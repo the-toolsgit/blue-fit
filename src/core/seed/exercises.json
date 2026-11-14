@@ -1,0 +1,2619 @@
+[
+  {
+    "id": "t-bar-reverse-row",
+    "name": "T-Bar Reverse Row",
+    "aliases": [
+      "Machine T Bar Reverse Row"
+    ],
+    "muscles": [
+      "Lats",
+      "Mid back"
+    ],
+    "secondaryMuscles": [
+      "Rear delts",
+      "Biceps"
+    ],
+    "volume": [
+      {
+        "group": "back",
+        "weight": 1
+      },
+      {
+        "group": "rearDelts",
+        "weight": 0.5
+      },
+      {
+        "group": "biceps",
+        "weight": 0.5
+      }
+    ],
+    "equipment": "plateMachine",
+    "loadMode": "perSide",
+    "isHeavy": true,
+    "bodyRegion": "upper",
+    "why": "Back day version: a heavy row aimed at the lats.",
+    "setup": [
+      "Chest on the pad, feet planted.",
+      "Start with arms fully straight."
+    ],
+    "form": [
+      "Pull your shoulder blades back first, then drive the elbows toward your hips.",
+      "Squeeze 1 second at the top.",
+      "Lower under control until the arms are straight and the shoulder blades spread."
+    ],
+    "tips": [
+      "Elbows close to the body = more lats. Elbows flared = more upper back (that's the version for traps days)."
+    ],
+    "avoid": [
+      "Lifting the chest off the pad to heave the weight.",
+      "Shrugging up instead of pulling back."
+    ],
+    "rangeOfMotion": "Full stretch at the bottom to elbows just past the torso.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 2.5,
+    "figure": {
+      "base": {
+        "hx": 48,
+        "hy": 58,
+        "t": 50,
+        "th": 12,
+        "sh": -8
+      },
+      "A": {
+        "ua": 0,
+        "fa": 0
+      },
+      "B": {
+        "ua": -60,
+        "fa": -5
+      },
+      "props": [
+        {
+          "line": [
+            56,
+            62,
+            80,
+            42
+          ]
+        },
+        {
+          "db": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "single-arm-cable-lat-pulldown",
+    "name": "Single-arm Cable Lat Pulldown",
+    "aliases": [
+      "Cable One-Arm Lat Pulldown"
+    ],
+    "muscles": [
+      "Lats"
+    ],
+    "secondaryMuscles": [
+      "Biceps",
+      "Teres major"
+    ],
+    "volume": [
+      {
+        "group": "back",
+        "weight": 1
+      },
+      {
+        "group": "biceps",
+        "weight": 0.5
+      }
+    ],
+    "equipment": "cable",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Lats in the stretched position. Training one arm lets you reach further overhead.",
+    "setup": [
+      "Pulley high, kneel or sit facing it.",
+      "One handle, arm fully up."
+    ],
+    "form": [
+      "Let the arm reach up until the lat stretches.",
+      "Pull the elbow down to the side of the hip.",
+      "Return slowly to the full stretch."
+    ],
+    "tips": [
+      "Think about pulling with the elbow, not the hand.",
+      "Pause 1 second in the stretch."
+    ],
+    "avoid": [
+      "Twisting the torso to finish the rep.",
+      "Stopping short of the stretch."
+    ],
+    "rangeOfMotion": "Arm fully overhead to elbow beside the ribs.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "hx": 52,
+        "hy": 78,
+        "t": 5,
+        "th": 0,
+        "sh": -90,
+        "nofoot": 1
+      },
+      "A": {
+        "ua": 170,
+        "fa": 172
+      },
+      "B": {
+        "ua": -15,
+        "fa": 160
+      },
+      "props": [
+        {
+          "cable": [
+            62,
+            -22
+          ],
+          "to": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "single-arm-db-row",
+    "name": "Single-arm DB Row",
+    "aliases": [
+      "Dumbbell One-Arm Row"
+    ],
+    "muscles": [
+      "Lats"
+    ],
+    "secondaryMuscles": [
+      "Mid back",
+      "Rear delts",
+      "Biceps"
+    ],
+    "volume": [
+      {
+        "group": "back",
+        "weight": 1
+      },
+      {
+        "group": "rearDelts",
+        "weight": 0.5
+      },
+      {
+        "group": "biceps",
+        "weight": 0.5
+      }
+    ],
+    "equipment": "dumbbell",
+    "loadMode": "perHand",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Lower lats. The elbow travels toward the hip in an arc.",
+    "setup": [
+      "One hand and knee on a bench, or a hand on a rack, back flat.",
+      "DB hangs straight under the shoulder."
+    ],
+    "form": [
+      "Pull the elbow back and up toward the hip.",
+      "Lower until the shoulder blade spreads forward."
+    ],
+    "tips": [
+      "Pull to the hip, not the chest. Pulling to the chest shifts the work to the upper back."
+    ],
+    "avoid": [
+      "Rotating the torso open to move more weight.",
+      "Jerking the DB up."
+    ],
+    "rangeOfMotion": "Full hang to the DB at hip height.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "hx": 40,
+        "hy": 56,
+        "t": 80,
+        "th": 8,
+        "sh": 0
+      },
+      "A": {
+        "ua": 0,
+        "fa": 0
+      },
+      "B": {
+        "ua": -75,
+        "fa": 0
+      },
+      "props": [
+        {
+          "line": [
+            78,
+            92,
+            112,
+            92
+          ]
+        },
+        {
+          "line": [
+            108,
+            92,
+            108,
+            104
+          ]
+        },
+        {
+          "db": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "straight-arm-cable-pulldown",
+    "name": "Straight-arm Cable Pulldown",
+    "aliases": [
+      "Cable Shoulder Extension"
+    ],
+    "muscles": [
+      "Lats"
+    ],
+    "secondaryMuscles": [
+      "Teres major",
+      "Long head of triceps"
+    ],
+    "volume": [
+      {
+        "group": "back",
+        "weight": 1
+      }
+    ],
+    "equipment": "cable",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "The only lat move with no biceps involvement. Takes the lats from stretched to fully contracted.",
+    "setup": [
+      "High pulley, bar or rope.",
+      "Step back and hinge forward about 30°."
+    ],
+    "form": [
+      "Keep the arms almost straight with a slight bend locked in.",
+      "Sweep the bar down in an arc to your thighs and squeeze.",
+      "Let the arms rise back overhead to the stretch."
+    ],
+    "tips": [
+      "A rope lets the hands finish slightly behind the hips for a harder squeeze."
+    ],
+    "avoid": [
+      "Bending the elbows, which turns it into a triceps pushdown.",
+      "Using body swing."
+    ],
+    "rangeOfMotion": "Arms overhead to hands at the thighs.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "hx": 50,
+        "hy": 57,
+        "t": 30,
+        "th": 5,
+        "sh": -3
+      },
+      "A": {
+        "ua": 150,
+        "fa": 150
+      },
+      "B": {
+        "ua": 5,
+        "fa": 5
+      },
+      "props": [
+        {
+          "cable": [
+            112,
+            -20
+          ],
+          "to": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "db-incline-curl",
+    "name": "DB Incline Curl",
+    "aliases": [
+      "Dumbbell Incline Curl"
+    ],
+    "muscles": [
+      "Biceps (long head)"
+    ],
+    "secondaryMuscles": [
+      "Brachialis"
+    ],
+    "volume": [
+      {
+        "group": "biceps",
+        "weight": 1
+      }
+    ],
+    "equipment": "dumbbell",
+    "loadMode": "perHand",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Arms hang behind the body, which stretches the long head of the biceps.",
+    "setup": [
+      "Bench at 45–60°, lie back.",
+      "Arms hanging straight down, palms forward."
+    ],
+    "form": [
+      "Curl without letting the elbows drift forward.",
+      "Lower all the way to straight arms."
+    ],
+    "tips": [
+      "Keep the head and shoulders on the bench so the stretch stays."
+    ],
+    "avoid": [
+      "Elbows swinging forward, which removes the stretch.",
+      "Cutting the bottom part short."
+    ],
+    "rangeOfMotion": "Full extension to full curl.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "hx": 52,
+        "hy": 80,
+        "t": -35,
+        "th": 88,
+        "sh": 0,
+        "ua": -5
+      },
+      "A": {
+        "fa": -5
+      },
+      "B": {
+        "fa": 140
+      },
+      "props": [
+        {
+          "line": [
+            49,
+            85,
+            28,
+            55
+          ]
+        },
+        {
+          "line": [
+            48,
+            84,
+            70,
+            85
+          ]
+        },
+        {
+          "line": [
+            58,
+            85,
+            58,
+            104
+          ]
+        },
+        {
+          "db": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "barbell-preacher-curl",
+    "name": "Barbell Preacher Curl",
+    "aliases": [
+      "Barbell Preacher Curl"
+    ],
+    "muscles": [
+      "Biceps (short head)"
+    ],
+    "secondaryMuscles": [
+      "Brachialis"
+    ],
+    "volume": [
+      {
+        "group": "biceps",
+        "weight": 1
+      }
+    ],
+    "equipment": "fixedBar",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Hardest near the bottom, so it trains the biceps lengthened.",
+    "setup": [
+      "Armpits snug at the top of the pad, upper arms flat on it.",
+      "EZ bar is fine if a straight bar bothers your wrists."
+    ],
+    "form": [
+      "Curl up, stop just before the forearms are vertical.",
+      "Lower slowly until the arms are nearly straight."
+    ],
+    "tips": [
+      "Slow down most near the bottom. That's the part that builds it."
+    ],
+    "avoid": [
+      "Dropping fast into the bottom (stresses the elbow).",
+      "Lifting the elbows off the pad."
+    ],
+    "rangeOfMotion": "Almost straight arm to just short of vertical forearms.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 10,
+    "figure": {
+      "base": {
+        "hx": 45,
+        "hy": 78,
+        "t": 12,
+        "th": 88,
+        "sh": 0,
+        "ua": 45
+      },
+      "A": {
+        "fa": 60
+      },
+      "B": {
+        "fa": 165
+      },
+      "props": [
+        {
+          "line": [
+            54,
+            53,
+            70,
+            68
+          ]
+        },
+        {
+          "line": [
+            66,
+            68,
+            66,
+            104
+          ]
+        },
+        {
+          "db": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "machine-shoulder-press",
+    "name": "Machine Shoulder Press",
+    "aliases": [
+      "Machine Shoulder Press"
+    ],
+    "muscles": [
+      "Front delts"
+    ],
+    "secondaryMuscles": [
+      "Side delts",
+      "Triceps"
+    ],
+    "volume": [
+      {
+        "group": "frontDelts",
+        "weight": 1
+      },
+      {
+        "group": "sideDelts",
+        "weight": 0.5
+      },
+      {
+        "group": "triceps",
+        "weight": 0.5
+      }
+    ],
+    "equipment": "machine",
+    "loadMode": "total",
+    "isHeavy": true,
+    "bodyRegion": "upper",
+    "why": "Your only direct front-delt work, plus triceps.",
+    "setup": [
+      "Seat height so the handles start at chin level.",
+      "Back flat on the pad."
+    ],
+    "form": [
+      "Press up to just short of a hard lockout.",
+      "Lower under control to chin level."
+    ],
+    "tips": [
+      "Keep the ribs down. Don't arch off the pad to finish reps."
+    ],
+    "avoid": [
+      "Bouncing out of the bottom.",
+      "Half reps at the top only."
+    ],
+    "rangeOfMotion": "Chin level to arms almost straight.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "v": "f",
+      "base": {
+        "hy": 66,
+        "lf": 0.45,
+        "la": 12,
+        "sa": 4
+      },
+      "A": {
+        "ua": 90,
+        "fa": 180
+      },
+      "B": {
+        "ua": 160,
+        "fa": 175
+      },
+      "props": [
+        {
+          "line": [
+            44,
+            68,
+            76,
+            68
+          ]
+        },
+        {
+          "db": "haR"
+        },
+        {
+          "db": "haL"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "cable-lateral-raise",
+    "name": "Cable Lateral Raise",
+    "aliases": [
+      "Cable Lateral Raise"
+    ],
+    "muscles": [
+      "Side delts"
+    ],
+    "secondaryMuscles": [
+      "Upper traps"
+    ],
+    "volume": [
+      {
+        "group": "sideDelts",
+        "weight": 1
+      }
+    ],
+    "equipment": "cable",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Side delts with tension through the whole range, including the bottom.",
+    "setup": [
+      "Low pulley, single arm, cable running behind your body.",
+      "Slight lean away."
+    ],
+    "form": [
+      "Raise out to the side, leading with the elbow, to shoulder height.",
+      "Lower slowly, 2–3 seconds."
+    ],
+    "tips": [
+      "Think of pushing the hand out wide, not up."
+    ],
+    "avoid": [
+      "Shrugging as the arm rises.",
+      "Swinging the torso."
+    ],
+    "rangeOfMotion": "Hand by the hip to shoulder height.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "v": "f",
+      "base": {
+        "L": {
+          "ua": 4,
+          "fa": 4
+        }
+      },
+      "A": {
+        "ua": 8,
+        "fa": 8
+      },
+      "B": {
+        "ua": 90,
+        "fa": 92
+      },
+      "props": [
+        {
+          "cable": [
+            38,
+            104
+          ],
+          "to": "haR"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "lateral-shrug-hybrid",
+    "name": "Lateral/Shrug Hybrid",
+    "aliases": [
+      "Dumbbell Lateral Raise"
+    ],
+    "muscles": [
+      "Upper traps"
+    ],
+    "secondaryMuscles": [
+      "Side delts"
+    ],
+    "volume": [
+      {
+        "group": "traps",
+        "weight": 1
+      },
+      {
+        "group": "sideDelts",
+        "weight": 0.5
+      }
+    ],
+    "equipment": "dumbbell",
+    "loadMode": "perHand",
+    "isHeavy": true,
+    "bodyRegion": "upper",
+    "why": "Your locked-in heavy trap move: a partial lateral raise combined with a shrug.",
+    "setup": [
+      "Heavy DBs at your sides.",
+      "Straps are fine if grip fails first."
+    ],
+    "form": [
+      "Raise the arms out to about 30–45° while shrugging the shoulders to the ears.",
+      "Hold 1 second at the top, lower slowly."
+    ],
+    "tips": [
+      "The goal is shoulders to ears. The arm height is secondary."
+    ],
+    "avoid": [
+      "Turning it into a light lateral raise.",
+      "Dropping the weight fast."
+    ],
+    "rangeOfMotion": "Arms by the sides to about 45° with full shrug.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "v": "f",
+      "base": {},
+      "A": {
+        "ua": 6,
+        "fa": 6,
+        "shr": 0
+      },
+      "B": {
+        "ua": 40,
+        "fa": 40,
+        "shr": 6
+      },
+      "props": [
+        {
+          "db": "haR"
+        },
+        {
+          "db": "haL"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "barbell-shrug",
+    "name": "Barbell Shrug",
+    "aliases": [
+      "Barbell Shrug"
+    ],
+    "muscles": [
+      "Upper traps"
+    ],
+    "secondaryMuscles": [],
+    "volume": [
+      {
+        "group": "traps",
+        "weight": 1
+      }
+    ],
+    "equipment": "barbell",
+    "loadMode": "perSide",
+    "isHeavy": true,
+    "bodyRegion": "upper",
+    "why": "Heavy upper-trap loading.",
+    "setup": [
+      "Bar in front, overhand grip, just outside the thighs.",
+      "Stand tall."
+    ],
+    "form": [
+      "Shrug straight up, pause 1–2 seconds.",
+      "Lower to a full stretch."
+    ],
+    "tips": [
+      "Use straps so grip doesn't end the set before the traps do."
+    ],
+    "avoid": [
+      "Rolling the shoulders (adds nothing).",
+      "Bending the elbows.",
+      "Short bouncing reps."
+    ],
+    "rangeOfMotion": "Shoulders fully down to fully up.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 2.5,
+    "figure": {
+      "v": "f",
+      "base": {
+        "ua": 4,
+        "fa": 4
+      },
+      "A": {
+        "shr": 0
+      },
+      "B": {
+        "shr": 7
+      },
+      "props": [
+        {
+          "bar": 1
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "overhead-trap",
+    "name": "Overhead Trap",
+    "aliases": [
+      "Overheaed trap"
+    ],
+    "muscles": [
+      "Lower traps",
+      "Upper traps"
+    ],
+    "secondaryMuscles": [
+      "Side delts"
+    ],
+    "volume": [
+      {
+        "group": "traps",
+        "weight": 1
+      }
+    ],
+    "equipment": "cable",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Your lower-trap exercise. Raising the arm overhead makes the shoulder blade rotate up, and the lower traps work hardest above the head.",
+    "setup": [
+      "Cable on the lowest setting.",
+      "Stand 3–4 feet away."
+    ],
+    "form": [
+      "Sweep the arm up in a half circle until it's over your head.",
+      "Finish in a Y, slightly in front of your head, thumb up.",
+      "Pause 1 second at the top, lower slowly."
+    ],
+    "tips": [
+      "At the top, reach up so the shoulder blade rotates fully.",
+      "Go light enough to reach the top every rep."
+    ],
+    "avoid": [
+      "Arching the lower back to get the arm up.",
+      "Stopping at shoulder height."
+    ],
+    "rangeOfMotion": "Hand low by the body to fully overhead.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "v": "f",
+      "base": {
+        "L": {
+          "ua": 4,
+          "fa": 4
+        }
+      },
+      "A": {
+        "ua": 15,
+        "fa": 15
+      },
+      "B": {
+        "ua": 155,
+        "fa": 155
+      },
+      "props": [
+        {
+          "cable": [
+            34,
+            104
+          ],
+          "to": "haR"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "machine-reverse-fly",
+    "name": "Machine Reverse Fly",
+    "aliases": [
+      "Machine Reverse Fly"
+    ],
+    "muscles": [
+      "Rear delts"
+    ],
+    "secondaryMuscles": [
+      "Mid traps"
+    ],
+    "volume": [
+      {
+        "group": "rearDelts",
+        "weight": 1
+      }
+    ],
+    "equipment": "machine",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Rear delts in a fixed path.",
+    "setup": [
+      "Chest on the pad, handles at shoulder height.",
+      "Slight bend in the elbows."
+    ],
+    "form": [
+      "Sweep the arms back wide until they line up with the body.",
+      "Return slowly."
+    ],
+    "tips": [
+      "Keep the shoulder blades from squeezing hard together. That keeps the work in the rear delts instead of the traps."
+    ],
+    "avoid": [
+      "Swinging the torso.",
+      "Going past the body line."
+    ],
+    "rangeOfMotion": "Arms in front to in line with the torso.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "v": "f",
+      "base": {
+        "hy": 66,
+        "lf": 0.45,
+        "la": 12,
+        "sa": 4,
+        "ua": 90,
+        "fa": 90
+      },
+      "A": {
+        "al": 0.2,
+        "fl": 0.2
+      },
+      "B": {
+        "al": 1,
+        "fl": 1
+      },
+      "props": [
+        {
+          "line": [
+            44,
+            68,
+            76,
+            68
+          ]
+        },
+        {
+          "db": "haR"
+        },
+        {
+          "db": "haL"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "smith-squat",
+    "name": "Smith Squat",
+    "aliases": [
+      "Smith Machine Squat"
+    ],
+    "muscles": [
+      "Quads"
+    ],
+    "secondaryMuscles": [
+      "Adductors",
+      "Glutes (minimal)"
+    ],
+    "volume": [
+      {
+        "group": "quads",
+        "weight": 1
+      },
+      {
+        "group": "adductors",
+        "weight": 0.5
+      },
+      {
+        "group": "glutes",
+        "weight": 0.5
+      }
+    ],
+    "equipment": "smith",
+    "loadMode": "perSide",
+    "isHeavy": true,
+    "bodyRegion": "lower",
+    "why": "Heavy quad work. Stopping at parallel grows the quads about as well as going deep, with much less glute work.",
+    "setup": [
+      "Feet shoulder width, roughly under or slightly in front of the bar.",
+      "Bar across the upper back."
+    ],
+    "form": [
+      "Sit down until the thighs are parallel, no deeper.",
+      "Drive up through the mid-foot, knees following the toes."
+    ],
+    "tips": [
+      "Feet more under the bar = more knee bend = more quads."
+    ],
+    "avoid": [
+      "Going below parallel (more glutes).",
+      "Knees caving in.",
+      "Stopping well above parallel."
+    ],
+    "rangeOfMotion": "Standing to thighs parallel.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "anchor": 1,
+        "ax": 60,
+        "ua": -25,
+        "fa": 150
+      },
+      "A": {
+        "th": 0,
+        "sh": 0,
+        "t": 8
+      },
+      "B": {
+        "th": 82,
+        "sh": -32,
+        "t": 38
+      },
+      "props": [
+        {
+          "line": [
+            67,
+            -18,
+            67,
+            104
+          ]
+        },
+        {
+          "pad": "sh",
+          "r": 3
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "leg-extension",
+    "name": "Leg Extension",
+    "aliases": [
+      "Machine Leg Extension"
+    ],
+    "muscles": [
+      "Quads"
+    ],
+    "secondaryMuscles": [
+      "Rectus femoris"
+    ],
+    "volume": [
+      {
+        "group": "quads",
+        "weight": 1
+      }
+    ],
+    "equipment": "machine",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "lower",
+    "why": "Isolates the quads with no glute involvement, which fits the plan.",
+    "setup": [
+      "Back of the knee at the seat edge, knee lined up with the machine's pivot.",
+      "Ankle pad just above the ankle."
+    ],
+    "form": [
+      "Extend until the knees are straight and squeeze for 1 second.",
+      "Lower slowly, about 2–3 seconds."
+    ],
+    "tips": [
+      "Leaning back a little stretches the rectus femoris (the quad muscle that also crosses the hip) more."
+    ],
+    "avoid": [
+      "Kicking the weight up and letting it drop.",
+      "Lifting the hips off the seat."
+    ],
+    "rangeOfMotion": "From about 90° (or deeper if the machine allows) to fully straight.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 10,
+    "figure": {
+      "base": {
+        "hx": 45,
+        "hy": 72,
+        "t": -10,
+        "th": 90,
+        "ua": 10,
+        "fa": 30
+      },
+      "A": {
+        "sh": 0
+      },
+      "B": {
+        "sh": 85
+      },
+      "props": [
+        {
+          "line": [
+            36,
+            75,
+            70,
+            75
+          ]
+        },
+        {
+          "line": [
+            42,
+            76,
+            35,
+            40
+          ]
+        },
+        {
+          "line": [
+            52,
+            75,
+            52,
+            104
+          ]
+        },
+        {
+          "pad": "an"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "prone-leg-curl",
+    "name": "Prone Leg Curl",
+    "aliases": [
+      "Machine Leg Curl (Prone)"
+    ],
+    "muscles": [
+      "Hamstrings"
+    ],
+    "secondaryMuscles": [
+      "Calves"
+    ],
+    "volume": [
+      {
+        "group": "hamstrings",
+        "weight": 1
+      }
+    ],
+    "equipment": "machine",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "lower",
+    "why": "Hamstrings in the short (contracted) position.",
+    "setup": [
+      "Lie face down, knees just off the pad edge.",
+      "Pad above the heels."
+    ],
+    "form": [
+      "Curl the heels toward the glutes.",
+      "Lower slowly to almost straight."
+    ],
+    "tips": [
+      "Press the hips into the pad the whole time."
+    ],
+    "avoid": [
+      "Hips lifting off the pad.",
+      "Dropping the weight on the way down."
+    ],
+    "rangeOfMotion": "Almost straight legs to full curl.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 10,
+    "figure": {
+      "base": {
+        "hx": 58,
+        "hy": 70,
+        "t": 90,
+        "th": -90,
+        "ua": 10,
+        "fa": 80
+      },
+      "A": {
+        "sh": -90
+      },
+      "B": {
+        "sh": -175
+      },
+      "props": [
+        {
+          "line": [
+            8,
+            75,
+            106,
+            75
+          ]
+        },
+        {
+          "line": [
+            30,
+            75,
+            30,
+            104
+          ]
+        },
+        {
+          "line": [
+            90,
+            75,
+            90,
+            104
+          ]
+        },
+        {
+          "pad": "an"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "hip-adduction",
+    "name": "Hip Adduction",
+    "aliases": [
+      "Machine Hip Adduction"
+    ],
+    "muscles": [
+      "Adductors"
+    ],
+    "secondaryMuscles": [],
+    "volume": [
+      {
+        "group": "adductors",
+        "weight": 1
+      }
+    ],
+    "equipment": "machine",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "lower",
+    "why": "Inner thighs. Large muscles that add thigh size without involving the glutes.",
+    "setup": [
+      "Sit tall, pads on the inside of the knees.",
+      "Set the start as wide as you can control."
+    ],
+    "form": [
+      "Squeeze the legs together and pause 1 second.",
+      "Open slowly back to the stretch."
+    ],
+    "tips": [
+      "The stretched (wide) part does the most work. Don't cut it short."
+    ],
+    "avoid": [
+      "Letting the weight stack slam at the open position.",
+      "Rocking the torso to move the weight."
+    ],
+    "rangeOfMotion": "Widest controlled stretch to legs together.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 10,
+    "figure": {
+      "v": "f",
+      "base": {
+        "hy": 66,
+        "lf": 0.5,
+        "ua": 20,
+        "fa": 20
+      },
+      "A": {
+        "la": 40,
+        "sa": 10
+      },
+      "B": {
+        "la": 6,
+        "sa": 4
+      },
+      "props": [
+        {
+          "line": [
+            44,
+            68,
+            76,
+            68
+          ]
+        },
+        {
+          "pad": "knR"
+        },
+        {
+          "pad": "knL"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "standing-calf-raise",
+    "name": "Standing Calf Raise",
+    "aliases": [
+      "Machine Calf Raise"
+    ],
+    "muscles": [
+      "Calves (gastrocnemius)"
+    ],
+    "secondaryMuscles": [
+      "Soleus"
+    ],
+    "volume": [
+      {
+        "group": "calves",
+        "weight": 1
+      }
+    ],
+    "equipment": "machine",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "lower",
+    "why": "Straight knees work the upper calf.",
+    "setup": [
+      "Balls of the feet on the edge, knees straight."
+    ],
+    "form": [
+      "Lower until the calves are fully stretched and pause 1–2 seconds.",
+      "Rise as high as possible."
+    ],
+    "tips": [
+      "The paused stretch at the bottom matters most."
+    ],
+    "avoid": [
+      "Bouncing at the bottom.",
+      "Bending the knees to help."
+    ],
+    "rangeOfMotion": "Full stretch to full rise.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 10,
+    "figure": {
+      "base": {
+        "anchor": 1,
+        "ax": 60
+      },
+      "A": {
+        "ah": 0
+      },
+      "B": {
+        "ah": 7
+      },
+      "props": [
+        {
+          "pad": "sh",
+          "r": 3
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "wide-grip-lat-pulldown",
+    "name": "Wide-Grip Lat Pulldown",
+    "aliases": [
+      "Cable Lat Pulldown (Wide Grip)"
+    ],
+    "muscles": [
+      "Lats"
+    ],
+    "secondaryMuscles": [
+      "Upper back",
+      "Biceps"
+    ],
+    "volume": [
+      {
+        "group": "back",
+        "weight": 1
+      },
+      {
+        "group": "biceps",
+        "weight": 0.5
+      }
+    ],
+    "equipment": "cable",
+    "loadMode": "total",
+    "isHeavy": true,
+    "bodyRegion": "upper",
+    "why": "Heavy vertical pull.",
+    "setup": [
+      "Grip about 1.5× shoulder width.",
+      "Thighs locked under the pad, slight lean back."
+    ],
+    "form": [
+      "Pull the bar to the upper chest, elbows down and slightly back.",
+      "Return until the arms are straight."
+    ],
+    "tips": [
+      "Let the shoulders rise at the top for the full stretch."
+    ],
+    "avoid": [
+      "Leaning way back and rowing it.",
+      "Pulling behind the neck."
+    ],
+    "rangeOfMotion": "Full stretch at the top to bar at the upper chest.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "v": "f",
+      "base": {
+        "hy": 70,
+        "lf": 0.5
+      },
+      "A": {
+        "ua": 155,
+        "fa": 165
+      },
+      "B": {
+        "ua": 45,
+        "fa": 170
+      },
+      "props": [
+        {
+          "bar": 1
+        },
+        {
+          "cable": [
+            60,
+            -22
+          ],
+          "to": "barmid"
+        },
+        {
+          "line": [
+            44,
+            72,
+            76,
+            72
+          ]
+        },
+        {
+          "line": [
+            42,
+            80,
+            78,
+            80
+          ]
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "cable-seated-row",
+    "name": "Cable Seated Row",
+    "aliases": [
+      "Cable Seated Row"
+    ],
+    "muscles": [
+      "Mid back",
+      "Lats"
+    ],
+    "secondaryMuscles": [
+      "Rear delts",
+      "Biceps"
+    ],
+    "volume": [
+      {
+        "group": "back",
+        "weight": 1
+      },
+      {
+        "group": "rearDelts",
+        "weight": 0.5
+      },
+      {
+        "group": "biceps",
+        "weight": 0.5
+      }
+    ],
+    "equipment": "cable",
+    "loadMode": "total",
+    "isHeavy": true,
+    "bodyRegion": "upper",
+    "why": "Heavy horizontal pull.",
+    "setup": [
+      "Neutral handle, feet on the plate, knees slightly bent."
+    ],
+    "form": [
+      "Row to the lower ribs and squeeze 1 second.",
+      "Let the arms go straight and the shoulder blades spread."
+    ],
+    "tips": [
+      "A small forward lean in the stretch is fine. Swinging back is not."
+    ],
+    "avoid": [
+      "Using the lower back to throw the weight.",
+      "Shrugging at the end."
+    ],
+    "rangeOfMotion": "Arms straight to handle at the belly.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "hx": 40,
+        "hy": 88,
+        "th": 85,
+        "sh": 85
+      },
+      "A": {
+        "t": 15,
+        "ua": 85,
+        "fa": 88
+      },
+      "B": {
+        "t": -5,
+        "ua": -40,
+        "fa": 85
+      },
+      "props": [
+        {
+          "cable": [
+            118,
+            72
+          ],
+          "to": "ha"
+        },
+        {
+          "line": [
+            20,
+            92,
+            50,
+            92
+          ]
+        },
+        {
+          "line": [
+            93,
+            70,
+            93,
+            95
+          ]
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "ez-bar-incline-tricep-extension",
+    "name": "EZ Bar Incline Tricep Extension",
+    "aliases": [
+      "EZ Bar Incline Tricep Extension"
+    ],
+    "muscles": [
+      "Triceps (long head)"
+    ],
+    "secondaryMuscles": [],
+    "volume": [
+      {
+        "group": "triceps",
+        "weight": 1
+      }
+    ],
+    "equipment": "fixedBar",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Long head of the triceps stretched with the arms angled back.",
+    "setup": [
+      "Incline bench at 30–45°, lie on your back.",
+      "Arms angled slightly back past vertical."
+    ],
+    "form": [
+      "Bend only at the elbows and lower the bar behind your head.",
+      "Extend back up."
+    ],
+    "tips": [
+      "Keep the upper arms still. Only the forearms move."
+    ],
+    "avoid": [
+      "Elbows flaring wide.",
+      "Turning it into a pullover."
+    ],
+    "rangeOfMotion": "Deep stretch behind the head to straight arms.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 10,
+    "figure": {
+      "base": {
+        "hx": 58,
+        "hy": 82,
+        "t": -55,
+        "th": 80,
+        "sh": 0,
+        "ua": 200
+      },
+      "A": {
+        "fa": 350
+      },
+      "B": {
+        "fa": 200
+      },
+      "props": [
+        {
+          "line": [
+            56,
+            88,
+            26,
+            68
+          ]
+        },
+        {
+          "line": [
+            52,
+            86,
+            72,
+            86
+          ]
+        },
+        {
+          "db": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "machine-dip",
+    "name": "Machine Dip",
+    "aliases": [
+      "Machine Dip"
+    ],
+    "muscles": [
+      "Triceps"
+    ],
+    "secondaryMuscles": [
+      "Chest (lower)",
+      "Front delts"
+    ],
+    "volume": [
+      {
+        "group": "triceps",
+        "weight": 1
+      },
+      {
+        "group": "chest",
+        "weight": 0.5
+      },
+      {
+        "group": "frontDelts",
+        "weight": 0.5
+      }
+    ],
+    "equipment": "machine",
+    "loadMode": "total",
+    "isHeavy": true,
+    "bodyRegion": "upper",
+    "why": "Heavy triceps compound.",
+    "setup": [
+      "Sit upright."
+    ],
+    "form": [
+      "Push down to a full lockout.",
+      "Return as deep as your shoulders allow."
+    ],
+    "tips": [
+      "Staying upright keeps it triceps-focused."
+    ],
+    "avoid": [
+      "Partial reps at the top.",
+      "Leaning far forward."
+    ],
+    "rangeOfMotion": "Deepest comfortable point to straight arms.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "hx": 50,
+        "hy": 78,
+        "t": 0,
+        "th": 88,
+        "sh": 0
+      },
+      "A": {
+        "ua": -3,
+        "fa": 3
+      },
+      "B": {
+        "ua": -55,
+        "fa": 28
+      },
+      "props": [
+        {
+          "line": [
+            38,
+            81,
+            64,
+            81
+          ]
+        },
+        {
+          "db": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "v-bar-pushdown",
+    "name": "V-Bar Pushdown",
+    "aliases": [
+      "Cable Tricep Pushdown (V-Bar)"
+    ],
+    "muscles": [
+      "Triceps"
+    ],
+    "secondaryMuscles": [],
+    "volume": [
+      {
+        "group": "triceps",
+        "weight": 1
+      }
+    ],
+    "equipment": "cable",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Triceps with the arms at your sides.",
+    "setup": [
+      "High pulley, V-bar.",
+      "Elbows pinned at your sides, slight forward lean."
+    ],
+    "form": [
+      "Push down to full lockout and squeeze.",
+      "Let the forearms rise just above 90°."
+    ],
+    "tips": [
+      "The lockout squeeze is the point of this one."
+    ],
+    "avoid": [
+      "Elbows drifting forward.",
+      "Leaning over the bar to push with body weight."
+    ],
+    "rangeOfMotion": "Forearms just above parallel to arms straight.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "hx": 55,
+        "hy": 57,
+        "t": 12,
+        "th": 4,
+        "sh": -2,
+        "ua": -5
+      },
+      "A": {
+        "fa": 115
+      },
+      "B": {
+        "fa": 2
+      },
+      "props": [
+        {
+          "cable": [
+            84,
+            -22
+          ],
+          "to": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "rope-face-pull",
+    "name": "Rope Face Pull",
+    "aliases": [
+      "Cable Rope Face Pull"
+    ],
+    "muscles": [
+      "Rear delts",
+      "Mid traps"
+    ],
+    "secondaryMuscles": [
+      "Rotator cuff"
+    ],
+    "volume": [
+      {
+        "group": "rearDelts",
+        "weight": 1
+      },
+      {
+        "group": "traps",
+        "weight": 0.5
+      },
+      {
+        "group": "back",
+        "weight": 0.5
+      },
+      {
+        "group": "rotatorCuff",
+        "weight": 0.5
+      }
+    ],
+    "equipment": "cable",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Rear delts and mid traps, plus shoulder health.",
+    "setup": [
+      "Rope at face height."
+    ],
+    "form": [
+      "Pull toward the forehead and split the rope apart.",
+      "Finish with hands beside the ears, elbows high."
+    ],
+    "tips": [
+      "Light and controlled. The finish position matters more than the weight."
+    ],
+    "avoid": [
+      "Leaning back to move heavy weight.",
+      "Elbows dropping below the hands."
+    ],
+    "rangeOfMotion": "Arms straight to hands beside the ears.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "hx": 48,
+        "th": 4,
+        "sh": -3
+      },
+      "A": {
+        "t": 0,
+        "ua": 95,
+        "fa": 95,
+        "al": 1,
+        "fl": 1
+      },
+      "B": {
+        "t": -7,
+        "ua": 92,
+        "al": 0.3,
+        "fa": 168,
+        "fl": 0.75
+      },
+      "props": [
+        {
+          "line": [
+            110,
+            -16,
+            110,
+            104
+          ]
+        },
+        {
+          "line": [
+            100,
+            104,
+            116,
+            104
+          ]
+        },
+        {
+          "line": [
+            104,
+            -16,
+            110,
+            -16
+          ]
+        },
+        {
+          "cable": [
+            106,
+            16
+          ],
+          "to": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "lean-away-lateral-raise",
+    "name": "Lean-away Lateral Raise",
+    "aliases": [
+      "Dumbbell One-Arm Lateral Raise"
+    ],
+    "muscles": [
+      "Side delts"
+    ],
+    "secondaryMuscles": [],
+    "volume": [
+      {
+        "group": "sideDelts",
+        "weight": 1
+      }
+    ],
+    "equipment": "dumbbell",
+    "loadMode": "perHand",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Leaning away makes the bottom of the raise hard, so side delts work stretched.",
+    "setup": [
+      "Hold a post with one hand, lean away 15–30°.",
+      "DB or cable in the free hand."
+    ],
+    "form": [
+      "Raise to shoulder height.",
+      "Lower slowly."
+    ],
+    "tips": [
+      "Start the rep from a dead stop at the bottom."
+    ],
+    "avoid": [
+      "Swinging.",
+      "Letting the lean change during the set."
+    ],
+    "rangeOfMotion": "Hand across the body to shoulder height.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "v": "f",
+      "base": {
+        "cx": 36,
+        "la": 0,
+        "sa": 0,
+        "hw": 1.5,
+        "rot": 20,
+        "L": {
+          "ua": 22,
+          "fa": 22
+        }
+      },
+      "A": {
+        "ua": 20,
+        "fa": 20
+      },
+      "B": {
+        "ua": 98,
+        "fa": 98
+      },
+      "props": [
+        {
+          "line": [
+            28,
+            -14,
+            28,
+            104
+          ]
+        },
+        {
+          "line": [
+            22,
+            104,
+            36,
+            104
+          ]
+        },
+        {
+          "db": "haR"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "all-the-way-up-lateral-raise",
+    "name": "All-the-way-up Lateral Raise",
+    "aliases": [
+      "All the way up lateral raise"
+    ],
+    "muscles": [
+      "Side delts",
+      "Upper traps"
+    ],
+    "secondaryMuscles": [],
+    "volume": [
+      {
+        "group": "sideDelts",
+        "weight": 1
+      },
+      {
+        "group": "traps",
+        "weight": 0.5
+      }
+    ],
+    "equipment": "dumbbell",
+    "loadMode": "perHand",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Side delts up to shoulder height, then upper traps above it.",
+    "setup": [
+      "Light DBs."
+    ],
+    "form": [
+      "Raise out to the sides, past shoulder height, until near overhead.",
+      "Lower slowly."
+    ],
+    "tips": [
+      "Use less weight than a normal lateral raise."
+    ],
+    "avoid": [
+      "Swinging to get past shoulder height."
+    ],
+    "rangeOfMotion": "Sides to almost overhead.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "v": "f",
+      "base": {},
+      "A": {
+        "ua": 8,
+        "fa": 8
+      },
+      "B": {
+        "ua": 165,
+        "fa": 165
+      },
+      "props": [
+        {
+          "db": "haR"
+        },
+        {
+          "db": "haL"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "kelso-shrug",
+    "name": "Kelso Shrug",
+    "aliases": [
+      "Machine Seated Row"
+    ],
+    "muscles": [
+      "Mid traps"
+    ],
+    "secondaryMuscles": [
+      "Rhomboids"
+    ],
+    "volume": [
+      {
+        "group": "traps",
+        "weight": 1
+      }
+    ],
+    "equipment": "machine",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Mid traps, an angle the shrugs miss.",
+    "setup": [
+      "Chest-supported row machine, chest on the pad.",
+      "Arms straight, holding the handles."
+    ],
+    "form": [
+      "Squeeze the shoulder blades back together without bending the elbows.",
+      "Hold 1 second, release forward."
+    ],
+    "tips": [
+      "It's a short movement. Make the squeeze count."
+    ],
+    "avoid": [
+      "Bending the elbows, which turns it into a row."
+    ],
+    "rangeOfMotion": "Shoulder blades fully forward to fully back.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "hx": 46,
+        "hy": 60,
+        "t": 42,
+        "th": 10,
+        "sh": -6,
+        "ua": 35,
+        "fa": 35
+      },
+      "A": {
+        "sb": 0
+      },
+      "B": {
+        "sb": -5
+      },
+      "props": [
+        {
+          "line": [
+            56,
+            64,
+            78,
+            42
+          ]
+        },
+        {
+          "db": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "single-arm-cable-reverse-fly",
+    "name": "Single-arm Cable Reverse Fly",
+    "aliases": [
+      "Single arm cable reverse fly"
+    ],
+    "muscles": [
+      "Rear delts"
+    ],
+    "secondaryMuscles": [],
+    "volume": [
+      {
+        "group": "rearDelts",
+        "weight": 1
+      }
+    ],
+    "equipment": "cable",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Rear delts with a cable, a second angle to the machine.",
+    "setup": [
+      "Cable at shoulder height.",
+      "Grab the handle with the opposite hand, across your body."
+    ],
+    "form": [
+      "Sweep the arm out and back at shoulder height, slight elbow bend.",
+      "Return across the body."
+    ],
+    "tips": [
+      "Keep the shoulder down and the torso square."
+    ],
+    "avoid": [
+      "Rotating the torso to finish."
+    ],
+    "rangeOfMotion": "Across the body to in line with the torso.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "v": "f",
+      "base": {
+        "L": {
+          "ua": 4,
+          "fa": 4
+        },
+        "ua": 90,
+        "fa": 90
+      },
+      "A": {
+        "al": -0.55,
+        "fl": -0.55
+      },
+      "B": {
+        "al": 1,
+        "fl": 1
+      },
+      "props": [
+        {
+          "cable": [
+            12,
+            24
+          ],
+          "to": "haR"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "rope-overhead-tricep-extension",
+    "name": "Rope Overhead Tricep Extension",
+    "aliases": [
+      "Cable Rope Overhead Tricep Extension"
+    ],
+    "muscles": [
+      "Triceps (long head)"
+    ],
+    "secondaryMuscles": [],
+    "volume": [
+      {
+        "group": "triceps",
+        "weight": 1
+      }
+    ],
+    "equipment": "cable",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Long head stretched overhead.",
+    "setup": [
+      "Face away from a low or mid cable.",
+      "Rope behind the head, elbows forward by the ears."
+    ],
+    "form": [
+      "Extend fully overhead.",
+      "Lower into a deep stretch."
+    ],
+    "tips": [
+      "Keep the elbows pointing forward and still."
+    ],
+    "avoid": [
+      "Elbows flaring.",
+      "Shortening the stretch."
+    ],
+    "rangeOfMotion": "Deep stretch behind the head to straight arms.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "hx": 52,
+        "hy": 57,
+        "t": 22,
+        "th": 8,
+        "sh": -4,
+        "ua": 155
+      },
+      "A": {
+        "fa": 305
+      },
+      "B": {
+        "fa": 155
+      },
+      "props": [
+        {
+          "cable": [
+            4,
+            100
+          ],
+          "to": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "db-hammer-curl",
+    "name": "DB Hammer Curl",
+    "aliases": [
+      "Dumbbell Alternating Hammer Curl"
+    ],
+    "muscles": [
+      "Brachialis",
+      "Brachioradialis"
+    ],
+    "secondaryMuscles": [
+      "Biceps"
+    ],
+    "volume": [
+      {
+        "group": "biceps",
+        "weight": 1
+      },
+      {
+        "group": "forearms",
+        "weight": 1
+      }
+    ],
+    "equipment": "dumbbell",
+    "loadMode": "perHand",
+    "isHeavy": true,
+    "bodyRegion": "upper",
+    "why": "Heavy neutral-grip curl. Builds arm thickness under the biceps.",
+    "setup": [
+      "Neutral grip (palms facing in), elbows at your sides."
+    ],
+    "form": [
+      "Alternate arms, curl to the shoulder.",
+      "Lower all the way."
+    ],
+    "tips": [
+      "This is a heavy one. Add weight when you hit 10 clean reps on every set."
+    ],
+    "avoid": [
+      "Swinging the body.",
+      "Elbows moving forward."
+    ],
+    "rangeOfMotion": "Straight arm to full curl.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "ua": 0
+      },
+      "A": {
+        "fa": 0
+      },
+      "B": {
+        "fa": 145
+      },
+      "props": [
+        {
+          "db": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "leg-press",
+    "name": "Leg Press",
+    "aliases": [
+      "Machine Leg Press"
+    ],
+    "muscles": [
+      "Quads"
+    ],
+    "secondaryMuscles": [
+      "Adductors",
+      "Glutes (minimal)"
+    ],
+    "volume": [
+      {
+        "group": "quads",
+        "weight": 1
+      },
+      {
+        "group": "adductors",
+        "weight": 0.5
+      },
+      {
+        "group": "glutes",
+        "weight": 0.5
+      }
+    ],
+    "equipment": "plateMachine",
+    "loadMode": "perSide",
+    "isHeavy": true,
+    "bodyRegion": "lower",
+    "why": "Second heavy quad move.",
+    "setup": [
+      "Feet low on the platform, shoulder width."
+    ],
+    "form": [
+      "Lower to about a 90° knee angle.",
+      "Press up without locking the knees hard."
+    ],
+    "tips": [
+      "Feet low = more knee bend = more quads, less glutes."
+    ],
+    "avoid": [
+      "Going deep enough for the lower back to round.",
+      "Locking the knees out forcefully."
+    ],
+    "rangeOfMotion": "About 90° at the knee to almost straight.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "hx": 40,
+        "hy": 80,
+        "t": -45,
+        "ua": 20,
+        "fa": 40
+      },
+      "A": {
+        "th": 125,
+        "sh": 128
+      },
+      "B": {
+        "th": 168,
+        "sh": 78
+      },
+      "props": [
+        {
+          "line": [
+            44,
+            85,
+            18,
+            59
+          ]
+        },
+        {
+          "perp": "an",
+          "ang": 40,
+          "len": 20
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "seated-leg-curl",
+    "name": "Seated Leg Curl",
+    "aliases": [
+      "Machine Seated Leg Curl"
+    ],
+    "muscles": [
+      "Hamstrings"
+    ],
+    "secondaryMuscles": [],
+    "volume": [
+      {
+        "group": "hamstrings",
+        "weight": 1
+      }
+    ],
+    "equipment": "machine",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "lower",
+    "why": "Hamstrings stretched. Grew more than lying curls in research.",
+    "setup": [
+      "Lap pad tight, knees lined up with the pivot."
+    ],
+    "form": [
+      "Curl fully.",
+      "Return slowly to straight legs."
+    ],
+    "tips": [
+      "Leaning the torso forward increases the hamstring stretch."
+    ],
+    "avoid": [
+      "Letting the weight yank the legs straight."
+    ],
+    "rangeOfMotion": "Straight legs to full curl.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 10,
+    "figure": {
+      "base": {
+        "hx": 45,
+        "hy": 72,
+        "t": 15,
+        "th": 90,
+        "ua": 20,
+        "fa": 40
+      },
+      "A": {
+        "sh": 85
+      },
+      "B": {
+        "sh": -15
+      },
+      "props": [
+        {
+          "line": [
+            36,
+            75,
+            66,
+            75
+          ]
+        },
+        {
+          "line": [
+            50,
+            67,
+            70,
+            67
+          ]
+        },
+        {
+          "line": [
+            52,
+            75,
+            52,
+            104
+          ]
+        },
+        {
+          "pad": "an"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "seated-calf-raise",
+    "name": "Seated Calf Raise",
+    "aliases": [
+      "Machine Seated Calf Raise"
+    ],
+    "muscles": [
+      "Calves (soleus)"
+    ],
+    "secondaryMuscles": [],
+    "volume": [
+      {
+        "group": "calves",
+        "weight": 1
+      }
+    ],
+    "equipment": "machine",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "lower",
+    "why": "Bent knees switch work to the soleus, the lower calf.",
+    "setup": [
+      "Knees bent 90°, pad on the lower thighs."
+    ],
+    "form": [
+      "Lower to a full stretch and pause.",
+      "Rise as high as possible."
+    ],
+    "tips": [
+      "Pause at the bottom every rep."
+    ],
+    "avoid": [
+      "Bouncing."
+    ],
+    "rangeOfMotion": "Full stretch to full rise.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 10,
+    "figure": {
+      "base": {
+        "anchor": 1,
+        "ax": 70,
+        "th": 90,
+        "sh": 0,
+        "t": 0,
+        "ua": 20,
+        "fa": 60
+      },
+      "A": {
+        "ah": 0
+      },
+      "B": {
+        "ah": 6
+      },
+      "props": [
+        {
+          "pad": "kn",
+          "r": 3
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  },
+  {
+    "id": "cable-one-arm-tricep-kickback",
+    "name": "Cable One-Arm Tricep Kickback",
+    "aliases": [
+      "Cable One-Arm Tricep Kickback"
+    ],
+    "muscles": [
+      "Triceps"
+    ],
+    "secondaryMuscles": [],
+    "volume": [
+      {
+        "group": "triceps",
+        "weight": 1
+      }
+    ],
+    "equipment": "cable",
+    "loadMode": "total",
+    "isHeavy": false,
+    "bodyRegion": "upper",
+    "why": "Triceps in the short (fully contracted) position, the one angle the other triceps moves miss.",
+    "setup": [
+      "Low pulley, single handle, hinge forward.",
+      "Upper arm pinned beside the torso, parallel to the floor."
+    ],
+    "form": [
+      "Extend the elbow until the arm is straight and squeeze 1 second.",
+      "Bend back to about 90°."
+    ],
+    "tips": [
+      "Light weight. The squeeze at full lockout is the whole point."
+    ],
+    "avoid": [
+      "Upper arm swinging down.",
+      "Using momentum from the shoulder."
+    ],
+    "rangeOfMotion": "About 90° at the elbow to fully straight.",
+    "tempo": "1–2 s up, 2–3 s down",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "base": {
+        "hx": 45,
+        "hy": 58,
+        "t": 55,
+        "th": 12,
+        "sh": -8,
+        "ua": -95
+      },
+      "A": {
+        "fa": 0
+      },
+      "B": {
+        "fa": -92
+      },
+      "props": [
+        {
+          "cable": [
+            112,
+            100
+          ],
+          "to": "ha"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "group": "back",
+    "min": 14,
+    "max": 22,
+    "angles": "vertical, rows, lat stretch, lat isolation"
+  },
+  {
+    "group": "biceps",
+    "min": 14,
+    "max": 20,
+    "angles": "stretched, lengthened, hammer",
+    "gap": "short position, heavy palm-up curl"
+  },
+  {
+    "group": "triceps",
+    "min": 14,
+    "max": 22,
+    "angles": "overhead, pushdown, compound, kickback"
+  },
+  {
+    "group": "sideDelts",
+    "min": 14,
+    "max": 20,
+    "angles": "cable, stretched, all-the-way-up"
+  },
+  {
+    "group": "rearDelts",
+    "min": 14,
+    "max": 20,
+    "angles": "machine, cable, face pull"
+  },
+  {
+    "group": "traps",
+    "min": 12,
+    "max": 20,
+    "angles": "upper, mid, lower"
+  },
+  {
+    "group": "frontDelts",
+    "min": 6,
+    "max": 8,
+    "angles": "press only",
+    "gap": "by design"
+  },
+  {
+    "group": "chest",
+    "min": null,
+    "max": null,
+    "angles": "dips only",
+    "note": "0 by plan"
+  },
+  {
+    "group": "quads",
+    "min": 10,
+    "max": null,
+    "angles": "squat, leg press, extension"
+  },
+  {
+    "group": "hamstrings",
+    "min": 10,
+    "max": null,
+    "angles": "short, stretched",
+    "gap": "hip hinge (glutes)",
+    "acceptedBelow": true,
+    "note": "by choice (shorter leg days)"
+  },
+  {
+    "group": "adductors",
+    "min": 10,
+    "max": null,
+    "angles": "machine, squat, leg press"
+  },
+  {
+    "group": "calves",
+    "min": 8,
+    "max": null,
+    "angles": "standing, seated"
+  },
+  {
+    "group": "glutes",
+    "min": null,
+    "max": null,
+    "note": "tracked only"
+  },
+  {
+    "group": "rotatorCuff",
+    "min": null,
+    "max": null,
+    "note": "tracked only"
+  },
+  {
+    "group": "forearms",
+    "min": null,
+    "max": null,
+    "note": "tracked only"
+  }
+]

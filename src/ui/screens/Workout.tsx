@@ -1,0 +1,368 @@
+// Workout logger. Built for one hand and sweaty fingers: the current set is expanded with big steppers
+// and one big Done button; everything saves on every tap; rest starts automatically.
+import { useEffect, useMemo, useRef, useState } from "react";
+import { LOADING } from "../../core/figure/poses";
+import { platesPerSide } from "../../core/plates";
+import { progressionHint } from "../../core/progression";
+import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
+import {
+  addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, moveEntry, removeEntry, removeSet,
+  setEntry, swapEntry, toggleDone, toggleSupersetWithNext, updateSet,
+} from "../../core/session";
+import type { Exercise, LoggedSet, Session, SessionEntry, SetType } from "../../core/types";
+import { fmtNum } from "../../core/util";
+import { Stepper } from "../components/Controls";
+import { ExercisePicker } from "../components/ExercisePicker";
+import { Figure } from "../components/Figure";
+import { Icon } from "../components/Icon";
+import { Confirm, Sheet } from "../components/Sheet";
+import { keepAwake, vibrate } from "../device";
+import { fmtClock, fmtRest, fmtW, loadSuffix, repRange, setsLine } from "../format";
+import { go } from "../router";
+import { useStore } from "../store";
+import { ExerciseSheet } from "./ExerciseScreen";
+
+const TYPES: SetType[] = ["working", "warmup", "drop", "failure"];
+const TYPE_UI: Record<SetType, { short: string; long: string; color: string }> = {
+  working: { short: "", long: "Working set", color: "var(--neon)" },
+  warmup: { short: "W", long: "Warm-up", color: "var(--muted)" },
+  drop: { short: "D", long: "Drop set", color: "var(--neon-2)" },
+  failure: { short: "F", long: "To failure", color: "var(--bad)" },
+};
+
+function Elapsed({ s }: { s: Session }) {
+  const [, tick] = useState(0);
+  useEffect(() => { const t = setInterval(() => tick((x) => x + 1), 1000); return () => clearInterval(t); }, []);
+  return <span className="mono">{fmtClock((Date.now() - Date.parse(s.startedAt)) / 1000)}</span>;
+}
+
+export function WorkoutScreen() {
+  const store = useStore();
+  const { active, exMap, finished, settings, saveSession, setRestTimer, toast, routine } = store;
+  const [focus, setFocus] = useState<string | null>(null);
+  const [detail, setDetail] = useState<string | null>(null);
+  const [menu, setMenu] = useState<string | null>(null);
+  const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; entryId: string } | null>(null);
+  const [noteFor, setNoteFor] = useState<string | "workout" | null>(null);
+  const [finishOpen, setFinishOpen] = useState(false);
+  const [confirmDiscard, setConfirmDiscard] = useState(false);
+  const [confirmRemove, setConfirmRemove] = useState<string | null>(null);
+  const refs = useRef(new Map<string, HTMLElement>());
+
+  useEffect(() => {
+    if (!active || !settings.keepAwake) return;
+    void keepAwake(true);
+    const v = () => document.visibilityState === "visible" && keepAwake(true);
+    document.addEventListener("visibilitychange", v);
+    return () => { document.removeEventListener("visibilitychange", v); void keepAwake(false); };
+  }, [active, settings.keepAwake]);
+
+  // Focus = the exercise you're on: first one with a set left, unless chosen.
+  const current = useMemo(() => {
+    if (!active) return null;
+    if (focus && active.entries.some((e) => e.id === focus && e.sets.some((x) => !x.done))) return focus;
+    return active.entries.find((e) => e.sets.some((x) => !x.done))?.id ?? null;
+  }, [active, focus]);
+
+  if (!active) {
+    return (
+      <div className="page"><div className="empty" style={{ paddingTop: 80 }}>
+        <Figure spec={LOADING} size={130} />
+        <h2 className="title-lg">No workout running</h2>
+        <p>Start one from Today.</p>
+        <button className="btn btn-primary" onClick={() => go("today")}>Go to Today</button>
+      </div></div>
+    );
+  }
+  const s = active;
+  const commit = (n: Session) => saveSession(n);
+  const total = s.entries.reduce((a, e) => a + e.sets.length, 0);
+  const done = s.entries.reduce((a, e) => a + e.sets.filter((x) => x.done).length, 0);
+  const day = routine?.days.find((d) => d.id === s.dayId);
+
+  const scrollTo = (id: string | null) => {
+    if (!id) return;
+    setTimeout(() => refs.current.get(id)?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+  };
+
+  const onToggle = (e: SessionEntry, x: LoggedSet) => {
+    const ex = exMap.get(e.exerciseId)!;
+    const next = toggleDone(s, e.id, x.id, new Date());
+    commit(next);
+    if (x.done) return; // undo
+    vibrate(12);
+    // PR check against history + this entry's earlier sets
+    const prev = computeRecords(finished, ex.id, s.id);
+    const running = cloneRecords(prev);
+    const ne = next.entries.find((y) => y.id === e.id)!;
+    for (const y of ne.sets) if (y.id !== x.id && y.done) addSetToRecords(running, y, s.date);
+    const kinds: PrKind[] = prsForSet(running, { ...x, done: true });
+    const before = entryVolume(e.sets), after = entryVolume(ne.sets);
+    if (prev.bestSessionVolume && after > prev.bestSessionVolume.value && before <= prev.bestSessionVolume.value) kinds.push("volume");
+    if (kinds.length) toast({ kind: "pr", title: "New PR!", body: `${ex.name}: ${kinds.map((k) => PR_LABEL[k]).join(" · ")} (${fmtW(x.weight)}${loadSuffix(ex)} × ${x.reps})` });
+    const r = afterSetDone(next, e.id);
+    if (r.rest && settings.autoStartRest && e.restSec > 0) setRestTimer({ endsAt: Date.now() + e.restSec * 1000, durationSec: e.restSec, sessionId: s.id, entryId: e.id });
+    if (r.nextEntryId !== e.id) { setFocus(r.nextEntryId); scrollTo(r.nextEntryId); }
+  };
+
+  const doFinish = () => {
+    const f = finishSession(s, new Date());
+    if (!f.entries.length) { setFinishOpen(false); setConfirmDiscard(true); return; }
+    commit(f);
+    setRestTimer(null);
+    go(`summary/${f.id}`);
+  };
+
+  // Group consecutive superset entries for the bracket
+  const groupInfo = (i: number) => {
+    const e = s.entries[i];
+    if (!e.supersetGroup) return null;
+    const prev = s.entries[i - 1], nxt = s.entries[i + 1];
+    return { label: e.supersetGroup, first: prev?.supersetGroup !== e.supersetGroup, last: nxt?.supersetGroup !== e.supersetGroup };
+  };
+  const menuEntry = s.entries.find((e) => e.id === menu);
+  const menuIdx = s.entries.findIndex((e) => e.id === menu);
+
+  return (
+    <div className="page" style={{ paddingTop: 0 }}>
+      <header className="glass" style={{ position: "sticky", top: 0, zIndex: 20, margin: "0 -16px 14px", padding: "calc(env(safe-area-inset-top) + 10px) 16px 12px", borderRadius: "0 0 22px 22px", borderTop: 0 }}>
+        <div className="spread">
+          <div className="grow">
+            <div className="eyebrow" style={{ fontSize: 11 }}>{day ? "Workout" : "Free workout"} · <Elapsed s={s} /></div>
+            <h1 className="title-md" style={{ textTransform: "uppercase", fontSize: 24, marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.title}</h1>
+          </div>
+          <button className="icon-btn" aria-label="Workout notes" onClick={() => setNoteFor("workout")} style={{ color: s.notes ? "var(--neon)" : undefined }}><Icon name="note" /></button>
+          <button className="btn btn-primary" style={{ minHeight: 42, padding: "0 16px", fontSize: 16 }} onClick={() => setFinishOpen(true)}>Finish</button>
+        </div>
+        <div style={{ marginTop: 10, height: 6, borderRadius: 6, background: "var(--surface-2)", overflow: "hidden" }} role="progressbar" aria-valuenow={done} aria-valuemax={total} aria-label="Sets done">
+          <div style={{ height: "100%", width: `${total ? (done / total) * 100 : 0}%`, borderRadius: 6, background: "linear-gradient(90deg,var(--neon),var(--neon-2))", boxShadow: "0 0 12px var(--glow)", transition: "width .5s var(--ease)" }} />
+        </div>
+        <div className="muted mono" style={{ fontSize: 12, marginTop: 4, textAlign: "right" }}>{done}/{total} sets</div>
+      </header>
+
+      {s.entries.length === 0 && (
+        <div className="empty"><Figure spec={LOADING} size={110} /><p>Add your first exercise.</p></div>
+      )}
+
+      <div className="stack" style={{ gap: 14 }}>
+        {s.entries.map((e, i) => {
+          const ex = exMap.get(e.exerciseId);
+          if (!ex) return null;
+          const g = groupInfo(i);
+          return (
+            <div key={e.id} ref={(el) => { if (el) refs.current.set(e.id, el); }} style={{ scrollMarginTop: 120, position: "relative", paddingLeft: g ? 14 : 0 }}>
+              {g && (
+                <div aria-hidden style={{ position: "absolute", left: 0, top: g.first ? 18 : -14, bottom: g.last ? 18 : -14, width: 3, borderRadius: 3, background: "var(--neon-2)", boxShadow: "0 0 10px var(--neon-2)" }} />
+              )}
+              {g?.first && <div className="eyebrow" style={{ color: "var(--neon-2)", margin: "0 0 6px 2px", fontSize: 11 }}>Superset {g.label}</div>}
+              <EntryCard
+                s={s} e={e} ex={ex} index={i} focused={current === e.id}
+                onFocus={() => setFocus(e.id)} onToggle={(x) => onToggle(e, x)} commit={commit}
+                onDetail={() => setDetail(e.id)} onMenu={() => setMenu(e.id)}
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      <button className="btn btn-ghost btn-block" style={{ marginTop: 16, minHeight: 54 }} onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
+
+      {/* Exercise detail without losing your place */}
+      {(() => {
+        const de = s.entries.find((x) => x.id === detail);
+        const slot = day?.slots.find((x) => x.id === de?.slotId);
+        return <ExerciseSheet id={de?.exerciseId ?? null} onClose={() => setDetail(null)} whyOverride={de?.exerciseId === slot?.exerciseId ? slot?.whyOverride : undefined} tipsOverride={de?.exerciseId === slot?.exerciseId ? slot?.tipsOverride : undefined} />;
+      })()}
+
+      <Sheet open={!!menuEntry} onClose={() => setMenu(null)} label="Exercise options">
+        {menuEntry && (
+          <div>
+            <div className="eyebrow" style={{ padding: "0 8px 8px" }}>{exMap.get(menuEntry.exerciseId)?.name}</div>
+            <button className="menu-item" onClick={() => { setPicker({ mode: "swap", entryId: menuEntry.id }); setMenu(null); }}><Icon name="swap" /> Swap for this workout</button>
+            {menuIdx < s.entries.length - 1 && (
+              <button className="menu-item" onClick={() => { commit(toggleSupersetWithNext(s, menuEntry.id)); setMenu(null); }}>
+                <Icon name="link" /> {menuEntry.supersetGroup && menuEntry.supersetGroup === s.entries[menuIdx + 1]?.supersetGroup ? "Unlink from next (end superset)" : "Superset with next exercise"}
+              </button>
+            )}
+            <button className="menu-item" onClick={() => { setNoteFor(menuEntry.id); setMenu(null); }}><Icon name="note" /> {menuEntry.notes ? "Edit note" : "Add note"}</button>
+            <button className="menu-item" onClick={() => { commit(addSet(s, menuEntry.id, "warmup")); setMenu(null); }}><Icon name="plus" /> Add warm-up set</button>
+            {menuIdx > 0 && <button className="menu-item" onClick={() => { commit(moveEntry(s, menuEntry.id, -1)); setMenu(null); }}><Icon name="up" /> Move up</button>}
+            {menuIdx < s.entries.length - 1 && <button className="menu-item" onClick={() => { commit(moveEntry(s, menuEntry.id, 1)); setMenu(null); }}><Icon name="down" /> Move down</button>}
+            <button className="menu-item" onClick={() => { setDetail(menuEntry.id); setMenu(null); }}><Icon name="info" /> How to do it</button>
+            <button className="menu-item danger" onClick={() => { setConfirmRemove(menuEntry.id); setMenu(null); }}><Icon name="trash" /> Remove from workout</button>
+          </div>
+        )}
+      </Sheet>
+
+      <ExercisePicker
+        open={!!picker}
+        title={picker?.mode === "swap" ? "Swap exercise" : "Add exercise"}
+        exclude={picker?.mode === "swap" ? s.entries.find((x) => x.id === picker.entryId)?.exerciseId : undefined}
+        onClose={() => setPicker(null)}
+        onPick={(ex) => {
+          if (picker?.mode === "swap") commit(swapEntry(s, picker.entryId, ex, finished));
+          else { const ne = buildEntry(ex, finished, { restSec: ex.defaultRestSec || settings.restDefaultSec }); commit(addEntry(s, ne)); scrollTo(ne.id); }
+        }}
+      />
+
+      <NoteSheet
+        open={noteFor != null}
+        title={noteFor === "workout" ? "Workout notes" : `Note · ${exMap.get(s.entries.find((x) => x.id === noteFor)?.exerciseId ?? "")?.name ?? ""}`}
+        value={noteFor === "workout" ? s.notes ?? "" : s.entries.find((x) => x.id === noteFor)?.notes ?? ""}
+        onSave={(v) => {
+          if (noteFor === "workout") commit({ ...s, notes: v || undefined });
+          else if (noteFor) commit(setEntry(s, noteFor, { notes: v || undefined }));
+        }}
+        onClose={() => setNoteFor(null)}
+      />
+
+      <Sheet open={finishOpen} onClose={() => setFinishOpen(false)} label="Finish workout">
+        <div className="stack" style={{ padding: "0 4px" }}>
+          <h3 className="title-lg">Finish workout?</h3>
+          <p className="muted">{done} of {total} sets done · {durationMin(s)} min.{total - done > 0 ? ` ${total - done} set${total - done > 1 ? "s" : ""} not done will be dropped.` : ""}</p>
+          <button className="btn btn-primary btn-xl" onClick={doFinish}><Icon name="check" /> Finish</button>
+          <button className="btn btn-ghost btn-block" onClick={() => setFinishOpen(false)}>Keep going</button>
+          <button className="btn btn-quiet btn-block" style={{ color: "var(--bad)" }} onClick={() => { setFinishOpen(false); setConfirmDiscard(true); }}>Discard workout</button>
+        </div>
+      </Sheet>
+      <Confirm open={confirmDiscard} title="Discard this workout?" body="Everything logged in it is deleted. This can't be undone." confirm="Discard" danger
+        onClose={() => setConfirmDiscard(false)} onConfirm={() => { store.deleteSession(s.id); setRestTimer(null); go("today"); }} />
+      <Confirm open={!!confirmRemove} title="Remove this exercise?" body="Its sets in this workout are removed." confirm="Remove" danger
+        onClose={() => setConfirmRemove(null)} onConfirm={() => confirmRemove && commit(removeEntry(s, confirmRemove))} />
+    </div>
+  );
+}
+
+function NoteSheet({ open, title, value, onSave, onClose }: { open: boolean; title: string; value: string; onSave: (v: string) => void; onClose: () => void }) {
+  const [v, setV] = useState(value);
+  useEffect(() => setV(value), [value, open]);
+  const close = () => { if (v !== value) onSave(v.trim()); onClose(); };
+  return (
+    <Sheet open={open} onClose={close} label={title}>
+      <div className="stack">
+        <h3 className="title-md">{title}</h3>
+        <textarea className="input" autoFocus value={v} onChange={(e) => setV(e.target.value)} placeholder="Seat height, grip, how it felt…" />
+        <button className="btn btn-primary btn-block" onClick={close}>Save</button>
+      </div>
+    </Sheet>
+  );
+}
+
+function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDetail, onMenu }: {
+  s: Session; e: SessionEntry; ex: Exercise; index: number; focused: boolean;
+  onFocus: () => void; onToggle: (x: LoggedSet) => void; commit: (n: Session) => void; onDetail: () => void; onMenu: () => void;
+}) {
+  const { finished, settings, exMap } = useStore();
+  const [sel, setSel] = useState<string | null>(null);
+  const last = useMemo(() => lastEntryFor(finished, ex.id, s.id), [finished, ex.id, s.id]);
+  const repMin = e.repMin ?? 8, repMax = e.repMax ?? repMin;
+  const hint = progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb);
+  const allDone = e.sets.length > 0 && e.sets.every((x) => x.done);
+  const selected = e.sets.find((x) => x.id === sel) ?? e.sets.find((x) => !x.done) ?? null;
+  const workIdx = (x: LoggedSet) => e.sets.filter((y) => y.type === "working" && e.sets.indexOf(y) <= e.sets.indexOf(x)).length;
+  const swappedFrom = e.swappedFromId ? exMap.get(e.swappedFromId)?.name : undefined;
+
+  return (
+    <article className="glass edge" onClick={onFocus}
+      style={{ padding: 14, borderRadius: 22, transition: "box-shadow .35s, border-color .35s, opacity .35s",
+        borderColor: focused ? "color-mix(in srgb, var(--neon) 55%, transparent)" : undefined,
+        boxShadow: focused ? "0 0 0 1px color-mix(in srgb,var(--neon) 30%,transparent), 0 18px 50px -20px var(--glow)" : undefined,
+        opacity: allDone && !focused ? 0.78 : 1 }}>
+      <div className="row" style={{ alignItems: "flex-start", gap: 10 }}>
+        <span className="mono" style={{ width: 26, height: 26, flex: "none", display: "grid", placeItems: "center", borderRadius: 8, fontSize: 13, marginTop: 2,
+          background: allDone ? "var(--good)" : focused ? "var(--neon)" : "var(--surface-2)", color: allDone || focused ? "var(--on-neon)" : "var(--muted)", boxShadow: allDone ? "0 0 12px var(--good)" : focused ? "0 0 12px var(--glow)" : "none", transition: "all .3s" }}>
+          {allDone ? <Icon name="check" size={16} stroke={3} /> : index + 1}
+        </span>
+        <button className="grow" style={{ textAlign: "left" }} onClick={(ev) => { ev.stopPropagation(); onDetail(); }} aria-label={`${ex.name}: how to do it`}>
+          <div style={{ font: "700 21px/1.1 var(--display)", letterSpacing: ".01em" }}>{ex.name} {ex.isHeavy && <span className="star">★</span>}</div>
+          <div className="muted" style={{ fontSize: 13, marginTop: 3 }}>
+            {e.sets.filter((x) => x.type !== "warmup").length} × {repRange(e.repMin, e.repMax) || "—"} · rest {fmtRest(e.restSec)}
+            {swappedFrom && <> · <span style={{ color: "var(--neon-2)" }}>swapped from {swappedFrom}</span></>}
+          </div>
+        </button>
+        <Figure spec={ex.figure} size={focused ? 74 : 54} still={!focused} />
+        <button className="icon-btn" style={{ marginRight: -8, marginTop: -6 }} onClick={(ev) => { ev.stopPropagation(); onMenu(); }} aria-label={`Options for ${ex.name}`}><Icon name="more" /></button>
+      </div>
+
+      {e.notes && <div style={{ fontSize: 13, marginTop: 8, padding: "6px 10px", borderRadius: 10, background: "var(--surface-2)" }}><Icon name="note" size={14} /> {e.notes}</div>}
+
+      {(last || hint.kind !== "none") && (
+        <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
+          {last && <div className="mono muted" style={{ fontSize: 13 }}>Last: {setsLine(last.entry.sets)}</div>}
+          {hint.kind !== "none" && !allDone && (
+            <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
+              <span style={{ color: "var(--neon)" }}><Icon name={hint.kind === "addWeight" ? "up" : "bolt"} size={18} /></span>
+              <span className="grow" style={{ fontSize: 14 }}>
+                {hint.kind === "addWeight"
+                  ? <>Hit the top last time. Try <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>
+                  : <>Beat last time: <b className="mono">{fmtNum(hint.weight)} × {hint.targetReps.join(", ")}</b></>}
+              </span>
+              <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
+                onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.kind === "addWeight" ? hint.reps : hint.targetReps)); }}>Use</button>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
+        {e.sets.map((x) => {
+          const isSel = selected?.id === x.id && focused;
+          const t = TYPE_UI[x.type];
+          return (
+            <div key={x.id} style={{ borderRadius: 14, background: isSel ? "var(--surface-2)" : "transparent", border: `1px solid ${isSel ? "var(--line-strong)" : "transparent"}`, transition: "all .25s var(--ease)" }}>
+              <div className="row" style={{ minHeight: 48, padding: "0 4px 0 6px" }}>
+                <button aria-label={`Set type: ${t.long}. Tap to change`} title={t.long}
+                  onClick={(ev) => { ev.stopPropagation(); commit(updateSet(s, e.id, x.id, { type: TYPES[(TYPES.indexOf(x.type) + 1) % TYPES.length] })); }}
+                  style={{ width: 40, height: 36, borderRadius: 10, font: "700 15px var(--mono)", color: t.color, border: `1px solid color-mix(in srgb, ${t.color} 45%, transparent)` }}>
+                  {t.short || workIdx(x)}
+                </button>
+                <button className="grow mono" style={{ textAlign: "left", fontSize: 18, padding: "8px 6px", color: x.done ? "var(--ink)" : "var(--muted)" }}
+                  onClick={(ev) => { ev.stopPropagation(); onFocus(); setSel(x.id); }} aria-label="Edit set">
+                  {fmtW(x.weight)}<span style={{ fontSize: 12 }}>{x.weight != null ? loadSuffix(ex) : ""}</span> <span style={{ opacity: 0.6 }}>×</span> {x.reps ?? "—"}
+                </button>
+                <button aria-label={x.done ? "Mark not done" : "Mark done"} aria-pressed={x.done}
+                  onClick={(ev) => { ev.stopPropagation(); setSel(null); onToggle(x); }}
+                  style={{ width: 48, height: 40, borderRadius: 12, display: "grid", placeItems: "center", transition: "all .25s var(--ease)",
+                    background: x.done ? "var(--good)" : "transparent", color: x.done ? "var(--on-neon)" : "var(--muted)",
+                    border: `1.5px solid ${x.done ? "var(--good)" : "var(--line-strong)"}`, boxShadow: x.done ? "0 0 16px -2px var(--good)" : "none",
+                    transform: x.done ? "scale(1)" : "scale(.96)" }}>
+                  <Icon name="check" size={22} stroke={2.6} />
+                </button>
+              </div>
+              {isSel && !x.done && (
+                <div style={{ padding: "4px 10px 12px", display: "grid", gap: 10, animation: "pageIn .3s var(--ease) both" }} onClick={(ev) => ev.stopPropagation()}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 8 }}>
+                    <Stepper label="Weight" suffix={ex.loadMode === "perSide" ? "lb per side" : ex.loadMode === "perHand" ? "lb per hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />
+                    <Stepper label="Reps" value={x.reps} step={1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
+                  </div>
+                  {ex.loadMode === "perSide" && x.weight != null && x.weight > 0 && <Plates weight={x.weight} stock={settings.plates} />}
+                  <button className="btn btn-primary btn-xl" style={{ minHeight: 56 }} onClick={() => { setSel(null); onToggle(x); }}>
+                    <Icon name="check" size={22} stroke={2.6} /> Done{e.sets.indexOf(x) === e.sets.length - 1 ? "" : ` · set ${e.sets.indexOf(x) + 1}`}
+                  </button>
+                  <button className="btn btn-quiet" style={{ minHeight: 36, fontSize: 13 }} onClick={() => commit(removeSet(s, e.id, x.id))}><Icon name="trash" size={16} /> Remove this set</button>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <button className="btn btn-quiet btn-block" style={{ marginTop: 4, minHeight: 40, fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(addSet(s, e.id)); onFocus(); }}>
+        <Icon name="plus" size={18} /> Add set
+      </button>
+    </article>
+  );
+}
+
+function Plates({ weight, stock }: { weight: number; stock: { weight: number; pairs: number }[] }) {
+  const r = platesPerSide(weight, stock);
+  return (
+    <div className="row" style={{ flexWrap: "wrap", gap: 6, fontSize: 13 }} aria-label="Plates per side">
+      <span className="eyebrow" style={{ fontSize: 10 }}>Per side</span>
+      {r.plates.map((p, i) => (
+        <span key={i} className="mono" style={{ padding: "3px 8px", borderRadius: 8, border: "1px solid var(--neon)", color: "var(--neon)", boxShadow: "0 0 10px -4px var(--glow)",
+          minHeight: 24, height: 20 + Math.min(16, p / 3), display: "grid", placeItems: "center", lineHeight: 1 }}>{fmtNum(p)}</span>
+      ))}
+      {r.remainder > 0 && <span style={{ color: "var(--warn)" }}>+{fmtNum(r.remainder)} lb can't be loaded</span>}
+    </div>
+  );
+}

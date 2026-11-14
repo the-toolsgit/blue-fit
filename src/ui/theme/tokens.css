@@ -1,0 +1,67 @@
+/* Blue Fit design tokens. Neon-led: the glowing blue line man sets the palette. Dark is the hero theme. */
+:root {
+  --bg: #04060c;
+  --bg-2: #08101f;
+  --surface: rgba(13, 21, 39, 0.72);
+  --surface-solid: #0b1322;
+  --surface-2: rgba(25, 39, 68, 0.62);
+  --line: rgba(110, 165, 255, 0.15);
+  --line-strong: rgba(110, 165, 255, 0.34);
+  --ink: #eaf2ff;
+  --muted: #8494b4;
+  --faint: #4a5878;
+  --fig: #4fa6ff;
+  --fig2: #2b5aa6;
+  --neon: #3d9bff;
+  --neon-2: #23e2ff;
+  --glow: rgba(61, 155, 255, 0.55);
+  --glow-soft: rgba(61, 155, 255, 0.18);
+  --pink: #ff3fa8;
+  --pink-glow: rgba(255, 63, 168, 0.5);
+  --good: #3dffb0;
+  --warn: #ffc53d;
+  --bad: #ff4d6a;
+  --star: #ffc53d;
+  --on-neon: #02101f;
+  --bg-fx-1: rgba(35, 110, 255, 0.22);
+  --bg-fx-2: rgba(0, 220, 255, 0.10);
+  --grid: rgba(90, 150, 255, 0.045);
+
+  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  --r-sm: 10px; --r-md: 16px; --r-lg: 22px;
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px;
+  --tap: 44px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tabbar-h: 64px;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #eef3fc; --bg-2: #e3ebfa;
+    --surface: rgba(255, 255, 255, 0.82); --surface-solid: #ffffff; --surface-2: rgba(226, 236, 253, 0.85);
+    --line: rgba(31, 90, 200, 0.14); --line-strong: rgba(31, 90, 200, 0.3);
+    --ink: #0a1430; --muted: #52618a; --faint: #9aa8c6;
+    --fig: #1f6bff; --fig2: #9dbcf6; --neon: #1f6bff; --neon-2: #00a3d4;
+    --glow: rgba(31, 107, 255, 0.32); --glow-soft: rgba(31, 107, 255, 0.1);
+    --pink: #e0187f; --pink-glow: rgba(224, 24, 127, 0.28);
+    --good: #0b9e62; --warn: #b7791f; --bad: #d6334f; --star: #c98a12; --on-neon: #ffffff;
+    --bg-fx-1: rgba(31, 107, 255, 0.12); --bg-fx-2: rgba(0, 190, 240, 0.08); --grid: rgba(31, 90, 200, 0.05);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #eef3fc; --bg-2: #e3ebfa;
+  --surface: rgba(255, 255, 255, 0.82); --surface-solid: #ffffff; --surface-2: rgba(226, 236, 253, 0.85);
+  --line: rgba(31, 90, 200, 0.14); --line-strong: rgba(31, 90, 200, 0.3);
+  --ink: #0a1430; --muted: #52618a; --faint: #9aa8c6;
+  --fig: #1f6bff; --fig2: #9dbcf6; --neon: #1f6bff; --neon-2: #00a3d4;
+  --glow: rgba(31, 107, 255, 0.32); --glow-soft: rgba(31, 107, 255, 0.1);
+  --pink: #e0187f; --pink-glow: rgba(224, 24, 127, 0.28);
+  --good: #0b9e62; --warn: #b7791f; --bad: #d6334f; --star: #c98a12; --on-neon: #ffffff;
+  --bg-fx-1: rgba(31, 107, 255, 0.12); --bg-fx-2: rgba(0, 190, 240, 0.08); --grid: rgba(31, 90, 200, 0.05);
+  color-scheme: light;
+}

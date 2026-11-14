@@ -1,0 +1,391 @@
+{
+  "id": "leo-v3-1",
+  "name": "Leo v3.1",
+  "isCurrent": true,
+  "createdAt": "2026-11-11T00:00:00.000Z",
+  "rules": [
+    {
+      "title": "Effort",
+      "text": "Stop every set when only 0–2 good reps are left. Drop sets only on the last set of an exercise."
+    },
+    {
+      "title": "Progression",
+      "text": "Pick a weight that gets you to the bottom of the rep range. When every set hits the top, add weight and start at the bottom again."
+    },
+    {
+      "title": "★ Heavy",
+      "text": "Stable lifts where adding weight is the main goal. Unmarked = isolation: lighter, strict, same effort. Rest about 2 min between sets. Workout times assume that and leave out warm-up."
+    }
+  ],
+  "days": [
+    {
+      "id": "mon",
+      "weekday": 1,
+      "title": "Back & Biceps",
+      "slots": [
+        {
+          "id": "mon-1",
+          "exerciseId": "t-bar-reverse-row",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 15,
+          "restSec": 120,
+          "notes": "back version, elbows to hips"
+        },
+        {
+          "id": "mon-2",
+          "exerciseId": "single-arm-cable-lat-pulldown",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120,
+          "notes": "lats stretched"
+        },
+        {
+          "id": "mon-3",
+          "exerciseId": "single-arm-db-row",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120,
+          "notes": "elbow to hip"
+        },
+        {
+          "id": "mon-4",
+          "exerciseId": "straight-arm-cable-pulldown",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "lats only"
+        },
+        {
+          "id": "mon-5",
+          "exerciseId": "db-incline-curl",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120,
+          "notes": "biceps long head stretched"
+        },
+        {
+          "id": "mon-6",
+          "exerciseId": "barbell-preacher-curl",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "biceps lengthened"
+        }
+      ]
+    },
+    {
+      "id": "tue",
+      "weekday": 2,
+      "title": "Shoulders & Traps",
+      "slots": [
+        {
+          "id": "tue-1",
+          "exerciseId": "machine-shoulder-press",
+          "sets": 4,
+          "repMin": 8,
+          "repMax": 10,
+          "restSec": 120,
+          "notes": "only direct front-delt work"
+        },
+        {
+          "id": "tue-2",
+          "exerciseId": "cable-lateral-raise",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "side delts"
+        },
+        {
+          "id": "tue-3",
+          "exerciseId": "lateral-shrug-hybrid",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120,
+          "notes": "upper traps (locked in)"
+        },
+        {
+          "id": "tue-4",
+          "exerciseId": "barbell-shrug",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 15,
+          "restSec": 120,
+          "notes": "upper traps"
+        },
+        {
+          "id": "tue-5",
+          "exerciseId": "overhead-trap",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120,
+          "notes": "cable low → overhead, finish in a Y · lower traps"
+        },
+        {
+          "id": "tue-6",
+          "exerciseId": "machine-reverse-fly",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "rear delts"
+        }
+      ]
+    },
+    {
+      "id": "wed",
+      "weekday": 3,
+      "title": "Legs A",
+      "slots": [
+        {
+          "id": "wed-1",
+          "exerciseId": "smith-squat",
+          "sets": 4,
+          "repMin": 8,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "to parallel only (less glute)"
+        },
+        {
+          "id": "wed-2",
+          "exerciseId": "leg-extension",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120
+        },
+        {
+          "id": "wed-3",
+          "exerciseId": "prone-leg-curl",
+          "sets": 4,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120,
+          "notes": "hamstrings, short position"
+        },
+        {
+          "id": "wed-4",
+          "exerciseId": "hip-adduction",
+          "sets": 4,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120
+        },
+        {
+          "id": "wed-5",
+          "exerciseId": "standing-calf-raise",
+          "sets": 4,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "upper calf"
+        },
+        {
+          "id": "wed-6",
+          "exerciseId": "cable-lateral-raise",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "extra side delts",
+          "whyOverride": "Extra side-delt sets on a day the shoulders are fresh, to keep side delts in their growth range at 3 sets per exercise.",
+          "tipsOverride": [
+            "Do it at the end of leg day so the legs get your best effort first."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thu",
+      "weekday": 4,
+      "title": "Back & Triceps",
+      "slots": [
+        {
+          "id": "thu-1",
+          "exerciseId": "wide-grip-lat-pulldown",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120
+        },
+        {
+          "id": "thu-2",
+          "exerciseId": "cable-seated-row",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120
+        },
+        {
+          "id": "thu-3",
+          "exerciseId": "ez-bar-incline-tricep-extension",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120,
+          "notes": "long head"
+        },
+        {
+          "id": "thu-4",
+          "exerciseId": "machine-dip",
+          "sets": 4,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120,
+          "notes": "upright torso"
+        },
+        {
+          "id": "thu-5",
+          "exerciseId": "v-bar-pushdown",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120
+        },
+        {
+          "id": "thu-6",
+          "exerciseId": "rope-face-pull",
+          "sets": 4,
+          "repMin": 15,
+          "repMax": 15,
+          "restSec": 120,
+          "notes": "rear delts + mid traps"
+        }
+      ]
+    },
+    {
+      "id": "fri",
+      "weekday": 5,
+      "title": "Shoulders, Traps & Arms",
+      "slots": [
+        {
+          "id": "fri-1",
+          "exerciseId": "lean-away-lateral-raise",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "side delts stretched"
+        },
+        {
+          "id": "fri-2",
+          "exerciseId": "all-the-way-up-lateral-raise",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "side delts + upper traps"
+        },
+        {
+          "id": "fri-3",
+          "exerciseId": "kelso-shrug",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "chest on row-machine pad, arms straight · mid traps"
+        },
+        {
+          "id": "fri-4",
+          "exerciseId": "single-arm-cable-reverse-fly",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "rear delts"
+        },
+        {
+          "id": "fri-5",
+          "exerciseId": "rope-overhead-tricep-extension",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "long head"
+        },
+        {
+          "id": "fri-6",
+          "exerciseId": "db-hammer-curl",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120,
+          "notes": "brachialis"
+        }
+      ]
+    },
+    {
+      "id": "sat",
+      "weekday": 6,
+      "title": "Legs B",
+      "slots": [
+        {
+          "id": "sat-1",
+          "exerciseId": "leg-press",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "feet low, not deep (less glute)"
+        },
+        {
+          "id": "sat-2",
+          "exerciseId": "seated-leg-curl",
+          "sets": 4,
+          "repMin": 10,
+          "repMax": 10,
+          "restSec": 120,
+          "notes": "hamstrings stretched"
+        },
+        {
+          "id": "sat-3",
+          "exerciseId": "leg-extension",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120
+        },
+        {
+          "id": "sat-4",
+          "exerciseId": "seated-calf-raise",
+          "sets": 4,
+          "repMin": 15,
+          "repMax": 15,
+          "restSec": 120,
+          "notes": "lower calf (soleus)"
+        },
+        {
+          "id": "sat-5",
+          "exerciseId": "hip-adduction",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120
+        },
+        {
+          "id": "sat-6",
+          "exerciseId": "cable-one-arm-tricep-kickback",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 12,
+          "restSec": 120,
+          "notes": "triceps short position"
+        }
+      ]
+    },
+    {
+      "id": "sun",
+      "weekday": 0,
+      "title": "Rest",
+      "slots": []
+    }
+  ]
+}
