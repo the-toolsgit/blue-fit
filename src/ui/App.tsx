@@ -110,6 +110,7 @@ export function App() {
       <div className="bg-fx" />
       <main key={route.join("/")}><ErrorBoundary resetKey={route.join("/")}><Suspense fallback={<Loading />}>{screen}</Suspense></ErrorBoundary></main>
       {ready && <RestTimerDock />}
+      <div className="bottom-fade" aria-hidden="true" />
       <nav className="tabbar glass" aria-label="Main">
         {TABS.map((t) => (
           <button key={t.id} className="tab" aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id)}>

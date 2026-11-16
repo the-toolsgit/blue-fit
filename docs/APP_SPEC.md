@@ -19,6 +19,8 @@ Blue Fit is a single-user training app that replaces Jefit for one advanced lift
 
 Bottom tab bar (always visible, floating glass bar): **Today · Plan · History · Progress · Settings**. While scrolling down it shrinks to a compact icons-only bar (64 → 46 px, labels fade, icons 24 → 20 px and centered, the active marker moves under the icon; 0.32 s); it grows back when scrolling up, near the top or bottom of the page, or on a new screen. The dock above it follows.
 
+Behind the tab bar and dock, a soft fade to the page background (no blur) keeps scrolling content from clashing with them; it is taller when the dock shows something.
+
 Above the tab bar sits the **dock**, a stack of floating actions:
 - Today's **Start workout** button (on Today, when no workout is running and the selected day has exercises).
 - The **rest timer** row, when a rest timer is running (on every screen).

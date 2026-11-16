@@ -117,6 +117,12 @@ ul { margin: 0; padding-left: 18px; }
 @keyframes tabDot { from { width: 0; opacity: 0; } }
 
 /* ---------- Bottom dock (CTA / rest timer / resume) above the tab bar ---------- */
+/* Soft fade under the floating tab bar and dock so content scrolling behind them doesn't clash. No blur; taller when the dock has something in it. */
+.bottom-fade { position: fixed; z-index: 24; left: 0; right: 0; bottom: 0; pointer-events: none;
+  height: calc(env(safe-area-inset-bottom) + var(--tabbar-h) + 44px);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--bg) 0%, transparent), color-mix(in srgb, var(--bg) 78%, transparent) 55%, var(--bg));
+  transition: height 0.32s var(--ease); }
+body:has(.dock > *) .bottom-fade { height: calc(env(safe-area-inset-bottom) + var(--tabbar-h) + 110px); }
 .dock { position: fixed; z-index: 25; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom) + var(--tabbar-h) + 18px); transition: bottom 0.32s var(--ease); width: min(560px, calc(100% - 24px)); display: grid; gap: 8px; }
 .dock > * { animation: dockIn 0.4s var(--ease) both; }
 @keyframes dockIn { from { opacity: 0; transform: translateY(16px); } }
