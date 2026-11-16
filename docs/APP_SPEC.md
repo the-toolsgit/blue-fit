@@ -245,7 +245,7 @@ At most one session is `active`. Duration = finishedAt − startedAt (minutes, r
 - Personal records are **derived**, never stored (§5.4).
 
 ### 4.8 Later phases (designed, not built)
-- **Deload suggestion (planned):** the app suggests a deload week (by interval and/or stalled lifts; rules to be agreed) and the user decides: "Deload this week" or "Not now". Web version: a banner on Today (web apps on iPhone can't notify without a server). **Native app: turn it into a notification.**
+- **Deload suggestion (planned):** the app suggests a deload week (whichever comes first: 6 weeks since the last deload or since the user started; or a 4-week stall = for more than half of the ★ heavy lifts in the current plan, the best est. 1RM of the last 4 weeks is not higher than the best before that; est. 1RM counts reps too, so a lift improves with more weight or more reps) and the user decides: "Deload this week" or "Not now". Web version: a banner on Today (web apps on iPhone can't notify without a server). **Native app: turn it into a notification.**
 - `BodyEntry { id, date, weightLb?, bodyFatPct?, measurements: {chest?, hips?, upperWaist?, lowerWaist?, upperArmR?, upperArmL?, forearmR?, forearmL?, thighR?, thighL?} (inches), photoIds?: string[], source: manual | scan }`, with a bodyweight band setting (min/max).
 - Routine versions and deload weeks: `Routine.basedOn?`, `Session.routineId` keeps history tied to the version used.
 
