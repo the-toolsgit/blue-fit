@@ -29,8 +29,8 @@ const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const mondayFirst = (w: number | null) => (w == null ? 9 : (w + 6) % 7);
 const draftKey = (id: string) => "bf-plan-draft-" + id;
 
-function SlotRow({ slot, ex, index, count, groupStart, groupEnd, onOpen, onMove }: {
-  slot: Slot; ex: Exercise | undefined; index: number; count: number; groupStart: boolean; groupEnd: boolean; onOpen: () => void; onMove: (to: number) => void;
+function SlotRow({ slot, ex, groupStart, groupEnd, onOpen }: {
+  slot: Slot; ex: Exercise | undefined; groupStart: boolean; groupEnd: boolean; onOpen: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: slot.id });
   return (
@@ -48,10 +48,6 @@ function SlotRow({ slot, ex, index, count, groupStart, groupEnd, onOpen, onMove 
             <span className="mono muted" style={{ fontSize: 12 }}>{slot.sets} × {repRange(slot.repMin, slot.repMax)} · {fmtRest(slot.restSec)}</span>
           </span>
         </button>
-        <div style={{ display: "grid" }}>
-          <button className="icon-btn" style={{ height: 30 }} disabled={index === 0} aria-label="Move up" onClick={() => onMove(index - 1)}><Icon name="up" size={16} /></button>
-          <button className="icon-btn" style={{ height: 30 }} disabled={index === count - 1} aria-label="Move down" onClick={() => onMove(index + 1)}><Icon name="down" size={16} /></button>
-        </div>
       </div>
     </div>
   );
@@ -167,9 +163,9 @@ export function PlanEditorScreen({ id }: { id?: string }) {
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
             <SortableContext items={day.slots.map((s) => s.id)} strategy={verticalListSortingStrategy}>
               {day.slots.map((s, i) => (
-                <SlotRow key={s.id} slot={s} ex={exMap.get(s.exerciseId)} index={i} count={day.slots.length}
+                <SlotRow key={s.id} slot={s} ex={exMap.get(s.exerciseId)}
                   groupStart={s.supersetGroup !== day.slots[i - 1]?.supersetGroup} groupEnd={s.supersetGroup !== day.slots[i + 1]?.supersetGroup}
-                  onOpen={() => setSlotOpen(s.id)} onMove={(to) => setDraft(moveSlot(draft, day.id, i, to))} />
+                  onOpen={() => setSlotOpen(s.id)} />
               ))}
             </SortableContext>
           </DndContext>
