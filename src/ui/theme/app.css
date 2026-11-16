@@ -42,6 +42,7 @@ ul { margin: 0; padding-left: 18px; }
 .title-lg { font-size: 32px; line-height: 1; text-transform: uppercase; }
 .title-md { font-size: 22px; line-height: 1.05; }
 .neon { color: var(--neon-ink); text-shadow: 0 0 10px var(--glow), 0 0 28px var(--glow-soft); }
+.brand { color: var(--brand); text-shadow: 0 0 10px var(--fig-glow), 0 0 28px var(--fig-glow-soft); } /* BLUE FIT wordmark: always blue */
 .neon-grad { background: linear-gradient(100deg, var(--neon-ink) 10%, var(--neon-ink-2) 90%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 12px var(--glow-soft)); }
 .section-title { font: 700 15px/1 var(--display); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: var(--s5) 4px var(--s2); }
 

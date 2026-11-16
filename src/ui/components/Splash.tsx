@@ -76,7 +76,7 @@ export function Splash({ onDone }: { onDone: () => void }) {
       <div className="bg-fx" style={{ position: "absolute" }} />
       <div ref={stage} className="splash-stage">
         <div className="splash-fig"><svg ref={fig} className="fig" viewBox="0 -24 120 131" width={FIG_W} height={(FIG_W * 131) / 120} /></div>
-        <div ref={word} className="splash-word neon">BLUE FIT</div>
+        <div ref={word} className="splash-word brand">BLUE FIT</div>
       </div>
     </div>
   );

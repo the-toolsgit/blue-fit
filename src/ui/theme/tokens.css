@@ -20,6 +20,7 @@
   --recovering: #ff3fa8;
   --glow: rgba(61, 155, 255, 0.55);
   --glow-soft: rgba(61, 155, 255, 0.18);
+  --brand: #3d9bff;
   --fig-glow: rgba(61, 155, 255, 0.55); /* the line man's glow: always blue, whatever the accent */
   --fig-glow-soft: rgba(61, 155, 255, 0.18);
   --pink: #ff3fa8;
@@ -52,7 +53,7 @@
     --line: rgba(31, 90, 200, 0.14); --line-strong: rgba(31, 90, 200, 0.3);
     --ink: #0a1430; --muted: #52618a; --faint: #9aa8c6;
     --fig: #1f6bff; --fig2: #9dbcf6; --neon: #1559d6; --neon-2: #0078a0; --neon-ink: #1559d6; --neon-ink-2: #0078a0; --recovering: #c41470;
-    --glow: rgba(31, 107, 255, 0.32); --glow-soft: rgba(31, 107, 255, 0.1); --fig-glow: rgba(31, 107, 255, 0.32); --fig-glow-soft: rgba(31, 107, 255, 0.1);
+    --glow: rgba(31, 107, 255, 0.32); --glow-soft: rgba(31, 107, 255, 0.1); --brand: #1559d6; --fig-glow: rgba(31, 107, 255, 0.32); --fig-glow-soft: rgba(31, 107, 255, 0.1);
     --pink: #c41470; --pink-glow: rgba(196, 20, 112, 0.28);
     --good: #08794b; --warn: #8f5c0e; --bad: #c42a46; --star: #8f6206; --on-neon: #ffffff;
     --bg-fx-1: rgba(31, 107, 255, 0.12); --bg-fx-2: rgba(0, 190, 240, 0.08); --grid: rgba(31, 90, 200, 0.05);
@@ -65,7 +66,7 @@
   --line: rgba(31, 90, 200, 0.14); --line-strong: rgba(31, 90, 200, 0.3);
   --ink: #0a1430; --muted: #52618a; --faint: #9aa8c6;
   --fig: #1f6bff; --fig2: #9dbcf6; --neon: #1559d6; --neon-2: #0078a0; --neon-ink: #1559d6; --neon-ink-2: #0078a0; --recovering: #c41470;
-  --glow: rgba(31, 107, 255, 0.32); --glow-soft: rgba(31, 107, 255, 0.1); --fig-glow: rgba(31, 107, 255, 0.32); --fig-glow-soft: rgba(31, 107, 255, 0.1);
+  --glow: rgba(31, 107, 255, 0.32); --glow-soft: rgba(31, 107, 255, 0.1); --brand: #1559d6; --fig-glow: rgba(31, 107, 255, 0.32); --fig-glow-soft: rgba(31, 107, 255, 0.1);
   --pink: #c41470; --pink-glow: rgba(196, 20, 112, 0.28);
   --good: #08794b; --warn: #8f5c0e; --bad: #c42a46; --star: #8f6206; --on-neon: #ffffff;
   --bg-fx-1: rgba(31, 107, 255, 0.12); --bg-fx-2: rgba(0, 190, 240, 0.08); --grid: rgba(31, 90, 200, 0.05);

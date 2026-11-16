@@ -356,7 +356,7 @@ Neon, built from the blue line man: deep-space background with blue/cyan haze an
 | star | #FFC53D | #8F6206 | ★ heavy |
 | on-neon | #02101F | #FFFFFF | text on neon fills |
 
-**Accent palettes.** The accent recolors buttons, chips, switches, steppers, bars, glows, lines and the background haze. The line man and his glow are always blue, and the background stays navy in dark and soft white-blue in light, with a faint blue haze kept in every palette. Each accent has a fill color (buttons, chips, bars; dark text on it) and an ink color (accent text and chart lines). They are the same, except light Blue, whose ink is its deeper shade. (Light Pink/Orange/Green/Brown ink is Leo's choice and is below 4.5:1 on white.)
+**Accent palettes.** The accent recolors buttons, chips, switches, steppers, bars, glows, lines and the background haze. The line man, his glow and the BLUE FIT wordmark are always blue, and the background stays navy in dark and soft white-blue in light, with a faint blue haze kept in every palette. Each accent has a fill color (buttons, chips, bars; dark text on it) and an ink color (accent text and chart lines). They are the same, except light Blue, whose ink is its deeper shade. (Light Pink/Orange/Green/Brown ink is Leo's choice and is below 4.5:1 on white.)
 
 | Accent | Dark fill / 2nd | Light fill / 2nd | Light ink / 2nd (if different) |
 |---|---|---|---|

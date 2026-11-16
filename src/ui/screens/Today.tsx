@@ -71,7 +71,7 @@ export function TodayScreen() {
       <header className="spread" style={{ marginBottom: 14 }}>
         <div className="row" style={{ gap: 6 }}>
           <Figure spec={FLEX} size={30} still />
-          <span style={{ font: "700 22px var(--display)", letterSpacing: ".12em" }} className="neon">BLUE FIT</span>
+          <span style={{ font: "700 22px var(--display)", letterSpacing: ".12em" }} className="brand">BLUE FIT</span>
         </div>
         <span className="eyebrow">{now.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
       </header>
