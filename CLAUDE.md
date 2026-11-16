@@ -5,7 +5,7 @@ Leo's personal training app (replaces Jefit). Mobile-first PWA on GitHub Pages: 
 ## Working with Leo
 - **Discuss before building.** New features or big structural changes: short plan first (what, where, data impact), wait for OK.
 - **Small fixes don't need approval.** Fix bugs and obvious gaps directly.
-- **Be short and direct.** Say what changed and what to test. No long recaps.
+- **Be short and direct — less verbose in every reply.** Say what changed and what to test. No long recaps, no extra explanation unless asked.
 - **Don't guess training facts.** Exercise content, sets, reps, targets and rules come from the plan data (`src/core/seed/`, extracted from Leo's plan page). If something is missing, ask.
 - **Look: neon, built from the blue line man.** Glowing blue lines, dark-led, fun, smooth animations, very easy to navigate. This is a must. Keep 44px+ tap targets, actions at the bottom, and respect `prefers-reduced-motion`.
 - Leo uses an **iPhone** (no web vibration, no alerts while the screen is locked; native app later).

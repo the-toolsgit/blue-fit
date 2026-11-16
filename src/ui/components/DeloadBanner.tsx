@@ -11,7 +11,7 @@ export function DeloadBanner({ suggestion, today }: { suggestion: DeloadSuggesti
   const { settings, saveSettings, toast } = useStore();
   const week = deloadWeek(today, settings.weekStartDay);
   const why = suggestion.reason === "interval"
-    ? `It's been ${suggestion.weeks} weeks since your last deload${settings.deload ? "" : " (or since you started)"}.`
+    ? `It's been ${suggestion.weeks} weeks since ${settings.deload ? "your last deload" : "your first logged workout"}.`
     : `${suggestion.stalled} of your ${suggestion.judged} ★ lifts haven't gone up in ${DELOAD.stallWeeks} weeks.`;
   return (
     <section className="glass edge" role="status" style={{ padding: 16, marginBottom: 12, borderColor: "color-mix(in srgb, var(--neon-2) 50%, transparent)", boxShadow: "0 0 40px -18px var(--neon-2)" }}>

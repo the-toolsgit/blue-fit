@@ -49,7 +49,7 @@ Page change animation: the new page fades in and rises 14 px (0.42 s, ease-out `
 Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose), label "LOADING". Storage error: toast "Storage unavailable. This browser blocked local storage. Private mode can cause this."
 
 ### 3.2 Today
-- **Deload suggestion** (top, §5.16; not while a workout is running or a deload is active): REST figure, "SUGGESTION", "TIME FOR A DELOAD?", the reason ("It's been 7 weeks since your last deload (or since you started)." / "6 of your 10 ★ lifts haven't gone up in 4 weeks."), the rule ("Half the sets, 10% lighter, stop every set with 3–4 reps left. Same days and exercises. Until Friday."), **Deload this week** (starts it; toast "Deload week on · Back to normal after Friday.") and **Not now**. Native app: this becomes a notification.
+- **Deload suggestion** (top, §5.16; not while a workout is running or a deload is active): REST figure, "SUGGESTION", "TIME FOR A DELOAD?", the reason ("It's been 7 weeks since your last deload." or "…since your first logged workout." / "6 of your 10 ★ lifts haven't gone up in 4 weeks."), the rule ("Half the sets, 10% lighter, stop every set with 3–4 reps left. Same days and exercises. Until Friday."), **Deload this week** (starts it; toast "Deload week on · Back to normal after Friday.") and **Not now**. Native app: this becomes a notification.
 - **During a deload week:** cyan badge "Deload week · until Fri" under the day title; set counts (tiles and list) show the deload sets in cyan; Start workout and Free workout create deload sessions.
 - **Backup reminder** (top, only when there are finished workouts and the last backup is 14+ days old or never, and not snoozed): amber-edged glass row "You haven't backed up your workouts yet." / "Last backup n days ago.", **Back up** (downloads the backup file right away) and × (remind again in 7 days).
 - **Header:** small static FLEX figure + "BLUE FIT" in neon, today's date (e.g. "NOV 14").
@@ -241,7 +241,7 @@ Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Sat Back & Biceps,
 At most one session is `active`. Duration = finishedAt − startedAt (minutes, rounded).
 
 ### 4.6 Settings
-`{ units: "lb", restDefaultSec: 120, autoStartRest: true, sound: true, keepAwake: true, theme: system | light | dark, weekStartDay: 0–6 (0 = Sunday; default 6 = Saturday; backups without it import as 1 = Monday), plates: [{weight, pairs}], startedAt?: date (first day using the app), deload?: {start, end} | null (current or last deload week, inclusive dates), deloadDismissedAt?: date | null ("Not now") }`. Default plates (pairs): 45×8, 35×2, 25×4, 10×4, 5×4, 2.5×2.
+`{ units: "lb", restDefaultSec: 120, autoStartRest: true, sound: true, keepAwake: true, theme: system | light | dark, weekStartDay: 0–6 (0 = Sunday; default 6 = Saturday; backups without it import as 1 = Monday), plates: [{weight, pairs}], deload?: {start, end} | null (current or last deload week, inclusive dates), deloadDismissedAt?: date | null ("Not now") }`. Default plates (pairs): 45×8, 35×2, 25×4, 10×4, 5×4, 2.5×2.
 
 ### 4.7 Other records
 - `JefitAlias { jefitName, exerciseId | null }` (null = skip). Seeded from every exercise's aliases.
@@ -308,7 +308,7 @@ Finish drops sets not done and exercises left with no done sets, sets `status = 
 - **Content:** same days and exercises; each exercise gets half its sets rounded up (4→2, 3→2, 1→1); pre-filled weights are 10% lighter, rounded to the nearest weight step of the exercise (never below one step); every set stops with 3–4 reps left (shown as a reminder). No progression hint during a deload.
 - **Window:** the current training week (§4.6), e.g. Sat–Fri; afterwards the normal plan is back automatically. "End" ends it early (ended yesterday; removed if it started today).
 - **History:** sessions logged during it are marked `deload`. They count normally for history, streak, volume and charts, but are skipped for pre-fill, "Last", progression hints and stall checks.
-- **Suggestion** (user decides; never automatic). Reference day = the latest of: the day after the last deload ended, the day "Not now" was tapped, the start day (startedAt). Suggest when either comes first:
+- **Suggestion** (user decides; never automatic). Reference day = the latest of: the first logged workout, the day after the last deload ended, the day "Not now" was tapped. No logged workouts → no suggestion. Suggest when either comes first:
   - **Interval:** ≥ 6 weeks since the reference day.
   - **Stall:** ≥ 4 weeks since the reference day, and more than half of the judgeable ★ heavy lifts in the current plan have no est. 1RM gain: best est. 1RM (Epley, so more reps at the same weight counts) in the last 28 days ≤ best before that. A lift is judgeable when it has non-deload sets both in and before the window.
   - Not shown during a deload or while a workout is running. "Not now" waits for the next trigger (it moves the reference day to today).
@@ -396,8 +396,6 @@ Implement `StorageAdapter` against the cloud store (e.g. Supabase tables with th
 
 ### 7.5 One-time migrations
 On launch, each migration in order runs once; done ids are stored in meta `migrations`. `2026-11-16-week-starts-saturday`: if routine `leo-v3-1` still has day `mon` on Monday, move every day two weekdays earlier (Mon→Sat, Tue→Sun, …, Sun→Fri) and set weekStartDay = 6.
-
-`2026-11-16-started-at`: sets settings.startedAt to the first logged workout's date, else today (never overwrites).
 
 ### 7.6 Seed
 On first launch (no exercises stored) the seed is written: 33 exercises, routine "Leo v3.1" (36 slots, 117 sets), targets, default settings, Jefit aliases. Seed JSON is extracted from the plan page by a script.

@@ -21,12 +21,3 @@ export const MIGRATIONS: Migration[] = [
   },
 ];
 
-MIGRATIONS.push({
-  // Nov 16 2026: record when the user started, for the 6-week deload interval: the first logged workout, else today.
-  id: "2026-11-16-started-at",
-  run(d, today) {
-    if (d.settings.startedAt) return null;
-    const first = d.sessions.filter((x) => x.status === "finished").reduce<string | null>((a, x) => (!a || x.date < a ? x.date : a), null);
-    return { ...d, settings: { ...d.settings, startedAt: first && first < today ? first : today } };
-  },
-});

@@ -50,7 +50,7 @@ const targetSchema = z.object({
 const settingsSchema = z.object({
   units: z.literal("lb"), restDefaultSec: z.number().int().min(0).max(1800), autoStartRest: z.boolean(), sound: z.boolean(), keepAwake: z.boolean(),
   theme: z.enum(["system", "light", "dark"]), weekStartDay: z.number().int().min(0).max(6).default(1),
-  startedAt: str.optional(), deload: z.object({ start: str, end: str }).nullable().optional(), deloadDismissedAt: str.nullable().optional(), plates: z.array(z.object({ weight: z.number().positive(), pairs: z.number().int().min(0).max(50) })),
+  deload: z.object({ start: str, end: str }).nullable().optional(), deloadDismissedAt: str.nullable().optional(), plates: z.array(z.object({ weight: z.number().positive(), pairs: z.number().int().min(0).max(50) })),
 });
 
 export const appDataSchema = z.object({

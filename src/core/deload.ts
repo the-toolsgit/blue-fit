@@ -2,7 +2,7 @@
 // A deload week keeps the same days and exercises with: half the sets (rounded up), weights 10% lighter,
 // and every set stopped with 3–4 reps left. It lasts the current training week.
 // The app SUGGESTS a deload; the user decides ("Deload this week" / "Not now"). Suggest when either comes first:
-//  • interval: 6 weeks since the reference day (end of the last deload, else the first day using the app);
+//  • interval: 6 weeks since the reference day (end of the last deload, else the first logged workout);
 //  • stall: 4 weeks since the reference day AND more than half of the ★ heavy lifts in the current plan
 //    have no est. 1RM gain: best of the last 4 weeks ≤ best before that (deload sessions ignored).
 // "Not now" moves the reference day to the day it was tapped (wait for the next trigger).
@@ -34,11 +34,18 @@ export function endDeload(s: Settings, today: string): Settings {
   return { ...s, deload: s.deload.start >= today ? null : { ...s.deload, end: addDays(today, -1) } };
 }
 
-/** Reference day the triggers count from. */
-export function deloadReference(s: Settings): string | null {
-  const candidates = [s.deload ? addDays(s.deload.end, 1) : null, s.deloadDismissedAt ?? null, s.startedAt ?? null].filter(Boolean) as string[];
-  // Last deload or a "Not now" win over the start day; the latest of them counts.
-  if (!candidates.length) return null;
+/** First logged (finished) workout date, or null if none yet. */
+export const firstWorkoutDate = (sessions: Session[]) =>
+  sessions.filter((x) => x.status === "finished").reduce<string | null>((a, x) => (!a || x.date < a ? x.date : a), null);
+
+/**
+ * Reference day the triggers count from: the latest of the day after the last deload ended,
+ * the "Not now" day, and the first logged workout. No workouts yet → no reference (no suggestion).
+ */
+export function deloadReference(s: Settings, sessions: Session[]): string | null {
+  const first = firstWorkoutDate(sessions);
+  if (!first) return null;
+  const candidates = [first, s.deload ? addDays(s.deload.end, 1) : null, s.deloadDismissedAt ?? null].filter(Boolean) as string[];
   return candidates.reduce((a, b) => (a > b ? a : b));
 }
 
@@ -63,7 +70,7 @@ export type DeloadSuggestion = { reason: "interval"; weeks: number } | { reason:
 
 export function deloadSuggestion(sessions: Session[], routine: Routine | undefined, exMap: Map<string, Exercise>, settings: Settings, today: string): DeloadSuggestion | null {
   if (deloadActive(settings, today)) return null;
-  const ref = deloadReference(settings);
+  const ref = deloadReference(settings, sessions);
   if (!ref) return null;
   const days = daysBetween(ref, today);
   if (days >= DELOAD.stallWeeks * 7) {

@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
 import { deloadActive, deloadReference, deloadSets, deloadSuggestion, deloadWeek, deloadWeight, endDeload, stallCheck } from "./deload";
 import { createSessionFromDay, lastEntryFor } from "./session";
-import { MIGRATIONS } from "./migrations";
 import { DEFAULT_SETTINGS, type LoggedSet, type Session, type Settings } from "./types";
 import { addDays } from "./util";
 
@@ -51,49 +50,46 @@ describe("deload window", () => {
     expect(endDeload(s, "2026-11-17").deload).toEqual({ start: "2026-11-14", end: "2026-11-16" });
     expect(endDeload(S({ deload: { start: "2026-11-17", end: "2026-11-20" } }), "2026-11-17").deload).toBeNull();
   });
-  it("reference day: latest of deload end+1, Not now, start", () => {
-    expect(deloadReference(S({ startedAt: "2026-09-01" }))).toBe("2026-09-01");
-    expect(deloadReference(S({ startedAt: "2026-09-01", deload: { start: "2026-10-10", end: "2026-10-16" } }))).toBe("2026-10-17");
-    expect(deloadReference(S({ startedAt: "2026-09-01", deload: { start: "2026-10-10", end: "2026-10-16" }, deloadDismissedAt: "2026-11-01" }))).toBe("2026-11-01");
+  it("reference day: latest of first logged workout, deload end+1, Not now; none without workouts", () => {
+    const first = [sess("2026-09-01", "leg-press", [set(100, 10)])];
+    expect(deloadReference(S({}), [])).toBeNull();
+    expect(deloadReference(S({}), first)).toBe("2026-09-01");
+    expect(deloadReference(S({ deload: { start: "2026-10-10", end: "2026-10-16" } }), first)).toBe("2026-10-17");
+    expect(deloadReference(S({ deload: { start: "2026-10-10", end: "2026-10-16" }, deloadDismissedAt: "2026-11-01" }), first)).toBe("2026-11-01");
   });
 });
 
 describe("deload suggestion", () => {
   const today = "2026-11-16";
-  it("interval: 6 weeks since start or last deload", () => {
-    expect(deloadSuggestion([], routine, exMap, S({ startedAt: addDays(today, -41) }), today)).toBeNull();
-    expect(deloadSuggestion([], routine, exMap, S({ startedAt: addDays(today, -42) }), today)).toEqual({ reason: "interval", weeks: 6 });
-    expect(deloadSuggestion([], routine, exMap, S({ startedAt: "2026-01-01", deload: { start: addDays(today, -20), end: addDays(today, -14) } }), today)).toBeNull();
+  const firstAt = (daysAgo: number) => [sess(addDays(today, -daysAgo), "leg-press", [set(100, 10)])];
+  it("interval: 6 weeks since the first logged workout or the last deload", () => {
+    expect(deloadSuggestion(firstAt(41), routine, exMap, S({}), today)).toBeNull();
+    expect(deloadSuggestion(firstAt(42), routine, exMap, S({}), today)).toEqual({ reason: "interval", weeks: 6 });
+    expect(deloadSuggestion(firstAt(300), routine, exMap, S({ deload: { start: addDays(today, -20), end: addDays(today, -14) } }), today)).toBeNull();
+  });
+  it("nothing before the first logged workout, however long the app has been installed", () => {
+    expect(deloadSuggestion([], routine, exMap, S({}), today)).toBeNull();
   });
   it("not during a deload week; Not now waits for the next trigger", () => {
-    expect(deloadSuggestion([], routine, exMap, S({ startedAt: "2026-01-01", deload: deloadWeek(today, 6) }), today)).toBeNull();
-    expect(deloadSuggestion([], routine, exMap, S({ startedAt: "2026-01-01", deloadDismissedAt: addDays(today, -10) }), today)).toBeNull();
+    expect(deloadSuggestion(firstAt(300), routine, exMap, S({ deload: deloadWeek(today, 6) }), today)).toBeNull();
+    expect(deloadSuggestion(firstAt(300), routine, exMap, S({ deloadDismissedAt: addDays(today, -10) }), today)).toBeNull();
   });
   // Each ★ lift: one older session (before the 4-week window) and one recent one
-  const history = (improved: number) => HEAVY.flatMap((id, i) => [
-    sess(addDays(today, -40), id, [set(100, 10)]),
+  const history = (improved: number, firstDaysAgo = 30) => [...firstAt(firstDaysAgo), ...HEAVY.flatMap((id, i) => [
+    sess(addDays(today, -29), id, [set(100, 10)]),
     sess(addDays(today, -7), id, [set(i < improved ? 105 : 100, 10)]),
-  ]);
+  ])];
   it("stall: more than half of the ★ lifts without est. 1RM gain in 4 weeks", () => {
-    const s = S({ startedAt: addDays(today, -30) }); // 4+ weeks in, not yet 6
     expect(stallCheck(history(4), routine, exMap, today)).toMatchObject({ judged: 10, stalled: 6 });
-    expect(deloadSuggestion(history(4), routine, exMap, s, today)).toEqual({ reason: "stall", stalled: 6, judged: 10 });
-    expect(deloadSuggestion(history(5), routine, exMap, s, today)).toBeNull(); // exactly half → no
+    expect(deloadSuggestion(history(4), routine, exMap, S({}), today)).toEqual({ reason: "stall", stalled: 6, judged: 10 });
+    expect(deloadSuggestion(history(5), routine, exMap, S({}), today)).toBeNull(); // exactly half → no
   });
   it("more reps at the same weight counts as improvement; deload sessions are ignored", () => {
     const h = HEAVY.flatMap((id) => [sess(addDays(today, -40), id, [set(100, 10)]), sess(addDays(today, -7), id, [set(100, 11)]), sess(addDays(today, -3), id, [set(50, 5)], true)]);
     expect(stallCheck(h, routine, exMap, today).stalled).toBe(0);
   });
   it("stall needs 4 weeks since the reference day", () => {
-    expect(deloadSuggestion(history(0), routine, exMap, S({ startedAt: addDays(today, -27) }), today)).toBeNull();
-  });
-});
-
-describe("start date migration", () => {
-  const m = MIGRATIONS.find((x) => x.id === "2026-11-16-started-at")!;
-  it("first logged workout, else today; never overwrites", () => {
-    expect(m.run({ ...seed, sessions: [sess("2026-10-03", "leg-press", [set(1, 1)])] }, "2026-11-16")!.settings.startedAt).toBe("2026-10-03");
-    expect(m.run(seed, "2026-11-16")!.settings.startedAt).toBe("2026-11-16");
-    expect(m.run({ ...seed, settings: { ...seed.settings, startedAt: "2026-01-01" } }, "2026-11-16")).toBeNull();
+    const h = history(0, 27).filter((x) => x.date >= addDays(today, -27));
+    expect(deloadSuggestion(h, routine, exMap, S({}), today)).toBeNull();
   });
 });
