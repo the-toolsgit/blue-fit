@@ -11,7 +11,7 @@ import { estimateMinutes } from "../../core/timeEstimate";
 import { completeProfile, MUSCLE_GROUPS, type Exercise, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
 import { modelTarget, priorityOf } from "../../core/volumeModel";
 import defaultTargets from "../../core/seed/targets.json";
-import { planVolume, targetStatus } from "../../core/volume";
+import { planVolume } from "../../core/volume";
 import { Stepper } from "../components/Controls";
 import { Dock } from "../components/Dock";
 import { ExercisePicker } from "../components/ExercisePicker";
@@ -21,7 +21,6 @@ import { Confirm, Sheet } from "../components/Sheet";
 import { VolumeTable } from "../components/VolumeTable";
 import { fmtRest, repRange } from "../format";
 import { replace } from "../router";
-import { reducedMotion } from "../device";
 import { useStore } from "../store";
 import { ExerciseSheet } from "./ExerciseScreen";
 
@@ -93,11 +92,8 @@ export function PlanEditorScreen({ id }: { id?: string }) {
   }));
   const editTarget = (t: VolumeTarget) => setTdraft((ts) => (ts.some((x) => x.group === t.group) ? ts.map((x) => (x.group === t.group ? t : x)) : [...ts, t]));
   const issues = validateRoutine(draft);
-  const tmap = new Map(tdraft.map((t) => [t.group, t]));
   const totals = Object.fromEntries(MUSCLE_GROUPS.map((m) => [m.id, vol.find((v) => v.group === m.id)?.sets ?? 0])) as never;
   const dayCount = Object.fromEntries(vol.map((v) => [v.group, v.directDays]));
-  const statuses = vol.map((v) => targetStatus(v.sets, tmap.get(v.group)));
-  const ok = statuses.filter((s) => s === "ok").length, warn = statuses.filter((s) => s === "below" || s === "above").length;
   const slot = day?.slots.find((s) => s.id === slotOpen);
   const slotIdx = day?.slots.findIndex((s) => s.id === slotOpen) ?? -1;
 
@@ -174,21 +170,14 @@ export function PlanEditorScreen({ id }: { id?: string }) {
         </div>
       )}
 
-      <h2 className="section-title" id="live-volume">Weekly volume · live</h2>
+      <h2 className="section-title">Weekly volume</h2>
       <p className="muted" style={{ fontSize: 12, margin: "-2px 4px 8px" }}>Tap a muscle to change its weekly target, make it a priority or skip it.</p>
       <VolumeTable totals={totals} targets={tdraft} days={dayCount} onEdit={editTarget} defaults={defaults} />
       {!profile && <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Fill in Settings → Training profile to get targets worked out for you.</p>}
       <button className="btn btn-quiet btn-block" style={{ marginTop: 8 }} onClick={() => setConfirm("resetTargets")}><Icon name="undo" size={18} /> Reset targets to defaults</button>
 
       <Dock>
-        <div className="glass row" style={{ padding: 8, borderRadius: 20 }}>
-          <button className="row grow" style={{ padding: "0 8px", minHeight: 44 }} onClick={() => document.getElementById("live-volume")?.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth" })} aria-label="Jump to weekly volume">
-            <span className="status-ok mono">✓ {ok}</span>
-            <span className={warn ? "status-warn mono" : "muted mono"}>⚠ {warn}</span>
-            <span className="muted" style={{ fontSize: 12 }}>on target</span>
-          </button>
-          <button className="btn btn-primary" style={{ minHeight: 46 }} onClick={dirty ? save : leave}><Icon name="check" size={18} /> {dirty ? "Save plan" : "Done"}</button>
-        </div>
+        <button className="btn btn-primary btn-xl" onClick={dirty ? save : leave}><Icon name="check" size={20} /> {dirty ? "Save plan" : "Done"}</button>
       </Dock>
 
       <Sheet open={!!slot} onClose={() => setSlotOpen(null)} label="Exercise in plan">
