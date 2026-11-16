@@ -1,4 +1,6 @@
-# Plan: our own weekly volume targets (goal, profile, progress)
+# Plan: Interview phase · our own weekly volume targets (goal, profile, progress)
+
+**Interview** = the foundation set up before the workout routine (D11): goal, profile, priorities and the volume model. The routine is built on top of it afterwards.
 
 Working document. Read it **before starting, while working, and after finishing** each step.
 Tick items only when they are done *and verified*. Anything not agreed here is out of scope.
@@ -18,12 +20,17 @@ Started Nov 16 2026. Map: [volume-targets-map.html](volume-targets-map.html).
 | D8 | Until the model is approved, **Reset uses the current plan numbers**. | "use the current numbers as defaults for now" |
 | D9 | Biceps need **fewer** sets than back (a one-size range is wrong). | "Biceps will need less sets / week compared to back" |
 | D10 | Built in **3 steps**, each shown to Leo before the next. | plan accepted: "yes" |
+| D11 | This is the **Interview** phase: the foundation before the workout routine. Once it's defined, the routine is built on it. | "This is all part of a phase that we should label Interview, which is pre workout routine" |
+| D12 | The model must be **truthful and useful for the goal**, not cautious. For Leo the goal is **mass gain**. | "i dont want the model to be too cautious, i want it to be truthful and useful for the goal WHICH IN THIS CASE IS MASS GAIN" |
+| D13 | Add a **priority factor** per muscle. | "WE SHOULD add priority factor" |
+| D14 | Strength/endurance numbers come from **our own reasoning about what a muscle needs** for each goal, not from waiting on conclusive research. | "think about what a muscle needs for gaining mass and what it needs for gaining strength in the gym and come up with your own model" |
 
 Already built (before this plan): editable targets in Edit plan (min/max steppers, Not a focus switch, Reset targets to defaults).
 
 ## 2. Ground rules for this work
 
-- **Don't make anything up.** Every number is either (a) from a cited source, or (b) marked **our judgment** with the reason written next to it. Nothing unmarked.
+- **Don't make anything up.** Every number is either (a) from a cited source, or (b) **derived by our own reasoning**, with the reasoning written next to it. Nothing unexplained.
+- **Not cautious, truthful** (D12): ranges aim at what actually works for the goal, not at the safest number.
 - Where evidence is weak, say so in the app ("why" line) and here.
 - `src/core/` stays framework-free; the model is a pure function (portable to Swift/Kotlin).
 - Profile data (age, sleep, phase) stays **on the phone only**. Never commit real values. Tests use made-up profiles.
@@ -39,7 +46,9 @@ Already built (before this plan): editable targets in Edit plan (min/max stepper
 - [x] 1.4 Written formula: goal × muscle factors × profile → min–max per muscle, rounding rules.
 - [x] 1.5 Pure core module `src/core/volumeModel.ts` + tests (not used by any screen yet).
 - [x] 1.6 Table of resulting numbers for a sample profile, shown to Leo with a "why" per muscle.
-- [ ] 1.7 Leo reviews and approves (or we adjust). **Stop here until approved.**
+- [x] 1.7a Draft 1 reviewed by Leo (Nov 16): too cautious, needs a priority factor, reason strength/endurance ourselves → draft 2.
+- [x] 1.8 Draft 2: first-principles model (functions, recovery, per-session limit), priority factor, our own strength/endurance logic.
+- [ ] 1.9 Leo reviews draft 2. **Stop here until approved.**
 
 ### Step 2: training profile + defaults in the app
 - [ ] 2.1 Settings → Training profile: Goal (Muscle growth · Strength · Endurance · Maintenance), Phase (Cutting · Maintaining · Bulking), Age, Years training, Average sleep. Sessions per week come from the plan.
@@ -66,59 +75,82 @@ Already built (before this plan): editable targets in Edit plan (min/max stepper
 ## 5. Open questions / parked
 - Endurance and strength per-muscle volume evidence is thinner than for growth: flag in the app.
 
-## 6. Step 1 draft: the model (code: `src/core/volumeModel.ts`, tests: `volumeModel.test.ts`)
+## 6. Step 1 model, draft 2 (code: `src/core/volumeModel.ts`, tests: `volumeModel.test.ts`)
 
-Units: fractional weekly sets per muscle (direct 1, indirect ½), same as the rest of the app.
+Draft 1 (size/damage/joint multipliers on a 10–20 base) was replaced after Leo's review (D12–D14): it was cautious and had no priority.
 
-### 6.1 Goal base (large reference muscle)
-| Goal | Base | Source |
-|---|---|---|
-| Muscle growth | 10–20 | Schoenfeld 2017 (10+ trend best); Baz-Valle 2022 (12–20 ≈ >20); Pelland 2024 (keeps rising, smaller gains) |
-| Strength | 6–12 | **Judgment**, anchored on Ralston 2017 (medium/high weekly sets beat low) and Pelland 2024 (strength levels off sooner) |
-| Endurance | 10–20 | **Judgment**: no volume study found; endurance comes from reps/rest, not more sets. Low confidence |
-| Maintenance | 4–7 | Bickel 2011: ⅓ of training volume kept size in young adults (older adults needed more) |
+Units: fractional weekly sets (direct 1, indirect ½), same as the rest of the app.
 
-### 6.2 Muscle factors (0 low · 1 medium · 2 high), **judgment** unless a source is named
-| Muscle | Size | Damage | Joint | Reason |
-|---|---|---|---|---|
-| Back | 2 | 0 | 1 | large; lower back loads on rows |
-| Biceps | 0 | 2 | 1 | small; damages easily (Chen 2011); elbow tendons |
-| Triceps | 1 | 2 | 1 | medium; damages easily (Chen 2011); elbow tendons |
-| Side delts | 0 | 0 | 1 | small; recovers fast; shoulder joint |
-| Rear delts | 0 | 0 | 0 | small; recovers fast |
-| Traps | 1 | 0 | 0 | medium; recovers fast |
-| Front delts | 0 | 0 | 1 | small; presses already work it |
-| Chest | 1 | 0 | 1 | medium; shoulder joint |
-| Quads | 2 | 0 | 1 | large; least damage-prone (Chen 2011); knees |
-| Hamstrings | 1 | 1 | 0 | more damage-prone than quads (Chen 2011) |
-| Adductors | 1 | 0 | 0 | medium |
-| Calves | 0 | 0 | 0 | small; used all day |
-| Glutes | 2 | 0 | 0 | large |
-| Rotator cuff | 0 | 0 | 2 | shoulder stability; keep moderate |
-| Forearms | 0 | 0 | 1 | elbow tendons |
+### 6.1 Reasoning (what a muscle needs)
+1. **Hard sets drive growth.** A set ≈0–3 reps from failure is the unit of stimulus.
+2. **One session can only use so many.** Beyond a point, extra sets in the same session add fatigue, not growth (Pelland 2024: ~11 fractional sets/session with no detectable extra growth). Muscles with more functions stay productive longer in one session because each function recruits partly different fibers: **6 / 8 / 10 sets** for 1 / 2 / 3 functions (our reasoning).
+3. **It can only be trained again once recovered.** Sessions per week = min(3, 7 ÷ recovery days). Recovery days: 2 (small, low-damage, used all day), 2.5 (medium, or damage-prone: arms per Chen 2011), 3 (heavy lower-body: quads, hamstrings, glutes) (our reasoning).
+4. **Every function needs its own work.** Floor = max(6, 4 × functions): at least 2 sessions × 3 sets, and ~4 sets for each function (our reasoning).
 
-### 6.3 Formula
-- min = base.min × (0.6 + 0.2 × size) × profile min factor
-- max = base.max × (0.8 + 0.1 × size − 0.05 × damage − 0.05 × joint) × profile max factors
-- max ≤ 11 × days the plan trains the muscle directly (Pelland 2024: ~11 fractional sets per session, no detectable extra growth beyond)
-- Rounded to whole sets; max ≥ min + 2. All multipliers are **judgment**.
+### 6.2 Goals
+| Goal | Min | Max | Reasoning |
+|---|---|---|---|
+| Mass gain | floor (§6.1.4) | sessions × session sets | everything the muscle can use and recover from |
+| Strength | same floor | 60% of mass max | heavy sets (1–6 reps) cost more recovery per set; strength is mostly practice on the lifts; size still drives it, so the floor stays |
+| Endurance | same floor | recovery ½ day shorter | light sets (15–30+ reps) cause less damage, so it can train more often |
+| Maintenance | ⅓ of mass | ⅓ of mass | Bickel 2011: ⅓ of training volume kept size |
 
-### 6.4 Profile adjustments (**judgment** unless noted)
+### 6.3 Priority (D13)
+- **Priority**: min moves to the middle of the range (aim for the top half). Max unchanged (recovery limit).
+- **Normal**: full range.
+- **Not a focus**: maintenance range.
+- Defaults: none "not a focus" (D7). Leo's plan already marks back, biceps, triceps, side/rear delts, traps as priority.
+
+### 6.4 Profile (scales the max; beginners also the min) (our reasoning unless noted)
 | Input | Effect |
 |---|---|
-| Years training < 1 | min ×0.7, max ×0.8 |
-| Years training > 3 | max ×1.1 |
-| Age 40–59 | max ×0.9 |
-| Age 60+ | max ×0.85; maintenance min ×1.5 (Bickel 2011: older adults need more to maintain) |
-| Sleep 6–7 h | max ×0.9 |
-| Sleep < 6 h | max ×0.8 (Lamon 2021: one night without sleep cut muscle protein synthesis 18%) |
+| Years training < 1 | min and max ×0.75 |
+| Years training ≥ 3 | max ×1.1 |
+| Age 40–59 | max ×0.92 |
+| Age 60+ | max ×0.85; maintenance min ×1.5 (Bickel 2011) |
+| Sleep 6–7 h | max ×0.92 |
+| Sleep < 6 h | max ×0.8 (Lamon 2021: one sleepless night cut muscle protein synthesis 18%) |
 | Cutting | max ×0.85 (Murphy & Koehler 2022: lean-mass gains impaired in a deficit) |
-| Bulking | max ×1.05 |
+| Maintaining | — |
+| Bulking | max ×1.1 |
 
-### 6.5 Known weaknesses (for Leo's review)
-- The model's growth ranges come out **lower** than both Leo's plan and the coaching landmarks (e.g. biceps 6–13 vs plan 14–20 vs coaching 10–16). The size/damage multipliers may be too conservative.
-- No "priority muscle" factor (not agreed; Leo's plan prioritizes arms/back/shoulders/traps).
-- Endurance and strength bases are judgment with thin evidence.
+### 6.5 Muscles
+| Muscle | Functions | Recovery days | Why |
+|---|---|---|---|
+| Back | 3 | 2.5 | vertical pull, row, lat stretch/upper back |
+| Biceps | 2 | 2.5 | curl, stretched long head; damage-prone (Chen 2011) |
+| Triceps | 2 | 2.5 | overhead long head, pushdown/press |
+| Side delts | 1 | 2 | raise to the side |
+| Rear delts | 1 | 2 | pull arm back |
+| Traps | 2 | 2 | shrug, retract |
+| Front delts | 1 | 2 | raise forward; presses hit it |
+| Chest | 2 | 2.5 | upper, mid/lower |
+| Quads | 2 | 3 | squat/press, knee extension |
+| Hamstrings | 2 | 3 | knee flexion, hip extension |
+| Adductors | 1 | 2.5 | pull leg in |
+| Calves | 2 | 2 | gastroc (straight knee), soleus (bent knee) |
+| Glutes | 2 | 3 | hip extension, abduction |
+| Rotator cuff | 1 | 2 | rotate/stabilize shoulder |
+| Forearms | 2 | 2 | flexors, extensors |
 
-### 6.6 Sources
-Schoenfeld 2017 (J Sports Sci) · Baz-Valle 2022 (J Hum Kinet) · Pelland 2024 (SportRxiv preprint) · Ralston 2017 (Sports Med) · Bickel 2011 (MSSE) · Chen 2011 (Eur J Appl Physiol) · Lamon 2021 (Physiol Rep) · Murphy & Koehler 2022 (Scand J Med Sci Sports)
+### 6.6 Result for a sample profile (made up: age 30, 2 years, 8 h sleep, maintaining; ★ = priority)
+| Muscle | Mass gain | Strength | Endurance | Maintenance | Leo's plan target | Plan does |
+|---|---|---|---|---|---|---|
+| Back ★ | 20–28 | 14–17 | 21–30 | 4–9 | 14–22 | 20 |
+| Biceps ★ | 15–22 | 11–13 | 16–24 | 3–7 | 14–20 | 16.5 |
+| Triceps ★ | 15–22 | 11–13 | 16–24 | 3–7 | 14–22 | 18 |
+| Side delts ★ | 12–18 | 8–11 | 12–18 | 2–6 | 14–20 | 15.5 |
+| Rear delts ★ | 12–18 | 8–11 | 12–18 | 2–6 | 14–20 | 14.5 |
+| Traps ★ | 16–24 | 11–14 | 16–24 | 3–8 | 12–20 | 15.5 |
+| Front delts | 6–18 | 6–11 | 6–18 | 2–6 | 6–8 | 6 |
+| Chest | 8–22 | 8–13 | 8–24 | 3–7 | — | 2 |
+| Quads | 8–19 | 8–11 | 8–22 | 3–6 | 10+ | 13 |
+| Hamstrings | 8–19 | 8–11 | 8–22 | 3–6 | 8–10 | 8 |
+| Adductors | 6–17 | 6–10 | 6–18 | 2–6 | 10+ | 10.5 |
+| Calves | 8–24 | 8–14 | 8–24 | 3–8 | 8+ | 8 |
+| Glutes | 8–19 | 8–11 | 8–22 | 3–6 | — | 3.5 |
+| Rotator cuff | 6–18 | 6–11 | 6–18 | 2–6 | — | 2 |
+| Forearms | 8–24 | 8–14 | 8–24 | 3–8 | — | 3 |
+
+### 6.7 Sources
+Pelland 2024 (SportRxiv preprint) · Bickel 2011 (MSSE) · Chen 2011 (Eur J Appl Physiol) · Lamon 2021 (Physiol Rep) · Murphy & Koehler 2022 (Scand J Med Sci Sports). Background: Schoenfeld 2017, Baz-Valle 2022, Ralston 2017.
