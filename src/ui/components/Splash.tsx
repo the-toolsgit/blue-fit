@@ -1,14 +1,18 @@
-// Launch splash: the line man (FLEX pose) above "BLUE FIT" flexes twice (1 s), then we zoom into his head
-// and the app appears inside the circle. Mounted once per app launch (returning from the background doesn't remount it).
+// Launch splash: the line man above "BLUE FIT" flexes once (forearms curl in, upper arms stay flat, a bicep
+// pops up and stays), then we zoom into his head and the app appears inside the circle. Mounted once per app launch (returning from the background doesn't remount it).
 import { useEffect, useRef, useState } from "react";
-import { FLEX, FLEX_PUMP } from "../../core/figure/poses";
+import { SPLASH_FLEX } from "../../core/figure/poses";
+import { bicepBumps, bumpsToSvg } from "../../core/figure/flex";
 import { frameToSvg } from "../../core/figure/svg";
 import { poseFrame } from "../../core/figure/engine";
 import { reducedMotion } from "../device";
 
 const FIG_W = 150; // px
 const INTRO_MS = 380, FLEX_MS = 1000, ZOOM_MS = 720;
+const FLEX_UP_MS = 420; // the flex itself; it then holds for the rest of FLEX_MS and through the zoom
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+const draw = (k: number) => { const f = poseFrame(SPLASH_FLEX, k); return frameToSvg(f) + bumpsToSvg(bicepBumps(f, k)); };
 
 export function Splash({ onDone }: { onDone: () => void }) {
   const overlay = useRef<HTMLDivElement>(null);
@@ -18,31 +22,31 @@ export function Splash({ onDone }: { onDone: () => void }) {
   const fig = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
-    if (fig.current) fig.current.innerHTML = frameToSvg(poseFrame(FLEX_PUMP, 0));
+    if (fig.current) fig.current.innerHTML = draw(0);
     if (reducedMotion()) {
       const a = setTimeout(() => setFade(true), 350), b = setTimeout(onDone, 650);
       return () => { clearTimeout(a); clearTimeout(b); };
     }
     let raf = 0;
-    // Two quick flexes (biceps squeeze up and back), ending in the logo pose.
+    // One flex: forearms curl in and the bicep pops up, then it stays flexed (through the zoom too).
     const flexStart = setTimeout(() => {
       const t0 = performance.now();
-      const pump = (now: number) => {
-        const t = Math.min(1, (now - t0) / FLEX_MS);
-        if (fig.current) fig.current.innerHTML = frameToSvg(poseFrame(FLEX_PUMP, Math.pow(Math.sin(Math.PI * 2 * t), 2)));
-        if (t < 1) raf = requestAnimationFrame(pump);
+      const flex = (now: number) => {
+        const t = Math.min(1, (now - t0) / FLEX_UP_MS);
+        if (fig.current) fig.current.innerHTML = draw(easeOut(t));
+        if (t < 1) raf = requestAnimationFrame(flex);
       };
-      raf = requestAnimationFrame(pump);
+      raf = requestAnimationFrame(flex);
     }, INTRO_MS);
     const start = setTimeout(() => {
       cancelAnimationFrame(raf);
-      if (fig.current) fig.current.innerHTML = frameToSvg(poseFrame(FLEX_PUMP, 0));
+      if (fig.current) fig.current.innerHTML = draw(1);
       const ov = overlay.current, st = stage.current, box = fig.current;
       if (!ov || !st || !box) return onDone();
       // Measure the final resting position: settle the intro animation first (else the zoom drifts off the head).
       st.getAnimations?.({ subtree: true }).forEach((a) => a.finish());
       // Head center and inner radius in screen px (figure viewBox: x 0–120, y −24–107).
-      const head = poseFrame(FLEX, 1).head;
+      const head = poseFrame(SPLASH_FLEX, 1).head;
       const r = box.getBoundingClientRect(), k = r.width / 120;
       const cx = r.left + head.cx * k, cy = r.top + (head.cy + 24) * k;
       const inner = (head.r - 1.3) * k;

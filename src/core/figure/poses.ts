@@ -15,5 +15,8 @@ export const REST: FigureSpec = {
 /** Loading: a dumbbell curl. */
 export const LOADING: FigureSpec = { base: { ua: 0 }, A: { fa: 0 }, B: { fa: 145 }, props: [{ db: "ha" }] };
 
-/** Splash flex pump: from the logo pose (A) the arms squeeze up a little (B). Head stays put. */
-export const FLEX_PUMP: FigureSpec = { v: "f", base: { hy: 60, la: 9, sa: 3 }, A: { ua: 92, fa: 182, shr: 1.5 }, B: { ua: 104, fa: 210, shr: 4 }, props: [] };
+/**
+ * Splash flex: upper arms stay flat (horizontal); forearms rotate inward toward the head.
+ * Pair with bicepBumps() for the bicep that rises on top of each upper arm. Same head as FLEX.
+ */
+export const SPLASH_FLEX: FigureSpec = { v: "f", base: { hy: 60, la: 9, sa: 3, ua: 90 }, A: { fa: 180 }, B: { fa: 200 }, props: [] };
