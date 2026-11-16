@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { FLEX, REST } from "../../core/figure/poses";
-import { createFreeSession, createSessionFromDay } from "../../core/session";
+import { createSessionFromDay } from "../../core/session";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { localDate, weekOrder, weekStart } from "../../core/util";
 import { reducedMotion } from "../device";
@@ -65,7 +65,6 @@ export function TodayScreen() {
     saveSession(s);
     go("workout");
   };
-  const startFree = () => { if (active) return go("workout"); saveSession(createFreeSession(new Date(), { deload: deloading })); go("workout"); };
 
   return (
     <div className="page">
@@ -109,7 +108,7 @@ export function TodayScreen() {
           <div className="fig-stage"><Figure spec={REST} size={170} speed={0.5} label="Resting figure" /></div>
           <h1 className="title-xl neon-grad">Rest day</h1>
           <p className="muted" style={{ maxWidth: 300 }}>Walk if you like, but keep it easy.</p>
-          <p className="muted" style={{ fontSize: 13, marginTop: 6 }}>Training anyway? Pick a day above or start a free workout.</p>
+          <p className="muted" style={{ fontSize: 13, marginTop: 6 }}>Training anyway? Pick a day above.</p>
         </section>
       ) : (
         <>
@@ -157,7 +156,6 @@ export function TodayScreen() {
         </>
       )}
 
-      {!active && <button className="btn btn-quiet btn-block" style={{ marginTop: 14 }} onClick={startFree}><Icon name="plus" size={18} /> Free workout</button>}
 
       {!active && !isRest && (
         <Dock>

@@ -19,6 +19,8 @@ Blue Fit is a single-user training app that replaces Jefit for one advanced lift
 
 Bottom tab bar (always visible, floating glass bar): **Today · Plan · History · Progress · Settings**. While scrolling down it shrinks to a compact icons-only bar (64 → 46 px, labels fade, icons 24 → 20 px and centered, the active marker moves under the icon; 0.32 s); it grows back when scrolling up, near the top or bottom of the page, or on a new screen. The dock above it follows.
 
+The app doesn't zoom: pinch and double-tap zoom are blocked (viewport `user-scalable=no`, iOS gesture events cancelled, `touch-action: manipulation`), like a native app.
+
 Behind the tab bar and dock, a soft fade to the page background (no blur) keeps scrolling content from clashing with them; it is taller when the dock shows something.
 
 Above the tab bar sits the **dock**, a stack of floating actions:
@@ -58,15 +60,15 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 
 ### 3.2 Today
 - **Deload suggestion** (top, §5.16; not while a workout is running or a deload is active): REST figure, "SUGGESTION", "TIME FOR A DELOAD?", the reason ("It's been 7 weeks since your last deload." or "…since your first logged workout." / "6 of your 10 ★ lifts haven't gone up in 4 weeks."), the rule ("Half the sets, 10% lighter, stop every set with 3–4 reps left. Same days and exercises. Until Friday."), **Deload this week** (starts it; toast "Deload week on · Back to normal after Friday.") and **Not now**. Native app: this becomes a notification.
-- **During a deload week:** cyan badge "Deload week · until Fri" under the day title; set counts (tiles and list) show the deload sets in cyan; Start workout and Free workout create deload sessions.
+- **During a deload week:** cyan badge "Deload week · until Fri" under the day title; set counts (tiles and list) show the deload sets in cyan; Start workout creates a deload session.
 - **Backup reminder** (top, only when there are finished workouts and the last backup is 14+ days old or never, and not snoozed): amber-edged glass row "You haven't backed up your workouts yet." / "Last backup n days ago.", **Back up** (downloads the backup file right away) and × (remind again in 7 days).
 - **Header:** small static FLEX figure + "BLUE FIT" in neon, today's date (e.g. "NOV 14").
 - **Week strip:** 7 buttons Mon→Sun (always calendar order). Today's weekday is preselected. The selected day is a neon gradient pill; today's day (if not selected) is neon text. A green glowing dot marks days of the current training week (§4.6) with a finished workout for that routine day.
 - **Training day card:** eyebrow "TODAY · MONDAY" (or just the weekday when previewing another day); day title huge in neon gradient (e.g. "BACK & BICEPS"); "✓ Done today" badge if a finished session today has this day. A large animated figure cycles through the day's exercises, one per 3.2 s animation loop, with the exercise name under it. Three stat tiles: exercises · sets · ~minutes (time estimate §5.8).
 - **Exercises list:** number, small static figure, name, ★ if heavy, the slot note (or primary muscles), "sets × reps". Tap opens the exercise detail sheet.
-- **Free workout** text button: starts an empty session titled "Free workout", for training outside the plan. Hidden while a workout is running. Only one workout runs at a time: starting while one is running opens it instead.
+- Only one workout runs at a time: Start is hidden while one is running and, if reached anyway, opens the running workout. (The Free workout button was removed on Nov 16 2026 at Leo's request; older free sessions still show and edit normally.)
 - **Dock:** "▶ START WORKOUT" (pulsing glow) or "START WEDNESDAY" when previewing another day. Hidden when a workout is active (the dock then shows Resume).
-- **Rest day state** (no day, or a day without exercises; Friday in the seed plan): REST figure sitting on a bench, breathing slowly; "REST DAY"; "Walk if you like, but keep it easy."; hint to pick a day above or start a free workout.
+- **Rest day state** (no day, or a day without exercises; Friday in the seed plan): REST figure sitting on a bench, breathing slowly; "REST DAY"; "Walk if you like, but keep it easy."; hint to pick a day above.
 
 ### 3.3 Workout logger
 - **Sticky header:** "WORKOUT · m:ss" (elapsed, live), the session title, notes button (neon when notes exist), **Finish** button, a neon progress bar of done/total sets, and "n/N sets".
@@ -85,7 +87,7 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 - **+ Add exercise** opens the exercise picker (§3.9).
 - **Marking a set done:** saves immediately; later empty sets of the same type copy its weight/reps; light haptic where supported; PR check (§5.4) shows a pink "NEW PR!" toast with a flexing figure and sparks; the rest timer starts (§5.7) if auto-start is on; focus moves to the next exercise when this one is finished (smooth scroll).
 - **Finish sheet:** "FINISH WORKOUT?", "x of y sets done · n min. k sets not done will be dropped.", **Finish**, Keep going, Discard workout (confirm: "Everything logged in it is deleted. This can't be undone."). Finishing with no done sets goes to the discard confirmation.
-- **Empty states:** no active workout → LOADING figure, "No workout running", button to Today. Free workout with no exercises → "Add your first exercise."
+- **Empty states:** no active workout → LOADING figure, "No workout running", button to Today. A workout with no exercises → "Add your first exercise."
 - Screen stays on while the logger is open (setting, §3.8).
 - **Resume:** the active session lives in storage; closing the app and reopening restores it exactly.
 
@@ -120,7 +122,7 @@ Edits a **draft copy** of the routine; nothing changes until Save. The draft sur
 ### 3.7 History
 - **Streak card:** flame icon (pink glow and gentle flicker when the streak is above 0), current streak in weeks, "WEEK STREAK"; "This week n/6 days" with one pill per planned day (Mon→Sun order) lit in neon when that routine day is logged this week; "Week complete. Streak +1." or "Log all 6 days to keep/start the streak."; best streak.
 - **Calendar:** month view, always Monday first, 5 or 6 rows; ‹ › month buttons (no months after the current one); month name and "n workouts". Days with workouts are shaded neon→cyan by working sets that day (intensity `0.25 + 0.75 × sets / max(12, most sets in any day)`), bright days glow; today has a cyan ring; days of other months are dimmed. Tap a day with one workout → its summary; with several → a list under the calendar. Legend "Fewer sets ▢▢▢▢ More".
-- **List:** finished workouts grouped by week (deload workouts show "· Deload" after the title) ("This week", "Week of Nov 9") with count; each row: weekday + day number, title, "min · sets · volume lb" → summary.
+- **List:** finished workouts grouped by week (weeks newest first; inside a week oldest at the top, most recent at the bottom) (deload workouts show "· Deload" after the title) ("This week", "Week of Nov 9") with count; each row: weekday + day number, title, "min · sets · volume lb" → summary.
 - Empty: the splash flex on a loop (SPLASH_FLEX: flex up 0.42 s, hold 0.9 s, relax 0.52 s, rest 0.6 s, repeat; runs only while on screen; still flexed with reduced motion; no zoom), "No workouts yet. Finish one and it shows up here."
 
 #### 3.7.1 Edit workout

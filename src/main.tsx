@@ -12,6 +12,9 @@ import { StoreProvider } from "./ui/store";
 import { unlockAudio } from "./ui/device";
 
 unlockAudio();
+// Behave like an app, not a web page: no pinch zoom or double-tap zoom (iOS ignores user-scalable=no, so stop the gestures).
+for (const ev of ["gesturestart", "gesturechange"]) document.addEventListener(ev, (e) => e.preventDefault(), { passive: false });
+document.addEventListener("touchmove", (e) => { if ((e as TouchEvent).touches.length > 1) e.preventDefault(); }, { passive: false });
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <StoreProvider>

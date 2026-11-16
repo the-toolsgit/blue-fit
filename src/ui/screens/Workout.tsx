@@ -294,7 +294,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
         <button className="icon-btn" style={{ marginRight: -8, marginTop: -6 }} onClick={(ev) => { ev.stopPropagation(); onMenu(); }} aria-label={`Options for ${ex.name}`}><Icon name="more" /></button>
       </div>
 
-      {e.notes && <div style={{ fontSize: 13, marginTop: 8, padding: "6px 10px", borderRadius: 10, background: "var(--surface-2)" }}><Icon name="note" size={14} /> {e.notes}</div>}
+      {e.notes && <div className="row" style={{ gap: 8, alignItems: "center", fontSize: 13, marginTop: 8, padding: "8px 10px", borderRadius: 10, background: "var(--surface-2)" }}><span style={{ display: "inline-flex", flex: "none" }}><Icon name="note" size={15} /></span><span>{e.notes}</span></div>}
 
       {(last || hint.kind !== "none" || s.deload) && (
         <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
