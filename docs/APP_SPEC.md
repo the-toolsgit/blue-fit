@@ -428,7 +428,7 @@ Mirrored ellipses negate the rotation. Region fill opacity: empty 0.05; value k 
 | Calendar / streaks | Heat-map calendar, weekly-plan streak | Built |
 | Progress charts (1RM, volume) | Per-exercise charts, weekly sets vs targets, tonnage, frequency | Built |
 | Muscle recovery map | Muscle map (weekly sets) + recovery status | Built |
-| Import history | Jefit export importer with name mapping | Planned (Phase 4) |
+| Import history | Jefit export importer with name mapping | Left out (skipped by choice; Jefit names stay as exercise aliases in case it comes back) |
 | Body stats and photos | Body tracking (weight band, scans, photos) | Later phase |
 | Interval / stopwatch timer | Timer modes | Later phase |
 | Cloud sync / account | Swap StorageAdapter | Later phase |
