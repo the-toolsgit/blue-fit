@@ -13,7 +13,7 @@ export const exerciseSchema = z.object({
   id: str.min(1), name: str.min(1), aliases: strs, muscles: strs, secondaryMuscles: strs,
   volume: z.array(z.object({ group, weight: z.union([z.literal(1), z.literal(0.5)]) })),
   equipment: z.enum(["barbell", "smith", "fixedBar", "dumbbell", "cable", "machine", "plateMachine", "bodyweight", "other"]),
-  loadMode: z.enum(["perSide", "total", "perHand"]), singleSleeve: z.boolean().optional(),
+  loadMode: z.enum(["perSide", "total", "perHand"]), singleSleeve: z.boolean().optional(), failureLastSet: z.boolean().optional(),
   isHeavy: z.boolean(), bodyRegion: z.enum(["upper", "lower"]),
   why: str, setup: strs, form: strs, tips: strs, avoid: strs, rangeOfMotion: str, tempo: str,
   defaultRestSec: z.number().int().min(0).max(1800), incrementLb: z.number().min(0).max(100),
@@ -23,7 +23,7 @@ export const exerciseSchema = z.object({
 
 const slotSchema = z.object({
   id: str.min(1), exerciseId: str.min(1), sets: z.number().int().min(1).max(20), repMin: z.number().int().min(1), repMax: z.number().int().min(1),
-  restSec: z.number().int().min(0).max(1800), supersetGroup: str.optional(), notes: str.optional(), whyOverride: str.optional(), tipsOverride: strs.optional(),
+  restSec: z.number().int().min(0).max(1800), supersetGroup: str.optional(), notes: str.optional(), whyOverride: str.optional(), tipsOverride: strs.optional(), toFailure: z.boolean().optional(),
 });
 export const routineSchema = z.object({
   id: str.min(1), name: str.min(1), isCurrent: z.boolean(), createdAt: str, rules: z.array(z.object({ title: str, text: str })).optional(),

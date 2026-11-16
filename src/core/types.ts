@@ -54,6 +54,8 @@ export interface Exercise {
   loadMode: LoadMode;
   /** Plate-loaded on one sleeve only (e.g. T-bar row): show the plates for the whole weight */
   singleSleeve?: boolean;
+  /** Mass gain: take the last set to failure by default (safe isolation / machine / cable moves) */
+  failureLastSet?: boolean;
   isHeavy: boolean;
   bodyRegion: "upper" | "lower";
   why: string;
@@ -81,6 +83,8 @@ export interface Slot {
   notes?: string;
   whyOverride?: string;
   tipsOverride?: string[];
+  /** Last set to failure in this plan (unset = the exercise's default) */
+  toFailure?: boolean;
 }
 
 export interface RoutineDay {

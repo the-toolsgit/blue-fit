@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { LOADING } from "../../core/figure/poses";
 import { groupPlates, platesFor } from "../../core/plates";
+import { failureApplies, lastSetToFailure } from "../../core/failure";
 import { progressionHint } from "../../core/progression";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
@@ -254,7 +255,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   s: Session; e: SessionEntry; ex: Exercise; index: number; focused: boolean;
   onFocus: () => void; onToggle: (x: LoggedSet) => void; commit: (n: Session) => void; onDetail: () => void; onMenu: () => void;
 }) {
-  const { finished, exMap, settings } = useStore();
+  const { finished, exMap, settings, routines } = useStore();
   const [sel, setSel] = useState<string | null>(null);
   // Missing weight/reps on a refused "done": which set, and a counter to restart the shake
   const [missing, setMissing] = useState<{ id: string; n: number; from: "check" | "done" } | null>(null);
@@ -270,6 +271,10 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const selected = picked && (picked.done || picked.id === firstOpen?.id) ? picked : firstOpen;
   const workIdx = (x: LoggedSet) => e.sets.filter((y) => y.type === "working" && e.sets.indexOf(y) <= e.sets.indexOf(x)).length;
   const swappedFrom = e.swappedFromId ? exMap.get(e.swappedFromId)?.name : undefined;
+  // Mass gain: the last working set of this exercise goes to failure (not in a deload week)
+  const slot = e.slotId ? routines.find((r) => r.id === s.routineId)?.days.flatMap((d) => d.slots).find((x) => x.id === e.slotId) : undefined;
+  const failSetId = !s.deload && failureApplies(settings.profile?.goal) && lastSetToFailure(ex, slot)
+    ? [...e.sets].reverse().find((x) => x.type === "working" || x.type === "failure")?.id : undefined;
 
   return (
     <article className="glass edge" onClick={onFocus}
@@ -337,6 +342,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                 <button className="grow mono" style={{ textAlign: "left", fontSize: 18, padding: "8px 6px", color: x.done ? "var(--ink)" : "var(--muted)", opacity: locked ? 0.55 : 1, cursor: locked ? "default" : undefined }}
                   onClick={(ev) => { ev.stopPropagation(); onFocus(); if (!locked) setSel(x.id); }} aria-label={locked ? "Finish the earlier sets first" : "Edit set"} aria-disabled={locked}>
                   {fmtW(x.weight)}<span style={{ fontSize: 12 }}>{x.weight != null ? loadSuffix(ex) : ""}</span> <span style={{ opacity: 0.6 }}>×</span> {x.reps ?? "—"}
+                  {x.id === failSetId && <span className="fail-tag" title="Last set: go to failure"><Icon name="flame" size={14} /> failure</span>}
                 </button>
                 <button key={missing?.id === x.id ? "m" + missing.n : "c"} className={missing?.id === x.id && missing.from === "check" && !x.done ? "shake" : undefined} aria-label={x.done ? "Mark not done" : "Mark done"} aria-pressed={x.done}
                   onClick={(ev) => {
@@ -358,6 +364,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                     <Stepper invalid={missing?.id === x.id && ex.equipment !== "bodyweight" && !(x.weight != null && x.weight > 0)} label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />
                     <Stepper invalid={missing?.id === x.id && !(x.reps != null && x.reps > 0)} label="Reps" value={x.reps} step={1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
                   </div>
+                  {x.id === failSetId && <div className="fail-cue"><Icon name="flame" size={18} /><span><b>Last set: go to failure.</b> Keep going until you can't do another clean rep.</span></div>}
                   {(ex.loadMode === "perSide" || ex.singleSleeve) && x.weight != null && x.weight > 0 && <Plates weight={x.weight} single={ex.singleSleeve} />}
                   <button key={missing?.id === x.id ? missing.n : 0} className={"btn btn-primary btn-xl" + (missing?.id === x.id && missing.from === "done" ? " shake" : "")} style={{ minHeight: 56 }} onClick={() => { if (needsValues(x, ex)) return refuse(x, "done"); setSel(null); onToggle(x); }}>
                     <Icon name="check" size={22} stroke={2.6} /> Done{e.sets.indexOf(x) === e.sets.length - 1 ? "" : ` · set ${e.sets.indexOf(x) + 1}`}

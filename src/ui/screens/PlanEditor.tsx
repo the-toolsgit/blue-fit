@@ -12,7 +12,8 @@ import { completeProfile, MUSCLE_GROUPS, type Exercise, type Routine, type Routi
 import { modelTarget, priorityOf } from "../../core/volumeModel";
 import defaultTargets from "../../core/seed/targets.json";
 import { planVolume } from "../../core/volume";
-import { Stepper } from "../components/Controls";
+import { failureApplies, lastSetToFailure } from "../../core/failure";
+import { Stepper, Switch } from "../components/Controls";
 import { Dock } from "../components/Dock";
 import { ExercisePicker } from "../components/ExercisePicker";
 import { Figure } from "../components/Figure";
@@ -28,8 +29,8 @@ const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const mondayFirst = (w: number | null) => (w == null ? 9 : (w + 6) % 7);
 const draftKey = (id: string) => "bf-plan-draft-" + id;
 
-function SlotRow({ slot, ex, groupStart, groupEnd, onOpen }: {
-  slot: Slot; ex: Exercise | undefined; groupStart: boolean; groupEnd: boolean; onOpen: () => void;
+function SlotRow({ slot, ex, groupStart, groupEnd, onOpen, showFail }: {
+  slot: Slot; ex: Exercise | undefined; groupStart: boolean; groupEnd: boolean; onOpen: () => void; showFail?: boolean;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: slot.id });
   return (
@@ -43,7 +44,7 @@ function SlotRow({ slot, ex, groupStart, groupEnd, onOpen }: {
         <button className="row grow" style={{ textAlign: "left", minHeight: 52 }} onClick={onOpen}>
           <Figure spec={ex?.figure} size={40} still className="thin" />
           <span className="grow" style={{ minWidth: 0 }}>
-            <span style={{ display: "block", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{ex?.name ?? slot.exerciseId} {ex?.isHeavy && <span className="star">★</span>}</span>
+            <span style={{ display: "block", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{ex?.name ?? slot.exerciseId} {ex?.isHeavy && <span className="star">★</span>}{showFail && lastSetToFailure(ex, slot) && <span className="fail-icon" title="Last set to failure"><Icon name="flame" size={14} /></span>}</span>
             <span className="mono muted" style={{ fontSize: 12 }}>{slot.sets} × {repRange(slot.repMin, slot.repMax)} · {fmtRest(slot.restSec)}</span>
           </span>
         </button>
@@ -161,7 +162,7 @@ export function PlanEditorScreen({ id }: { id?: string }) {
               {day.slots.map((s, i) => (
                 <SlotRow key={s.id} slot={s} ex={exMap.get(s.exerciseId)}
                   groupStart={s.supersetGroup !== day.slots[i - 1]?.supersetGroup} groupEnd={s.supersetGroup !== day.slots[i + 1]?.supersetGroup}
-                  onOpen={() => setSlotOpen(s.id)} />
+                  onOpen={() => setSlotOpen(s.id)} showFail={failureApplies(settings.profile?.goal)} />
               ))}
             </SortableContext>
           </DndContext>
@@ -192,6 +193,12 @@ export function PlanEditorScreen({ id }: { id?: string }) {
               <Stepper label="Rest" suffix={fmtRest(slot.restSec)} value={slot.restSec} step={15} decimals={false} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { restSec: v ?? settings.restDefaultSec }))} />
               <Stepper label="Reps min" value={slot.repMin} step={1} decimals={false} min={1} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { repMin: Math.max(1, v ?? 1), repMax: Math.max(slot.repMax, v ?? 1) }))} />
               <Stepper label="Reps max" value={slot.repMax} step={1} decimals={false} min={1} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { repMax: Math.max(slot.repMin, v ?? slot.repMin) }))} />
+            </div>
+            <div className="setting" style={{ padding: "4px 2px" }}>
+              <span><span className="row" style={{ gap: 6, display: "inline-flex" }}><span style={{ color: "var(--warn)", display: "inline-flex" }}><Icon name="flame" size={16} /></span>Last set to failure</span>
+                <span className="muted" style={{ display: "block", fontSize: 12 }}>Mass gain only. Best on machine, cable and isolation moves.</span></span>
+              <Switch label="Last set to failure" checked={lastSetToFailure(exMap.get(slot.exerciseId), slot)}
+                onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { toFailure: v === !!exMap.get(slot.exerciseId)?.failureLastSet ? undefined : v }))} />
             </div>
             <div className="field"><label htmlFor="snote">Note</label>
               <input id="snote" className="input" value={slot.notes ?? ""} placeholder="e.g. elbows to hips" onChange={(e) => setDraft(updateSlot(draft, day.id, slot.id, { notes: e.target.value || undefined }))} /></div>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { FLEX, REST } from "../../core/figure/poses";
 import { createSessionFromDay } from "../../core/session";
+import { failureApplies, lastSetToFailure } from "../../core/failure";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { localDate, weekOrder, weekStart } from "../../core/util";
 import { reducedMotion } from "../device";
@@ -31,6 +32,7 @@ export function TodayScreen() {
   const slots = day?.slots ?? [];
   const today = localDate(now);
   const deloading = deloadActive(settings, today);
+  const showFail = !deloading && failureApplies(settings.profile?.goal);
   const slotSets = (n: number) => (deloading ? deloadSets(n) : n);
   const sets = slots.reduce((a, s) => a + slotSets(s.sets), 0);
   const suggestion = useMemo(() => (active || !settings.deloadSuggestions ? null : deloadSuggestion(finished, routine, exMap, settings, today)), [active, finished, routine, exMap, settings, today]);
@@ -145,7 +147,7 @@ export function TodayScreen() {
                   <span className="mono muted" style={{ width: 18, fontSize: 13 }}>{i + 1}</span>
                   <Figure spec={ex.figure} size={40} still className="thin" />
                   <span className="grow">
-                    <span style={{ display: "block", fontWeight: 600 }}>{ex.name} {ex.isHeavy && <span className="star">★</span>}</span>
+                    <span style={{ display: "block", fontWeight: 600 }}>{ex.name} {ex.isHeavy && <span className="star">★</span>}{showFail && lastSetToFailure(ex, s) && <span className="fail-icon" title="Last set to failure"><Icon name="flame" size={14} /></span>}</span>
                     <span className="muted" style={{ fontSize: 13 }}>{s.notes ?? ex.muscles.join(", ")}</span>
                   </span>
                   <span className="mono" style={{ fontSize: 15, whiteSpace: "nowrap", color: deloading ? "var(--neon-2)" : undefined }}>{slotSets(s.sets)} × {repRange(s.repMin, s.repMax)}</span>

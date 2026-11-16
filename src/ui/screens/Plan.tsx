@@ -7,6 +7,7 @@ import { Confirm, Sheet } from "../components/Sheet";
 import type { Exercise, Routine, RoutineDay, VolumeTarget } from "../../core/types";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { formatTarget, planVolume } from "../../core/volume";
+import { failureApplies } from "../../core/failure";
 import { muscleLabel } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { Icon } from "../components/Icon";
@@ -116,7 +117,7 @@ export function PlanScreen() {
           <div className="glass" style={{ padding: 4 }}>
             <Suspense fallback={<div style={{ minHeight: day.slots.length * 64 }} />}>
               <SortableDayList slots={day.slots} exMap={exMap} onOpen={(id) => go(`exercise/${id}`)}
-                onMove={(from, to) => saveRoutine(moveSlot(routine, day.id, from, to))} />
+                onMove={(from, to) => saveRoutine(moveSlot(routine, day.id, from, to))} showFail={failureApplies(settings.profile?.goal)} />
             </Suspense>
           </div>
           <p className="muted" style={{ fontSize: 12, margin: "6px 4px 0" }}>Press and hold an exercise to move it.</p>
