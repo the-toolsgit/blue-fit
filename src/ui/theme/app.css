@@ -195,6 +195,14 @@ textarea.input { min-height: 84px; resize: vertical; }
 .vedit { margin-top: 10px; padding: 12px; border-radius: var(--r-md); background: var(--surface-2); border: 1px solid var(--line); animation: fadeUp .3s var(--ease) both; }
 .vrow.off .vedit { opacity: 1; }
 .vdefault { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+.info-tiles { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 8px; }
+.info-tile { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); font-size: 14px; line-height: 1.35; }
+.info-tile.wide { grid-column: 1 / -1; }
+.info-tile .eyebrow { font-size: 10px; margin-bottom: 3px; }
+.info-ic { flex: none; width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; color: var(--neon-ink); background: var(--glow-soft); box-shadow: inset 0 0 0 1px var(--line); }
+.tempo { display: flex; flex-wrap: wrap; gap: 2px 6px; }
+.tempo > span { white-space: nowrap; }
+.tempo b { font-weight: 600; }
 .plates { display: grid; gap: 6px; }
 .plates-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .plate-group { display: inline-flex; align-items: center; gap: 5px; }

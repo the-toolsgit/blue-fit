@@ -2,12 +2,15 @@
 import exercises from "./exercises.json";
 import routine from "./routine-leo-v3-1.json";
 import targets from "./targets.json";
+import plainText from "./exercise-text.json";
 import { DEFAULT_SETTINGS, type AppData, type Exercise, type Routine, type VolumeTarget } from "../types";
 
 export const SEED_VERSION = 1;
 
 export function buildSeed(): AppData {
-  const ex = structuredClone(exercises) as unknown as Exercise[];
+  // Plain-language how-to texts override the extracted ones (kept in their own file so `npm run seed` doesn't undo them)
+  const text = plainText as unknown as Record<string, Partial<Exercise>>;
+  const ex = (structuredClone(exercises) as unknown as Exercise[]).map((e) => ({ ...e, ...(text[e.id] ?? {}) }));
   return {
     exercises: ex,
     routines: [structuredClone(routine) as Routine],

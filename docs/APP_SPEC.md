@@ -94,7 +94,7 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 - **Done** (fresh) → Today. **Edit workout** → editor (§3.7.1). **Delete workout** (confirm).
 
 ### 3.5 Exercise detail
-Large animated figure (200 px), name, ★, primary muscle badges (neon), secondary badges (outline), ★ heavy badge, "why" text, sections Setup, Form, Tips (cyan heading), Avoid (red heading); info box: Range, Rest, Tempo, Equipment (+ how to log the weight), Counts as (e.g. "Back ×1 · Biceps ×½"). **Your records:** Heaviest, Best est. 1RM, Best volume, Last time; or "No sets logged yet." With history: **Progress** (the exercise progress chart, §3.13) and **History · n** (up to 40 most recent sessions: date, sets line with /side or /hand, session volume; tap → summary). A slot can override "why" and "tips" (used for the leg-day cable lateral raise).
+Large animated figure (200 px), name, ★, primary muscle badges (neon), secondary badges (outline), ★ heavy badge, "why" text, sections Setup, Form, Tips (cyan heading), Avoid (red heading); **info tiles** (rounded tiles, each with a neon icon chip and a small label): Range (↕, full width: "start → end"), Tempo (metronome: the two phases in the order the lifter does them, e.g. "Down 3s → Up 1s") and Rest (timer) side by side, Equipment (dumbbell, full width: e.g. "Smith machine · log one side, no bar"; "log one hand"; single sleeve "log the plates on it"), Works (stick figure, full width: muscle chips, direct in neon, indirect with "½"). **Your records:** Heaviest, Best est. 1RM, Best volume, Last time; or "No sets logged yet." With history: **Progress** (the exercise progress chart, §3.13) and **History · n** (up to 40 most recent sessions: date, sets line with /side or /hand, session volume; tap → summary). A slot can override "why" and "tips" (used for the leg-day cable lateral raise).
 
 ### 3.6 Plan
 Header: "CURRENT PLAN", **Plans** (ghost) and **Edit** (primary) buttons. Routine name in neon gradient, "6 days · 36 exercises · 117 sets a week", horizontally scrolling rule cards (Effort, Progression, ★ Heavy) from routine data, day chips (Mon→Sun), the selected day's title with "sets · ~min" and its slots (figure, name, ★, note, rest, sets × reps → exercise page). **Weekly volume** table (§3.10).
@@ -183,7 +183,7 @@ All IDs are strings. Dates: `YYYY-MM-DD` local calendar date; timestamps: ISO 86
 | bodyRegion | upper \| lower | |
 | why | string | |
 | setup, form, tips, avoid | string[] | |
-| rangeOfMotion, tempo | string | |
+| rangeOfMotion, tempo | string | rangeOfMotion as "start → end"; tempo as two phases in movement order, one number each: "Up 1 s · Down 3 s" (lifting 1 s, lowering 3 s) |
 | defaultRestSec | int | 120 |
 | incrementLb | number | stepper step and progression jump |
 | figure | FigureSpec \| null | §8 |
@@ -316,6 +316,9 @@ Framework-free `core/volumeModel.ts`. Full reasoning and sources: `docs/plans/vo
 - Priority: min moves to the middle of the range. Skip: maintenance range.
 - Profile scales the max: < 1 year ×0.75 (min too), ≥ 3 years ×1.1, age 40–59 ×0.92, 60+ ×0.85 (maintenance min ×1.5), sleep 6–7 h ×0.92, < 6 h ×0.8, cutting ×0.85, bulking ×1.1 (cutting/bulking not applied to maintenance).
 - Rounded; max ≥ min + 2. Each result carries "why" lines shown in the editor.
+
+### 5.18 Exercise texts (Nov 16 2026)
+How-to texts are plain and short, for reading mid-set: everyday words, no jargon, nothing tied to Leo's personal plan (that stays in plan slot notes). They live in `core/seed/exercise-text.json`, applied over the extracted seed by `buildSeed` (so `npm run seed` keeps them). Tempo: one number per phase (lifting 1 s, lowering 3 s, from the plan's 1–2 s up / 2–3 s down), phases in the order the lifter does them (squats, leg press, calf raises, the incline EZ extension start with Down; pulldowns, pushdowns and machine dips start with Down as the effort; rows and curls start with Up). A one-time migration updates the stored built-in exercises whose texts were never edited (checked by a fingerprint of the original texts).
 
 ### 5.16 Deload weeks (agreed with Leo, Nov 16 2026)
 - **Content:** same days and exercises; each exercise gets half its sets rounded up (4→2, 3→2, 1→1); pre-filled weights are 10% lighter, rounded to the nearest weight step of the exercise (never below one step); every set stops with 3–4 reps left (shown as a reminder). No progression hint during a deload.

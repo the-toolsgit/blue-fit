@@ -13,6 +13,12 @@ import { fmtDate, fmtRest, fmtVolume, loadSuffix, setsLine } from "../format";
 import { back, go } from "../router";
 import { useStore } from "../store";
 
+/** "Up 1 s · Down 3 s" → [{ word: "Up", sec: "1 s" }, …]; anything else is shown as one phase. */
+const tempoPhases = (t: string) => t.split("·").map((p) => p.trim()).filter(Boolean).map((p) => {
+  const m = p.match(/^(.*?)\s*(\d+(?:[.–-]\d+)?\s*s)$/);
+  return m ? { word: m[1], sec: m[2] } : { word: p, sec: "" };
+});
+
 function Section({ title, items, tone }: { title: string; items: string[]; tone?: "tip" | "bad" }) {
   if (!items.length) return null;
   const color = tone === "tip" ? "var(--neon-2)" : tone === "bad" ? "var(--bad)" : "var(--muted)";
@@ -45,12 +51,15 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride }: { ex: Exercise; 
       <Section title="Form" items={ex.form} />
       <Section title="Tips" items={tipsOverride ?? ex.tips} tone="tip" />
       <Section title="Avoid" items={ex.avoid} tone="bad" />
-      <div className="glass" style={{ padding: 14, display: "grid", gap: 8, fontSize: 14 }}>
-        <div><b>Range</b> <span className="muted">· {ex.rangeOfMotion}</span></div>
-        <div><b>Rest</b> <span className="muted">· {fmtRest(restSec)}</span></div>
-        <div><b>Tempo</b> <span className="muted">· {ex.tempo}</span></div>
-        <div><b>Equipment</b> <span className="muted">· {EQUIPMENT_LABEL[ex.equipment]}{ex.loadMode === "perSide" ? " · log weight per side, bar not included" : ex.loadMode === "perHand" ? " · log weight per hand" : ""}</span></div>
-        <div><b>Counts as</b> <span className="muted">· {ex.volume.map((v) => `${muscleLabel(v.group)} ${v.weight === 1 ? "×1" : "×½"}`).join(" · ")}</span></div>
+      <div className="info-tiles">
+        <div className="info-tile wide"><span className="info-ic"><Icon name="range" size={20} /></span><div><div className="eyebrow">Range</div><div>{ex.rangeOfMotion}</div></div></div>
+        <div className="info-tile"><span className="info-ic"><Icon name="tempo" size={20} /></span><div><div className="eyebrow">Tempo</div>
+          <div className="tempo">{tempoPhases(ex.tempo).map((p, i) => <span key={i}>{i > 0 && <span className="muted" aria-hidden="true">→ </span>}<b>{p.word}</b> <span className="mono">{p.sec.replace(" ", "")}</span></span>)}</div></div></div>
+        <div className="info-tile"><span className="info-ic"><Icon name="timer" size={20} /></span><div><div className="eyebrow">Rest</div><div className="mono">{fmtRest(restSec)}</div></div></div>
+        <div className="info-tile wide"><span className="info-ic"><Icon name="today" size={20} /></span><div><div className="eyebrow">Equipment</div>
+          <div>{EQUIPMENT_LABEL[ex.equipment]}{ex.singleSleeve ? <span className="muted"> · log the plates on it</span> : ex.loadMode === "perSide" ? <span className="muted"> · log one side, no bar</span> : ex.loadMode === "perHand" ? <span className="muted"> · log one hand</span> : null}</div></div></div>
+        <div className="info-tile wide"><span className="info-ic"><Icon name="body" size={20} /></span><div><div className="eyebrow">Works</div>
+          <div className="row" style={{ flexWrap: "wrap", gap: 6, marginTop: 4 }}>{ex.volume.map((v) => <span key={v.group} className={"badge" + (v.weight === 1 ? " p" : "")}>{muscleLabel(v.group)}{v.weight === 1 ? "" : " ½"}</span>)}</div></div></div>
       </div>
       <div>
         <h4 className="section-title" style={{ margin: "4px 0 8px" }}>Your records</h4>

@@ -1,5 +1,10 @@
 // One-time data migrations applied on launch. Each runs once (its id is remembered in meta).
-import type { AppData, Routine } from "./types";
+import type { AppData, Exercise, Routine } from "./types";
+import plainText from "./seed/exercise-text.json";
+import { TEXT_FIELDS, textFingerprint } from "./textFields";
+
+/** Fingerprints of the original (pre Nov 16 2026) how-to texts: only exercises still showing those get the new plain texts. */
+const OLD_TEXT: Record<string, string> = {"t-bar-reverse-row": "6b8632a7", "single-arm-cable-lat-pulldown": "df96e44a", "single-arm-db-row": "12ea0da8", "straight-arm-cable-pulldown": "b7a692c2", "db-incline-curl": "656a2c8e", "barbell-preacher-curl": "e438cae0", "machine-shoulder-press": "3c4be1", "cable-lateral-raise": "5876a8cb", "lateral-shrug-hybrid": "15387c0f", "barbell-shrug": "7178eb3d", "overhead-trap": "f04c5cb1", "machine-reverse-fly": "82d257d8", "smith-squat": "a37ba86e", "leg-extension": "307c6f71", "prone-leg-curl": "1d775ce5", "hip-adduction": "5c6be17f", "standing-calf-raise": "513af48c", "wide-grip-lat-pulldown": "a2f2d4b1", "cable-seated-row": "ce490152", "ez-bar-incline-tricep-extension": "4b283842", "machine-dip": "c5b42a37", "v-bar-pushdown": "733b2c4b", "rope-face-pull": "3e0264c2", "lean-away-lateral-raise": "2593c16", "all-the-way-up-lateral-raise": "80d56b5d", "kelso-shrug": "417581ff", "single-arm-cable-reverse-fly": "fc8526a4", "rope-overhead-tricep-extension": "93fca8aa", "db-hammer-curl": "8762b83b", "leg-press": "5552ec03", "seated-leg-curl": "eb257054", "seated-calf-raise": "57abd3bf", "cable-one-arm-tricep-kickback": "a899d5fb"};
 
 /** Move every routine day by `by` weekdays (e.g. −2: Monday → Saturday). Days keep their ids, so history stays linked. */
 export function shiftWeekdays(r: Routine, by: number): Routine {
@@ -17,6 +22,22 @@ export const MIGRATIONS: Migration[] = [
       const r = d.routines.find((x) => x.id === "leo-v3-1");
       if (!r || r.days.find((x) => x.id === "mon")?.weekday !== 1) return null;
       return { ...d, routines: d.routines.map((x) => (x.id === r.id ? shiftWeekdays(x, -2) : x)), settings: { ...d.settings, weekStartDay: 6 } };
+    },
+  },
+  {
+    // Nov 16 2026: plain-language how-to texts and one-number tempos for the built-in exercises.
+    // Skips any exercise whose texts were edited in the app.
+    id: "2026-11-16-plain-exercise-text",
+    run(d) {
+      const text = plainText as unknown as Record<string, Partial<Exercise>>;
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        const t = text[e.id];
+        if (e.isCustom || !t || OLD_TEXT[e.id] !== textFingerprint(e)) return e;
+        changed = true;
+        return { ...e, ...Object.fromEntries(TEXT_FIELDS.map((k) => [k, t[k] ?? e[k]])) } as Exercise;
+      });
+      return changed ? { ...d, exercises } : null;
     },
   },
   {
