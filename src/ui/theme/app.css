@@ -132,11 +132,11 @@ ul { margin: 0; padding-left: 18px; }
 /* ---------- Toasts ---------- */
 .toasts { position: fixed; z-index: 60; top: calc(env(safe-area-inset-top) + 10px); left: 50%; transform: translateX(-50%); width: min(520px, calc(100% - 24px)); display: grid; gap: 8px; pointer-events: none; }
 .toast { pointer-events: auto; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 18px; background: var(--surface-solid); border: 1px solid var(--line-strong); box-shadow: 0 16px 40px -12px rgba(0,0,0,0.5); animation: toastIn 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
-.toast.out { animation: toastOut 0.2s cubic-bezier(0.4, 0, 1, 1) both; pointer-events: none; }
+.toast.out { animation: toastOut 0.24s cubic-bezier(0.4, 0, 1, 1) both; pointer-events: none; }
 .toast.pr { border-color: color-mix(in srgb, var(--pink) 60%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--pink) 25%, transparent), 0 16px 50px -10px var(--pink-glow); }
 .toast.error { border-color: color-mix(in srgb, var(--bad) 60%, transparent); }
 @keyframes toastIn { from { opacity: 0; transform: translateY(-16px); } }
-@keyframes toastOut { to { opacity: 0; transform: translateY(-16px); } }
+@keyframes toastOut { to { transform: translateY(calc(-100% - env(safe-area-inset-top) - 24px)); } }
 .spark { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: var(--pink); box-shadow: 0 0 8px var(--pink); animation: spark 0.9s var(--ease) forwards; }
 @keyframes spark { from { transform: translate(0, 0) scale(1); opacity: 1; } to { transform: translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; } }
 

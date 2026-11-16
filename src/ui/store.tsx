@@ -9,7 +9,7 @@ import { IdbAdapter } from "../storage/idbAdapter";
 
 export type Toast = { id: number; kind: "info" | "pr" | "error"; title: string; body?: string; leaving?: boolean };
 /** How long a toast takes to slide back up before it is removed (matches .toast.out in app.css). */
-const TOAST_OUT_MS = 200;
+const TOAST_OUT_MS = 240;
 
 interface Store extends AppData {
   ready: boolean;

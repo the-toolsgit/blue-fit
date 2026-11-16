@@ -257,8 +257,8 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const { finished, exMap } = useStore();
   const [sel, setSel] = useState<string | null>(null);
   // Missing weight/reps on a refused "done": which set, and a counter to restart the shake
-  const [missing, setMissing] = useState<{ id: string; n: number } | null>(null);
-  const refuse = (x: LoggedSet) => { onFocus(); setSel(x.id); setMissing((m) => ({ id: x.id, n: (m?.n ?? 0) + 1 })); vibrate([30, 40, 30]); };
+  const [missing, setMissing] = useState<{ id: string; n: number; from: "check" | "done" } | null>(null);
+  const refuse = (x: LoggedSet, from: "check" | "done") => { onFocus(); setSel(x.id); setMissing((m) => ({ id: x.id, n: (m?.n ?? 0) + 1, from })); vibrate([30, 40, 30]); };
   const last = useMemo(() => lastEntryFor(finished, ex.id, s.id), [finished, ex.id, s.id]);
   const repMin = e.repMin ?? 8, repMax = e.repMax ?? repMin;
   // Deload: no progression push; a fixed reminder instead.
@@ -337,11 +337,11 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   onClick={(ev) => { ev.stopPropagation(); onFocus(); if (!locked) setSel(x.id); }} aria-label={locked ? "Finish the earlier sets first" : "Edit set"} aria-disabled={locked}>
                   {fmtW(x.weight)}<span style={{ fontSize: 12 }}>{x.weight != null ? loadSuffix(ex) : ""}</span> <span style={{ opacity: 0.6 }}>×</span> {x.reps ?? "—"}
                 </button>
-                <button key={missing?.id === x.id ? "m" + missing.n : "c"} className={missing?.id === x.id && !x.done ? "shake" : undefined} aria-label={x.done ? "Mark not done" : "Mark done"} aria-pressed={x.done}
+                <button key={missing?.id === x.id ? "m" + missing.n : "c"} className={missing?.id === x.id && missing.from === "check" && !x.done ? "shake" : undefined} aria-label={x.done ? "Mark not done" : "Mark done"} aria-pressed={x.done}
                   onClick={(ev) => {
                     ev.stopPropagation();
                     // Can't be done without weight and reps: shake, open the set (if it's the next one) and mark what's missing
-                    if (!x.done && needsValues(x, ex)) { if (!locked) refuse(x); else setMissing((m) => ({ id: x.id, n: (m?.n ?? 0) + 1 })); return; }
+                    if (!x.done && needsValues(x, ex)) { if (!locked) refuse(x, "check"); else setMissing((m) => ({ id: x.id, n: (m?.n ?? 0) + 1, from: "check" })); return; }
                     setSel(null); onToggle(x);
                   }}
                   style={{ width: 48, height: 40, borderRadius: 12, display: "grid", placeItems: "center", transition: "all .25s var(--ease)",
@@ -358,7 +358,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                     <Stepper invalid={missing?.id === x.id && !(x.reps != null && x.reps > 0)} label="Reps" value={x.reps} step={1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
                   </div>
                   {(ex.loadMode === "perSide" || ex.singleSleeve) && x.weight != null && x.weight > 0 && <Plates weight={x.weight} single={ex.singleSleeve} />}
-                  <button key={missing?.id === x.id ? missing.n : 0} className={"btn btn-primary btn-xl" + (missing?.id === x.id ? " shake" : "")} style={{ minHeight: 56 }} onClick={() => { if (needsValues(x, ex)) return refuse(x); setSel(null); onToggle(x); }}>
+                  <button key={missing?.id === x.id ? missing.n : 0} className={"btn btn-primary btn-xl" + (missing?.id === x.id && missing.from === "done" ? " shake" : "")} style={{ minHeight: 56 }} onClick={() => { if (needsValues(x, ex)) return refuse(x, "done"); setSel(null); onToggle(x); }}>
                     <Icon name="check" size={22} stroke={2.6} /> Done{e.sets.indexOf(x) === e.sets.length - 1 ? "" : ` · set ${e.sets.indexOf(x) + 1}`}
                   </button>
                   <button className="btn btn-quiet" style={{ minHeight: 36, fontSize: 13 }} onClick={() => commit(removeSet(s, e.id, x.id))}><Icon name="trash" size={16} /> Remove this set</button>
