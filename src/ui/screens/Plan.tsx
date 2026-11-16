@@ -12,9 +12,8 @@ import { useStore } from "../store";
 const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export function PlanScreen() {
-  const { routine, exMap, targets, settings } = useStore();
-  const sd = settings.weekStartDay;
-  const days = (routine?.days ?? []).filter((d) => d.slots.length).sort((a, b) => ((a.weekday ?? 9) - sd + 7) % 7 - ((b.weekday ?? 9) - sd + 7) % 7);
+  const { routine, exMap, targets } = useStore();
+  const days = (routine?.days ?? []).filter((d) => d.slots.length).sort((a, b) => ((a.weekday ?? 9) + 6) % 7 - ((b.weekday ?? 9) + 6) % 7);
   const [dayId, setDayId] = useState(days.find((d) => d.weekday === new Date().getDay())?.id ?? days[0]?.id);
   const vol = useMemo(() => (routine ? planVolume(routine, exMap) : []), [routine, exMap]);
   if (!routine) return <div className="page"><div className="empty">No routine.</div></div>;

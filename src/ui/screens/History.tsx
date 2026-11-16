@@ -20,7 +20,7 @@ function StreakCard() {
   const st = useMemo(() => weeklyStreak(finished, routine, today, sd), [finished, routine, today, sd]);
   const planned = plannedDays(routine);
   const doneDayIds = new Set(finished.filter((s) => weekStart(s.date, sd) === weekStart(today, sd)).map((s) => s.dayId));
-  const days = (routine?.days ?? []).filter((d) => d.weekday != null && d.slots.length).sort((a, b) => ((a.weekday! - sd + 7) % 7) - ((b.weekday! - sd + 7) % 7));
+  const days = (routine?.days ?? []).filter((d) => d.weekday != null && d.slots.length).sort((a, b) => ((a.weekday! + 6) % 7) - ((b.weekday! + 6) % 7));
   const hot = st.current > 0;
   return (
     <section className="glass edge" style={{ padding: 16, display: "grid", gridTemplateColumns: "auto 1fr", gap: 16, alignItems: "center" }}>
@@ -52,13 +52,12 @@ function StreakCard() {
 }
 
 function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => void }) {
-  const { finished, settings } = useStore();
-  const sd = settings.weekStartDay;
+  const { finished } = useStore();
   const today = localDate(new Date());
   const [month, setMonth] = useState(today.slice(0, 7) + "-01");
   const load = useMemo(() => dailyLoad(finished), [finished]);
   const max = Math.max(12, ...[...load.values()].map((d) => d.sets));
-  const first = weekStart(month, sd);
+  const first = weekStart(month); // calendar grid is always Mon → Sun
   const cells = Array.from({ length: 42 }, (_, i) => addDays(first, i));
   const rows = cells[35].slice(0, 7) === month.slice(0, 7) ? 6 : 5;
   const shift = (n: number) => { const d = parseLocalDate(month); d.setMonth(d.getMonth() + n); setMonth(localDate(d).slice(0, 7) + "-01"); };
@@ -74,7 +73,7 @@ function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => v
         <button className="icon-btn" onClick={() => shift(1)} aria-label="Next month" disabled={month.slice(0, 7) >= today.slice(0, 7)} style={{ opacity: month.slice(0, 7) >= today.slice(0, 7) ? 0.3 : 1 }}><Icon name="chevron" /></button>
       </div>
       <div className="cal">
-        {weekOrder(sd).map((d) => <div key={d} className="cal-h">{WD[d]}</div>)}
+        {weekOrder(1).map((d) => <div key={d} className="cal-h">{WD[d]}</div>)}
         {cells.slice(0, rows * 7).map((c) => {
           const l = load.get(c);
           const k = l ? Math.min(1, 0.25 + 0.75 * (l.sets / max)) : 0;

@@ -68,7 +68,7 @@ export function TodayScreen() {
       </header>
 
       <div className="glass" style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", padding: 6, gap: 4, borderRadius: 18 }} role="tablist" aria-label="Day of the week">
-        {weekOrder(sd).map((d) => {
+        {weekOrder(1).map((d) => {
           const sel = d === wd, td = d === todayWd;
           return (
             <button key={d} role="tab" aria-selected={sel} onClick={() => setWd(d)}

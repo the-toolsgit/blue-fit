@@ -55,15 +55,15 @@ export function SettingsScreen({ onUpdate }: { onUpdate?: () => void }) {
         <div className="setting"><span>Keep screen on during a workout</span><Switch label="Keep screen on" checked={settings.keepAwake} onChange={(v) => set("keepAwake", v)} /></div>
       </div>
 
-      <h2 className="section-title">Week starts on</h2>
-      <div className="glass" style={{ padding: 10, display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4 }} role="group" aria-label="Week starts on">
+      <h2 className="section-title">Training week starts on</h2>
+      <div className="glass" style={{ padding: 10, display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4 }} role="group" aria-label="Training week starts on">
         {weekOrder(1).map((d) => (
           <button key={d} className="chip" aria-pressed={settings.weekStartDay === d} style={{ padding: 0, justifyContent: "center", minHeight: 40 }} onClick={() => set("weekStartDay", d)}>
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d]}
           </button>
         ))}
       </div>
-      <p className="muted" style={{ fontSize: 12, margin: "6px 4px 0" }}>Used for the week strip, streaks, calendar and weekly charts.</p>
+      <p className="muted" style={{ fontSize: 12, margin: "6px 4px 0" }}>Only for the numbers: streaks, "this week" and weekly charts. Screens always show Mon–Sun.</p>
 
       <h2 className="section-title">Look</h2>
       <div className="glass" style={{ padding: 14 }}>

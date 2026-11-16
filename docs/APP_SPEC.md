@@ -2,7 +2,7 @@
 
 Platform-neutral description of the whole app. A Swift or Android developer should be able to rebuild Blue Fit from this document without reading the web code. Kept current with every behavior or design change.
 
-Spec version: 0.3 (Phase 2 + week start). Backup format version: 1.
+Spec version: 0.3.1 (Phase 2 + training week start). Backup format version: 1.
 
 ---
 
@@ -49,7 +49,7 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 
 ### 3.2 Today
 - **Header:** small static FLEX figure + "BLUE FIT" in neon, today's date (e.g. "NOV 14").
-- **Week strip:** 7 buttons in week order, starting on the week-start day (Settings; Sat→Fri for Leo). Today's weekday is preselected. The selected day is a neon gradient pill; today's day (if not selected) is neon text. A green glowing dot marks days of the current week with a finished workout for that routine day.
+- **Week strip:** 7 buttons Mon→Sun (always calendar order). Today's weekday is preselected. The selected day is a neon gradient pill; today's day (if not selected) is neon text. A green glowing dot marks days of the current training week (§4.6) with a finished workout for that routine day.
 - **Training day card:** eyebrow "TODAY · MONDAY" (or just the weekday when previewing another day); day title huge in neon gradient (e.g. "BACK & BICEPS"); "✓ Done today" badge if a finished session today has this day. A large animated figure cycles through the day's exercises, one per 3.2 s animation loop, with the exercise name under it. Three stat tiles: exercises · sets · ~minutes (time estimate §5.8).
 - **Exercises list:** number, small static figure, name, ★ if heavy, the slot note (or primary muscles), "sets × reps". Tap opens the exercise detail sheet.
 - **Free workout** text button: starts an empty session titled "Free workout".
@@ -91,8 +91,8 @@ Large animated figure (200 px), name, ★, primary muscle badges (neon), seconda
 Routine name in neon gradient, "6 days · 36 exercises · 117 sets a week", horizontally scrolling rule cards (Effort, Progression, ★ Heavy) from routine data, day chips, the selected day's title with "sets · ~min" and its slots (figure, name, ★, note, rest, sets × reps → exercise page). **Weekly volume** table (§3.10). Editing arrives in Phase 3.
 
 ### 3.7 History
-- **Streak card:** flame icon (pink glow and gentle flicker when the streak is above 0), current streak in weeks, "WEEK STREAK"; "This week n/6 days" with one pill per planned day (Mon→Sat) lit in neon when that routine day is logged this week; "Week complete. Streak +1." or "Log all 6 days to keep/start the streak."; best streak.
-- **Calendar:** month view, Monday first, 5 or 6 rows; ‹ › month buttons (no months after the current one); month name and "n workouts". Days with workouts are shaded neon→cyan by working sets that day (intensity `0.25 + 0.75 × sets / max(12, most sets in any day)`), bright days glow; today has a cyan ring; days of other months are dimmed. Tap a day with one workout → its summary; with several → a list under the calendar. Legend "Fewer sets ▢▢▢▢ More".
+- **Streak card:** flame icon (pink glow and gentle flicker when the streak is above 0), current streak in weeks, "WEEK STREAK"; "This week n/6 days" with one pill per planned day (Mon→Sun order) lit in neon when that routine day is logged this week; "Week complete. Streak +1." or "Log all 6 days to keep/start the streak."; best streak.
+- **Calendar:** month view, always Monday first, 5 or 6 rows; ‹ › month buttons (no months after the current one); month name and "n workouts". Days with workouts are shaded neon→cyan by working sets that day (intensity `0.25 + 0.75 × sets / max(12, most sets in any day)`), bright days glow; today has a cyan ring; days of other months are dimmed. Tap a day with one workout → its summary; with several → a list under the calendar. Legend "Fewer sets ▢▢▢▢ More".
 - **List:** finished workouts grouped by week ("This week", "Week of Nov 9") with count; each row: weekday + day number, title, "min · sets · volume lb" → summary.
 - Empty: FLEX figure, "No workouts yet. Finish one and it shows up here."
 
@@ -101,7 +101,7 @@ Back and **Done** at the top (both return to the summary, replacing the editor i
 
 ### 3.8 Settings
 - **Workout:** Default rest stepper (step 15 s; shows "2 min") + "Apply to every exercise in the plan" (confirm); Start rest timer when a set is done (switch); Sound when rest is over (switch); Keep screen on during a workout (switch).
-- **Week starts on:** 7 chips Mon…Sun (default Sat). Drives the Today week strip, streak, calendar columns, weekly grouping and weekly charts.
+- **Training week starts on:** 7 chips Mon…Sun (default Sat). Only drives the numbers: streak, "this week", history grouping by week, weekly charts and ranges. Every screen still shows days Mon→Sun (week strip, calendar, plan, streak pills).
 - **Look:** Theme segmented control: System · Dark · Light.
 - **Plates (pairs you have):** a stepper per plate weight (45, 35, 25, 10, 5, 2.5).
 - **Data:** Export (downloads `blue-fit-backup-YYYY-MM-DD.json`), Copy JSON (clipboard), Import file, Paste JSON. Imports are validated (§7.3); a valid file shows a confirmation with its date and counts, then replaces all data. **Reset everything** (confirm) restores the seed.
