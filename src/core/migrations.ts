@@ -26,13 +26,13 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
-    // Nov 16 2026: plainer "★ Heavy" rule card (only if its text is still the original).
-    id: "2026-11-16-plain-rule-text",
+    // Nov 16 2026: plainer "★ Heavy" rule card (only if it still shows an earlier app text). Re-run as "-2" for the second wording.
+    id: "2026-11-16-plain-rule-text-2",
     run(d) {
       let changed = false;
       const routines = d.routines.map((r) => !r.rules ? r : { ...r, rules: r.rules.map((x) => {
         const t = RULE_TEXT[x.title];
-        if (!t || t.old !== x.text) return x;
+        if (!t || !t.old.includes(x.text)) return x;
         changed = true;
         return { ...x, text: t.text };
       }) });

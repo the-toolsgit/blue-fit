@@ -10,7 +10,7 @@ export const SEED_VERSION = 1;
 
 /** Plain wording for rule cards whose text is still the original. */
 export const withRuleText = (r: Routine): Routine =>
-  r.rules ? { ...r, rules: r.rules.map((x) => (RULE_TEXT[x.title]?.old === x.text ? { ...x, text: RULE_TEXT[x.title].text } : x)) } : r;
+  r.rules ? { ...r, rules: r.rules.map((x) => (RULE_TEXT[x.title]?.old.includes(x.text) ? { ...x, text: RULE_TEXT[x.title].text } : x)) } : r;
 
 export function buildSeed(): AppData {
   // Plain-language how-to texts override the extracted ones (kept in their own file so `npm run seed` doesn't undo them)
