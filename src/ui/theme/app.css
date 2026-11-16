@@ -203,7 +203,7 @@ textarea.input { min-height: 84px; resize: vertical; }
 .splash-stage { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 14px; will-change: transform; }
 .splash-fig { animation: splashIn 0.38s var(--ease) both; }
 .splash-fig .floor { display: none; }
-.fig .bump path { fill: none; stroke: var(--fig); stroke-width: 1.4; stroke-linecap: round; }
+.fig .bump path { fill: var(--fig); stroke: var(--fig); stroke-width: 1; stroke-linejoin: round; stroke-linecap: round; }
 .splash-fig .fig { filter: drop-shadow(0 0 4px var(--glow)) drop-shadow(0 0 16px var(--glow)); }
 .splash-word { font: 700 34px/1 var(--display); letter-spacing: 0.22em; padding-left: 0.22em; animation: splashIn 0.38s var(--ease) 0.06s both; }
 @keyframes splashIn { from { opacity: 0; transform: scale(0.9) translateY(6px); } }
