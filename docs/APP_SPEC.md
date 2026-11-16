@@ -236,7 +236,7 @@ With the seed plan this gives exactly: back 20, biceps 16.5, triceps 18, side de
 Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Sat Back & Biceps, Sun Shoulders & Traps, Mon Legs A, Tue Back & Triceps, Wed Shoulders, Traps & Arms, Thu Legs B, Fri Rest), all rests 120 s. Day ids keep their original names (mon … sun) so history stays linked.
 
 ### 4.4 Volume target
-`VolumeTarget { group, min: number | null, max: number | null, angles?, gap?, note?, acceptedBelow? }`. Seed: back 14–22, biceps 14–20, triceps 14–22, side delts 14–20, rear delts 14–20, traps 12–20, front delts 6–8, quads 10+, hamstrings 10+ (acceptedBelow, note "by choice (shorter leg days)"), adductors 10+, calves 8+; chest (note "0 by plan"), glutes, rotator cuff, forearms have no target ("tracked only").
+`VolumeTarget { group, min: number | null, max: number | null, angles?, gap?, note?, acceptedBelow? }`. Seed: back 14–22, biceps 14–20, triceps 14–22, side delts 14–20, rear delts 14–20, traps 12–20, front delts 6–8, quads 10+, hamstrings 8–10 (2 leg curls × 4 sets; changed from "10+, below by choice" on Nov 16 2026 by a one-time migration)"), adductors 10+, calves 8+; chest (note "0 by plan"), glutes, rotator cuff, forearms have no target ("tracked only").
 
 ### 4.5 Session (logged workout)
 `Session { id, date, title, routineId?, dayId?, startedAt, finishedAt?, status: active | finished, notes?, source: app | jefit, importKey?, deload?: boolean, entries: SessionEntry[] }`

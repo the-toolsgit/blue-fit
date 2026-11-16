@@ -47,7 +47,8 @@ describe("weekly volume (fractional)", () => {
   });
   it("target status: not-a-focus groups are off; below turns in progress while the week still plans it", () => {
     const t = new Map(seed.targets.map((x) => [x.group, x]));
-    expect(targetStatus(8, t.get("hamstrings"))).toBe("off");
+    expect(targetStatus(8, t.get("hamstrings"))).toBe("ok");
+    expect(targetStatus(8, { group: "hamstrings", min: 10, max: null, acceptedBelow: true })).toBe("off");
     expect(targetStatus(12, t.get("back"), true)).toBe("inProgress");
     expect(targetStatus(23, t.get("back"), true)).toBe("above");
     expect(targetStatus(20, t.get("back"))).toBe("ok");

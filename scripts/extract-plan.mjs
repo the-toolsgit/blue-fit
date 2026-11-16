@@ -113,7 +113,7 @@ const targets = [
   { group: "frontDelts", min: 6, max: 8, angles: "press only", gap: "by design" },
   { group: "chest", min: null, max: null, angles: "dips only", note: "0 by plan" },
   { group: "quads", min: 10, max: null, angles: "squat, leg press, extension" },
-  { group: "hamstrings", min: 10, max: null, angles: "short, stretched", gap: "hip hinge (glutes)", acceptedBelow: true, note: "by choice (shorter leg days)" },
+  { group: "hamstrings", min: 8, max: 10, angles: "short, stretched", gap: "hip hinge (glutes)" },
   { group: "adductors", min: 10, max: null, angles: "machine, squat, leg press" },
   { group: "calves", min: 8, max: null, angles: "standing, seated" },
   { group: "glutes", min: null, max: null, note: "tracked only" },

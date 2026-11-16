@@ -58,12 +58,10 @@
   },
   {
     "group": "hamstrings",
-    "min": 10,
-    "max": null,
+    "min": 8,
+    "max": 10,
     "angles": "short, stretched",
-    "gap": "hip hinge (glutes)",
-    "acceptedBelow": true,
-    "note": "by choice (shorter leg days)"
+    "gap": "hip hinge (glutes)"
   },
   {
     "group": "adductors",

@@ -19,5 +19,14 @@ export const MIGRATIONS: Migration[] = [
       return { ...d, routines: d.routines.map((x) => (x.id === r.id ? shiftWeekdays(x, -2) : x)), settings: { ...d.settings, weekStartDay: 6 } };
     },
   },
+  {
+    // Nov 16 2026: hamstrings become a normal muscle with an 8–10 target (2 leg curls × 4 sets), instead of "10+, below by choice".
+    id: "2026-11-16-hamstrings-8-10",
+    run(d) {
+      const h = d.targets.find((t) => t.group === "hamstrings");
+      if (!h?.acceptedBelow) return null;
+      return { ...d, targets: d.targets.map((t) => (t.group === "hamstrings" ? { group: "hamstrings", min: 8, max: 10, angles: t.angles, gap: t.gap } : t)) };
+    },
+  },
 ];
 

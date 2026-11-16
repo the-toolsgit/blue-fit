@@ -138,3 +138,14 @@ describe("one-time migration: week starts Saturday", () => {
   });
   it("does nothing when already moved", () => expect(m.run(seed, "2026-11-16")).toBeNull());
 });
+
+describe("one-time migration: hamstrings 8–10", () => {
+  const m = MIGRATIONS.find((x) => x.id === "2026-11-16-hamstrings-8-10")!;
+  const old = seed.targets.map((t) => (t.group === "hamstrings" ? { ...t, min: 10, max: null, acceptedBelow: true, note: "by choice (shorter leg days)" } : t));
+  it("turns the old by-choice target into 8–10", () => {
+    const h = m.run({ ...seed, targets: old }, "2026-11-16")!.targets.find((t) => t.group === "hamstrings")!;
+    expect(h).toMatchObject({ min: 8, max: 10 });
+    expect(h.acceptedBelow).toBeUndefined();
+  });
+  it("does nothing when already updated", () => expect(m.run(seed, "2026-11-16")).toBeNull());
+});
