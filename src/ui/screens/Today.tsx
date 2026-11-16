@@ -59,12 +59,13 @@ export function TodayScreen() {
   const heroEx = exMap.get(slots[hero]?.exerciseId ?? "");
 
   const start = () => {
+    if (active) return go("workout"); // one workout at a time
     if (!routine || !day) return;
     const s = createSessionFromDay(routine, day, exMap, finished, new Date(), { deload: deloading });
     saveSession(s);
     go("workout");
   };
-  const startFree = () => { saveSession(createFreeSession(new Date(), { deload: deloading })); go("workout"); };
+  const startFree = () => { if (active) return go("workout"); saveSession(createFreeSession(new Date(), { deload: deloading })); go("workout"); };
 
   return (
     <div className="page">
