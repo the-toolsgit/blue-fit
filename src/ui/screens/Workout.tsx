@@ -88,7 +88,7 @@ export function WorkoutScreen() {
 
   const onToggle = (e: SessionEntry, x: LoggedSet) => {
     const ex = exMap.get(e.exerciseId)!;
-    if (!x.done && needsValues(x, ex)) return toast({ kind: "error", title: needsValues(x, ex)! });
+    if (!x.done && needsValues(x, ex)) return; // the card shakes the button and highlights what's missing
     const next = toggleDone(s, e.id, x.id, new Date());
     commit(next);
     if (x.done) return; // undo
@@ -256,6 +256,9 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
 }) {
   const { finished, exMap } = useStore();
   const [sel, setSel] = useState<string | null>(null);
+  // Missing weight/reps on a refused "done": which set, and a counter to restart the shake
+  const [missing, setMissing] = useState<{ id: string; n: number } | null>(null);
+  const refuse = (x: LoggedSet) => { onFocus(); setSel(x.id); setMissing((m) => ({ id: x.id, n: (m?.n ?? 0) + 1 })); vibrate([30, 40, 30]); };
   const last = useMemo(() => lastEntryFor(finished, ex.id, s.id), [finished, ex.id, s.id]);
   const repMin = e.repMin ?? 8, repMax = e.repMax ?? repMin;
   // Deload: no progression push; a fixed reminder instead.
@@ -334,11 +337,11 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   onClick={(ev) => { ev.stopPropagation(); onFocus(); if (!locked) setSel(x.id); }} aria-label={locked ? "Finish the earlier sets first" : "Edit set"} aria-disabled={locked}>
                   {fmtW(x.weight)}<span style={{ fontSize: 12 }}>{x.weight != null ? loadSuffix(ex) : ""}</span> <span style={{ opacity: 0.6 }}>×</span> {x.reps ?? "—"}
                 </button>
-                <button aria-label={x.done ? "Mark not done" : "Mark done"} aria-pressed={x.done}
+                <button key={missing?.id === x.id ? "m" + missing.n : "c"} className={missing?.id === x.id && !x.done ? "shake" : undefined} aria-label={x.done ? "Mark not done" : "Mark done"} aria-pressed={x.done}
                   onClick={(ev) => {
                     ev.stopPropagation();
-                    // Can't be done without weight and reps: open the set instead (if it's the next one)
-                    if (!x.done && needsValues(x, ex)) { onFocus(); if (!locked) setSel(x.id); onToggle(x); return; }
+                    // Can't be done without weight and reps: shake, open the set (if it's the next one) and mark what's missing
+                    if (!x.done && needsValues(x, ex)) { if (!locked) refuse(x); else setMissing((m) => ({ id: x.id, n: (m?.n ?? 0) + 1 })); return; }
                     setSel(null); onToggle(x);
                   }}
                   style={{ width: 48, height: 40, borderRadius: 12, display: "grid", placeItems: "center", transition: "all .25s var(--ease)",
@@ -351,11 +354,11 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               {isSel && !x.done && (
                 <div style={{ padding: "4px 10px 12px", display: "grid", gap: 10, animation: "pageIn .3s var(--ease) both" }} onClick={(ev) => ev.stopPropagation()}>
                   <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 8, alignItems: "end" }}>
-                    <Stepper label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />
-                    <Stepper label="Reps" value={x.reps} step={1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
+                    <Stepper invalid={missing?.id === x.id && ex.equipment !== "bodyweight" && !(x.weight != null && x.weight > 0)} label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />
+                    <Stepper invalid={missing?.id === x.id && !(x.reps != null && x.reps > 0)} label="Reps" value={x.reps} step={1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
                   </div>
                   {(ex.loadMode === "perSide" || ex.singleSleeve) && x.weight != null && x.weight > 0 && <Plates weight={x.weight} single={ex.singleSleeve} />}
-                  <button className="btn btn-primary btn-xl" style={{ minHeight: 56 }} onClick={() => { if (!needsValues(x, ex)) setSel(null); onToggle(x); }}>
+                  <button key={missing?.id === x.id ? missing.n : 0} className={"btn btn-primary btn-xl" + (missing?.id === x.id ? " shake" : "")} style={{ minHeight: 56 }} onClick={() => { if (needsValues(x, ex)) return refuse(x); setSel(null); onToggle(x); }}>
                     <Icon name="check" size={22} stroke={2.6} /> Done{e.sets.indexOf(x) === e.sets.length - 1 ? "" : ` · set ${e.sets.indexOf(x) + 1}`}
                   </button>
                   <button className="btn btn-quiet" style={{ minHeight: 36, fontSize: 13 }} onClick={() => commit(removeSet(s, e.id, x.id))}><Icon name="trash" size={16} /> Remove this set</button>

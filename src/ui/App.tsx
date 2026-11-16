@@ -73,6 +73,23 @@ export function App() {
     if (needRefresh) toast({ kind: "info", title: "Update ready", body: "Open Settings → Update app, or it applies next launch." });
   }, [needRefresh, toast]);
 
+  // Compact tab bar: icons only while scrolling down; full again when scrolling up, near the top/bottom, or on a new screen
+  useEffect(() => {
+    const root = document.documentElement;
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY, d = y - last;
+      const atEdge = y < 60 || window.innerHeight + y >= root.scrollHeight - 40;
+      if (atEdge) { delete root.dataset.compact; last = y; return; }
+      if (Math.abs(d) < 10) return;
+      if (d > 0) root.dataset.compact = ""; else delete root.dataset.compact;
+      last = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  useEffect(() => { delete document.documentElement.dataset.compact; }, [route.join("/")]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const [name, id] = route;
   const tab = TAB_OF[name] ?? name;
   let screen;

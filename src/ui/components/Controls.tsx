@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Icon } from "./Icon";
 
 /** Big −/+ stepper with a typeable value. */
-export function Stepper({ label, value, step, onChange, decimals = true, suffix, min = 0, empty }: {
+export function Stepper({ label, value, step, onChange, decimals = true, suffix, min = 0, empty, invalid }: {
   label: string; value: number | null; step: number; onChange: (v: number | null) => void; decimals?: boolean; suffix?: string; min?: number;
+  /** Highlight in the error red (e.g. a missing value) */
+  invalid?: boolean;
   /** Value the first tap jumps to when empty */
   empty?: number;
 }) {
@@ -12,10 +14,10 @@ export function Stepper({ label, value, step, onChange, decimals = true, suffix,
   const bump = (d: number) => onChange(value == null && empty != null ? empty : Math.max(min, Math.round(((value ?? 0) + d) * 100) / 100));
   return (
     <div>
-      <div className="stepper-label"><span>{label}</span>{suffix && <span>{suffix}</span>}</div>
-      <div className="stepper">
+      <div className={"stepper-label" + (invalid ? " invalid" : "")}><span>{label}</span>{suffix && <span>{suffix}</span>}</div>
+      <div className={"stepper" + (invalid ? " invalid" : "")}>
         <button type="button" aria-label={`Decrease ${label}`} onClick={() => bump(-step)}><Icon name="minus" size={24} stroke={2.4} /></button>
-        <input aria-label={label} inputMode={decimals ? "decimal" : "numeric"} value={text} placeholder="—"
+        <input aria-label={label} aria-invalid={invalid || undefined} inputMode={decimals ? "decimal" : "numeric"} value={text} placeholder="—"
           onFocus={(e) => e.currentTarget.select()}
           onChange={(e) => setText(e.target.value.replace(/[^0-9.]/g, ""))}
           onBlur={() => { const n = parseFloat(text); onChange(Number.isFinite(n) ? Math.max(min, decimals ? n : Math.round(n)) : null); }}

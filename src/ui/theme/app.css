@@ -29,7 +29,7 @@ ul { margin: 0; padding-left: 18px; }
 
 /* ---------- Layout ---------- */
 .app { min-height: 100%; }
-.page { max-width: 640px; margin: 0 auto; padding: calc(env(safe-area-inset-top) + 14px) 16px calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 112px); animation: pageIn 0.42s var(--ease) both; }
+.page { max-width: 640px; margin: 0 auto; padding: calc(env(safe-area-inset-top) + 14px) 16px calc(64px + env(safe-area-inset-bottom) + 112px); animation: pageIn 0.42s var(--ease) both; }
 @keyframes pageIn { from { opacity: 0; transform: translateY(14px) scale(0.99); } to { opacity: 1; transform: none; } }
 .stack { display: grid; gap: var(--s3); }
 .row { display: flex; align-items: center; gap: var(--s2); }
@@ -96,7 +96,14 @@ ul { margin: 0; padding-left: 18px; }
 /* ---------- Tab bar ---------- */
 .tabbar { position: fixed; z-index: 30; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom) + 10px); width: min(560px, calc(100% - 24px));
   height: var(--tabbar-h); display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px; border-radius: 22px;
-  background: color-mix(in srgb, var(--surface-solid) 92%, transparent); box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--line); }
+  background: color-mix(in srgb, var(--surface-solid) 92%, transparent); box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--line);
+  transition: height 0.32s var(--ease), padding 0.32s var(--ease); }
+/* Compact tab bar while scrolling down (icons only); full again on scroll up, at the bottom, or on a new screen */
+.tab span { max-height: 14px; overflow: hidden; transition: opacity 0.2s, max-height 0.32s var(--ease); }
+:root[data-compact] { --tabbar-h: 46px; }
+:root[data-compact] .tabbar { padding: 4px 6px; }
+:root[data-compact] .tab { gap: 0; }
+:root[data-compact] .tab span { opacity: 0; max-height: 0; }
 .tab { position: relative; display: grid; place-items: center; gap: 2px; border-radius: 16px; color: var(--muted); font: 600 10.5px var(--body); letter-spacing: 0.04em; transition: color 0.25s; }
 .tab svg { transition: transform 0.3s var(--ease), filter 0.3s; }
 .tab[aria-current="page"] { color: var(--neon-ink); }
@@ -105,7 +112,7 @@ ul { margin: 0; padding-left: 18px; }
 @keyframes tabDot { from { width: 0; opacity: 0; } }
 
 /* ---------- Bottom dock (CTA / rest timer / resume) above the tab bar ---------- */
-.dock { position: fixed; z-index: 25; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom) + var(--tabbar-h) + 18px); width: min(560px, calc(100% - 24px)); display: grid; gap: 8px; }
+.dock { position: fixed; z-index: 25; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom) + var(--tabbar-h) + 18px); transition: bottom 0.32s var(--ease); width: min(560px, calc(100% - 24px)); display: grid; gap: 8px; }
 .dock > * { animation: dockIn 0.4s var(--ease) both; }
 @keyframes dockIn { from { opacity: 0; transform: translateY(16px); } }
 
@@ -156,6 +163,11 @@ textarea.input { min-height: 84px; resize: vertical; }
 .stepper button:active { background: var(--glow-soft); }
 .stepper input { width: 100%; min-width: 0; height: 52px; border: 0; background: transparent; text-align: center; font: 600 23px var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; outline: none; padding: 0; }
 .stepper input::placeholder { color: var(--faint); }
+.stepper.invalid { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad), 0 0 14px -4px var(--bad); }
+.stepper-label.invalid { color: var(--bad); }
+/* Refused action: a quick left-right shake, no bounce */
+.shake { animation: shake 0.36s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+@keyframes shake { 15%, 85% { transform: translateX(-2px); } 30%, 70% { transform: translateX(4px); } 45% { transform: translateX(-6px); } 60% { transform: translateX(6px); } }
 .stepper-label { display: flex; flex-wrap: wrap; gap: 0 8px; justify-content: space-between; font: 600 11px var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 2px 6px; }
 
 /* ---------- Lists ---------- */

@@ -17,7 +17,7 @@ Blue Fit is a single-user training app that replaces Jefit for one advanced lift
 
 ## 2. Navigation
 
-Bottom tab bar (always visible, floating glass bar): **Today · Plan · History · Progress · Settings**.
+Bottom tab bar (always visible, floating glass bar): **Today · Plan · History · Progress · Settings**. While scrolling down it shrinks to a compact icons-only bar (64 → 46 px, labels fade, 0.32 s); it grows back when scrolling up, near the top or bottom of the page, or on a new screen. The dock above it follows.
 
 Above the tab bar sits the **dock**, a stack of floating actions:
 - Today's **Start workout** button (on Today, when no workout is running and the selected day has exercises).
@@ -74,7 +74,7 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
   - In a deload session: header eyebrow starts with "Deload ·", and instead of the progression hint a cyan note "Deload: weights are 10% lighter. Stop every set with 3–4 reps left."
   - **Progression hint** (§5.5) with a **Use** button that writes the suggested weight and reps into the sets not yet done.
   - **Set rows:** type button (number for working sets, W warm-up, D drop, F failure; tap cycles working → warm-up → drop → failure), "weight /side × reps", and a done toggle (green glow when done; tap again to undo).
-  - The **selected set** (the first not-done set; sets open in order, so a later set can't be expanded until the earlier ones are done and shows dimmed; done sets can still be tapped) expands: Weight stepper (step = exercise increment; label shows "lb", "lb per side" or "lb per hand"), Reps stepper (step 1; first tap on an empty value jumps to the rep minimum), plates to load for per-side and single-sleeve lifts (§5.9), labeled "Plates per side" (or "Plates" for a single sleeve) and drawn as plates (front view, sized by weight: 45 → 50 px … 2.5 → 28 px, weight in the center) with a ×n count, big **✓ DONE · SET n**, and "Remove this set". A set can only be marked done with reps and a weight (weight not needed for bodyweight exercises); otherwise an error toast says what's missing ("Enter weight and reps first") and the set opens.
+  - The **selected set** (the first not-done set; sets open in order, so a later set can't be expanded until the earlier ones are done and shows dimmed; done sets can still be tapped) expands: Weight stepper (step = exercise increment; label shows "lb", "lb per side" or "lb per hand"), Reps stepper (step 1; first tap on an empty value jumps to the rep minimum), plates to load for per-side and single-sleeve lifts (§5.9), labeled "Plates per side" (or "Plates" for a single sleeve) and drawn as plates (front view, sized by weight: 45 → 50 px … 2.5 → 28 px, weight in the center) with a ×n count, big **✓ DONE · SET n**, and "Remove this set". A set can only be marked done with reps and a weight (weight not needed for bodyweight exercises); otherwise the button shakes left-right (0.36 s), the set opens, and the missing Weight/Reps field turns error red (border, glow and label) until it's filled. No toast.
   - "+ Add set" (copies the last set's weight and reps).
   - Superset groups: consecutive entries with the same group letter get a cyan glowing bracket on the left and a "SUPERSET A" label.
 - **⋯ menu per exercise:** Swap for this workout · Superset with next exercise / Unlink from next · Add note / Edit note · Add warm-up set · Move up · Move down · How to do it · Remove from workout (confirm).
@@ -361,7 +361,7 @@ Neon, built from the blue line man: deep-space background with blue/cyan haze an
 | neon / neon-2 | #3D9BFF / #23E2FF | #1559D6 / #0078A0 | primary, gradients |
 | glow / glow-soft | rgba(61,155,255,.55/.18) | rgba(31,107,255,.32/.10) | shadows |
 | pink | #FF3FA8 | #C41470 | PRs, celebration |
-| good / warn / bad | #3DFFB0 / #FFC53D / #FF4D6A | #08794B / #8F5C0E / #C42A46 | status |
+| good / warn / bad | #3DFFB0 / #FFC53D / #FF2C2C | #08794B / #8F5C0E / #FF2C2C | status; #FF2C2C is the one error red everywhere (Leo's choice) |
 | star | #FFC53D | #8F6206 | ★ heavy |
 | on-neon | #02101F | #FFFFFF | text on neon fills |
 
