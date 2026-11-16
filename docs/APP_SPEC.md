@@ -109,7 +109,7 @@ Edits a **draft copy** of the routine; nothing changes until Save. The draft sur
 - Day panel: Day name; Weekday chips Mon…Sun + None (picking a weekday another day uses swaps the two days; chips owned by other days are dimmed); "n exercises · n sets · ~min"; **Delete day** (confirm: "Past workouts of this day stay in history.").
 - Exercise rows: drag handle (6 dots; drag to reorder, keyboard supported), figure, name ★, "3 × 10–12 · 2 min", ↑/↓ buttons. Superset groups show the cyan bracket and "SUPERSET A". Tap a row → **slot sheet**: Sets (1–20), Rest (step 15 s), Reps min, Reps max (max never below min), Note; Superset with next / Unlink; Swap exercise; How to do it; Remove from day; Done.
 - Empty day: "No exercises. A day without exercises is a rest day." **+ Add exercise** → picker (§3.9); new slots are 3 × 10–12 with the exercise's rest (or the default rest).
-- **Weekly volume · live** table (§3.10) recalculated on every change, listing every muscle group. Hint: "Tap a muscle to change its weekly target or mark it as not a focus." Tapping a row opens an inline panel: Min sets and Max sets steppers (max empty = no upper limit; raising min above max raises max) and a **Not a focus** switch (grayed, striped, no warnings; min/max are kept; switching it off gives a group with no minimum one equal to its planned sets). **Reset targets to defaults** (confirm) restores the default targets (currently the plan's original numbers; research-based defaults per muscle are pending). Target edits apply to every plan and are saved with Save plan; Cancel discards them.
+- **Weekly volume · live** table (§3.10) recalculated on every change, listing every muscle group. Hint: "Tap a muscle to change its weekly target or mark it as not a focus." Tapping a row opens an inline panel: Min sets and Max sets steppers (max empty = no upper limit; raising min above max raises max), a **Priority · Normal · Not a focus** control (priority aims for the top half of the range and the muscle name is bold; not a focus is grayed, striped, no warnings, numbers kept; leaving not a focus gives a group with no minimum one equal to its planned sets), and, when the training profile is filled in, **Suggested for you** with the model's range, its reasons and a "Use x–y" button. Below the table, without a complete profile: "Fill in Settings → Training profile to get targets worked out for you." **Reset targets to defaults** (confirm) sets every muscle to the model's range with default priorities and no "not a focus" (or, without a complete profile, to the plan's original numbers); angle and gap notes are kept. Target edits apply to every plan and are saved with Save plan; Cancel discards them.
 - Dock: "✓ n ⚠ n on target" (tap → scrolls to the table) and **Save plan**.
 - Save checks (§5.15); the first problem shows as an error toast. Saved → "Plan saved" toast, back to Plan.
 
@@ -125,6 +125,7 @@ Back and **Done** at the top (both return to the summary, replacing the editor i
 ### 3.8 Settings
 - **Workout:** Default rest stepper (step 15 s; shows "2 min") + "Apply to every exercise in the plan" (confirm); Start rest timer when a set is done (switch); Sound when rest is over (switch); Keep screen on during a workout (switch).
 - **Training week starts on:** 7 chips Mon…Sun (default Sat). Only drives the numbers: streak, "this week", history grouping by week, weekly charts and ranges. Every screen still shows days Mon→Sun (week strip, calendar, plan, streak pills).
+- **Training profile** (Interview): Goal (Mass · Strength · Endurance · Maintain), Eating (Cutting · Maintaining · Bulking), Age, Years lifting, Sleep a night (h). Note: "Used to work out your weekly set targets (Edit plan → Reset targets). Stays on this phone." The volume model uses it once age, years and sleep are filled in (§5.17).
 - **Look:** Theme segmented control: System · Dark · Light. Accent: five round swatches (Blue default, Pink, Orange, Green, Brown); the choice is saved and applied before the splash paints.
 - **Plates (pairs you have):** a stepper per plate weight (45, 35, 25, 10, 5, 2.5).
 - **Data:** "Last backup: today / yesterday / n days ago / never" (amber when 14+ days or never). Export (downloads `blue-fit-backup-YYYY-MM-DD.json`), Copy JSON (clipboard); both record the backup time. Import file, Paste JSON. Imports are validated (§7.3); a valid file shows a confirmation with its date and counts, then replaces all data. **Reset everything** (confirm) restores the seed.
@@ -236,7 +237,7 @@ With the seed plan this gives exactly: back 20, biceps 16.5, triceps 18, side de
 Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Sat Back & Biceps, Sun Shoulders & Traps, Mon Legs A, Tue Back & Triceps, Wed Shoulders, Traps & Arms, Thu Legs B, Fri Rest), all rests 120 s. Day ids keep their original names (mon … sun) so history stays linked.
 
 ### 4.4 Volume target
-`VolumeTarget { group, min: number | null, max: number | null, angles?, gap?, note?, off?, acceptedBelow? }` (`off` = not a focus; `acceptedBelow` is the older flag and means the same). Seed: back 14–22, biceps 14–20, triceps 14–22, side delts 14–20, rear delts 14–20, traps 12–20, front delts 6–8, quads 10+, hamstrings 8–10 (2 leg curls × 4 sets; changed from "10+, below by choice" on Nov 16 2026 by a one-time migration)"), adductors 10+, calves 8+; chest (note "0 by plan"), glutes, rotator cuff, forearms have no target ("tracked only").
+`VolumeTarget { group, min: number | null, max: number | null, angles?, gap?, note?, off?, priority?, acceptedBelow? }` (`priority` unset = app default: back, biceps, triceps, side delts, rear delts, traps) (`off` = not a focus; `acceptedBelow` is the older flag and means the same). Seed: back 14–22, biceps 14–20, triceps 14–22, side delts 14–20, rear delts 14–20, traps 12–20, front delts 6–8, quads 10+, hamstrings 8–10 (2 leg curls × 4 sets; changed from "10+, below by choice" on Nov 16 2026 by a one-time migration)"), adductors 10+, calves 8+; chest (note "0 by plan"), glutes, rotator cuff, forearms have no target ("tracked only").
 
 ### 4.5 Session (logged workout)
 `Session { id, date, title, routineId?, dayId?, startedAt, finishedAt?, status: active | finished, notes?, source: app | jefit, importKey?, deload?: boolean, entries: SessionEntry[] }`
@@ -245,7 +246,7 @@ Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Sat Back & Biceps,
 At most one session is `active`. Duration = finishedAt − startedAt (minutes, rounded).
 
 ### 4.6 Settings
-`{ units: "lb", restDefaultSec: 120, autoStartRest: true, sound: true, keepAwake: true, theme: system | light | dark, accent: blue | pink | orange | green | brown (default blue; backups without it import as blue), weekStartDay: 0–6 (0 = Sunday; default 6 = Saturday; backups without it import as 1 = Monday), plates: [{weight, pairs}], deload?: {start, end} | null (current or last deload week, inclusive dates), deloadDismissedAt?: date | null ("Not now") }`. Default plates (pairs): 45×8, 35×2, 25×4, 10×4, 5×4, 2.5×2.
+`{ units: "lb", restDefaultSec: 120, autoStartRest: true, sound: true, keepAwake: true, theme: system | light | dark, profile?: { goal: growth | strength | endurance | maintenance, phase: cutting | maintaining | bulking, age, yearsTraining, sleepHours (numbers may be null while filling in) } | null, accent: blue | pink | orange | green | brown (default blue; backups without it import as blue), weekStartDay: 0–6 (0 = Sunday; default 6 = Saturday; backups without it import as 1 = Monday), plates: [{weight, pairs}], deload?: {start, end} | null (current or last deload week, inclusive dates), deloadDismissedAt?: date | null ("Not now") }`. Default plates (pairs): 45×8, 35×2, 25×4, 10×4, 5×4, 2.5×2.
 
 ### 4.7 Other records
 - `JefitAlias { jefitName, exerciseId | null }` (null = skip). Seeded from every exercise's aliases.
@@ -307,6 +308,14 @@ Finish drops sets not done and exercises left with no done sets, sets `status = 
 - Supersets: "Superset with next" links a slot with the following one (joining its group if it has one); unlinking splits the group after the slot. A group always has ≥ 2 adjacent slots: moving a slot away from its group removes it from the group, and a group left with one slot dissolves.
 - Swapping a slot's exercise drops that slot's day-specific why/tips.
 - Duplicate copies days and slots with new ids; the copy is not current. Make current sets exactly one routine current. Workouts keep the routine and day ids they were logged with; Today and streaks use the current routine.
+
+### 5.17 Volume model (Interview phase, approved Nov 16 2026)
+Framework-free `core/volumeModel.ts`. Full reasoning and sources: `docs/plans/volume-targets.md` §6. Fractional weekly sets.
+- Per muscle: functions (1–3) and recovery days (2, 2.5 or 3). Sets one session can use: 6 / 8 / 10 by functions. Sessions per week = min(3, 7 ÷ recovery days).
+- Mass: min = max(6, 4 × functions); max = sessions × session sets. Strength: same min, max × 0.6. Endurance: recovery ½ day shorter. Maintenance: ⅓ of mass.
+- Priority: min moves to the middle of the range. Not a focus: maintenance range.
+- Profile scales the max: < 1 year ×0.75 (min too), ≥ 3 years ×1.1, age 40–59 ×0.92, 60+ ×0.85 (maintenance min ×1.5), sleep 6–7 h ×0.92, < 6 h ×0.8, cutting ×0.85, bulking ×1.1 (cutting/bulking not applied to maintenance).
+- Rounded; max ≥ min + 2. Each result carries "why" lines shown in the editor.
 
 ### 5.16 Deload weeks (agreed with Leo, Nov 16 2026)
 - **Content:** same days and exercises; each exercise gets half its sets rounded up (4→2, 3→2, 1→1); pre-filled weights are 10% lighter, rounded to the nearest weight step of the exercise (never below one step); every set stops with 3–4 reps left (shown as a reminder). No progression hint during a deload.

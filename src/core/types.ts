@@ -108,6 +108,8 @@ export interface VolumeTarget {
   note?: string;
   /** Not a focus: grayed out, no warnings. min/max are kept for when it's turned back on. */
   off?: boolean;
+  /** Priority muscle (aims for the top half of its range). Unset → the app's default (bold muscles). */
+  priority?: boolean;
   /** Older data: below min was a deliberate choice. Treated like `off`. */
   acceptedBelow?: boolean;
 }
@@ -156,6 +158,15 @@ export interface Session {
   entries: SessionEntry[];
 }
 
+export type Goal = "growth" | "strength" | "endurance" | "maintenance";
+export type Phase = "cutting" | "maintaining" | "bulking";
+/** Interview: the training profile the volume model uses. */
+export interface TrainingProfile { goal: Goal; phase: Phase; age: number; yearsTraining: number; sleepHours: number }
+/** Saved while filling in: numbers can still be missing. */
+export type ProfileDraft = { goal: Goal; phase: Phase; age: number | null; yearsTraining: number | null; sleepHours: number | null };
+export const completeProfile = (p: ProfileDraft | null | undefined): TrainingProfile | null =>
+  p && p.age != null && p.yearsTraining != null && p.sleepHours != null ? { ...p, age: p.age, yearsTraining: p.yearsTraining, sleepHours: p.sleepHours } : null;
+
 export const ACCENTS = ["blue", "pink", "orange", "green", "brown"] as const;
 export type Accent = (typeof ACCENTS)[number];
 
@@ -170,6 +181,8 @@ export interface Settings {
   theme: "system" | "light" | "dark";
   /** Accent palette; the line man always stays blue */
   accent: Accent;
+  /** Interview: training profile for the volume model (on this phone only) */
+  profile?: ProfileDraft | null;
   /** First day of the training week: 0 = Sunday … 6 = Saturday */
   weekStartDay: number;
   plates: PlateStock[];

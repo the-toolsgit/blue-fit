@@ -3,7 +3,8 @@ import { formatTarget, targetStatus, type GroupTotals } from "../../core/volume"
 import { MUSCLE_GROUPS, type MuscleGroup, type VolumeTarget } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { useState } from "react";
-import { Stepper, Switch } from "./Controls";
+import { Seg, Stepper } from "./Controls";
+import { priorityOf, type ModelTarget, type Priority } from "../../core/volumeModel";
 import { Icon } from "./Icon";
 
 const STATUS = {
@@ -23,7 +24,16 @@ const offNote = (note?: string) => {
  * stillPlanned: groups a planned day later this week still works (live week only) → below target shows "in progress".
  * onEdit: makes rows tappable to change the target (min/max sets) and turn "Not a focus" on or off.
  */
-export function VolumeTable({ totals, targets, days, stillPlanned, onEdit }: { totals: GroupTotals; targets: VolumeTarget[]; days?: Record<string, number>; stillPlanned?: Set<MuscleGroup>; onEdit?: (t: VolumeTarget) => void }) {
+/** Set a target's focus level, storing only what differs from the app default (keeps saved data clean). */
+export function withPriority(t: VolumeTarget, p: Priority, fallbackMin: number): VolumeTarget {
+  const { off: _o, acceptedBelow: _a, priority: _p, ...rest } = t;
+  if (p === "off") return { ...rest, ...(t.priority != null ? { priority: t.priority } : {}), off: true };
+  const isDefault = priorityOf(t.group) === p;
+  return { ...rest, min: t.min ?? fallbackMin, ...(isDefault ? {} : { priority: p === "priority" }) };
+}
+
+/** defaults: the model's suggestion per muscle (shown in the edit panel with its reasons). */
+export function VolumeTable({ totals, targets, days, stillPlanned, onEdit, defaults }: { totals: GroupTotals; targets: VolumeTarget[]; days?: Record<string, number>; stillPlanned?: Set<MuscleGroup>; onEdit?: (t: VolumeTarget) => void; defaults?: Map<MuscleGroup, ModelTarget> }) {
   const tmap = new Map(targets.map((t) => [t.group, t]));
   const [open, setOpen] = useState<MuscleGroup | null>(null);
   const scale = Math.max(24, ...MUSCLE_GROUPS.map((m) => totals[m.id]), ...targets.map((t) => t.max ?? t.min ?? 0));
@@ -36,12 +46,13 @@ export function VolumeTable({ totals, targets, days, stillPlanned, onEdit }: { t
         const edit = t ?? { group: m.id, min: null, max: null };
         const isOpen = onEdit && open === m.id;
         const set = (p: Partial<VolumeTarget>) => onEdit?.({ ...edit, ...p });
+        const prio = priorityOf(m.id, t), def = defaults?.get(m.id);
         return (
           <div key={m.id} className={off ? "vrow off" : "vrow"} style={{ padding: "10px 0", borderBottom: "1px solid var(--line)" }}>
             <div className="spread" style={{ alignItems: "baseline", cursor: onEdit ? "pointer" : undefined }} onClick={onEdit ? () => setOpen(isOpen ? null : m.id) : undefined}
               role={onEdit ? "button" : undefined} aria-expanded={onEdit ? !!isOpen : undefined} tabIndex={onEdit ? 0 : undefined}
               onKeyDown={onEdit ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen(isOpen ? null : m.id); } } : undefined}>
-              <span className="row" style={{ gap: 6, fontWeight: m.priority ? 600 : 400 }}>{m.label}{onEdit && <span className="muted" style={{ display: "inline-flex", transform: isOpen ? "rotate(-90deg)" : "rotate(90deg)", transition: "transform .25s var(--ease)" }}><Icon name="chevron" size={16} /></span>}</span>
+              <span className="row" style={{ gap: 6, fontWeight: priorityOf(m.id, t) === "priority" ? 600 : 400 }}>{m.label}{onEdit && <span className="muted" style={{ display: "inline-flex", transform: isOpen ? "rotate(-90deg)" : "rotate(90deg)", transition: "transform .25s var(--ease)" }}><Icon name="chevron" size={16} /></span>}</span>
               <span className="row" style={{ gap: 10 }}>
                 <span className="mono" style={{ fontSize: 16 }}>{fmtNum(v)}<span className="muted" style={{ fontSize: 12 }}> / {formatTarget(t)}</span></span>
                 <span className={s.cls} style={{ fontSize: 13, minWidth: 18, textAlign: "right" }}>{s.label}</span>
@@ -65,16 +76,18 @@ export function VolumeTable({ totals, targets, days, stillPlanned, onEdit }: { t
                     onChange={(x) => set({ max: x })} />
                 </div>
                 <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>Weekly sets. Leave max empty for no upper limit.</p>
-                <div className="spread" style={{ marginTop: 6, minHeight: 44 }}>
-                  <span>Not a focus <span className="muted" style={{ fontSize: 12 }}>· grayed, no warnings</span></span>
-                  <Switch label={`${m.label}: not a focus`} checked={!!(edit.off || edit.acceptedBelow)}
-                    onChange={(x) => {
-                      if (x) return set({ off: true });
-                      // Back to a focus: drop the not-a-focus flags (keeps the saved data clean) and give it a minimum if it had none
-                      const { off: _o, acceptedBelow: _a, ...rest } = edit;
-                      onEdit?.({ ...rest, min: edit.min ?? Math.max(1, Math.round(v)) });
-                    }} />
+                <div style={{ marginTop: 10 }}>
+                  <Seg label={`${m.label}: focus`} value={prio} onChange={(x: Priority) => onEdit?.(withPriority(edit, x, Math.max(1, Math.round(v))))}
+                    options={[{ v: "priority", label: "Priority" }, { v: "normal", label: "Normal" }, { v: "off", label: "Not a focus" }]} />
+                  <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>{prio === "priority" ? "Aims for the top half of its range." : prio === "off" ? "Grayed out, no warnings. Your numbers are kept." : "Full range."}</p>
                 </div>
+                {def && (
+                  <div className="vdefault">
+                    <div className="spread"><span className="eyebrow">Suggested for you</span><span className="mono">{def.min}–{def.max}</span></div>
+                    <p className="muted" style={{ fontSize: 12, margin: "4px 0 0" }}>{def.why.join(" · ")}</p>
+                    {(def.min !== edit.min || def.max !== edit.max) && <button className="btn btn-quiet" style={{ minHeight: 40, padding: 0, fontSize: 14 }} onClick={() => set({ min: def.min, max: def.max })}>Use {def.min}–{def.max}</button>}
+                  </div>
+                )}
               </div>
             )}
           </div>

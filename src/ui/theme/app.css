@@ -175,6 +175,7 @@ textarea.input { min-height: 84px; resize: vertical; }
 .vrow.off > .spread { color: var(--muted); opacity: 0.75; }
 .vedit { margin-top: 10px; padding: 12px; border-radius: var(--r-md); background: var(--surface-2); border: 1px solid var(--line); animation: fadeUp .3s var(--ease) both; }
 .vrow.off .vedit { opacity: 1; }
+.vdefault { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
 .status-progress { color: var(--muted); font-weight: 600; }
 @keyframes grow { from { transform: scaleX(0); } }
 .status-ok { color: var(--good); font-weight: 600; }

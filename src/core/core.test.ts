@@ -212,6 +212,17 @@ describe("backup export / import", () => {
     await db2.replaceAll(r.backup.data);
     expect(await db2.all("sessions")).toHaveLength(1);
   });
+  it("keeps the training profile and target priorities; older backups without them still import", () => {
+    const d = buildSeed();
+    d.settings = { ...d.settings, profile: { goal: "growth", phase: "bulking", age: 30, yearsTraining: 2, sleepHours: 7.5 } };
+    d.targets = d.targets.map((t) => (t.group === "chest" ? { ...t, priority: true } : t));
+    const r = parseBackup(JSON.stringify(buildBackup(d, new Date())));
+    expect(r.ok && r.backup.data.settings.profile).toMatchObject({ phase: "bulking", sleepHours: 7.5 });
+    expect(r.ok && r.backup.data.targets.find((t) => t.group === "chest")?.priority).toBe(true);
+    const old = JSON.parse(JSON.stringify(buildBackup(buildSeed(), new Date())));
+    delete old.data.settings.profile;
+    expect(parseBackup(JSON.stringify(old)).ok).toBe(true);
+  });
   it("refuses bad files with a clear message", () => {
     expect(parseBackup("nope")).toEqual({ ok: false, error: "This file isn't valid JSON." });
     expect(parseBackup('{"app":"other"}')).toMatchObject({ ok: false, error: "This isn't a Blue Fit backup file." });

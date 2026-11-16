@@ -4,19 +4,14 @@
 //   need sets for each function. Goal, priority and profile then shape the range.
 // Units: fractional weekly sets (direct 1, indirect ½), same as the rest of the app. Pure and framework-free.
 // Reasoning and sources: docs/plans/volume-targets.md §6.
-import type { MuscleGroup } from "./types";
+import { MUSCLE_GROUPS, type MuscleGroup, type TrainingProfile, type VolumeTarget } from "./types";
+export type { Goal, Phase, TrainingProfile } from "./types";
 
-export type Goal = "growth" | "strength" | "endurance" | "maintenance";
-export type Phase = "cutting" | "maintaining" | "bulking";
 export type Priority = "priority" | "normal" | "off";
 
-export interface TrainingProfile {
-  goal: Goal;
-  phase: Phase;
-  age: number;
-  yearsTraining: number;
-  sleepHours: number;
-}
+/** A target's priority: off (not a focus) wins; otherwise its own flag, else the app default (bold muscles). */
+export const priorityOf = (group: MuscleGroup, t?: VolumeTarget): Priority =>
+  t?.off || t?.acceptedBelow ? "off" : (t?.priority ?? !!MUSCLE_GROUPS.find((m) => m.id === group)?.priority) ? "priority" : "normal";
 
 export interface Muscle {
   /** Distinct functions/regions that need their own exercise (e.g. hamstrings: knee flexion + hip extension). */

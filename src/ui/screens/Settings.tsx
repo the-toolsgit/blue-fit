@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import type { Backup } from "../../core/io/exportFormat";
 import { weekOrder } from "../../core/util";
-import { ACCENTS } from "../../core/types";
+import { ACCENTS, type ProfileDraft } from "../../core/types";
 import { Seg, Stepper, Switch } from "../components/Controls";
 import { Icon } from "../components/Icon";
 import { Confirm, Sheet } from "../components/Sheet";
@@ -21,6 +21,8 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
   const [applyRest, setApplyRest] = useState(false);
   const file = useRef<HTMLInputElement>(null);
   const set = <K extends keyof typeof settings>(k: K, v: (typeof settings)[K]) => saveSettings({ ...settings, [k]: v });
+  const prof: ProfileDraft = settings.profile ?? { goal: "growth", phase: "maintaining", age: null, yearsTraining: null, sleepHours: null };
+  const setProf = (p: Partial<ProfileDraft>) => set("profile", { ...prof, ...p });
 
   // The backup format (with its validator) loads only when needed.
   const io = () => import("../../core/io/exportFormat");
@@ -65,6 +67,20 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
         ))}
       </div>
       <p className="muted" style={{ fontSize: 12, margin: "6px 4px 0" }}>Only for the numbers: streaks, "this week" and weekly charts. Screens always show Mon–Sun.</p>
+
+      <h2 className="section-title">Training profile</h2>
+      <div className="glass" style={{ padding: 14, display: "grid", gap: 12 }}>
+        <div><span className="eyebrow" style={{ display: "block", margin: "0 2px 8px" }}>Goal</span>
+          <Seg label="Goal" value={prof.goal} onChange={(v) => setProf({ goal: v })} options={[{ v: "growth", label: "Mass" }, { v: "strength", label: "Strength" }, { v: "endurance", label: "Endurance" }, { v: "maintenance", label: "Maintain" }]} /></div>
+        <div><span className="eyebrow" style={{ display: "block", margin: "0 2px 8px" }}>Eating</span>
+          <Seg label="Eating phase" value={prof.phase} onChange={(v) => setProf({ phase: v })} options={[{ v: "cutting", label: "Cutting" }, { v: "maintaining", label: "Maintaining" }, { v: "bulking", label: "Bulking" }]} /></div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 10 }}>
+          <Stepper label="Age" value={prof.age} step={1} decimals={false} min={10} empty={30} onChange={(v) => setProf({ age: v })} />
+          <Stepper label="Years lifting" value={prof.yearsTraining} step={0.5} min={0} empty={1} onChange={(v) => setProf({ yearsTraining: v })} />
+          <Stepper label="Sleep a night (h)" value={prof.sleepHours} step={0.5} min={0} empty={7} onChange={(v) => setProf({ sleepHours: v })} />
+        </div>
+        <p className="muted" style={{ fontSize: 12, margin: 0 }}>Used to work out your weekly set targets (Edit plan → Reset targets). Stays on this phone.</p>
+      </div>
 
       <h2 className="section-title">Look</h2>
       <div className="glass" style={{ padding: 14 }}>

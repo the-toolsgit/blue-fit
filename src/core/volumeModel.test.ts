@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { modelTarget, modelTargets, type TrainingProfile } from "./volumeModel";
+import { modelTarget, modelTargets, priorityOf, type TrainingProfile } from "./volumeModel";
+import { completeProfile } from "./types";
 
 // Made-up sample profile (not anyone's real data)
 const base: TrainingProfile = { goal: "growth", phase: "maintaining", age: 30, yearsTraining: 2, sleepHours: 8 };
@@ -33,5 +34,16 @@ describe("volume model (draft 2)", () => {
     const ref = modelTarget("quads", base).max;
     for (const p of [{ phase: "cutting" as const }, { sleepHours: 5 }, { age: 45 }]) expect(modelTarget("quads", { ...base, ...p }).max).toBeLessThan(ref);
     expect(modelTarget("quads", { ...base, phase: "bulking" }).max).toBeGreaterThan(ref);
+  });
+  it("priority: not a focus wins, then the muscle's own flag, then the app default", () => {
+    expect(priorityOf("biceps")).toBe("priority");
+    expect(priorityOf("chest")).toBe("normal");
+    expect(priorityOf("biceps", { group: "biceps", min: 1, max: 3, priority: false })).toBe("normal");
+    expect(priorityOf("chest", { group: "chest", min: 1, max: 3, priority: true })).toBe("priority");
+    expect(priorityOf("biceps", { group: "biceps", min: 1, max: 3, off: true })).toBe("off");
+  });
+  it("profile is used only once age, years and sleep are filled in", () => {
+    expect(completeProfile({ goal: "growth", phase: "bulking", age: 30, yearsTraining: null, sleepHours: 7 })).toBeNull();
+    expect(completeProfile({ goal: "growth", phase: "bulking", age: 30, yearsTraining: 2, sleepHours: 7 })).toMatchObject({ yearsTraining: 2 });
   });
 });

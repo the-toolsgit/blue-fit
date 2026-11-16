@@ -48,15 +48,17 @@ Already built (before this plan): editable targets in Edit plan (min/max stepper
 - [x] 1.6 Table of resulting numbers for a sample profile, shown to Leo with a "why" per muscle.
 - [x] 1.7a Draft 1 reviewed by Leo (Nov 16): too cautious, needs a priority factor, reason strength/endurance ourselves → draft 2.
 - [x] 1.8 Draft 2: first-principles model (functions, recovery, per-session limit), priority factor, our own strength/endurance logic.
-- [ ] 1.9 Leo reviews draft 2. **Stop here until approved.**
+- [x] 1.9 Leo approved draft 2 (Nov 16).
 
 ### Step 2: training profile + defaults in the app
-- [ ] 2.1 Settings → Training profile: Goal (Muscle growth · Strength · Endurance · Maintenance), Phase (Cutting · Maintaining · Bulking), Age, Years training, Average sleep. Sessions per week come from the plan.
-- [ ] 2.2 Reset targets to defaults uses the model's numbers (replaces D8's temporary defaults).
-- [ ] 2.3 Each muscle shows a short "why" for its default.
-- [ ] 2.4 Leo's current targets unchanged (D6); none marked not a focus by default (D7).
-- [ ] 2.5 Backup/restore includes the profile; old backups still import.
-- [ ] 2.6 Spec updated; tests pass; checked in the preview; Leo reviews.
+- [x] 2.1 Settings → Training profile: Goal (Mass · Strength · Endurance · Maintain), Eating (Cutting · Maintaining · Bulking), Age, Years lifting, Sleep. (Sessions per week: draft 2 uses each muscle's recovery instead of the plan's days.)
+- [x] 2.1b Priority per muscle (D13): Priority · Normal · Not a focus in the target panel; default = the app's bold muscles.
+- [x] 2.2 Reset targets to defaults uses the model's numbers when the profile is complete (else the plan's original numbers, D8).
+- [x] 2.3 Each muscle shows "Suggested for you" with its range, the why, and a Use button.
+- [x] 2.4 Leo's current targets unchanged (D6: nothing changes until he edits or presses Reset); Reset marks none as not a focus (D7).
+- [x] 2.5 Backup/restore includes the profile and priorities; old backups still import (tested).
+- [x] 2.6a Spec updated (§3.8, §4.6, §5.17, plan editor); 120 tests pass; checked in the preview.
+- [ ] 2.6b Leo reviews in the app.
 
 ### Step 3: suggestions from progress
 - [ ] 3.1 Research thresholds first (how many weeks of stall, what counts as a performance drop), with sources; show Leo before building.

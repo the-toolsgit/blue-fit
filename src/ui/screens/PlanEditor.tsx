@@ -8,7 +8,8 @@ import {
   addDay, addSlot, moveSlot, removeDay, removeSlot, renameDay, setDayWeekday, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine,
 } from "../../core/routineEdit";
 import { estimateMinutes } from "../../core/timeEstimate";
-import { MUSCLE_GROUPS, type Exercise, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
+import { completeProfile, MUSCLE_GROUPS, type Exercise, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
+import { modelTarget, priorityOf } from "../../core/volumeModel";
 import defaultTargets from "../../core/seed/targets.json";
 import { planVolume, targetStatus } from "../../core/volume";
 import { Stepper } from "../components/Controls";
@@ -85,6 +86,15 @@ export function PlanEditorScreen({ id }: { id?: string }) {
   const day: RoutineDay | undefined = days.find((d) => d.id === dayId) ?? days.find((d) => d.slots.length) ?? days[0];
   const targetsDirty = JSON.stringify(tdraft) !== JSON.stringify(targets);
   const dirty = JSON.stringify(draft) !== JSON.stringify(original) || targetsDirty;
+  // Interview: the model's suggestion for each muscle, from the training profile and the muscle's priority
+  const profile = completeProfile(settings.profile);
+  const suggest = (g: VolumeTarget["group"], t?: VolumeTarget) => (profile ? modelTarget(g, profile, priorityOf(g, t)) : null);
+  const defaults = profile ? new Map(MUSCLE_GROUPS.map((m) => [m.id, suggest(m.id, tdraft.find((x) => x.group === m.id))!])) : undefined;
+  /** Reset: model numbers when the profile is filled in, else the plan's original numbers. Notes are kept; no muscle is "not a focus"; priorities go back to the default. */
+  const resetTargets = () => setTdraft((defaultTargets as VolumeTarget[]).map((t) => {
+    const s = suggest(t.group);
+    return s ? { group: t.group, min: s.min, max: s.max, ...(t.angles ? { angles: t.angles } : {}), ...(t.gap ? { gap: t.gap } : {}) } : { ...t };
+  }));
   const editTarget = (t: VolumeTarget) => setTdraft((ts) => (ts.some((x) => x.group === t.group) ? ts.map((x) => (x.group === t.group ? t : x)) : [...ts, t]));
   const issues = validateRoutine(draft);
   const tmap = new Map(tdraft.map((t) => [t.group, t]));
@@ -170,7 +180,8 @@ export function PlanEditorScreen({ id }: { id?: string }) {
 
       <h2 className="section-title" id="live-volume">Weekly volume · live</h2>
       <p className="muted" style={{ fontSize: 12, margin: "-2px 4px 8px" }}>Tap a muscle to change its weekly target or mark it as not a focus.</p>
-      <VolumeTable totals={totals} targets={tdraft} days={dayCount} onEdit={editTarget} />
+      <VolumeTable totals={totals} targets={tdraft} days={dayCount} onEdit={editTarget} defaults={defaults} />
+      {!profile && <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Fill in Settings → Training profile to get targets worked out for you.</p>}
       <button className="btn btn-quiet btn-block" style={{ marginTop: 8 }} onClick={() => setConfirm("resetTargets")}><Icon name="undo" size={18} /> Reset targets to defaults</button>
 
       <Dock>
@@ -227,8 +238,8 @@ export function PlanEditorScreen({ id }: { id?: string }) {
       <Confirm open={confirm === "cancel"} title="Discard changes?" body="Your edits to this plan are thrown away." confirm="Discard" danger onClose={() => setConfirm(null)} onConfirm={leave} />
       <Confirm open={confirm === "deleteDay"} title={`Delete ${day?.title ?? "this day"}?`} body="Past workouts of this day stay in history." confirm="Delete" danger
         onClose={() => setConfirm(null)} onConfirm={() => { if (day) { setDraft(removeDay(draft, day.id)); setDayId(null); } }} />
-      <Confirm open={confirm === "resetTargets"} title="Reset targets?" body="Every muscle goes back to its default weekly target. Nothing is saved until you tap Save plan." confirm="Reset"
-        onClose={() => setConfirm(null)} onConfirm={() => setTdraft((defaultTargets as VolumeTarget[]).map((t) => ({ ...t })))} />
+      <Confirm open={confirm === "resetTargets"} title="Reset targets?" body={profile ? "Every muscle gets the target worked out from your training profile, with default priorities. Nothing is saved until you tap Save plan." : "Every muscle goes back to the plan's original target. Fill in your training profile in Settings to get targets worked out for you. Nothing is saved until you tap Save plan."} confirm="Reset"
+        onClose={() => setConfirm(null)} onConfirm={resetTargets} />
     </div>
   );
 }
