@@ -33,3 +33,17 @@ writeFileSync("public/icons/apple-touch-icon.png", png(icon(180, 0.84, false)));
 writeFileSync("public/favicon.svg", icon(64, 0.92, true));
 writeFileSync("docs/logo.png", png(icon(512, 0.86, true)));
 console.log("icons written");
+
+// iOS launch screens (shown before the page loads when opened from the home screen): plain app background,
+// so there is no white flash before the splash. [CSS width, CSS height, pixel ratio] for iPhones, portrait.
+export const LAUNCH_SIZES: [number, number, number][] = [
+  [440, 956, 3], [402, 874, 3], [420, 912, 3], [430, 932, 3], [393, 852, 3], [428, 926, 3], [390, 844, 3],
+  [414, 896, 3], [375, 812, 3], [414, 896, 2], [375, 667, 2], [414, 736, 3], [320, 568, 2],
+];
+mkdirSync("public/icons/launch", { recursive: true });
+for (const [w, h, r] of LAUNCH_SIZES) {
+  const W = w * r, H = h * r;
+  writeFileSync(`public/icons/launch/${W}x${H}.png`, png(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><rect width="100%" height="100%" fill="#04060c"/></svg>`));
+}
+console.log("launch screens written; link tags:");
+for (const [w, h, r] of LAUNCH_SIZES) console.log(`    <link rel="apple-touch-startup-image" media="(device-width: ${w}px) and (device-height: ${h}px) and (-webkit-device-pixel-ratio: ${r}) and (orientation: portrait)" href="icons/launch/${w * r}x${h * r}.png" />`);
