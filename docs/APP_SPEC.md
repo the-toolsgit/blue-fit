@@ -22,7 +22,7 @@ Bottom tab bar (always visible, floating glass bar): **Today · Plan · History 
 Above the tab bar sits the **dock**, a stack of floating actions:
 - Today's **Start workout** button (on Today, when no workout is running and the selected day has exercises).
 - The **rest timer** row, when a rest timer is running (on every screen).
-- **Resume workout** button, when a workout is running and you're not on the logger. If a rest timer is also running, the timer row shows the time and a **▶ Back to workout** button instead (−15/+15 are left out there to keep it clear; they're in the big timer). Tapping the timer opens the big timer (ring, REST figure, −15 s · +15 s · Skip), which also has **Back to workout** / **Go to workout** (closes it; the timer keeps running) and closes on a tap outside.
+- **Back to workout** button (with the workout's minutes so far), when a workout is running and you're not on the logger. If a rest timer is also running, the timer row shows the time and a **▶ Back to workout** button instead (−15/+15 are left out there to keep it clear; they're in the big timer). Tapping the timer opens the big timer (ring, REST figure, −15 s · +15 s · Skip), which also has **Back to workout** / **Go to workout** (closes it; the timer keeps running) and closes on a tap outside.
 
 Routes (web uses hash routes because GitHub Pages has no server routing):
 

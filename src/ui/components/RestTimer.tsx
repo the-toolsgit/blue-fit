@@ -1,5 +1,5 @@
 // Rest timer dock: lives above the tab bar on every screen, survives navigation and reloads
-// (its end time is stored). Chimes at zero. Also shows a "Resume workout" pill away from the logger.
+// (its end time is stored). Chimes at zero. Also shows a "Back to workout" pill away from the logger.
 import { useEffect, useRef, useState } from "react";
 import { REST } from "../../core/figure/poses";
 import { durationMin } from "../../core/session";
@@ -78,7 +78,7 @@ export function RestTimerDock() {
         )}
         {showResume && !restTimer && (
           <button className="btn btn-primary btn-xl" style={{ justifyContent: "space-between", padding: "0 20px", minHeight: 54, fontSize: 19 }} onClick={() => go("workout")}>
-            <span className="row"><Icon name="play" size={18} /> Resume workout</span>
+            <span className="row"><Icon name="play" size={18} /> Back to workout</span>
             <span className="mono" style={{ fontSize: 16 }}>{durationMin(active!, new Date(now))} min</span>
           </button>
         )}
