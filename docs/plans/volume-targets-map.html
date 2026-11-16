@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Volume targets plan</title>
+<style>
+:root{--bg:#04060c;--card:#0b1322;--line:rgba(110,165,255,.18);--ink:#eaf2ff;--muted:#8f9dbb;--neon:#3d9bff;--cyan:#23e2ff;--good:#3dffb0;--warn:#ffc53d;--pink:#ff6bbd}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(60% 40% at 10% 0%,rgba(35,110,255,.18),transparent),radial-gradient(50% 40% at 100% 100%,rgba(0,220,255,.08),transparent),var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,sans-serif;padding:20px 16px 40px}
+h1{font:800 26px/1.1 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--neon);text-shadow:0 0 14px rgba(61,155,255,.5);margin:0 0 4px}
+.sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+.lane{display:grid;gap:10px;max-width:760px;margin:0 auto}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.box h2{margin:0 0 6px;font:700 15px system-ui;letter-spacing:.1em;text-transform:uppercase}
+.box ul{margin:0;padding-left:18px;color:#c9d6ee;font-size:13.5px}.box li{margin:2px 0}
+.step h2{color:var(--neon)}.dec h2{color:var(--pink)}.rule h2{color:var(--cyan)}
+.gate{justify-self:center;border:1px dashed var(--warn);color:var(--warn);border-radius:99px;padding:5px 14px;font-size:12.5px;font-weight:700;letter-spacing:.06em}
+.arrow{justify-self:center;color:var(--neon);font-size:20px;line-height:1;text-shadow:0 0 8px var(--neon)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;border:1px solid var(--line);color:var(--muted);margin-left:6px;vertical-align:2px}
+.now{border-color:var(--neon);box-shadow:0 0 0 1px var(--neon),0 0 24px -6px rgba(61,155,255,.6)}
+.now .tag{color:var(--neon);border-color:var(--neon)}
+</style></head><body>
+<div class="lane">
+  <div><h1>Our own volume targets</h1><div class="sub">Plan map · Nov 16 2026 · checklist in docs/plans/volume-targets.md</div></div>
+
+  <div class="grid2">
+    <div class="box dec"><h2>Agreed</h2><ul>
+      <li>Our own numbers from size, function, recovery</li><li>Change with the goal (all goals)</li><li>One goal for the whole plan</li>
+      <li>Ask age, sleep, phase (cut · middle · bulk)</li><li>Suggest changes from progress</li></ul></div>
+    <div class="box dec"><h2>Must not</h2><ul>
+      <li>Change Leo's current plan</li><li>Mark any muscle "not a focus" by default</li><li>Use a number without a source or a "judgment" note</li><li>Commit personal values</li></ul></div>
+  </div>
+
+  <div class="arrow">↓</div>
+  <div class="box step now"><h2>Step 1 · The model <span class="tag">in progress</span></h2><ul>
+    <li>Goal base ranges (with sources)</li><li>Muscle factors: size/fatigue, recovery, joint load, indirect work</li>
+    <li>Profile adjustments: years training, age, sleep, phase, sessions/week</li><li>Formula → min–max per muscle, with a "why"</li>
+    <li>Pure core module + tests (no screen uses it yet)</li></ul></div>
+  <div class="gate">Leo reviews the numbers ✋</div>
+
+  <div class="arrow">↓</div>
+  <div class="box step"><h2>Step 2 · Profile + defaults <span class="tag">next</span></h2><ul>
+    <li>Settings → Training profile (goal, phase, age, years, sleep)</li><li>Reset targets uses the model</li>
+    <li>"Why" line per muscle</li><li>Backup includes the profile</li></ul></div>
+  <div class="gate">Leo reviews in the app ✋</div>
+
+  <div class="arrow">↓</div>
+  <div class="box step"><h2>Step 3 · Suggestions from progress <span class="tag">later</span></h2><ul>
+    <li>Research stall / drop thresholds first, show Leo</li><li>Card in Plan: "+2 sets?" / "−2 sets?" · Accept or Ignore</li>
+    <li>Skips deload weeks</li><li>Native app: notification (roadmap)</li></ul></div>
+  <div class="gate">Leo reviews ✋</div>
+
+  <div class="arrow">↓</div>
+  <div class="box rule"><h2>Final check</h2><ul>
+    <li>Every agreed point implemented as written</li><li>Every number sourced or marked judgment</li>
+    <li>Spec matches the app · tests pass</li><li>Nothing left unticked without a reason</li></ul></div>
+</div>
+</body></html>
