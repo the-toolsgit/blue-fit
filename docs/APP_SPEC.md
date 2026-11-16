@@ -356,15 +356,15 @@ Neon, built from the blue line man: deep-space background with blue/cyan haze an
 | star | #FFC53D | #8F6206 | ★ heavy |
 | on-neon | #02101F | #FFFFFF | text on neon fills |
 
-**Accent palettes.** The accent recolors buttons, chips, switches, steppers, bars, glows, lines and the background haze. The line man is always blue, and the background stays navy in dark and soft white-blue in light, with a faint blue haze kept in every palette. Each accent has a fill color (buttons, chips, bars; dark text on it) and an ink color (accent text and chart lines). In dark the two are the same; in light the ink is a deeper shade of the same hue so text stays readable.
+**Accent palettes.** The accent recolors buttons, chips, switches, steppers, bars, glows, lines and the background haze. The line man and his glow are always blue, and the background stays navy in dark and soft white-blue in light, with a faint blue haze kept in every palette. Each accent has a fill color (buttons, chips, bars; dark text on it) and an ink color (accent text and chart lines). They are the same, except light Blue, whose ink is its deeper shade. (Light Pink/Orange/Green/Brown ink is Leo's choice and is below 4.5:1 on white.)
 
-| Accent | Dark fill / 2nd | Light fill / 2nd | Light ink / 2nd |
+| Accent | Dark fill / 2nd | Light fill / 2nd | Light ink / 2nd (if different) |
 |---|---|---|---|
 | Blue (default) | #3D9BFF / #23E2FF | #1559D6 / #0078A0 (white text) | #1559D6 / #0078A0 |
-| Pink | #FF8FD0 / #FFC2E6 | #FF8DA1 / #FFB3C1 | #C22A52 / #D9476E |
-| Orange | #FF9D4D / #FFC98A | #FF5C00 / #FF8A3D | #B34000 / #CC5A12 |
-| Green | #5CF2A8 / #B4FFD8 | #0BDA51 / #4BE887 | #08793A / #0F9449 |
-| Brown | #D9A46B / #F0CFA0 | #B07A45 / #C99662 | #87531F / #9C6531 |
+| Pink | #FF8FD0 / #FFC2E6 | #FF8DA1 / #FFB3C1 | same as fill |
+| Orange | #FF9D4D / #FFC98A | #FF5C00 / #FF8A3D | same as fill |
+| Green | #5CF2A8 / #B4FFD8 | #0BDA51 / #4BE887 | same as fill |
+| Brown | #D9A46B / #F0CFA0 | #B07A45 / #C99662 | same as fill |
 
 With the Pink accent, PR highlights (normally pink) turn gold and the "recovering" muscle color turns coral, so they still stand out. PR toasts keep the line man blue.
 

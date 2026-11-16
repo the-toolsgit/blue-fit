@@ -83,13 +83,13 @@ ul { margin: 0; padding-left: 18px; }
 .chips-scroll::-webkit-scrollbar { display: none; }
 
 /* ---------- Figure ---------- */
-.fig { display: block; overflow: visible; filter: drop-shadow(0 0 2px var(--glow)) drop-shadow(0 0 7px var(--glow-soft)); }
+.fig { display: block; overflow: visible; filter: drop-shadow(0 0 2px var(--fig-glow)) drop-shadow(0 0 7px var(--fig-glow-soft)); }
 .fig .mn polyline, .fig .mn circle { fill: none; stroke: var(--fig); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .fig .lt line, .fig .lt polyline, .fig .lt circle { fill: none; stroke: var(--fig2); stroke-width: 1.6; stroke-linecap: round; }
 .fig .floor { stroke: var(--fig2); stroke-width: 1; opacity: 0.7; }
 .fig.thin .mn polyline, .fig.thin .mn circle { stroke-width: 2.2; }
 .fig-stage { position: relative; display: grid; place-items: center; }
-.fig-stage::before { content: ""; position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, var(--glow-soft), transparent 65%); filter: blur(8px); }
+.fig-stage::before { content: ""; position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, var(--fig-glow-soft), transparent 65%); filter: blur(8px); }
 .fig-stage > * { position: relative; }
 
 /* ---------- Tab bar ---------- */
@@ -203,7 +203,7 @@ textarea.input { min-height: 84px; resize: vertical; }
 .splash-fig { animation: splashIn 0.38s var(--ease) both; }
 .splash-fig .floor { display: none; }
 .fig .bump path { fill: var(--fig); stroke: var(--fig); stroke-width: 1; stroke-linejoin: round; stroke-linecap: round; }
-.splash-fig .fig { filter: drop-shadow(0 0 4px var(--glow)) drop-shadow(0 0 16px var(--glow)); }
+.splash-fig .fig { filter: drop-shadow(0 0 4px var(--fig-glow)) drop-shadow(0 0 16px var(--fig-glow)); }
 .splash-word { font: 700 34px/1 var(--display); letter-spacing: 0.22em; padding-left: 0.22em; animation: splashIn 0.38s var(--ease) 0.06s both; }
 @keyframes splashIn { from { opacity: 0; transform: scale(0.9) translateY(6px); } }
 

@@ -20,6 +20,8 @@
   --recovering: #ff3fa8;
   --glow: rgba(61, 155, 255, 0.55);
   --glow-soft: rgba(61, 155, 255, 0.18);
+  --fig-glow: rgba(61, 155, 255, 0.55); /* the line man's glow: always blue, whatever the accent */
+  --fig-glow-soft: rgba(61, 155, 255, 0.18);
   --pink: #ff3fa8;
   --pink-glow: rgba(255, 63, 168, 0.5);
   --good: #3dffb0;
@@ -50,7 +52,7 @@
     --line: rgba(31, 90, 200, 0.14); --line-strong: rgba(31, 90, 200, 0.3);
     --ink: #0a1430; --muted: #52618a; --faint: #9aa8c6;
     --fig: #1f6bff; --fig2: #9dbcf6; --neon: #1559d6; --neon-2: #0078a0; --neon-ink: #1559d6; --neon-ink-2: #0078a0; --recovering: #c41470;
-    --glow: rgba(31, 107, 255, 0.32); --glow-soft: rgba(31, 107, 255, 0.1);
+    --glow: rgba(31, 107, 255, 0.32); --glow-soft: rgba(31, 107, 255, 0.1); --fig-glow: rgba(31, 107, 255, 0.32); --fig-glow-soft: rgba(31, 107, 255, 0.1);
     --pink: #c41470; --pink-glow: rgba(196, 20, 112, 0.28);
     --good: #08794b; --warn: #8f5c0e; --bad: #c42a46; --star: #8f6206; --on-neon: #ffffff;
     --bg-fx-1: rgba(31, 107, 255, 0.12); --bg-fx-2: rgba(0, 190, 240, 0.08); --grid: rgba(31, 90, 200, 0.05);
@@ -63,7 +65,7 @@
   --line: rgba(31, 90, 200, 0.14); --line-strong: rgba(31, 90, 200, 0.3);
   --ink: #0a1430; --muted: #52618a; --faint: #9aa8c6;
   --fig: #1f6bff; --fig2: #9dbcf6; --neon: #1559d6; --neon-2: #0078a0; --neon-ink: #1559d6; --neon-ink-2: #0078a0; --recovering: #c41470;
-  --glow: rgba(31, 107, 255, 0.32); --glow-soft: rgba(31, 107, 255, 0.1);
+  --glow: rgba(31, 107, 255, 0.32); --glow-soft: rgba(31, 107, 255, 0.1); --fig-glow: rgba(31, 107, 255, 0.32); --fig-glow-soft: rgba(31, 107, 255, 0.1);
   --pink: #c41470; --pink-glow: rgba(196, 20, 112, 0.28);
   --good: #08794b; --warn: #8f5c0e; --bad: #c42a46; --star: #8f6206; --on-neon: #ffffff;
   --bg-fx-1: rgba(31, 107, 255, 0.12); --bg-fx-2: rgba(0, 190, 240, 0.08); --grid: rgba(31, 90, 200, 0.05);
@@ -72,7 +74,7 @@
 
 /* ---------- Accent palettes (Settings → Accent). The line man (--fig) always stays blue. ----------
    --neon / --neon-2 fill buttons, chips and bars (text on them: --on-neon). --neon-ink / --neon-ink-2 are the
-   accent for text and chart lines; on light palettes they are deeper shades of the same hue so text stays readable.
+   accent for text and chart lines (the same colors, except light Blue, which uses its deeper text shades).
    With the pink accent, PR highlights (--pink) turn gold and "recovering" turns coral so they still stand out. */
 :root[data-accent="pink"] {
   --neon: #ff8fd0; --neon-2: #ffc2e6; --neon-ink: #ff8fd0; --neon-ink-2: #ffc2e6; --on-neon: #2a0418;
@@ -103,26 +105,26 @@
 /* Light versions: same selectors plus the light-theme condition (higher specificity, so they win). */
 @media (prefers-color-scheme: light) {
   :root[data-accent="pink"]:not([data-theme="dark"]) {
-    --neon: #ff8da1; --neon-2: #ffb3c1; --neon-ink: #c22a52; --neon-ink-2: #d9476e; --on-neon: #3a0714;
+    --neon: #ff8da1; --neon-2: #ffb3c1; --neon-ink: #ff8da1; --neon-ink-2: #ffb3c1; --on-neon: #3a0714;
     --glow: rgba(255, 141, 161, 0.45); --glow-soft: rgba(255, 141, 161, 0.16);
     --line: rgba(194, 42, 82, 0.14); --line-strong: rgba(194, 42, 82, 0.3);
     --bg-fx-1: rgba(255, 141, 161, 0.16); --bg-fx-2: rgba(31, 107, 255, 0.08);
     --pink: #8f6206; --pink-glow: rgba(143, 98, 6, 0.28); --pink-2: #b34000; --recovering: #c42a46;
   }
   :root[data-accent="orange"]:not([data-theme="dark"]) {
-    --neon: #ff5c00; --neon-2: #ff8a3d; --neon-ink: #b34000; --neon-ink-2: #cc5a12; --on-neon: #1f0a00;
+    --neon: #ff5c00; --neon-2: #ff8a3d; --neon-ink: #ff5c00; --neon-ink-2: #ff8a3d; --on-neon: #1f0a00;
     --glow: rgba(255, 92, 0, 0.35); --glow-soft: rgba(255, 92, 0, 0.12);
     --line: rgba(179, 64, 0, 0.14); --line-strong: rgba(179, 64, 0, 0.3);
     --bg-fx-1: rgba(255, 92, 0, 0.12); --bg-fx-2: rgba(31, 107, 255, 0.08);
   }
   :root[data-accent="green"]:not([data-theme="dark"]) {
-    --neon: #0bda51; --neon-2: #4be887; --neon-ink: #08793a; --neon-ink-2: #0f9449; --on-neon: #002810;
+    --neon: #0bda51; --neon-2: #4be887; --neon-ink: #0bda51; --neon-ink-2: #4be887; --on-neon: #002810;
     --glow: rgba(11, 218, 81, 0.35); --glow-soft: rgba(11, 218, 81, 0.12);
     --line: rgba(8, 121, 58, 0.14); --line-strong: rgba(8, 121, 58, 0.3);
     --bg-fx-1: rgba(11, 218, 81, 0.12); --bg-fx-2: rgba(31, 107, 255, 0.08);
   }
   :root[data-accent="brown"]:not([data-theme="dark"]) {
-    --neon: #b07a45; --neon-2: #c99662; --neon-ink: #87531f; --neon-ink-2: #9c6531; --on-neon: #1f1206;
+    --neon: #b07a45; --neon-2: #c99662; --neon-ink: #b07a45; --neon-ink-2: #c99662; --on-neon: #1f1206;
     --glow: rgba(176, 122, 69, 0.35); --glow-soft: rgba(176, 122, 69, 0.12);
     --line: rgba(135, 83, 31, 0.15); --line-strong: rgba(135, 83, 31, 0.3);
     --bg-fx-1: rgba(176, 122, 69, 0.13); --bg-fx-2: rgba(31, 107, 255, 0.08);
@@ -130,26 +132,26 @@
 }
 
 :root[data-accent="pink"][data-theme="light"] {
-  --neon: #ff8da1; --neon-2: #ffb3c1; --neon-ink: #c22a52; --neon-ink-2: #d9476e; --on-neon: #3a0714;
+  --neon: #ff8da1; --neon-2: #ffb3c1; --neon-ink: #ff8da1; --neon-ink-2: #ffb3c1; --on-neon: #3a0714;
   --glow: rgba(255, 141, 161, 0.45); --glow-soft: rgba(255, 141, 161, 0.16);
   --line: rgba(194, 42, 82, 0.14); --line-strong: rgba(194, 42, 82, 0.3);
   --bg-fx-1: rgba(255, 141, 161, 0.16); --bg-fx-2: rgba(31, 107, 255, 0.08);
   --pink: #8f6206; --pink-glow: rgba(143, 98, 6, 0.28); --pink-2: #b34000; --recovering: #c42a46;
 }
 :root[data-accent="orange"][data-theme="light"] {
-  --neon: #ff5c00; --neon-2: #ff8a3d; --neon-ink: #b34000; --neon-ink-2: #cc5a12; --on-neon: #1f0a00;
+  --neon: #ff5c00; --neon-2: #ff8a3d; --neon-ink: #ff5c00; --neon-ink-2: #ff8a3d; --on-neon: #1f0a00;
   --glow: rgba(255, 92, 0, 0.35); --glow-soft: rgba(255, 92, 0, 0.12);
   --line: rgba(179, 64, 0, 0.14); --line-strong: rgba(179, 64, 0, 0.3);
   --bg-fx-1: rgba(255, 92, 0, 0.12); --bg-fx-2: rgba(31, 107, 255, 0.08);
 }
 :root[data-accent="green"][data-theme="light"] {
-  --neon: #0bda51; --neon-2: #4be887; --neon-ink: #08793a; --neon-ink-2: #0f9449; --on-neon: #002810;
+  --neon: #0bda51; --neon-2: #4be887; --neon-ink: #0bda51; --neon-ink-2: #4be887; --on-neon: #002810;
   --glow: rgba(11, 218, 81, 0.35); --glow-soft: rgba(11, 218, 81, 0.12);
   --line: rgba(8, 121, 58, 0.14); --line-strong: rgba(8, 121, 58, 0.3);
   --bg-fx-1: rgba(11, 218, 81, 0.12); --bg-fx-2: rgba(31, 107, 255, 0.08);
 }
 :root[data-accent="brown"][data-theme="light"] {
-  --neon: #b07a45; --neon-2: #c99662; --neon-ink: #87531f; --neon-ink-2: #9c6531; --on-neon: #1f1206;
+  --neon: #b07a45; --neon-2: #c99662; --neon-ink: #b07a45; --neon-ink-2: #c99662; --on-neon: #1f1206;
   --glow: rgba(176, 122, 69, 0.35); --glow-soft: rgba(176, 122, 69, 0.12);
   --line: rgba(135, 83, 31, 0.15); --line-strong: rgba(135, 83, 31, 0.3);
   --bg-fx-1: rgba(176, 122, 69, 0.13); --bg-fx-2: rgba(31, 107, 255, 0.08);
