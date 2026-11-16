@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
 import { groupsLeftThisWeek, planVolume, sessionsVolume, targetStatus, tonnage } from "./volume";
 import { estimateMinutes } from "./timeEstimate";
-import { platesPerSide } from "./plates";
+import { groupPlates, platesFor } from "./plates";
 import { epley } from "./oneRm";
 import { computeRecords, prsForSet, prsForEntry } from "./records";
 import { progressionHint } from "./progression";
@@ -10,7 +10,7 @@ import { addSet, afterSetDone, applyHint, createSessionFromDay, finishSession, s
 import { dayForDate } from "./today";
 import { buildBackup, parseBackup } from "./io/exportFormat";
 import { MemoryAdapter } from "./storage/memoryAdapter";
-import { DEFAULT_SETTINGS, type LoggedSet, type Session } from "./types";
+import { type LoggedSet, type Session } from "./types";
 
 const seed = buildSeed();
 const exMap = new Map(seed.exercises.map((e) => [e.id, e]));
@@ -70,18 +70,16 @@ describe("time estimate", () => {
   });
 });
 
-describe("plates per side", () => {
-  const stock = DEFAULT_SETTINGS.plates;
-  it("greedy heaviest first", () => {
-    expect(platesPerSide(70, stock).plates).toEqual([45, 25]);
-    expect(platesPerSide(137.5, stock).plates).toEqual([45, 45, 45, 2.5]);
-    expect(platesPerSide(0, stock).plates).toEqual([]);
+describe("plates (standard gym plates, unlimited)", () => {
+  it("heaviest first, as many as needed", () => {
+    expect(platesFor(70).plates).toEqual([45, 25]);
+    expect(platesFor(137.5).plates).toEqual([45, 45, 45, 2.5]);
+    expect(platesFor(405).plates).toEqual(Array(9).fill(45));
+    expect(platesFor(0).plates).toEqual([]);
   });
-  it("reports what can't be loaded", () => {
-    const r = platesPerSide(46, stock);
-    expect(r.loaded).toBe(45);
-    expect(r.remainder).toBe(1);
-    expect(platesPerSide(100, [{ weight: 45, pairs: 1 }]).remainder).toBe(55);
+  it("groups and reports what can't be loaded", () => {
+    expect(groupPlates(platesFor(120).plates)).toEqual([{ weight: 45, count: 2 }, { weight: 25, count: 1 }, { weight: 5, count: 1 }]);
+    expect(platesFor(46)).toMatchObject({ loaded: 45, remainder: 1 });
   });
 });
 

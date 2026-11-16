@@ -74,7 +74,7 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
   - In a deload session: header eyebrow starts with "Deload ·", and instead of the progression hint a cyan note "Deload: weights are 10% lighter. Stop every set with 3–4 reps left."
   - **Progression hint** (§5.5) with a **Use** button that writes the suggested weight and reps into the sets not yet done.
   - **Set rows:** type button (number for working sets, W warm-up, D drop, F failure; tap cycles working → warm-up → drop → failure), "weight /side × reps", and a done toggle (green glow when done; tap again to undo).
-  - The **selected set** (first not-done set by default; tap a row to pick another) expands: Weight stepper (step = exercise increment; label shows "lb", "lb per side" or "lb per hand"), Reps stepper (step 1; first tap on an empty value jumps to the rep minimum), plate breakdown for per-side lifts (§5.9), big **✓ DONE · SET n**, and "Remove this set".
+  - The **selected set** (first not-done set by default; tap a row to pick another) expands: Weight stepper (step = exercise increment; label shows "lb", "lb per side" or "lb per hand"), Reps stepper (step 1; first tap on an empty value jumps to the rep minimum), plates to load for per-side and single-sleeve lifts (§5.9), labeled "Plates per side" (or "Plates" for a single sleeve) and drawn as plates (front view, sized by weight: 45 → 50 px … 2.5 → 28 px, weight in the center) with a ×n count, big **✓ DONE · SET n**, and "Remove this set".
   - "+ Add set" (copies the last set's weight and reps).
   - Superset groups: consecutive entries with the same group letter get a cyan glowing bracket on the left and a "SUPERSET A" label.
 - **⋯ menu per exercise:** Swap for this workout · Superset with next exercise / Unlink from next · Add note / Edit note · Add warm-up set · Move up · Move down · How to do it · Remove from workout (confirm).
@@ -127,7 +127,6 @@ Back and **Done** at the top (both return to the summary, replacing the editor i
 - **Training week starts on:** 7 chips Mon…Sun (default Sat). Only drives the numbers: streak, "this week", history grouping by week, weekly charts and ranges. Every screen still shows days Mon→Sun (week strip, calendar, plan, streak pills).
 - **Training profile** (Interview): Goal (Mass · Strength · Endurance · Maintain), Eating (Cutting · Maintaining · Bulking), Age, Years lifting, Sleep a night (h). Note: "Used to work out your weekly set targets (Edit plan → Reset targets). Stays on this phone." The volume model uses it once age, years and sleep are filled in (§5.17).
 - **Look:** Theme segmented control: System · Dark · Light. Accent: five round swatches (Blue default, Pink, Orange, Green, Brown); the choice is saved and applied before the splash paints.
-- **Plates (pairs you have):** a stepper per plate weight (45, 35, 25, 10, 5, 2.5).
 - **Data:** "Last backup: today / yesterday / n days ago / never" (amber when 14+ days or never). Export (downloads `blue-fit-backup-YYYY-MM-DD.json`), Copy JSON (clipboard); both record the backup time. Import file, Paste JSON. Imports are validated (§7.3); a valid file shows a confirmation with its date and counts, then replaces all data. **Reset everything** (confirm) restores the seed.
 - **App:** Update app (when a new version is waiting), otherwise Check for updates (toast "You're up to date" or "Update found"). The app also checks on launch, each time it returns to the foreground, and every 30 minutes while open, install instructions when not installed ("Share → Add to Home Screen"), version.
 
@@ -194,7 +193,7 @@ Groups: back, biceps, triceps, sideDelts, rearDelts, traps, frontDelts, chest, q
 
 | Exercise | Direct (1) | Indirect (0.5) | Equipment / load | Increment |
 |---|---|---|---|---|
-| T-Bar Reverse Row ★ | back | rear delts, biceps | plate machine / per side | 2.5 |
+| T-Bar Reverse Row ★ | back | rear delts, biceps | plate machine / single sleeve (whole weight) | 2.5 |
 | Single-arm Cable Lat Pulldown | back | biceps | cable | 5 |
 | Single-arm DB Row | back | rear delts, biceps | dumbbell / per hand | 5 |
 | Straight-arm Cable Pulldown | back | — | cable | 5 |
@@ -261,7 +260,7 @@ At most one session is `active`. Duration = finishedAt − startedAt (minutes, r
 ## 5. Business rules
 
 ### 5.1 Weights
-Stored exactly as typed. Plate-loaded lifts (Smith Squat, T-Bar Row, Leg Press, Barbell Shrug): weight on **one side**, bar not included. Dumbbells: **per hand**. Fixed bars (EZ, preacher): the number on the bar (10 lb steps). Machines and cables: the stack number. There is no bar-weight setting; tonnage is a personal trend number.
+Stored exactly as typed. Plate-loaded lifts with two sides (Smith Squat, Leg Press, Barbell Shrug): weight on **one side**, bar not included. T-Bar Row has one sleeve (`singleSleeve`): the weight is all the plates on it (one-time migration Nov 16 2026; earlier numbers mean the same plates). Dumbbells: **per hand**. Fixed bars (EZ, preacher): the number on the bar (10 lb steps). Machines and cables: the stack number. There is no bar-weight setting; tonnage is a personal trend number.
 
 ### 5.2 Fractional volume (weekly sets)
 For each done set whose type is **working or failure**: for each `{group, weight}` in the exercise's `volume`, add `weight` (1 or 0.5) to that group. Warm-ups and drop sets add nothing.
@@ -294,7 +293,7 @@ After a set is marked done (auto-start on, entry rest > 0): start a timer for th
 `round((sets × 0.75 + (sets − 1) × 2 + exercises) / 5) × 5` minutes (45 s per set, 2 min rest between sets, 1 min setup per exercise). Seed plan: Mon 55, Tue 55, Wed 65, Thu 60, Fri 55, Sat 60.
 
 ### 5.9 Plate math
-Input: the per-side weight. Greedy from the heaviest plate, limited by pairs owned. Output: plates for one side and any remainder that can't be loaded ("+1 lb can't be loaded").
+Input: the weight for one sleeve (per-side weight, or the whole weight for a single sleeve). Standard gym plates 45, 35, 25, 10, 5, 2.5 lb, as many as needed; greedy from the heaviest. Output: plates grouped with counts, and any remainder ("+1 lb can't be loaded with standard plates"). No plate setting (`settings.plates` is unused, kept for older backups).
 
 ### 5.10 Today's day
 Today's weekday (local time) → the current routine's day with that weekday. Missing or empty day → rest day. The user can preview any weekday and start it.

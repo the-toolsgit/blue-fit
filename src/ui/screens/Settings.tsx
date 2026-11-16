@@ -95,14 +95,6 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
         </div>
       </div>
 
-      <h2 className="section-title">Plates (pairs you have)</h2>
-      <div className="glass" style={{ padding: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-        {settings.plates.map((p, i) => (
-          <Stepper key={p.weight} label={`${p.weight} lb`} value={p.pairs} step={1} decimals={false}
-            onChange={(v) => set("plates", settings.plates.map((x, k) => (k === i ? { ...x, pairs: Math.min(50, v ?? 0) } : x)))} />
-        ))}
-      </div>
-
       <h2 className="section-title">Data</h2>
       <div className="glass" style={{ padding: 14 }} >
         <p className="muted" style={{ fontSize: 13, marginBottom: 12 }}>Everything is stored on this phone only. Last backup: <b style={{ color: since == null || since >= REMIND_AFTER_DAYS ? "var(--warn)" : "var(--ink)" }}>{since == null ? "never" : since === 0 ? "today" : since === 1 ? "yesterday" : `${since} days ago`}</b>.</p>

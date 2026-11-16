@@ -20,6 +20,15 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
+    // Nov 16 2026: the T-bar row has one sleeve, so its weight is the plates on that sleeve (not "per side").
+    id: "2026-11-16-tbar-single-sleeve",
+    run(d) {
+      const t = d.exercises.find((e) => e.id === "t-bar-reverse-row");
+      if (!t || t.singleSleeve) return null;
+      return { ...d, exercises: d.exercises.map((e) => (e.id === t.id ? { ...e, loadMode: "total", singleSleeve: true } : e)) };
+    },
+  },
+  {
     // Nov 16 2026: hamstrings become a normal muscle with an 8–10 target (2 leg curls × 4 sets), instead of "10+, below by choice".
     id: "2026-11-16-hamstrings-8-10",
     run(d) {

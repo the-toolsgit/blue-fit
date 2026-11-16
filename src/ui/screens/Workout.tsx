@@ -2,7 +2,7 @@
 // and one big Done button; everything saves on every tap; rest starts automatically.
 import { useEffect, useMemo, useRef, useState } from "react";
 import { LOADING } from "../../core/figure/poses";
-import { platesPerSide } from "../../core/plates";
+import { groupPlates, platesFor } from "../../core/plates";
 import { progressionHint } from "../../core/progression";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
@@ -253,7 +253,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   s: Session; e: SessionEntry; ex: Exercise; index: number; focused: boolean;
   onFocus: () => void; onToggle: (x: LoggedSet) => void; commit: (n: Session) => void; onDetail: () => void; onMenu: () => void;
 }) {
-  const { finished, settings, exMap } = useStore();
+  const { finished, exMap } = useStore();
   const [sel, setSel] = useState<string | null>(null);
   const last = useMemo(() => lastEntryFor(finished, ex.id, s.id), [finished, ex.id, s.id]);
   const repMin = e.repMin ?? 8, repMax = e.repMax ?? repMin;
@@ -343,7 +343,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                     <Stepper label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />
                     <Stepper label="Reps" value={x.reps} step={1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
                   </div>
-                  {ex.loadMode === "perSide" && x.weight != null && x.weight > 0 && <Plates weight={x.weight} stock={settings.plates} />}
+                  {(ex.loadMode === "perSide" || ex.singleSleeve) && x.weight != null && x.weight > 0 && <Plates weight={x.weight} single={ex.singleSleeve} />}
                   <button className="btn btn-primary btn-xl" style={{ minHeight: 56 }} onClick={() => { setSel(null); onToggle(x); }}>
                     <Icon name="check" size={22} stroke={2.6} /> Done{e.sets.indexOf(x) === e.sets.length - 1 ? "" : ` · set ${e.sets.indexOf(x) + 1}`}
                   </button>
@@ -361,16 +361,23 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   );
 }
 
-function Plates({ weight, stock }: { weight: number; stock: { weight: number; pairs: number }[] }) {
-  const r = platesPerSide(weight, stock);
+/** Plates to load, drawn as plates (front view, sized by weight) with a count. Standard gym plates, unlimited. */
+function Plates({ weight, single }: { weight: number; single?: boolean }) {
+  const r = platesFor(weight);
+  const label = single ? "Plates" : "Plates per side";
   return (
-    <div className="row" style={{ flexWrap: "wrap", gap: 6, fontSize: 13 }} aria-label="Plates per side">
-      <span className="eyebrow" style={{ fontSize: 10 }}>Per side</span>
-      {r.plates.map((p, i) => (
-        <span key={i} className="mono" style={{ padding: "3px 8px", borderRadius: 8, border: "1px solid var(--neon-ink)", color: "var(--neon-ink)", boxShadow: "0 0 10px -4px var(--glow)",
-          minHeight: 24, height: 20 + Math.min(16, p / 3), display: "grid", placeItems: "center", lineHeight: 1 }}>{fmtNum(p)}</span>
-      ))}
-      {r.remainder > 0 && <span style={{ color: "var(--warn)" }}>+{fmtNum(r.remainder)} lb can't be loaded</span>}
+    <div className="plates" aria-label={`${label}: ${groupPlates(r.plates).map((g) => `${g.count} × ${fmtNum(g.weight)}`).join(", ")}`}>
+      <span className="eyebrow" style={{ fontSize: 10 }}>{label}</span>
+      <div className="plates-row" aria-hidden="true">
+        {groupPlates(r.plates).map((g) => (
+          <span key={g.weight} className="plate-group">
+            <span className="plate" style={{ ["--d" as string]: `${PLATE_SIZE[g.weight] ?? 24}px` }}><b>{fmtNum(g.weight)}</b></span>
+            {g.count > 1 && <span className="plate-count mono">×{g.count}</span>}
+          </span>
+        ))}
+      </div>
+      {r.remainder > 0 && <span style={{ color: "var(--warn)", fontSize: 13 }}>+{fmtNum(r.remainder)} lb can't be loaded with standard plates</span>}
     </div>
   );
 }
+const PLATE_SIZE: Record<number, number> = { 45: 50, 35: 45, 25: 40, 10: 34, 5: 30, 2.5: 28 };

@@ -149,3 +149,12 @@ describe("one-time migration: hamstrings 8–10", () => {
   });
   it("does nothing when already updated", () => expect(m.run(seed, "2026-11-16")).toBeNull());
 });
+
+describe("one-time migration: T-bar row has one sleeve", () => {
+  const m = MIGRATIONS.find((x) => x.id === "2026-11-16-tbar-single-sleeve")!;
+  it("logs the T-bar as the plates on its one sleeve", () => {
+    const old = { ...seed, exercises: seed.exercises.map((e) => (e.id === "t-bar-reverse-row" ? { ...e, loadMode: "perSide" as const, singleSleeve: undefined } : e)) };
+    expect(m.run(old, "2026-11-16")!.exercises.find((e) => e.id === "t-bar-reverse-row")).toMatchObject({ loadMode: "total", singleSleeve: true });
+  });
+  it("does nothing when already updated", () => expect(m.run(seed, "2026-11-16")).toBeNull());
+});

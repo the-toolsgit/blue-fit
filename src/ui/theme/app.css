@@ -178,6 +178,14 @@ textarea.input { min-height: 84px; resize: vertical; }
 .vedit { margin-top: 10px; padding: 12px; border-radius: var(--r-md); background: var(--surface-2); border: 1px solid var(--line); animation: fadeUp .3s var(--ease) both; }
 .vrow.off .vedit { opacity: 1; }
 .vdefault { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+.plates { display: grid; gap: 6px; }
+.plates-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.plate-group { display: inline-flex; align-items: center; gap: 5px; }
+.plate { width: var(--d); height: var(--d); border-radius: 50%; display: grid; place-items: center; flex: none;
+  background: radial-gradient(circle, var(--surface-solid) 0 54%, color-mix(in srgb, var(--neon-ink) 22%, var(--surface-2)) 56% 100%);
+  border: 2px solid var(--neon-ink); box-shadow: 0 0 10px -3px var(--glow); }
+.plate b { font: 700 11px/1 var(--mono); color: var(--ink); }
+.plate-count { font-size: 14px; color: var(--muted); }
 .status-progress { color: var(--muted); font-weight: 600; }
 @keyframes grow { from { transform: scaleX(0); } }
 .status-ok { color: var(--good); font-weight: 600; }

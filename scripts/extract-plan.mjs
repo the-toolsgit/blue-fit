@@ -20,7 +20,7 @@ const slug = (s) => s.toLowerCase().replace(/\(leg day\)/, "").replace(/[^a-z0-9
 // ---- Approved mapping (Nov 14): D = direct (1 set), I = indirect (0.5 set). Reproduces the weekly volume table.
 // Extra tracked groups without targets: Glutes, Rotator cuff, Forearms.
 const META = {
-  "T-Bar Reverse Row":            { D: ["back"], I: ["rearDelts", "biceps"], eq: "plateMachine", load: "perSide", inc: 2.5, jefit: "Machine T Bar Reverse Row" },
+  "T-Bar Reverse Row":            { D: ["back"], I: ["rearDelts", "biceps"], eq: "plateMachine", load: "total", single: true, inc: 2.5, jefit: "Machine T Bar Reverse Row" },
   "Single-arm Cable Lat Pulldown":{ D: ["back"], I: ["biceps"], eq: "cable", load: "total", inc: 5, jefit: "Cable One-Arm Lat Pulldown" },
   "Single-arm DB Row":            { D: ["back"], I: ["rearDelts", "biceps"], eq: "dumbbell", load: "perHand", inc: 5, jefit: "Dumbbell One-Arm Row" },
   "Straight-arm Cable Pulldown":  { D: ["back"], I: [], eq: "cable", load: "total", inc: 5, jefit: "Cable Shoulder Extension" },
@@ -82,7 +82,7 @@ for (const day of DAYS) {
         id, name: base, aliases: [m.jefit],
         muscles: e.muscles, secondaryMuscles: e.sec,
         volume: [...m.D.map((g) => ({ group: g, weight: 1 })), ...m.I.map((g) => ({ group: g, weight: 0.5 }))],
-        equipment: m.eq, loadMode: m.load, isHeavy: !!e.star, bodyRegion: LOWER.has(base) ? "lower" : "upper",
+        equipment: m.eq, loadMode: m.load, ...(m.single ? { singleSleeve: true } : {}), isHeavy: !!e.star, bodyRegion: LOWER.has(base) ? "lower" : "upper",
         why: e.why, setup: e.setup, form: e.form, tips: e.tips, avoid: e.mistakes,
         rangeOfMotion: e.rom, tempo: "1–2 s up, 2–3 s down",
         defaultRestSec: 120, incrementLb: m.inc,

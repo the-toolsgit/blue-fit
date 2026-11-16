@@ -28,7 +28,7 @@
       }
     ],
     "equipment": "plateMachine",
-    "loadMode": "perSide",
+    "loadMode": "total",
     "isHeavy": true,
     "bodyRegion": "upper",
     "why": "Back day version: a heavy row aimed at the lats.",
@@ -83,7 +83,8 @@
       ]
     },
     "isCustom": false,
-    "archived": false
+    "archived": false,
+    "singleSleeve": true
   },
   {
     "id": "single-arm-cable-lat-pulldown",

@@ -52,6 +52,8 @@ export interface Exercise {
   volume: VolumeShare[];
   equipment: Equipment;
   loadMode: LoadMode;
+  /** Plate-loaded on one sleeve only (e.g. T-bar row): show the plates for the whole weight */
+  singleSleeve?: boolean;
   isHeavy: boolean;
   bodyRegion: "upper" | "lower";
   why: string;
@@ -185,6 +187,7 @@ export interface Settings {
   profile?: ProfileDraft | null;
   /** First day of the training week: 0 = Sunday … 6 = Saturday */
   weekStartDay: number;
+  /** No longer used (the app assumes standard plates, unlimited). Kept so older backups still import. */
   plates: PlateStock[];
   /** The current or most recent deload week (inclusive local dates) */
   deload?: { start: string; end: string } | null;

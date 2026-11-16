@@ -13,7 +13,7 @@ export const exerciseSchema = z.object({
   id: str.min(1), name: str.min(1), aliases: strs, muscles: strs, secondaryMuscles: strs,
   volume: z.array(z.object({ group, weight: z.union([z.literal(1), z.literal(0.5)]) })),
   equipment: z.enum(["barbell", "smith", "fixedBar", "dumbbell", "cable", "machine", "plateMachine", "bodyweight", "other"]),
-  loadMode: z.enum(["perSide", "total", "perHand"]),
+  loadMode: z.enum(["perSide", "total", "perHand"]), singleSleeve: z.boolean().optional(),
   isHeavy: z.boolean(), bodyRegion: z.enum(["upper", "lower"]),
   why: str, setup: strs, form: strs, tips: strs, avoid: strs, rangeOfMotion: str, tempo: str,
   defaultRestSec: z.number().int().min(0).max(1800), incrementLb: z.number().min(0).max(100),
