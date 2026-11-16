@@ -9,7 +9,7 @@ export type { Goal, Phase, TrainingProfile } from "./types";
 
 export type Priority = "priority" | "normal" | "off";
 
-/** A target's priority: off (not a focus) wins; otherwise its own flag, else the app default (bold muscles). */
+/** A target's priority: off (skipped) wins; otherwise its own flag, else the app default (bold muscles). */
 export const priorityOf = (group: MuscleGroup, t?: VolumeTarget): Priority =>
   t?.off || t?.acceptedBelow ? "off" : (t?.priority ?? !!MUSCLE_GROUPS.find((m) => m.id === group)?.priority) ? "priority" : "normal";
 
@@ -71,7 +71,7 @@ export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Pr
   if (goal === "growth") { min = growthMin; max = growthMax; }
   else if (goal === "strength") { min = growthMin; max = growthMax * 0.6; why.push("strength: heavy sets, fewer but harder"); }
   else if (goal === "endurance") { min = growthMin; max = sessions(Math.max(1.5, m.recoveryDays - 0.5)) * perSession; why.push("endurance: light sets recover sooner"); }
-  else { min = Math.max(2, growthMin / 3); max = growthMax / 3; why.push(priority === "off" ? "not a focus: keep what you have (⅓, Bickel 2011)" : "maintenance: ⅓ keeps size (Bickel 2011)"); }
+  else { min = Math.max(2, growthMin / 3); max = growthMax / 3; why.push(priority === "off" ? "skipped: keep what you have (⅓, Bickel 2011)" : "maintenance: ⅓ keeps size (Bickel 2011)"); }
 
   // Profile: recovery capacity scales the ceiling
   let rec = 1;

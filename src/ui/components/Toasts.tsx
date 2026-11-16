@@ -13,7 +13,7 @@ export function Toasts() {
   return (
     <div className="toasts" aria-live="polite">
       {toasts.map((t) => (
-        <div key={t.id} className={"toast " + t.kind} role="status" onClick={() => dismissToast(t.id)}>
+        <div key={t.id} className={"toast " + t.kind + (t.leaving ? " out" : "")} role="status" onClick={() => dismissToast(t.id)}>
           {t.kind === "pr" ? (
             <div style={{ position: "relative", width: 44, height: 48, flex: "none" }}>
               <Figure spec={FLEX} size={44} speed={2} />

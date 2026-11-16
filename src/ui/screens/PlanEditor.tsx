@@ -90,7 +90,7 @@ export function PlanEditorScreen({ id }: { id?: string }) {
   const profile = completeProfile(settings.profile);
   const suggest = (g: VolumeTarget["group"], t?: VolumeTarget) => (profile ? modelTarget(g, profile, priorityOf(g, t)) : null);
   const defaults = profile ? new Map(MUSCLE_GROUPS.map((m) => [m.id, suggest(m.id, tdraft.find((x) => x.group === m.id))!])) : undefined;
-  /** Reset: model numbers when the profile is filled in, else the plan's original numbers. Notes are kept; no muscle is "not a focus"; priorities go back to the default. */
+  /** Reset: model numbers when the profile is filled in, else the plan's original numbers. Notes are kept; no muscle is skipped; priorities go back to the default. */
   const resetTargets = () => setTdraft((defaultTargets as VolumeTarget[]).map((t) => {
     const s = suggest(t.group);
     return s ? { group: t.group, min: s.min, max: s.max, ...(t.angles ? { angles: t.angles } : {}), ...(t.gap ? { gap: t.gap } : {}) } : { ...t };
@@ -124,7 +124,7 @@ export function PlanEditorScreen({ id }: { id?: string }) {
       <div className="spread" style={{ marginBottom: 8 }}>
         <button className="btn btn-quiet" style={{ paddingLeft: 0 }} onClick={() => (dirty ? setConfirm("cancel") : leave())}>Cancel</button>
         <span className="eyebrow">Edit plan</span>
-        <button className="btn btn-primary" style={{ minHeight: 40 }} onClick={save} disabled={!dirty}>Save</button>
+        <button className="btn btn-primary" style={{ minHeight: 40 }} onClick={dirty ? save : leave}>{dirty ? "Save" : "Done"}</button>
       </div>
       <input className="input" aria-label="Plan name" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })}
         style={{ font: "700 28px var(--display)", textTransform: "uppercase", letterSpacing: ".02em", background: "transparent", border: "1px dashed var(--line-strong)" }} />
@@ -179,7 +179,7 @@ export function PlanEditorScreen({ id }: { id?: string }) {
       )}
 
       <h2 className="section-title" id="live-volume">Weekly volume · live</h2>
-      <p className="muted" style={{ fontSize: 12, margin: "-2px 4px 8px" }}>Tap a muscle to change its weekly target or mark it as not a focus.</p>
+      <p className="muted" style={{ fontSize: 12, margin: "-2px 4px 8px" }}>Tap a muscle to change its weekly target, make it a priority or skip it.</p>
       <VolumeTable totals={totals} targets={tdraft} days={dayCount} onEdit={editTarget} defaults={defaults} />
       {!profile && <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Fill in Settings → Training profile to get targets worked out for you.</p>}
       <button className="btn btn-quiet btn-block" style={{ marginTop: 8 }} onClick={() => setConfirm("resetTargets")}><Icon name="undo" size={18} /> Reset targets to defaults</button>
@@ -191,7 +191,7 @@ export function PlanEditorScreen({ id }: { id?: string }) {
             <span className={warn ? "status-warn mono" : "muted mono"}>⚠ {warn}</span>
             <span className="muted" style={{ fontSize: 12 }}>on target</span>
           </button>
-          <button className="btn btn-primary" style={{ minHeight: 46 }} onClick={save} disabled={!dirty}><Icon name="check" size={18} /> Save plan</button>
+          <button className="btn btn-primary" style={{ minHeight: 46 }} onClick={dirty ? save : leave}><Icon name="check" size={18} /> {dirty ? "Save plan" : "Done"}</button>
         </div>
       </Dock>
 
@@ -238,7 +238,7 @@ export function PlanEditorScreen({ id }: { id?: string }) {
       <Confirm open={confirm === "cancel"} title="Discard changes?" body="Your edits to this plan are thrown away." confirm="Discard" danger onClose={() => setConfirm(null)} onConfirm={leave} />
       <Confirm open={confirm === "deleteDay"} title={`Delete ${day?.title ?? "this day"}?`} body="Past workouts of this day stay in history." confirm="Delete" danger
         onClose={() => setConfirm(null)} onConfirm={() => { if (day) { setDraft(removeDay(draft, day.id)); setDayId(null); } }} />
-      <Confirm open={confirm === "resetTargets"} title="Reset targets?" body={profile ? "Every muscle gets the target worked out from your training profile, with default priorities. Nothing is saved until you tap Save plan." : "Every muscle goes back to the plan's original target. Fill in your training profile in Settings to get targets worked out for you. Nothing is saved until you tap Save plan."} confirm="Reset"
+      <Confirm open={confirm === "resetTargets"} title="Reset targets?" body={profile ? "Every muscle gets the target worked out from your training profile, with default priorities and none skipped. Nothing is saved until you tap Save plan." : "Every muscle goes back to the plan's original target. Fill in your training profile in Settings to get targets worked out for you. Nothing is saved until you tap Save plan."} confirm="Reset"
         onClose={() => setConfirm(null)} onConfirm={resetTargets} />
     </div>
   );

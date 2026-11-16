@@ -7,7 +7,9 @@ import type { StorageAdapter, TableName, Tables } from "../core/storage/StorageA
 import { DEFAULT_SETTINGS, type AppData, type Exercise, type RestTimer, type Routine, type Session, type Settings, type VolumeTarget } from "../core/types";
 import { IdbAdapter } from "../storage/idbAdapter";
 
-export type Toast = { id: number; kind: "info" | "pr" | "error"; title: string; body?: string };
+export type Toast = { id: number; kind: "info" | "pr" | "error"; title: string; body?: string; leaving?: boolean };
+/** How long a toast takes to slide back up before it is removed (matches .toast.out in app.css). */
+const TOAST_OUT_MS = 200;
 
 interface Store extends AppData {
   ready: boolean;
@@ -61,9 +63,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const toast = useCallback((t: Omit<Toast, "id">) => {
     const id = ++toastId.current;
     setToasts((x) => [...x.slice(-2), { ...t, id }]);
-    setTimeout(() => setToasts((x) => x.filter((y) => y.id !== id)), t.kind === "pr" ? 4200 : 3200);
+    setTimeout(() => dismiss(id), t.kind === "pr" ? 4200 : 3200);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const dismissToast = useCallback((id: number) => setToasts((x) => x.filter((y) => y.id !== id)), []);
+  // Slide up, then remove
+  const dismiss = (id: number) => {
+    setToasts((x) => x.map((y) => (y.id === id ? { ...y, leaving: true } : y)));
+    setTimeout(() => setToasts((x) => x.filter((y) => y.id !== id)), TOAST_OUT_MS);
+  };
+  const dismissToast = useCallback((id: number) => dismiss(id), []);
 
   const write = useCallback((f: () => Promise<unknown>) => {
     queue.current = queue.current.then(f).catch((e) => {

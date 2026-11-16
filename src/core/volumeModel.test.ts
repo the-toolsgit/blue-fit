@@ -21,7 +21,7 @@ describe("volume model (draft 2)", () => {
     expect(p.min).toBeGreaterThan(n.min);
     expect(p.max).toBe(n.max);
   });
-  it("not a focus gives a maintenance range", () => {
+  it("skip gives a maintenance range", () => {
     const off = modelTarget("chest", base, "off"), m = modelTarget("chest", { ...base, goal: "maintenance" });
     expect([off.min, off.max]).toEqual([m.min, m.max]);
   });
@@ -35,7 +35,7 @@ describe("volume model (draft 2)", () => {
     for (const p of [{ phase: "cutting" as const }, { sleepHours: 5 }, { age: 45 }]) expect(modelTarget("quads", { ...base, ...p }).max).toBeLessThan(ref);
     expect(modelTarget("quads", { ...base, phase: "bulking" }).max).toBeGreaterThan(ref);
   });
-  it("priority: not a focus wins, then the muscle's own flag, then the app default", () => {
+  it("priority: skip wins, then the muscle's own flag, then the app default", () => {
     expect(priorityOf("biceps")).toBe("priority");
     expect(priorityOf("chest")).toBe("normal");
     expect(priorityOf("biceps", { group: "biceps", min: 1, max: 3, priority: false })).toBe("normal");

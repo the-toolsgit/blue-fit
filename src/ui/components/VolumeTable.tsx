@@ -14,15 +14,15 @@ const STATUS = {
   inProgress: { label: "in progress", cls: "status-progress" },
   off: { label: "", cls: "status-none" },
 };
-/** "not a focus", plus the plan's reason when it has one */
+/** "skipped", plus the plan's reason when it has one */
 const offNote = (note?: string) => {
   const why = note && !/tracked only/i.test(note) ? note.replace(/^by choice\s*/i, "").replace(/^\((.*)\)$/, "$1") : "";
-  return "not a focus" + (why ? ` · ${why}` : "");
+  return "skipped" + (why ? ` · ${why}` : "");
 };
 
 /**
  * stillPlanned: groups a planned day later this week still works (live week only) → below target shows "in progress".
- * onEdit: makes rows tappable to change the target (min/max sets) and turn "Not a focus" on or off.
+ * onEdit: makes rows tappable to change the target (min/max sets) and turn Priority, Normal or Skip.
  */
 /** Set a target's focus level, storing only what differs from the app default (keeps saved data clean). */
 export function withPriority(t: VolumeTarget, p: Priority, fallbackMin: number): VolumeTarget {
@@ -78,8 +78,8 @@ export function VolumeTable({ totals, targets, days, stillPlanned, onEdit, defau
                 <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>Weekly sets. Leave max empty for no upper limit.</p>
                 <div style={{ marginTop: 10 }}>
                   <Seg label={`${m.label}: focus`} value={prio} onChange={(x: Priority) => onEdit?.(withPriority(edit, x, Math.max(1, Math.round(v))))}
-                    options={[{ v: "priority", label: "Priority" }, { v: "normal", label: "Normal" }, { v: "off", label: "Not a focus" }]} />
-                  <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>{prio === "priority" ? "Aims for the top half of its range." : prio === "off" ? "Grayed out, no warnings. Your numbers are kept." : "Full range."}</p>
+                    options={[{ v: "priority", label: "Priority" }, { v: "normal", label: "Normal" }, { v: "off", label: "Skip" }]} />
+                  <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>{prio === "priority" ? "Aims for the top half of its range." : prio === "off" ? "Skipped: grayed out, no warnings. Your numbers are kept." : "Full range."}</p>
                 </div>
                 {def && (
                   <div className="vdefault">

@@ -106,7 +106,7 @@ export interface VolumeTarget {
   angles?: string;
   gap?: string;
   note?: string;
-  /** Not a focus: grayed out, no warnings. min/max are kept for when it's turned back on. */
+  /** Skip (was "not a focus"): grayed out, no warnings. min/max are kept for when it's turned back on. */
   off?: boolean;
   /** Priority muscle (aims for the top half of its range). Unset → the app's default (bold muscles). */
   priority?: boolean;

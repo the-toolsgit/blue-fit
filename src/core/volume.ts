@@ -48,7 +48,7 @@ export function tonnage(sessions: Session[]): number {
   return t;
 }
 
-/** ok / above / below the weekly target; inProgress = below, but a planned day this week still works it; off = not a focus (no target, or the plan accepts being below it). */
+/** ok / above / below the weekly target; inProgress = below, but a planned day this week still works it; off = skipped (no target, or the plan accepts being below it). */
 export type TargetStatus = "ok" | "below" | "inProgress" | "above" | "off";
 export const isFocus = (t: VolumeTarget | undefined): t is VolumeTarget & { min: number } => !!t && t.min != null && !t.off && !t.acceptedBelow;
 export function targetStatus(sets: number, t: VolumeTarget | undefined, stillPlanned = false): TargetStatus {
