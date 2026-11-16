@@ -1,6 +1,6 @@
 // Versioned JSON backup format. Validates strictly; refuses bad data with a clear message.
 import { z } from "zod";
-import type { AppData } from "../types";
+import { ACCENTS, type AppData } from "../types";
 
 export const APP_ID = "blue-fit";
 export const SCHEMA_VERSION = 1;
@@ -49,7 +49,7 @@ const targetSchema = z.object({
 });
 const settingsSchema = z.object({
   units: z.literal("lb"), restDefaultSec: z.number().int().min(0).max(1800), autoStartRest: z.boolean(), sound: z.boolean(), keepAwake: z.boolean(),
-  theme: z.enum(["system", "light", "dark"]), weekStartDay: z.number().int().min(0).max(6).default(1),
+  theme: z.enum(["system", "light", "dark"]), accent: z.enum(ACCENTS).default("blue"), weekStartDay: z.number().int().min(0).max(6).default(1),
   deload: z.object({ start: str, end: str }).nullable().optional(), deloadDismissedAt: str.nullable().optional(), plates: z.array(z.object({ weight: z.number().positive(), pairs: z.number().int().min(0).max(50) })),
 });
 

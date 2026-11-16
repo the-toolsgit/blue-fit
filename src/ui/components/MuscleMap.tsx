@@ -4,7 +4,7 @@ import type { Recovery } from "../../core/recovery";
 import { muscleLabel, type MuscleGroup } from "../../core/types";
 
 const pts = (l: number[][]) => l.map((q) => q.join(",")).join(" ");
-export const RECOVERY_COLOR: Record<Recovery, string> = { recovering: "var(--pink)", partial: "var(--warn)", fresh: "var(--good)" };
+export const RECOVERY_COLOR: Record<Recovery, string> = { recovering: "var(--recovering)", partial: "var(--warn)", fresh: "var(--good)" };
 
 export function MuscleMap({ intensity, recovery, selected, onSelect }: {
   intensity?: Partial<Record<MuscleGroup, number>>;

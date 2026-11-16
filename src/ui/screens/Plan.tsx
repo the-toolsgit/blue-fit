@@ -65,7 +65,7 @@ export function PlanScreen() {
         <div className="chips-scroll" style={{ marginTop: 14, gap: 10 }}>
           {routine.rules.map((r) => (
             <div key={r.title} className="glass" style={{ minWidth: 240, maxWidth: 260, padding: 12, borderRadius: 16, flex: "none" }}>
-              <b style={{ font: "700 16px var(--display)", letterSpacing: ".08em", textTransform: "uppercase", color: "var(--neon)" }}>{r.title}</b>
+              <b style={{ font: "700 16px var(--display)", letterSpacing: ".08em", textTransform: "uppercase", color: "var(--neon-ink)" }}>{r.title}</b>
               <p style={{ fontSize: 13, marginTop: 4 }}>{r.text}</p>
             </div>
           ))}

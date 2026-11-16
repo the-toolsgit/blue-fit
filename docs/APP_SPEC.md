@@ -125,7 +125,7 @@ Back and **Done** at the top (both return to the summary, replacing the editor i
 ### 3.8 Settings
 - **Workout:** Default rest stepper (step 15 s; shows "2 min") + "Apply to every exercise in the plan" (confirm); Start rest timer when a set is done (switch); Sound when rest is over (switch); Keep screen on during a workout (switch).
 - **Training week starts on:** 7 chips Mon…Sun (default Sat). Only drives the numbers: streak, "this week", history grouping by week, weekly charts and ranges. Every screen still shows days Mon→Sun (week strip, calendar, plan, streak pills).
-- **Look:** Theme segmented control: System · Dark · Light.
+- **Look:** Theme segmented control: System · Dark · Light. Accent: five round swatches (Blue default, Pink, Orange, Green, Brown); the choice is saved and applied before the splash paints.
 - **Plates (pairs you have):** a stepper per plate weight (45, 35, 25, 10, 5, 2.5).
 - **Data:** "Last backup: today / yesterday / n days ago / never" (amber when 14+ days or never). Export (downloads `blue-fit-backup-YYYY-MM-DD.json`), Copy JSON (clipboard); both record the backup time. Import file, Paste JSON. Imports are validated (§7.3); a valid file shows a confirmation with its date and counts, then replaces all data. **Reset everything** (confirm) restores the seed.
 - **App:** Update app (when a new version is waiting), otherwise Check for updates (toast "You're up to date" or "Update found"). The app also checks on launch, each time it returns to the foreground, and every 30 minutes while open, install instructions when not installed ("Share → Add to Home Screen"), version.
@@ -245,7 +245,7 @@ Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Sat Back & Biceps,
 At most one session is `active`. Duration = finishedAt − startedAt (minutes, rounded).
 
 ### 4.6 Settings
-`{ units: "lb", restDefaultSec: 120, autoStartRest: true, sound: true, keepAwake: true, theme: system | light | dark, weekStartDay: 0–6 (0 = Sunday; default 6 = Saturday; backups without it import as 1 = Monday), plates: [{weight, pairs}], deload?: {start, end} | null (current or last deload week, inclusive dates), deloadDismissedAt?: date | null ("Not now") }`. Default plates (pairs): 45×8, 35×2, 25×4, 10×4, 5×4, 2.5×2.
+`{ units: "lb", restDefaultSec: 120, autoStartRest: true, sound: true, keepAwake: true, theme: system | light | dark, accent: blue | pink | orange | green | brown (default blue; backups without it import as blue), weekStartDay: 0–6 (0 = Sunday; default 6 = Saturday; backups without it import as 1 = Monday), plates: [{weight, pairs}], deload?: {start, end} | null (current or last deload week, inclusive dates), deloadDismissedAt?: date | null ("Not now") }`. Default plates (pairs): 45×8, 35×2, 25×4, 10×4, 5×4, 2.5×2.
 
 ### 4.7 Other records
 - `JefitAlias { jefitName, exerciseId | null }` (null = skip). Seeded from every exercise's aliases.
@@ -355,6 +355,18 @@ Neon, built from the blue line man: deep-space background with blue/cyan haze an
 | good / warn / bad | #3DFFB0 / #FFC53D / #FF4D6A | #08794B / #8F5C0E / #C42A46 | status |
 | star | #FFC53D | #8F6206 | ★ heavy |
 | on-neon | #02101F | #FFFFFF | text on neon fills |
+
+**Accent palettes.** The accent recolors buttons, chips, switches, steppers, bars, glows, lines and the background haze. The line man is always blue, and the background stays navy in dark and soft white-blue in light, with a faint blue haze kept in every palette. Each accent has a fill color (buttons, chips, bars; dark text on it) and an ink color (accent text and chart lines). In dark the two are the same; in light the ink is a deeper shade of the same hue so text stays readable.
+
+| Accent | Dark fill / 2nd | Light fill / 2nd | Light ink / 2nd |
+|---|---|---|---|
+| Blue (default) | #3D9BFF / #23E2FF | #1559D6 / #0078A0 (white text) | #1559D6 / #0078A0 |
+| Pink | #FF8FD0 / #FFC2E6 | #FF8DA1 / #FFB3C1 | #C22A52 / #D9476E |
+| Orange | #FF9D4D / #FFC98A | #FF5C00 / #FF8A3D | #B34000 / #CC5A12 |
+| Green | #5CF2A8 / #B4FFD8 | #0BDA51 / #4BE887 | #08793A / #0F9449 |
+| Brown | #D9A46B / #F0CFA0 | #B07A45 / #C99662 | #87531F / #9C6531 |
+
+With the Pink accent, PR highlights (normally pink) turn gold and the "recovering" muscle color turns coral, so they still stand out. PR toasts keep the line man blue.
 
 Text colors meet WCAG AA (4.5:1) on their backgrounds in both themes, except `faint` (placeholders and decorative only).
 

@@ -16,7 +16,7 @@ import { useStore } from "../store";
 
 const TYPES: SetType[] = ["working", "warmup", "drop", "failure"];
 const TYPE_UI: Record<SetType, { short: string; color: string; long: string }> = {
-  working: { short: "", color: "var(--neon)", long: "Working set" }, warmup: { short: "W", color: "var(--muted)", long: "Warm-up" },
+  working: { short: "", color: "var(--neon-ink)", long: "Working set" }, warmup: { short: "W", color: "var(--muted)", long: "Warm-up" },
   drop: { short: "D", color: "var(--neon-2)", long: "Drop set" }, failure: { short: "F", color: "var(--bad)", long: "To failure" },
 };
 

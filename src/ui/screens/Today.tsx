@@ -93,7 +93,7 @@ export function TodayScreen() {
           return (
             <button key={d} role="tab" aria-selected={sel} onClick={() => setWd(d)}
               style={{ minHeight: 50, borderRadius: 13, display: "grid", placeItems: "center", gap: 2, transition: "all .25s var(--ease)",
-                background: sel ? "linear-gradient(140deg,var(--neon),var(--neon-2))" : "transparent", color: sel ? "var(--on-neon)" : td ? "var(--neon)" : "var(--muted)",
+                background: sel ? "linear-gradient(140deg,var(--neon),var(--neon-2))" : "transparent", color: sel ? "var(--on-neon)" : td ? "var(--neon-ink)" : "var(--muted)",
                 boxShadow: sel ? "0 0 20px -4px var(--glow)" : "none" }}>
               <span style={{ font: "700 14px var(--display)", letterSpacing: ".06em" }}>{LONG[d].slice(0, 3).toUpperCase()}</span>
               <span style={{ width: 5, height: 5, borderRadius: 5, background: doneDays.get(d) ? (sel ? "var(--on-neon)" : "var(--good)") : "transparent", boxShadow: doneDays.get(d) ? "0 0 6px var(--good)" : "none" }} />

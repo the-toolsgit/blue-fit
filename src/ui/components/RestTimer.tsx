@@ -60,7 +60,7 @@ export function RestTimerDock() {
             <button className="row grow" onClick={() => setBig(true)} aria-label="Open rest timer">
               <div style={{ position: "relative", width: 46, height: 46 }}>
                 <Ring frac={over ? 1 : frac} size={46} stroke={4} done={over} />
-                <span style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", color: over ? "var(--good)" : "var(--neon)" }}><Icon name="timer" size={18} /></span>
+                <span style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", color: over ? "var(--good)" : "var(--neon-ink)" }}><Icon name="timer" size={18} /></span>
               </div>
               <div style={{ textAlign: "left" }}>
                 <div className="eyebrow" style={{ fontSize: 10 }}>{over ? "Rest over" : "Rest"}</div>
@@ -70,7 +70,7 @@ export function RestTimerDock() {
             <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52 }} onClick={() => adjust(-15)} aria-label="15 seconds less">−15</button>
             <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52 }} onClick={() => adjust(15)} aria-label="15 seconds more">+15</button>
             {showResume
-              ? <button className="icon-btn" style={{ color: "var(--neon)" }} onClick={() => go("workout")} aria-label="Back to workout"><Icon name="play" /></button>
+              ? <button className="icon-btn" style={{ color: "var(--neon-ink)" }} onClick={() => go("workout")} aria-label="Back to workout"><Icon name="play" /></button>
               : <button className="icon-btn" onClick={() => setRestTimer(null)} aria-label="Skip rest"><Icon name="close" /></button>}
           </div>
         )}

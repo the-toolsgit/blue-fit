@@ -68,7 +68,7 @@ export function ExerciseEditor({ open, exercise, onClose, onSaved }: { open: boo
               <button key={e.id} title={e.name} aria-label={`Use the ${e.name} figure`} aria-pressed={JSON.stringify(d.figure) === JSON.stringify(e.figure)}
                 onClick={() => set("figure", structuredClone(e.figure))}
                 style={{ flex: "none", width: 64, height: 64, borderRadius: 14, display: "grid", placeItems: "center", background: "var(--surface-2)",
-                  border: `1.5px solid ${JSON.stringify(d.figure) === JSON.stringify(e.figure) ? "var(--neon)" : "var(--line)"}` }}>
+                  border: `1.5px solid ${JSON.stringify(d.figure) === JSON.stringify(e.figure) ? "var(--neon-ink)" : "var(--line)"}` }}>
                 <Figure spec={e.figure} size={46} still className="thin" />
               </button>
             ))}
@@ -81,7 +81,7 @@ export function ExerciseEditor({ open, exercise, onClose, onSaved }: { open: boo
               const w = weightOf(m.id);
               return (
                 <button key={m.id} className="chip" onClick={() => cycle(m.id)} aria-label={`${m.label}: ${w === 1 ? "direct" : w === 0.5 ? "indirect" : "not worked"}`}
-                  style={w === 1 ? { background: "var(--neon)", color: "var(--on-neon)", borderColor: "transparent", boxShadow: "0 0 14px -3px var(--glow)" } : w === 0.5 ? { color: "var(--neon)", borderColor: "var(--neon)" } : undefined}>
+                  style={w === 1 ? { background: "var(--neon)", color: "var(--on-neon)", borderColor: "transparent", boxShadow: "0 0 14px -3px var(--glow)" } : w === 0.5 ? { color: "var(--neon-ink)", borderColor: "var(--neon-ink)" } : undefined}>
                   {m.label}{w ? (w === 1 ? " ×1" : " ×½") : ""}
                 </button>
               );

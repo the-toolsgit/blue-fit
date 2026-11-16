@@ -27,7 +27,7 @@ function Readout({ p, fmt, unit }: { p?: ChartPoint; fmt: (n: number) => string;
   return (
     <div className="spread" style={{ minHeight: 22, fontSize: 13 }}>
       <span className="muted">{p ? p.label : "Tap the chart"}</span>
-      {p && <span className="mono" style={{ color: "var(--neon)" }}>{fmt(p.value)}{unit ? ` ${unit}` : ""}{p.sub ? <span className="muted"> · {p.sub}</span> : null}</span>}
+      {p && <span className="mono" style={{ color: "var(--neon-ink)" }}>{fmt(p.value)}{unit ? ` ${unit}` : ""}{p.sub ? <span className="muted"> · {p.sub}</span> : null}</span>}
     </div>
   );
 }
@@ -52,7 +52,7 @@ export function LineChart({ points, height = 150, fmt = shortNum, unit, band }: 
       <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", touchAction: "pan-y" }} onPointerMove={onMove} onPointerDown={onMove} onPointerLeave={clear} role="img" aria-label="Line chart">
         <defs>
           <linearGradient id={`a${id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="var(--neon)" stopOpacity=".35" /><stop offset="1" stopColor="var(--neon)" stopOpacity="0" /></linearGradient>
-          <linearGradient id={`l${id}`}><stop offset="0" stopColor="var(--neon)" /><stop offset="1" stopColor="var(--neon-2)" /></linearGradient>
+          <linearGradient id={`l${id}`}><stop offset="0" stopColor="var(--neon-ink)" /><stop offset="1" stopColor="var(--neon-ink-2)" /></linearGradient>
         </defs>
         {[lo, (lo + hi) / 2, hi].map((t, k) => (
           <g key={k}><line x1={PL} x2={W - PR} y1={y(t)} y2={y(t)} stroke="var(--line)" strokeDasharray="2 4" />
@@ -61,7 +61,7 @@ export function LineChart({ points, height = 150, fmt = shortNum, unit, band }: 
         {band && band.min != null && <rect x={PL} width={W - PL - PR} y={y(Math.min(hi, band.max ?? hi))} height={Math.max(0, y(band.min) - y(Math.min(hi, band.max ?? hi)))} fill="var(--good)" opacity=".08" />}
         {points.length > 1 && <path d={`${d} L${x(points.length - 1)},${H - PB} L${x(0)},${H - PB} Z`} fill={`url(#a${id})`} className="chart-area" />}
         <path d={d} fill="none" stroke={`url(#l${id})`} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" pathLength={1} className="chart-line" style={{ filter: "drop-shadow(0 0 4px var(--glow))" }} />
-        {points.map((p, k) => <circle key={k} cx={x(k)} cy={y(p.value)} r={k === sel ? 4.5 : points.length > 24 ? 0 : 2.2} fill={k === sel ? "var(--neon-2)" : "var(--neon)"} style={k === sel ? { filter: "drop-shadow(0 0 6px var(--neon-2))" } : undefined} />)}
+        {points.map((p, k) => <circle key={k} cx={x(k)} cy={y(p.value)} r={k === sel ? 4.5 : points.length > 24 ? 0 : 2.2} fill={k === sel ? "var(--neon-ink-2)" : "var(--neon-ink)"} style={k === sel ? { filter: "drop-shadow(0 0 6px var(--neon-2))" } : undefined} />)}
         {i != null && <line x1={x(i)} x2={x(i)} y1={PT} y2={H - PB} stroke="var(--line-strong)" />}
         <text x={x(0)} y={H - 6} fill="var(--muted)" textAnchor={points.length > 1 ? "start" : "middle"} style={{ font: "500 9px var(--body)" }}>{points[0].label}</text>
         {points.length > 1 && <text x={x(points.length - 1)} y={H - 6} fill="var(--muted)" textAnchor="end" style={{ font: "500 9px var(--body)" }}>{points[points.length - 1].label}</text>}

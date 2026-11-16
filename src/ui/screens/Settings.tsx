@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import type { Backup } from "../../core/io/exportFormat";
 import { weekOrder } from "../../core/util";
+import { ACCENTS } from "../../core/types";
 import { Seg, Stepper, Switch } from "../components/Controls";
 import { Icon } from "../components/Icon";
 import { Confirm, Sheet } from "../components/Sheet";
@@ -68,6 +69,14 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
       <h2 className="section-title">Look</h2>
       <div className="glass" style={{ padding: 14 }}>
         <Seg label="Theme" value={settings.theme} onChange={(v) => set("theme", v)} options={[{ v: "system", label: "System" }, { v: "dark", label: "Dark" }, { v: "light", label: "Light" }]} />
+        <span className="eyebrow" style={{ display: "block", margin: "16px 2px 10px" }}>Accent</span>
+        <div className="swatches" role="radiogroup" aria-label="Accent color">
+          {ACCENTS.map((a) => (
+            <button key={a} role="radio" aria-checked={settings.accent === a} className="swatch" data-a={a} onClick={() => set("accent", a)}>
+              <i aria-hidden="true" /><span>{a[0].toUpperCase() + a.slice(1)}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       <h2 className="section-title">Plates (pairs you have)</h2>

@@ -25,7 +25,7 @@ import { ExerciseSheet } from "./ExerciseScreen";
 
 const TYPES: SetType[] = ["working", "warmup", "drop", "failure"];
 const TYPE_UI: Record<SetType, { short: string; long: string; color: string }> = {
-  working: { short: "", long: "Working set", color: "var(--neon)" },
+  working: { short: "", long: "Working set", color: "var(--neon-ink)" },
   warmup: { short: "W", long: "Warm-up", color: "var(--muted)" },
   drop: { short: "D", long: "Drop set", color: "var(--neon-2)" },
   failure: { short: "F", long: "To failure", color: "var(--bad)" },
@@ -132,7 +132,7 @@ export function WorkoutScreen() {
             <div className="eyebrow" style={{ fontSize: 11 }}>{s.deload ? <span style={{ color: "var(--neon-2)" }}>Deload · </span> : null}{day ? "Workout" : "Free workout"} · <Elapsed s={s} /></div>
             <h1 className="title-md" style={{ textTransform: "uppercase", fontSize: 24, marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.title}</h1>
           </div>
-          <button className="icon-btn" aria-label="Workout notes" onClick={() => setNoteFor("workout")} style={{ color: s.notes ? "var(--neon)" : undefined }}><Icon name="note" /></button>
+          <button className="icon-btn" aria-label="Workout notes" onClick={() => setNoteFor("workout")} style={{ color: s.notes ? "var(--neon-ink)" : undefined }}><Icon name="note" /></button>
           <button className="btn btn-primary" style={{ minHeight: 42, padding: "0 16px", fontSize: 16 }} onClick={() => setFinishOpen(true)}>Finish</button>
         </div>
         <div style={{ marginTop: 10, height: 6, borderRadius: 6, background: "var(--surface-2)", overflow: "hidden" }} role="progressbar" aria-valuenow={done} aria-valuemax={total} aria-label="Sets done">
@@ -299,7 +299,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           )}
           {hint.kind !== "none" && !allDone && (
             <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
-              <span style={{ color: "var(--neon)" }}><Icon name={hint.kind === "addWeight" ? "up" : "bolt"} size={18} /></span>
+              <span style={{ color: "var(--neon-ink)" }}><Icon name={hint.kind === "addWeight" ? "up" : "bolt"} size={18} /></span>
               <span className="grow" style={{ fontSize: 14 }}>
                 {hint.kind === "addWeight"
                   ? <>Hit the top last time. Try <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>
@@ -367,7 +367,7 @@ function Plates({ weight, stock }: { weight: number; stock: { weight: number; pa
     <div className="row" style={{ flexWrap: "wrap", gap: 6, fontSize: 13 }} aria-label="Plates per side">
       <span className="eyebrow" style={{ fontSize: 10 }}>Per side</span>
       {r.plates.map((p, i) => (
-        <span key={i} className="mono" style={{ padding: "3px 8px", borderRadius: 8, border: "1px solid var(--neon)", color: "var(--neon)", boxShadow: "0 0 10px -4px var(--glow)",
+        <span key={i} className="mono" style={{ padding: "3px 8px", borderRadius: 8, border: "1px solid var(--neon-ink)", color: "var(--neon-ink)", boxShadow: "0 0 10px -4px var(--glow)",
           minHeight: 24, height: 20 + Math.min(16, p / 3), display: "grid", placeItems: "center", lineHeight: 1 }}>{fmtNum(p)}</span>
       ))}
       {r.remainder > 0 && <span style={{ color: "var(--warn)" }}>+{fmtNum(r.remainder)} lb can't be loaded</span>}

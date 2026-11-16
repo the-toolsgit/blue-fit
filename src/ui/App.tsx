@@ -64,6 +64,12 @@ export function App() {
   }, [settings.theme]);
 
   useEffect(() => {
+    const root = document.documentElement;
+    if (settings.accent === "blue") delete root.dataset.accent; else root.dataset.accent = settings.accent;
+    try { localStorage.setItem("bf-accent", JSON.stringify(settings.accent)); } catch { /* ignore */ }
+  }, [settings.accent]);
+
+  useEffect(() => {
     if (needRefresh) toast({ kind: "info", title: "Update ready", body: "Open Settings → Update app, or it applies next launch." });
   }, [needRefresh, toast]);
 

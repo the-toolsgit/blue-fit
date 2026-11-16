@@ -20,7 +20,7 @@ export function Toasts() {
               {SPARKS.map((s, i) => <i key={i} className="spark" style={{ left: 20, top: 22, ["--dx" as string]: s.dx, ["--dy" as string]: s.dy, animationDelay: s.delay }} />)}
             </div>
           ) : (
-            <span style={{ color: t.kind === "error" ? "var(--bad)" : "var(--neon)" }}><Icon name={t.kind === "error" ? "info" : "bolt"} /></span>
+            <span style={{ color: t.kind === "error" ? "var(--bad)" : "var(--neon-ink)" }}><Icon name={t.kind === "error" ? "info" : "bolt"} /></span>
           )}
           <div className="grow">
             <div style={{ font: "700 17px var(--display)", letterSpacing: ".06em", textTransform: "uppercase", color: t.kind === "pr" ? "var(--pink)" : undefined }}>{t.title}</div>

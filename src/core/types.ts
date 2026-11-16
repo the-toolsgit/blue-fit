@@ -154,6 +154,9 @@ export interface Session {
   entries: SessionEntry[];
 }
 
+export const ACCENTS = ["blue", "pink", "orange", "green", "brown"] as const;
+export type Accent = (typeof ACCENTS)[number];
+
 export interface PlateStock { weight: number; pairs: number }
 
 export interface Settings {
@@ -163,6 +166,8 @@ export interface Settings {
   sound: boolean;
   keepAwake: boolean;
   theme: "system" | "light" | "dark";
+  /** Accent palette; the line man always stays blue */
+  accent: Accent;
   /** First day of the training week: 0 = Sunday … 6 = Saturday */
   weekStartDay: number;
   plates: PlateStock[];
@@ -179,6 +184,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sound: true,
   keepAwake: true,
   theme: "system",
+  accent: "blue",
   weekStartDay: 6,
   plates: [
     { weight: 45, pairs: 8 }, { weight: 35, pairs: 2 }, { weight: 25, pairs: 4 },
