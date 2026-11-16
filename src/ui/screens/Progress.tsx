@@ -1,31 +1,128 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { averageSets, inRange, muscleFrequency, rangeStart, RANGE_LABEL, weeklyTotals, type Range } from "../../core/progress";
+import { recoveryStatus, type Recovery } from "../../core/recovery";
+import { MUSCLE_GROUPS, muscleLabel, type MuscleGroup } from "../../core/types";
+import { fmtNum, localDate } from "../../core/util";
+import { formatTarget } from "../../core/volume";
 import { LOADING } from "../../core/figure/poses";
-import { sessionsVolume, tonnage } from "../../core/volume";
-import { localDate, weekStart } from "../../core/util";
+import { BarChart, weekLabel } from "../components/Charts";
+import { Seg } from "../components/Controls";
+import { ExerciseProgress } from "../components/ExerciseProgress";
 import { Figure } from "../components/Figure";
+import { MuscleMap, RECOVERY_COLOR } from "../components/MuscleMap";
 import { VolumeTable } from "../components/VolumeTable";
 import { fmtVolume } from "../format";
 import { useStore } from "../store";
 
+const REC_LABEL: Record<Recovery, string> = { recovering: "Recovering", partial: "Partly recovered", fresh: "Fresh" };
+
 export function ProgressScreen() {
-  const { finished, exMap, targets } = useStore();
-  const ws = weekStart(localDate(new Date()));
-  const week = useMemo(() => finished.filter((s) => weekStart(s.date) === ws), [finished, ws]);
-  const totals = useMemo(() => sessionsVolume(week, exMap), [week, exMap]);
+  const { finished, exMap, targets, exercises } = useStore();
+  const today = localDate(new Date());
+  const [range, setRange] = useState<Range>("12w");
+  const [mapMode, setMapMode] = useState<"volume" | "recovery">("volume");
+  const [sel, setSel] = useState<MuscleGroup | null>(null);
+  const [muscle, setMuscle] = useState<MuscleGroup>("back");
+  const [tableMode, setTableMode] = useState<"week" | "avg">("avg");
+  const from = rangeStart(range, today);
+  const weeks = useMemo(() => weeklyTotals(finished, exMap, from, today), [finished, exMap, from, today]);
+  const avg = useMemo(() => averageSets(weeks), [weeks]);
+  const freq = useMemo(() => muscleFrequency(inRange(finished, from), exMap, weeks.length), [finished, exMap, from, weeks.length]);
+  const rec = useMemo(() => recoveryStatus(finished, exMap, new Date()), [finished, exMap]);
+  const tmap = new Map(targets.map((t) => [t.group, t]));
+  const workouts = inRange(finished, from).length;
+  const totalTon = weeks.reduce((a, w) => a + w.tonnage, 0);
+  const logged = useMemo(() => {
+    const last = new Map<string, string>();
+    for (const s of finished) for (const e of s.entries) if (e.sets.some((x) => x.done) && !last.has(e.exerciseId)) last.set(e.exerciseId, s.date);
+    return exercises.filter((e) => last.has(e.id)).sort((a, b) => (last.get(b.id)! > last.get(a.id)! ? 1 : -1));
+  }, [finished, exercises]);
+  const [exId, setExId] = useState<string | null>(null);
+  const ex = exMap.get(exId ?? logged[0]?.id ?? "");
+
+  const intensity = Object.fromEntries(MUSCLE_GROUPS.map((m) => { const t = tmap.get(m.id); return [m.id, avg[m.id] / (t?.max ?? t?.min ?? 12)]; }));
+  const recMap = Object.fromEntries(MUSCLE_GROUPS.map((m) => [m.id, rec[m.id].status])) as Record<MuscleGroup, Recovery>;
+  const t = tmap.get(muscle);
+
+  if (!finished.length) {
+    return (
+      <div className="page">
+        <span className="eyebrow">Progress</span>
+        <h1 className="title-lg" style={{ marginTop: 6 }}>Progress</h1>
+        <div className="empty" style={{ paddingTop: 40 }}><Figure spec={LOADING} size={120} /><p>Finish a workout and your charts, muscle map and recovery show up here.</p></div>
+      </div>
+    );
+  }
+
   return (
     <div className="page">
       <span className="eyebrow">Progress</span>
-      <h1 className="title-lg" style={{ marginTop: 6 }}>This week</h1>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginTop: 12 }}>
-        <div className="glass edge" style={{ padding: 14, borderRadius: 18 }}><div className="mono neon" style={{ fontSize: 28 }}>{week.length}<span className="muted" style={{ fontSize: 14 }}> / 6</span></div><div className="eyebrow" style={{ fontSize: 10 }}>workouts</div></div>
-        <div className="glass edge" style={{ padding: 14, borderRadius: 18 }}><div className="mono neon" style={{ fontSize: 28 }}>{fmtVolume(tonnage(week))}</div><div className="eyebrow" style={{ fontSize: 10 }}>volume lb</div></div>
+      <h1 className="title-lg" style={{ marginTop: 6 }}>Progress</h1>
+      <div style={{ marginTop: 12 }}>
+        <Seg label="Range" value={range} onChange={setRange} options={(Object.keys(RANGE_LABEL) as Range[]).map((r) => ({ v: r, label: RANGE_LABEL[r] }))} />
       </div>
-      <h2 className="section-title">Sets per muscle vs target</h2>
-      <VolumeTable totals={totals} targets={targets} hideEmpty />
-      <div className="empty" style={{ paddingTop: 28 }}>
-        <Figure spec={LOADING} size={90} />
-        <p style={{ fontSize: 13 }}>Charts for 1RM, volume, muscle map and recovery arrive in Phase 2.</p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginTop: 10 }}>
+        {[[String(workouts), "workouts"], [fmtNum(Math.round((workouts / Math.max(1, weeks.length)) * 10) / 10), "per week"], [fmtVolume(totalTon), "volume lb"]].map(([v, l]) => (
+          <div key={l} className="glass edge" style={{ padding: "12px 10px", borderRadius: 16, textAlign: "center" }}>
+            <div className="mono neon" style={{ fontSize: 24, lineHeight: 1.1 }}>{v}</div><div className="eyebrow" style={{ fontSize: 9, marginTop: 4 }}>{l}</div>
+          </div>
+        ))}
       </div>
+
+      <h2 className="section-title">Muscle map</h2>
+      <section className="glass" style={{ padding: 14 }}>
+        <Seg label="Map mode" value={mapMode} onChange={(v) => { setMapMode(v); setSel(null); }} options={[{ v: "volume", label: "Weekly sets" }, { v: "recovery", label: "Recovery" }]} />
+        <div style={{ marginTop: 10 }}>
+          <MuscleMap intensity={mapMode === "volume" ? intensity : undefined} recovery={mapMode === "recovery" ? recMap : undefined} selected={sel} onSelect={(g) => setSel(sel === g ? null : g)} />
+        </div>
+        <div style={{ minHeight: 40, marginTop: 6, textAlign: "center", fontSize: 14 }}>
+          {sel ? (
+            mapMode === "volume"
+              ? <><b>{muscleLabel(sel)}</b> · <span className="mono">{fmtNum(avg[sel])}</span> sets/week avg <span className="muted">· target {formatTarget(tmap.get(sel))}</span></>
+              : <><b>{muscleLabel(sel)}</b> · <span style={{ color: RECOVERY_COLOR[rec[sel].status] }}>{REC_LABEL[rec[sel].status]}</span> <span className="muted">· {fmtNum(rec[sel].sets48)} sets in 48 h, {fmtNum(rec[sel].sets72)} in 72 h</span></>
+          ) : mapMode === "volume"
+            ? <span className="muted">Brighter = closer to the top of the target. Tap a muscle.</span>
+            : <span className="row" style={{ justifyContent: "center", gap: 12, fontSize: 12 }}>{(Object.keys(REC_LABEL) as Recovery[]).map((r) => <span key={r} className="row" style={{ gap: 5 }}><i style={{ width: 10, height: 10, borderRadius: 3, background: RECOVERY_COLOR[r], boxShadow: `0 0 6px ${RECOVERY_COLOR[r]}` }} />{REC_LABEL[r]}</span>)}</span>}
+        </div>
+      </section>
+
+      <h2 className="section-title">Weekly sets vs target</h2>
+      <section className="glass" style={{ padding: 14 }}>
+        <div className="chips-scroll" style={{ marginBottom: 8 }}>
+          {MUSCLE_GROUPS.map((m) => <button key={m.id} className="chip" aria-pressed={muscle === m.id} onClick={() => setMuscle(m.id)}>{m.label}</button>)}
+        </div>
+        <BarChart key={muscle + range} points={weeks.map((w) => ({ label: weekLabel(w.weekStart), value: w.sets[muscle] }))} unit="sets" band={t ? { min: t.min, max: t.max } : undefined} highlightLast />
+        <p className="muted" style={{ fontSize: 12, marginTop: 4 }}>Green band = target {formatTarget(t)} sets a week.</p>
+      </section>
+      <div style={{ margin: "12px 0 8px" }}>
+        <Seg label="Table" value={tableMode} onChange={setTableMode} options={[{ v: "week", label: "This week" }, { v: "avg", label: `Average · ${RANGE_LABEL[range]}` }]} />
+      </div>
+      <VolumeTable totals={tableMode === "week" ? weeks[weeks.length - 1].sets : avg} targets={targets} hideEmpty />
+
+      <h2 className="section-title">Weekly volume</h2>
+      <section className="glass" style={{ padding: 14 }}>
+        <BarChart key={"t" + range} points={weeks.map((w) => ({ label: weekLabel(w.weekStart), value: w.tonnage, sub: `${w.workouts} workouts` }))} unit="lb" highlightLast />
+      </section>
+
+      <h2 className="section-title">Frequency (times a week)</h2>
+      <section className="glass" style={{ padding: 14, display: "grid", gap: 9 }}>
+        {MUSCLE_GROUPS.filter((m) => freq[m.id] > 0).sort((a, b) => freq[b.id] - freq[a.id]).map((m) => (
+          <div key={m.id} style={{ display: "grid", gridTemplateColumns: "96px 1fr 40px", gap: 10, alignItems: "center", fontSize: 14 }}>
+            <span>{m.label}</span>
+            <div className="vbar"><div className="fill" style={{ width: `${Math.min(100, (freq[m.id] / 3) * 100)}%` }} /></div>
+            <span className="mono" style={{ textAlign: "right" }}>{fmtNum(freq[m.id])}×</span>
+          </div>
+        ))}
+        <p className="muted" style={{ fontSize: 12 }}>Workouts per week with direct work for the muscle.</p>
+      </section>
+
+      <h2 className="section-title">Exercise progress</h2>
+      <section className="glass" style={{ padding: 14 }}>
+        <select className="input" aria-label="Exercise" value={ex?.id ?? ""} onChange={(e) => setExId(e.target.value)} style={{ marginBottom: 10 }}>
+          {logged.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}
+        </select>
+        {ex && <ExerciseProgress key={ex.id + range} ex={ex} from={from} />}
+      </section>
     </div>
   );
 }

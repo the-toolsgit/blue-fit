@@ -7,6 +7,7 @@ import { RestTimerDock } from "./components/RestTimer";
 import { Toasts } from "./components/Toasts";
 import { go, useRoute } from "./router";
 import { useStore } from "./store";
+import { EditWorkoutScreen } from "./screens/EditWorkout";
 import { ExerciseScreen } from "./screens/ExerciseScreen";
 import { HistoryScreen } from "./screens/History";
 import { PlanScreen } from "./screens/Plan";
@@ -23,7 +24,7 @@ const TABS = [
   { id: "progress", label: "Progress", icon: "progress" },
   { id: "settings", label: "Settings", icon: "settings" },
 ];
-const TAB_OF: Record<string, string> = { workout: "today", summary: "history", exercise: "plan" };
+const TAB_OF: Record<string, string> = { workout: "today", summary: "history", edit: "history", exercise: "plan" };
 
 export function App() {
   const route = useRoute();
@@ -49,6 +50,7 @@ export function App() {
   else if (name === "workout") screen = <WorkoutScreen />;
   else if (name === "exercise") screen = <ExerciseScreen id={id} />;
   else if (name === "summary") screen = <SummaryScreen id={id} />;
+  else if (name === "edit") screen = <EditWorkoutScreen id={id} />;
   else if (name === "plan") screen = <PlanScreen />;
   else if (name === "history") screen = <HistoryScreen />;
   else if (name === "progress") screen = <ProgressScreen />;

@@ -14,3 +14,5 @@ export function useRoute(): string[] {
 }
 export const go = (path: string) => { location.hash = "#/" + path; };
 export const back = (fallback = "today") => (history.length > 1 ? history.back() : go(fallback));
+/** Navigate without adding a history entry */
+export const replace = (path: string) => location.replace("#/" + path);

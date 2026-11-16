@@ -4,10 +4,11 @@ import { lastEntryFor } from "../../core/session";
 import { EQUIPMENT_LABEL, muscleLabel, type Exercise } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { Figure } from "../components/Figure";
+import { ExerciseProgress } from "../components/ExerciseProgress";
 import { Icon } from "../components/Icon";
 import { Sheet } from "../components/Sheet";
 import { fmtDate, fmtRest, fmtVolume, loadSuffix, setsLine } from "../format";
-import { back } from "../router";
+import { back, go } from "../router";
 import { useStore } from "../store";
 
 function Section({ title, items, tone }: { title: string; items: string[]; tone?: "tip" | "bad" }) {
@@ -67,6 +68,30 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride }: { ex: Exercise; 
             ))}
           </div>
         ) : <p className="muted" style={{ fontSize: 14 }}>No sets logged yet. Records and charts appear after your first workout.</p>}
+      </div>
+      {rec.heaviest && <ExerciseHistory ex={ex} />}
+    </div>
+  );
+}
+
+function ExerciseHistory({ ex }: { ex: Exercise }) {
+  const { finished } = useStore();
+  const rows = finished.flatMap((s) => s.entries.filter((e) => e.exerciseId === ex.id && e.sets.some((x) => x.done)).map((e) => ({ s, e })));
+  return (
+    <div>
+      <h4 className="section-title" style={{ margin: "4px 0 8px" }}>Progress</h4>
+      <div className="glass" style={{ padding: 14 }}><ExerciseProgress ex={ex} /></div>
+      <h4 className="section-title" style={{ margin: "16px 0 8px" }}>History · {rows.length}</h4>
+      <div className="glass" style={{ padding: 4 }}>
+        {rows.slice(0, 40).map(({ s, e }) => (
+          <button key={e.id} className="list-row" onClick={() => go(`summary/${s.id}`)}>
+            <span className="grow">
+              <span style={{ display: "block", fontSize: 13 }} className="muted">{fmtDate(s.date, { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span>
+              <span className="mono" style={{ fontSize: 15 }}>{setsLine(e.sets)}<span className="muted" style={{ fontSize: 12 }}>{loadSuffix(ex)}</span></span>
+            </span>
+            <span className="mono muted" style={{ fontSize: 12 }}>{fmtVolume(e.sets.filter((x) => x.done && x.type !== "warmup").reduce((a, x) => a + (x.weight ?? 0) * (x.reps ?? 0), 0))} lb</span>
+          </button>
+        ))}
       </div>
     </div>
   );

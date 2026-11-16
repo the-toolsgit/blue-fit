@@ -95,6 +95,7 @@ export function SummaryScreen({ id }: { id?: string }) {
 
       <div className="stack" style={{ marginTop: 18 }}>
         {fresh && <button className="btn btn-primary btn-xl" onClick={() => go("today")}>Done</button>}
+        <button className="btn btn-ghost btn-block" onClick={() => go(`edit/${s.id}`)}><Icon name="note" size={18} /> Edit workout</button>
         <button className="btn btn-quiet btn-block" style={{ color: "var(--bad)" }} onClick={() => setDel(true)}><Icon name="trash" size={18} /> Delete workout</button>
       </div>
       <Confirm open={del} title="Delete this workout?" body="It's removed from history, records and charts. This can't be undone." confirm="Delete" danger

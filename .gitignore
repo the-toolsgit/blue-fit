@@ -4,3 +4,4 @@ dist
 .DS_Store
 # Personal source documents stay on this Mac only (public repo)
 docs/source/
+*.tsbuildinfo

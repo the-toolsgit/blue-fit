@@ -12,3 +12,7 @@ export const parseLocalDate = (s: string): Date => { const [y, m, d] = s.split("
 export const weekStart = (s: string): string => { const d = parseLocalDate(s); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return localDate(d); };
 export const round1 = (n: number) => Math.round(n * 10) / 10;
 export const fmtNum = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(1).replace(/\.0$/, ""));
+/** Add days to a local YYYY-MM-DD date */
+export const addDays = (s: string, n: number): string => { const d = parseLocalDate(s); d.setDate(d.getDate() + n); return localDate(d); };
+/** Whole days from a to b (b − a), local calendar dates */
+export const daysBetween = (a: string, b: string): number => Math.round((parseLocalDate(b).getTime() - parseLocalDate(a).getTime()) / 86_400_000);

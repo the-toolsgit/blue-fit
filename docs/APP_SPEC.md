@@ -2,7 +2,7 @@
 
 Platform-neutral description of the whole app. A Swift or Android developer should be able to rebuild Blue Fit from this document without reading the web code. Kept current with every behavior or design change.
 
-Spec version: 0.1 (Phase 1). Backup format version: 1.
+Spec version: 0.2 (Phase 2). Backup format version: 1.
 
 ---
 
@@ -32,6 +32,7 @@ Routes (web uses hash routes because GitHub Pages has no server routing):
 | `workout` | Workout logger | Today |
 | `exercise/{id}` | Exercise detail (page) | Plan |
 | `summary/{sessionId}` | Workout summary | History |
+| `edit/{sessionId}` | Edit a finished workout | History |
 | `plan` | Plan | Plan |
 | `history` | History | History |
 | `progress` | Progress | Progress |
@@ -81,16 +82,22 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 - **Personal records** (pink section) per exercise with the PR kinds.
 - **Sets per muscle** this session (fractional, §5.2) as neon bars.
 - **Exercises** with sets line and notes (tap → exercise page). Workout notes.
-- **Done** (fresh) → Today. **Delete workout** (confirm).
+- **Done** (fresh) → Today. **Edit workout** → editor (§3.7.1). **Delete workout** (confirm).
 
 ### 3.5 Exercise detail
-Large animated figure (200 px), name, ★, primary muscle badges (neon), secondary badges (outline), ★ heavy badge, "why" text, sections Setup, Form, Tips (cyan heading), Avoid (red heading); info box: Range, Rest, Tempo, Equipment (+ how to log the weight), Counts as (e.g. "Back ×1 · Biceps ×½"). **Your records:** Heaviest, Best est. 1RM, Best volume, Last time; or "No sets logged yet." A slot can override "why" and "tips" (used for the leg-day cable lateral raise).
+Large animated figure (200 px), name, ★, primary muscle badges (neon), secondary badges (outline), ★ heavy badge, "why" text, sections Setup, Form, Tips (cyan heading), Avoid (red heading); info box: Range, Rest, Tempo, Equipment (+ how to log the weight), Counts as (e.g. "Back ×1 · Biceps ×½"). **Your records:** Heaviest, Best est. 1RM, Best volume, Last time; or "No sets logged yet." With history: **Progress** (the exercise progress chart, §3.13) and **History · n** (up to 40 most recent sessions: date, sets line with /side or /hand, session volume; tap → summary). A slot can override "why" and "tips" (used for the leg-day cable lateral raise).
 
 ### 3.6 Plan
 Routine name in neon gradient, "6 days · 36 exercises · 117 sets a week", horizontally scrolling rule cards (Effort, Progression, ★ Heavy) from routine data, day chips, the selected day's title with "sets · ~min" and its slots (figure, name, ★, note, rest, sets × reps → exercise page). **Weekly volume** table (§3.10). Editing arrives in Phase 3.
 
-### 3.7 History (Phase 1 version)
-Finished workouts grouped by week ("This week", "Week of Nov 9") with count; each row: weekday + day number, title, "min · sets · volume lb" → summary. Empty: FLEX figure, "No workouts yet. Finish one and it shows up here." Phase 2 adds the calendar heat map, streaks and editing.
+### 3.7 History
+- **Streak card:** flame icon (pink glow and gentle flicker when the streak is above 0), current streak in weeks, "WEEK STREAK"; "This week n/6 days" with one pill per planned day (Mon→Sat) lit in neon when that routine day is logged this week; "Week complete. Streak +1." or "Log all 6 days to keep/start the streak."; best streak.
+- **Calendar:** month view, Monday first, 5 or 6 rows; ‹ › month buttons (no months after the current one); month name and "n workouts". Days with workouts are shaded neon→cyan by working sets that day (intensity `0.25 + 0.75 × sets / max(12, most sets in any day)`), bright days glow; today has a cyan ring; days of other months are dimmed. Tap a day with one workout → its summary; with several → a list under the calendar. Legend "Fewer sets ▢▢▢▢ More".
+- **List:** finished workouts grouped by week ("This week", "Week of Nov 9") with count; each row: weekday + day number, title, "min · sets · volume lb" → summary.
+- Empty: FLEX figure, "No workouts yet. Finish one and it shows up here."
+
+#### 3.7.1 Edit workout
+Back and **Done** at the top (both return to the summary, replacing the editor in navigation history). Fields: Title (saved on leaving the field), Date (date picker, not after today; moving the date moves start and finish times by the same days), Minutes (stepper, step 5; sets the finish time). One card per exercise: figure, name, ★, ⋯ menu (Change exercise: keeps the sets; Add/Edit note; Exercise details; Remove exercise with confirm); a grid of sets: type button (cycles like the logger), weight field, ×, reps field, delete. "+ Add set" adds a done set copying the last one. "+ Add exercise" adds an exercise with one done set pre-filled from its history. Workout notes. Every change saves immediately; on Done, exercises left with no sets are removed.
 
 ### 3.8 Settings
 - **Workout:** Default rest stepper (step 15 s; shows "2 min") + "Apply to every exercise in the plan" (confirm); Start rest timer when a set is done (switch); Sound when rest is over (switch); Keep screen on during a workout (switch).
@@ -105,8 +112,23 @@ Title (Swap exercise / Add exercise), search (name, aliases, muscles), muscle-gr
 ### 3.10 Volume table (component)
 One row per muscle group (§4.2): name (priority muscles bold), value / target, status (✓, ⚠ below, ⚠ above, ⚠ by choice, or nothing for groups without a target), a neon bar with a dashed target band, and a detail line (days · angles · gap or note). Footer: "Indirect sets count as half. Warm-ups and drop sets don't count."
 
-### 3.11 Progress (Phase 1 version)
-"This week": workouts done / 6, volume lb, and the volume table of sets actually done this week (Mon–Sun, finished sessions). Phase 2 adds the charts, muscle map and recovery.
+### 3.11 Progress
+Empty (no finished workouts): LOADING figure, "Finish a workout and your charts, muscle map and recovery show up here."
+- **Range:** segmented 4 wk · 12 wk (default) · 6 mo · All (§5.14).
+- **Tiles:** workouts in range, per week, volume lb.
+- **Muscle map** (§8.6) with a toggle:
+  - *Weekly sets:* each region's brightness = average weekly sets in the range ÷ (target max, else target min, else 12), capped at 1; regions above 0.55 glow. Tap a region: "Biceps · 14.5 sets/week avg · target 14–20".
+  - *Recovery:* recovering = pink, partly recovered = amber, fresh = green (faint); legend. Tap: "Quads · Recovering · 6 sets in 48 h, 8 in 72 h".
+- **Weekly sets vs target:** muscle chips; bar chart of that muscle's sets per week with the target as a green band; then a toggle "This week | Average · range" for the volume table (§3.10). Default: Average.
+- **Weekly volume:** bar chart of tonnage per week (readout shows workouts that week).
+- **Frequency (times a week):** muscles with direct work, highest first, bar scaled to 3×/week, value "2.3×".
+- **Exercise progress:** exercise dropdown (exercises with logged sets, most recently trained first) + the exercise progress chart (§3.13), limited to the range.
+
+### 3.13 Exercise progress chart (component)
+Segmented Est. 1RM · Best set · Volume. Est. 1RM: line chart, one point per session, readout "160 lb · 120 × 10". Best set: line of the best set's weight (by e1RM), readout "× reps". Volume: bars of the session volume for the exercise, readout "n sets". "No sets logged (in this range) yet." when empty.
+
+### 3.14 Charts (component)
+Width-fitting SVG (320-unit wide coordinate space). Line: neon→cyan gradient stroke 2.4 with glow, area fill fading down, small dots (hidden above 24 points), the selected point larger and cyan; dashed grid at min/mid/max with mono labels; first and last labels on the x axis; draws itself in over 1.1 s. Bars: neon→cyan gradient, 62 % opacity except the selected or latest bar (full, glowing); grow from the bottom with an 18 ms stagger. Both: optional green target band; a readout line above ("Week of Nov 9 · 18 sets"); tap or drag to select a point (vertical guide line on line charts).
 
 ### 3.12 Toasts
 Top of screen, auto-dismiss (3.2 s; PR 4.2 s), tap to dismiss. Kinds: info (bolt icon), PR (pink border and glow, flexing pink figure with 10 sparks), error (red border).
@@ -248,11 +270,19 @@ Today's weekday (local time) → the current routine's day with that weekday. Mi
 ### 5.11 Finishing
 Finish drops sets not done and exercises left with no done sets, sets `status = finished` and `finishedAt`. A session with nothing done can only be discarded.
 
-### 5.12 Streak (Phase 2)
-A week (Mon–Sun) counts when all 6 planned training days are logged. Streak = consecutive counted weeks.
+### 5.12 Streak
+Planned days = routine days with a weekday and at least one slot (6 in the seed plan). Days logged in a week (Mon–Sun) = distinct routine days done (by dayId) + distinct dates of finished workouts without a routine day (free or imported) not already counted. A week is **complete** when days logged ≥ planned days. Current streak = consecutive complete weeks counting back from the current week; the current week adds 1 once complete and doesn't break the streak while in progress. Best = longest run of complete weeks.
 
-### 5.13 Recovery (Phase 2)
-Per muscle group: ≥ 4 fractional working sets in the last 48 h → recovering; trained within 48–72 h → partially recovered; otherwise fresh. Display only (muscle map shading).
+### 5.13 Recovery
+For each done working/failure set (time = set's completedAt, else the workout's finish or start), add its fractional weight (§5.2) to every group of its exercise, in two windows: last 48 h and last 72 h. ≥ 4 in 48 h → **recovering**; else ≥ 4 in 72 h → **partly recovered**; else **fresh**. Display only (muscle map).
+
+### 5.14 Progress ranges and series
+- Range start (first day included): 4 wk = Monday 3 weeks before this week's Monday; 12 wk = 11 weeks before; 6 mo = 25 weeks before; All = first workout's week.
+- Weekly totals: one row per week from the range start to the current week, empty weeks included: tonnage (§5.3), fractional sets per group (§5.2), workouts.
+- Average weekly sets = Σ weekly sets ÷ number of weeks (empty weeks count), rounded to 0.1.
+- Frequency = workouts in the range with ≥ 1 direct (weight 1) working/failure set for the group ÷ number of weeks, rounded to 0.1.
+- Exercise series: one point per finished session with done non-warm-up sets of the exercise (oldest first): est. 1RM = best Epley of its sets, best set = the set giving it, volume = Σ weight × reps, sets.
+- Calendar day load: per date, working/failure sets done, tonnage, workouts.
 
 ## 6. Design system
 
@@ -284,7 +314,7 @@ Display: Barlow Condensed 600/700, uppercase, letter-spacing .02–.16 em (XL 46
 Spacing 4/8/12/16/24/32. Radii 10/16/22 (cards 22, sheets 26 top). Minimum tap target 44 px; primary buttons 54–62 px. Ease `cubic-bezier(.22,1,.36,1)`. Motion: page enter 0.42 s; sheet slide-up 0.42 s; dock items rise 0.4 s; button press scale .96; Start button glow pulse 2.4 s; done toggle fills green with glow; bars grow from 0 in 0.9 s; summary numbers count up 1 s; PR toast drops in with 10 sparks. **Reduced motion:** all animation off, figures show the end position (pose B).
 
 ### 6.5 Components
-Glass card (with gradient hairline edge), primary button (neon→cyan gradient, dark text, glow), ghost button, quiet button, danger button, chip (selected = neon fill), badge (primary/secondary/star/pink), stepper (− value +, 52 px tall, typeable), switch, segmented control, bottom sheet (grip, backdrop blur), confirm sheet, toast, list row, volume bar with target band, progress ring (rest timer), tab bar (floating glass, active icon glows with a neon bar on top).
+Glass card (with gradient hairline edge), primary button (neon→cyan gradient, dark text, glow), ghost button, quiet button, danger button, chip (selected = neon fill), badge (primary/secondary/star/pink), stepper (− value +, 52 px tall, typeable), switch, segmented control, bottom sheet (grip, backdrop blur), confirm sheet, toast, list row, volume bar with target band, progress ring (rest timer), tab bar (floating glass, active icon glows with a neon bar on top), line and bar charts (§3.14), heat-map calendar (§3.7), streak card, muscle map (§8.6).
 
 ### 6.6 Icons
 24 × 24 line icons, stroke 1.9, round caps/joins, same style as the figure: today (dumbbell), plan (clipboard), history (calendar), progress (rising line), settings (sliders), plus, minus, check, close, more, swap, back, chevron, up, down, trash, note, link, info, timer, play, search, download, upload, copy, bolt, flame, trophy.
@@ -337,6 +367,13 @@ Loop 3.2 s: ease-in-out A→B over 42 %, hold B 8 %, ease B→A 42 %, hold A 8 %
 ### 8.5 Brand poses
 FLEX (logo, PR, summary): front view, base hy 60, la 9, sa 3; A ua 76 fa 150 → B ua 92 fa 182 shr 1.5. REST (rest day, rest timer): side view sitting back on a bench with hands behind, breathing (t −24 → −19). LOADING: side-view dumbbell curl.
 
+### 8.6 Muscle map
+Two views side by side (front, back), each 120 × 210 units, centered on x = 60, labeled FRONT / BACK below. Drawn in the figure style: outline polylines stroke fig 1.5 with round joins, head circle (60, 13) r 9, a faint center line (front, y 34–92) or spine (back, y 28–96) in fig2. One side of the outline (mirrored at x → 120 − x): neck-shoulder (64,24)(64,28)(78,31)(86,35)(89,42); outer arm (89,42)(92,60)(95,80)(98,104); inner arm (81,48)(84,62)(87,80)(92,105); torso (78,42)(77,62)(75,82)(77,98); outer leg (77,98)(80,128)(77,160)(76,196)(80,199); inner leg (61,110)(64,140)(65,162)(66,196)(70,199); crotch (59,110)(61,110).
+Regions (right side, mirrored unless noted; ellipse = cx, cy, rx, ry, rotation°):
+- Front: traps polygon (64,28)(75,30.5)(67,33); front delts ellipse 82.5,39.5,4.6,6,−20; side delts 88,44,2.6,7,−12; chest polygon (62,36)(76.5,36)(77.5,47)(70,53)(62,51); biceps 87,60,3.6,10,−10; forearms 92,89,3.6,13,−10; quads polygon (66,104)(77,101)(79,128)(74.5,151)(67,149)(64.5,124); adductors polygon (61.5,110)(65.5,107)(64,127)(62.5,134); calves 75,172,2.4,12,4.
+- Back: traps polygon, not mirrored (60,24)(67,28.5)(79,32)(70,41)(60,62)(50,41)(41,32)(53,28.5); rear delts 84,40.5,4.8,5.5,20; side delts 88.4,45,2.4,6.5,−12; rotator cuff 71.5,46,5,3.6,18; back (lats) polygon (62,60)(74,50)(77.5,58)(76,76)(69,86)(62,88); triceps 87.6,60,3.8,10.5,−10; forearms 92,89,3.6,13,−10; glutes 68.5,104,8.4,8.6; hamstrings polygon (63.5,115)(77,113)(78,136)(72.5,151)(65.5,149); calves 71,170,4.8,13,3.
+Mirrored ellipses negate the rotation. Region fill opacity: empty 0.05; value k → 0.14 + 0.7k; recovery: fresh 0.16, others 0.75. Selected region: white-ish stroke, fill ≥ 0.5. Fill changes animate over 0.6 s.
+
 ## 9. Offline, install, deploy
 - PWA: manifest (standalone, portrait, theme #05070D), service worker precaches all app files (latin font subsets only); works with no network after the first visit. Update flow: "Update ready" toast and Settings → Update app.
 - iPhone: install from Safari via Share → Add to Home Screen. Web limits: no vibration; no alert while the screen is locked (the app keeps the screen on during workouts instead).
@@ -358,10 +395,10 @@ FLEX (logo, PR, summary): front view, base hy 60, la 9, sa 3; A ua 76 fa 150 →
 | Plate calculator | Plates per side | Built |
 | Personal records + alerts | Derived PRs, live pink alerts | Built |
 | Workout summary | Summary with PRs and sets per muscle | Built |
-| Workout history list | History list | Built (basic); calendar + edit Phase 2 |
-| Calendar / streaks | Heat-map calendar, weekly-plan streak | Planned (Phase 2) |
-| Progress charts (1RM, volume) | Per-exercise charts, weekly sets vs targets, tonnage | Planned (Phase 2) |
-| Muscle recovery map | Muscle map + recovery status | Planned (Phase 2) |
+| Workout history list | History list, edit and delete past workouts | Built |
+| Calendar / streaks | Heat-map calendar, weekly-plan streak | Built |
+| Progress charts (1RM, volume) | Per-exercise charts, weekly sets vs targets, tonnage, frequency | Built |
+| Muscle recovery map | Muscle map (weekly sets) + recovery status | Built |
 | Import history | Jefit export importer with name mapping | Planned (Phase 4) |
 | Body stats and photos | Body tracking (weight band, scans, photos) | Later phase |
 | Interval / stopwatch timer | Timer modes | Later phase |

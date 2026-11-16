@@ -12,7 +12,8 @@ export const setsLine = (sets: LoggedSet[]) => {
   return same ? `${fmtW(w[0].weight)} × ${w.map((x) => x.reps ?? "—").join(", ")}` : w.map((x) => `${fmtW(x.weight)}×${x.reps ?? "—"}`).join(", ");
 };
 export const loadSuffix = (e: Exercise) => (e.loadMode === "perSide" ? " /side" : e.loadMode === "perHand" ? " /hand" : "");
-export const fmtVolume = (n: number) => (n >= 10000 ? `${(n / 1000).toFixed(1)}k` : Math.round(n).toLocaleString("en-US"));
+export const fmtVolume = (n: number) =>
+  n >= 1e6 ? `${(n / 1e6).toFixed(2)}M` : n >= 1e5 ? `${Math.round(n / 1000)}k` : n >= 1e4 ? `${(n / 1000).toFixed(1)}k` : Math.round(n).toLocaleString("en-US");
 export const fmtDate = (iso: string, opts: Intl.DateTimeFormatOptions = { weekday: "short", month: "short", day: "numeric" }) => {
   const [y, m, d] = iso.slice(0, 10).split("-").map(Number);
   return new Date(y, m - 1, d).toLocaleDateString("en-US", opts);

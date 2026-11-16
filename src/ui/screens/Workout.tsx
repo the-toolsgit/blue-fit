@@ -233,7 +233,7 @@ export function WorkoutScreen() {
   );
 }
 
-function NoteSheet({ open, title, value, onSave, onClose }: { open: boolean; title: string; value: string; onSave: (v: string) => void; onClose: () => void }) {
+export function NoteSheet({ open, title, value, onSave, onClose }: { open: boolean; title: string; value: string; onSave: (v: string) => void; onClose: () => void }) {
   const [v, setV] = useState(value);
   useEffect(() => setV(value), [value, open]);
   const close = () => { if (v !== value) onSave(v.trim()); onClose(); };
