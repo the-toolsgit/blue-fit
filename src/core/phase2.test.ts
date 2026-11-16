@@ -178,3 +178,14 @@ describe("plain exercise texts", () => {
     expect(m.run(out, "2026-11-16")).toBeNull();
   });
 });
+
+describe("plain rule text", () => {
+  const m = MIGRATIONS.find((x) => x.id === "2026-11-16-plain-rule-text")!;
+  it("rewrites the original ★ Heavy card once, leaves edited ones alone", async () => {
+    const raw = (await import("./seed/routine-leo-v3-1.json")).default as unknown as typeof seed.routines[0];
+    const out = m.run({ ...seed, routines: [structuredClone(raw)] }, "2026-11-16")!;
+    expect(out.routines[0].rules!.find((r) => r.title === "★ Heavy")!.text).toMatch(/^★ lifts: the main goal is adding weight/);
+    expect(m.run(out, "2026-11-16")).toBeNull();
+    expect(seed.routines[0].rules!.find((r) => r.title === "★ Heavy")!.text).toMatch(/^★ lifts/);
+  });
+});

@@ -3,9 +3,14 @@ import exercises from "./exercises.json";
 import routine from "./routine-leo-v3-1.json";
 import targets from "./targets.json";
 import plainText from "./exercise-text.json";
+import { RULE_TEXT } from "./rule-text";
 import { DEFAULT_SETTINGS, type AppData, type Exercise, type Routine, type VolumeTarget } from "../types";
 
 export const SEED_VERSION = 1;
+
+/** Plain wording for rule cards whose text is still the original. */
+export const withRuleText = (r: Routine): Routine =>
+  r.rules ? { ...r, rules: r.rules.map((x) => (RULE_TEXT[x.title]?.old === x.text ? { ...x, text: RULE_TEXT[x.title].text } : x)) } : r;
 
 export function buildSeed(): AppData {
   // Plain-language how-to texts override the extracted ones (kept in their own file so `npm run seed` doesn't undo them)
@@ -13,7 +18,7 @@ export function buildSeed(): AppData {
   const ex = (structuredClone(exercises) as unknown as Exercise[]).map((e) => ({ ...e, ...(text[e.id] ?? {}) }));
   return {
     exercises: ex,
-    routines: [structuredClone(routine) as Routine],
+    routines: [withRuleText(structuredClone(routine) as Routine)],
     sessions: [],
     targets: structuredClone(targets) as VolumeTarget[],
     settings: structuredClone(DEFAULT_SETTINGS),
