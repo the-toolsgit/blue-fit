@@ -46,18 +46,6 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
       <span className="eyebrow">Settings</span>
       <h1 className="title-lg" style={{ marginTop: 6 }}>Settings</h1>
 
-      <h2 className="section-title">Workout</h2>
-      <div className="glass" style={{ padding: "4px 14px" }}>
-        <div className="setting" style={{ display: "block", paddingTop: 12 }}>
-          <Stepper label="Default rest" suffix={fmtRest(settings.restDefaultSec)} value={settings.restDefaultSec} step={15} decimals={false} min={0}
-            onChange={(v) => set("restDefaultSec", v ?? 120)} />
-          <button className="btn btn-quiet" style={{ marginTop: 2, fontSize: 13, minHeight: 44, padding: 0 }} onClick={() => setApplyRest(true)}>Apply to every exercise in the plan</button>
-        </div>
-        <div className="setting"><span>Start rest timer when a set is done</span><Switch label="Auto-start rest" checked={settings.autoStartRest} onChange={(v) => set("autoStartRest", v)} /></div>
-        <div className="setting"><span>Sound when rest is over</span><Switch label="Sound" checked={settings.sound} onChange={(v) => set("sound", v)} /></div>
-        <div className="setting"><span>Keep screen on during a workout</span><Switch label="Keep screen on" checked={settings.keepAwake} onChange={(v) => set("keepAwake", v)} /></div>
-      </div>
-
       <h2 className="section-title">Training week starts on</h2>
       <div className="glass" style={{ padding: 10, display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4 }} role="group" aria-label="Training week starts on">
         {weekOrder(1).map((d) => (
@@ -80,6 +68,18 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
           <Stepper label="Sleep a night (h)" value={prof.sleepHours} step={0.5} min={0} empty={7} onChange={(v) => setProf({ sleepHours: v })} />
         </div>
         <p className="muted" style={{ fontSize: 12, margin: 0 }}>Used to work out your weekly set targets (Edit plan → Reset targets). Stays on this phone.</p>
+      </div>
+
+      <h2 className="section-title">Workout</h2>
+      <div className="glass" style={{ padding: "4px 14px" }}>
+        <div className="setting" style={{ display: "block", paddingTop: 12 }}>
+          <Stepper label="Default rest" suffix={fmtRest(settings.restDefaultSec)} value={settings.restDefaultSec} step={15} decimals={false} min={0}
+            onChange={(v) => set("restDefaultSec", v ?? 120)} />
+          <button className="btn btn-quiet" style={{ marginTop: 2, fontSize: 13, minHeight: 44, padding: 0 }} onClick={() => setApplyRest(true)}>Apply to every exercise in the plan</button>
+        </div>
+        <div className="setting"><span>Start rest timer when a set is done</span><Switch label="Auto-start rest" checked={settings.autoStartRest} onChange={(v) => set("autoStartRest", v)} /></div>
+        <div className="setting"><span>Sound when rest is over</span><Switch label="Sound" checked={settings.sound} onChange={(v) => set("sound", v)} /></div>
+        <div className="setting"><span>Keep screen on during a workout</span><Switch label="Keep screen on" checked={settings.keepAwake} onChange={(v) => set("keepAwake", v)} /></div>
       </div>
 
       <h2 className="section-title">Look</h2>
