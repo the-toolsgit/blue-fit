@@ -82,6 +82,14 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
         <div className="setting"><span>Keep screen on during a workout</span><Switch label="Keep screen on" checked={settings.keepAwake} onChange={(v) => set("keepAwake", v)} /></div>
       </div>
 
+      <h2 className="section-title">Reminders & tips</h2>
+      <div className="glass" style={{ padding: "4px 14px" }}>
+        <div className="setting"><span>Deload suggestions<span className="muted" style={{ display: "block", fontSize: 12 }}>Card on Today when it's time for a lighter week</span></span>
+          <Switch label="Deload suggestions" checked={settings.deloadSuggestions} onChange={(v) => set("deloadSuggestions", v)} /></div>
+        <div className="setting"><span>Beat last time<span className="muted" style={{ display: "block", fontSize: 12 }}>Target for each exercise based on your last workout</span></span>
+          <Switch label="Beat last time" checked={settings.progressionHints} onChange={(v) => set("progressionHints", v)} /></div>
+      </div>
+
       <h2 className="section-title">Look</h2>
       <div className="glass" style={{ padding: 14 }}>
         <Seg label="Theme" value={settings.theme} onChange={(v) => set("theme", v)} options={[{ v: "system", label: "System" }, { v: "dark", label: "Dark" }, { v: "light", label: "Light" }]} />

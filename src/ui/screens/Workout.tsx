@@ -254,7 +254,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   s: Session; e: SessionEntry; ex: Exercise; index: number; focused: boolean;
   onFocus: () => void; onToggle: (x: LoggedSet) => void; commit: (n: Session) => void; onDetail: () => void; onMenu: () => void;
 }) {
-  const { finished, exMap } = useStore();
+  const { finished, exMap, settings } = useStore();
   const [sel, setSel] = useState<string | null>(null);
   // Missing weight/reps on a refused "done": which set, and a counter to restart the shake
   const [missing, setMissing] = useState<{ id: string; n: number; from: "check" | "done" } | null>(null);
@@ -262,7 +262,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const last = useMemo(() => lastEntryFor(finished, ex.id, s.id), [finished, ex.id, s.id]);
   const repMin = e.repMin ?? 8, repMax = e.repMax ?? repMin;
   // Deload: no progression push; a fixed reminder instead.
-  const hint = s.deload ? ({ kind: "none" } as const) : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb);
+  const hint = s.deload || !settings.progressionHints ? ({ kind: "none" } as const) : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb);
   const allDone = e.sets.length > 0 && e.sets.every((x) => x.done);
   // The first set that isn't done is the open one; a picked set counts only if it's done or that one (sets go in order)
   const firstOpen = e.sets.find((x) => !x.done) ?? null;

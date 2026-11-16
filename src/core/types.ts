@@ -180,6 +180,9 @@ export interface Settings {
   autoStartRest: boolean;
   sound: boolean;
   keepAwake: boolean;
+  /** Reminders and tips that can be turned off (Settings → Reminders & tips) */
+  deloadSuggestions: boolean;
+  progressionHints: boolean;
   theme: "system" | "light" | "dark";
   /** Accent palette; the line man always stays blue */
   accent: Accent;
@@ -201,6 +204,8 @@ export const DEFAULT_SETTINGS: Settings = {
   autoStartRest: true,
   sound: true,
   keepAwake: true,
+  deloadSuggestions: true,
+  progressionHints: true,
   theme: "system",
   accent: "blue",
   weekStartDay: 6,

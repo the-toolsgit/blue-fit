@@ -33,7 +33,7 @@ export function TodayScreen() {
   const deloading = deloadActive(settings, today);
   const slotSets = (n: number) => (deloading ? deloadSets(n) : n);
   const sets = slots.reduce((a, s) => a + slotSets(s.sets), 0);
-  const suggestion = useMemo(() => (active ? null : deloadSuggestion(finished, routine, exMap, settings, today)), [active, finished, routine, exMap, settings, today]);
+  const suggestion = useMemo(() => (active || !settings.deloadSuggestions ? null : deloadSuggestion(finished, routine, exMap, settings, today)), [active, finished, routine, exMap, settings, today]);
 
   // Days of this week (starting on the chosen week-start day) that have a finished workout
   const doneDays = useMemo(() => {
