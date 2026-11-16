@@ -2,7 +2,7 @@
 
 Platform-neutral description of the whole app. A Swift or Android developer should be able to rebuild Blue Fit from this document without reading the web code. Kept current with every behavior or design change.
 
-Spec version: 0.3.1 (Phase 2 + training week start). Backup format version: 1.
+Spec version: 0.4 (Phase 3: plan editor). Backup format version: 1.
 
 ---
 
@@ -34,6 +34,7 @@ Routes (web uses hash routes because GitHub Pages has no server routing):
 | `summary/{sessionId}` | Workout summary | History |
 | `edit/{sessionId}` | Edit a finished workout | History |
 | `plan` | Plan | Plan |
+| `plan-edit/{routineId}` | Plan editor | Plan |
 | `history` | History | History |
 | `progress` | Progress | Progress |
 | `settings` | Settings | Settings |
@@ -88,7 +89,20 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 Large animated figure (200 px), name, ★, primary muscle badges (neon), secondary badges (outline), ★ heavy badge, "why" text, sections Setup, Form, Tips (cyan heading), Avoid (red heading); info box: Range, Rest, Tempo, Equipment (+ how to log the weight), Counts as (e.g. "Back ×1 · Biceps ×½"). **Your records:** Heaviest, Best est. 1RM, Best volume, Last time; or "No sets logged yet." With history: **Progress** (the exercise progress chart, §3.13) and **History · n** (up to 40 most recent sessions: date, sets line with /side or /hand, session volume; tap → summary). A slot can override "why" and "tips" (used for the leg-day cable lateral raise).
 
 ### 3.6 Plan
-Routine name in neon gradient, "6 days · 36 exercises · 117 sets a week", horizontally scrolling rule cards (Effort, Progression, ★ Heavy) from routine data, day chips, the selected day's title with "sets · ~min" and its slots (figure, name, ★, note, rest, sets × reps → exercise page). **Weekly volume** table (§3.10). Editing arrives in Phase 3.
+Header: "CURRENT PLAN", **Plans** (ghost) and **Edit** (primary) buttons. Routine name in neon gradient, "6 days · 36 exercises · 117 sets a week", horizontally scrolling rule cards (Effort, Progression, ★ Heavy) from routine data, day chips (Mon→Sun), the selected day's title with "sets · ~min" and its slots (figure, name, ★, note, rest, sets × reps → exercise page). **Weekly volume** table (§3.10).
+**Plans sheet:** every routine (current first, then newest): name, "n days · n sets/week", "Current" badge; actions Make current, Edit, Duplicate (named "X copy", "X copy 2" …), Delete (not for the current one; confirm: "Workouts you did with it stay in history." when used).
+
+#### 3.6.1 Plan editor
+Edits a **draft copy** of the routine; nothing changes until Save. The draft survives a reload during the session.
+- Top: **Cancel** (asks "Discard changes?" when there are changes), "EDIT PLAN", **Save** (disabled until something changed).
+- Plan name field (large display type, dashed outline).
+- Day chips "Mon · Legs A" (Mon→Sun; days without a weekday show "—" and come last) and **+ Day** (new day "New day" on the first free weekday Mon→Sun, else none).
+- Day panel: Day name; Weekday chips Mon…Sun + None (picking a weekday another day uses swaps the two days; chips owned by other days are dimmed); "n exercises · n sets · ~min"; **Delete day** (confirm: "Past workouts of this day stay in history.").
+- Exercise rows: drag handle (6 dots; drag to reorder, keyboard supported), figure, name ★, "3 × 10–12 · 2 min", ↑/↓ buttons. Superset groups show the cyan bracket and "SUPERSET A". Tap a row → **slot sheet**: Sets (1–20), Rest (step 15 s), Reps min, Reps max (max never below min), Note; Superset with next / Unlink; Swap exercise; How to do it; Remove from day; Done.
+- Empty day: "No exercises. A day without exercises is a rest day." **+ Add exercise** → picker (§3.9); new slots are 3 × 10–12 with the exercise's rest (or the default rest).
+- **Weekly volume · live** table (§3.10) recalculated on every change.
+- Dock: "✓ n ⚠ n on target" (tap → scrolls to the table) and **Save plan**.
+- Save checks (§5.15); the first problem shows as an error toast. Saved → "Plan saved" toast, back to Plan.
 
 ### 3.7 History
 - **Streak card:** flame icon (pink glow and gentle flicker when the streak is above 0), current streak in weeks, "WEEK STREAK"; "This week n/6 days" with one pill per planned day (Mon→Sun order) lit in neon when that routine day is logged this week; "Week complete. Streak +1." or "Log all 6 days to keep/start the streak."; best streak.
@@ -108,7 +122,10 @@ Back and **Done** at the top (both return to the summary, replacing the editor i
 - **App:** Update app (when a new version is waiting), install instructions when not installed ("Share → Add to Home Screen"), version.
 
 ### 3.9 Exercise picker (sheet)
-Title (Swap exercise / Add exercise), search (name, aliases, muscles), muscle-group filter chips, equipment filter chips; list with figure, name, ★, muscles · equipment. With a muscle filter, exercises with direct work for that muscle come first. Swap hides the current exercise.
+Title (Swap exercise / Add exercise), **+ New exercise** (opens the exercise editor; the new exercise is picked right away), search (name, aliases, muscles), muscle-group filter chips, equipment filter chips; list with figure, name, ★, muscles · equipment. With a muscle filter, exercises with direct work for that muscle come first. Swap hides the current exercise. Hidden (archived) exercises never show.
+
+### 3.9.1 Exercise editor (sheet)
+Opened from the picker (new) or the exercise page's **Edit** button (any exercise, built-in or custom). Cancel · title · Save. Live figure preview. Fields: Name (required, unique ignoring case); Figure (None or any existing exercise's figure, as tiles); Muscles (a chip per muscle group; tap cycles off → direct ×1 → indirect ×½); Equipment (picking it sets the default log mode: barbell/Smith/plate machine → per side, dumbbell → per hand, others → as shown); Heavy ★; Log weight (As shown / Per side / Per hand); Weight step (lb); Rest; Why; Setup, Form, Tips, Avoid (one item per line); Range; Tempo (default "1–2 s up, 2–3 s down"); Other names (comma separated, used by the Jefit import). Custom exercises derive their muscle text and body region from the muscle chips; built-in ones keep their written muscle text. Delete (custom only): **Hide** when the exercise is in history or any plan (archived, still shown where used), otherwise **Delete** for good.
 
 ### 3.10 Volume table (component)
 One row per muscle group (§4.2): name (priority muscles bold), value / target, status (✓, ⚠ below, ⚠ above, ⚠ by choice, or nothing for groups without a target), a neon bar with a dashed target band, and a detail line (days · angles · gap or note). Footer: "Indirect sets count as half. Warm-ups and drop sets don't count."
@@ -271,6 +288,13 @@ Today's weekday (local time) → the current routine's day with that weekday. Mi
 ### 5.11 Finishing
 Finish drops sets not done and exercises left with no done sets, sets `status = finished` and `finishedAt`. A session with nothing done can only be discarded.
 
+### 5.15 Plan editing rules
+- Save is blocked when: the plan name is empty; a day name is empty; two days share a weekday; a slot has < 1 set; rep max < rep min.
+- Setting a weekday used by another day swaps them; "None" frees it.
+- Supersets: "Superset with next" links a slot with the following one (joining its group if it has one); unlinking splits the group after the slot. A group always has ≥ 2 adjacent slots: moving a slot away from its group removes it from the group, and a group left with one slot dissolves.
+- Swapping a slot's exercise drops that slot's day-specific why/tips.
+- Duplicate copies days and slots with new ids; the copy is not current. Make current sets exactly one routine current. Workouts keep the routine and day ids they were logged with; Today and streaks use the current routine.
+
 ### 5.12 Streak
 Weeks start on the week-start day (§4.6). Planned days = routine days with a weekday and at least one slot (6 in the seed plan). Days logged in a week = distinct routine days done (by dayId) + distinct dates of finished workouts without a routine day (free or imported) not already counted. A week is **complete** when days logged ≥ planned days. Current streak = consecutive complete weeks counting back from the current week; the current week adds 1 once complete and doesn't break the streak while in progress. Best = longest run of complete weeks.
 
@@ -388,11 +412,11 @@ Mirrored ellipses negate the rotation. Region fill opacity: empty 0.05; value k 
 
 | Jefit feature | Blue Fit | Status |
 |---|---|---|
-| Routines with days and exercises | Routine → days → slots, current routine | Built (view); editor Phase 3 |
-| Routine editor (add/remove/reorder, sets, reps, rest) | Plan editor with drag and drop, live volume table | Planned (Phase 3) |
-| Supersets | Superset groups in logger (link/unlink) and plan | Built (logger); plan Phase 3 |
+| Routines with days and exercises | Routine → days → slots, several routines, one current | Built |
+| Routine editor (add/remove/reorder, sets, reps, rest) | Plan editor with drag and drop, live volume table | Built |
+| Supersets | Superset groups in logger and plan editor | Built |
 | Exercise database + search/filters | Exercise library + picker (muscle, equipment) | Built |
-| Custom exercises | Same fields + optional figure | Planned (Phase 3) |
+| Custom exercises | Same fields + muscle mapping + optional figure; edit built-ins too | Built |
 | Exercise instructions / videos | Full how-to card + animated line figure | Built (videos left out) |
 | Workout logging with previous values | Logger with pre-fill, Last line, steppers | Built |
 | Set types (warm-up, drop, failure) | Warm-up, working, drop, failure | Built |

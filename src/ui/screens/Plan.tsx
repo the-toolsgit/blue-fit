@@ -1,4 +1,7 @@
 import { useMemo, useState } from "react";
+import { copyName, duplicateRoutine, routineUsed, setCurrent } from "../../core/routineEdit";
+import { Confirm, Sheet } from "../components/Sheet";
+import type { Routine } from "../../core/types";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { planVolume } from "../../core/volume";
 import { MUSCLE_GROUPS } from "../../core/types";
@@ -12,7 +15,9 @@ import { useStore } from "../store";
 const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export function PlanScreen() {
-  const { routine, exMap, targets } = useStore();
+  const { routine, routines, exMap, targets, sessions, saveRoutine, saveRoutines, deleteRoutine, toast } = useStore();
+  const [manage, setManage] = useState(false);
+  const [del, setDel] = useState<Routine | null>(null);
   const days = (routine?.days ?? []).filter((d) => d.slots.length).sort((a, b) => ((a.weekday ?? 9) + 6) % 7 - ((b.weekday ?? 9) + 6) % 7);
   const [dayId, setDayId] = useState(days.find((d) => d.weekday === new Date().getDay())?.id ?? days[0]?.id);
   const vol = useMemo(() => (routine ? planVolume(routine, exMap) : []), [routine, exMap]);
@@ -25,7 +30,13 @@ export function PlanScreen() {
 
   return (
     <div className="page">
-      <span className="eyebrow">Current plan</span>
+      <div className="spread">
+        <span className="eyebrow">Current plan</span>
+        <div className="row" style={{ gap: 6 }}>
+          <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px" }} onClick={() => setManage(true)}>Plans</button>
+          <button className="btn btn-primary" style={{ minHeight: 40, padding: "0 14px" }} onClick={() => go(`plan-edit/${routine.id}`)}><Icon name="note" size={18} /> Edit</button>
+        </div>
+      </div>
       <h1 className="title-lg neon-grad" style={{ marginTop: 6 }}>{routine.name}</h1>
       <p className="muted" style={{ marginTop: 4, fontSize: 14 }}>{days.length} days · {routine.days.flatMap((d) => d.slots).length} exercises · {allSets} sets a week</p>
 
@@ -72,7 +83,34 @@ export function PlanScreen() {
 
       <h2 className="section-title">Weekly volume</h2>
       <VolumeTable totals={totals} targets={targets} days={dayCount} />
-      <p className="muted" style={{ fontSize: 12, textAlign: "center", marginTop: 14 }}>Editing the plan arrives in Phase 3.</p>
+      <Sheet open={manage} onClose={() => setManage(false)} label="Plans">
+        <div className="spread" style={{ marginBottom: 8 }}>
+          <h3 className="title-md" style={{ textTransform: "uppercase" }}>Plans</h3>
+          <button className="icon-btn" onClick={() => setManage(false)} aria-label="Close"><Icon name="close" /></button>
+        </div>
+        <div className="stack">
+          {[...routines].sort((a, b) => Number(b.isCurrent) - Number(a.isCurrent) || (a.createdAt < b.createdAt ? 1 : -1)).map((r) => (
+            <div key={r.id} className="glass" style={{ padding: 12, borderColor: r.isCurrent ? "color-mix(in srgb, var(--neon) 50%, transparent)" : undefined }}>
+              <div className="spread">
+                <div>
+                  <b style={{ font: "700 19px var(--display)", textTransform: "uppercase" }}>{r.name}</b>
+                  <div className="muted" style={{ fontSize: 12 }}>{r.days.filter((d) => d.slots.length).length} days · {r.days.reduce((a, d) => a + d.slots.reduce((b, x) => b + x.sets, 0), 0)} sets/week</div>
+                </div>
+                {r.isCurrent && <span className="badge p">Current</span>}
+              </div>
+              <div className="row" style={{ flexWrap: "wrap", gap: 6, marginTop: 10 }}>
+                {!r.isCurrent && <button className="chip" onClick={() => { saveRoutines(setCurrent(routines, r.id)); toast({ kind: "info", title: `${r.name} is now current` }); }}>Make current</button>}
+                <button className="chip" onClick={() => { setManage(false); go(`plan-edit/${r.id}`); }}>Edit</button>
+                <button className="chip" onClick={() => { const c = duplicateRoutine(r, copyName(r.name, routines.map((x) => x.name)), new Date()); saveRoutine(c); toast({ kind: "info", title: `Copied as ${c.name}` }); }}>Duplicate</button>
+                {!r.isCurrent && <button className="chip" style={{ color: "var(--bad)" }} onClick={() => setDel(r)}>Delete</button>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Sheet>
+      <Confirm open={!!del} title={`Delete ${del?.name ?? "plan"}?`} danger confirm="Delete"
+        body={del && routineUsed(del.id, sessions) ? "Workouts you did with it stay in history." : "This can't be undone."}
+        onClose={() => setDel(null)} onConfirm={() => del && deleteRoutine(del.id)} />
     </div>
   );
 }

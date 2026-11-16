@@ -5,8 +5,10 @@ import { useStore } from "../store";
 import { Figure } from "./Figure";
 import { Icon } from "./Icon";
 import { Sheet } from "./Sheet";
+import { ExerciseEditor } from "./ExerciseEditor";
 
 export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open: boolean; title: string; onClose: () => void; onPick: (e: Exercise) => void; exclude?: string }) {
+  const [creating, setCreating] = useState(false);
   const { exercises } = useStore();
   const [q, setQ] = useState("");
   const [group, setGroup] = useState<MuscleGroup | null>(null);
@@ -32,6 +34,7 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
         <h3 className="title-md">{title}</h3>
         <button className="icon-btn" onClick={onClose} aria-label="Close"><Icon name="close" /></button>
       </div>
+      <button className="btn btn-ghost btn-block" style={{ marginBottom: 10 }} onClick={() => setCreating(true)}><Icon name="plus" size={18} /> New exercise</button>
       <div style={{ position: "relative" }}>
         <span style={{ position: "absolute", left: 12, top: 11, color: "var(--muted)" }}><Icon name="search" size={20} /></span>
         <input className="input" style={{ paddingLeft: 40 }} type="search" placeholder="Search name, alias or muscle" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search exercises" />
@@ -53,8 +56,9 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
             <Icon name="plus" size={20} />
           </button>
         ))}
-        {!list.length && <div className="empty">No exercise matches. Custom exercises arrive with the plan editor.</div>}
+        {!list.length && <div className="empty">No exercise matches. Tap "New exercise" to add your own.</div>}
       </div>
+      <ExerciseEditor open={creating} onClose={() => setCreating(false)} onSaved={(e) => { onPick(e); onClose(); }} />
     </Sheet>
   );
 }

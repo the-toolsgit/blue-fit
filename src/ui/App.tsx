@@ -11,6 +11,7 @@ import { EditWorkoutScreen } from "./screens/EditWorkout";
 import { ExerciseScreen } from "./screens/ExerciseScreen";
 import { HistoryScreen } from "./screens/History";
 import { PlanScreen } from "./screens/Plan";
+import { PlanEditorScreen } from "./screens/PlanEditor";
 import { ProgressScreen } from "./screens/Progress";
 import { SettingsScreen } from "./screens/Settings";
 import { SummaryScreen } from "./screens/Summary";
@@ -24,7 +25,7 @@ const TABS = [
   { id: "progress", label: "Progress", icon: "progress" },
   { id: "settings", label: "Settings", icon: "settings" },
 ];
-const TAB_OF: Record<string, string> = { workout: "today", summary: "history", edit: "history", exercise: "plan" };
+const TAB_OF: Record<string, string> = { workout: "today", summary: "history", edit: "history", exercise: "plan", "plan-edit": "plan" };
 
 export function App() {
   const route = useRoute();
@@ -52,6 +53,7 @@ export function App() {
   else if (name === "summary") screen = <SummaryScreen id={id} />;
   else if (name === "edit") screen = <EditWorkoutScreen id={id} />;
   else if (name === "plan") screen = <PlanScreen />;
+  else if (name === "plan-edit") screen = <PlanEditorScreen id={id} />;
   else if (name === "history") screen = <HistoryScreen />;
   else if (name === "progress") screen = <ProgressScreen />;
   else if (name === "settings") screen = <SettingsScreen onUpdate={needRefresh ? () => updateServiceWorker(true) : undefined} />;

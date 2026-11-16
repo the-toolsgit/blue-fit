@@ -4,6 +4,8 @@ import { lastEntryFor } from "../../core/session";
 import { EQUIPMENT_LABEL, muscleLabel, type Exercise } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { Figure } from "../components/Figure";
+import { ExerciseEditor } from "../components/ExerciseEditor";
+import { useState } from "react";
 import { ExerciseProgress } from "../components/ExerciseProgress";
 import { Icon } from "../components/Icon";
 import { Sheet } from "../components/Sheet";
@@ -112,10 +114,16 @@ export function ExerciseSheet({ id, onClose, whyOverride, tipsOverride }: { id: 
 
 export function ExerciseScreen({ id }: { id?: string }) {
   const { exMap } = useStore();
+  const [editing, setEditing] = useState(false);
   const ex = id ? exMap.get(id) : undefined;
   return (
     <div className="page">
-      <button className="icon-btn" onClick={() => back("plan")} aria-label="Back" style={{ marginLeft: -10 }}><Icon name="back" /></button>
+      <div className="spread">
+        <button className="icon-btn" onClick={() => back("plan")} aria-label="Back" style={{ marginLeft: -10 }}><Icon name="back" /></button>
+        {ex && <button className="btn btn-ghost" style={{ minHeight: 40 }} onClick={() => setEditing(true)}><Icon name="note" size={18} /> Edit</button>}
+      </div>
+      {ex?.archived && <p className="badge" style={{ marginBottom: 8 }}>Hidden from the exercise picker</p>}
+      <ExerciseEditor open={editing} exercise={ex} onClose={() => setEditing(false)} />
       {ex ? <ExerciseInfo ex={ex} /> : <div className="empty">Exercise not found.</div>}
     </div>
   );

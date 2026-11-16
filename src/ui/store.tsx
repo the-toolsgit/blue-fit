@@ -21,6 +21,9 @@ interface Store extends AppData {
   saveSettings(s: Settings): void;
   saveExercise(e: Exercise): void;
   saveRoutine(r: Routine): void;
+  saveRoutines(rs: Routine[]): void;
+  deleteRoutine(id: string): void;
+  deleteExercise(id: string): void;
   setRestTimer(t: RestTimer | null): void;
   replaceAll(d: AppData): Promise<void>;
   exportAll(): Promise<AppData>;
@@ -111,6 +114,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       saveSession: (s) => putRow("sessions", s, "id"),
       saveExercise: (e) => putRow("exercises", e, "id"),
       saveRoutine: (r) => putRow("routines", r, "id"),
+      saveRoutines: (rs) => rs.forEach((r) => putRow("routines", r, "id")),
+      deleteRoutine: (id) => {
+        setData((d) => ({ ...d, routines: d.routines.filter((r) => r.id !== id) }));
+        write(() => adapter.remove("routines", id));
+      },
+      deleteExercise: (id) => {
+        setData((d) => ({ ...d, exercises: d.exercises.filter((e) => e.id !== id) }));
+        write(() => adapter.remove("exercises", id));
+      },
       deleteSession: (id) => {
         setData((d) => ({ ...d, sessions: d.sessions.filter((s) => s.id !== id) }));
         write(() => adapter.remove("sessions", id));
