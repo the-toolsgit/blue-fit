@@ -28,6 +28,7 @@ const P: Record<string, string> = {
   bolt: "M13 3L5 13.5h6L10 21l9-11h-6z",
   flame: "M12 21c4 0 6.5-2.6 6.5-6.3 0-4.4-4.2-6.4-4.8-11.2-2.3 1.6-3.7 4.3-3.4 7.2-1.5-.6-2.4-2-2.6-3.4C5.9 9.2 5.5 11.4 5.5 14.7 5.5 18.4 8 21 12 21z",
   trophy: "M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20.5h7M10 17h4v3.5h-4z",
+  undo: "M9 14L4 9l5-5M4 9h11a5 5 0 010 10h-3",
 };
 export function Icon({ name, size = 22, stroke = 1.9 }: { name: keyof typeof P | string; size?: number; stroke?: number }) {
   const d = P[name] ?? "";

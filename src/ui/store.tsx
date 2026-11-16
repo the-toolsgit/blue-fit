@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { MIGRATIONS } from "../core/migrations";
 import { localDate } from "../core/util";
 import type { StorageAdapter, TableName, Tables } from "../core/storage/StorageAdapter";
-import { DEFAULT_SETTINGS, type AppData, type Exercise, type RestTimer, type Routine, type Session, type Settings } from "../core/types";
+import { DEFAULT_SETTINGS, type AppData, type Exercise, type RestTimer, type Routine, type Session, type Settings, type VolumeTarget } from "../core/types";
 import { IdbAdapter } from "../storage/idbAdapter";
 
 export type Toast = { id: number; kind: "info" | "pr" | "error"; title: string; body?: string };
@@ -22,6 +22,7 @@ interface Store extends AppData {
   saveExercise(e: Exercise): void;
   saveRoutine(r: Routine): void;
   saveRoutines(rs: Routine[]): void;
+  saveTargets(ts: VolumeTarget[]): void;
   deleteRoutine(id: string): void;
   deleteExercise(id: string): void;
   setRestTimer(t: RestTimer | null): void;
@@ -126,6 +127,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       saveExercise: (e) => putRow("exercises", e, "id"),
       saveRoutine: (r) => putRow("routines", r, "id"),
       saveRoutines: (rs) => rs.forEach((r) => putRow("routines", r, "id")),
+      saveTargets: (ts) => ts.forEach((t) => putRow("targets", t, "group")),
       deleteRoutine: (id) => {
         setData((d) => ({ ...d, routines: d.routines.filter((r) => r.id !== id) }));
         write(() => adapter.remove("routines", id));

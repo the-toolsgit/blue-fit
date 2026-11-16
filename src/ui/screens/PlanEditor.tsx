@@ -8,7 +8,8 @@ import {
   addDay, addSlot, moveSlot, removeDay, removeSlot, renameDay, setDayWeekday, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine,
 } from "../../core/routineEdit";
 import { estimateMinutes } from "../../core/timeEstimate";
-import { MUSCLE_GROUPS, type Exercise, type Routine, type RoutineDay, type Slot } from "../../core/types";
+import { MUSCLE_GROUPS, type Exercise, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
+import defaultTargets from "../../core/seed/targets.json";
 import { planVolume, targetStatus } from "../../core/volume";
 import { Stepper } from "../components/Controls";
 import { Dock } from "../components/Dock";
@@ -56,7 +57,7 @@ function SlotRow({ slot, ex, index, count, groupStart, groupEnd, onOpen, onMove 
 }
 
 export function PlanEditorScreen({ id }: { id?: string }) {
-  const { routines, exMap, targets, settings, saveRoutine, toast } = useStore();
+  const { routines, exMap, targets, settings, saveRoutine, saveTargets, toast } = useStore();
   const original = routines.find((r) => r.id === id);
   const [draft, setDraft] = useState<Routine | null>(() => {
     try { const s = sessionStorage.getItem(draftKey(id ?? "")); if (s) return JSON.parse(s); } catch { /* ignore */ }
@@ -66,19 +67,27 @@ export function PlanEditorScreen({ id }: { id?: string }) {
   const [slotOpen, setSlotOpen] = useState<string | null>(null);
   const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; slotId: string } | null>(null);
   const [howTo, setHowTo] = useState<string | null>(null);
-  const [confirm, setConfirm] = useState<null | "cancel" | "deleteDay">(null);
+  const [confirm, setConfirm] = useState<null | "cancel" | "deleteDay" | "resetTargets">(null);
+  // Weekly targets are edited here too (they apply to every plan) and saved with Save plan.
+  const [tdraft, setTdraft] = useState<VolumeTarget[]>(() => {
+    try { const s = sessionStorage.getItem(draftKey(id ?? "") + "-targets"); if (s) return JSON.parse(s); } catch { /* ignore */ }
+    return structuredClone(targets);
+  });
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
 
   useEffect(() => { if (!draft && original) setDraft(structuredClone(original)); }, [original, draft]);
   useEffect(() => { if (draft && id) try { sessionStorage.setItem(draftKey(id), JSON.stringify(draft)); } catch { /* ignore */ } }, [draft, id]);
+  useEffect(() => { if (id) try { sessionStorage.setItem(draftKey(id) + "-targets", JSON.stringify(tdraft)); } catch { /* ignore */ } }, [tdraft, id]);
   const vol = useMemo(() => (draft ? planVolume(draft, exMap) : []), [draft, exMap]);
   if (!draft || !original) return <div className="page"><div className="empty">Plan not found.</div></div>;
 
   const days = [...draft.days].sort((a, b) => mondayFirst(a.weekday) - mondayFirst(b.weekday));
   const day: RoutineDay | undefined = days.find((d) => d.id === dayId) ?? days.find((d) => d.slots.length) ?? days[0];
-  const dirty = JSON.stringify(draft) !== JSON.stringify(original);
+  const targetsDirty = JSON.stringify(tdraft) !== JSON.stringify(targets);
+  const dirty = JSON.stringify(draft) !== JSON.stringify(original) || targetsDirty;
+  const editTarget = (t: VolumeTarget) => setTdraft((ts) => (ts.some((x) => x.group === t.group) ? ts.map((x) => (x.group === t.group ? t : x)) : [...ts, t]));
   const issues = validateRoutine(draft);
-  const tmap = new Map(targets.map((t) => [t.group, t]));
+  const tmap = new Map(tdraft.map((t) => [t.group, t]));
   const totals = Object.fromEntries(MUSCLE_GROUPS.map((m) => [m.id, vol.find((v) => v.group === m.id)?.sets ?? 0])) as never;
   const dayCount = Object.fromEntries(vol.map((v) => [v.group, v.directDays]));
   const statuses = vol.map((v) => targetStatus(v.sets, tmap.get(v.group)));
@@ -86,10 +95,11 @@ export function PlanEditorScreen({ id }: { id?: string }) {
   const slot = day?.slots.find((s) => s.id === slotOpen);
   const slotIdx = day?.slots.findIndex((s) => s.id === slotOpen) ?? -1;
 
-  const leave = () => { try { sessionStorage.removeItem(draftKey(id!)); } catch { /* ignore */ } replace("plan"); };
+  const leave = () => { try { sessionStorage.removeItem(draftKey(id!)); sessionStorage.removeItem(draftKey(id!) + "-targets"); } catch { /* ignore */ } replace("plan"); };
   const save = () => {
     if (issues.length) return toast({ kind: "error", title: "Can't save yet", body: issues[0].message });
     saveRoutine({ ...draft, name: draft.name.trim(), days: draft.days.map((d) => ({ ...d, title: d.title.trim() })) });
+    if (targetsDirty) saveTargets(tdraft);
     toast({ kind: "info", title: "Plan saved" });
     leave();
   };
@@ -159,7 +169,9 @@ export function PlanEditorScreen({ id }: { id?: string }) {
       )}
 
       <h2 className="section-title" id="live-volume">Weekly volume · live</h2>
-      <VolumeTable totals={totals} targets={targets} days={dayCount} />
+      <p className="muted" style={{ fontSize: 12, margin: "-2px 4px 8px" }}>Tap a muscle to change its weekly target or mark it as not a focus.</p>
+      <VolumeTable totals={totals} targets={tdraft} days={dayCount} onEdit={editTarget} />
+      <button className="btn btn-quiet btn-block" style={{ marginTop: 8 }} onClick={() => setConfirm("resetTargets")}><Icon name="undo" size={18} /> Reset targets to defaults</button>
 
       <Dock>
         <div className="glass row" style={{ padding: 8, borderRadius: 20 }}>
@@ -215,6 +227,8 @@ export function PlanEditorScreen({ id }: { id?: string }) {
       <Confirm open={confirm === "cancel"} title="Discard changes?" body="Your edits to this plan are thrown away." confirm="Discard" danger onClose={() => setConfirm(null)} onConfirm={leave} />
       <Confirm open={confirm === "deleteDay"} title={`Delete ${day?.title ?? "this day"}?`} body="Past workouts of this day stay in history." confirm="Delete" danger
         onClose={() => setConfirm(null)} onConfirm={() => { if (day) { setDraft(removeDay(draft, day.id)); setDayId(null); } }} />
+      <Confirm open={confirm === "resetTargets"} title="Reset targets?" body="Every muscle goes back to its default weekly target. Nothing is saved until you tap Save plan." confirm="Reset"
+        onClose={() => setConfirm(null)} onConfirm={() => setTdraft((defaultTargets as VolumeTarget[]).map((t) => ({ ...t })))} />
     </div>
   );
 }

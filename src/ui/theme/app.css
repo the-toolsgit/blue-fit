@@ -173,6 +173,8 @@ textarea.input { min-height: 84px; resize: vertical; }
 .vbar .fill.none { background: var(--faint); box-shadow: none; }
 .vbar.off { background: repeating-linear-gradient(-45deg, color-mix(in srgb, var(--faint) 55%, transparent) 0 3px, transparent 3px 7px), var(--surface-2); }
 .vrow.off > .spread { color: var(--muted); opacity: 0.75; }
+.vedit { margin-top: 10px; padding: 12px; border-radius: var(--r-md); background: var(--surface-2); border: 1px solid var(--line); animation: fadeUp .3s var(--ease) both; }
+.vrow.off .vedit { opacity: 1; }
 .status-progress { color: var(--muted); font-weight: 600; }
 @keyframes grow { from { transform: scaleX(0); } }
 .status-ok { color: var(--good); font-weight: 600; }

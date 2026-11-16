@@ -45,7 +45,7 @@ export const sessionSchema = z.object({
   })),
 });
 const targetSchema = z.object({
-  group, min: z.number().nullable(), max: z.number().nullable(), angles: str.optional(), gap: str.optional(), note: str.optional(), acceptedBelow: z.boolean().optional(),
+  group, min: z.number().nullable(), max: z.number().nullable(), angles: str.optional(), gap: str.optional(), note: str.optional(), off: z.boolean().optional(), acceptedBelow: z.boolean().optional(),
 });
 const settingsSchema = z.object({
   units: z.literal("lb"), restDefaultSec: z.number().int().min(0).max(1800), autoStartRest: z.boolean(), sound: z.boolean(), keepAwake: z.boolean(),

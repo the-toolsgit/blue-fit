@@ -109,7 +109,7 @@ Edits a **draft copy** of the routine; nothing changes until Save. The draft sur
 - Day panel: Day name; Weekday chips Mon…Sun + None (picking a weekday another day uses swaps the two days; chips owned by other days are dimmed); "n exercises · n sets · ~min"; **Delete day** (confirm: "Past workouts of this day stay in history.").
 - Exercise rows: drag handle (6 dots; drag to reorder, keyboard supported), figure, name ★, "3 × 10–12 · 2 min", ↑/↓ buttons. Superset groups show the cyan bracket and "SUPERSET A". Tap a row → **slot sheet**: Sets (1–20), Rest (step 15 s), Reps min, Reps max (max never below min), Note; Superset with next / Unlink; Swap exercise; How to do it; Remove from day; Done.
 - Empty day: "No exercises. A day without exercises is a rest day." **+ Add exercise** → picker (§3.9); new slots are 3 × 10–12 with the exercise's rest (or the default rest).
-- **Weekly volume · live** table (§3.10) recalculated on every change.
+- **Weekly volume · live** table (§3.10) recalculated on every change, listing every muscle group. Hint: "Tap a muscle to change its weekly target or mark it as not a focus." Tapping a row opens an inline panel: Min sets and Max sets steppers (max empty = no upper limit; raising min above max raises max) and a **Not a focus** switch (grayed, striped, no warnings; min/max are kept; switching it off gives a group with no minimum one equal to its planned sets). **Reset targets to defaults** (confirm) restores the default targets (currently the plan's original numbers; research-based defaults per muscle are pending). Target edits apply to every plan and are saved with Save plan; Cancel discards them.
 - Dock: "✓ n ⚠ n on target" (tap → scrolls to the table) and **Save plan**.
 - Save checks (§5.15); the first problem shows as an error toast. Saved → "Plan saved" toast, back to Plan.
 
@@ -236,7 +236,7 @@ With the seed plan this gives exactly: back 20, biceps 16.5, triceps 18, side de
 Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Sat Back & Biceps, Sun Shoulders & Traps, Mon Legs A, Tue Back & Triceps, Wed Shoulders, Traps & Arms, Thu Legs B, Fri Rest), all rests 120 s. Day ids keep their original names (mon … sun) so history stays linked.
 
 ### 4.4 Volume target
-`VolumeTarget { group, min: number | null, max: number | null, angles?, gap?, note?, acceptedBelow? }`. Seed: back 14–22, biceps 14–20, triceps 14–22, side delts 14–20, rear delts 14–20, traps 12–20, front delts 6–8, quads 10+, hamstrings 8–10 (2 leg curls × 4 sets; changed from "10+, below by choice" on Nov 16 2026 by a one-time migration)"), adductors 10+, calves 8+; chest (note "0 by plan"), glutes, rotator cuff, forearms have no target ("tracked only").
+`VolumeTarget { group, min: number | null, max: number | null, angles?, gap?, note?, off?, acceptedBelow? }` (`off` = not a focus; `acceptedBelow` is the older flag and means the same). Seed: back 14–22, biceps 14–20, triceps 14–22, side delts 14–20, rear delts 14–20, traps 12–20, front delts 6–8, quads 10+, hamstrings 8–10 (2 leg curls × 4 sets; changed from "10+, below by choice" on Nov 16 2026 by a one-time migration)"), adductors 10+, calves 8+; chest (note "0 by plan"), glutes, rotator cuff, forearms have no target ("tracked only").
 
 ### 4.5 Session (logged workout)
 `Session { id, date, title, routineId?, dayId?, startedAt, finishedAt?, status: active | finished, notes?, source: app | jefit, importKey?, deload?: boolean, entries: SessionEntry[] }`
@@ -265,7 +265,7 @@ Stored exactly as typed. Plate-loaded lifts (Smith Squat, T-Bar Row, Leg Press, 
 ### 5.2 Fractional volume (weekly sets)
 For each done set whose type is **working or failure**: for each `{group, weight}` in the exercise's `volume`, add `weight` (1 or 0.5) to that group. Warm-ups and drop sets add nothing.
 Plan volume: `Σ slot.sets × weight` over all slots of the routine. **Days** = number of routine days with at least one **direct** (weight 1) slot for that group.
-Status vs target: no target, min null or `acceptedBelow` → not a focus (off); max set and value > max → above; value ≥ min → ✓; else below, or in progress when a planned day left this training week still works the muscle (live week only).
+Status vs target: no target, min null, `off` or `acceptedBelow` → not a focus (off); max set and value > max → above; value ≥ min → ✓; else below, or in progress when a planned day left this training week still works the muscle (live week only).
 
 ### 5.3 Tonnage (volume lb)
 `Σ weight × reps` over done sets whose type is **not warm-up** (drop and failure included), using the logged number as is.

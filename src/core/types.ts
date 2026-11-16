@@ -106,7 +106,9 @@ export interface VolumeTarget {
   angles?: string;
   gap?: string;
   note?: string;
-  /** Below min is a deliberate choice: show ⚠ "by choice", not an error */
+  /** Not a focus: grayed out, no warnings. min/max are kept for when it's turned back on. */
+  off?: boolean;
+  /** Older data: below min was a deliberate choice. Treated like `off`. */
   acceptedBelow?: boolean;
 }
 
