@@ -124,7 +124,7 @@ Back and **Done** at the top (both return to the summary, replacing the editor i
 - **Look:** Theme segmented control: System · Dark · Light.
 - **Plates (pairs you have):** a stepper per plate weight (45, 35, 25, 10, 5, 2.5).
 - **Data:** "Last backup: today / yesterday / n days ago / never" (amber when 14+ days or never). Export (downloads `blue-fit-backup-YYYY-MM-DD.json`), Copy JSON (clipboard); both record the backup time. Import file, Paste JSON. Imports are validated (§7.3); a valid file shows a confirmation with its date and counts, then replaces all data. **Reset everything** (confirm) restores the seed.
-- **App:** Update app (when a new version is waiting), install instructions when not installed ("Share → Add to Home Screen"), version.
+- **App:** Update app (when a new version is waiting), otherwise Check for updates (toast "You're up to date" or "Update found"). The app also checks on launch, each time it returns to the foreground, and every 30 minutes while open, install instructions when not installed ("Share → Add to Home Screen"), version.
 
 ### 3.9 Exercise picker (sheet)
 Title (Swap exercise / Add exercise), **+ New exercise** (opens the exercise editor; the new exercise is picked right away), search (name, aliases, muscles), muscle-group filter chips, equipment filter chips; list with figure, name, ★, muscles · equipment. With a muscle filter, exercises with direct work for that muscle come first. Swap hides the current exercise. Hidden (archived) exercises never show.

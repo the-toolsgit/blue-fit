@@ -9,7 +9,8 @@ import { fmtRest } from "../format";
 import { loadSeed, useStore } from "../store";
 import { backupText, daysSince, downloadBackup, REMIND_AFTER_DAYS } from "../backup";
 
-export function SettingsScreen({ onUpdate }: { onUpdate?: () => void }) {
+export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; onCheck?: () => Promise<boolean> }) {
+  const [checking, setChecking] = useState(false);
   const { settings, saveSettings, exportAll, replaceAll, toast, routine, saveRoutine, backup, markBackup } = useStore();
   const since = daysSince(backup.lastAt);
   const [pending, setPending] = useState<Backup | null>(null);
@@ -92,7 +93,14 @@ export function SettingsScreen({ onUpdate }: { onUpdate?: () => void }) {
 
       <h2 className="section-title">App</h2>
       <div className="glass" style={{ padding: 14, display: "grid", gap: 10, fontSize: 14 }}>
-        {onUpdate && <button className="btn btn-primary btn-block" onClick={onUpdate}>Update app</button>}
+        {onUpdate
+          ? <button className="btn btn-primary btn-block" onClick={onUpdate}>Update app</button>
+          : <button className="btn btn-ghost btn-block" disabled={checking} onClick={async () => {
+              setChecking(true);
+              try { const found = await onCheck?.(); toast(found ? { kind: "info", title: "Update found", body: "Downloading. Tap Update app when it appears." } : { kind: "info", title: "You're up to date" }); }
+              catch { toast({ kind: "error", title: "Couldn't check", body: "Check your connection." }); }
+              setChecking(false);
+            }}>{checking ? "Checking…" : "Check for updates"}</button>}
         {!isStandalone() && <p className="muted"><b style={{ color: "var(--ink)" }}>Install:</b> in Safari tap Share → Add to Home Screen. It then opens full screen and works offline.</p>}
         <p className="muted">Blue Fit · version {__APP_VERSION__}</p>
       </div>

@@ -22,6 +22,14 @@ const PlanEditorScreen = lazy(() => import("./screens/PlanEditor").then((m) => (
 const EditWorkoutScreen = lazy(() => import("./screens/EditWorkout").then((m) => ({ default: m.EditWorkoutScreen })));
 const Loading = () => <div className="loading"><Figure spec={LOADING} size={120} label="Loading" /><span className="eyebrow">Loading</span></div>;
 
+let swReg: ServiceWorkerRegistration | null = null;
+/** Manual check (Settings). Resolves true if a new version was found. */
+async function checkForUpdate(): Promise<boolean> {
+  if (!swReg) return false;
+  await swReg.update();
+  return !!(swReg.waiting || swReg.installing);
+}
+
 const TABS = [
   { id: "today", label: "Today", icon: "today" },
   { id: "plan", label: "Plan", icon: "plan" },
@@ -34,7 +42,17 @@ const TAB_OF: Record<string, string> = { workout: "today", summary: "history", e
 export function App() {
   const route = useRoute();
   const { ready, settings, toast } = useStore();
-  const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW();
+  // iPhone home-screen apps resume without reloading, so check for a new version on launch, whenever the app
+  // comes back to the foreground, and every 30 minutes while open.
+  const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW({
+    onRegisteredSW(_url, reg) {
+      if (!reg) return;
+      swReg = reg;
+      const check = () => { if (navigator.onLine) reg.update().catch(() => undefined); };
+      document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") check(); });
+      setInterval(check, 30 * 60_000);
+    },
+  });
 
   useEffect(() => {
     const root = document.documentElement;
@@ -58,7 +76,7 @@ export function App() {
   else if (name === "plan-edit") screen = <PlanEditorScreen id={id} />;
   else if (name === "history") screen = <HistoryScreen />;
   else if (name === "progress") screen = <ProgressScreen />;
-  else if (name === "settings") screen = <SettingsScreen onUpdate={needRefresh ? () => updateServiceWorker(true) : undefined} />;
+  else if (name === "settings") screen = <SettingsScreen onUpdate={needRefresh ? () => updateServiceWorker(true) : undefined} onCheck={checkForUpdate} />;
   else screen = <TodayScreen />;
 
   return (
