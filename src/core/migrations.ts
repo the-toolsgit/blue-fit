@@ -26,8 +26,8 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
-    // Nov 16 2026: plainer "★ Heavy" rule card (only if it still shows an earlier app text). Re-run as "-3" for the third wording.
-    id: "2026-11-16-plain-rule-text-3",
+    // Nov 16 2026: plainer "★ Heavy" rule card (only if it still shows an earlier app text). Re-run as "-4" for the latest wording.
+    id: "2026-11-16-plain-rule-text-4",
     run(d) {
       let changed = false;
       const routines = d.routines.map((r) => !r.rules ? r : { ...r, rules: r.rules.map((x) => {
