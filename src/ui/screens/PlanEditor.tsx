@@ -196,7 +196,7 @@ export function PlanEditorScreen({ id }: { id?: string }) {
             </div>
             <div className="setting" style={{ padding: "4px 2px" }}>
               <span><span className="row" style={{ gap: 6, display: "inline-flex" }}><span style={{ color: "var(--warn)", display: "inline-flex" }}><Icon name="flame" size={16} /></span>Last set to failure</span>
-                <span className="muted" style={{ display: "block", fontSize: 12 }}>Mass gain only. Best on machine, cable and isolation moves.</span></span>
+                <span className="muted" style={{ display: "block", fontSize: 12 }}>Mass gain and endurance. Best on machine, cable and isolation moves.</span></span>
               <Switch label="Last set to failure" checked={lastSetToFailure(exMap.get(slot.exerciseId), slot)}
                 onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { toFailure: v === !!exMap.get(slot.exerciseId)?.failureLastSet ? undefined : v }))} />
             </div>

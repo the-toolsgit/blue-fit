@@ -12,8 +12,9 @@ export const FAILURE_DEFAULT = [
   "cable-one-arm-tricep-kickback",
 ] as const;
 
-/** Only the mass-gain goal uses it. No profile yet counts as mass gain (the profile's default goal). */
-export const failureApplies = (goal: Goal | undefined) => (goal ?? "growth") === "growth";
+/** Mass gain and endurance use it (endurance = getting better at working while tired). Strength and maintain don't.
+ *  No profile yet counts as mass gain (the profile's default goal). */
+export const failureApplies = (goal: Goal | undefined) => { const g = goal ?? "growth"; return g === "growth" || g === "endurance"; };
 
 /** Whether this exercise (in this plan slot) takes its last set to failure. */
 export const lastSetToFailure = (ex: Exercise | undefined, slot?: Slot) => slot?.toFailure ?? ex?.failureLastSet ?? false;

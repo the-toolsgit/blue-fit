@@ -204,6 +204,8 @@ describe("last set to failure", async () => {
     expect(lastSetToFailure(squat, { ...slot, exerciseId: squat.id, toFailure: true })).toBe(true);
     expect(failureApplies(undefined)).toBe(true);
     expect(failureApplies("strength")).toBe(false);
+    expect(failureApplies("maintenance")).toBe(false);
+    expect(failureApplies("endurance")).toBe(true);
   });
   it("migration sets the defaults once on stored exercises", async () => {
     const m = MIGRATIONS.find((x) => x.id === "2026-11-16-failure-defaults")!;
