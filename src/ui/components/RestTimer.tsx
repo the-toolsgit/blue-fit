@@ -67,10 +67,12 @@ export function RestTimerDock() {
                 <div className="mono" style={{ fontSize: 28, lineHeight: 1, color: over ? "var(--good)" : "var(--ink)" }} aria-live="off">{over ? "GO!" : fmtClock(left)}</div>
               </div>
             </button>
-            <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52 }} onClick={() => adjust(-15)} aria-label="15 seconds less">−15</button>
-            <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52 }} onClick={() => adjust(15)} aria-label="15 seconds more">+15</button>
+            {!showResume && <>
+              <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52 }} onClick={() => adjust(-15)} aria-label="15 seconds less">−15</button>
+              <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52 }} onClick={() => adjust(15)} aria-label="15 seconds more">+15</button>
+            </>}
             {showResume
-              ? <button className="icon-btn" style={{ color: "var(--neon-ink)" }} onClick={() => go("workout")} aria-label="Back to workout"><Icon name="play" /></button>
+              ? <button className="btn btn-primary" style={{ padding: "0 16px", minHeight: 46, fontSize: 15 }} onClick={() => go("workout")} aria-label="Back to workout"><Icon name="play" size={16} /> Back to workout</button>
               : <button className="icon-btn" onClick={() => setRestTimer(null)} aria-label="Skip rest"><Icon name="close" /></button>}
           </div>
         )}
@@ -96,6 +98,10 @@ export function RestTimerDock() {
               <button className="btn btn-ghost" style={{ minWidth: 84, minHeight: 56 }} onClick={() => adjust(15)}>+15 s</button>
               <button className="btn btn-primary" style={{ minWidth: 84, minHeight: 56 }} onClick={() => { setRestTimer(null); setBig(false); }}>Skip</button>
             </div>
+            <button className="btn btn-ghost" style={{ minWidth: 280, minHeight: 52, marginTop: 6 }} onClick={() => { setBig(false); if (name !== "workout") go("workout"); }}>
+              <Icon name={name === "workout" ? "back" : "play"} size={18} /> {name === "workout" ? "Back to workout" : "Go to workout"}
+            </button>
+            <p className="muted" style={{ fontSize: 12, margin: 0 }}>The timer keeps running.</p>
           </div>
         </div>
       )}
