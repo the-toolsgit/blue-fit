@@ -7,9 +7,11 @@ import { reducedMotion } from "../device";
 import { Figure } from "../components/Figure";
 import { Icon } from "../components/Icon";
 import { Dock } from "../components/Dock";
+import { DeloadBanner } from "../components/DeloadBanner";
+import { deloadActive, deloadSets, deloadSuggestion } from "../../core/deload";
 import { daysSince, downloadBackup, REMIND_AFTER_DAYS } from "../backup";
 import { ExerciseSheet } from "./ExerciseScreen";
-import { repRange } from "../format";
+import { fmtDate, repRange } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
 
@@ -27,7 +29,11 @@ export function TodayScreen() {
   const day = routine?.days.find((d) => d.weekday === wd);
   const isRest = !day || day.slots.length === 0;
   const slots = day?.slots ?? [];
-  const sets = slots.reduce((a, s) => a + s.sets, 0);
+  const today = localDate(now);
+  const deloading = deloadActive(settings, today);
+  const slotSets = (n: number) => (deloading ? deloadSets(n) : n);
+  const sets = slots.reduce((a, s) => a + slotSets(s.sets), 0);
+  const suggestion = useMemo(() => (active ? null : deloadSuggestion(finished, routine, exMap, settings, today)), [active, finished, routine, exMap, settings, today]);
 
   // Days of this week (starting on the chosen week-start day) that have a finished workout
   const doneDays = useMemo(() => {
@@ -54,11 +60,11 @@ export function TodayScreen() {
 
   const start = () => {
     if (!routine || !day) return;
-    const s = createSessionFromDay(routine, day, exMap, finished, new Date());
+    const s = createSessionFromDay(routine, day, exMap, finished, new Date(), { deload: deloading });
     saveSession(s);
     go("workout");
   };
-  const startFree = () => { saveSession(createFreeSession(new Date())); go("workout"); };
+  const startFree = () => { saveSession(createFreeSession(new Date(), { deload: deloading })); go("workout"); };
 
   return (
     <div className="page">
@@ -69,6 +75,8 @@ export function TodayScreen() {
         </div>
         <span className="eyebrow">{now.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
       </header>
+
+      {suggestion && <DeloadBanner suggestion={suggestion} today={today} />}
 
       {remind && (
         <div className="glass row" role="status" style={{ padding: "8px 8px 8px 14px", marginBottom: 12, borderRadius: 16, borderColor: "color-mix(in srgb, var(--warn) 45%, transparent)" }}>
@@ -109,6 +117,7 @@ export function TodayScreen() {
               <div className="grow">
                 <span className="eyebrow">{wd === todayWd ? "Today · " : ""}{LONG[wd]}</span>
                 <h1 className="title-xl neon-grad" style={{ marginTop: 8 }}>{day!.title}</h1>
+                {deloading && <span className="badge" style={{ marginTop: 10, marginRight: 6, color: "var(--neon-2)", borderColor: "var(--neon-2)" }}>Deload week · until {fmtDate(settings.deload!.end, { weekday: "short" })}</span>}
                 {doneToday && <span className="badge" style={{ marginTop: 10, color: "var(--good)", borderColor: "var(--good)" }}><Icon name="check" size={14} /> Done today</span>}
               </div>
               <div className="fig-stage" style={{ marginRight: -6 }}>
@@ -139,7 +148,7 @@ export function TodayScreen() {
                     <span style={{ display: "block", fontWeight: 600 }}>{ex.name} {ex.isHeavy && <span className="star">★</span>}</span>
                     <span className="muted" style={{ fontSize: 13 }}>{s.notes ?? ex.muscles.join(", ")}</span>
                   </span>
-                  <span className="mono" style={{ fontSize: 15, whiteSpace: "nowrap" }}>{s.sets} × {repRange(s.repMin, s.repMax)}</span>
+                  <span className="mono" style={{ fontSize: 15, whiteSpace: "nowrap", color: deloading ? "var(--neon-2)" : undefined }}>{slotSets(s.sets)} × {repRange(s.repMin, s.repMax)}</span>
                 </button>
               );
             })}

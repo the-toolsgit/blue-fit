@@ -37,7 +37,7 @@ const setSchema = z.object({
 export const sessionSchema = z.object({
   id: str.min(1), date: str.regex(/^\d{4}-\d{2}-\d{2}$/, "date must be YYYY-MM-DD"), title: str,
   routineId: str.optional(), dayId: str.optional(), startedAt: str, finishedAt: str.nullable().optional(),
-  status: z.enum(["active", "finished"]), notes: str.optional(), source: z.enum(["app", "jefit"]), importKey: str.optional(),
+  status: z.enum(["active", "finished"]), notes: str.optional(), source: z.enum(["app", "jefit"]), importKey: str.optional(), deload: z.boolean().optional(),
   entries: z.array(z.object({
     id: str.min(1), exerciseId: str.min(1), swappedFromId: str.optional(), slotId: str.optional(), supersetGroup: str.optional(),
     restSec: z.number().int().min(0).max(1800), repMin: z.number().int().optional(), repMax: z.number().int().optional(), notes: str.optional(),
@@ -49,7 +49,8 @@ const targetSchema = z.object({
 });
 const settingsSchema = z.object({
   units: z.literal("lb"), restDefaultSec: z.number().int().min(0).max(1800), autoStartRest: z.boolean(), sound: z.boolean(), keepAwake: z.boolean(),
-  theme: z.enum(["system", "light", "dark"]), weekStartDay: z.number().int().min(0).max(6).default(1), plates: z.array(z.object({ weight: z.number().positive(), pairs: z.number().int().min(0).max(50) })),
+  theme: z.enum(["system", "light", "dark"]), weekStartDay: z.number().int().min(0).max(6).default(1),
+  startedAt: str.optional(), deload: z.object({ start: str, end: str }).nullable().optional(), deloadDismissedAt: str.nullable().optional(), plates: z.array(z.object({ weight: z.number().positive(), pairs: z.number().int().min(0).max(50) })),
 });
 
 export const appDataSchema = z.object({

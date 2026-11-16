@@ -131,10 +131,10 @@ describe("one-time migration: week starts Saturday", () => {
   const original = shiftWeekdays(routine, 2); // the plan as it was (Mon = Back & Biceps)
   const m = MIGRATIONS.find((x) => x.id === "2026-11-16-week-starts-saturday")!;
   it("moves Monday's day to Saturday, Tuesday's to Sunday …, and sets the week start", () => {
-    const out = m.run({ ...seed, routines: [original], settings: { ...DEFAULT_SETTINGS, weekStartDay: 1 } })!;
+    const out = m.run({ ...seed, routines: [original], settings: { ...DEFAULT_SETTINGS, weekStartDay: 1 } }, "2026-11-16")!;
     const byId = Object.fromEntries(out.routines[0].days.map((d) => [d.id, d.weekday]));
     expect(byId).toEqual({ mon: 6, tue: 0, wed: 1, thu: 2, fri: 3, sat: 4, sun: 5 });
     expect(out.settings.weekStartDay).toBe(6);
   });
-  it("does nothing when already moved", () => expect(m.run(seed)).toBeNull());
+  it("does nothing when already moved", () => expect(m.run(seed, "2026-11-16")).toBeNull());
 });

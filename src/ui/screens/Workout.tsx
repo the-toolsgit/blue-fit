@@ -20,6 +20,7 @@ import { keepAwake, reducedMotion, vibrate } from "../device";
 import { fmtClock, fmtRest, fmtW, loadSuffix, repRange, setsLine } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
+import { DELOAD } from "../../core/deload";
 import { ExerciseSheet } from "./ExerciseScreen";
 
 const TYPES: SetType[] = ["working", "warmup", "drop", "failure"];
@@ -128,7 +129,7 @@ export function WorkoutScreen() {
       <header className="glass" style={{ position: "sticky", top: 0, zIndex: 20, margin: "0 -16px 14px", padding: "calc(env(safe-area-inset-top) + 10px) 16px 12px", borderRadius: "0 0 22px 22px", borderTop: 0 }}>
         <div className="spread">
           <div className="grow">
-            <div className="eyebrow" style={{ fontSize: 11 }}>{day ? "Workout" : "Free workout"} · <Elapsed s={s} /></div>
+            <div className="eyebrow" style={{ fontSize: 11 }}>{s.deload ? <span style={{ color: "var(--neon-2)" }}>Deload · </span> : null}{day ? "Workout" : "Free workout"} · <Elapsed s={s} /></div>
             <h1 className="title-md" style={{ textTransform: "uppercase", fontSize: 24, marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.title}</h1>
           </div>
           <button className="icon-btn" aria-label="Workout notes" onClick={() => setNoteFor("workout")} style={{ color: s.notes ? "var(--neon)" : undefined }}><Icon name="note" /></button>
@@ -256,7 +257,8 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const [sel, setSel] = useState<string | null>(null);
   const last = useMemo(() => lastEntryFor(finished, ex.id, s.id), [finished, ex.id, s.id]);
   const repMin = e.repMin ?? 8, repMax = e.repMax ?? repMin;
-  const hint = progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb);
+  // Deload: no progression push; a fixed reminder instead.
+  const hint = s.deload ? ({ kind: "none" } as const) : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb);
   const allDone = e.sets.length > 0 && e.sets.every((x) => x.done);
   const selected = e.sets.find((x) => x.id === sel) ?? e.sets.find((x) => !x.done) ?? null;
   const workIdx = (x: LoggedSet) => e.sets.filter((y) => y.type === "working" && e.sets.indexOf(y) <= e.sets.indexOf(x)).length;
@@ -286,9 +288,15 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
 
       {e.notes && <div style={{ fontSize: 13, marginTop: 8, padding: "6px 10px", borderRadius: 10, background: "var(--surface-2)" }}><Icon name="note" size={14} /> {e.notes}</div>}
 
-      {(last || hint.kind !== "none") && (
+      {(last || hint.kind !== "none" || s.deload) && (
         <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
           {last && <div className="mono muted" style={{ fontSize: 13 }}>Last: {setsLine(last.entry.sets)}</div>}
+          {s.deload && !allDone && (
+            <div className="row" style={{ padding: "8px 10px", borderRadius: 12, fontSize: 14, border: "1px solid color-mix(in srgb,var(--neon-2) 40%,transparent)", background: "color-mix(in srgb,var(--neon-2) 10%,transparent)" }}>
+              <span style={{ color: "var(--neon-2)" }}><Icon name="timer" size={18} /></span>
+              <span className="grow">Deload: weights are 10% lighter. Stop every set with {DELOAD.repsLeft} reps left.</span>
+            </div>
+          )}
           {hint.kind !== "none" && !allDone && (
             <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
               <span style={{ color: "var(--neon)" }}><Icon name={hint.kind === "addWeight" ? "up" : "bolt"} size={18} /></span>

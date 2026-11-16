@@ -1,4 +1,7 @@
 import { useMemo, useState } from "react";
+import { deloadActive, deloadWeek, endDeload } from "../../core/deload";
+import { localDate } from "../../core/util";
+import { DELOAD_RULE } from "../components/DeloadBanner";
 import { copyName, duplicateRoutine, routineUsed, setCurrent } from "../../core/routineEdit";
 import { Confirm, Sheet } from "../components/Sheet";
 import type { Routine } from "../../core/types";
@@ -8,14 +11,17 @@ import { MUSCLE_GROUPS } from "../../core/types";
 import { Figure } from "../components/Figure";
 import { Icon } from "../components/Icon";
 import { VolumeTable } from "../components/VolumeTable";
-import { fmtRest, repRange } from "../format";
+import { fmtDate, fmtRest, repRange } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
 
 const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export function PlanScreen() {
-  const { routine, routines, exMap, targets, sessions, saveRoutine, saveRoutines, deleteRoutine, toast } = useStore();
+  const { routine, routines, exMap, targets, sessions, saveRoutine, saveRoutines, deleteRoutine, toast, settings, saveSettings } = useStore();
+  const today = localDate(new Date());
+  const deloading = deloadActive(settings, today);
+  const [confirmDeload, setConfirmDeload] = useState(false);
   const [manage, setManage] = useState(false);
   const [del, setDel] = useState<Routine | null>(null);
   const days = (routine?.days ?? []).filter((d) => d.slots.length).sort((a, b) => ((a.weekday ?? 9) + 6) % 7 - ((b.weekday ?? 9) + 6) % 7);
@@ -39,6 +45,21 @@ export function PlanScreen() {
       </div>
       <h1 className="title-lg neon-grad" style={{ marginTop: 6 }}>{routine.name}</h1>
       <p className="muted" style={{ marginTop: 4, fontSize: 14 }}>{days.length} days · {routine.days.flatMap((d) => d.slots).length} exercises · {allSets} sets a week</p>
+
+      <section className="glass row" style={{ padding: "10px 10px 10px 14px", marginTop: 12, borderRadius: 16, borderColor: deloading ? "color-mix(in srgb, var(--neon-2) 50%, transparent)" : undefined }}>
+        <div className="grow">
+          <div style={{ font: "700 16px var(--display)", letterSpacing: ".08em", textTransform: "uppercase", color: deloading ? "var(--neon-2)" : undefined }}>
+            {deloading ? `Deload week · until ${fmtDate(settings.deload!.end, { weekday: "short" })}` : "Deload week"}
+          </div>
+          <div className="muted" style={{ fontSize: 12 }}>{DELOAD_RULE}</div>
+        </div>
+        {deloading
+          ? <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px", fontSize: 14 }} onClick={() => { saveSettings(endDeload(settings, today)); toast({ kind: "info", title: "Deload ended", body: "Back to your normal plan." }); }}>End</button>
+          : <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px", fontSize: 14 }} onClick={() => setConfirmDeload(true)}>Start</button>}
+      </section>
+      <Confirm open={confirmDeload} title="Start a deload week?" confirm="Start deload"
+        body={<>{DELOAD_RULE} It lasts until {fmtDate(deloadWeek(today, settings.weekStartDay).end, { weekday: "long" })}, then your normal plan comes back.</>}
+        onClose={() => setConfirmDeload(false)} onConfirm={() => saveSettings({ ...settings, deload: deloadWeek(today, settings.weekStartDay), deloadDismissedAt: null })} />
 
       {routine.rules?.length ? (
         <div className="chips-scroll" style={{ marginTop: 14, gap: 10 }}>

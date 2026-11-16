@@ -103,7 +103,7 @@ function Row({ s }: { s: Session }) {
         <span className="mono" style={{ fontSize: 20 }}>{Number(s.date.slice(8))}</span>
       </span>
       <span className="grow">
-        <span style={{ display: "block", fontWeight: 600 }}>{s.title}</span>
+        <span style={{ display: "block", fontWeight: 600 }}>{s.title}{s.deload && <span style={{ color: "var(--neon-2)", fontWeight: 400, fontSize: 13 }}> · Deload</span>}</span>
         <span className="muted mono" style={{ fontSize: 12 }}>{durationMin(s)} min · {s.entries.reduce((a, e) => a + e.sets.length, 0)} sets · {fmtVolume(tonnage([s]))} lb</span>
       </span>
       <Icon name="chevron" size={18} />

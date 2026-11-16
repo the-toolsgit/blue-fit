@@ -2,6 +2,7 @@
 // after every change (writes are queued so they land in order).
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { MIGRATIONS } from "../core/migrations";
+import { localDate } from "../core/util";
 import type { StorageAdapter, TableName, Tables } from "../core/storage/StorageAdapter";
 import { DEFAULT_SETTINGS, type AppData, type Exercise, type RestTimer, type Routine, type Session, type Settings } from "../core/types";
 import { IdbAdapter } from "../storage/idbAdapter";
@@ -78,7 +79,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       const doneIds = (await adapter.getMeta<string[]>("migrations")) ?? [];
       for (const m of MIGRATIONS) {
         if (doneIds.includes(m.id)) continue;
-        const next = m.run(d);
+        const next = m.run(d, localDate(new Date()));
         if (next) { await adapter.replaceAll(next); d = await adapter.exportAll(); }
         doneIds.push(m.id);
         await adapter.setMeta("migrations", doneIds);

@@ -149,6 +149,8 @@ export interface Session {
   notes?: string;
   source: "app" | "jefit";
   importKey?: string;
+  /** Logged during a deload week (lighter on purpose): skipped for pre-fill, progression hints and stall checks */
+  deload?: boolean;
   entries: SessionEntry[];
 }
 
@@ -164,6 +166,12 @@ export interface Settings {
   /** First day of the training week: 0 = Sunday … 6 = Saturday */
   weekStartDay: number;
   plates: PlateStock[];
+  /** First day using the app (YYYY-MM-DD); the deload interval counts from here when there was no deload yet */
+  startedAt?: string;
+  /** The current or most recent deload week (inclusive local dates) */
+  deload?: { start: string; end: string } | null;
+  /** Day the deload suggestion was answered "Not now" */
+  deloadDismissedAt?: string | null;
 }
 
 export const DEFAULT_SETTINGS: Settings = {

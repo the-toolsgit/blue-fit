@@ -3,14 +3,15 @@ import { progressionHint } from "./progression";
 import { prsForEntry, type PrKind } from "./records";
 import type { Exercise, LoggedSet, Routine, RoutineDay, Session, SessionEntry, Slot } from "./types";
 import { localDate, uid } from "./util";
+import { deloadSets, deloadWeight } from "./deload";
 import { countsForLoad, sessionsVolume, tonnage, type GroupTotals } from "./volume";
 
 const byNewest = (a: Session, b: Session) => (b.startedAt > a.startedAt ? 1 : b.startedAt < a.startedAt ? -1 : 0);
 
-/** Most recent finished session that has done sets of this exercise. */
+/** Most recent finished, non-deload session that has done sets of this exercise (deload weeks are lighter on purpose). */
 export function lastEntryFor(history: Session[], exerciseId: string, excludeSessionId?: string): { session: Session; entry: SessionEntry } | null {
   for (const s of [...history].sort(byNewest)) {
-    if (s.id === excludeSessionId || s.status !== "finished") continue;
+    if (s.id === excludeSessionId || s.status !== "finished" || s.deload) continue;
     const entry = s.entries.find((e) => e.exerciseId === exerciseId && e.sets.some((x) => x.done));
     if (entry) return { session: s, entry };
   }
@@ -19,13 +20,18 @@ export function lastEntryFor(history: Session[], exerciseId: string, excludeSess
 
 const newSet = (weight: number | null, reps: number | null, type: LoggedSet["type"] = "working"): LoggedSet => ({ id: uid(), type, weight, reps, done: false, completedAt: null });
 
-/** Build an entry, pre-filled with last session's weights and reps (working sets, by position). */
-export function buildEntry(ex: Exercise, history: Session[], opts: { sets?: number; repMin?: number; repMax?: number; restSec?: number; slot?: Slot } = {}): SessionEntry {
+/**
+ * Build an entry, pre-filled with last session's weights and reps (working sets, by position).
+ * Deload: half the slot's sets (rounded up) and weights 10% lighter.
+ */
+export function buildEntry(ex: Exercise, history: Session[], opts: { sets?: number; repMin?: number; repMax?: number; restSec?: number; slot?: Slot; deload?: boolean } = {}): SessionEntry {
   const last = lastEntryFor(history, ex.id);
   const lastWork = last?.entry.sets.filter((x) => x.done && x.type !== "warmup" && x.type !== "drop") ?? [];
-  const n = opts.slot?.sets ?? opts.sets ?? (lastWork.length || 3);
+  const planned = opts.slot?.sets ?? opts.sets ?? (lastWork.length || 3);
+  const n = opts.deload ? deloadSets(planned) : planned;
   const top = lastWork.length ? lastWork[lastWork.length - 1] : undefined;
-  const sets = Array.from({ length: n }, (_, i) => newSet(lastWork[i]?.weight ?? top?.weight ?? null, lastWork[i]?.reps ?? top?.reps ?? null));
+  const w = (v: number | null | undefined) => (v == null ? null : opts.deload ? deloadWeight(v, ex.incrementLb) : v);
+  const sets = Array.from({ length: n }, (_, i) => newSet(w(lastWork[i]?.weight ?? top?.weight), lastWork[i]?.reps ?? top?.reps ?? null));
   return {
     id: uid(),
     exerciseId: ex.id,
@@ -38,16 +44,16 @@ export function buildEntry(ex: Exercise, history: Session[], opts: { sets?: numb
   };
 }
 
-export function createSessionFromDay(routine: Routine, day: RoutineDay, exercises: Map<string, Exercise>, history: Session[], now: Date): Session {
+export function createSessionFromDay(routine: Routine, day: RoutineDay, exercises: Map<string, Exercise>, history: Session[], now: Date, opts: { deload?: boolean } = {}): Session {
   const entries = day.slots.flatMap((slot) => {
     const ex = exercises.get(slot.exerciseId);
-    return ex ? [buildEntry(ex, history, { slot })] : [];
+    return ex ? [buildEntry(ex, history, { slot, deload: opts.deload })] : [];
   });
-  return { id: uid(), date: localDate(now), title: day.title, routineId: routine.id, dayId: day.id, startedAt: now.toISOString(), finishedAt: null, status: "active", source: "app", entries };
+  return { id: uid(), date: localDate(now), title: day.title, routineId: routine.id, dayId: day.id, startedAt: now.toISOString(), finishedAt: null, status: "active", source: "app", entries, ...(opts.deload ? { deload: true } : {}) };
 }
 
-export function createFreeSession(now: Date): Session {
-  return { id: uid(), date: localDate(now), title: "Free workout", startedAt: now.toISOString(), finishedAt: null, status: "active", source: "app", entries: [] };
+export function createFreeSession(now: Date, opts: { deload?: boolean } = {}): Session {
+  return { id: uid(), date: localDate(now), title: "Free workout", startedAt: now.toISOString(), finishedAt: null, status: "active", source: "app", entries: [], ...(opts.deload ? { deload: true } : {}) };
 }
 
 const mapEntry = (s: Session, entryId: string, f: (e: SessionEntry) => SessionEntry): Session => ({ ...s, entries: s.entries.map((e) => (e.id === entryId ? f(e) : e)) });
