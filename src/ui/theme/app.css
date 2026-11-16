@@ -104,8 +104,13 @@ ul { margin: 0; padding-left: 18px; }
 :root[data-compact] .tabbar { padding: 4px 6px; }
 :root[data-compact] .tab { gap: 0; }
 :root[data-compact] .tab span { opacity: 0; max-height: 0; }
+.tab svg { width: 24px; height: 24px; }
+:root[data-compact] .tab { align-content: center; }
+:root[data-compact] .tab svg { width: 20px; height: 20px; }
+:root[data-compact] .tab[aria-current="page"] svg { transform: none; }
+:root[data-compact] .tab[aria-current="page"]::after { top: auto; bottom: 2px; width: 14px; height: 2.5px; }
 .tab { position: relative; display: grid; place-items: center; gap: 2px; border-radius: 16px; color: var(--muted); font: 600 10.5px var(--body); letter-spacing: 0.04em; transition: color 0.25s; }
-.tab svg { transition: transform 0.3s var(--ease), filter 0.3s; }
+.tab svg { transition: transform 0.3s var(--ease), filter 0.3s, width 0.32s var(--ease), height 0.32s var(--ease); }
 .tab[aria-current="page"] { color: var(--neon-ink); }
 .tab[aria-current="page"] svg { transform: translateY(-1px) scale(1.08); filter: drop-shadow(0 0 6px var(--glow)); }
 .tab[aria-current="page"]::after { content: ""; position: absolute; top: 1px; width: 18px; height: 3px; border-radius: 3px; background: var(--neon); box-shadow: 0 0 10px var(--glow); animation: tabDot 0.35s var(--ease); }
