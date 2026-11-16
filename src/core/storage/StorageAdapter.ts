@@ -17,7 +17,7 @@ export const TABLE_KEYS: { [T in TableName]: keyof Tables[T] } = {
 
 export interface StorageAdapter {
   /** Open the store. Seeds it with `seed()` when empty. */
-  init(seed: () => AppData): Promise<void>;
+  init(seed: () => AppData | Promise<AppData>): Promise<void>;
   all<T extends TableName>(table: T): Promise<Tables[T][]>;
   put<T extends TableName>(table: T, row: Tables[T]): Promise<void>;
   putMany<T extends TableName>(table: T, rows: Tables[T][]): Promise<void>;

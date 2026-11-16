@@ -16,7 +16,7 @@ import { ExercisePicker } from "../components/ExercisePicker";
 import { Figure } from "../components/Figure";
 import { Icon } from "../components/Icon";
 import { Confirm, Sheet } from "../components/Sheet";
-import { keepAwake, vibrate } from "../device";
+import { keepAwake, reducedMotion, vibrate } from "../device";
 import { fmtClock, fmtRest, fmtW, loadSuffix, repRange, setsLine } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
@@ -82,7 +82,7 @@ export function WorkoutScreen() {
 
   const scrollTo = (id: string | null) => {
     if (!id) return;
-    setTimeout(() => refs.current.get(id)?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+    setTimeout(() => refs.current.get(id)?.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" }), 60);
   };
 
   const onToggle = (e: SessionEntry, x: LoggedSet) => {
@@ -331,8 +331,8 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               </div>
               {isSel && !x.done && (
                 <div style={{ padding: "4px 10px 12px", display: "grid", gap: 10, animation: "pageIn .3s var(--ease) both" }} onClick={(ev) => ev.stopPropagation()}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 8 }}>
-                    <Stepper label="Weight" suffix={ex.loadMode === "perSide" ? "lb per side" : ex.loadMode === "perHand" ? "lb per hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />
+                  <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 8, alignItems: "end" }}>
+                    <Stepper label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />
                     <Stepper label="Reps" value={x.reps} step={1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
                   </div>
                   {ex.loadMode === "perSide" && x.weight != null && x.weight > 0 && <Plates weight={x.weight} stock={settings.plates} />}

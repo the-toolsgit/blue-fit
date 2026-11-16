@@ -1,22 +1,26 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
 import { LOADING } from "../core/figure/poses";
 import { Figure } from "./components/Figure";
 import { Icon } from "./components/Icon";
 import { RestTimerDock } from "./components/RestTimer";
 import { Toasts } from "./components/Toasts";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { go, useRoute } from "./router";
 import { useStore } from "./store";
-import { EditWorkoutScreen } from "./screens/EditWorkout";
 import { ExerciseScreen } from "./screens/ExerciseScreen";
 import { HistoryScreen } from "./screens/History";
 import { PlanScreen } from "./screens/Plan";
-import { PlanEditorScreen } from "./screens/PlanEditor";
-import { ProgressScreen } from "./screens/Progress";
 import { SettingsScreen } from "./screens/Settings";
 import { SummaryScreen } from "./screens/Summary";
 import { TodayScreen } from "./screens/Today";
 import { WorkoutScreen } from "./screens/Workout";
+
+// Heavier screens (charts, drag and drop) load on first visit.
+const ProgressScreen = lazy(() => import("./screens/Progress").then((m) => ({ default: m.ProgressScreen })));
+const PlanEditorScreen = lazy(() => import("./screens/PlanEditor").then((m) => ({ default: m.PlanEditorScreen })));
+const EditWorkoutScreen = lazy(() => import("./screens/EditWorkout").then((m) => ({ default: m.EditWorkoutScreen })));
+const Loading = () => <div className="loading"><Figure spec={LOADING} size={120} label="Loading" /><span className="eyebrow">Loading</span></div>;
 
 const TABS = [
   { id: "today", label: "Today", icon: "today" },
@@ -45,9 +49,7 @@ export function App() {
   const [name, id] = route;
   const tab = TAB_OF[name] ?? name;
   let screen;
-  if (!ready) screen = (
-    <div className="loading"><Figure spec={LOADING} size={120} label="Loading" /><span className="eyebrow">Loading</span></div>
-  );
+  if (!ready) screen = <Loading />;
   else if (name === "workout") screen = <WorkoutScreen />;
   else if (name === "exercise") screen = <ExerciseScreen id={id} />;
   else if (name === "summary") screen = <SummaryScreen id={id} />;
@@ -62,7 +64,7 @@ export function App() {
   return (
     <div className="app">
       <div className="bg-fx" />
-      <div key={route.join("/")}>{screen}</div>
+      <div key={route.join("/")}><ErrorBoundary resetKey={route.join("/")}><Suspense fallback={<Loading />}>{screen}</Suspense></ErrorBoundary></div>
       {ready && <RestTimerDock />}
       <nav className="tabbar glass" aria-label="Main">
         {TABS.map((t) => (

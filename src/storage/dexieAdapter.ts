@@ -1,4 +1,5 @@
-// IndexedDB implementation of StorageAdapter (via Dexie). The only file that knows about Dexie.
+// Legacy: the IndexedDB adapter used by versions up to Phase 3 (via Dexie). The app now uses IdbAdapter;
+// this stays only so tests can prove IdbAdapter opens data written by older versions.
 import Dexie, { type Table } from "dexie";
 import { DEFAULT_SETTINGS, type AppData, type Exercise, type JefitAlias, type Routine, type Session, type Settings, type VolumeTarget } from "../core/types";
 import type { StorageAdapter, TableName, Tables } from "../core/storage/StorageAdapter";
@@ -31,11 +32,11 @@ export class DexieAdapter implements StorageAdapter {
 
   private table<T extends TableName>(t: T) { return this.db[t] as unknown as Table<Tables[T], string>; }
 
-  async init(seed: () => AppData) {
+  async init(seed: () => AppData | Promise<AppData>) {
     await this.db.open();
     // Ask the browser not to evict our data under storage pressure.
     try { await navigator.storage?.persist?.(); } catch { /* not supported */ }
-    if ((await this.db.exercises.count()) === 0) await this.replaceAll(seed());
+    if ((await this.db.exercises.count()) === 0) await this.replaceAll(await seed());
   }
   async all<T extends TableName>(t: T) { return this.table(t).toArray(); }
   async put<T extends TableName>(t: T, row: Tables[T]) { await this.table(t).put(row); }

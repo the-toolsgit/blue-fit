@@ -19,6 +19,7 @@ import { Confirm, Sheet } from "../components/Sheet";
 import { VolumeTable } from "../components/VolumeTable";
 import { fmtRest, repRange } from "../format";
 import { replace } from "../router";
+import { reducedMotion } from "../device";
 import { useStore } from "../store";
 import { ExerciseSheet } from "./ExerciseScreen";
 
@@ -162,7 +163,7 @@ export function PlanEditorScreen({ id }: { id?: string }) {
 
       <Dock>
         <div className="glass row" style={{ padding: 8, borderRadius: 20 }}>
-          <button className="row grow" style={{ padding: "0 8px", minHeight: 44 }} onClick={() => document.getElementById("live-volume")?.scrollIntoView({ behavior: "smooth" })} aria-label="Jump to weekly volume">
+          <button className="row grow" style={{ padding: "0 8px", minHeight: 44 }} onClick={() => document.getElementById("live-volume")?.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth" })} aria-label="Jump to weekly volume">
             <span className="status-ok mono">✓ {ok}</span>
             <span className={warn ? "status-warn mono" : "muted mono"}>⚠ {warn}</span>
             <span className="muted" style={{ fontSize: 12 }}>on target</span>

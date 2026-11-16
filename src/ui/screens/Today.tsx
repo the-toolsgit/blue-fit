@@ -7,6 +7,7 @@ import { reducedMotion } from "../device";
 import { Figure } from "../components/Figure";
 import { Icon } from "../components/Icon";
 import { Dock } from "../components/Dock";
+import { daysSince, downloadBackup, REMIND_AFTER_DAYS } from "../backup";
 import { ExerciseSheet } from "./ExerciseScreen";
 import { repRange } from "../format";
 import { go } from "../router";
@@ -15,7 +16,9 @@ import { useStore } from "../store";
 const LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export function TodayScreen() {
-  const { routine, exMap, finished, active, saveSession, settings } = useStore();
+  const { routine, exMap, finished, active, saveSession, settings, backup, markBackup, snoozeBackup, exportAll, toast } = useStore();
+  const since = daysSince(backup.lastAt);
+  const remind = finished.length > 0 && (since == null || since >= REMIND_AFTER_DAYS) && !(backup.snoozedUntil && backup.snoozedUntil > new Date().toISOString());
   const sd = settings.weekStartDay;
   const now = new Date();
   const todayWd = now.getDay();
@@ -66,6 +69,15 @@ export function TodayScreen() {
         </div>
         <span className="eyebrow">{now.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
       </header>
+
+      {remind && (
+        <div className="glass row" role="status" style={{ padding: "8px 8px 8px 14px", marginBottom: 12, borderRadius: 16, borderColor: "color-mix(in srgb, var(--warn) 45%, transparent)" }}>
+          <span style={{ color: "var(--warn)" }}><Icon name="download" size={20} /></span>
+          <span className="grow" style={{ fontSize: 13 }}>{since == null ? "You haven't backed up your workouts yet." : `Last backup ${since} days ago.`}</span>
+          <button className="btn btn-ghost" style={{ minHeight: 38, padding: "0 12px", fontSize: 14 }} onClick={async () => { await downloadBackup(await exportAll()); markBackup(); toast({ kind: "info", title: "Backup exported" }); }}>Back up</button>
+          <button className="icon-btn" aria-label="Remind me in a week" onClick={() => snoozeBackup(7)}><Icon name="close" size={18} /></button>
+        </div>
+      )}
 
       <div className="glass" style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", padding: 6, gap: 4, borderRadius: 18 }} role="tablist" aria-label="Day of the week">
         {weekOrder(1).map((d) => {

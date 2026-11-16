@@ -1,16 +1,17 @@
 import { useRef, useState } from "react";
-import { buildBackup, parseBackup, type Backup } from "../../core/io/exportFormat";
-import { buildSeed } from "../../core/seed";
-import { localDate, weekOrder } from "../../core/util";
+import type { Backup } from "../../core/io/exportFormat";
+import { weekOrder } from "../../core/util";
 import { Seg, Stepper, Switch } from "../components/Controls";
 import { Icon } from "../components/Icon";
 import { Confirm, Sheet } from "../components/Sheet";
 import { isStandalone } from "../device";
 import { fmtRest } from "../format";
-import { useStore } from "../store";
+import { loadSeed, useStore } from "../store";
+import { backupText, daysSince, downloadBackup, REMIND_AFTER_DAYS } from "../backup";
 
 export function SettingsScreen({ onUpdate }: { onUpdate?: () => void }) {
-  const { settings, saveSettings, exportAll, replaceAll, toast, routine, saveRoutine } = useStore();
+  const { settings, saveSettings, exportAll, replaceAll, toast, routine, saveRoutine, backup, markBackup } = useStore();
+  const since = daysSince(backup.lastAt);
   const [pending, setPending] = useState<Backup | null>(null);
   const [pasteOpen, setPasteOpen] = useState(false);
   const [paste, setPaste] = useState("");
@@ -19,21 +20,19 @@ export function SettingsScreen({ onUpdate }: { onUpdate?: () => void }) {
   const file = useRef<HTMLInputElement>(null);
   const set = <K extends keyof typeof settings>(k: K, v: (typeof settings)[K]) => saveSettings({ ...settings, [k]: v });
 
-  const backupText = async () => JSON.stringify(buildBackup(await exportAll(), new Date()), null, 1);
+  // The backup format (with its validator) loads only when needed.
+  const io = () => import("../../core/io/exportFormat");
   const doExport = async () => {
-    const blob = new Blob([await backupText()], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = Object.assign(document.createElement("a"), { href: url, download: `blue-fit-backup-${localDate(new Date())}.json` });
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    await downloadBackup(await exportAll());
+    markBackup();
     toast({ kind: "info", title: "Backup exported" });
   };
   const doCopy = async () => {
-    try { await navigator.clipboard.writeText(await backupText()); toast({ kind: "info", title: "Backup copied", body: "Paste it into Notes or Files to keep it." }); }
+    try { await navigator.clipboard.writeText(await backupText(await exportAll())); markBackup(); toast({ kind: "info", title: "Backup copied", body: "Paste it into Notes or Files to keep it." }); }
     catch { toast({ kind: "error", title: "Couldn't copy", body: "Use Export instead." }); }
   };
-  const check = (text: string) => {
-    const r = parseBackup(text);
+  const check = async (text: string) => {
+    const r = (await io()).parseBackup(text);
     if (!r.ok) { toast({ kind: "error", title: "Import refused", body: r.error }); return; }
     setPending(r.backup);
   };
@@ -48,7 +47,7 @@ export function SettingsScreen({ onUpdate }: { onUpdate?: () => void }) {
         <div className="setting" style={{ display: "block", paddingTop: 12 }}>
           <Stepper label="Default rest" suffix={fmtRest(settings.restDefaultSec)} value={settings.restDefaultSec} step={15} decimals={false} min={0}
             onChange={(v) => set("restDefaultSec", v ?? 120)} />
-          <button className="btn btn-quiet" style={{ marginTop: 6, fontSize: 13, minHeight: 36, padding: 0 }} onClick={() => setApplyRest(true)}>Apply to every exercise in the plan</button>
+          <button className="btn btn-quiet" style={{ marginTop: 2, fontSize: 13, minHeight: 44, padding: 0 }} onClick={() => setApplyRest(true)}>Apply to every exercise in the plan</button>
         </div>
         <div className="setting"><span>Start rest timer when a set is done</span><Switch label="Auto-start rest" checked={settings.autoStartRest} onChange={(v) => set("autoStartRest", v)} /></div>
         <div className="setting"><span>Sound when rest is over</span><Switch label="Sound" checked={settings.sound} onChange={(v) => set("sound", v)} /></div>
@@ -80,7 +79,7 @@ export function SettingsScreen({ onUpdate }: { onUpdate?: () => void }) {
 
       <h2 className="section-title">Data</h2>
       <div className="glass" style={{ padding: 14 }} >
-        <p className="muted" style={{ fontSize: 13, marginBottom: 12 }}>Everything is stored on this phone only. Export a backup now and then.</p>
+        <p className="muted" style={{ fontSize: 13, marginBottom: 12 }}>Everything is stored on this phone only. Last backup: <b style={{ color: since == null || since >= REMIND_AFTER_DAYS ? "var(--warn)" : "var(--ink)" }}>{since == null ? "never" : since === 0 ? "today" : since === 1 ? "yesterday" : `${since} days ago`}</b>.</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
           <button className="btn btn-primary" onClick={doExport}><Icon name="download" size={18} /> Export</button>
           <button className="btn btn-ghost" onClick={doCopy}><Icon name="copy" size={18} /> Copy JSON</button>
@@ -110,7 +109,7 @@ export function SettingsScreen({ onUpdate }: { onUpdate?: () => void }) {
         confirm="Replace" danger onClose={() => setPending(null)}
         onConfirm={async () => { if (pending) { await replaceAll(pending.data); toast({ kind: "info", title: "Backup imported" }); } }} />
       <Confirm open={reset} title="Reset everything?" body="Deletes all workouts, edits and settings, and reloads the original plan. Export a backup first. This can't be undone." confirm="Reset" danger
-        onClose={() => setReset(false)} onConfirm={async () => { await replaceAll(buildSeed()); toast({ kind: "info", title: "Reset done" }); }} />
+        onClose={() => setReset(false)} onConfirm={async () => { await replaceAll(await loadSeed()); toast({ kind: "info", title: "Reset done" }); }} />
       <Confirm open={applyRest} title={`Set rest to ${fmtRest(settings.restDefaultSec)} everywhere?`} body={`Every exercise in ${routine?.name ?? "the plan"} gets this rest time.`} confirm="Apply"
         onClose={() => setApplyRest(false)} onConfirm={() => routine && saveRoutine({ ...routine, days: routine.days.map((d) => ({ ...d, slots: d.slots.map((s) => ({ ...s, restSec: settings.restDefaultSec })) })) })} />
     </div>

@@ -10,7 +10,7 @@ export class MemoryAdapter implements StorageAdapter {
   private meta = new Map<string, unknown>();
   private clone = <V>(v: V): V => structuredClone(v);
 
-  async init(seed: () => AppData) { if (this.t.exercises.size === 0) await this.replaceAll(seed()); }
+  async init(seed: () => AppData | Promise<AppData>) { if (this.t.exercises.size === 0) await this.replaceAll(await seed()); }
   async all<T extends TableName>(table: T) { return [...this.t[table].values()].map(this.clone) as Tables[T][]; }
   async put<T extends TableName>(table: T, row: Tables[T]) { (this.t[table] as Map<string, Tables[T]>).set(String(row[TABLE_KEYS[table]]), this.clone(row)); }
   async putMany<T extends TableName>(table: T, rows: Tables[T][]) { for (const r of rows) await this.put(table, r); }

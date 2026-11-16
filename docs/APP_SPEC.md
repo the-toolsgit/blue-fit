@@ -2,7 +2,7 @@
 
 Platform-neutral description of the whole app. A Swift or Android developer should be able to rebuild Blue Fit from this document without reading the web code. Kept current with every behavior or design change.
 
-Spec version: 0.4 (Phase 3: plan editor). Backup format version: 1.
+Spec version: 1.0 (Phase 5: polish). Build phases: 1 logger ✓ · 2 history & charts ✓ · 3 plan editor ✓ · 4 Jefit import (skipped) · 5 polish ✓. Backup format version: 1.
 
 ---
 
@@ -49,6 +49,7 @@ Page change animation: the new page fades in and rises 14 px (0.42 s, ease-out `
 Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose), label "LOADING". Storage error: toast "Storage unavailable. This browser blocked local storage. Private mode can cause this."
 
 ### 3.2 Today
+- **Backup reminder** (top, only when there are finished workouts and the last backup is 14+ days old or never, and not snoozed): amber-edged glass row "You haven't backed up your workouts yet." / "Last backup n days ago.", **Back up** (downloads the backup file right away) and × (remind again in 7 days).
 - **Header:** small static FLEX figure + "BLUE FIT" in neon, today's date (e.g. "NOV 14").
 - **Week strip:** 7 buttons Mon→Sun (always calendar order). Today's weekday is preselected. The selected day is a neon gradient pill; today's day (if not selected) is neon text. A green glowing dot marks days of the current training week (§4.6) with a finished workout for that routine day.
 - **Training day card:** eyebrow "TODAY · MONDAY" (or just the weekday when previewing another day); day title huge in neon gradient (e.g. "BACK & BICEPS"); "✓ Done today" badge if a finished session today has this day. A large animated figure cycles through the day's exercises, one per 3.2 s animation loop, with the exercise name under it. Three stat tiles: exercises · sets · ~minutes (time estimate §5.8).
@@ -118,7 +119,7 @@ Back and **Done** at the top (both return to the summary, replacing the editor i
 - **Training week starts on:** 7 chips Mon…Sun (default Sat). Only drives the numbers: streak, "this week", history grouping by week, weekly charts and ranges. Every screen still shows days Mon→Sun (week strip, calendar, plan, streak pills).
 - **Look:** Theme segmented control: System · Dark · Light.
 - **Plates (pairs you have):** a stepper per plate weight (45, 35, 25, 10, 5, 2.5).
-- **Data:** Export (downloads `blue-fit-backup-YYYY-MM-DD.json`), Copy JSON (clipboard), Import file, Paste JSON. Imports are validated (§7.3); a valid file shows a confirmation with its date and counts, then replaces all data. **Reset everything** (confirm) restores the seed.
+- **Data:** "Last backup: today / yesterday / n days ago / never" (amber when 14+ days or never). Export (downloads `blue-fit-backup-YYYY-MM-DD.json`), Copy JSON (clipboard); both record the backup time. Import file, Paste JSON. Imports are validated (§7.3); a valid file shows a confirmation with its date and counts, then replaces all data. **Reset everything** (confirm) restores the seed.
 - **App:** Update app (when a new version is waiting), install instructions when not installed ("Share → Add to Home Screen"), version.
 
 ### 3.9 Exercise picker (sheet)
@@ -147,6 +148,9 @@ Segmented Est. 1RM · Best set · Volume. Est. 1RM: line chart, one point per se
 
 ### 3.14 Charts (component)
 Width-fitting SVG (320-unit wide coordinate space). Line: neon→cyan gradient stroke 2.4 with glow, area fill fading down, small dots (hidden above 24 points), the selected point larger and cyan; dashed grid at min/mid/max with mono labels; first and last labels on the x axis; draws itself in over 1.1 s. Bars: neon→cyan gradient, 62 % opacity except the selected or latest bar (full, glowing); grow from the bottom with an 18 ms stagger. Both: optional green target band; a readout line above ("Week of Nov 9 · 18 sets"); tap or drag to select a point (vertical guide line on line charts).
+
+### 3.11.1 Crash recovery
+If a screen fails, it's replaced (not the tab bar) by: REST figure, "SOMETHING WENT WRONG", "This screen hit an error. Your workouts are stored safely on this phone. Save a backup to be sure, then go back.", **Save a backup** (reads storage directly and downloads the backup file; shows "Backup downloaded." or the reason it failed), Go to Today, Reload the app, and the error message in small mono text. Navigating to another screen clears it.
 
 ### 3.12 Toasts
 Top of screen, auto-dismiss (3.2 s; PR 4.2 s), tap to dismiss. Kinds: info (bolt icon), PR (pink border and glow, flexing pink figure with 10 sparks), error (red border).
@@ -326,18 +330,20 @@ Neon, built from the blue line man: deep-space background with blue/cyan haze an
 | ink / muted / faint | #EAF2FF / #8494B4 / #4A5878 | #0A1430 / #52618A / #9AA8C6 | text |
 | fig | #4FA6FF | #1F6BFF | figure body |
 | fig2 | #2B5AA6 | #9DBCF6 | figure equipment, floor |
-| neon / neon-2 | #3D9BFF / #23E2FF | #1F6BFF / #00A3D4 | primary, gradients |
+| neon / neon-2 | #3D9BFF / #23E2FF | #1559D6 / #0078A0 | primary, gradients |
 | glow / glow-soft | rgba(61,155,255,.55/.18) | rgba(31,107,255,.32/.10) | shadows |
-| pink | #FF3FA8 | #E0187F | PRs, celebration |
-| good / warn / bad | #3DFFB0 / #FFC53D / #FF4D6A | #0B9E62 / #B7791F / #D6334F | status |
-| star | #FFC53D | #C98A12 | ★ heavy |
+| pink | #FF3FA8 | #C41470 | PRs, celebration |
+| good / warn / bad | #3DFFB0 / #FFC53D / #FF4D6A | #08794B / #8F5C0E / #C42A46 | status |
+| star | #FFC53D | #8F6206 | ★ heavy |
 | on-neon | #02101F | #FFFFFF | text on neon fills |
+
+Text colors meet WCAG AA (4.5:1) on their backgrounds in both themes, except `faint` (placeholders and decorative only).
 
 ### 6.3 Type
 Display: Barlow Condensed 600/700, uppercase, letter-spacing .02–.16 em (XL 46/0.92, LG 32, MD 22). Body: IBM Plex Sans 400/600, 15/1.5. Numbers: IBM Plex Mono 500, tabular. Eyebrow: 12 px, 600, .16 em, uppercase, muted.
 
 ### 6.4 Spacing, shape, motion
-Spacing 4/8/12/16/24/32. Radii 10/16/22 (cards 22, sheets 26 top). Minimum tap target 44 px; primary buttons 54–62 px. Ease `cubic-bezier(.22,1,.36,1)`. Motion: page enter 0.42 s; sheet slide-up 0.42 s; dock items rise 0.4 s; button press scale .96; Start button glow pulse 2.4 s; done toggle fills green with glow; bars grow from 0 in 0.9 s; summary numbers count up 1 s; PR toast drops in with 10 sparks. **Reduced motion:** all animation off, figures show the end position (pose B).
+Spacing 4/8/12/16/24/32. Radii 10/16/22 (cards 22, sheets 26 top). Minimum tap target 44 px (chips and switches are drawn smaller but have an invisible 44 px hit area); primary buttons 54–62 px. Layouts work down to 320 px wide with no sideways scrolling; the calendar's day cells shrink to fit. Ease `cubic-bezier(.22,1,.36,1)`. Motion: page enter 0.42 s; sheet slide-up 0.42 s; dock items rise 0.4 s; button press scale .96; Start button glow pulse 2.4 s; done toggle fills green with glow; bars grow from 0 in 0.9 s; summary numbers count up 1 s; PR toast drops in with 10 sparks. **Reduced motion:** all animation off, figures show the end position (pose B).
 
 ### 6.5 Components
 Glass card (with gradient hairline edge), primary button (neon→cyan gradient, dark text, glow), ghost button, quiet button, danger button, chip (selected = neon fill), badge (primary/secondary/star/pink), stepper (− value +, 52 px tall, typeable), switch, segmented control, bottom sheet (grip, backdrop blur), confirm sheet, toast, list row, volume bar with target band, progress ring (rest timer), tab bar (floating glass, active icon glows with a neon bar on top), line and bar charts (§3.14), heat-map calendar (§3.7), streak card, muscle map (§8.6).
@@ -352,6 +358,11 @@ The FLEX pose (front double-biceps) drawn by the figure engine at progress 1, st
 
 ### 7.1 Interface (`StorageAdapter`)
 `init(seed)`, `all(table)`, `put(table, row)`, `putMany(table, rows)`, `remove(table, key)`, `getSettings()`, `saveSettings(s)`, `getMeta(key)`, `setMeta(key, value)`, `exportAll()`, `replaceAll(data)` (one transaction). Tables and keys: exercises.id, routines.id, sessions.id, targets.group, jefitAliases.jefitName. Screens never touch the database directly.
+
+### 7.1.1 Web implementation
+Raw IndexedDB (no library), database `blue-fit`, IndexedDB version 10, object stores exercises (keyPath id, index name), routines (id), sessions (id, indexes date, status, importKey), targets (group), jefitAliases (jefitName), kv (key; holds `settings` and `meta:*`). Versions up to Phase 3 wrote the same database through the Dexie library (which records schema 1 as version 10); a test proves the current adapter opens that data unchanged.
+
+Meta keys: `restTimer`, `migrations` (done migration ids), `lastBackupAt`, `backupSnoozedUntil`.
 
 ### 7.2 Write-through
 The UI updates its in-memory snapshot immediately, then queues the write; writes run in order. A failed write shows "Couldn't save" with advice to export a backup. The browser is asked for persistent storage.
@@ -404,6 +415,7 @@ Regions (right side, mirrored unless noted; ellipse = cx, cy, rx, ry, rotation°
 Mirrored ellipses negate the rotation. Region fill opacity: empty 0.05; value k → 0.14 + 0.7k; recovery: fresh 0.16, others 0.75. Selected region: white-ish stroke, fill ≥ 0.5. Fill changes animate over 0.6 s.
 
 ## 9. Offline, install, deploy
+- Loading: the app shell, Today, logger, plan view, history and settings load at start (about 100 KB of compressed JavaScript); Progress, the plan editor, the workout editor, exercise charts, the seed data (first launch/reset only) and the backup format/validator load on first use, showing the LOADING figure meanwhile. Everything is precached, so this works offline too.
 - PWA: manifest (standalone, portrait, theme #05070D), service worker precaches all app files (latin font subsets only); works with no network after the first visit. Update flow: "Update ready" toast and Settings → Update app.
 - iPhone: install from Safari via Share → Add to Home Screen. Web limits: no vibration; no alert while the screen is locked (the app keeps the screen on during workouts instead).
 - Hosting: GitHub Pages project site at `/blue-fit/`; GitHub Actions builds, tests and deploys on every push to `main`.

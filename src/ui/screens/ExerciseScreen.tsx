@@ -5,8 +5,8 @@ import { EQUIPMENT_LABEL, muscleLabel, type Exercise } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { Figure } from "../components/Figure";
 import { ExerciseEditor } from "../components/ExerciseEditor";
-import { useState } from "react";
-import { ExerciseProgress } from "../components/ExerciseProgress";
+import { lazy, Suspense, useState } from "react";
+const ExerciseProgress = lazy(() => import("../components/ExerciseProgress").then((m) => ({ default: m.ExerciseProgress })));
 import { Icon } from "../components/Icon";
 import { Sheet } from "../components/Sheet";
 import { fmtDate, fmtRest, fmtVolume, loadSuffix, setsLine } from "../format";
@@ -82,7 +82,7 @@ function ExerciseHistory({ ex }: { ex: Exercise }) {
   return (
     <div>
       <h4 className="section-title" style={{ margin: "4px 0 8px" }}>Progress</h4>
-      <div className="glass" style={{ padding: 14 }}><ExerciseProgress ex={ex} /></div>
+      <div className="glass" style={{ padding: 14, minHeight: 230 }}><Suspense fallback={null}><ExerciseProgress ex={ex} /></Suspense></div>
       <h4 className="section-title" style={{ margin: "16px 0 8px" }}>History · {rows.length}</h4>
       <div className="glass" style={{ padding: 4 }}>
         {rows.slice(0, 40).map(({ s, e }) => (

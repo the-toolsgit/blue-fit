@@ -1,11 +1,10 @@
 // App state: an in-memory snapshot of storage, updated optimistically and written through
 // after every change (writes are queued so they land in order).
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { buildSeed } from "../core/seed";
 import { MIGRATIONS } from "../core/migrations";
 import type { StorageAdapter, TableName, Tables } from "../core/storage/StorageAdapter";
-import type { AppData, Exercise, RestTimer, Routine, Session, Settings } from "../core/types";
-import { DexieAdapter } from "../storage/dexieAdapter";
+import { DEFAULT_SETTINGS, type AppData, type Exercise, type RestTimer, type Routine, type Session, type Settings } from "../core/types";
+import { IdbAdapter } from "../storage/idbAdapter";
 
 export type Toast = { id: number; kind: "info" | "pr" | "error"; title: string; body?: string };
 
@@ -29,6 +28,10 @@ interface Store extends AppData {
   exportAll(): Promise<AppData>;
   toast(t: Omit<Toast, "id">): void;
   toasts: Toast[];
+  /** ISO time of the last export/copy, and until when the reminder is snoozed */
+  backup: { lastAt: string | null; snoozedUntil: string | null };
+  markBackup(): void;
+  snoozeBackup(days: number): void;
   dismissToast(id: number): void;
 }
 
@@ -39,14 +42,17 @@ export const useStore = () => {
   return s;
 };
 
-const adapter: StorageAdapter = new DexieAdapter();
-const EMPTY: AppData = { exercises: [], routines: [], sessions: [], targets: [], jefitAliases: [], settings: buildSeed().settings };
+const adapter: StorageAdapter = new IdbAdapter();
+const EMPTY: AppData = { exercises: [], routines: [], sessions: [], targets: [], jefitAliases: [], settings: DEFAULT_SETTINGS };
+// The seed (plan + exercise library) is only needed on first launch and reset, so it loads on demand.
+export const loadSeed = async () => (await import("../core/seed")).buildSeed();
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<AppData>(EMPTY);
   const [ready, setReady] = useState(false);
   const [restTimer, setTimerState] = useState<RestTimer | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [backup, setBackup] = useState<{ lastAt: string | null; snoozedUntil: string | null }>({ lastAt: null, snoozedUntil: null });
   const queue = useRef<Promise<unknown>>(Promise.resolve());
   const toastId = useRef(0);
 
@@ -66,7 +72,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     (async () => {
-      await adapter.init(buildSeed);
+      await adapter.init(loadSeed);
       let d = await adapter.exportAll();
       // One-time migrations (each runs once; ids remembered in meta)
       const doneIds = (await adapter.getMeta<string[]>("migrations")) ?? [];
@@ -78,6 +84,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         await adapter.setMeta("migrations", doneIds);
       }
       const t = await adapter.getMeta<RestTimer>("restTimer");
+      setBackup({ lastAt: (await adapter.getMeta<string>("lastBackupAt")) ?? null, snoozedUntil: (await adapter.getMeta<string>("backupSnoozedUntil")) ?? null });
       setData(d);
       if (t && t.endsAt > Date.now() - 60_000) setTimerState(t);
       setReady(true);
@@ -110,6 +117,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       restTimer,
       toasts,
       toast,
+      backup,
+      markBackup: () => { const at = new Date().toISOString(); setBackup((b) => ({ ...b, lastAt: at })); write(() => adapter.setMeta("lastBackupAt", at)); },
+      snoozeBackup: (days) => { const until = new Date(Date.now() + days * 86_400_000).toISOString(); setBackup((b) => ({ ...b, snoozedUntil: until })); write(() => adapter.setMeta("backupSnoozedUntil", until)); },
       dismissToast,
       saveSession: (s) => putRow("sessions", s, "id"),
       saveExercise: (e) => putRow("exercises", e, "id"),
@@ -146,7 +156,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return adapter.exportAll();
       },
     };
-  }, [data, ready, restTimer, toasts, toast, dismissToast, putRow, write]);
+  }, [data, ready, restTimer, toasts, toast, dismissToast, putRow, write, backup]);
 
   return <Ctx.Provider value={store}>{children}</Ctx.Provider>;
 }
