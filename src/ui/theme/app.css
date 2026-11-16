@@ -274,3 +274,7 @@ textarea.input { min-height: 84px; resize: vertical; }
 :root[data-theme="light"] .swatch[data-a="orange"] { --sw: #ff5c00; --sw2: #ff8a3d; }
 :root[data-theme="light"] .swatch[data-a="green"] { --sw: #0bda51; --sw2: #4be887; }
 :root[data-theme="light"] .swatch[data-a="brown"] { --sw: #b07a45; --sw2: #c99662; }
+
+/* Plan tab: exercise rows can be pressed and held to move */
+.day-row { position: relative; border-radius: 14px; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.day-row.dragging { z-index: 5; background: var(--surface-solid); box-shadow: 0 0 0 1px var(--neon), 0 16px 40px -10px var(--glow); }
