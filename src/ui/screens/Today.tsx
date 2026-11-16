@@ -156,7 +156,7 @@ export function TodayScreen() {
         </>
       )}
 
-      <button className="btn btn-quiet btn-block" style={{ marginTop: 14 }} onClick={startFree}><Icon name="plus" size={18} /> Free workout</button>
+      {!active && <button className="btn btn-quiet btn-block" style={{ marginTop: 14 }} onClick={startFree}><Icon name="plus" size={18} /> Free workout</button>}
 
       {!active && !isRest && (
         <Dock>

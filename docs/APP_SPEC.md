@@ -60,7 +60,7 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 - **Week strip:** 7 buttons Mon→Sun (always calendar order). Today's weekday is preselected. The selected day is a neon gradient pill; today's day (if not selected) is neon text. A green glowing dot marks days of the current training week (§4.6) with a finished workout for that routine day.
 - **Training day card:** eyebrow "TODAY · MONDAY" (or just the weekday when previewing another day); day title huge in neon gradient (e.g. "BACK & BICEPS"); "✓ Done today" badge if a finished session today has this day. A large animated figure cycles through the day's exercises, one per 3.2 s animation loop, with the exercise name under it. Three stat tiles: exercises · sets · ~minutes (time estimate §5.8).
 - **Exercises list:** number, small static figure, name, ★ if heavy, the slot note (or primary muscles), "sets × reps". Tap opens the exercise detail sheet.
-- **Free workout** text button: starts an empty session titled "Free workout".
+- **Free workout** text button: starts an empty session titled "Free workout", for training outside the plan. Hidden while a workout is running.
 - **Dock:** "▶ START WORKOUT" (pulsing glow) or "START WEDNESDAY" when previewing another day. Hidden when a workout is active (the dock then shows Resume).
 - **Rest day state** (no day, or a day without exercises; Friday in the seed plan): REST figure sitting on a bench, breathing slowly; "REST DAY"; "Walk if you like, but keep it easy."; hint to pick a day above or start a free workout.
 
