@@ -3,7 +3,7 @@ import { Resvg } from "@resvg/resvg-js";
 import { writeFileSync } from "node:fs";
 import { poseFrame } from "../src/core/figure/engine";
 import { frameToSvg } from "../src/core/figure/svg";
-import { FLEX, LOADING, REST } from "../src/core/figure/poses";
+import { FLEX, FLEX_PUMP, LOADING, REST } from "../src/core/figure/poses";
 import exercises from "../src/core/seed/exercises.json";
 import type { FigureSpec } from "../src/core/types";
 
@@ -11,7 +11,7 @@ const out = process.argv[2] ?? "poses.png";
 const which = process.argv[3];
 const list: [string, FigureSpec][] = which === "all"
   ? exercises.map((e) => [e.name, e.figure as unknown as FigureSpec])
-  : [["FLEX", FLEX], ["REST", REST], ["LOADING", LOADING]];
+  : [["FLEX", FLEX], ["FLEX_PUMP", FLEX_PUMP], ["REST", REST], ["LOADING", LOADING]];
 const cols = which === "all" ? 6 : 3, W = 180;
 const rows = Math.ceil(list.length / cols);
 let body = "";

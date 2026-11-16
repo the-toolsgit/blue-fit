@@ -1,30 +1,43 @@
-// Launch splash: the line man (FLEX pose) above "BLUE FIT"; then we zoom into his head and the app
-// appears inside the circle. Mounted once per app launch (returning from the background doesn't remount it).
+// Launch splash: the line man (FLEX pose) above "BLUE FIT" flexes twice (1 s), then we zoom into his head
+// and the app appears inside the circle. Mounted once per app launch (returning from the background doesn't remount it).
 import { useEffect, useRef, useState } from "react";
-import { FLEX } from "../../core/figure/poses";
+import { FLEX, FLEX_PUMP } from "../../core/figure/poses";
+import { frameToSvg } from "../../core/figure/svg";
 import { poseFrame } from "../../core/figure/engine";
 import { reducedMotion } from "../device";
-import { Figure } from "./Figure";
 
 const FIG_W = 150; // px
-const INTRO_MS = 380, HOLD_MS = 260, ZOOM_MS = 720;
+const INTRO_MS = 380, FLEX_MS = 1000, ZOOM_MS = 720;
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 export function Splash({ onDone }: { onDone: () => void }) {
   const overlay = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const word = useRef<HTMLDivElement>(null);
-  const figBox = useRef<HTMLDivElement>(null);
   const [fade, setFade] = useState(false);
+  const fig = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
+    if (fig.current) fig.current.innerHTML = frameToSvg(poseFrame(FLEX_PUMP, 0));
     if (reducedMotion()) {
       const a = setTimeout(() => setFade(true), 350), b = setTimeout(onDone, 650);
       return () => { clearTimeout(a); clearTimeout(b); };
     }
     let raf = 0;
+    // Two quick flexes (biceps squeeze up and back), ending in the logo pose.
+    const flexStart = setTimeout(() => {
+      const t0 = performance.now();
+      const pump = (now: number) => {
+        const t = Math.min(1, (now - t0) / FLEX_MS);
+        if (fig.current) fig.current.innerHTML = frameToSvg(poseFrame(FLEX_PUMP, Math.pow(Math.sin(Math.PI * 2 * t), 2)));
+        if (t < 1) raf = requestAnimationFrame(pump);
+      };
+      raf = requestAnimationFrame(pump);
+    }, INTRO_MS);
     const start = setTimeout(() => {
-      const ov = overlay.current, st = stage.current, box = figBox.current?.querySelector("svg");
+      cancelAnimationFrame(raf);
+      if (fig.current) fig.current.innerHTML = frameToSvg(poseFrame(FLEX_PUMP, 0));
+      const ov = overlay.current, st = stage.current, box = fig.current;
       if (!ov || !st || !box) return onDone();
       // Measure the final resting position: settle the intro animation first (else the zoom drifts off the head).
       st.getAnimations?.({ subtree: true }).forEach((a) => a.finish());
@@ -50,15 +63,15 @@ export function Splash({ onDone }: { onDone: () => void }) {
         else onDone();
       };
       raf = requestAnimationFrame(tick);
-    }, INTRO_MS + HOLD_MS);
-    return () => { clearTimeout(start); cancelAnimationFrame(raf); };
+    }, INTRO_MS + FLEX_MS);
+    return () => { clearTimeout(flexStart); clearTimeout(start); cancelAnimationFrame(raf); };
   }, [onDone]);
 
   return (
     <div ref={overlay} className="splash" aria-hidden="true" style={fade ? { opacity: 0, transition: "opacity .3s ease" } : undefined}>
       <div className="bg-fx" style={{ position: "absolute" }} />
       <div ref={stage} className="splash-stage">
-        <div ref={figBox} className="splash-fig"><Figure spec={FLEX} size={FIG_W} still k={1} /></div>
+        <div className="splash-fig"><svg ref={fig} className="fig" viewBox="0 -24 120 131" width={FIG_W} height={(FIG_W * 131) / 120} /></div>
         <div ref={word} className="splash-word neon">BLUE FIT</div>
       </div>
     </div>
