@@ -274,9 +274,10 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   return (
     <article className="glass edge" onClick={onFocus}
       style={{ padding: 14, borderRadius: 22, transition: "box-shadow .35s, border-color .35s, opacity .35s",
-        borderColor: focused ? "color-mix(in srgb, var(--neon) 55%, transparent)" : undefined,
-        boxShadow: focused ? "0 0 0 1px color-mix(in srgb,var(--neon) 30%,transparent), 0 18px 50px -20px var(--glow)" : undefined,
-        opacity: allDone && !focused ? 0.78 : 1 }}>
+        // All sets done: green line around the card
+        borderColor: allDone ? "var(--good)" : focused ? "color-mix(in srgb, var(--neon) 55%, transparent)" : undefined,
+        boxShadow: allDone ? "0 0 0 1px var(--good), 0 0 22px -8px var(--good)" : focused ? "0 0 0 1px color-mix(in srgb,var(--neon) 30%,transparent), 0 18px 50px -20px var(--glow)" : undefined,
+        opacity: allDone && !focused ? 0.9 : 1 }}>
       <div className="row" style={{ alignItems: "flex-start", gap: 10 }}>
         <span className="mono" style={{ width: 26, height: 26, flex: "none", display: "grid", placeItems: "center", borderRadius: 8, fontSize: 13, marginTop: 2,
           background: allDone ? "var(--good)" : focused ? "var(--neon)" : "var(--surface-2)", color: allDone || focused ? "var(--on-neon)" : "var(--muted)", boxShadow: allDone ? "0 0 12px var(--good)" : focused ? "0 0 12px var(--glow)" : "none", transition: "all .3s" }}>

@@ -67,7 +67,7 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 ### 3.3 Workout logger
 - **Sticky header:** "WORKOUT · m:ss" (elapsed, live), the session title, notes button (neon when notes exist), **Finish** button, a neon progress bar of done/total sets, and "n/N sets".
 - **Exercise cards** in order. The current exercise (focus) has a neon border and glow and an animated figure; others are slightly dimmed when complete and show a still figure.
-  - Number badge (neon when focused, green ✓ when all sets done).
+  - Number badge (neon when focused, green ✓ when all sets done). When all sets are done the whole card gets a green outline with a soft green glow (slightly dimmed when not focused).
   - Name (tap → exercise detail sheet) with ★ if heavy; "sets × rep range · rest 2 min"; "swapped from X" if swapped.
   - Note (if any).
   - **Last:** "Last: 170 × 10, 10, 9" from the most recent finished session with this exercise (§5.6).
