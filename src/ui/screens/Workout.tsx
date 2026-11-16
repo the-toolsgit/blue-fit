@@ -88,6 +88,7 @@ export function WorkoutScreen() {
 
   const onToggle = (e: SessionEntry, x: LoggedSet) => {
     const ex = exMap.get(e.exerciseId)!;
+    if (!x.done && needsValues(x, ex)) return toast({ kind: "error", title: needsValues(x, ex)! });
     const next = toggleDone(s, e.id, x.id, new Date());
     commit(next);
     if (x.done) return; // undo
@@ -334,7 +335,12 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   {fmtW(x.weight)}<span style={{ fontSize: 12 }}>{x.weight != null ? loadSuffix(ex) : ""}</span> <span style={{ opacity: 0.6 }}>×</span> {x.reps ?? "—"}
                 </button>
                 <button aria-label={x.done ? "Mark not done" : "Mark done"} aria-pressed={x.done}
-                  onClick={(ev) => { ev.stopPropagation(); setSel(null); onToggle(x); }}
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    // Can't be done without weight and reps: open the set instead (if it's the next one)
+                    if (!x.done && needsValues(x, ex)) { onFocus(); if (!locked) setSel(x.id); onToggle(x); return; }
+                    setSel(null); onToggle(x);
+                  }}
                   style={{ width: 48, height: 40, borderRadius: 12, display: "grid", placeItems: "center", transition: "all .25s var(--ease)",
                     background: x.done ? "var(--good)" : "transparent", color: x.done ? "var(--on-neon)" : "var(--muted)",
                     border: `1.5px solid ${x.done ? "var(--good)" : "var(--line-strong)"}`, boxShadow: x.done ? "0 0 16px -2px var(--good)" : "none",
@@ -349,7 +355,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                     <Stepper label="Reps" value={x.reps} step={1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
                   </div>
                   {(ex.loadMode === "perSide" || ex.singleSleeve) && x.weight != null && x.weight > 0 && <Plates weight={x.weight} single={ex.singleSleeve} />}
-                  <button className="btn btn-primary btn-xl" style={{ minHeight: 56 }} onClick={() => { setSel(null); onToggle(x); }}>
+                  <button className="btn btn-primary btn-xl" style={{ minHeight: 56 }} onClick={() => { if (!needsValues(x, ex)) setSel(null); onToggle(x); }}>
                     <Icon name="check" size={22} stroke={2.6} /> Done{e.sets.indexOf(x) === e.sets.length - 1 ? "" : ` · set ${e.sets.indexOf(x) + 1}`}
                   </button>
                   <button className="btn btn-quiet" style={{ minHeight: 36, fontSize: 13 }} onClick={() => commit(removeSet(s, e.id, x.id))}><Icon name="trash" size={16} /> Remove this set</button>
@@ -364,6 +370,12 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
       </button>
     </article>
   );
+}
+
+/** Why a set can't be marked done yet, or null when it can: reps always, weight unless it's a bodyweight exercise. */
+function needsValues(x: LoggedSet, ex: Exercise): string | null {
+  const noW = ex.equipment !== "bodyweight" && (x.weight == null || x.weight <= 0), noR = x.reps == null || x.reps <= 0;
+  return noW && noR ? "Enter weight and reps first" : noW ? "Enter the weight first" : noR ? "Enter the reps first" : null;
 }
 
 /** Plates to load, drawn as plates (front view, sized by weight) with a count. Standard gym plates, unlimited. */
