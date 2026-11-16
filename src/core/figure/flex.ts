@@ -5,7 +5,7 @@ import type { FigureFrame, Pt } from "./engine";
  * Quadratic curves [start, control, end] over each upper arm (front view lines 1 = right arm, 3 = left arm:
  * [shoulder, elbow, hand]). k = 0 → flat (no bump), 1 → full bump of `height` units, peaking toward the head side (up).
  */
-export function bicepBumps(frame: FigureFrame, k: number, height = 5): [Pt, Pt, Pt][] {
+export function bicepBumps(frame: FigureFrame, k: number, height = 2.5): [Pt, Pt, Pt][] {
   return [frame.main[1], frame.main[3]].filter(Boolean).map((arm) => {
     const [sh, el] = arm;
     const at = (t: number): Pt => [sh[0] + (el[0] - sh[0]) * t, sh[1] + (el[1] - sh[1]) * t];
