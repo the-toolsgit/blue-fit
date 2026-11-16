@@ -33,8 +33,8 @@ export interface Streak { current: number; best: number; thisWeek: WeekStatus; w
  * of workouts without a routine day (free or imported workouts) that aren't already counted.
  * A week is complete when days logged ≥ planned training days.
  */
-export function weekStatus(sessions: Session[], ws: string, planned: number): WeekStatus {
-  const inWeek = sessions.filter((s) => s.status === "finished" && weekStart(s.date) === ws);
+export function weekStatus(sessions: Session[], ws: string, planned: number, startDay = 1): WeekStatus {
+  const inWeek = sessions.filter((s) => s.status === "finished" && weekStart(s.date, startDay) === ws);
   const dayIds = new Set(inWeek.filter((s) => s.dayId).map((s) => s.dayId));
   const datesWithDay = new Set(inWeek.filter((s) => s.dayId).map((s) => s.date));
   const otherDates = new Set(inWeek.filter((s) => !s.dayId && !datesWithDay.has(s.date)).map((s) => s.date));
@@ -43,18 +43,18 @@ export function weekStatus(sessions: Session[], ws: string, planned: number): We
 }
 
 /**
- * Streak = consecutive complete weeks (Mon–Sun) up to now. The current week only adds
+ * Streak = consecutive complete weeks (starting on startDay) up to now. The current week only adds
  * once complete; while it's in progress it doesn't break the streak.
  */
-export function weeklyStreak(sessions: Session[], routine: Routine | undefined, today: string): Streak {
+export function weeklyStreak(sessions: Session[], routine: Routine | undefined, today: string, startDay = 1): Streak {
   const planned = plannedDays(routine);
   const finished = sessions.filter((s) => s.status === "finished");
-  const thisWs = weekStart(today);
-  const thisWeek = weekStatus(finished, thisWs, planned);
+  const thisWs = weekStart(today, startDay);
+  const thisWeek = weekStatus(finished, thisWs, planned, startDay);
   if (!finished.length) return { current: 0, best: 0, thisWeek, weeks: [] };
-  const first = weekStart(finished.reduce((a, s) => (s.date < a ? s.date : a), finished[0].date));
+  const first = weekStart(finished.reduce((a, s) => (s.date < a ? s.date : a), finished[0].date), startDay);
   const weeks: WeekStatus[] = [];
-  for (let w = first; w <= thisWs; w = addDays(w, 7)) weeks.push(w === thisWs ? thisWeek : weekStatus(finished, w, planned));
+  for (let w = first; w <= thisWs; w = addDays(w, 7)) weeks.push(w === thisWs ? thisWeek : weekStatus(finished, w, planned, startDay));
   let best = 0, run = 0;
   for (const w of weeks) { run = w.complete ? run + 1 : 0; best = Math.max(best, run); }
   let current = 0;

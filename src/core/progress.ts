@@ -8,9 +8,9 @@ import { countsForLoad, countsForVolume, sessionsVolume, tonnage, type GroupTota
 export type Range = "4w" | "12w" | "6m" | "all";
 export const RANGE_LABEL: Record<Range, string> = { "4w": "4 wk", "12w": "12 wk", "6m": "6 mo", all: "All" };
 
-/** First local date included in a range (Monday of the first week). null = all time. */
-export function rangeStart(range: Range, today: string): string | null {
-  const ws = weekStart(today);
+/** First local date included in a range (first day of the first week). null = all time. */
+export function rangeStart(range: Range, today: string, startDay = 1): string | null {
+  const ws = weekStart(today, startDay);
   if (range === "4w") return addDays(ws, -7 * 3);
   if (range === "12w") return addDays(ws, -7 * 11);
   if (range === "6m") return addDays(ws, -7 * 25);
@@ -39,13 +39,13 @@ export function exerciseSeries(sessions: Session[], exerciseId: string): Exercis
 
 export interface WeekTotals { weekStart: string; tonnage: number; sets: GroupTotals; workouts: number }
 
-/** Weekly totals (Mon–Sun) from `from` (or the first workout) through the current week. Empty weeks included. */
-export function weeklyTotals(sessions: Session[], exMap: Map<string, Exercise>, from: string | null, today: string): WeekTotals[] {
+/** Weekly totals (weeks begin on startDay) from `from` (or the first workout) through the current week. Empty weeks included. */
+export function weeklyTotals(sessions: Session[], exMap: Map<string, Exercise>, from: string | null, today: string, startDay = 1): WeekTotals[] {
   const list = inRange(sessions, from);
-  const first = from ? weekStart(from) : list.length ? weekStart(list.reduce((a, s) => (s.date < a ? s.date : a), list[0].date)) : weekStart(today);
+  const first = from ? weekStart(from, startDay) : list.length ? weekStart(list.reduce((a, s) => (s.date < a ? s.date : a), list[0].date), startDay) : weekStart(today, startDay);
   const out: WeekTotals[] = [];
-  for (let w = first; w <= weekStart(today); w = addDays(w, 7)) {
-    const wk = list.filter((s) => weekStart(s.date) === w);
+  for (let w = first; w <= weekStart(today, startDay); w = addDays(w, 7)) {
+    const wk = list.filter((s) => weekStart(s.date, startDay) === w);
     out.push({ weekStart: w, tonnage: tonnage(wk), sets: sessionsVolume(wk, exMap), workouts: wk.length });
   }
   return out;

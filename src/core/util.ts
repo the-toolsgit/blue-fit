@@ -8,8 +8,10 @@ const pad = (n: number) => String(n).padStart(2, "0");
 /** Local calendar date YYYY-MM-DD */
 export const localDate = (d: Date): string => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 export const parseLocalDate = (s: string): Date => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
-/** Monday-based week start (local) as YYYY-MM-DD */
-export const weekStart = (s: string): string => { const d = parseLocalDate(s); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return localDate(d); };
+/** First day of the week containing date s (local YYYY-MM-DD). startDay: 0 = Sunday … 6 = Saturday (default Monday). */
+export const weekStart = (s: string, startDay = 1): string => { const d = parseLocalDate(s); d.setDate(d.getDate() - ((d.getDay() - startDay + 7) % 7)); return localDate(d); };
+/** Weekdays in week order starting at startDay, e.g. 6 → [6, 0, 1, 2, 3, 4, 5] */
+export const weekOrder = (startDay = 1): number[] => Array.from({ length: 7 }, (_, i) => (startDay + i) % 7);
 export const round1 = (n: number) => Math.round(n * 10) / 10;
 export const fmtNum = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(1).replace(/\.0$/, ""));
 /** Add days to a local YYYY-MM-DD date */

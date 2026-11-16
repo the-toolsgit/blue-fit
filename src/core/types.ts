@@ -161,6 +161,8 @@ export interface Settings {
   sound: boolean;
   keepAwake: boolean;
   theme: "system" | "light" | "dark";
+  /** First day of the training week: 0 = Sunday … 6 = Saturday */
+  weekStartDay: number;
   plates: PlateStock[];
 }
 
@@ -171,6 +173,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sound: true,
   keepAwake: true,
   theme: "system",
+  weekStartDay: 6,
   plates: [
     { weight: 45, pairs: 8 }, { weight: 35, pairs: 2 }, { weight: 25, pairs: 4 },
     { weight: 10, pairs: 4 }, { weight: 5, pairs: 4 }, { weight: 2.5, pairs: 2 },

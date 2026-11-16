@@ -65,7 +65,8 @@ const NOTES = {
   Fri: ["side delts stretched", "side delts + upper traps", "chest on row-machine pad, arms straight · mid traps", "rear delts", "long head", "brachialis"],
   Sat: ["feet low, not deep (less glute)", "hamstrings stretched", "", "lower calf (soleus)", "", "triceps short position"],
 };
-const WEEKDAY = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+// The plan page lists Mon–Sun; since Nov 16 2026 the week starts on Saturday, so each day moves two weekdays earlier.
+const WEEKDAY = { Mon: 6, Tue: 0, Wed: 1, Thu: 2, Fri: 3, Sat: 4, Sun: 5 };
 
 const exercises = new Map();
 const days = [];

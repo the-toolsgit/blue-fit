@@ -4,6 +4,9 @@ import { dailyLoad, setSessionDate, setSessionDuration, weeklyStreak } from "./h
 import { averageSets, exerciseSeries, muscleFrequency, rangeStart, weeklyTotals } from "./progress";
 import { recoveryStatus } from "./recovery";
 import type { LoggedSet, Session } from "./types";
+import { weekOrder, weekStart } from "./util";
+import { MIGRATIONS, shiftWeekdays } from "./migrations";
+import { DEFAULT_SETTINGS } from "./types";
 
 const seed = buildSeed();
 const exMap = new Map(seed.exercises.map((e) => [e.id, e]));
@@ -102,4 +105,36 @@ describe("recovery", () => {
     expect(r.adductors.sets72).toBe(3);
     expect(r.hamstrings.status).toBe("fresh");
   });
+});
+
+describe("week start day", () => {
+  it("weekStart honours the start day", () => {
+    expect(weekStart("2026-11-16")).toBe("2026-11-16"); // Monday
+    expect(weekStart("2026-11-16", 6)).toBe("2026-11-14"); // Saturday
+    expect(weekStart("2026-11-14", 6)).toBe("2026-11-14");
+    expect(weekStart("2026-11-20", 6)).toBe("2026-11-14"); // Friday belongs to the week that began Saturday
+    expect(weekStart("2026-11-21", 6)).toBe("2026-11-21");
+    expect(weekStart("2026-11-16", 0)).toBe("2026-11-15");
+    expect(weekOrder(6)).toEqual([6, 0, 1, 2, 3, 4, 5]);
+  });
+  it("streak and weekly totals use it", () => {
+    // Sat Nov 14 – Thu Nov 19 = one full Saturday-start week
+    const s = DAYS.map((d, i) => sess(`2026-11-${14 + i}`, "barbell-shrug", [set(100, 10)], d));
+    expect(weeklyStreak(s, routine, "2026-11-20", 6).current).toBe(1);
+    expect(weeklyStreak(s, routine, "2026-11-20", 1).current).toBe(0); // split across two Monday weeks
+    const w = weeklyTotals(s, exMap, rangeStart("4w", "2026-11-20", 6), "2026-11-20", 6);
+    expect(w[w.length - 1]).toMatchObject({ weekStart: "2026-11-14", workouts: 6 });
+  });
+});
+
+describe("one-time migration: week starts Saturday", () => {
+  const original = shiftWeekdays(routine, 2); // the plan as it was (Mon = Back & Biceps)
+  const m = MIGRATIONS.find((x) => x.id === "2026-11-16-week-starts-saturday")!;
+  it("moves Monday's day to Saturday, Tuesday's to Sunday …, and sets the week start", () => {
+    const out = m.run({ ...seed, routines: [original], settings: { ...DEFAULT_SETTINGS, weekStartDay: 1 } })!;
+    const byId = Object.fromEntries(out.routines[0].days.map((d) => [d.id, d.weekday]));
+    expect(byId).toEqual({ mon: 6, tue: 0, wed: 1, thu: 2, fri: 3, sat: 4, sun: 5 });
+    expect(out.settings.weekStartDay).toBe(6);
+  });
+  it("does nothing when already moved", () => expect(m.run(seed)).toBeNull());
 });

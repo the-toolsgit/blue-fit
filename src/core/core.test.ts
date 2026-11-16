@@ -119,9 +119,12 @@ describe("progression hint", () => {
 
 describe("session logic", () => {
   const mon = routine.days.find((d) => d.id === "mon")!;
-  it("today's day; Sunday is rest", () => {
-    expect(dayForDate(routine, new Date(2026, 10, 16))!.id).toBe("mon");
-    expect(dayForDate(routine, new Date(2026, 10, 15))).toBeNull();
+  it("today's day: the week starts Saturday with Back & Biceps; Friday is rest", () => {
+    expect(dayForDate(routine, new Date(2026, 10, 14))!.title).toBe("Back & Biceps"); // Saturday
+    expect(dayForDate(routine, new Date(2026, 10, 15))!.title).toBe("Shoulders & Traps"); // Sunday
+    expect(dayForDate(routine, new Date(2026, 10, 16))!.title).toBe("Legs A"); // Monday
+    expect(dayForDate(routine, new Date(2026, 10, 19))!.title).toBe("Legs B"); // Thursday
+    expect(dayForDate(routine, new Date(2026, 10, 20))).toBeNull(); // Friday
   });
   it("pre-fills from last session", () => {
     const hist = [sess("a", "2026-11-09", "t-bar-reverse-row", [set(90, 12), set(90, 11), set(90, 10)])];

@@ -3,7 +3,7 @@ import { FLEX } from "../../core/figure/poses";
 import { dailyLoad, plannedDays, weeklyStreak } from "../../core/history";
 import { durationMin } from "../../core/session";
 import { tonnage } from "../../core/volume";
-import { addDays, localDate, parseLocalDate, weekStart } from "../../core/util";
+import { addDays, localDate, parseLocalDate, weekOrder, weekStart } from "../../core/util";
 import { Figure } from "../components/Figure";
 import { Icon } from "../components/Icon";
 import { fmtDate, fmtVolume } from "../format";
@@ -11,15 +11,16 @@ import { go } from "../router";
 import { useStore } from "../store";
 import type { Session } from "../../core/types";
 
-const WD = ["M", "T", "W", "T", "F", "S", "S"];
+const WD = ["S", "M", "T", "W", "T", "F", "S"];
 
 function StreakCard() {
-  const { finished, routine } = useStore();
+  const { finished, routine, settings } = useStore();
+  const sd = settings.weekStartDay;
   const today = localDate(new Date());
-  const st = useMemo(() => weeklyStreak(finished, routine, today), [finished, routine, today]);
+  const st = useMemo(() => weeklyStreak(finished, routine, today, sd), [finished, routine, today, sd]);
   const planned = plannedDays(routine);
-  const doneDayIds = new Set(finished.filter((s) => weekStart(s.date) === weekStart(today)).map((s) => s.dayId));
-  const days = (routine?.days ?? []).filter((d) => d.weekday != null && d.slots.length).sort((a, b) => ((a.weekday! + 6) % 7) - ((b.weekday! + 6) % 7));
+  const doneDayIds = new Set(finished.filter((s) => weekStart(s.date, sd) === weekStart(today, sd)).map((s) => s.dayId));
+  const days = (routine?.days ?? []).filter((d) => d.weekday != null && d.slots.length).sort((a, b) => ((a.weekday! - sd + 7) % 7) - ((b.weekday! - sd + 7) % 7));
   const hot = st.current > 0;
   return (
     <section className="glass edge" style={{ padding: 16, display: "grid", gridTemplateColumns: "auto 1fr", gap: 16, alignItems: "center" }}>
@@ -51,12 +52,13 @@ function StreakCard() {
 }
 
 function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => void }) {
-  const { finished } = useStore();
+  const { finished, settings } = useStore();
+  const sd = settings.weekStartDay;
   const today = localDate(new Date());
   const [month, setMonth] = useState(today.slice(0, 7) + "-01");
   const load = useMemo(() => dailyLoad(finished), [finished]);
   const max = Math.max(12, ...[...load.values()].map((d) => d.sets));
-  const first = weekStart(month);
+  const first = weekStart(month, sd);
   const cells = Array.from({ length: 42 }, (_, i) => addDays(first, i));
   const rows = cells[35].slice(0, 7) === month.slice(0, 7) ? 6 : 5;
   const shift = (n: number) => { const d = parseLocalDate(month); d.setMonth(d.getMonth() + n); setMonth(localDate(d).slice(0, 7) + "-01"); };
@@ -72,7 +74,7 @@ function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => v
         <button className="icon-btn" onClick={() => shift(1)} aria-label="Next month" disabled={month.slice(0, 7) >= today.slice(0, 7)} style={{ opacity: month.slice(0, 7) >= today.slice(0, 7) ? 0.3 : 1 }}><Icon name="chevron" /></button>
       </div>
       <div className="cal">
-        {WD.map((d, i) => <div key={i} className="cal-h">{d}</div>)}
+        {weekOrder(sd).map((d) => <div key={d} className="cal-h">{WD[d]}</div>)}
         {cells.slice(0, rows * 7).map((c) => {
           const l = load.get(c);
           const k = l ? Math.min(1, 0.25 + 0.75 * (l.sets / max)) : 0;
@@ -111,11 +113,12 @@ function Row({ s }: { s: Session }) {
 }
 
 export function HistoryScreen() {
-  const { finished } = useStore();
+  const { finished, settings } = useStore();
+  const sd = settings.weekStartDay;
   const [picked, setPicked] = useState<string | null>(null);
-  const thisWeek = weekStart(localDate(new Date()));
+  const thisWeek = weekStart(localDate(new Date()), sd);
   const groups = new Map<string, Session[]>();
-  for (const s of finished) { const w = weekStart(s.date); groups.set(w, [...(groups.get(w) ?? []), s]); }
+  for (const s of finished) { const w = weekStart(s.date, sd); groups.set(w, [...(groups.get(w) ?? []), s]); }
   const pickedList = picked ? finished.filter((s) => s.date === picked) : [];
   return (
     <div className="page">

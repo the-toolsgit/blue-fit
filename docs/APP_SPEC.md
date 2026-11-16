@@ -2,7 +2,7 @@
 
 Platform-neutral description of the whole app. A Swift or Android developer should be able to rebuild Blue Fit from this document without reading the web code. Kept current with every behavior or design change.
 
-Spec version: 0.2 (Phase 2). Backup format version: 1.
+Spec version: 0.3 (Phase 2 + week start). Backup format version: 1.
 
 ---
 
@@ -49,12 +49,12 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 
 ### 3.2 Today
 - **Header:** small static FLEX figure + "BLUE FIT" in neon, today's date (e.g. "NOV 14").
-- **Week strip:** 7 buttons Mon→Sun. Today's weekday is preselected. The selected day is a neon gradient pill; today's day (if not selected) is neon text. A green glowing dot marks days of the current week (Mon–Sun) with a finished workout for that routine day.
+- **Week strip:** 7 buttons in week order, starting on the week-start day (Settings; Sat→Fri for Leo). Today's weekday is preselected. The selected day is a neon gradient pill; today's day (if not selected) is neon text. A green glowing dot marks days of the current week with a finished workout for that routine day.
 - **Training day card:** eyebrow "TODAY · MONDAY" (or just the weekday when previewing another day); day title huge in neon gradient (e.g. "BACK & BICEPS"); "✓ Done today" badge if a finished session today has this day. A large animated figure cycles through the day's exercises, one per 3.2 s animation loop, with the exercise name under it. Three stat tiles: exercises · sets · ~minutes (time estimate §5.8).
 - **Exercises list:** number, small static figure, name, ★ if heavy, the slot note (or primary muscles), "sets × reps". Tap opens the exercise detail sheet.
 - **Free workout** text button: starts an empty session titled "Free workout".
 - **Dock:** "▶ START WORKOUT" (pulsing glow) or "START WEDNESDAY" when previewing another day. Hidden when a workout is active (the dock then shows Resume).
-- **Rest day state** (no day, or a day without exercises; Sunday in the seed plan): REST figure sitting on a bench, breathing slowly; "REST DAY"; "Walk if you like, but keep it easy."; hint to pick a day above or start a free workout.
+- **Rest day state** (no day, or a day without exercises; Friday in the seed plan): REST figure sitting on a bench, breathing slowly; "REST DAY"; "Walk if you like, but keep it easy."; hint to pick a day above or start a free workout.
 
 ### 3.3 Workout logger
 - **Sticky header:** "WORKOUT · m:ss" (elapsed, live), the session title, notes button (neon when notes exist), **Finish** button, a neon progress bar of done/total sets, and "n/N sets".
@@ -101,6 +101,7 @@ Back and **Done** at the top (both return to the summary, replacing the editor i
 
 ### 3.8 Settings
 - **Workout:** Default rest stepper (step 15 s; shows "2 min") + "Apply to every exercise in the plan" (confirm); Start rest timer when a set is done (switch); Sound when rest is over (switch); Keep screen on during a workout (switch).
+- **Week starts on:** 7 chips Mon…Sun (default Sat). Drives the Today week strip, streak, calendar columns, weekly grouping and weekly charts.
 - **Look:** Theme segmented control: System · Dark · Light.
 - **Plates (pairs you have):** a stepper per plate weight (45, 35, 25, 10, 5, 2.5).
 - **Data:** Export (downloads `blue-fit-backup-YYYY-MM-DD.json`), Copy JSON (clipboard), Import file, Paste JSON. Imports are validated (§7.3); a valid file shows a confirmation with its date and counts, then replaces all data. **Reset everything** (confirm) restores the seed.
@@ -203,7 +204,7 @@ With the seed plan this gives exactly: back 20, biceps 16.5, triceps 18, side de
 `Routine { id, name, isCurrent, createdAt, rules?: {title, text}[], days: RoutineDay[] }`
 `RoutineDay { id, weekday: 0–6 | null (0 = Sunday), title, slots: Slot[] }` (order = array order)
 `Slot { id, exerciseId, sets, repMin, repMax, restSec, supersetGroup?, notes?, whyOverride?, tipsOverride? }`
-Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Mon Back & Biceps, Tue Shoulders & Traps, Wed Legs A, Thu Back & Triceps, Fri Shoulders, Traps & Arms, Sat Legs B, Sun Rest), all rests 120 s.
+Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Sat Back & Biceps, Sun Shoulders & Traps, Mon Legs A, Tue Back & Triceps, Wed Shoulders, Traps & Arms, Thu Legs B, Fri Rest), all rests 120 s. Day ids keep their original names (mon … sun) so history stays linked.
 
 ### 4.4 Volume target
 `VolumeTarget { group, min: number | null, max: number | null, angles?, gap?, note?, acceptedBelow? }`. Seed: back 14–22, biceps 14–20, triceps 14–22, side delts 14–20, rear delts 14–20, traps 12–20, front delts 6–8, quads 10+, hamstrings 10+ (acceptedBelow, note "by choice (shorter leg days)"), adductors 10+, calves 8+; chest (note "0 by plan"), glutes, rotator cuff, forearms have no target ("tracked only").
@@ -215,7 +216,7 @@ Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Mon Back & Biceps,
 At most one session is `active`. Duration = finishedAt − startedAt (minutes, rounded).
 
 ### 4.6 Settings
-`{ units: "lb", restDefaultSec: 120, autoStartRest: true, sound: true, keepAwake: true, theme: system | light | dark, plates: [{weight, pairs}] }`. Default plates (pairs): 45×8, 35×2, 25×4, 10×4, 5×4, 2.5×2.
+`{ units: "lb", restDefaultSec: 120, autoStartRest: true, sound: true, keepAwake: true, theme: system | light | dark, weekStartDay: 0–6 (0 = Sunday; default 6 = Saturday; backups without it import as 1 = Monday), plates: [{weight, pairs}] }`. Default plates (pairs): 45×8, 35×2, 25×4, 10×4, 5×4, 2.5×2.
 
 ### 4.7 Other records
 - `JefitAlias { jefitName, exerciseId | null }` (null = skip). Seeded from every exercise's aliases.
@@ -271,13 +272,14 @@ Today's weekday (local time) → the current routine's day with that weekday. Mi
 Finish drops sets not done and exercises left with no done sets, sets `status = finished` and `finishedAt`. A session with nothing done can only be discarded.
 
 ### 5.12 Streak
-Planned days = routine days with a weekday and at least one slot (6 in the seed plan). Days logged in a week (Mon–Sun) = distinct routine days done (by dayId) + distinct dates of finished workouts without a routine day (free or imported) not already counted. A week is **complete** when days logged ≥ planned days. Current streak = consecutive complete weeks counting back from the current week; the current week adds 1 once complete and doesn't break the streak while in progress. Best = longest run of complete weeks.
+Weeks start on the week-start day (§4.6). Planned days = routine days with a weekday and at least one slot (6 in the seed plan). Days logged in a week = distinct routine days done (by dayId) + distinct dates of finished workouts without a routine day (free or imported) not already counted. A week is **complete** when days logged ≥ planned days. Current streak = consecutive complete weeks counting back from the current week; the current week adds 1 once complete and doesn't break the streak while in progress. Best = longest run of complete weeks.
 
 ### 5.13 Recovery
+Basis: in trained lifters, sets to failure need about 48 h for performance to come back, with 72 h feeling better (Morán-Navarro 2017; Goulart 2020). The 4-set line marks a hard session for one muscle when every set is near failure; it's a judgment call, not a research value.
 For each done working/failure set (time = set's completedAt, else the workout's finish or start), add its fractional weight (§5.2) to every group of its exercise, in two windows: last 48 h and last 72 h. ≥ 4 in 48 h → **recovering**; else ≥ 4 in 72 h → **partly recovered**; else **fresh**. Display only (muscle map).
 
 ### 5.14 Progress ranges and series
-- Range start (first day included): 4 wk = Monday 3 weeks before this week's Monday; 12 wk = 11 weeks before; 6 mo = 25 weeks before; All = first workout's week.
+- Weeks begin on the week-start day (§4.6). Range start (first day included): 4 wk = the first day of the week 3 weeks before the current week; 12 wk = 11 weeks before; 6 mo = 25 weeks before; All = first workout's week.
 - Weekly totals: one row per week from the range start to the current week, empty weeks included: tonnage (§5.3), fractional sets per group (§5.2), workouts.
 - Average weekly sets = Σ weekly sets ÷ number of weeks (empty weeks count), rounded to 0.1.
 - Frequency = workouts in the range with ≥ 1 direct (weight 1) working/failure set for the group ÷ number of weeks, rounded to 0.1.
@@ -340,7 +342,10 @@ Import checks, in order: valid JSON ("This file isn't valid JSON."); `app` = "bl
 ### 7.4 Swapping in a cloud database later
 Implement `StorageAdapter` against the cloud store (e.g. Supabase tables with the same keys plus `userId`), add sign-in, keep IndexedDB as an offline cache, and sync by `id` with last-write-wins on `updatedAt` (to be added to rows at that point). No screen changes.
 
-### 7.5 Seed
+### 7.5 One-time migrations
+On launch, each migration in order runs once; done ids are stored in meta `migrations`. `2026-11-16-week-starts-saturday`: if routine `leo-v3-1` still has day `mon` on Monday, move every day two weekdays earlier (Mon→Sat, Tue→Sun, …, Sun→Fri) and set weekStartDay = 6.
+
+### 7.6 Seed
 On first launch (no exercises stored) the seed is written: 33 exercises, routine "Leo v3.1" (36 slots, 117 sets), targets, default settings, Jefit aliases. Seed JSON is extracted from the plan page by a script.
 
 ## 8. Figure engine

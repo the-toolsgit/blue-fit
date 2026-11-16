@@ -2,6 +2,7 @@
 // after every change (writes are queued so they land in order).
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { buildSeed } from "../core/seed";
+import { MIGRATIONS } from "../core/migrations";
 import type { StorageAdapter, TableName, Tables } from "../core/storage/StorageAdapter";
 import type { AppData, Exercise, RestTimer, Routine, Session, Settings } from "../core/types";
 import { DexieAdapter } from "../storage/dexieAdapter";
@@ -63,7 +64,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     (async () => {
       await adapter.init(buildSeed);
-      const d = await adapter.exportAll();
+      let d = await adapter.exportAll();
+      // One-time migrations (each runs once; ids remembered in meta)
+      const doneIds = (await adapter.getMeta<string[]>("migrations")) ?? [];
+      for (const m of MIGRATIONS) {
+        if (doneIds.includes(m.id)) continue;
+        const next = m.run(d);
+        if (next) { await adapter.replaceAll(next); d = await adapter.exportAll(); }
+        doneIds.push(m.id);
+        await adapter.setMeta("migrations", doneIds);
+      }
       const t = await adapter.getMeta<RestTimer>("restTimer");
       setData(d);
       if (t && t.endsAt > Date.now() - 60_000) setTimerState(t);

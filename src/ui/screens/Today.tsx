@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { FLEX, REST } from "../../core/figure/poses";
 import { createFreeSession, createSessionFromDay } from "../../core/session";
 import { estimateMinutes } from "../../core/timeEstimate";
-import { localDate, weekStart } from "../../core/util";
+import { localDate, weekOrder, weekStart } from "../../core/util";
 import { reducedMotion } from "../device";
 import { Figure } from "../components/Figure";
 import { Icon } from "../components/Icon";
@@ -13,10 +13,10 @@ import { go } from "../router";
 import { useStore } from "../store";
 
 const LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const ORDER = [1, 2, 3, 4, 5, 6, 0]; // Mon → Sun
 
 export function TodayScreen() {
-  const { routine, exMap, finished, active, saveSession } = useStore();
+  const { routine, exMap, finished, active, saveSession, settings } = useStore();
+  const sd = settings.weekStartDay;
   const now = new Date();
   const todayWd = now.getDay();
   const [wd, setWd] = useState(todayWd);
@@ -26,17 +26,17 @@ export function TodayScreen() {
   const slots = day?.slots ?? [];
   const sets = slots.reduce((a, s) => a + s.sets, 0);
 
-  // Days of this week (Mon–Sun) that have a finished workout
+  // Days of this week (starting on the chosen week-start day) that have a finished workout
   const doneDays = useMemo(() => {
-    const ws = weekStart(localDate(now));
+    const ws = weekStart(localDate(now), sd);
     const m = new Map<number, boolean>();
-    for (const s of finished) if (weekStart(s.date) === ws && s.dayId) {
+    for (const s of finished) if (weekStart(s.date, sd) === ws && s.dayId) {
       const d = routine?.days.find((x) => x.id === s.dayId);
       if (d?.weekday != null) m.set(d.weekday, true);
     }
     return m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [finished, routine]);
+  }, [finished, routine, sd]);
   const doneToday = finished.some((s) => s.date === localDate(now) && s.dayId === day?.id);
 
   // Hero figure cycles through the day's exercises, one per animation loop
@@ -68,7 +68,7 @@ export function TodayScreen() {
       </header>
 
       <div className="glass" style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", padding: 6, gap: 4, borderRadius: 18 }} role="tablist" aria-label="Day of the week">
-        {ORDER.map((d) => {
+        {weekOrder(sd).map((d) => {
           const sel = d === wd, td = d === todayWd;
           return (
             <button key={d} role="tab" aria-selected={sel} onClick={() => setWd(d)}

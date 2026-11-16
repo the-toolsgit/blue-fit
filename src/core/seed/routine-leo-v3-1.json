@@ -20,7 +20,7 @@
   "days": [
     {
       "id": "mon",
-      "weekday": 1,
+      "weekday": 6,
       "title": "Back & Biceps",
       "slots": [
         {
@@ -81,7 +81,7 @@
     },
     {
       "id": "tue",
-      "weekday": 2,
+      "weekday": 0,
       "title": "Shoulders & Traps",
       "slots": [
         {
@@ -142,7 +142,7 @@
     },
     {
       "id": "wed",
-      "weekday": 3,
+      "weekday": 1,
       "title": "Legs A",
       "slots": [
         {
@@ -205,7 +205,7 @@
     },
     {
       "id": "thu",
-      "weekday": 4,
+      "weekday": 2,
       "title": "Back & Triceps",
       "slots": [
         {
@@ -263,7 +263,7 @@
     },
     {
       "id": "fri",
-      "weekday": 5,
+      "weekday": 3,
       "title": "Shoulders, Traps & Arms",
       "slots": [
         {
@@ -324,7 +324,7 @@
     },
     {
       "id": "sat",
-      "weekday": 6,
+      "weekday": 4,
       "title": "Legs B",
       "slots": [
         {
@@ -383,7 +383,7 @@
     },
     {
       "id": "sun",
-      "weekday": 0,
+      "weekday": 5,
       "title": "Rest",
       "slots": []
     }

@@ -17,15 +17,16 @@ import { useStore } from "../store";
 const REC_LABEL: Record<Recovery, string> = { recovering: "Recovering", partial: "Partly recovered", fresh: "Fresh" };
 
 export function ProgressScreen() {
-  const { finished, exMap, targets, exercises } = useStore();
+  const { finished, exMap, targets, exercises, settings } = useStore();
+  const sd = settings.weekStartDay;
   const today = localDate(new Date());
   const [range, setRange] = useState<Range>("12w");
   const [mapMode, setMapMode] = useState<"volume" | "recovery">("volume");
   const [sel, setSel] = useState<MuscleGroup | null>(null);
   const [muscle, setMuscle] = useState<MuscleGroup>("back");
   const [tableMode, setTableMode] = useState<"week" | "avg">("avg");
-  const from = rangeStart(range, today);
-  const weeks = useMemo(() => weeklyTotals(finished, exMap, from, today), [finished, exMap, from, today]);
+  const from = rangeStart(range, today, sd);
+  const weeks = useMemo(() => weeklyTotals(finished, exMap, from, today, sd), [finished, exMap, from, today, sd]);
   const avg = useMemo(() => averageSets(weeks), [weeks]);
   const freq = useMemo(() => muscleFrequency(inRange(finished, from), exMap, weeks.length), [finished, exMap, from, weeks.length]);
   const rec = useMemo(() => recoveryStatus(finished, exMap, new Date()), [finished, exMap]);
