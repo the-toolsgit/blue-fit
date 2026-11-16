@@ -101,7 +101,7 @@ export function ProgressScreen() {
       <div style={{ margin: "12px 0 8px" }}>
         <Seg label="Table" value={tableMode} onChange={setTableMode} options={[{ v: "week", label: "This week" }, { v: "avg", label: `Average · ${RANGE_LABEL[range]}` }]} />
       </div>
-      <VolumeTable totals={tableMode === "week" ? weeks[weeks.length - 1].sets : avg} targets={targets} hideEmpty stillPlanned={tableMode === "week" ? left : undefined} />
+      <VolumeTable totals={tableMode === "week" ? weeks[weeks.length - 1].sets : avg} targets={targets} stillPlanned={tableMode === "week" ? left : undefined} />
 
       <h2 className="section-title">Weekly volume</h2>
       <section className="glass" style={{ padding: 14 }}>

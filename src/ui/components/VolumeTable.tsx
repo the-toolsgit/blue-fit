@@ -17,12 +17,12 @@ const offNote = (note?: string) => {
 };
 
 /** stillPlanned: groups a planned day later this week still works (live week only) → below target shows "in progress". */
-export function VolumeTable({ totals, targets, days, hideEmpty, stillPlanned }: { totals: GroupTotals; targets: VolumeTarget[]; days?: Record<string, number>; hideEmpty?: boolean; stillPlanned?: Set<MuscleGroup> }) {
+export function VolumeTable({ totals, targets, days, stillPlanned }: { totals: GroupTotals; targets: VolumeTarget[]; days?: Record<string, number>; stillPlanned?: Set<MuscleGroup> }) {
   const tmap = new Map(targets.map((t) => [t.group, t]));
   const scale = Math.max(24, ...MUSCLE_GROUPS.map((m) => totals[m.id]), ...targets.map((t) => t.max ?? t.min ?? 0));
   return (
     <div className="glass" style={{ padding: "6px 14px" }}>
-      {MUSCLE_GROUPS.filter((m) => !hideEmpty || totals[m.id] > 0 || tmap.get(m.id)?.min != null).map((m) => {
+      {MUSCLE_GROUPS.map((m) => {
         const t = tmap.get(m.id), v = totals[m.id], st = targetStatus(v, t, stillPlanned?.has(m.id)), s = STATUS[st];
         const off = st === "off";
         const note = off ? offNote(t?.note) : t?.gap;
