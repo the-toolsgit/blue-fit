@@ -1,10 +1,11 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
 import { LOADING } from "../core/figure/poses";
 import { Figure } from "./components/Figure";
 import { Icon } from "./components/Icon";
 import { RestTimerDock } from "./components/RestTimer";
 import { Toasts } from "./components/Toasts";
+import { Splash } from "./components/Splash";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { go, useRoute } from "./router";
 import { useStore } from "./store";
@@ -41,6 +42,8 @@ const TAB_OF: Record<string, string> = { workout: "today", summary: "history", e
 
 export function App() {
   const route = useRoute();
+  const [splash, setSplash] = useState(true); // once per launch
+  const endSplash = useCallback(() => setSplash(false), []);
   const { ready, settings, toast } = useStore();
   // iPhone home-screen apps resume without reloading, so check for a new version on launch, whenever the app
   // comes back to the foreground, and every 30 minutes while open.
@@ -93,6 +96,7 @@ export function App() {
         ))}
       </nav>
       <Toasts />
+      {splash && <Splash onDone={endSplash} />}
     </div>
   );
 }

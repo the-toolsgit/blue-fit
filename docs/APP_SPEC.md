@@ -45,6 +45,9 @@ Page change animation: the new page fades in and rises 14 px (0.42 s, ease-out `
 
 ## 3. Screens
 
+### 3.0 Launch splash
+Shown once each time the app is launched (not when it returns from the background). Full screen in the app background with the haze/grid: the FLEX figure (150 px, no floor line, strong glow) centered, "BLUE FIT" below (display 34 px, letter-spacing .22em, neon). Timing (~1.4 s): figure and wordmark fade/scale in (0.38 s), hold 0.26 s, then a 0.72 s zoom (cubic ease-in-out, exponential scale) centered on the figure's head while a circular window matching the inside of the head ring reveals the app; the wordmark fades out in the first third of the zoom. Reduced motion: no zoom, it fades out after 0.35 s.
+
 ### 3.1 Loading
 Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose), label "LOADING". Storage error: toast "Storage unavailable. This browser blocked local storage. Private mode can cause this."
 

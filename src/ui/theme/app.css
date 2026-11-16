@@ -197,3 +197,12 @@ textarea.input { min-height: 84px; resize: vertical; }
 .cal-d.out { opacity: 0.25; }
 .flicker { animation: flicker 2.6s ease-in-out infinite; display: inline-block; }
 @keyframes flicker { 0%, 100% { transform: scale(1) rotate(0); } 30% { transform: scale(1.08) rotate(-3deg); } 60% { transform: scale(0.97) rotate(2deg); } }
+
+/* ---------- Launch splash ---------- */
+.splash { position: fixed; inset: 0; z-index: 100; background: var(--bg); overflow: hidden; }
+.splash-stage { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 14px; will-change: transform; }
+.splash-fig { animation: splashIn 0.38s var(--ease) both; }
+.splash-fig .floor { display: none; }
+.splash-fig .fig { filter: drop-shadow(0 0 4px var(--glow)) drop-shadow(0 0 16px var(--glow)); }
+.splash-word { font: 700 34px/1 var(--display); letter-spacing: 0.22em; padding-left: 0.22em; animation: splashIn 0.38s var(--ease) 0.06s both; }
+@keyframes splashIn { from { opacity: 0; transform: scale(0.9) translateY(6px); } }
