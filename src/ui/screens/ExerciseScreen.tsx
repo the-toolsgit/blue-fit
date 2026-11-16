@@ -113,9 +113,6 @@ export function ExerciseSheet({ id, onClose, whyOverride, tipsOverride }: { id: 
   const ex = id ? exMap.get(id) : undefined;
   return (
     <Sheet open={!!ex} onClose={onClose} label={ex?.name ?? "Exercise"}>
-      <div className="row" style={{ justifyContent: "flex-end", marginTop: -6 }}>
-        <button className="icon-btn" onClick={onClose} aria-label="Close"><Icon name="close" /></button>
-      </div>
       {ex && <ExerciseInfo ex={ex} whyOverride={whyOverride} tipsOverride={tipsOverride} />}
     </Sheet>
   );

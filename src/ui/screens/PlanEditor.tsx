@@ -201,7 +201,6 @@ export function PlanEditorScreen({ id }: { id?: string }) {
             <div className="row">
               <Figure spec={exMap.get(slot.exerciseId)?.figure} size={54} />
               <h3 className="title-md grow">{exMap.get(slot.exerciseId)?.name}</h3>
-              <button className="icon-btn" onClick={() => setSlotOpen(null)} aria-label="Close"><Icon name="close" /></button>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               <Stepper label="Sets" value={slot.sets} step={1} decimals={false} min={1} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { sets: Math.max(1, Math.min(20, v ?? 1)) }))} />

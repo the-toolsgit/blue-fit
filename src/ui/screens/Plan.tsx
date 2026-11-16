@@ -107,7 +107,6 @@ export function PlanScreen() {
       <Sheet open={manage} onClose={() => setManage(false)} label="Plans">
         <div className="spread" style={{ marginBottom: 8 }}>
           <h3 className="title-md" style={{ textTransform: "uppercase" }}>Plans</h3>
-          <button className="icon-btn" onClick={() => setManage(false)} aria-label="Close"><Icon name="close" /></button>
         </div>
         <div className="stack">
           {[...routines].sort((a, b) => Number(b.isCurrent) - Number(a.isCurrent) || (a.createdAt < b.createdAt ? 1 : -1)).map((r) => (

@@ -32,7 +32,6 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
     <Sheet open={open} onClose={onClose} label={title}>
       <div className="spread" style={{ marginBottom: 10 }}>
         <h3 className="title-md">{title}</h3>
-        <button className="icon-btn" onClick={onClose} aria-label="Close"><Icon name="close" /></button>
       </div>
       <button className="btn btn-ghost btn-block" style={{ marginBottom: 10 }} onClick={() => setCreating(true)}><Icon name="plus" size={18} /> New exercise</button>
       <div style={{ position: "relative" }}>

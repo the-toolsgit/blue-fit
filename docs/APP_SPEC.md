@@ -41,6 +41,8 @@ Routes (web uses hash routes because GitHub Pages has no server routing):
 
 Exercise detail also opens as a **bottom sheet** from Today and the logger, so you never lose your place.
 
+**Bottom sheets** (exercise detail, picker, plan manager, slot editor, confirms) close like iOS: swipe down from the grip at the top, or from anywhere while the sheet is scrolled to the top. The sheet follows the finger and the backdrop fades; letting go past ~110 px or with a quick flick closes it (slides off, 0.26 s), otherwise it springs back. No X button and no tap-on-backdrop close (Leo's choice); Escape still closes on a keyboard; confirms keep their Cancel button.
+
 Page change animation: the new page fades in and rises 14 px (0.42 s, ease-out `cubic-bezier(.22,1,.36,1)`). Disabled with reduced motion.
 
 ## 3. Screens
