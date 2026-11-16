@@ -1,10 +1,9 @@
 import { useMemo, useState } from "react";
-import { FLEX } from "../../core/figure/poses";
 import { dailyLoad, plannedDays, weeklyStreak } from "../../core/history";
 import { durationMin } from "../../core/session";
 import { tonnage } from "../../core/volume";
 import { addDays, localDate, parseLocalDate, weekOrder, weekStart } from "../../core/util";
-import { Figure } from "../components/Figure";
+import { FlexFigure } from "../components/FlexFigure";
 import { Icon } from "../components/Icon";
 import { fmtDate, fmtVolume } from "../format";
 import { go } from "../router";
@@ -132,7 +131,7 @@ export function HistoryScreen() {
         </section>
       )}
       {!finished.length && (
-        <div className="empty"><Figure spec={FLEX} size={130} /><p>No workouts yet. Finish one and it shows up here.</p></div>
+        <div className="empty"><FlexFigure size={130} /><p>No workouts yet. Finish one and it shows up here.</p></div>
       )}
       {[...groups].map(([w, list]) => (
         <section key={w}>
