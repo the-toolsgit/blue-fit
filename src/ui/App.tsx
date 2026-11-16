@@ -64,7 +64,7 @@ export function App() {
   return (
     <div className="app">
       <div className="bg-fx" />
-      <div key={route.join("/")}><ErrorBoundary resetKey={route.join("/")}><Suspense fallback={<Loading />}>{screen}</Suspense></ErrorBoundary></div>
+      <main key={route.join("/")}><ErrorBoundary resetKey={route.join("/")}><Suspense fallback={<Loading />}>{screen}</Suspense></ErrorBoundary></main>
       {ready && <RestTimerDock />}
       <nav className="tabbar glass" aria-label="Main">
         {TABS.map((t) => (
