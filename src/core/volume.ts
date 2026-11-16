@@ -1,5 +1,6 @@
 // Fractional volume: a direct set counts 1, an indirect set 0.5 (per exercise.volume).
 import { MUSCLE_GROUPS, type Exercise, type MuscleGroup, type Routine, type Session, type SetType, type VolumeTarget } from "./types";
+import { addDays, parseLocalDate, weekStart } from "./util";
 
 export type GroupTotals = Record<MuscleGroup, number>;
 const zero = (): GroupTotals => Object.fromEntries(MUSCLE_GROUPS.map((m) => [m.id, 0])) as GroupTotals;
@@ -47,12 +48,30 @@ export function tonnage(sessions: Session[]): number {
   return t;
 }
 
-export type TargetStatus = "ok" | "below" | "byChoice" | "above" | "none";
-export function targetStatus(sets: number, t: VolumeTarget | undefined): TargetStatus {
-  if (!t || t.min == null) return "none";
-  if (sets < t.min) return t.acceptedBelow ? "byChoice" : "below";
+/** ok / above / below the weekly target; inProgress = below, but a planned day this week still works it; off = not a focus (no target, or the plan accepts being below it). */
+export type TargetStatus = "ok" | "below" | "inProgress" | "above" | "off";
+export const isFocus = (t: VolumeTarget | undefined): t is VolumeTarget & { min: number } => !!t && t.min != null && !t.acceptedBelow;
+export function targetStatus(sets: number, t: VolumeTarget | undefined, stillPlanned = false): TargetStatus {
+  if (!isFocus(t)) return "off";
   if (t.max != null && sets > t.max) return "above";
-  return "ok";
+  if (sets >= t.min) return "ok";
+  return stillPlanned ? "inProgress" : "below";
+}
+
+/**
+ * Muscle groups that a planned day still left in this training week works (directly or indirectly).
+ * Today counts unless today's planned day is already finished.
+ */
+export function groupsLeftThisWeek(routine: Routine | undefined, exercises: Map<string, Exercise>, finished: Session[], today: string, weekStartDay: number): Set<MuscleGroup> {
+  const left = new Set<MuscleGroup>();
+  if (!routine) return left;
+  const end = addDays(weekStart(today, weekStartDay), 6);
+  for (let d = today; d <= end; d = addDays(d, 1)) {
+    const day = routine.days.find((x) => x.weekday === parseLocalDate(d).getDay());
+    if (!day || (d === today && finished.some((s) => s.date === d && s.dayId === day.id))) continue;
+    for (const slot of day.slots) for (const v of exercises.get(slot.exerciseId)?.volume ?? []) left.add(v.group);
+  }
+  return left;
 }
 export const formatTarget = (t: VolumeTarget | undefined) =>
   !t || t.min == null ? "—" : t.max == null ? `${t.min}+` : `${t.min}–${t.max}`;

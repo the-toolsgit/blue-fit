@@ -171,6 +171,9 @@ textarea.input { min-height: 84px; resize: vertical; }
 .vbar .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 8px; background: linear-gradient(90deg, var(--neon), var(--neon-2)); box-shadow: 0 0 12px var(--glow); transform-origin: left; animation: grow 0.9s var(--ease) both; }
 .vbar .fill.warn { background: linear-gradient(90deg, var(--warn), #ffdd7a); box-shadow: 0 0 12px color-mix(in srgb, var(--warn) 50%, transparent); }
 .vbar .fill.none { background: var(--faint); box-shadow: none; }
+.vbar.off { background: repeating-linear-gradient(-45deg, color-mix(in srgb, var(--faint) 55%, transparent) 0 3px, transparent 3px 7px), var(--surface-2); }
+.vrow.off > .spread { color: var(--muted); opacity: 0.75; }
+.status-progress { color: var(--muted); font-weight: 600; }
 @keyframes grow { from { transform: scaleX(0); } }
 .status-ok { color: var(--good); font-weight: 600; }
 .status-warn { color: var(--warn); font-weight: 600; }

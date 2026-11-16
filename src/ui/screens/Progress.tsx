@@ -3,7 +3,7 @@ import { averageSets, inRange, muscleFrequency, rangeStart, RANGE_LABEL, weeklyT
 import { recoveryStatus, type Recovery } from "../../core/recovery";
 import { MUSCLE_GROUPS, muscleLabel, type MuscleGroup } from "../../core/types";
 import { fmtNum, localDate } from "../../core/util";
-import { formatTarget } from "../../core/volume";
+import { formatTarget, groupsLeftThisWeek } from "../../core/volume";
 import { LOADING } from "../../core/figure/poses";
 import { BarChart, weekLabel } from "../components/Charts";
 import { Seg } from "../components/Controls";
@@ -17,18 +17,21 @@ import { useStore } from "../store";
 const REC_LABEL: Record<Recovery, string> = { recovering: "Recovering", partial: "Partly recovered", fresh: "Fresh" };
 
 export function ProgressScreen() {
-  const { finished, exMap, targets, exercises, settings } = useStore();
+  const { finished, exMap, targets, exercises, settings, routine } = useStore();
   const sd = settings.weekStartDay;
   const today = localDate(new Date());
   const [range, setRange] = useState<Range>("12w");
   const [mapMode, setMapMode] = useState<"volume" | "recovery">("volume");
   const [sel, setSel] = useState<MuscleGroup | null>(null);
   const [muscle, setMuscle] = useState<MuscleGroup>("back");
-  const [tableMode, setTableMode] = useState<"week" | "avg">("avg");
+  // "This week" by default; the last choice is remembered on this phone
+  const [tableMode, setTableModeState] = useState<"week" | "avg">(() => { try { return localStorage.getItem("bf-volume-table") === "avg" ? "avg" : "week"; } catch { return "week"; } });
+  const setTableMode = (v: "week" | "avg") => { setTableModeState(v); try { localStorage.setItem("bf-volume-table", v); } catch { /* ignore */ } };
   const from = rangeStart(range, today, sd);
   const weeks = useMemo(() => weeklyTotals(finished, exMap, from, today, sd), [finished, exMap, from, today, sd]);
   const avg = useMemo(() => averageSets(weeks), [weeks]);
   const freq = useMemo(() => muscleFrequency(inRange(finished, from), exMap, weeks.length), [finished, exMap, from, weeks.length]);
+  const left = useMemo(() => groupsLeftThisWeek(routine, exMap, finished, today, sd), [routine, exMap, finished, today, sd]);
   const rec = useMemo(() => recoveryStatus(finished, exMap, new Date()), [finished, exMap]);
   const tmap = new Map(targets.map((t) => [t.group, t]));
   const workouts = inRange(finished, from).length;
@@ -98,7 +101,7 @@ export function ProgressScreen() {
       <div style={{ margin: "12px 0 8px" }}>
         <Seg label="Table" value={tableMode} onChange={setTableMode} options={[{ v: "week", label: "This week" }, { v: "avg", label: `Average · ${RANGE_LABEL[range]}` }]} />
       </div>
-      <VolumeTable totals={tableMode === "week" ? weeks[weeks.length - 1].sets : avg} targets={targets} hideEmpty />
+      <VolumeTable totals={tableMode === "week" ? weeks[weeks.length - 1].sets : avg} targets={targets} hideEmpty stillPlanned={tableMode === "week" ? left : undefined} />
 
       <h2 className="section-title">Weekly volume</h2>
       <section className="glass" style={{ padding: 14 }}>

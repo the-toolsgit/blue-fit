@@ -137,7 +137,7 @@ Title (Swap exercise / Add exercise), **+ New exercise** (opens the exercise edi
 Opened from the picker (new) or the exercise page's **Edit** button (any exercise, built-in or custom). Cancel · title · Save. Live figure preview. Fields: Name (required, unique ignoring case); Figure (None or any existing exercise's figure, as tiles); Muscles (a chip per muscle group; tap cycles off → direct ×1 → indirect ×½); Equipment (picking it sets the default log mode: barbell/Smith/plate machine → per side, dumbbell → per hand, others → as shown); Heavy ★; Log weight (As shown / Per side / Per hand); Weight step (lb); Rest; Why; Setup, Form, Tips, Avoid (one item per line); Range; Tempo (default "1–2 s up, 2–3 s down"); Other names (comma separated, used by the Jefit import). Custom exercises derive their muscle text and body region from the muscle chips; built-in ones keep their written muscle text. Delete (custom only): **Hide** when the exercise is in history or any plan (archived, still shown where used), otherwise **Delete** for good.
 
 ### 3.10 Volume table (component)
-One row per muscle group (§4.2): name (priority muscles bold), value / target, status (✓, ⚠ below, ⚠ above, ⚠ by choice, or nothing for groups without a target), a neon bar with a dashed target band, and a detail line (days · angles · gap or note). Footer: "Indirect sets count as half. Warm-ups and drop sets don't count."
+One row per muscle group (§4.2): name (priority muscles bold), value / target, status (✓, ⚠ above, ⚠ below, or "in progress"), a neon bar with a dashed target band (the weekly goal range), and a detail line (days · angles · gap). In the live "This week" table, a muscle under its target shows "in progress" (muted, normal bar) while a planned day left in this training week (today included until today's day is finished) still works it; only when none is left does it show ⚠ below. Muscles that aren't a focus (no target, or the plan accepts being below it, like hamstrings) are grayed out with a diagonal-striped bar, no target band and no status; detail line "not a focus" plus the plan's reason. Footer: "Indirect sets count as half. Warm-ups and drop sets don't count."
 
 ### 3.11 Progress
 Empty (no finished workouts): LOADING figure, "Finish a workout and your charts, muscle map and recovery show up here."
@@ -146,7 +146,7 @@ Empty (no finished workouts): LOADING figure, "Finish a workout and your charts,
 - **Muscle map** (§8.6) with a toggle:
   - *Weekly sets:* each region's brightness = average weekly sets in the range ÷ (target max, else target min, else 12), capped at 1; regions above 0.55 glow. Tap a region: "Biceps · 14.5 sets/week avg · target 14–20".
   - *Recovery:* recovering = pink, partly recovered = amber, fresh = green (faint); legend. Tap: "Quads · Recovering · 6 sets in 48 h, 8 in 72 h".
-- **Weekly sets vs target:** muscle chips; bar chart of that muscle's sets per week with the target as a green band; then a toggle "This week | Average · range" for the volume table (§3.10). Default: Average.
+- **Weekly sets vs target:** muscle chips; bar chart of that muscle's sets per week with the target as a green band; then a toggle "This week | Average · range" for the volume table (§3.10). Default: This week; the last choice is remembered on the phone.
 - **Weekly volume:** bar chart of tonnage per week (readout shows workouts that week).
 - **Frequency (times a week):** muscles with direct work, highest first, bar scaled to 3×/week, value "2.3×".
 - **Exercise progress:** exercise dropdown (exercises with logged sets, most recently trained first) + the exercise progress chart (§3.13), limited to the range.
@@ -265,7 +265,7 @@ Stored exactly as typed. Plate-loaded lifts (Smith Squat, T-Bar Row, Leg Press, 
 ### 5.2 Fractional volume (weekly sets)
 For each done set whose type is **working or failure**: for each `{group, weight}` in the exercise's `volume`, add `weight` (1 or 0.5) to that group. Warm-ups and drop sets add nothing.
 Plan volume: `Σ slot.sets × weight` over all slots of the routine. **Days** = number of routine days with at least one **direct** (weight 1) slot for that group.
-Status vs target: no target or min null → none; value < min → below (or **by choice** when `acceptedBelow`); max set and value > max → above; else ✓.
+Status vs target: no target, min null or `acceptedBelow` → not a focus (off); max set and value > max → above; value ≥ min → ✓; else below, or in progress when a planned day left this training week still works the muscle (live week only).
 
 ### 5.3 Tonnage (volume lb)
 `Σ weight × reps` over done sets whose type is **not warm-up** (drop and failure included), using the logged number as is.
