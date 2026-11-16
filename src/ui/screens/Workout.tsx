@@ -260,7 +260,10 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   // Deload: no progression push; a fixed reminder instead.
   const hint = s.deload ? ({ kind: "none" } as const) : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb);
   const allDone = e.sets.length > 0 && e.sets.every((x) => x.done);
-  const selected = e.sets.find((x) => x.id === sel) ?? e.sets.find((x) => !x.done) ?? null;
+  // The first set that isn't done is the open one; a picked set counts only if it's done or that one (sets go in order)
+  const firstOpen = e.sets.find((x) => !x.done) ?? null;
+  const picked = e.sets.find((x) => x.id === sel);
+  const selected = picked && (picked.done || picked.id === firstOpen?.id) ? picked : firstOpen;
   const workIdx = (x: LoggedSet) => e.sets.filter((y) => y.type === "working" && e.sets.indexOf(y) <= e.sets.indexOf(x)).length;
   const swappedFrom = e.swappedFromId ? exMap.get(e.swappedFromId)?.name : undefined;
 
@@ -313,8 +316,10 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
       )}
 
       <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
-        {e.sets.map((x) => {
+        {e.sets.map((x, xi) => {
           const isSel = selected?.id === x.id && focused;
+          // Sets open in order: a set can't be expanded while an earlier one isn't done
+          const locked = !x.done && e.sets.slice(0, xi).some((y) => !y.done);
           const t = TYPE_UI[x.type];
           return (
             <div key={x.id} style={{ borderRadius: 14, background: isSel ? "var(--surface-2)" : "transparent", border: `1px solid ${isSel ? "var(--line-strong)" : "transparent"}`, transition: "all .25s var(--ease)" }}>
@@ -324,8 +329,8 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   style={{ width: 40, height: 36, borderRadius: 10, font: "700 15px var(--mono)", color: t.color, border: `1px solid color-mix(in srgb, ${t.color} 45%, transparent)` }}>
                   {t.short || workIdx(x)}
                 </button>
-                <button className="grow mono" style={{ textAlign: "left", fontSize: 18, padding: "8px 6px", color: x.done ? "var(--ink)" : "var(--muted)" }}
-                  onClick={(ev) => { ev.stopPropagation(); onFocus(); setSel(x.id); }} aria-label="Edit set">
+                <button className="grow mono" style={{ textAlign: "left", fontSize: 18, padding: "8px 6px", color: x.done ? "var(--ink)" : "var(--muted)", opacity: locked ? 0.55 : 1, cursor: locked ? "default" : undefined }}
+                  onClick={(ev) => { ev.stopPropagation(); onFocus(); if (!locked) setSel(x.id); }} aria-label={locked ? "Finish the earlier sets first" : "Edit set"} aria-disabled={locked}>
                   {fmtW(x.weight)}<span style={{ fontSize: 12 }}>{x.weight != null ? loadSuffix(ex) : ""}</span> <span style={{ opacity: 0.6 }}>×</span> {x.reps ?? "—"}
                 </button>
                 <button aria-label={x.done ? "Mark not done" : "Mark done"} aria-pressed={x.done}
