@@ -375,6 +375,8 @@ The UI updates its in-memory snapshot immediately, then queues the write; writes
 Import checks, in order: valid JSON ("This file isn't valid JSON."); `app` = "blue-fit" ("This isn't a Blue Fit backup file."); version not newer than supported ("…from a newer version of Blue Fit…"); full schema (first error with its path); every session and slot references a known exercise; at most one current routine. Then the user confirms and all data is replaced. Older versions will be migrated step by step.
 
 ### 7.4 Swapping in a cloud database later
+**Roadmap:** once users log in and data syncs to the cloud, remove the manual backup features (Export, Copy JSON, Import, Paste JSON, the backup reminder on Today, "Last backup" in Settings, and the crash screen's "Save a backup"). The local-only web version is temporary.
+
 Implement `StorageAdapter` against the cloud store (e.g. Supabase tables with the same keys plus `userId`), add sign-in, keep IndexedDB as an offline cache, and sync by `id` with last-write-wins on `updatedAt` (to be added to rows at that point). No screen changes.
 
 ### 7.5 One-time migrations
@@ -443,5 +445,5 @@ Mirrored ellipses negate the rotation. Region fill opacity: empty 0.05; value k 
 | Import history | Jefit export importer with name mapping | Left out (skipped by choice; Jefit names stay as exercise aliases in case it comes back) |
 | Body stats and photos | Body tracking (weight band, scans, photos) | Later phase |
 | Interval / stopwatch timer | Timer modes | Later phase |
-| Cloud sync / account | Swap StorageAdapter | Later phase |
+| Cloud sync / account | Swap StorageAdapter; then remove manual backup/import | Later phase |
 | AI coach, social, community, watch apps, video library | — | Left out |
