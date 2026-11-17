@@ -1,5 +1,8 @@
 // Plain wording for the plan's rule cards (applied over the extracted seed; `npm run seed` keeps it).
 // `old`: earlier texts this replaces (only if the card still shows one of them, i.e. it wasn't edited).
+/** Card titles renamed by the app (old → new), only if the card still has the old title. */
+export const RULE_TITLE: Record<string, string> = { "★ Heavy": "★ Key lift" };
+
 export const RULE_TEXT: Record<string, { old: string[]; text: string }> = {
   "★ Heavy": {
     old: [

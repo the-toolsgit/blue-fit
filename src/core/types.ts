@@ -100,7 +100,7 @@ export interface Routine {
   name: string;
   isCurrent: boolean;
   createdAt: string;
-  /** Short training rules shown with the plan (e.g. Effort, Progression, ★ Heavy) */
+  /** Short training rules shown with the plan (e.g. Effort, Progression, ★ Key lift) */
   rules?: { title: string; text: string }[];
   days: RoutineDay[];
 }

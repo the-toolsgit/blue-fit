@@ -46,7 +46,7 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride, failWhy }: { ex: E
         <div className="row" style={{ flexWrap: "wrap", gap: 6, marginTop: 10 }}>
           {ex.muscles.map((m) => <span key={m} className="badge p">{m}</span>)}
           {ex.secondaryMuscles.map((m) => <span key={m} className="badge">{m}</span>)}
-          {ex.isHeavy && <span className="badge star">★ heavy</span>}
+          {ex.isHeavy && <span className="badge star">★ key lift</span>}
           {failWhy && <span className="badge fail-badge"><Icon name="flame" size={12} /> last set to failure</span>}
         </div>
         {failWhy && failWhy.length > 0 && <p className="muted" style={{ fontSize: 13, marginTop: 6 }}>{failWhy.join(" · ")}</p>}

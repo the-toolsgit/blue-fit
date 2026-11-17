@@ -186,7 +186,7 @@ describe("plain rule text", () => {
     const out = m.run({ ...seed, routines: [structuredClone(raw)] }, "2026-11-16")!;
     expect(out.routines[0].rules!.find((r) => r.title === "★ Heavy")!.text).toMatch(/^★ Key lifts: the app tracks these/);
     expect(m.run(out, "2026-11-16")).toBeNull();
-    expect(seed.routines[0].rules!.find((r) => r.title === "★ Heavy")!.text).toMatch(/^★ Key lifts: the app tracks these/);
+    expect(seed.routines[0].rules!.find((r) => r.title === "★ Key lift")!.text).toMatch(/^★ Key lifts: the app tracks these/);
   });
 });
 

@@ -94,7 +94,7 @@ export function ExerciseEditor({ open, exercise, onClose, onSaved }: { open: boo
             <select id="eeeq" className="input" value={d.equipment} onChange={(e) => { const eq = e.target.value as Equipment; setD((x) => ({ ...x, equipment: eq, loadMode: defaultLoadMode(eq) })); }}>
               {(Object.keys(EQUIPMENT_LABEL) as Equipment[]).map((k) => <option key={k} value={k}>{EQUIPMENT_LABEL[k]}</option>)}
             </select></div>
-          <div className="field"><span className="label">Heavy ★</span><div style={{ minHeight: 44, display: "flex", alignItems: "center" }}><Switch label="Heavy lift" checked={d.isHeavy} onChange={(v) => set("isHeavy", v)} /></div></div>
+          <div className="field"><span className="label">Key lift ★</span><div style={{ minHeight: 44, display: "flex", alignItems: "center" }}><Switch label="Key lift" checked={d.isHeavy} onChange={(v) => set("isHeavy", v)} /></div></div>
         </div>
         <div className="field"><span className="label">Log weight</span>
           <Seg label="Log weight" value={d.loadMode} onChange={(v: LoadMode) => set("loadMode", v)} options={[{ v: "total", label: "As shown" }, { v: "perSide", label: "Per side" }, { v: "perHand", label: "Per hand" }]} />
