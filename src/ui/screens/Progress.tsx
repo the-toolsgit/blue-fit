@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { averageSets, inRange, muscleFrequency, rangeStart, RANGE_LABEL, weeklyTotals, type Range } from "../../core/progress";
 import { recoveryStatus, type MuscleRecovery, type Recovery } from "../../core/recovery";
 import { MUSCLE_GROUPS, muscleLabel, type MuscleGroup } from "../../core/types";
@@ -16,6 +16,8 @@ import { useStore } from "../store";
 
 const ago = (k: number) => (k === 0 ? "today" : k === 1 ? "yesterday" : `${k} days ago`);
 const recNote = (r: MuscleRecovery) => r.daysAgo == null ? "no hard day lately" : `${fmtNum(r.sets)} sets ${ago(r.daysAgo)}${r.slower.length ? ` · +1 day: ${r.slower.join(", ")}` : ""}`;
+/** Swipe order on the muscle map: top to bottom */
+const MAP_ORDER: MuscleGroup[] = ["traps", "frontDelts", "sideDelts", "rearDelts", "rotatorCuff", "chest", "back", "biceps", "triceps", "forearms", "glutes", "quads", "hamstrings", "adductors", "calves"];
 const REC_LABEL: Record<Recovery, string> = { recovering: "Recovering", partial: "Partly recovered", fresh: "Fresh" };
 
 export function ProgressScreen() {
@@ -25,6 +27,13 @@ export function ProgressScreen() {
   const [range, setRange] = useState<Range>("4w");
   const [mapMode, setMapMode] = useState<"volume" | "recovery">("volume");
   const [sel, setSel] = useState<MuscleGroup | null>(null);
+  const [swipeDir, setSwipeDir] = useState<"next" | "prev" | null>(null);
+  const swipe = useRef<{ x: number; y: number } | null>(null);
+  const step = (dir: 1 | -1) => {
+    const i = sel ? MAP_ORDER.indexOf(sel) : dir === 1 ? -1 : 0;
+    setSel(MAP_ORDER[(i + dir + MAP_ORDER.length) % MAP_ORDER.length]);
+    setSwipeDir(dir === 1 ? "next" : "prev");
+  };
   const [muscle, setMuscle] = useState<MuscleGroup>("back");
   // "This week" by default; the last choice is remembered on this phone
   const [tableMode, setTableModeState] = useState<"week" | "avg">(() => { try { return localStorage.getItem("bf-volume-table") === "avg" ? "avg" : "week"; } catch { return "week"; } });
@@ -80,16 +89,26 @@ export function ProgressScreen() {
       <section className="glass" style={{ padding: 14 }}>
         <Seg label="Map mode" value={mapMode} onChange={(v) => { setMapMode(v); setSel(null); }} options={[{ v: "volume", label: "This week" }, { v: "recovery", label: "Recovery" }]} />
         <div style={{ marginTop: 10 }}>
-          <MuscleMap intensity={mapMode === "volume" ? intensity : undefined} recovery={mapMode === "recovery" ? recMap : undefined} selected={sel} onSelect={(g) => setSel(sel === g ? null : g)} />
+          <MuscleMap intensity={mapMode === "volume" ? intensity : undefined} recovery={mapMode === "recovery" ? recMap : undefined} selected={sel} onSelect={(g) => { setSwipeDir(null); setSel(sel === g ? null : g); }} />
         </div>
-        <div style={{ minHeight: 40, marginTop: 6, textAlign: "center", fontSize: 14 }}>
+        <div className="map-caption" style={{ minHeight: 48, marginTop: 6, textAlign: "center", fontSize: 14, touchAction: "pan-y" }}
+          onPointerDown={(e) => { swipe.current = { x: e.clientX, y: e.clientY }; }}
+          onPointerUp={(e) => {
+            const s0 = swipe.current; swipe.current = null;
+            if (!s0) return;
+            const dx = e.clientX - s0.x, dy = e.clientY - s0.y;
+            if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
+          }}
+          onPointerCancel={() => { swipe.current = null; }}>
+          <div key={sel ?? "none"} className={sel && swipeDir ? `swipe-in-${swipeDir}` : undefined}>
           {sel ? (
             mapMode === "volume"
               ? <><b>{muscleLabel(sel)}</b> · <span className="mono">{fmtNum(thisWeek[sel] ?? 0)}</span> sets this week <span className="muted">· target {formatTarget(tmap.get(sel))}</span></>
               : <><b>{muscleLabel(sel)}</b> · <span style={{ color: RECOVERY_COLOR[rec[sel].status] }}>{REC_LABEL[rec[sel].status]}</span> <span className="muted">· {recNote(rec[sel])}</span></>
           ) : mapMode === "volume"
-            ? <span className="muted">Brighter = closer to the top of the target. Tap a muscle.</span>
+            ? <span className="muted">Brighter = closer to the top of the target. Tap a muscle or swipe here.</span>
             : <span className="row" style={{ justifyContent: "center", gap: 12, fontSize: 12 }}>{(Object.keys(REC_LABEL) as Recovery[]).map((r) => <span key={r} className="row" style={{ gap: 5 }}><i style={{ width: 10, height: 10, borderRadius: 3, background: RECOVERY_COLOR[r], boxShadow: `0 0 6px ${RECOVERY_COLOR[r]}` }} />{REC_LABEL[r]}</span>)}</span>}
+          </div>
         </div>
       </section>
 
