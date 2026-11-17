@@ -204,6 +204,8 @@ textarea.input { min-height: 84px; resize: vertical; }
 .vrow.off .vedit { opacity: 1; }
 .vdefault { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
 .info-tiles { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 8px; }
+/* Tempo with a hold (3 phases): Rest takes only the room it needs */
+.info-tiles.tempo-hold { grid-template-columns: minmax(0, 1fr) auto; }
 .info-tile { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); font-size: 14px; line-height: 1.35; }
 .info-tile.wide { grid-column: 1 / -1; }
 .info-tile .eyebrow { font-size: 10px; margin-bottom: 3px; }
