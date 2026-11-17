@@ -36,7 +36,7 @@ function StreakCard() {
         {frozen ? <StreakFlame kind="ice" size={30} />
           : <span className={st.thisWeek.daysLogged > 0 ? "flicker" : undefined}><FillFlame fill={planned ? st.thisWeek.daysLogged / planned : 0} size={30} /></span>}
         <span className="mono" style={{ fontSize: 40, lineHeight: 1, color: frozen ? "#5AB8FF" : hot ? "var(--ink)" : "var(--muted)", textShadow: frozen ? "0 0 16px rgba(80,170,255,.7)" : hot ? "0 0 16px var(--pink-glow)" : undefined }}>{st.current}</span>
-        <span className="eyebrow" style={{ fontSize: 9, marginTop: 4, color: frozen ? "#5AB8FF" : undefined }}>{frozen ? "frozen" : "week streak"}</span>
+        <span className="eyebrow" style={{ fontSize: 9, marginTop: 4, color: frozen ? "#5AB8FF" : undefined }}>{frozen ? "frozen" : "streak"}</span>
       </button>
       <div>
         <div className="spread"><span className="eyebrow" style={{ fontSize: 10 }}>This week</span><span className="mono" style={{ fontSize: 13 }}>{st.thisWeek.daysLogged}/{planned} days</span></div>
