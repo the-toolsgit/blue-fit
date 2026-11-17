@@ -299,8 +299,13 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .fail-icon { display: inline-flex; vertical-align: -2px; margin-left: 5px; color: var(--warn); }
 
 /* Week streak flames: sparks rise and fade above the fire; snowflakes twinkle above the ice */
-.streak-flame .spark { animation: spark 1.8s ease-out infinite; }
-@keyframes spark { 0% { opacity: 0; transform: translateY(3px); } 20% { opacity: 1; } 70% { opacity: .9; } 100% { opacity: 0; transform: translateY(-4px); } }
+.streak-flame .spark { opacity: 0; animation: 2.6s ease-out infinite; transform-box: fill-box; }
+.streak-flame .spark-a { animation-name: spark-a; animation-duration: 2.3s; }
+.streak-flame .spark-b { animation-name: spark-b; animation-duration: 3.1s; animation-delay: .9s; }
+.streak-flame .spark-c { animation-name: spark-c; animation-duration: 3.7s; animation-delay: 1.8s; }
+@keyframes spark-a { 0% { opacity: 0; transform: translate(0, 0); } 15% { opacity: 1; } 100% { opacity: 0; transform: translate(-2.5px, -7px); } }
+@keyframes spark-b { 0% { opacity: 0; transform: translate(0, 0); } 15% { opacity: 1; } 100% { opacity: 0; transform: translate(2px, -8px); } }
+@keyframes spark-c { 0% { opacity: 0; transform: translate(0, 0); } 20% { opacity: .9; } 100% { opacity: 0; transform: translate(-.5px, -9px); } }
 .streak-flame .twinkle { animation: twinkle 2.4s ease-in-out infinite; }
 @keyframes twinkle { 0%, 100% { opacity: .45; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.1); } }
 @media (prefers-reduced-motion: reduce) { .streak-flame .spark, .streak-flame .twinkle { animation: none; opacity: 1; } }

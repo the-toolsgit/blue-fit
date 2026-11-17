@@ -14,6 +14,17 @@ const Flake = ({ x, y, r, delay }: { x: number; y: number; r: number; delay: num
   </g>
 );
 
+/** Three small white sparks drifting up from a fire, each on its own rhythm (like a fire pit). `y`: flame tip. */
+export function Sparks({ y }: { y: number }) {
+  return (
+    <g fill="#FFFFFF" style={{ filter: "drop-shadow(0 0 1px rgba(255,170,60,.9))" }}>
+      <circle className="spark spark-a" cx="11" cy={y} r=".75" />
+      <circle className="spark spark-b" cx="13.4" cy={y + 0.6} r=".6" />
+      <circle className="spark spark-c" cx="12.2" cy={y + 0.2} r=".5" />
+    </g>
+  );
+}
+
 /** viewBox 0 0 24 27: the flame sits 3 units down so the sparks / flakes have room above it. */
 export function StreakFlame({ kind, size = 34 }: { kind: "fire" | "ice"; size?: number }) {
   const id = useId().replace(/:/g, "");
@@ -33,13 +44,7 @@ export function StreakFlame({ kind, size = 34 }: { kind: "fire" | "ice"; size?: 
         {!fire && <path d="M7.2 18.2l1 2.2.9-1.6 1 2 .9-1.5 1 1.9.9-1.6 1 1.6.9-2" fill="none" stroke="#E8FBFF" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />}
       </g>
       {fire ? (
-        <g fill="#FFE27A" style={{ filter: "drop-shadow(0 0 1.5px #FF8A00)" }}>
-          <circle className="spark" cx="9.6" cy="5.6" r="1.25" style={{ animationDelay: "0s" }} />
-          <circle className="spark" cx="15.8" cy="4.6" r="1.1" style={{ animationDelay: ".45s" }} />
-          <circle className="spark" cx="12.6" cy="2.8" r="1" style={{ animationDelay: ".9s" }} />
-          <circle className="spark" cx="6.8" cy="3.6" r=".85" style={{ animationDelay: "1.3s" }} />
-          <circle className="spark" cx="18.2" cy="2.6" r=".8" style={{ animationDelay: "1.6s" }} />
-        </g>
+        <Sparks y={5.4} />
       ) : (
         <g stroke="#FFFFFF" strokeWidth=".7" strokeLinecap="round">
           <Flake x={8.4} y={3.6} r={1.5} delay={0} />
