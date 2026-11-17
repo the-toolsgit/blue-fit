@@ -15,7 +15,7 @@ import type { Session } from "../../core/types";
 const WD = ["S", "M", "T", "W", "T", "F", "S"];
 
 function StreakCard() {
-  const { finished, routine, settings, saveSettings, toast } = useStore();
+  const { finished, routine, settings, saveSettings } = useStore();
   const sd = settings.weekStartDay;
   const today = localDate(new Date());
   const freezes = settings.streakFreezes;
@@ -24,7 +24,6 @@ function StreakCard() {
   // Tap the streak to freeze it (missed weeks hold it) or to unfreeze
   const toggle = () => {
     saveSettings({ ...settings, streakFreezes: toggleFreeze(freezes, today) });
-    toast({ kind: "info", title: frozen ? "Streak unfrozen" : "Streak frozen", body: frozen ? "Missed weeks break it again." : "Missed weeks won't break it. Tap again to unfreeze." });
   };
   const planned = plannedDays(routine);
   const doneDayIds = new Set(finished.filter((s) => weekStart(s.date, sd) === weekStart(today, sd)).map((s) => s.dayId));
