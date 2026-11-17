@@ -6,7 +6,7 @@ import { fmtNum } from "../../core/util";
 import { Figure } from "../components/Figure";
 import { tempoTiming } from "../../core/figure/tempo";
 import { ExerciseEditor } from "../components/ExerciseEditor";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useLayoutEffect, useRef, useState } from "react";
 const ExerciseProgress = lazy(() => import("../components/ExerciseProgress").then((m) => ({ default: m.ExerciseProgress })));
 import { Icon } from "../components/Icon";
 import { useWeekFailure } from "../components/FailFlame";
@@ -20,6 +20,30 @@ const tempoPhases = (t: string) => t.split("·").map((p) => p.trim()).filter(Boo
   const m = p.match(/^(.*?)\s*(\d+(?:[.–-]\d+)?\s*s)$/);
   return m ? { word: m[1], sec: m[2] } : { word: p, sec: "" };
 });
+
+/** Tempo tile. With a hold (3 phases) the text stays on one line; the icon shows whenever there's room for it. */
+function TempoTile({ tempo }: { tempo: string }) {
+  const tile = useRef<HTMLDivElement>(null), text = useRef<HTMLDivElement>(null);
+  const [icon, setIcon] = useState(true);
+  const hold = /hold/i.test(tempo);
+  useLayoutEffect(() => {
+    const el = tile.current, t = text.current;
+    if (!hold || !el || !t || typeof ResizeObserver !== "function") return;
+    const fit = () => {
+      const cs = getComputedStyle(el);
+      const room = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      setIcon(t.scrollWidth + 46 <= room); // icon chip 36 + gap 10
+    };
+    const ro = new ResizeObserver(fit);
+    ro.observe(el);
+    fit();
+    return () => ro.disconnect();
+  }, [hold, tempo]);
+  return (
+    <div ref={tile} className="info-tile tempo-tile">{(!hold || icon) && <span className="info-ic"><Icon name="tempo" size={20} /></span>}<div style={{ minWidth: 0 }}><div className="eyebrow">Tempo</div>
+      <div ref={text} className="tempo">{tempoPhases(tempo).map((p, i) => <span key={i}>{i > 0 && <span className="muted" aria-hidden="true">→ </span>}<b>{p.word}</b> <span className="mono">{p.sec.replace(" ", "")}</span></span>)}</div></div></div>
+  );
+}
 
 function Section({ title, items, tone }: { title: string; items: string[]; tone?: "tip" | "bad" }) {
   if (!items.length) return null;
@@ -61,8 +85,7 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride, failWhy }: { ex: E
       <Section title="Avoid" items={ex.avoid} tone="bad" />
       <div className={"info-tiles" + (/hold/i.test(ex.tempo) ? " tempo-hold" : "")}>
         <div className="info-tile wide"><span className="info-ic"><Icon name="range" size={20} /></span><div><div className="eyebrow">Range</div><div>{ex.rangeOfMotion}</div></div></div>
-        <div className="info-tile tempo-tile"><span className="info-ic"><Icon name="tempo" size={20} /></span><div><div className="eyebrow">Tempo</div>
-          <div className="tempo">{tempoPhases(ex.tempo).map((p, i) => <span key={i}>{i > 0 && <span className="muted" aria-hidden="true">→ </span>}<b>{p.word}</b> <span className="mono">{p.sec.replace(" ", "")}</span></span>)}</div></div></div>
+        <TempoTile tempo={ex.tempo} />
         <div className="info-tile rest-tile"><span className="info-ic"><Icon name="timer" size={20} /></span><div><div className="eyebrow">Rest</div><div className="mono">{fmtRest(restSec)}</div></div></div>
         <div className="info-tile wide"><span className="info-ic"><Icon name="today" size={20} /></span><div><div className="eyebrow">Equipment</div>
           <div>{EQUIPMENT_LABEL[ex.equipment]}{ex.singleSleeve ? <span className="muted"> · log the plates on it</span> : ex.loadMode === "perSide" ? <span className="muted"> · log one side, no bar</span> : ex.loadMode === "perHand" ? <span className="muted"> · log one hand</span> : null}</div></div></div>
