@@ -88,6 +88,16 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
+    // Nov 17 2026: ★ by the library rule (docs/plans/exercise-library.md), Leo agreed: calf raises, Kelso shrug,
+    // single-arm cable lat pulldown, single-arm DB row. Built-in exercises only.
+    id: "2026-11-17-library-heavy",
+    run(d) {
+      const ids = new Set(["standing-calf-raise", "seated-calf-raise", "kelso-shrug", "single-arm-cable-lat-pulldown", "single-arm-db-row"]);
+      if (!d.exercises.some((e) => ids.has(e.id) && !e.isCustom && !e.isHeavy)) return null;
+      return { ...d, exercises: d.exercises.map((e) => (ids.has(e.id) && !e.isCustom ? { ...e, isHeavy: true } : e)) };
+    },
+  },
+  {
     // Nov 16 2026: plain-language how-to texts and one-number tempos for the built-in exercises.
     // Skips any exercise whose texts were edited in the app.
     id: "2026-11-16-plain-exercise-text",

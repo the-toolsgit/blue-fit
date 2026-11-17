@@ -111,7 +111,7 @@
     ],
     "equipment": "cable",
     "loadMode": "total",
-    "isHeavy": false,
+    "isHeavy": true,
     "bodyRegion": "upper",
     "why": "Lats in the stretched position. Training one arm lets you reach further overhead.",
     "setup": [
@@ -195,7 +195,7 @@
     ],
     "equipment": "dumbbell",
     "loadMode": "perHand",
-    "isHeavy": false,
+    "isHeavy": true,
     "bodyRegion": "upper",
     "why": "Lower lats. The elbow travels toward the hip in an arc.",
     "setup": [
@@ -1311,7 +1311,7 @@
     ],
     "equipment": "machine",
     "loadMode": "total",
-    "isHeavy": false,
+    "isHeavy": true,
     "bodyRegion": "lower",
     "why": "Straight knees work the upper calf.",
     "setup": [
@@ -2057,7 +2057,7 @@
     ],
     "equipment": "machine",
     "loadMode": "total",
-    "isHeavy": false,
+    "isHeavy": true,
     "bodyRegion": "upper",
     "why": "Mid traps, an angle the shrugs miss.",
     "setup": [
@@ -2503,7 +2503,7 @@
     ],
     "equipment": "machine",
     "loadMode": "total",
-    "isHeavy": false,
+    "isHeavy": true,
     "bodyRegion": "lower",
     "why": "Bent knees switch work to the soleus, the lower calf.",
     "setup": [

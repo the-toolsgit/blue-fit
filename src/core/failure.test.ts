@@ -44,10 +44,10 @@ describe("strategic last set to failure", () => {
   it("picks only the last exercise for a muscle, and never one trained again within 2 days", () => {
     // Back & Biceps (Sat): last back move and last biceps move
     expect(ids(planFailure(day("mon"), "2026-11-14", ctx()), "mon")).toEqual(["straight-arm-cable-pulldown", "barbell-preacher-curl"]);
-    // Legs A (Mon): side delts are trained again Wed (2 days) → no lateral raise; 4 leg candidates, budget 3, later wins
+    // Legs A (Mon): side delts are trained again Wed (2 days) → no lateral raise; 3 leg candidates left (calf raises are ★), budget 3
     const legs = ids(planFailure(day("wed"), "2026-11-16", ctx()), "wed");
     expect(legs).not.toContain("cable-lateral-raise");
-    expect(legs).toEqual(["prone-leg-curl", "hip-adduction", "standing-calf-raise"]);
+    expect(legs).toEqual(["leg-extension", "prone-leg-curl", "hip-adduction"]); // calf raises are ★ (Nov 17), so not eligible
     // Sun: rear delts trained again Tue (2 days) → no reverse fly
     expect(ids(planFailure(day("tue"), "2026-11-15", ctx()), "tue")).not.toContain("machine-reverse-fly");
   });
