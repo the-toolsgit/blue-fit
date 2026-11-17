@@ -63,7 +63,7 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride, failWhy }: { ex: E
         <div className="info-tile wide"><span className="info-ic"><Icon name="range" size={20} /></span><div><div className="eyebrow">Range</div><div>{ex.rangeOfMotion}</div></div></div>
         <div className="info-tile"><span className="info-ic"><Icon name="tempo" size={20} /></span><div><div className="eyebrow">Tempo</div>
           <div className="tempo">{tempoPhases(ex.tempo).map((p, i) => <span key={i}>{i > 0 && <span className="muted" aria-hidden="true">→ </span>}<b>{p.word}</b> <span className="mono">{p.sec.replace(" ", "")}</span></span>)}</div></div></div>
-        <div className="info-tile"><span className="info-ic"><Icon name="timer" size={20} /></span><div><div className="eyebrow">Rest</div><div className="mono">{fmtRest(restSec)}</div></div></div>
+        <div className="info-tile rest-tile"><span className="info-ic"><Icon name="timer" size={20} /></span><div><div className="eyebrow">Rest</div><div className="mono">{fmtRest(restSec)}</div></div></div>
         <div className="info-tile wide"><span className="info-ic"><Icon name="today" size={20} /></span><div><div className="eyebrow">Equipment</div>
           <div>{EQUIPMENT_LABEL[ex.equipment]}{ex.singleSleeve ? <span className="muted"> · log the plates on it</span> : ex.loadMode === "perSide" ? <span className="muted"> · log one side, no bar</span> : ex.loadMode === "perHand" ? <span className="muted"> · log one hand</span> : null}</div></div></div>
         <div className="info-tile wide"><span className="info-ic"><Icon name="body" size={20} /></span><div><div className="eyebrow">Works</div>
