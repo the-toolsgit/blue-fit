@@ -40,7 +40,7 @@ export const sessionSchema = z.object({
   status: z.enum(["active", "finished"]), notes: str.optional(), source: z.enum(["app", "jefit"]), importKey: str.optional(), deload: z.boolean().optional(),
   entries: z.array(z.object({
     id: str.min(1), exerciseId: str.min(1), swappedFromId: str.optional(), slotId: str.optional(), supersetGroup: str.optional(),
-    restSec: z.number().int().min(0).max(1800), repMin: z.number().int().optional(), repMax: z.number().int().optional(), notes: str.optional(),
+    restSec: z.number().int().min(0).max(1800), repMin: z.number().int().optional(), repMax: z.number().int().optional(), notes: str.optional(), toFailure: z.boolean().optional(), failWhy: strs.optional(),
     sets: z.array(setSchema),
   })),
 });

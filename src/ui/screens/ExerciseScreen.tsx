@@ -3,7 +3,6 @@ import { computeRecords } from "../../core/records";
 import { lastEntryFor } from "../../core/session";
 import { EQUIPMENT_LABEL, muscleLabel, type Exercise } from "../../core/types";
 import { fmtNum } from "../../core/util";
-import { failureApplies } from "../../core/failure";
 import { Figure } from "../components/Figure";
 import { ExerciseEditor } from "../components/ExerciseEditor";
 import { lazy, Suspense, useState } from "react";
@@ -45,7 +44,6 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride }: { ex: Exercise; 
           {ex.muscles.map((m) => <span key={m} className="badge p">{m}</span>)}
           {ex.secondaryMuscles.map((m) => <span key={m} className="badge">{m}</span>)}
           {ex.isHeavy && <span className="badge star">★ heavy</span>}
-          {ex.failureLastSet && failureApplies(settings.profile?.goal) && <span className="badge fail-badge"><Icon name="flame" size={12} /> last set to failure</span>}
         </div>
       </div>
       <p style={{ fontSize: 16 }}>{whyOverride ?? ex.why}</p>

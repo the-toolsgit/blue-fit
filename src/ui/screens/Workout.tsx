@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { LOADING } from "../../core/figure/poses";
 import { groupPlates, platesFor } from "../../core/plates";
-import { failureApplies, lastSetToFailure } from "../../core/failure";
 import { progressionHint } from "../../core/progression";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
@@ -255,7 +254,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   s: Session; e: SessionEntry; ex: Exercise; index: number; focused: boolean;
   onFocus: () => void; onToggle: (x: LoggedSet) => void; commit: (n: Session) => void; onDetail: () => void; onMenu: () => void;
 }) {
-  const { finished, exMap, settings, routines } = useStore();
+  const { finished, exMap, settings } = useStore();
   const [sel, setSel] = useState<string | null>(null);
   // Missing weight/reps on a refused "done": which set, and a counter to restart the shake
   const [missing, setMissing] = useState<{ id: string; n: number; from: "check" | "done" } | null>(null);
@@ -271,9 +270,8 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const selected = picked && (picked.done || picked.id === firstOpen?.id) ? picked : firstOpen;
   const workIdx = (x: LoggedSet) => e.sets.filter((y) => y.type === "working" && e.sets.indexOf(y) <= e.sets.indexOf(x)).length;
   const swappedFrom = e.swappedFromId ? exMap.get(e.swappedFromId)?.name : undefined;
-  // Mass gain: the last working set of this exercise goes to failure (not in a deload week)
-  const slot = e.slotId ? routines.find((r) => r.id === s.routineId)?.days.flatMap((d) => d.slots).find((x) => x.id === e.slotId) : undefined;
-  const failSetId = !s.deload && failureApplies(settings.profile?.goal) && lastSetToFailure(ex, slot)
+  // Last set to failure: picked when the workout started (stored on the entry, so it never changes mid-workout)
+  const failSetId = !s.deload && e.toFailure
     ? [...e.sets].reverse().find((x) => x.type === "working" || x.type === "failure")?.id : undefined;
 
   return (
@@ -364,7 +362,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                     <Stepper invalid={missing?.id === x.id && ex.equipment !== "bodyweight" && !(x.weight != null && x.weight > 0)} label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />
                     <Stepper invalid={missing?.id === x.id && !(x.reps != null && x.reps > 0)} label="Reps" value={x.reps} step={1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
                   </div>
-                  {x.id === failSetId && <div className="fail-cue"><Icon name="flame" size={18} /><span><b>Last set: go to failure.</b> Keep going until you can't do another clean rep.</span></div>}
+                  {x.id === failSetId && <div className="fail-cue"><Icon name="flame" size={18} /><span><b>Last set: go to failure.</b> Keep going until you can't do another clean rep.{e.failWhy?.length ? <span className="muted" style={{ display: "block", fontSize: 12, marginTop: 2 }}>{e.failWhy.join(" · ")}</span> : null}</span></div>}
                   {(ex.loadMode === "perSide" || ex.singleSleeve) && x.weight != null && x.weight > 0 && <Plates weight={x.weight} single={ex.singleSleeve} />}
                   <button key={missing?.id === x.id ? missing.n : 0} className={"btn btn-primary btn-xl" + (missing?.id === x.id && missing.from === "done" ? " shake" : "")} style={{ minHeight: 56 }} onClick={() => { if (needsValues(x, ex)) return refuse(x, "done"); setSel(null); onToggle(x); }}>
                     <Icon name="check" size={22} stroke={2.6} /> Done{e.sets.indexOf(x) === e.sets.length - 1 ? "" : ` · set ${e.sets.indexOf(x) + 1}`}

@@ -240,7 +240,7 @@ With the seed plan this gives exactly: back 20, biceps 16.5, triceps 18, side de
 ### 4.3 Routine
 `Routine { id, name, isCurrent, createdAt, rules?: {title, text}[], days: RoutineDay[] }`
 `RoutineDay { id, weekday: 0–6 | null (0 = Sunday), title, slots: Slot[] }` (order = array order)
-`Slot { id, exerciseId, sets, repMin, repMax, restSec, supersetGroup?, notes?, whyOverride?, tipsOverride? }`
+`Slot { id, exerciseId, sets, repMin, repMax, restSec, supersetGroup?, notes?, whyOverride?, tipsOverride?, toFailure?: boolean (Auto = unset) }`
 Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Sat Back & Biceps, Sun Shoulders & Traps, Mon Legs A, Tue Back & Triceps, Wed Shoulders, Traps & Arms, Thu Legs B, Fri Rest), all rests 120 s. Day ids keep their original names (mon … sun) so history stays linked.
 
 ### 4.4 Volume target
@@ -248,7 +248,7 @@ Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Sat Back & Biceps,
 
 ### 4.5 Session (logged workout)
 `Session { id, date, title, routineId?, dayId?, startedAt, finishedAt?, status: active | finished, notes?, source: app | jefit, importKey?, deload?: boolean, entries: SessionEntry[] }`
-`SessionEntry { id, exerciseId, swappedFromId?, slotId?, supersetGroup?, restSec, repMin?, repMax?, notes?, sets: LoggedSet[] }`
+`SessionEntry { id, exerciseId, swappedFromId?, slotId?, supersetGroup?, restSec, repMin?, repMax?, notes?, toFailure?, failWhy?: string[], sets: LoggedSet[] }`
 `LoggedSet { id, type: warmup | working | drop | failure, weight: number | null, reps: int | null, done: boolean, rir?: number | null, completedAt?: timestamp | null }`
 At most one session is `active`. Duration = finishedAt − startedAt (minutes, rounded).
 
@@ -329,11 +329,17 @@ How-to texts are plain and short, for reading mid-set: everyday words, no jargon
 
 The plan's "★ Heavy" rule card reads: "★ Key lifts: the app tracks these to measure your strength progress, and suggests a deload when they stall." It says only what ★ means (no "no ★" part, no rest or timing notes). In the app ★ changes no training rule: it marks the lifts used for the deload stall check (§5.16), because their weight climbs in small steps relative to the load, unlike light isolation lifts. (`core/seed/rule-text.ts`, applied by the seed and by a one-time migration when the card still shows an earlier app text.)
 
-### 5.19 Last set to failure (mass gain and endurance, Nov 16 2026)
-Every set still stops with 0–2 good reps left. On top of that, for the **mass gain** and **endurance** goals (or no profile yet), chosen exercises take their **last working set to failure**. Research: growth rises as sets end closer to failure (Robinson 2024), true failure adds little and costs more fatigue (Refalo 2023), so it's kept to safe, low-fatigue isolation / machine / cable moves and never to heavy compound lifts; there's no evidence for splitting it by muscle size.
-- Defaults (`core/failure.ts` FAILURE_DEFAULT; `failureLastSet` on the exercise): single-arm cable lat pulldown, straight-arm pulldown, incline DB curl, preacher curl, cable lateral raise, overhead trap raise, machine reverse fly, leg extension, prone and seated leg curl, hip adduction, standing and seated calf raise, V-bar pushdown, face pull, lean-away and all-the-way-up lateral raise, Kelso shrug, single-arm cable reverse fly, rope overhead extension, cable kickback. No ★ lift. One-time migration sets them on stored exercises.
-- Per plan exercise: Edit plan → exercise sheet → **Last set to failure** switch (flame icon; "Mass gain and endurance. Best on machine, cable and isolation moves."); stored as `slot.toFailure` only when it differs from the exercise default.
-- Shown: amber flame next to the name on Today, the Plan tab and Edit plan; "🔥 last set to failure" badge on the exercise page; in the logger a small "failure" tag on the last working set, and when that set is open a cue "Last set: go to failure. Keep going until you can't do another clean rep." Hidden in a deload week and for the strength and maintain goals (no extra cue for those).
+### 5.19 Last set to failure (strategic; mass gain and endurance, Nov 16 2026)
+Every set still stops with 0–2 good reps left. On top of that, for the **mass gain** and **endurance** goals (or no profile yet), the app picks per workout which exercises take their **last working set to failure** (`core/failure.ts` `planFailure`). Research: growth rises as sets end closer to failure (Robinson 2024); true failure adds little over stopping just short and costs more fatigue (Refalo 2023); failure needs about 24–48 h more recovery (Morán-Navarro 2017). Plan: `docs/plans/failure-strategy.md`.
+- **None:** strength and maintain goals, a deload week, beginners (< 1 year lifting; manual "On" still applies).
+- **Eligible:** not ★, not the EZ-bar incline extension or single-arm DB row; machine, plate-loaded machine or cable, or a free-weight move with one direct muscle (dumbbell, fixed bar, bodyweight, other).
+- **Budget per workout** (*judgment*): 3 failure sets; 2 with one of cutting / sleep < 6 h / age 40+; 1 with two or more. Manual "On" exercises use it up first.
+- **Picks** (by the exercise's main muscle = first direct group): only the **last exercise for that muscle** in the workout; skipped if the muscle's projected weekly sets (logged this training week + still planned from today) are **above its max**; skipped if the plan trains that muscle directly again **within 2 days** (*judgment*). Then best first: priority muscles (target flag or the default bold muscles; Skip muscles last) → muscles below their weekly min → later in the workout.
+- **Reasons** (e.g. "Last biceps exercise in this workout · priority muscle · biceps rests 4 days", plus "Up to 2 per workout (cutting)" when the budget is smaller). Tap the flame to see them (toast); also shown in the logger cue and in Edit plan.
+- **User control:** Edit plan → exercise sheet → **Last set to failure: Auto / On / Off** (stored as `slot.toFailure` true/false; Auto = unset). Manual always wins.
+- **Timing:** previews (Today, Plan tab, Edit plan) are worked out for this training week's date of each day. **Start workout** stores the picks on the session entries (`entry.toFailure`, `entry.failWhy`), so they never change mid-workout or later; a finished day this week shows what was stored. After a workout is saved, the remaining days recompute from what was actually logged. Swapping a picked exercise to one that isn't eligible drops its flame.
+- Replaces the old fixed per-exercise defaults (`failureLastSet`); one-time migration `2026-11-16-failure-strategic` removes them and keeps users' slot choices.
+- Shown: amber flame next to the name on Today, the Plan tab and Edit plan; in the logger a small "failure" tag on the last working set, and when that set is open a cue "Last set: go to failure. Keep going until you can't do another clean rep." with the reasons below.
 
 ### 5.16 Deload weeks (agreed with Leo, Nov 16 2026)
 - **Content:** same days and exercises; each exercise gets half its sets rounded up (4→2, 3→2, 1→1); pre-filled weights are 10% lighter, rounded to the nearest weight step of the exercise (never below one step); every set stops with 3–4 reps left (shown as a reminder). No progression hint during a deload.

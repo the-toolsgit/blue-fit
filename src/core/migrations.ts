@@ -3,7 +3,6 @@ import type { AppData, Exercise, Routine } from "./types";
 import plainText from "./seed/exercise-text.json";
 import { TEXT_FIELDS, textFingerprint } from "./textFields";
 import { RULE_TEXT } from "./seed/rule-text";
-import { FAILURE_DEFAULT } from "./failure";
 
 /** Fingerprints of the original (pre Nov 16 2026) how-to texts: only exercises still showing those get the new plain texts. */
 const OLD_TEXT: Record<string, string> = {"t-bar-reverse-row": "6b8632a7", "single-arm-cable-lat-pulldown": "df96e44a", "single-arm-db-row": "12ea0da8", "straight-arm-cable-pulldown": "b7a692c2", "db-incline-curl": "656a2c8e", "barbell-preacher-curl": "e438cae0", "machine-shoulder-press": "3c4be1", "cable-lateral-raise": "5876a8cb", "lateral-shrug-hybrid": "15387c0f", "barbell-shrug": "7178eb3d", "overhead-trap": "f04c5cb1", "machine-reverse-fly": "82d257d8", "smith-squat": "a37ba86e", "leg-extension": "307c6f71", "prone-leg-curl": "1d775ce5", "hip-adduction": "5c6be17f", "standing-calf-raise": "513af48c", "wide-grip-lat-pulldown": "a2f2d4b1", "cable-seated-row": "ce490152", "ez-bar-incline-tricep-extension": "4b283842", "machine-dip": "c5b42a37", "v-bar-pushdown": "733b2c4b", "rope-face-pull": "3e0264c2", "lean-away-lateral-raise": "2593c16", "all-the-way-up-lateral-raise": "80d56b5d", "kelso-shrug": "417581ff", "single-arm-cable-reverse-fly": "fc8526a4", "rope-overhead-tricep-extension": "93fca8aa", "db-hammer-curl": "8762b83b", "leg-press": "5552ec03", "seated-leg-curl": "eb257054", "seated-calf-raise": "57abd3bf", "cable-one-arm-tricep-kickback": "a899d5fb"};
@@ -27,17 +26,13 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
-    // Nov 16 2026: "last set to failure" defaults for the built-in isolation / machine / cable exercises.
-    id: "2026-11-16-failure-defaults",
+    // Nov 16 2026: "last set to failure" is now picked per workout (core/failure.ts). Drop the old per-exercise
+    // defaults; slot.toFailure values stay (they were only ever saved when the user changed the default).
+    // Replaces "2026-11-16-failure-defaults".
+    id: "2026-11-16-failure-strategic",
     run(d) {
-      const fail = new Set<string>(FAILURE_DEFAULT);
-      let changed = false;
-      const exercises = d.exercises.map((e) => {
-        if (e.isCustom || !fail.has(e.id) || e.failureLastSet !== undefined) return e;
-        changed = true;
-        return { ...e, failureLastSet: true };
-      });
-      return changed ? { ...d, exercises } : null;
+      if (!d.exercises.some((e) => e.failureLastSet !== undefined)) return null;
+      return { ...d, exercises: d.exercises.map(({ failureLastSet: _f, ...e }) => e) };
     },
   },
   {

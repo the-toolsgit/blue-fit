@@ -1,7 +1,7 @@
 # Plan: strategic "last set to failure"
 
 Working document (agreed with Leo, Nov 16 2026). Read **before starting, while working, and after finishing**.
-Tick items only when done *and verified*. Anything not agreed here is out of scope. Status: **approved, not built yet**.
+Tick items only when done *and verified*. Anything not agreed here is out of scope. Status: **built Nov 16 2026; Leo reviews in the app**.
 
 ## 1. What Leo asked for (in his words where possible)
 
@@ -39,17 +39,17 @@ Evidence: growth rises as sets end closer to failure (Robinson 2024); true failu
 
 ## 4. Steps
 
-- [ ] 4.1 Pure core module (`src/core/failure.ts` rewrite): `planFailure(day, routine, exercises, targets, profile, finishedThisWeek, history, today, settings) → { slotId, why[] }[]`. Framework-free.
-- [ ] 4.2 Eligibility rules (§2.1–2.2) as data/logic; replace FAILURE_DEFAULT (keep `failureLastSet` on exercises only if still needed as "eligible", or derive eligibility from equipment/isHeavy/an `unsafeFailure` list).
-- [ ] 4.3 Budget (§2.3) and ranking (§2.4).
-- [ ] 4.4 Snapshot on Start workout (§3); logger reads the snapshot, not the live preview.
-- [ ] 4.5 UI: flames from the preview on Today / Plan / Edit plan; tap flame → reason sheet or tooltip; Edit plan switch = manual override (on / off / back to automatic).
-- [ ] 4.6 Migration: existing `failureLastSet` defaults and `slot.toFailure` values — keep only the user's real overrides (slot.toFailure set by the user); drop the old defaults.
-- [ ] 4.7 Tests: budget per profile, last-exercise-per-muscle pick, below/above target, 2-day recovery rule, snapshot stability, overrides win, deload/beginner/strength/maintain → none.
-- [ ] 4.8 APP_SPEC.md §5.19 rewritten in the same commit; check in the preview; Leo reviews.
+- [x] 4.1 Pure core module (`src/core/failure.ts` rewrite): `planFailure(day, routine, exercises, targets, profile, finishedThisWeek, history, today, settings) → { slotId, why[] }[]`. Framework-free.
+- [x] 4.2 Eligibility rules (§2.1–2.2) as data/logic; replace FAILURE_DEFAULT (keep `failureLastSet` on exercises only if still needed as "eligible", or derive eligibility from equipment/isHeavy/an `unsafeFailure` list).
+- [x] 4.3 Budget (§2.3) and ranking (§2.4).
+- [x] 4.4 Snapshot on Start workout (§3); logger reads the snapshot, not the live preview.
+- [x] 4.5 UI: flames from the preview on Today / Plan / Edit plan; tap flame → reason sheet or tooltip; Edit plan switch = manual override (on / off / back to automatic).
+- [x] 4.6 Migration: existing `failureLastSet` defaults and `slot.toFailure` values — keep only the user's real overrides (slot.toFailure set by the user); drop the old defaults.
+- [x] 4.7 Tests: budget per profile, last-exercise-per-muscle pick, below/above target, 2-day recovery rule, snapshot stability, overrides win, deload/beginner/strength/maintain → none.
+- [x] 4.8 APP_SPEC.md §5.19 rewritten in the same commit; checked in the preview. Leo's review pending.
 
 ## 5. Final check
-- [ ] F1–F6 implemented as written.
-- [ ] Every number has a source or a *judgment* note.
-- [ ] No personal values committed.
-- [ ] Nothing left unticked without a reason.
+- [x] F1–F6 implemented as written. Notes: "trained again within 2 days" uses the plan only (direct sets); manual On counts against the budget; Skip muscles rank last; beginners still get manual On.
+- [x] Every number has a source or a *judgment* note.
+- [x] No personal values committed (tests use made-up profiles).
+- [x] Nothing left unticked without a reason.

@@ -4,6 +4,7 @@ import { prsForEntry, type PrKind } from "./records";
 import type { Exercise, LoggedSet, Routine, RoutineDay, Session, SessionEntry, Slot } from "./types";
 import { localDate, uid } from "./util";
 import { deloadSets, deloadWeight } from "./deload";
+import { failureEligible } from "./failure";
 import { countsForLoad, sessionsVolume, tonnage, type GroupTotals } from "./volume";
 
 const byNewest = (a: Session, b: Session) => (b.startedAt > a.startedAt ? 1 : b.startedAt < a.startedAt ? -1 : 0);
@@ -44,10 +45,15 @@ export function buildEntry(ex: Exercise, history: Session[], opts: { sets?: numb
   };
 }
 
-export function createSessionFromDay(routine: Routine, day: RoutineDay, exercises: Map<string, Exercise>, history: Session[], now: Date, opts: { deload?: boolean } = {}): Session {
+/** `failure`: the day's "last set to failure" picks (core/failure.ts planFailure), stored on the entries so they stay fixed. */
+export function createSessionFromDay(routine: Routine, day: RoutineDay, exercises: Map<string, Exercise>, history: Session[], now: Date, opts: { deload?: boolean; failure?: { slotId: string; why: string[] }[] } = {}): Session {
+  const fail = new Map((opts.failure ?? []).map((x) => [x.slotId, x.why]));
   const entries = day.slots.flatMap((slot) => {
     const ex = exercises.get(slot.exerciseId);
-    return ex ? [buildEntry(ex, history, { slot, deload: opts.deload })] : [];
+    if (!ex) return [];
+    const e = buildEntry(ex, history, { slot, deload: opts.deload });
+    const why = fail.get(slot.id);
+    return [why ? { ...e, toFailure: true, failWhy: why } : e];
   });
   return { id: uid(), date: localDate(now), title: day.title, routineId: routine.id, dayId: day.id, startedAt: now.toISOString(), finishedAt: null, status: "active", source: "app", entries, ...(opts.deload ? { deload: true } : {}) };
 }
@@ -102,7 +108,9 @@ export function moveEntry(s: Session, entryId: string, dir: -1 | 1): Session {
 export function swapEntry(s: Session, entryId: string, ex: Exercise, history: Session[]): Session {
   return mapEntry(s, entryId, (e) => {
     const fresh = buildEntry(ex, history, { sets: e.sets.length, restSec: e.restSec, repMin: e.repMin, repMax: e.repMax });
-    return { ...e, exerciseId: ex.id, swappedFromId: e.swappedFromId ?? e.exerciseId, sets: fresh.sets };
+    // A swap to a move that isn't safe to take to failure drops the flame
+    const keep = e.toFailure && failureEligible(ex);
+    return { ...e, exerciseId: ex.id, swappedFromId: e.swappedFromId ?? e.exerciseId, sets: fresh.sets, toFailure: keep || undefined, failWhy: keep ? e.failWhy : undefined };
   });
 }
 

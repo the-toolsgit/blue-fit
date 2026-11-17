@@ -291,5 +291,5 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .fail-tag { display: inline-flex; align-items: center; gap: 3px; margin-left: 8px; padding: 2px 7px; border-radius: 99px; font: 600 11px var(--body); letter-spacing: .02em; color: var(--warn); border: 1px solid color-mix(in srgb, var(--warn) 45%, transparent); vertical-align: 2px; }
 .fail-cue { display: flex; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 12px; font-size: 13px; color: var(--ink); background: color-mix(in srgb, var(--warn) 12%, transparent); border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); }
 .fail-cue svg { color: var(--warn); flex: none; }
-.fail-badge { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 55%, transparent); }
-.fail-icon { display: inline-flex; vertical-align: -2px; margin-left: 5px; color: var(--warn); }
+.fail-icon { display: inline-flex; vertical-align: -6px; margin: -4px -4px -4px 1px; padding: 4px; border-radius: 8px; color: var(--warn); cursor: pointer; }
+.fail-icon:active { background: color-mix(in srgb, var(--warn) 18%, transparent); }

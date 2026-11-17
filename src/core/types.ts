@@ -54,7 +54,7 @@ export interface Exercise {
   loadMode: LoadMode;
   /** Plate-loaded on one sleeve only (e.g. T-bar row): show the plates for the whole weight */
   singleSleeve?: boolean;
-  /** Mass gain: take the last set to failure by default (safe isolation / machine / cable moves) */
+  /** No longer used (failure is now picked per workout, see core/failure.ts). Kept so older backups still import. */
   failureLastSet?: boolean;
   isHeavy: boolean;
   bodyRegion: "upper" | "lower";
@@ -83,7 +83,7 @@ export interface Slot {
   notes?: string;
   whyOverride?: string;
   tipsOverride?: string[];
-  /** Last set to failure in this plan (unset = the exercise's default) */
+  /** Last set to failure: the user's choice in Edit plan (true/false). Unset = the app decides each workout. */
   toFailure?: boolean;
 }
 
@@ -143,6 +143,9 @@ export interface SessionEntry {
   repMin?: number;
   repMax?: number;
   notes?: string;
+  /** Last set to failure, fixed when the workout started (with the reasons shown when the flame is tapped) */
+  toFailure?: boolean;
+  failWhy?: string[];
   sets: LoggedSet[];
 }
 

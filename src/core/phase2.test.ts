@@ -190,28 +190,3 @@ describe("plain rule text", () => {
   });
 });
 
-describe("last set to failure", async () => {
-  const { FAILURE_DEFAULT, failureApplies, lastSetToFailure } = await import("./failure");
-  it("defaults on for safe isolation/machine/cable moves, never for ★ lifts", () => {
-    for (const e of seed.exercises) expect(!!e.failureLastSet).toBe((FAILURE_DEFAULT as readonly string[]).includes(e.id));
-    expect(seed.exercises.filter((e) => e.isHeavy && e.failureLastSet)).toEqual([]);
-  });
-  it("the plan can turn it on or off per exercise; only mass gain uses it", () => {
-    const curl = seed.exercises.find((e) => e.id === "db-incline-curl")!, squat = seed.exercises.find((e) => e.id === "smith-squat")!;
-    const slot = { id: "s", exerciseId: curl.id, sets: 3, repMin: 8, repMax: 12, restSec: 120 };
-    expect(lastSetToFailure(curl, slot)).toBe(true);
-    expect(lastSetToFailure(curl, { ...slot, toFailure: false })).toBe(false);
-    expect(lastSetToFailure(squat, { ...slot, exerciseId: squat.id, toFailure: true })).toBe(true);
-    expect(failureApplies(undefined)).toBe(true);
-    expect(failureApplies("strength")).toBe(false);
-    expect(failureApplies("maintenance")).toBe(false);
-    expect(failureApplies("endurance")).toBe(true);
-  });
-  it("migration sets the defaults once on stored exercises", async () => {
-    const m = MIGRATIONS.find((x) => x.id === "2026-11-16-failure-defaults")!;
-    const old = { ...seed, exercises: seed.exercises.map(({ failureLastSet: _f, ...e }) => e) };
-    const out = m.run(old, "2026-11-16")!;
-    expect(out.exercises.find((e) => e.id === "leg-extension")!.failureLastSet).toBe(true);
-    expect(m.run(out, "2026-11-16")).toBeNull();
-  });
-});

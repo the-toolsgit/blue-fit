@@ -4,7 +4,6 @@ import routine from "./routine-leo-v3-1.json";
 import targets from "./targets.json";
 import plainText from "./exercise-text.json";
 import { RULE_TEXT } from "./rule-text";
-import { FAILURE_DEFAULT } from "../failure";
 import { DEFAULT_SETTINGS, type AppData, type Exercise, type Routine, type VolumeTarget } from "../types";
 
 export const SEED_VERSION = 1;
@@ -16,8 +15,7 @@ export const withRuleText = (r: Routine): Routine =>
 export function buildSeed(): AppData {
   // Plain-language how-to texts override the extracted ones (kept in their own file so `npm run seed` doesn't undo them)
   const text = plainText as unknown as Record<string, Partial<Exercise>>;
-  const fail = new Set<string>(FAILURE_DEFAULT);
-  const ex = (structuredClone(exercises) as unknown as Exercise[]).map((e) => ({ ...e, ...(text[e.id] ?? {}), ...(fail.has(e.id) ? { failureLastSet: true } : {}) }));
+  const ex = (structuredClone(exercises) as unknown as Exercise[]).map((e) => ({ ...e, ...(text[e.id] ?? {}) }));
   return {
     exercises: ex,
     routines: [withRuleText(structuredClone(routine) as Routine)],
