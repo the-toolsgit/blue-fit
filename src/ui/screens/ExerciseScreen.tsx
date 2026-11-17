@@ -104,7 +104,7 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride, failWhy }: { ex: E
             ].map(([l, v, s]) => (
               <div key={l} className="glass" style={{ padding: 12, borderRadius: 16 }}>
                 <div className="eyebrow" style={{ fontSize: 10 }}>{l}</div>
-                <div className="mono" style={{ fontSize: 20, marginTop: 4, color: "var(--neon-ink)" }}>{v}</div>
+                <div className="mono" style={{ fontSize: 20, marginTop: 4, color: "var(--neon-ink)", wordSpacing: l === "Last time" ? "-0.35em" : undefined }}>{v}</div>
                 <div className="muted" style={{ fontSize: 12 }}>{s}</div>
               </div>
             ))}
