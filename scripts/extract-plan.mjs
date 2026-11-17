@@ -55,6 +55,8 @@ const META = {
   "Cable One-Arm Tricep Kickback":{ D: ["triceps"], I: [], eq: "cable", load: "total", inc: 5, jefit: "Cable One-Arm Tricep Kickback" },
 };
 const LOWER = new Set(["Smith Squat","Leg Extension","Prone Leg Curl","Hip Adduction","Standing Calf Raise","Leg Press","Seated Leg Curl","Seated Calf Raise"]);
+/** ★ in the plan but not a heavy lift (Leo, Nov 17 2026): small single-joint move, can't be loaded like a row or press. */
+const NOT_HEAVY = new Set(["db-hammer-curl"]);
 
 // Slot notes from Leo_Workout_Routine.md (per day, in order)
 const NOTES = {
@@ -82,7 +84,7 @@ for (const day of DAYS) {
         id, name: base, aliases: [m.jefit],
         muscles: e.muscles, secondaryMuscles: e.sec,
         volume: [...m.D.map((g) => ({ group: g, weight: 1 })), ...m.I.map((g) => ({ group: g, weight: 0.5 }))],
-        equipment: m.eq, loadMode: m.load, ...(m.single ? { singleSleeve: true } : {}), isHeavy: !!e.star, bodyRegion: LOWER.has(base) ? "lower" : "upper",
+        equipment: m.eq, loadMode: m.load, ...(m.single ? { singleSleeve: true } : {}), isHeavy: !!e.star && !NOT_HEAVY.has(id), bodyRegion: LOWER.has(base) ? "lower" : "upper",
         why: e.why, setup: e.setup, form: e.form, tips: e.tips, avoid: e.mistakes,
         rangeOfMotion: e.rom, tempo: "1–2 s up, 2–3 s down",
         defaultRestSec: 120, incrementLb: m.inc,

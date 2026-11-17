@@ -2274,7 +2274,7 @@
     ],
     "equipment": "dumbbell",
     "loadMode": "perHand",
-    "isHeavy": true,
+    "isHeavy": false,
     "bodyRegion": "upper",
     "why": "Heavy neutral-grip curl. Builds arm thickness under the biceps.",
     "setup": [

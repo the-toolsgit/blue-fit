@@ -63,9 +63,9 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
-    // Nov 17 2026: the stall check now uses every exercise, so the ★ card says what ★ means: heavy compound lift.
-    // Works on the card under its old or new title; only if it still shows an earlier app text.
-    id: "2026-11-17-key-lift-text",
+    // Nov 17 2026: the stall check now uses every exercise, so the ★ card says what ★ means: heavy lift
+    // ("-2": was "heavy compound lifts"). Works on the card under its old or new title; only if it still shows an earlier app text.
+    id: "2026-11-17-key-lift-text-2",
     run(d) {
       let changed = false;
       const oldTitle = (title: string) => Object.keys(RULE_TITLE).find((k) => RULE_TITLE[k] === title) ?? title;
@@ -76,6 +76,15 @@ export const MIGRATIONS: Migration[] = [
         return { ...x, text: t.text };
       }) });
       return changed ? { ...d, routines } : null;
+    },
+  },
+  {
+    // Nov 17 2026: DB Hammer Curl isn't a heavy lift (small single-joint move): no ★. Only the built-in exercise.
+    id: "2026-11-17-hammer-curl-not-heavy",
+    run(d) {
+      const ex = d.exercises.find((e) => e.id === "db-hammer-curl" && !e.isCustom && e.isHeavy);
+      if (!ex) return null;
+      return { ...d, exercises: d.exercises.map((e) => (e === ex ? { ...e, isHeavy: false } : e)) };
     },
   },
   {

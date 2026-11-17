@@ -230,17 +230,27 @@ describe("plain rule text", () => {
   it("rewrites the original ★ Heavy card once, leaves edited ones alone", async () => {
     const raw = (await import("./seed/routine-leo-v3-1.json")).default as unknown as typeof seed.routines[0];
     const out = m.run({ ...seed, routines: [structuredClone(raw)] }, "2026-11-16")!;
-    expect(out.routines[0].rules!.find((r) => r.title === "★ Heavy")!.text).toMatch(/^★ Key lifts: heavy compound lifts/);
+    expect(out.routines[0].rules!.find((r) => r.title === "★ Heavy")!.text).toMatch(/^★ Key lifts: heavy lifts\./);
     expect(m.run(out, "2026-11-16")).toBeNull();
-    expect(seed.routines[0].rules!.find((r) => r.title === "★ Key lift")!.text).toMatch(/^★ Key lifts: heavy compound lifts/);
+    expect(seed.routines[0].rules!.find((r) => r.title === "★ Key lift")!.text).toMatch(/^★ Key lifts: heavy lifts\./);
+  });
+  it("Nov 17: DB Hammer Curl loses its ★ (built-in only)", () => {
+    const m3 = MIGRATIONS.find((x) => x.id === "2026-11-17-hammer-curl-not-heavy")!;
+    const ex = seed.exercises.map((e) => (e.id === "db-hammer-curl" ? { ...e, isHeavy: true } : e));
+    const out = m3.run({ ...seed, exercises: ex }, "2026-11-17")!;
+    expect(out.exercises.find((e) => e.id === "db-hammer-curl")!.isHeavy).toBe(false);
+    expect(m3.run(out, "2026-11-17")).toBeNull();
+    expect(seed.exercises.find((e) => e.id === "db-hammer-curl")!.isHeavy).toBe(false);
   });
   it("Nov 17: ★ Key lift card says what ★ means (old wording only)", () => {
-    const m2 = MIGRATIONS.find((x) => x.id === "2026-11-17-key-lift-text")!;
+    const m2 = MIGRATIONS.find((x) => x.id === "2026-11-17-key-lift-text-2")!;
     const r = structuredClone(seed.routines[0]);
     r.rules = [{ title: "★ Key lift", text: "★ Key lifts: the app tracks these to measure your strength progress, and suggests a deload when they stall." }, { title: "Effort", text: "x" }];
     const out = m2.run({ ...seed, routines: [r] }, "2026-11-17")!;
-    expect(out.routines[0].rules![0].text).toMatch(/^★ Key lifts: heavy compound lifts/);
+    expect(out.routines[0].rules![0].text).toMatch(/^★ Key lifts: heavy lifts\./);
     expect(m2.run(out, "2026-11-17")).toBeNull();
+    r.rules = [{ title: "★ Key lift", text: "★ Key lifts: heavy compound lifts. Add weight whenever you can. The app never takes them to failure." }];
+    expect(m2.run({ ...seed, routines: [r] }, "2026-11-17")!.routines[0].rules![0].text).toMatch(/^★ Key lifts: heavy lifts\./);
     r.rules = [{ title: "★ Key lift", text: "My own text" }];
     expect(m2.run({ ...seed, routines: [r] }, "2026-11-17")).toBeNull();
   });

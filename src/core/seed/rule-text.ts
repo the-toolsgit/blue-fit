@@ -11,7 +11,8 @@ export const RULE_TEXT: Record<string, { old: string[]; text: string }> = {
       "★ = big, stable lifts that are safe to load heavy: push the weight up whenever you can. No ★ = smaller isolation moves: they get heavier too, in small steps, with strict form and full range. Same effort for both.",
       "★ Key lifts: the heavy lifts where your weight should climb steadily. The app watches them to see if you're still getting stronger, and suggests a deload when they stall.",
       "★ Key lifts: the app tracks these to measure your strength progress, and suggests a deload when they stall.",
+      "★ Key lifts: heavy compound lifts. Add weight whenever you can. The app never takes them to failure.",
     ],
-    text: "★ Key lifts: heavy compound lifts. Add weight whenever you can. The app never takes them to failure.",
+    text: "★ Key lifts: heavy lifts. Add weight whenever you can. The app never takes them to failure.",
   },
 };
