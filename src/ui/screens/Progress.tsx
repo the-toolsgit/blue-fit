@@ -107,7 +107,7 @@ export function ProgressScreen() {
               ? <><b>{muscleLabel(sel)}</b> · <span className="mono">{fmtNum(thisWeek[sel] ?? 0)}</span> sets this week <span className="muted">· target {formatTarget(tmap.get(sel))}</span></>
               : <><b>{muscleLabel(sel)}</b> · <span style={{ color: RECOVERY_COLOR[rec[sel].status] }}>{REC_LABEL[rec[sel].status]}</span> <span className="muted">· {recNote(rec[sel])}</span></>
           ) : mapMode === "volume"
-            ? <span className="muted">Brighter = closer to the top of the target. Tap a muscle or swipe here.</span>
+            ? <span className="muted">Brighter = closer to the top of the target.</span>
             : <span className="row" style={{ justifyContent: "center", gap: 12, fontSize: 12 }}>{(Object.keys(REC_LABEL) as Recovery[]).map((r) => <span key={r} className="row" style={{ gap: 5 }}><i style={{ width: 10, height: 10, borderRadius: 3, background: RECOVERY_COLOR[r], boxShadow: `0 0 6px ${RECOVERY_COLOR[r]}` }} />{REC_LABEL[r]}</span>)}</span>}
           </div>
           <button className="map-chev" aria-label="Next muscle" onClick={() => step(1)}>›</button>
