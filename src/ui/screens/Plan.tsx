@@ -80,32 +80,6 @@ export function PlanScreen() {
       <h1 className="title-lg neon-grad" style={{ marginTop: 6 }}>{routine.name}</h1>
       <p className="muted" style={{ marginTop: 4, fontSize: 14 }}>{days.length} days · {routine.days.flatMap((d) => d.slots).length} exercises · {allSets} sets a week</p>
 
-      <section className="glass row" style={{ padding: "10px 10px 10px 14px", marginTop: 12, borderRadius: 16, borderColor: deloading ? "color-mix(in srgb, var(--neon-2) 50%, transparent)" : undefined }}>
-        <div className="grow">
-          <div style={{ font: "700 16px var(--display)", letterSpacing: ".08em", textTransform: "uppercase", color: deloading ? "var(--neon-2)" : undefined }}>
-            {deloading ? `Deload week · until ${fmtDate(settings.deload!.end, { weekday: "short" })}` : "Deload week"}
-          </div>
-          <div className="muted" style={{ fontSize: 12 }}>{DELOAD_RULE}</div>
-        </div>
-        {deloading
-          ? <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px", fontSize: 14 }} onClick={() => { saveSettings(endDeload(settings, today)); toast({ kind: "info", title: "Deload ended", body: "Back to your normal plan." }); }}>End</button>
-          : <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px", fontSize: 14 }} onClick={() => setConfirmDeload(true)}>Start</button>}
-      </section>
-      <Confirm open={confirmDeload} title="Start a deload week?" confirm="Start deload"
-        body={<>{DELOAD_RULE} It lasts until {fmtDate(deloadWeek(today, settings.weekStartDay).end, { weekday: "long" })}, then your normal plan comes back.</>}
-        onClose={() => setConfirmDeload(false)} onConfirm={() => saveSettings({ ...settings, deload: deloadWeek(today, settings.weekStartDay), deloadDismissedAt: null })} />
-
-      {routine.rules?.length ? (
-        <div className="chips-scroll" style={{ marginTop: 14, gap: 10 }}>
-          {routine.rules.map((r) => (
-            <div key={r.title} className="glass" style={{ minWidth: 240, maxWidth: 260, padding: 12, borderRadius: 16, flex: "none" }}>
-              <b style={{ font: "700 16px var(--display)", letterSpacing: ".08em", textTransform: "uppercase", color: "var(--neon-ink)" }}>{r.title}</b>
-              <p style={{ fontSize: 13, marginTop: 4 }}>{r.text}</p>
-            </div>
-          ))}
-        </div>
-      ) : null}
-
       <div className="chips-scroll" style={{ marginTop: 12 }}>
         {days.map((d) => <button key={d.id} className="chip" aria-pressed={d.id === day?.id} onClick={() => setDayId(d.id)}>{d.weekday != null ? SHORT[d.weekday] : d.title}</button>)}
       </div>
@@ -129,6 +103,32 @@ export function PlanScreen() {
         <h2 className="section-title">This workout's volume</h2>
         <DayVolume routine={routine} day={day} exMap={exMap} targets={targets} />
       </>}
+
+      {routine.rules?.length ? (
+        <div className="chips-scroll" style={{ marginTop: 22, gap: 10 }}>
+          {routine.rules.map((r) => (
+            <div key={r.title} className="glass" style={{ minWidth: 240, maxWidth: 260, padding: 12, borderRadius: 16, flex: "none" }}>
+              <b style={{ font: "700 16px var(--display)", letterSpacing: ".08em", textTransform: "uppercase", color: "var(--neon-ink)" }}>{r.title}</b>
+              <p style={{ fontSize: 13, marginTop: 4 }}>{r.text}</p>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
+      <section className="glass row" style={{ padding: "10px 10px 10px 14px", marginTop: 14, borderRadius: 16, borderColor: deloading ? "color-mix(in srgb, var(--neon-2) 50%, transparent)" : undefined }}>
+        <div className="grow">
+          <div style={{ font: "700 16px var(--display)", letterSpacing: ".08em", textTransform: "uppercase", color: deloading ? "var(--neon-2)" : undefined }}>
+            {deloading ? `Deload week · until ${fmtDate(settings.deload!.end, { weekday: "short" })}` : "Deload week"}
+          </div>
+          <div className="muted" style={{ fontSize: 12 }}>{DELOAD_RULE}</div>
+        </div>
+        {deloading
+          ? <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px", fontSize: 14 }} onClick={() => { saveSettings(endDeload(settings, today)); toast({ kind: "info", title: "Deload ended", body: "Back to your normal plan." }); }}>End</button>
+          : <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px", fontSize: 14 }} onClick={() => setConfirmDeload(true)}>Start</button>}
+      </section>
+      <Confirm open={confirmDeload} title="Start a deload week?" confirm="Start deload"
+        body={<>{DELOAD_RULE} It lasts until {fmtDate(deloadWeek(today, settings.weekStartDay).end, { weekday: "long" })}, then your normal plan comes back.</>}
+        onClose={() => setConfirmDeload(false)} onConfirm={() => saveSettings({ ...settings, deload: deloadWeek(today, settings.weekStartDay), deloadDismissedAt: null })} />
       <Sheet open={manage} onClose={() => setManage(false)} label="Plans">
         <div className="spread" style={{ marginBottom: 8 }}>
           <h3 className="title-md" style={{ textTransform: "uppercase" }}>Plans</h3>
