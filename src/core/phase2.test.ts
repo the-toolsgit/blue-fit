@@ -52,6 +52,34 @@ describe("weekly streak", () => {
   });
 });
 
+describe("streak freeze and calendar flames", async () => {
+  const { toggleFreeze, activeFreeze, streakMarks, restDayOf } = await import("./history");
+  it("a frozen missed week holds the streak (no +1); unfrozen it breaks it", () => {
+    const s = [...fullWeek("2026-11-02"), ...fullWeek("2026-11-16")]; // week of Nov 9 missed
+    expect(weeklyStreak(s, routine, "2026-11-25").current).toBe(1);
+    const frozen = weeklyStreak(s, routine, "2026-11-25", 1, [{ start: "2026-11-10", end: "2026-11-12" }]);
+    expect(frozen.current).toBe(2);
+    expect(frozen.best).toBe(2);
+    // Still frozen (no end) → following missed weeks hold too
+    expect(weeklyStreak(fullWeek("2026-11-02"), routine, "2026-11-30", 1, [{ start: "2026-11-09", end: null }]).current).toBe(1);
+  });
+  it("tap toggles: freeze from today, unfreeze ends it today (same day = undo)", () => {
+    const on = toggleFreeze([], "2026-11-16");
+    expect(activeFreeze(on)).toEqual({ start: "2026-11-16", end: null });
+    expect(toggleFreeze(on, "2026-11-16")).toEqual([]);
+    expect(toggleFreeze(on, "2026-11-20")).toEqual([{ start: "2026-11-16", end: "2026-11-20" }]);
+  });
+  it("fire on the rest day of each complete week, ice on the day a freeze started", () => {
+    // Monday weeks; the seed plan trains Sat–Thu (rest day Fri)
+    expect(restDayOf("2026-11-02", routine)).toBe("2026-11-06");
+    const st = weeklyStreak([...fullWeek("2026-11-02")], routine, "2026-11-20");
+    const m = streakMarks(st, routine, [{ start: "2026-11-16", end: null }]);
+    expect(m.get("2026-11-06")).toBe("fire");
+    expect(m.get("2026-11-16")).toBe("ice");
+    expect(m.size).toBe(2);
+  });
+});
+
 describe("editing a past workout", () => {
   it("moves date and times together", () => {
     const s = setSessionDate(sess("2026-11-02", "leg-press", [set(1, 1)]), "2026-11-04");

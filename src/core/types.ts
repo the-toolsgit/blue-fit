@@ -179,6 +179,8 @@ export const completeProfile = (p: ProfileDraft | null | undefined): TrainingPro
 export const ACCENTS = ["blue", "pink", "orange", "green", "brown"] as const;
 export type Accent = (typeof ACCENTS)[number];
 
+export interface StreakFreeze { start: string; end: string | null }
+
 export interface PlateStock { weight: number; pairs: number }
 
 export interface Settings {
@@ -203,6 +205,8 @@ export interface Settings {
   deload?: { start: string; end: string } | null;
   /** Day the deload suggestion was answered "Not now" */
   deloadDismissedAt?: string | null;
+  /** Week streak freezes (inclusive local dates; end null = still frozen). A frozen week holds the streak. */
+  streakFreezes?: StreakFreeze[];
 }
 
 export const DEFAULT_SETTINGS: Settings = {

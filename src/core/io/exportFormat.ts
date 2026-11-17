@@ -52,7 +52,7 @@ const settingsSchema = z.object({
   theme: z.enum(["system", "light", "dark"]), accent: z.enum(ACCENTS).default("blue"),
   profile: z.object({ goal: z.enum(["growth", "strength", "endurance", "maintenance"]), phase: z.enum(["cutting", "maintaining", "bulking"]),
     age: z.number().min(10).max(100).nullable(), yearsTraining: z.number().min(0).max(80).nullable(), sleepHours: z.number().min(0).max(16).nullable() }).nullable().optional(), weekStartDay: z.number().int().min(0).max(6).default(1),
-  deload: z.object({ start: str, end: str }).nullable().optional(), deloadDismissedAt: str.nullable().optional(), plates: z.array(z.object({ weight: z.number().positive(), pairs: z.number().int().min(0).max(50) })),
+  deload: z.object({ start: str, end: str }).nullable().optional(), deloadDismissedAt: str.nullable().optional(), streakFreezes: z.array(z.object({ start: str, end: str.nullable() })).optional(), plates: z.array(z.object({ weight: z.number().positive(), pairs: z.number().int().min(0).max(50) })),
 });
 
 export const appDataSchema = z.object({

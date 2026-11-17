@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
-import { dailyLoad, plannedDays, weeklyStreak } from "../../core/history";
+import { activeFreeze, dailyLoad, plannedDays, streakMarks, toggleFreeze, weeklyStreak } from "../../core/history";
 import { durationMin } from "../../core/session";
 import { tonnage } from "../../core/volume";
 import { addDays, localDate, parseLocalDate, weekOrder, weekStart } from "../../core/util";
 import { FlexFigure } from "../components/FlexFigure";
 import { Icon } from "../components/Icon";
 import { FillFlame } from "../components/FillFlame";
+import { StreakFlame } from "../components/StreakFlames";
 import { fmtDate, fmtVolume } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
@@ -14,22 +15,30 @@ import type { Session } from "../../core/types";
 const WD = ["S", "M", "T", "W", "T", "F", "S"];
 
 function StreakCard() {
-  const { finished, routine, settings } = useStore();
+  const { finished, routine, settings, saveSettings, toast } = useStore();
   const sd = settings.weekStartDay;
   const today = localDate(new Date());
-  const st = useMemo(() => weeklyStreak(finished, routine, today, sd), [finished, routine, today, sd]);
+  const freezes = settings.streakFreezes;
+  const st = useMemo(() => weeklyStreak(finished, routine, today, sd, freezes), [finished, routine, today, sd, freezes]);
+  const frozen = !!activeFreeze(freezes);
+  // Tap the streak to freeze it (missed weeks hold it) or to unfreeze
+  const toggle = () => {
+    saveSettings({ ...settings, streakFreezes: toggleFreeze(freezes, today) });
+    toast({ kind: "info", title: frozen ? "Streak unfrozen" : "Streak frozen", body: frozen ? "Missed weeks break it again." : "Missed weeks won't break it. Tap again to unfreeze." });
+  };
   const planned = plannedDays(routine);
   const doneDayIds = new Set(finished.filter((s) => weekStart(s.date, sd) === weekStart(today, sd)).map((s) => s.dayId));
   const days = (routine?.days ?? []).filter((d) => d.weekday != null && d.slots.length).sort((a, b) => ((a.weekday! + 6) % 7) - ((b.weekday! + 6) % 7));
   const hot = st.current > 0;
   return (
     <section className="glass edge" style={{ padding: 16, display: "grid", gridTemplateColumns: "auto 1fr", gap: 16, alignItems: "center" }}>
-      <div style={{ display: "grid", justifyItems: "center", minWidth: 74 }}>
-        {/* Fills up as this week's planned days get logged */}
-        <span className={st.thisWeek.daysLogged > 0 ? "flicker" : undefined}><FillFlame fill={planned ? st.thisWeek.daysLogged / planned : 0} size={30} /></span>
-        <span className="mono" style={{ fontSize: 40, lineHeight: 1, color: hot ? "var(--ink)" : "var(--muted)", textShadow: hot ? "0 0 16px var(--pink-glow)" : undefined }}>{st.current}</span>
-        <span className="eyebrow" style={{ fontSize: 9, marginTop: 4 }}>week streak</span>
-      </div>
+      <button onClick={toggle} aria-label={frozen ? "Streak frozen. Tap to unfreeze." : "Tap to freeze the streak"} style={{ display: "grid", justifyItems: "center", minWidth: 74 }}>
+        {/* Frozen: ice flame. Otherwise it fills up as this week's planned days get logged */}
+        {frozen ? <StreakFlame kind="ice" size={30} />
+          : <span className={st.thisWeek.daysLogged > 0 ? "flicker" : undefined}><FillFlame fill={planned ? st.thisWeek.daysLogged / planned : 0} size={30} /></span>}
+        <span className="mono" style={{ fontSize: 40, lineHeight: 1, color: frozen ? "#5AB8FF" : hot ? "var(--ink)" : "var(--muted)", textShadow: frozen ? "0 0 16px rgba(80,170,255,.7)" : hot ? "0 0 16px var(--pink-glow)" : undefined }}>{st.current}</span>
+        <span className="eyebrow" style={{ fontSize: 9, marginTop: 4, color: frozen ? "#5AB8FF" : undefined }}>{frozen ? "frozen" : "week streak"}</span>
+      </button>
       <div>
         <div className="spread"><span className="eyebrow" style={{ fontSize: 10 }}>This week</span><span className="mono" style={{ fontSize: 13 }}>{st.thisWeek.daysLogged}/{planned} days</span></div>
         <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.max(1, days.length)},1fr)`, gap: 5, marginTop: 8 }}>
@@ -53,8 +62,13 @@ function StreakCard() {
 }
 
 function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => void }) {
-  const { finished } = useStore();
+  const { finished, routine, settings } = useStore();
   const today = localDate(new Date());
+  // Fire on the rest day of each complete week, ice on the day a freeze started
+  const marks = useMemo(() => {
+    const f = settings.streakFreezes;
+    return streakMarks(weeklyStreak(finished, routine, today, settings.weekStartDay, f), routine, f);
+  }, [finished, routine, today, settings.weekStartDay, settings.streakFreezes]);
   const [month, setMonth] = useState(today.slice(0, 7) + "-01");
   const load = useMemo(() => dailyLoad(finished), [finished]);
   const max = Math.max(12, ...[...load.values()].map((d) => d.sets));
@@ -78,11 +92,12 @@ function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => v
         {cells.slice(0, rows * 7).map((c) => {
           const l = load.get(c);
           const k = l ? Math.min(1, 0.25 + 0.75 * (l.sets / max)) : 0;
-          const cls = ["cal-d", l ? "on" : "", c === today ? "today" : "", c.slice(0, 7) !== month.slice(0, 7) ? "out" : ""].join(" ");
+          const mark = marks.get(c);
+          const cls = ["cal-d", l ? "on" : "", mark ? "mark" : "", c === today ? "today" : "", c.slice(0, 7) !== month.slice(0, 7) ? "out" : ""].join(" ");
           return (
             <button key={c} className={cls} disabled={!l} onClick={() => l && onPickDay(c, l.sessionIds)} aria-label={`${fmtDate(c)}${l ? `: ${l.sessionIds.length} workout, ${l.sets} sets` : ""}`}
               style={l ? { background: `linear-gradient(140deg, color-mix(in srgb, var(--neon) ${Math.round(k * 100)}%, transparent), color-mix(in srgb, var(--neon-2) ${Math.round(k * 85)}%, transparent))`, color: k > 0.6 ? "var(--on-neon)" : undefined, fontWeight: 700, boxShadow: k > 0.5 ? `0 0 ${Math.round(16 * k)}px -3px var(--glow)` : undefined } : undefined}>
-              {Number(c.slice(8))}
+              {mark ? <><span className="cal-flame"><StreakFlame kind={mark} size={30} /></span><span className="cal-num">{Number(c.slice(8))}</span></> : Number(c.slice(8))}
             </button>
           );
         })}
