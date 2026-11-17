@@ -22,7 +22,7 @@ export function ProgressScreen() {
   const { finished, exMap, targets, exercises, settings, routine } = useStore();
   const sd = settings.weekStartDay;
   const today = localDate(new Date());
-  const [range, setRange] = useState<Range>("12w");
+  const [range, setRange] = useState<Range>("4w");
   const [mapMode, setMapMode] = useState<"volume" | "recovery">("volume");
   const [sel, setSel] = useState<MuscleGroup | null>(null);
   const [muscle, setMuscle] = useState<MuscleGroup>("back");

@@ -149,7 +149,7 @@ One row per muscle group (§4.2), always all of them: name (priority muscles bol
 
 ### 3.11 Progress
 Empty (no finished workouts): LOADING figure, "Finish a workout and your charts, muscle map and recovery show up here."
-- **Range:** segmented 4 wk · 12 wk (default) · 6 mo · All (§5.14).
+- **Range:** segmented 4 wk (default) · 12 wk · 6 mo · All (§5.14).
 - **Tiles:** workouts in range, per week, volume lb.
 - **Muscle map** (§8.6) with a toggle:
   - *This week:* each region's brightness = sets done so far this training week (any range) ÷ (target max, else target min, else 12), capped at 1; regions above 0.55 glow. Tap a region: "Biceps · 6 sets this week · target 14–20".
