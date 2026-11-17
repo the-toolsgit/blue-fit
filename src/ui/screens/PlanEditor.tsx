@@ -238,7 +238,7 @@ export function PlanEditorScreen({ id }: { id?: string }) {
           if (picker?.mode === "swap") setDraft(swapSlotExercise(draft, day.id, picker.slotId, ex));
           else setDraft(addSlot(draft, day.id, ex, settings.restDefaultSec).routine);
         }} />
-      <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} />
+      <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} failWhy={day && slot ? weekFail.get(day.id)?.get(slot.id) : undefined} />
       <Confirm open={confirm === "cancel"} title="Discard changes?" body="Your edits to this plan are thrown away." confirm="Discard" danger onClose={() => setConfirm(null)} onConfirm={leave} />
       <Confirm open={confirm === "deleteDay"} title={`Delete ${day?.title ?? "this day"}?`} body="Past workouts of this day stay in history." confirm="Delete" danger
         onClose={() => setConfirm(null)} onConfirm={() => { if (day) { setDraft(removeDay(draft, day.id)); setDayId(null); } }} />

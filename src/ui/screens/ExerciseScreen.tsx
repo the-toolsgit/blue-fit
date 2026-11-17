@@ -9,6 +9,7 @@ import { ExerciseEditor } from "../components/ExerciseEditor";
 import { lazy, Suspense, useState } from "react";
 const ExerciseProgress = lazy(() => import("../components/ExerciseProgress").then((m) => ({ default: m.ExerciseProgress })));
 import { Icon } from "../components/Icon";
+import { useWeekFailure } from "../components/FailFlame";
 import { Sheet } from "../components/Sheet";
 import { fmtDate, fmtRest, fmtVolume, loadSuffix, setsLine } from "../format";
 import { back, go } from "../router";
@@ -31,7 +32,8 @@ function Section({ title, items, tone }: { title: string; items: string[]; tone?
   );
 }
 
-export function ExerciseInfo({ ex, whyOverride, tipsOverride }: { ex: Exercise; whyOverride?: string; tipsOverride?: string[] }) {
+/** `failWhy`: this exercise takes its last set to failure in this workout (with the reasons). */
+export function ExerciseInfo({ ex, whyOverride, tipsOverride, failWhy }: { ex: Exercise; whyOverride?: string; tipsOverride?: string[]; failWhy?: string[] }) {
   const { finished, settings } = useStore();
   const rec = computeRecords(finished, ex.id);
   const last = lastEntryFor(finished, ex.id);
@@ -45,7 +47,9 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride }: { ex: Exercise; 
           {ex.muscles.map((m) => <span key={m} className="badge p">{m}</span>)}
           {ex.secondaryMuscles.map((m) => <span key={m} className="badge">{m}</span>)}
           {ex.isHeavy && <span className="badge star">★ heavy</span>}
+          {failWhy && <span className="badge fail-badge"><Icon name="flame" size={12} /> last set to failure</span>}
         </div>
+        {failWhy && failWhy.length > 0 && <p className="muted" style={{ fontSize: 13, marginTop: 6 }}>{failWhy.join(" · ")}</p>}
       </div>
       <p style={{ fontSize: 16 }}>{whyOverride ?? ex.why}</p>
       <Section title="Setup" items={ex.setup} />
@@ -109,18 +113,22 @@ function ExerciseHistory({ ex }: { ex: Exercise }) {
   );
 }
 
-export function ExerciseSheet({ id, onClose, whyOverride, tipsOverride }: { id: string | null; onClose: () => void; whyOverride?: string; tipsOverride?: string[] }) {
+export function ExerciseSheet({ id, onClose, whyOverride, tipsOverride, failWhy }: { id: string | null; onClose: () => void; whyOverride?: string; tipsOverride?: string[]; failWhy?: string[] }) {
   const { exMap } = useStore();
   const ex = id ? exMap.get(id) : undefined;
   return (
     <Sheet open={!!ex} onClose={onClose} label={ex?.name ?? "Exercise"}>
-      {ex && <ExerciseInfo ex={ex} whyOverride={whyOverride} tipsOverride={tipsOverride} />}
+      {ex && <ExerciseInfo ex={ex} whyOverride={whyOverride} tipsOverride={tipsOverride} failWhy={failWhy} />}
     </Sheet>
   );
 }
 
-export function ExerciseScreen({ id }: { id?: string }) {
-  const { exMap } = useStore();
+/** `slotId`: opened from a plan day (Plan tab), so its failure flame and reasons can show. */
+export function ExerciseScreen({ id, slotId }: { id?: string; slotId?: string }) {
+  const { exMap, routine } = useStore();
+  const weekFail = useWeekFailure(routine);
+  const failDay = slotId ? routine?.days.find((d) => d.slots.some((s) => s.id === slotId)) : undefined;
+  const failWhy = failDay && slotId ? weekFail.get(failDay.id)?.get(slotId) : undefined;
   const [editing, setEditing] = useState(false);
   const ex = id ? exMap.get(id) : undefined;
   return (
@@ -131,7 +139,7 @@ export function ExerciseScreen({ id }: { id?: string }) {
       </div>
       {ex?.archived && <p className="badge" style={{ marginBottom: 8 }}>Hidden from the exercise picker</p>}
       <ExerciseEditor open={editing} exercise={ex} onClose={() => setEditing(false)} />
-      {ex ? <ExerciseInfo ex={ex} /> : <div className="empty">Exercise not found.</div>}
+      {ex ? <ExerciseInfo ex={ex} failWhy={failWhy} /> : <div className="empty">Exercise not found.</div>}
     </div>
   );
 }

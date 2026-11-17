@@ -33,7 +33,7 @@ function Row({ slot, ex, index, onOpen, fail }: { slot: Slot; ex: Exercise; inde
 }
 
 export function SortableDayList({ slots, exMap, onOpen, onMove, fail }: {
-  slots: Slot[]; exMap: Map<string, Exercise>; onOpen: (exerciseId: string) => void; onMove: (from: number, to: number) => void; fail?: Map<string, string[]>;
+  slots: Slot[]; exMap: Map<string, Exercise>; onOpen: (slot: Slot) => void; onMove: (from: number, to: number) => void; fail?: Map<string, string[]>;
 }) {
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
@@ -48,7 +48,7 @@ export function SortableDayList({ slots, exMap, onOpen, onMove, fail }: {
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} modifiers={[verticalOnly]} onDragStart={() => vibrate(10)} onDragEnd={onDragEnd}>
       <SortableContext items={shown.map((s) => s.id)} strategy={verticalListSortingStrategy}>
-        {shown.map((s, i) => <Row key={s.id} slot={s} ex={exMap.get(s.exerciseId)!} index={i} onOpen={() => onOpen(s.exerciseId)} fail={fail?.get(s.id)} />)}
+        {shown.map((s, i) => <Row key={s.id} slot={s} ex={exMap.get(s.exerciseId)!} index={i} onOpen={() => onOpen(s)} fail={fail?.get(s.id)} />)}
       </SortableContext>
     </DndContext>
   );

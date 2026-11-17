@@ -1,4 +1,4 @@
-// "Last set to failure" flame. Tap it to see why the app picked this exercise (a toast).
+// "Last set to failure" flame, and the hook that works out this week's flames.
 import { useMemo } from "react";
 import { weekFailure } from "../../core/failure";
 import type { Routine, VolumeTarget } from "../../core/types";
@@ -15,20 +15,8 @@ export function useWeekFailure(routine: Routine | undefined, targetsDraft?: Volu
     [routine, exMap, targets, settings, finished, today]);
 }
 
+/** Flame next to an exercise name. The reasons are shown on the exercise's page (tap the row). */
 export function FailFlame({ why, size = 14 }: { why: string[] | undefined; size?: number }) {
-  const { toast } = useStore();
   if (!why) return null;
-  const show = (e: React.SyntheticEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    toast({ kind: "info", title: "Last set to failure", body: why.length ? why.join(" · ") : undefined });
-  };
-  return (
-    <span className="fail-icon" role="button" tabIndex={0} aria-label="Last set to failure: why" title="Last set to failure"
-      onClick={show} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && show(e)}
-      // Keep the row's press-and-hold drag and tap from starting
-      onPointerDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()}>
-      <Icon name="flame" size={size} />
-    </span>
-  );
+  return <span className="fail-icon" title="Last set to failure" aria-label="Last set to failure"><Icon name="flame" size={size} /></span>;
 }

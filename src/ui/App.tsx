@@ -90,12 +90,12 @@ export function App() {
   }, []);
   useEffect(() => { delete document.documentElement.dataset.compact; }, [route.join("/")]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [name, id] = route;
+  const [name, id, sub] = route;
   const tab = TAB_OF[name] ?? name;
   let screen;
   if (!ready) screen = <Loading />;
   else if (name === "workout") screen = <WorkoutScreen />;
-  else if (name === "exercise") screen = <ExerciseScreen id={id} />;
+  else if (name === "exercise") screen = <ExerciseScreen id={id} slotId={sub} />;
   else if (name === "summary") screen = <SummaryScreen id={id} />;
   else if (name === "edit") screen = <EditWorkoutScreen id={id} />;
   else if (name === "plan") screen = <PlanScreen />;

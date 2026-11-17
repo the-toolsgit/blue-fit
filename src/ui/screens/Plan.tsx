@@ -117,7 +117,7 @@ export function PlanScreen() {
           </div>
           <div className="glass" style={{ padding: 4 }}>
             <Suspense fallback={<div style={{ minHeight: day.slots.length * 64 }} />}>
-              <SortableDayList slots={day.slots} exMap={exMap} onOpen={(id) => go(`exercise/${id}`)}
+              <SortableDayList slots={day.slots} exMap={exMap} onOpen={(s) => go(`exercise/${s.exerciseId}/${s.id}`)}
                 onMove={(from, to) => saveRoutine(moveSlot(routine, day.id, from, to))} fail={weekFail.get(day.id)} />
             </Suspense>
           </div>

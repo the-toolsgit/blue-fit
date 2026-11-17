@@ -173,7 +173,7 @@ export function WorkoutScreen() {
       {(() => {
         const de = s.entries.find((x) => x.id === detail);
         const slot = day?.slots.find((x) => x.id === de?.slotId);
-        return <ExerciseSheet id={de?.exerciseId ?? null} onClose={() => setDetail(null)} whyOverride={de?.exerciseId === slot?.exerciseId ? slot?.whyOverride : undefined} tipsOverride={de?.exerciseId === slot?.exerciseId ? slot?.tipsOverride : undefined} />;
+        return <ExerciseSheet id={de?.exerciseId ?? null} onClose={() => setDetail(null)} failWhy={de?.toFailure && !s.deload ? de.failWhy ?? [] : undefined} whyOverride={de?.exerciseId === slot?.exerciseId ? slot?.whyOverride : undefined} tipsOverride={de?.exerciseId === slot?.exerciseId ? slot?.tipsOverride : undefined} />;
       })()}
 
       <Sheet open={!!menuEntry} onClose={() => setMenu(null)} label="Exercise options">

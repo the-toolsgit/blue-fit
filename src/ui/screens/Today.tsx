@@ -171,7 +171,7 @@ export function TodayScreen() {
           </button>
         </Dock>
       )}
-      <ExerciseSheet id={open} onClose={() => setOpen(null)} />
+      <ExerciseSheet id={open} onClose={() => setOpen(null)} failWhy={fail?.get(slots.find((s) => s.exerciseId === open)?.id ?? "")} />
     </div>
   );
 }
