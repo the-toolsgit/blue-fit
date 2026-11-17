@@ -153,7 +153,7 @@ Empty (no finished workouts): LOADING figure, "Finish a workout and your charts,
 - **Tiles:** workouts in range, per week, volume lb.
 - **Muscle map** (§8.6) with a toggle:
   - *Weekly sets:* each region's brightness = average weekly sets in the range ÷ (target max, else target min, else 12), capped at 1; regions above 0.55 glow. Tap a region: "Biceps · 14.5 sets/week avg · target 14–20".
-  - *Recovery:* recovering = pink, partly recovered = amber, fresh = green (faint); legend. Tap: "Quads · Recovering · 6 sets in 48 h, 8 in 72 h".
+  - *Recovery:* recovering = pink, partly recovered = amber, fresh = green (faint); legend. Tap: "Quads · Recovering · 6 sets yesterday", "Traps · Partly recovered · 4 sets 3 days ago · +1 day: age 40+", "Calves · Fresh · no hard day lately".
 - **Weekly sets vs target:** muscle chips; bar chart of that muscle's sets per week with the target as a green band; then a toggle "This week | Average · range" for the volume table (§3.10). Default: This week; the last choice is remembered on the phone.
 - **Weekly volume:** bar chart of tonnage per week (readout shows workouts that week).
 - **Frequency (times a week):** muscles with direct work, highest first, bar scaled to 3×/week, value "2.3×".
@@ -356,8 +356,11 @@ Freezes: a week overlapping any freeze period that isn't complete is skipped (ho
 Weeks start on the week-start day (§4.6). Planned days = routine days with a weekday and at least one slot (6 in the seed plan). Days logged in a week = distinct routine days done (by dayId) + distinct dates of finished workouts without a routine day (free or imported) not already counted. A week is **complete** when days logged ≥ planned days. Current streak = consecutive complete weeks counting back from the current week; the current week adds 1 once complete and doesn't break the streak while in progress. Best = longest run of complete weeks.
 
 ### 5.13 Recovery
-Basis: in trained lifters, sets to failure need about 48 h for performance to come back, with 72 h feeling better (Morán-Navarro 2017; Goulart 2020). The 4-set line marks a hard session for one muscle when every set is near failure; it's a judgment call, not a research value.
-For each done working/failure set (time = set's completedAt, else the workout's finish or start), add its fractional weight (§5.2) to every group of its exercise, in two windows: last 48 h and last 72 h. ≥ 4 in 48 h → **recovering**; else ≥ 4 in 72 h → **partly recovered**; else **fresh**. Display only (muscle map).
+Counted in **whole days** (workout dates), since people train at about the same time each day. Basis: performance comes back in about 48–72 h (Morán-Navarro 2017; Korak 2015), and training a muscle every 48–72 h is common and works (Schoenfeld 2016, 2019); a muscle doesn't need to be fully recovered to train it again. The 4-set line and the extra day are judgment calls.
+- **Hard day** for a muscle: ≥ 4 done working/failure sets that day, each adding its fractional weight (§5.2) to every group of its exercise (indirect ½).
+- Hard day today or yesterday → **recovering**; 2 days ago → **partly recovered** (fine to train); 3+ days → **fresh**.
+- **Slower recovery** (age 40+, sleep under 6 h, or a ★ key lift set to failure hitting that muscle directly that day): partly recovered one day longer (3 days ago). Never more; it never blocks training.
+- Display only (muscle map). The worst status over the last 3 days wins.
 
 ### 5.14 Progress ranges and series
 - Weeks begin on the week-start day (§4.6). Range start (first day included): 4 wk = the first day of the week 3 weeks before the current week; 12 wk = 11 weeks before; 6 mo = 25 weeks before; All = first workout's week.
@@ -512,4 +515,5 @@ Mirrored ellipses negate the rotation. Region fill opacity: empty 0.05; value k 
 | Deload weeks | Suggested by interval/stall, user decides; lighter week of the same plan | Built (web: banner; native: notification later) |
 | Interval / stopwatch timer | Timer modes | Later phase |
 | Cloud sync / account | Swap StorageAdapter; then remove manual backup/import | Later phase |
+| Auto-build plan | Builds the weekly plan from goal, profile and targets. Uses the §5.13 recovery rule, indirect sets included (½): indirect work on a recovering muscle is allowed but adds to its load, and no hard direct work for a muscle the day after a hard day for it | Later phase |
 | AI coach, social, community, watch apps, video library | — | Left out |

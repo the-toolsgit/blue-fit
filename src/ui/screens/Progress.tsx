@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { averageSets, inRange, muscleFrequency, rangeStart, RANGE_LABEL, weeklyTotals, type Range } from "../../core/progress";
-import { recoveryStatus, type Recovery } from "../../core/recovery";
+import { recoveryStatus, type MuscleRecovery, type Recovery } from "../../core/recovery";
 import { MUSCLE_GROUPS, muscleLabel, type MuscleGroup } from "../../core/types";
 import { fmtNum, localDate } from "../../core/util";
 import { formatTarget, groupsLeftThisWeek } from "../../core/volume";
@@ -14,6 +14,8 @@ import { VolumeTable } from "../components/VolumeTable";
 import { fmtVolume } from "../format";
 import { useStore } from "../store";
 
+const ago = (k: number) => (k === 0 ? "today" : k === 1 ? "yesterday" : `${k} days ago`);
+const recNote = (r: MuscleRecovery) => r.daysAgo == null ? "no hard day lately" : `${fmtNum(r.sets)} sets ${ago(r.daysAgo)}${r.slower.length ? ` · +1 day: ${r.slower.join(", ")}` : ""}`;
 const REC_LABEL: Record<Recovery, string> = { recovering: "Recovering", partial: "Partly recovered", fresh: "Fresh" };
 
 export function ProgressScreen() {
@@ -32,7 +34,7 @@ export function ProgressScreen() {
   const avg = useMemo(() => averageSets(weeks), [weeks]);
   const freq = useMemo(() => muscleFrequency(inRange(finished, from), exMap, weeks.length), [finished, exMap, from, weeks.length]);
   const left = useMemo(() => groupsLeftThisWeek(routine, exMap, finished, today, sd), [routine, exMap, finished, today, sd]);
-  const rec = useMemo(() => recoveryStatus(finished, exMap, new Date()), [finished, exMap]);
+  const rec = useMemo(() => recoveryStatus(finished, exMap, today, settings.profile), [finished, exMap, today, settings.profile]);
   const tmap = new Map(targets.map((t) => [t.group, t]));
   const workouts = inRange(finished, from).length;
   const totalTon = weeks.reduce((a, w) => a + w.tonnage, 0);
@@ -83,7 +85,7 @@ export function ProgressScreen() {
           {sel ? (
             mapMode === "volume"
               ? <><b>{muscleLabel(sel)}</b> · <span className="mono">{fmtNum(avg[sel])}</span> sets/week avg <span className="muted">· target {formatTarget(tmap.get(sel))}</span></>
-              : <><b>{muscleLabel(sel)}</b> · <span style={{ color: RECOVERY_COLOR[rec[sel].status] }}>{REC_LABEL[rec[sel].status]}</span> <span className="muted">· {fmtNum(rec[sel].sets48)} sets in 48 h, {fmtNum(rec[sel].sets72)} in 72 h</span></>
+              : <><b>{muscleLabel(sel)}</b> · <span style={{ color: RECOVERY_COLOR[rec[sel].status] }}>{REC_LABEL[rec[sel].status]}</span> <span className="muted">· {recNote(rec[sel])}</span></>
           ) : mapMode === "volume"
             ? <span className="muted">Brighter = closer to the top of the target. Tap a muscle.</span>
             : <span className="row" style={{ justifyContent: "center", gap: 12, fontSize: 12 }}>{(Object.keys(REC_LABEL) as Recovery[]).map((r) => <span key={r} className="row" style={{ gap: 5 }}><i style={{ width: 10, height: 10, borderRadius: 3, background: RECOVERY_COLOR[r], boxShadow: `0 0 6px ${RECOVERY_COLOR[r]}` }} />{REC_LABEL[r]}</span>)}</span>}
