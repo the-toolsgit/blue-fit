@@ -300,10 +300,10 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 
 /* Week streak flames: sparks rise and fade above the fire; snowflakes twinkle above the ice */
 .streak-flame .spark { animation: spark 1.8s ease-out infinite; }
-@keyframes spark { 0% { opacity: 0; transform: translateY(2px); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateY(-3px); } }
+@keyframes spark { 0% { opacity: 0; transform: translateY(3px); } 20% { opacity: 1; } 70% { opacity: .9; } 100% { opacity: 0; transform: translateY(-4px); } }
 .streak-flame .twinkle { animation: twinkle 2.4s ease-in-out infinite; }
 @keyframes twinkle { 0%, 100% { opacity: .45; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.1); } }
-@media (prefers-reduced-motion: reduce) { .streak-flame .spark, .streak-flame .twinkle { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .streak-flame .spark, .streak-flame .twinkle { animation: none; opacity: 1; } }
 .cal-d.mark { color: #fff; font-weight: 700; text-shadow: 0 1px 3px rgba(0, 0, 0, .85); }
 .cal-d .cal-flame { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
 .cal-d .cal-num { position: relative; margin-top: 8px; }

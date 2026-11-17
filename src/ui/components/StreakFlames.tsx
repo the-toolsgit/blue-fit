@@ -33,11 +33,12 @@ export function StreakFlame({ kind, size = 34 }: { kind: "fire" | "ice"; size?: 
         {!fire && <path d="M7.2 18.2l1 2.2.9-1.6 1 2 .9-1.5 1 1.9.9-1.6 1 1.6.9-2" fill="none" stroke="#E8FBFF" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />}
       </g>
       {fire ? (
-        <g fill="#FFD23F">
-          <circle className="spark" cx="10.2" cy="4.2" r=".8" style={{ animationDelay: "0s" }} />
-          <circle className="spark" cx="15.6" cy="3" r=".65" style={{ animationDelay: ".5s" }} />
-          <circle className="spark" cx="13" cy="1.2" r=".55" style={{ animationDelay: "1s" }} />
-          <circle className="spark" cx="7.8" cy="2" r=".45" style={{ animationDelay: "1.4s" }} />
+        <g fill="#FFE27A" style={{ filter: "drop-shadow(0 0 1.5px #FF8A00)" }}>
+          <circle className="spark" cx="9.6" cy="5.6" r="1.25" style={{ animationDelay: "0s" }} />
+          <circle className="spark" cx="15.8" cy="4.6" r="1.1" style={{ animationDelay: ".45s" }} />
+          <circle className="spark" cx="12.6" cy="2.8" r="1" style={{ animationDelay: ".9s" }} />
+          <circle className="spark" cx="6.8" cy="3.6" r=".85" style={{ animationDelay: "1.3s" }} />
+          <circle className="spark" cx="18.2" cy="2.6" r=".8" style={{ animationDelay: "1.6s" }} />
         </g>
       ) : (
         <g stroke="#FFFFFF" strokeWidth=".7" strokeLinecap="round">
