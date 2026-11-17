@@ -14,6 +14,7 @@ import { fmtNum } from "../../core/util";
 import { Stepper } from "../components/Controls";
 import { ExercisePicker } from "../components/ExercisePicker";
 import { Figure } from "../components/Figure";
+import { tempoTiming } from "../../core/figure/tempo";
 import { Icon } from "../components/Icon";
 import { Confirm, Sheet } from "../components/Sheet";
 import { keepAwake, reducedMotion, vibrate } from "../device";
@@ -282,18 +283,21 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
         boxShadow: allDone ? "0 0 0 1px var(--good), 0 0 22px -8px var(--good)" : focused ? "0 0 0 1px color-mix(in srgb,var(--neon) 30%,transparent), 0 18px 50px -20px var(--glow)" : undefined,
         opacity: allDone && !focused ? 0.9 : 1 }}>
       <div className="row" style={{ alignItems: "flex-start", gap: 10 }}>
-        <span className="mono" style={{ width: 26, height: 26, flex: "none", display: "grid", placeItems: "center", borderRadius: 8, fontSize: 13, marginTop: 2,
-          background: allDone ? "var(--good)" : focused ? "var(--neon)" : "var(--surface-2)", color: allDone || focused ? "var(--on-neon)" : "var(--muted)", boxShadow: allDone ? "0 0 12px var(--good)" : focused ? "0 0 12px var(--glow)" : "none", transition: "all .3s" }}>
-          {allDone ? <Icon name="check" size={16} stroke={3} /> : index + 1}
-        </span>
-        <button className="grow" style={{ textAlign: "left" }} onClick={(ev) => { ev.stopPropagation(); onDetail(); }} aria-label={`${ex.name}: how to do it`}>
+        {/* Number, name and figure: one tap target that opens how to do it */}
+        <button className="row grow" style={{ textAlign: "left", alignItems: "flex-start", gap: 10, minWidth: 0 }} onClick={(ev) => { ev.stopPropagation(); onDetail(); }} aria-label={`${ex.name}: how to do it`}>
+          <span className="mono" style={{ width: 26, height: 26, flex: "none", display: "grid", placeItems: "center", borderRadius: 8, fontSize: 13, marginTop: 2,
+            background: allDone ? "var(--good)" : focused ? "var(--neon)" : "var(--surface-2)", color: allDone || focused ? "var(--on-neon)" : "var(--muted)", boxShadow: allDone ? "0 0 12px var(--good)" : focused ? "0 0 12px var(--glow)" : "none", transition: "all .3s" }}>
+            {allDone ? <Icon name="check" size={16} stroke={3} /> : index + 1}
+          </span>
+          <span className="grow" style={{ display: "block" }}>
           <div style={{ font: "700 21px/1.1 var(--display)", letterSpacing: ".01em" }}>{ex.name} {ex.isHeavy && <span className="star">★</span>}</div>
           <div className="muted" style={{ fontSize: 13, marginTop: 3 }}>
             {e.sets.filter((x) => x.type !== "warmup").length} × {repRange(e.repMin, e.repMax) || "—"} · rest {fmtRest(e.restSec)}
             {swappedFrom && <> · <span style={{ color: "var(--neon-2)" }}>swapped from {swappedFrom}</span></>}
           </div>
+          </span>
+          <Figure spec={ex.figure} size={focused ? 74 : 54} still={!focused} timing={tempoTiming(ex.tempo, ex.id)} />
         </button>
-        <Figure spec={ex.figure} size={focused ? 74 : 54} still={!focused} />
         <button className="icon-btn" style={{ marginRight: -8, marginTop: -6 }} onClick={(ev) => { ev.stopPropagation(); onMenu(); }} aria-label={`Options for ${ex.name}`}><Icon name="more" /></button>
       </div>
 
