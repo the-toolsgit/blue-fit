@@ -133,7 +133,7 @@
     "tips": ["Keep your hips pressed into the pad."],
     "avoid": ["Hips lifting up.", "Dropping the weight."],
     "rangeOfMotion": "Legs almost straight → full curl",
-    "tempo": "Curl 1 s · Straighten 3 s"
+    "tempo": "Up 1 s · Down 3 s"
   },
   "hip-adduction": {
     "why": "Works your inner thighs.",

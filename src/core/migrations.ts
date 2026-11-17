@@ -75,6 +75,15 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
+    // Nov 16 2026: prone leg curl tempo reads "Up · Down" (legs go up, then down). Only if still the earlier app text.
+    id: "2026-11-16-prone-curl-tempo",
+    run(d) {
+      const old = "Curl 1 s · Straighten 3 s";
+      if (!d.exercises.some((e) => e.id === "prone-leg-curl" && e.tempo === old)) return null;
+      return { ...d, exercises: d.exercises.map((e) => (e.id === "prone-leg-curl" && e.tempo === old ? { ...e, tempo: "Up 1 s · Down 3 s" } : e)) };
+    },
+  },
+  {
     // Nov 16 2026: hamstrings become a normal muscle with an 8–10 target (2 leg curls × 4 sets), instead of "10+, below by choice".
     id: "2026-11-16-hamstrings-8-10",
     run(d) {
