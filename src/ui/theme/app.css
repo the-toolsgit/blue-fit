@@ -327,3 +327,5 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 @keyframes swipe-in-next { from { opacity: 0; transform: translateX(28px); } }
 @keyframes swipe-in-prev { from { opacity: 0; transform: translateX(-28px); } }
 @media (prefers-reduced-motion: reduce) { .swipe-in-next, .swipe-in-prev { animation: none; } }
+.map-chev { flex: none; width: 36px; min-height: 44px; background: none; border: 0; padding: 0; color: var(--muted); opacity: .45; font: 400 26px/1 var(--body, inherit); cursor: pointer; transition: opacity .2s; }
+.map-chev:hover, .map-chev:active { opacity: .9; }

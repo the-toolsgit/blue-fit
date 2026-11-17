@@ -91,7 +91,7 @@ export function ProgressScreen() {
         <div style={{ marginTop: 10 }}>
           <MuscleMap intensity={mapMode === "volume" ? intensity : undefined} recovery={mapMode === "recovery" ? recMap : undefined} selected={sel} onSelect={(g) => { setSwipeDir(null); setSel(sel === g ? null : g); }} />
         </div>
-        <div className="map-caption" style={{ minHeight: 48, marginTop: 6, textAlign: "center", fontSize: 14, touchAction: "pan-y" }}
+        <div className="map-caption row" style={{ minHeight: 48, gap: 0, alignItems: "center", marginTop: 6, textAlign: "center", fontSize: 14, touchAction: "pan-y" }}
           onPointerDown={(e) => { swipe.current = { x: e.clientX, y: e.clientY }; }}
           onPointerUp={(e) => {
             const s0 = swipe.current; swipe.current = null;
@@ -100,7 +100,8 @@ export function ProgressScreen() {
             if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
           }}
           onPointerCancel={() => { swipe.current = null; }}>
-          <div key={sel ?? "none"} className={sel && swipeDir ? `swipe-in-${swipeDir}` : undefined}>
+          <button className="map-chev" aria-label="Previous muscle" onClick={() => step(-1)}>‹</button>
+          <div key={sel ?? "none"} className={`grow${sel && swipeDir ? ` swipe-in-${swipeDir}` : ""}`}>
           {sel ? (
             mapMode === "volume"
               ? <><b>{muscleLabel(sel)}</b> · <span className="mono">{fmtNum(thisWeek[sel] ?? 0)}</span> sets this week <span className="muted">· target {formatTarget(tmap.get(sel))}</span></>
@@ -109,6 +110,7 @@ export function ProgressScreen() {
             ? <span className="muted">Brighter = closer to the top of the target. Tap a muscle or swipe here.</span>
             : <span className="row" style={{ justifyContent: "center", gap: 12, fontSize: 12 }}>{(Object.keys(REC_LABEL) as Recovery[]).map((r) => <span key={r} className="row" style={{ gap: 5 }}><i style={{ width: 10, height: 10, borderRadius: 3, background: RECOVERY_COLOR[r], boxShadow: `0 0 6px ${RECOVERY_COLOR[r]}` }} />{REC_LABEL[r]}</span>)}</span>}
           </div>
+          <button className="map-chev" aria-label="Next muscle" onClick={() => step(1)}>›</button>
         </div>
       </section>
 
