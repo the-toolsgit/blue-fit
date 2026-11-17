@@ -63,6 +63,22 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
+    // Nov 17 2026: the stall check now uses every exercise, so the ★ card says what ★ means: heavy compound lift.
+    // Works on the card under its old or new title; only if it still shows an earlier app text.
+    id: "2026-11-17-key-lift-text",
+    run(d) {
+      let changed = false;
+      const oldTitle = (title: string) => Object.keys(RULE_TITLE).find((k) => RULE_TITLE[k] === title) ?? title;
+      const routines = d.routines.map((r) => !r.rules ? r : { ...r, rules: r.rules.map((x) => {
+        const t = RULE_TEXT[oldTitle(x.title)];
+        if (!t || !t.old.includes(x.text)) return x;
+        changed = true;
+        return { ...x, text: t.text };
+      }) });
+      return changed ? { ...d, routines } : null;
+    },
+  },
+  {
     // Nov 16 2026: plain-language how-to texts and one-number tempos for the built-in exercises.
     // Skips any exercise whose texts were edited in the app.
     id: "2026-11-16-plain-exercise-text",

@@ -5,7 +5,7 @@ Features worth selling. Add one line each time something stands out. Details liv
 ## Smart training
 - **Automatic "last set to failure".** The app picks which exercises go to failure in each workout, based on the whole plan and on what you actually did this week (skipped workouts and exercises included). It considers your goal, recovery and weekly targets. Tap the flame to see why. (§5.19)
 - **Personal weekly volume targets.** Sets per muscle come from your goal, age, sleep, diet phase and training years, and you can set each muscle to Priority, Normal or Skip. (§5.17)
-- **Deload suggestions.** The app suggests a lighter week when your key lifts stall. (§5.16)
+- **Deload suggestions.** The app watches every exercise (weight and reps) and suggests a lighter week when half of them stall. (§5.16)
 - **Progression hints.** Each exercise tells you when to add weight. (§5.5)
 
 ## Logging

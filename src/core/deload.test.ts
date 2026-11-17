@@ -15,7 +15,6 @@ const sess = (date: string, exerciseId: string, sets: LoggedSet[], deload = fals
   entries: [{ id: "e" + n, exerciseId, restSec: 120, sets }],
 });
 const S = (p: Partial<Settings>): Settings => ({ ...DEFAULT_SETTINGS, ...p });
-const HEAVY = ["t-bar-reverse-row", "machine-shoulder-press", "lateral-shrug-hybrid", "barbell-shrug", "smith-squat", "wide-grip-lat-pulldown", "cable-seated-row", "machine-dip", "db-hammer-curl", "leg-press"];
 
 describe("deload week content", () => {
   it("half the sets rounded up, 10% lighter to the nearest weight step", () => {
@@ -74,19 +73,33 @@ describe("deload suggestion", () => {
     expect(deloadSuggestion(firstAt(300), routine, exMap, S({ deload: deloadWeek(today, 6) }), today)).toBeNull();
     expect(deloadSuggestion(firstAt(300), routine, exMap, S({ deloadDismissedAt: addDays(today, -10) }), today)).toBeNull();
   });
-  // Each ★ lift: one older session (before the 4-week window) and one recent one
-  const history = (improved: number, firstDaysAgo = 30) => [...firstAt(firstDaysAgo), ...HEAVY.flatMap((id, i) => [
+  // Each exercise: one older session (before the 4-week window) and three recent ones
+  const IDS = [...new Set(routine.days.flatMap((d) => d.slots.map((x) => x.exerciseId)))];
+  const history = (improved: number, firstDaysAgo = 30) => [...firstAt(firstDaysAgo), ...IDS.flatMap((id, i) => [
     sess(addDays(today, -29), id, [set(100, 10)]),
+    sess(addDays(today, -21), id, [set(100, 10)]),
+    sess(addDays(today, -14), id, [set(100, 10)]),
     sess(addDays(today, -7), id, [set(i < improved ? 105 : 100, 10)]),
   ])];
-  it("stall: more than half of the ★ lifts without est. 1RM gain in 4 weeks", () => {
-    expect(stallCheck(history(4), routine, exMap, today)).toMatchObject({ judged: 10, stalled: 6 });
-    expect(deloadSuggestion(history(4), routine, exMap, S({}), today)).toEqual({ reason: "stall", stalled: 6, judged: 10 });
-    expect(deloadSuggestion(history(5), routine, exMap, S({}), today)).toBeNull(); // exactly half → no
+  it("stall: half or more of all plan exercises (★ or not) without progress in 4 weeks", () => {
+    const n = IDS.length, half = Math.ceil(n / 2);
+    expect(stallCheck(history(n - half), routine, exMap, today)).toMatchObject({ judged: n, stalled: half });
+    expect(deloadSuggestion(history(n - half), routine, exMap, S({}), today)).toEqual({ reason: "stall", stalled: half, judged: n });
+    expect(deloadSuggestion(history(n - half + 1), routine, exMap, S({}), today)).toBeNull(); // under half → no
   });
-  it("more reps at the same weight counts as improvement; deload sessions are ignored", () => {
-    const h = HEAVY.flatMap((id) => [sess(addDays(today, -40), id, [set(100, 10)]), sess(addDays(today, -7), id, [set(100, 11)]), sess(addDays(today, -3), id, [set(50, 5)], true)]);
-    expect(stallCheck(h, routine, exMap, today).stalled).toBe(0);
+  it("needs 3 recent workouts of an exercise to judge it", () => {
+    const h = IDS.flatMap((id) => [sess(addDays(today, -40), id, [set(100, 10)]), sess(addDays(today, -14), id, [set(100, 10)]), sess(addDays(today, -7), id, [set(100, 10)])]);
+    expect(stallCheck(h, routine, exMap, today).judged).toBe(0);
+  });
+  it("more reps at the same weight counts as progress even if est. 1RM didn't rise; deload sessions are ignored", () => {
+    const h = IDS.flatMap((id) => [
+      sess(addDays(today, -40), id, [set(120, 8), set(100, 10)]),
+      ...[-20, -10, -5].map((d) => sess(addDays(today, d), id, [set(100, 11)])),
+      sess(addDays(today, -3), id, [set(50, 5)], true),
+    ]);
+    const st = stallCheck(h, routine, exMap, today);
+    expect(st.judged).toBe(IDS.length);
+    expect(st.stalled).toBe(0);
   });
   it("stall needs 4 weeks since the reference day", () => {
     const h = history(0, 27).filter((x) => x.date >= addDays(today, -27));

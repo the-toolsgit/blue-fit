@@ -77,7 +77,7 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride, failWhy }: { ex: E
       </div>
       <div>
         <p style={{ fontSize: 16 }}>{whyOverride ?? ex.why}</p>
-        {ex.isHeavy && <p className="muted" style={{ fontSize: 13, marginTop: 4 }}><span className="star">★</span> Key lift: tracks your strength progress.</p>}
+        {ex.isHeavy && <p className="muted" style={{ fontSize: 13, marginTop: 4 }}><span className="star">★</span> Key lift: heavy compound lift.</p>}
       </div>
       <Section title="Setup" items={ex.setup} />
       <Section title="Form" items={ex.form} />

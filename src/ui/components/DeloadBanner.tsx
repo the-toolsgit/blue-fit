@@ -12,7 +12,7 @@ export function DeloadBanner({ suggestion, today }: { suggestion: DeloadSuggesti
   const week = deloadWeek(today, settings.weekStartDay);
   const why = suggestion.reason === "interval"
     ? `It's been ${suggestion.weeks} weeks since ${settings.deload ? "your last deload" : "your first logged workout"}.`
-    : `${suggestion.stalled} of your ${suggestion.judged} ★ lifts haven't gone up in ${DELOAD.stallWeeks} weeks.`;
+    : `${suggestion.stalled} of your ${suggestion.judged} exercises haven't gone up in ${DELOAD.stallWeeks} weeks.`;
   return (
     <section className="glass edge" role="status" style={{ padding: 16, marginBottom: 12, borderColor: "color-mix(in srgb, var(--neon-2) 50%, transparent)", boxShadow: "0 0 40px -18px var(--neon-2)" }}>
       <div className="row" style={{ alignItems: "flex-start", gap: 12 }}>

@@ -3,8 +3,11 @@
 // and every set stopped with 3–4 reps left. It lasts the current training week.
 // The app SUGGESTS a deload; the user decides ("Deload this week" / "Not now"). Suggest when either comes first:
 //  • interval: 6 weeks since the reference day (end of the last deload, else the first logged workout);
-//  • stall: 4 weeks since the reference day AND more than half of the ★ heavy lifts in the current plan
-//    have no est. 1RM gain: best of the last 4 weeks ≤ best before that (deload sessions ignored).
+//  • stall: 4 weeks since the reference day AND half or more of the plan's exercises have stalled.
+//    Judged: done at least 3 times in the last 4 weeks and at least once before (deload sessions ignored).
+//    Stalled: neither the est. 1RM (best of the last 4 weeks vs best before) nor the reps at any same weight went up.
+//    Every exercise counts, not just ★ lifts: isolation work builds muscle as well as compounds and strength gains are
+//    specific to each exercise (agreed with Leo, Nov 17 2026). The 3-times minimum and the half line are judgment.
 // "Not now" moves the reference day to the day it was tapped (wait for the next trigger).
 import { exerciseSeries } from "./progress";
 import type { Exercise, Routine, Session, Settings } from "./types";
@@ -49,21 +52,35 @@ export function deloadReference(s: Settings, sessions: Session[]): string | null
   return candidates.reduce((a, b) => (a > b ? a : b));
 }
 
-export interface StallCheck { judged: number; stalled: number; lifts: { exerciseId: string; recentBest: number; previousBest: number }[] }
+export interface StallCheck { judged: number; stalled: number; lifts: { exerciseId: string; recentBest: number; previousBest: number; stalled: boolean }[] }
+/** Times an exercise must be done in the last 4 weeks to be judged (*judgment*: filters out noise). */
+export const STALL_MIN_SESSIONS = 3;
 
-/** ★ lifts in the plan: est. 1RM best of the last 4 weeks vs. the best before that (deload sessions ignored). */
+/** Best reps at each weight in these sessions (done working/failure/drop sets). */
+function repsByWeight(sessions: Session[], exerciseId: string): Map<number, number> {
+  const m = new Map<number, number>();
+  for (const s of sessions) for (const e of s.entries) if (e.exerciseId === exerciseId)
+    for (const x of e.sets) if (x.done && x.type !== "warmup" && x.weight != null && x.reps != null && x.reps > 0)
+      m.set(x.weight, Math.max(m.get(x.weight) ?? 0, x.reps));
+  return m;
+}
+
+/** Every exercise in the plan: est. 1RM and reps at the same weight, last 4 weeks vs. before (deload sessions ignored). */
 export function stallCheck(sessions: Session[], routine: Routine | undefined, exMap: Map<string, Exercise>, today: string): StallCheck {
-  const heavy = [...new Set((routine?.days ?? []).flatMap((d) => d.slots.map((s) => s.exerciseId)))].filter((id) => exMap.get(id)?.isHeavy);
-  const normal = sessions.filter((s) => !s.deload);
+  const ids = [...new Set((routine?.days ?? []).flatMap((d) => d.slots.map((s) => s.exerciseId)))].filter((id) => exMap.has(id));
+  const normal = sessions.filter((s) => !s.deload && s.status === "finished");
   const cutoff = addDays(today, -7 * DELOAD.stallWeeks); // window = after cutoff
   const lifts: StallCheck["lifts"] = [];
-  for (const id of heavy) {
+  for (const id of ids) {
     const pts = exerciseSeries(normal, id);
     const recent = pts.filter((p) => p.date > cutoff), before = pts.filter((p) => p.date <= cutoff);
-    if (!recent.length || !before.length) continue; // can't judge this lift
-    lifts.push({ exerciseId: id, recentBest: Math.max(...recent.map((p) => p.e1rm)), previousBest: Math.max(...before.map((p) => p.e1rm)) });
+    if (recent.length < STALL_MIN_SESSIONS || !before.length) continue; // can't judge this exercise
+    const recentBest = Math.max(...recent.map((p) => p.e1rm)), previousBest = Math.max(...before.map((p) => p.e1rm));
+    const rNow = repsByWeight(normal.filter((s) => s.date > cutoff), id), rBefore = repsByWeight(normal.filter((s) => s.date <= cutoff), id);
+    const moreReps = [...rNow].some(([w, r]) => rBefore.has(w) && r > rBefore.get(w)!);
+    lifts.push({ exerciseId: id, recentBest, previousBest, stalled: recentBest <= previousBest + 1e-9 && !moreReps });
   }
-  return { judged: lifts.length, stalled: lifts.filter((l) => l.recentBest <= l.previousBest + 1e-9).length, lifts };
+  return { judged: lifts.length, stalled: lifts.filter((l) => l.stalled).length, lifts };
 }
 
 export type DeloadSuggestion = { reason: "interval"; weeks: number } | { reason: "stall"; stalled: number; judged: number };
@@ -75,7 +92,7 @@ export function deloadSuggestion(sessions: Session[], routine: Routine | undefin
   const days = daysBetween(ref, today);
   if (days >= DELOAD.stallWeeks * 7) {
     const st = stallCheck(sessions, routine, exMap, today);
-    if (st.judged > 0 && st.stalled > st.judged / 2) return { reason: "stall", stalled: st.stalled, judged: st.judged };
+    if (st.judged > 0 && st.stalled * 2 >= st.judged) return { reason: "stall", stalled: st.stalled, judged: st.judged };
   }
   if (days >= DELOAD.intervalWeeks * 7) return { reason: "interval", weeks: Math.floor(days / 7) };
   return null;

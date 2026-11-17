@@ -230,9 +230,19 @@ describe("plain rule text", () => {
   it("rewrites the original ★ Heavy card once, leaves edited ones alone", async () => {
     const raw = (await import("./seed/routine-leo-v3-1.json")).default as unknown as typeof seed.routines[0];
     const out = m.run({ ...seed, routines: [structuredClone(raw)] }, "2026-11-16")!;
-    expect(out.routines[0].rules!.find((r) => r.title === "★ Heavy")!.text).toMatch(/^★ Key lifts: the app tracks these/);
+    expect(out.routines[0].rules!.find((r) => r.title === "★ Heavy")!.text).toMatch(/^★ Key lifts: heavy compound lifts/);
     expect(m.run(out, "2026-11-16")).toBeNull();
-    expect(seed.routines[0].rules!.find((r) => r.title === "★ Key lift")!.text).toMatch(/^★ Key lifts: the app tracks these/);
+    expect(seed.routines[0].rules!.find((r) => r.title === "★ Key lift")!.text).toMatch(/^★ Key lifts: heavy compound lifts/);
+  });
+  it("Nov 17: ★ Key lift card says what ★ means (old wording only)", () => {
+    const m2 = MIGRATIONS.find((x) => x.id === "2026-11-17-key-lift-text")!;
+    const r = structuredClone(seed.routines[0]);
+    r.rules = [{ title: "★ Key lift", text: "★ Key lifts: the app tracks these to measure your strength progress, and suggests a deload when they stall." }, { title: "Effort", text: "x" }];
+    const out = m2.run({ ...seed, routines: [r] }, "2026-11-17")!;
+    expect(out.routines[0].rules![0].text).toMatch(/^★ Key lifts: heavy compound lifts/);
+    expect(m2.run(out, "2026-11-17")).toBeNull();
+    r.rules = [{ title: "★ Key lift", text: "My own text" }];
+    expect(m2.run({ ...seed, routines: [r] }, "2026-11-17")).toBeNull();
   });
 });
 
