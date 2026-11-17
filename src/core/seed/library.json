@@ -1,0 +1,9219 @@
+{
+ "source": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/f00c92c7dcf1216a928a52c3706c7ce8e2f71ed5/dist/exercises.json",
+ "built": "see git history",
+ "exercises": [
+  {
+   "id": "all-the-way-up-lateral-raise",
+   "name": "All-the-way-up Lateral Raise",
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "plan": "Leo v3.1"
+   },
+   "planIds": [
+    "all-the-way-up-lateral-raise"
+   ]
+  },
+  {
+   "id": "alternate-hammer-curl",
+   "name": "Alternate Hammer Curl",
+   "equipment": "dumbbell",
+   "movement": "hammer",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    },
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Alternate_Hammer_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "alternate-incline-dumbbell-curl",
+   "name": "Alternate Incline Dumbbell Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Alternate_Incline_Dumbbell_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "alternating-cable-shoulder-press",
+   "name": "Alternating Cable Shoulder Press",
+   "equipment": "cable",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Alternating_Cable_Shoulder_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "alternating-deltoid-raise",
+   "name": "Alternating Deltoid Raise",
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Alternating_Deltoid_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "arnold-dumbbell-press",
+   "name": "Arnold Dumbbell Press",
+   "equipment": "dumbbell",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Arnold_Dumbbell_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "barbell-bench-press-medium-grip",
+   "name": "Barbell Bench Press - Medium Grip",
+   "equipment": "barbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Bench_Press_-_Medium_Grip",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "barbell-curl",
+   "name": "Barbell Curl",
+   "equipment": "barbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "barbell-curls-lying-against-an-incline",
+   "name": "Barbell Curls Lying Against An Incline",
+   "equipment": "barbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Curls_Lying_Against_An_Incline",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "barbell-deadlift",
+   "name": "Barbell Deadlift",
+   "equipment": "barbell",
+   "movement": "deadlift",
+   "compound": true,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    },
+    {
+     "group": "hamstrings",
+     "weight": 1
+    },
+    {
+     "group": "back",
+     "weight": 0.5
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    },
+    {
+     "group": "quads",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Deadlift",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lower back"
+    ]
+   }
+  },
+  {
+   "id": "barbell-glute-bridge",
+   "name": "Barbell Glute Bridge",
+   "equipment": "barbell",
+   "movement": "hipThrust",
+   "compound": true,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    },
+    {
+     "group": "hamstrings",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Glute_Bridge",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "glutes"
+    ]
+   }
+  },
+  {
+   "id": "barbell-hack-squat",
+   "name": "Barbell Hack Squat",
+   "equipment": "barbell",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Hack_Squat",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "barbell-hip-thrust",
+   "name": "Barbell Hip Thrust",
+   "equipment": "barbell",
+   "movement": "hipThrust",
+   "compound": true,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    },
+    {
+     "group": "hamstrings",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Hip_Thrust",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "glutes"
+    ]
+   }
+  },
+  {
+   "id": "barbell-incline-bench-press-medium-grip",
+   "name": "Barbell Incline Bench Press - Medium Grip",
+   "equipment": "barbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Incline_Bench_Press_-_Medium_Grip",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "barbell-lunge",
+   "name": "Barbell Lunge",
+   "equipment": "barbell",
+   "movement": "lunge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "balance limits the load",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Lunge",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "barbell-rear-delt-row",
+   "name": "Barbell Rear Delt Row",
+   "equipment": "barbell",
+   "movement": "rear",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Rear_Delt_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "barbell-seated-calf-raise",
+   "name": "Barbell Seated Calf Raise",
+   "equipment": "barbell",
+   "movement": "calf",
+   "compound": false,
+   "volume": [
+    {
+     "group": "calves",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Seated_Calf_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "calves"
+    ]
+   }
+  },
+  {
+   "id": "barbell-shoulder-press",
+   "name": "Barbell Shoulder Press",
+   "equipment": "barbell",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Shoulder_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "barbell-shrug",
+   "name": "Barbell Shrug",
+   "equipment": "barbell",
+   "movement": "shrug",
+   "compound": false,
+   "volume": [
+    {
+     "group": "traps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Shrug",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "traps"
+    ]
+   },
+   "planIds": [
+    "barbell-shrug"
+   ]
+  },
+  {
+   "id": "barbell-shrug-behind-the-back",
+   "name": "Barbell Shrug Behind The Back",
+   "equipment": "barbell",
+   "movement": "shrug",
+   "compound": false,
+   "volume": [
+    {
+     "group": "traps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Shrug_Behind_The_Back",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "traps"
+    ]
+   }
+  },
+  {
+   "id": "barbell-squat",
+   "name": "Barbell Squat",
+   "equipment": "barbell",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Squat",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "barbell-step-ups",
+   "name": "Barbell Step Ups",
+   "equipment": "barbell",
+   "movement": "lunge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "balance limits the load",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Step_Ups",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "barbell-walking-lunge",
+   "name": "Barbell Walking Lunge",
+   "equipment": "barbell",
+   "movement": "lunge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "balance limits the load",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Walking_Lunge",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "bayesian-cable-curl",
+   "name": "Bayesian Cable Curl",
+   "aliases": [
+    "Face-away Bayesian cable curl"
+   ],
+   "equipment": "cable",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://fitnessvolt.com/jeff-nippard-best-exercises-every-muscle-group/"
+   }
+  },
+  {
+   "id": "behind-the-back-cuffed-cable-lateral-raise",
+   "name": "Behind-the-Back Cuffed Cable Lateral Raise",
+   "equipment": "cable",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  {
+   "id": "bench-dips",
+   "name": "Bench Dips",
+   "equipment": "bodyweight",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "bodyweight only",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bench_Dips",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "bench-press-powerlifting",
+   "name": "Bench Press - Powerlifting",
+   "equipment": "barbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bench_Press_-_Powerlifting",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "bent-over-barbell-row",
+   "name": "Bent Over Barbell Row",
+   "equipment": "barbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bent_Over_Barbell_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "bent-over-dumbbell-rear-delt-raise-with-head-on-bench",
+   "name": "Bent Over Dumbbell Rear Delt Raise With Head On Bench",
+   "equipment": "dumbbell",
+   "movement": "rear",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bent_Over_Dumbbell_Rear_Delt_Raise_With_Head_On_Bench",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "bent-over-low-pulley-side-lateral",
+   "name": "Bent Over Low-Pulley Side Lateral",
+   "equipment": "cable",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bent_Over_Low-Pulley_Side_Lateral",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "bent-over-one-arm-long-bar-row",
+   "name": "Bent Over One-Arm Long Bar Row",
+   "equipment": "plateMachine",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bent_Over_One-Arm_Long_Bar_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "bent-over-two-arm-long-bar-row",
+   "name": "Bent Over Two-Arm Long Bar Row",
+   "equipment": "plateMachine",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bent_Over_Two-Arm_Long_Bar_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "bent-over-two-dumbbell-row",
+   "name": "Bent Over Two-Dumbbell Row",
+   "equipment": "dumbbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bent_Over_Two-Dumbbell_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "bent-over-two-dumbbell-row-with-palms-in",
+   "name": "Bent Over Two-Dumbbell Row With Palms In",
+   "equipment": "dumbbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bent_Over_Two-Dumbbell_Row_With_Palms_In",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "bent-arm-barbell-pullover",
+   "name": "Bent-Arm Barbell Pullover",
+   "equipment": "barbell",
+   "movement": "pulloverLats",
+   "compound": false,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bent-Arm_Barbell_Pullover",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lats"
+    ]
+   }
+  },
+  {
+   "id": "bent-arm-dumbbell-pullover",
+   "name": "Bent-Arm Dumbbell Pullover",
+   "equipment": "dumbbell",
+   "movement": "pulloverChest",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "back",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bent-Arm_Dumbbell_Pullover",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "bodyweight-squat",
+   "name": "Bodyweight Squat",
+   "equipment": "bodyweight",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "bodyweight only",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bodyweight_Squat",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "box-squat",
+   "name": "Box Squat",
+   "equipment": "barbell",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Box_Squat",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "butt-lift-bridge",
+   "name": "Butt Lift (Bridge)",
+   "equipment": "bodyweight",
+   "movement": "hipThrust",
+   "compound": true,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    },
+    {
+     "group": "hamstrings",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "bodyweight only",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Butt_Lift_Bridge",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "glutes"
+    ]
+   }
+  },
+  {
+   "id": "butterfly",
+   "name": "Butterfly",
+   "equipment": "machine",
+   "movement": "fly",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Butterfly",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "chest"
+    ]
+   },
+   "aliases": [
+    "Pec Deck"
+   ]
+  },
+  {
+   "id": "cable-chest-press",
+   "name": "Cable Chest Press",
+   "equipment": "cable",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Chest_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "cable-crossover",
+   "name": "Cable Crossover",
+   "equipment": "cable",
+   "movement": "fly",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Crossover",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "cable-hammer-curls-rope-attachment",
+   "name": "Cable Hammer Curls - Rope Attachment",
+   "equipment": "cable",
+   "movement": "hammer",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    },
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Hammer_Curls_-_Rope_Attachment",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "cable-hip-adduction",
+   "name": "Cable Hip Adduction",
+   "equipment": "cable",
+   "movement": "adduction",
+   "compound": false,
+   "volume": [
+    {
+     "group": "adductors",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Hip_Adduction",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "cable-incline-pushdown",
+   "name": "Cable Incline Pushdown",
+   "equipment": "cable",
+   "movement": "straightArm",
+   "compound": false,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Incline_Pushdown",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "lats"
+    ]
+   }
+  },
+  {
+   "id": "cable-incline-triceps-extension",
+   "name": "Cable Incline Triceps Extension",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Incline_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "cable-internal-rotation",
+   "name": "Cable Internal Rotation",
+   "equipment": "cable",
+   "movement": "rotation",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rotatorCuff",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Internal_Rotation",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "cable-lateral-raise",
+   "name": "Cable Lateral Raise",
+   "equipment": "cable",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   },
+   "planIds": [
+    "cable-lateral-raise"
+   ]
+  },
+  {
+   "id": "cable-lying-triceps-extension",
+   "name": "Cable Lying Triceps Extension",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Lying_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "cable-one-arm-tricep-extension",
+   "name": "Cable One Arm Tricep Extension",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_One_Arm_Tricep_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "cable-preacher-curl",
+   "name": "Cable Preacher Curl",
+   "equipment": "cable",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Preacher_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "cable-press-around",
+   "name": "Cable Press-Around",
+   "equipment": "cable",
+   "movement": "fly",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
+   }
+  },
+  {
+   "id": "cable-rear-delt-fly",
+   "name": "Cable Rear Delt Fly",
+   "equipment": "cable",
+   "movement": "rear",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Rear_Delt_Fly",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   },
+   "planIds": [
+    "single-arm-cable-reverse-fly"
+   ]
+  },
+  {
+   "id": "cable-rope-overhead-triceps-extension",
+   "name": "Cable Rope Overhead Triceps Extension",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Rope_Overhead_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "cable-rope-rear-delt-rows",
+   "name": "Cable Rope Rear-Delt Rows",
+   "equipment": "cable",
+   "movement": "rear",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Rope_Rear-Delt_Rows",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "cable-seated-lateral-raise",
+   "name": "Cable Seated Lateral Raise",
+   "equipment": "cable",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Seated_Lateral_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "cable-shoulder-press",
+   "name": "Cable Shoulder Press",
+   "equipment": "cable",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Shoulder_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "cable-shrugs",
+   "name": "Cable Shrugs",
+   "equipment": "cable",
+   "movement": "shrug",
+   "compound": false,
+   "volume": [
+    {
+     "group": "traps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Shrugs",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "traps"
+    ]
+   }
+  },
+  {
+   "id": "cable-triceps-kickback",
+   "name": "Cable Triceps Kickback",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+   },
+   "planIds": [
+    "cable-one-arm-tricep-kickback"
+   ]
+  },
+  {
+   "id": "cable-wrist-curl",
+   "name": "Cable Wrist Curl",
+   "equipment": "cable",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Wrist_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "cable-y-raise",
+   "name": "Cable Y-Raise",
+   "equipment": "cable",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  {
+   "id": "calf-press",
+   "name": "Calf Press",
+   "equipment": "plateMachine",
+   "movement": "calf",
+   "compound": false,
+   "volume": [
+    {
+     "group": "calves",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Calf_Press",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "calves"
+    ]
+   }
+  },
+  {
+   "id": "calf-press-on-the-leg-press-machine",
+   "name": "Calf Press On The Leg Press Machine",
+   "equipment": "plateMachine",
+   "movement": "calf",
+   "compound": false,
+   "volume": [
+    {
+     "group": "calves",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Calf_Press_On_The_Leg_Press_Machine",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "calves"
+    ]
+   }
+  },
+  {
+   "id": "calf-raise-on-a-dumbbell",
+   "name": "Calf Raise On A Dumbbell",
+   "equipment": "dumbbell",
+   "movement": "calf",
+   "compound": false,
+   "volume": [
+    {
+     "group": "calves",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Calf_Raise_On_A_Dumbbell",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "calves"
+    ]
+   }
+  },
+  {
+   "id": "calf-machine-shoulder-shrug",
+   "name": "Calf-Machine Shoulder Shrug",
+   "equipment": "machine",
+   "movement": "shrug",
+   "compound": false,
+   "volume": [
+    {
+     "group": "traps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Calf-Machine_Shoulder_Shrug",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "traps"
+    ]
+   }
+  },
+  {
+   "id": "chest-supported-machine-row",
+   "name": "Chest-Supported Machine Row",
+   "aliases": [
+    "Chest-supported row"
+   ],
+   "equipment": "machine",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+   }
+  },
+  {
+   "id": "chin-up",
+   "name": "Chin-Up",
+   "equipment": "bodyweight",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Chin-Up",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lats"
+    ]
+   }
+  },
+  {
+   "id": "close-grip-barbell-bench-press",
+   "name": "Close-Grip Barbell Bench Press",
+   "equipment": "barbell",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Close-Grip_Barbell_Bench_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "close-grip-dumbbell-press",
+   "name": "Close-Grip Dumbbell Press",
+   "equipment": "dumbbell",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Close-Grip_Dumbbell_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "close-grip-ez-bar-curl",
+   "name": "Close-Grip EZ Bar Curl",
+   "equipment": "barbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Close-Grip_EZ_Bar_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "close-grip-ez-bar-press",
+   "name": "Close-Grip EZ-Bar Press",
+   "equipment": "barbell",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Close-Grip_EZ-Bar_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "close-grip-front-lat-pulldown",
+   "name": "Close-Grip Front Lat Pulldown",
+   "equipment": "cable",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Close-Grip_Front_Lat_Pulldown",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lats"
+    ]
+   }
+  },
+  {
+   "id": "close-grip-standing-barbell-curl",
+   "name": "Close-Grip Standing Barbell Curl",
+   "equipment": "barbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Close-Grip_Standing_Barbell_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "concentration-curls",
+   "name": "Concentration Curls",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Concentration_Curls",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "cross-body-hammer-curl",
+   "name": "Cross Body Hammer Curl",
+   "equipment": "dumbbell",
+   "movement": "hammer",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    },
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cross_Body_Hammer_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "cross-body-lat-pull-around",
+   "name": "Cross-Body Lat Pull-Around",
+   "equipment": "cable",
+   "movement": "straightArm",
+   "compound": false,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+   }
+  },
+  {
+   "id": "decline-barbell-bench-press",
+   "name": "Decline Barbell Bench Press",
+   "equipment": "barbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Decline_Barbell_Bench_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "decline-dumbbell-bench-press",
+   "name": "Decline Dumbbell Bench Press",
+   "equipment": "dumbbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Decline_Dumbbell_Bench_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "decline-dumbbell-flyes",
+   "name": "Decline Dumbbell Flyes",
+   "equipment": "dumbbell",
+   "movement": "fly",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Decline_Dumbbell_Flyes",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "decline-dumbbell-triceps-extension",
+   "name": "Decline Dumbbell Triceps Extension",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Decline_Dumbbell_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "decline-ez-bar-triceps-extension",
+   "name": "Decline EZ Bar Triceps Extension",
+   "equipment": "barbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Decline_EZ_Bar_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "decline-smith-press",
+   "name": "Decline Smith Press",
+   "equipment": "smith",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Decline_Smith_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "deficit-deadlift",
+   "name": "Deficit Deadlift",
+   "equipment": "barbell",
+   "movement": "deadlift",
+   "compound": true,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    },
+    {
+     "group": "hamstrings",
+     "weight": 1
+    },
+    {
+     "group": "back",
+     "weight": 0.5
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    },
+    {
+     "group": "quads",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Deficit_Deadlift",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lower back"
+    ]
+   }
+  },
+  {
+   "id": "deficit-pendlay-row",
+   "name": "Deficit Pendlay Row",
+   "aliases": [
+    "Modified deficit Pendlay row"
+   ],
+   "equipment": "barbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+   }
+  },
+  {
+   "id": "dip-machine",
+   "name": "Dip Machine",
+   "equipment": "machine",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dip_Machine",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   },
+   "planIds": [
+    "machine-dip"
+   ]
+  },
+  {
+   "id": "dips-chest-version",
+   "name": "Dips - Chest Version",
+   "equipment": "bodyweight",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dips_-_Chest_Version",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "dips-triceps-version",
+   "name": "Dips - Triceps Version",
+   "equipment": "bodyweight",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dips_-_Triceps_Version",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "donkey-calf-raises",
+   "name": "Donkey Calf Raises",
+   "equipment": "other",
+   "movement": "calf",
+   "compound": false,
+   "volume": [
+    {
+     "group": "calves",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Donkey_Calf_Raises",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "calves"
+    ]
+   }
+  },
+  {
+   "id": "drag-curl",
+   "name": "Drag Curl",
+   "equipment": "barbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Drag_Curl",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-alternate-bicep-curl",
+   "name": "Dumbbell Alternate Bicep Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Alternate_Bicep_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-bench-press",
+   "name": "Dumbbell Bench Press",
+   "equipment": "dumbbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Bench_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-bench-press-with-neutral-grip",
+   "name": "Dumbbell Bench Press with Neutral Grip",
+   "equipment": "dumbbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Bench_Press_with_Neutral_Grip",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-bicep-curl",
+   "name": "Dumbbell Bicep Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Bicep_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-floor-press",
+   "name": "Dumbbell Floor Press",
+   "equipment": "dumbbell",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Floor_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-flyes",
+   "name": "Dumbbell Flyes",
+   "equipment": "dumbbell",
+   "movement": "fly",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Flyes",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-incline-row",
+   "name": "Dumbbell Incline Row",
+   "equipment": "dumbbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Incline_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-lunges",
+   "name": "Dumbbell Lunges",
+   "equipment": "dumbbell",
+   "movement": "lunge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "balance limits the load",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Lunges",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-lying-one-arm-rear-lateral-raise",
+   "name": "Dumbbell Lying One-Arm Rear Lateral Raise",
+   "equipment": "dumbbell",
+   "movement": "rear",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Lying_One-Arm_Rear_Lateral_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-lying-pronation",
+   "name": "Dumbbell Lying Pronation",
+   "equipment": "dumbbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Lying_Pronation",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-lying-rear-lateral-raise",
+   "name": "Dumbbell Lying Rear Lateral Raise",
+   "equipment": "dumbbell",
+   "movement": "rear",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Lying_Rear_Lateral_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-lying-supination",
+   "name": "Dumbbell Lying Supination",
+   "equipment": "dumbbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Lying_Supination",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-one-arm-shoulder-press",
+   "name": "Dumbbell One-Arm Shoulder Press",
+   "equipment": "dumbbell",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_One-Arm_Shoulder_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-one-arm-triceps-extension",
+   "name": "Dumbbell One-Arm Triceps Extension",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_One-Arm_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-one-arm-upright-row",
+   "name": "Dumbbell One-Arm Upright Row",
+   "equipment": "dumbbell",
+   "movement": "upright",
+   "compound": true,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "small muscles drive it",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_One-Arm_Upright_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-prone-incline-curl",
+   "name": "Dumbbell Prone Incline Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Prone_Incline_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-rear-lunge",
+   "name": "Dumbbell Rear Lunge",
+   "equipment": "dumbbell",
+   "movement": "lunge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "balance limits the load",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Rear_Lunge",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-scaption",
+   "name": "Dumbbell Scaption",
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Scaption",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-seated-one-leg-calf-raise",
+   "name": "Dumbbell Seated One-Leg Calf Raise",
+   "equipment": "dumbbell",
+   "movement": "calf",
+   "compound": false,
+   "volume": [
+    {
+     "group": "calves",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Seated_One-Leg_Calf_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "calves"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-shoulder-press",
+   "name": "Dumbbell Shoulder Press",
+   "equipment": "dumbbell",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Shoulder_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-shrug",
+   "name": "Dumbbell Shrug",
+   "equipment": "dumbbell",
+   "movement": "shrug",
+   "compound": false,
+   "volume": [
+    {
+     "group": "traps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Shrug",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "traps"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-skullcrusher",
+   "name": "Dumbbell Skullcrusher",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+   }
+  },
+  {
+   "id": "dumbbell-squat",
+   "name": "Dumbbell Squat",
+   "equipment": "dumbbell",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Squat",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-step-ups",
+   "name": "Dumbbell Step Ups",
+   "equipment": "dumbbell",
+   "movement": "lunge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "balance limits the load",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Step_Ups",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "dumbbell-tricep-extension-pronated-grip",
+   "name": "Dumbbell Tricep Extension -Pronated Grip",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Tricep_Extension_-Pronated_Grip",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "external-rotation",
+   "name": "External Rotation",
+   "equipment": "dumbbell",
+   "movement": "rotation",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rotatorCuff",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "External_Rotation",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "external-rotation-with-cable",
+   "name": "External Rotation with Cable",
+   "equipment": "cable",
+   "movement": "rotation",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rotatorCuff",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "External_Rotation_with_Cable",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "ez-bar-curl",
+   "name": "EZ-Bar Curl",
+   "equipment": "barbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "EZ-Bar_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "ez-bar-skullcrusher",
+   "name": "EZ-Bar Skullcrusher",
+   "equipment": "barbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "EZ-Bar_Skullcrusher",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "face-pull",
+   "name": "Face Pull",
+   "equipment": "cable",
+   "movement": "facePull",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    },
+    {
+     "group": "back",
+     "weight": 0.5
+    },
+    {
+     "group": "rotatorCuff",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Face_Pull",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   },
+   "aliases": [
+    "Rope Face Pull"
+   ],
+   "planIds": [
+    "rope-face-pull"
+   ]
+  },
+  {
+   "id": "flat-bench-cable-flyes",
+   "name": "Flat Bench Cable Flyes",
+   "equipment": "cable",
+   "movement": "fly",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Flat_Bench_Cable_Flyes",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "flexor-incline-dumbbell-curls",
+   "name": "Flexor Incline Dumbbell Curls",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Flexor_Incline_Dumbbell_Curls",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "floor-press",
+   "name": "Floor Press",
+   "equipment": "barbell",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Floor_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "front-barbell-squat",
+   "name": "Front Barbell Squat",
+   "equipment": "barbell",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Front_Barbell_Squat",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "front-cable-raise",
+   "name": "Front Cable Raise",
+   "equipment": "cable",
+   "movement": "frontRaise",
+   "compound": false,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Front_Cable_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "front-dumbbell-raise",
+   "name": "Front Dumbbell Raise",
+   "equipment": "dumbbell",
+   "movement": "frontRaise",
+   "compound": false,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Front_Dumbbell_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "front-incline-dumbbell-raise",
+   "name": "Front Incline Dumbbell Raise",
+   "equipment": "dumbbell",
+   "movement": "frontRaise",
+   "compound": false,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Front_Incline_Dumbbell_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "front-plate-raise",
+   "name": "Front Plate Raise",
+   "equipment": "other",
+   "movement": "frontRaise",
+   "compound": false,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Front_Plate_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "front-two-dumbbell-raise",
+   "name": "Front Two-Dumbbell Raise",
+   "equipment": "dumbbell",
+   "movement": "frontRaise",
+   "compound": false,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Front_Two-Dumbbell_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "full-range-of-motion-lat-pulldown",
+   "name": "Full Range-Of-Motion Lat Pulldown",
+   "equipment": "cable",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Full_Range-Of-Motion_Lat_Pulldown",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lats"
+    ]
+   }
+  },
+  {
+   "id": "glute-ham-raise",
+   "name": "Glute Ham Raise",
+   "equipment": "machine",
+   "movement": "legCurl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "hamstrings",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Glute_Ham_Raise",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "hamstrings"
+    ]
+   }
+  },
+  {
+   "id": "glute-kickback",
+   "name": "Glute Kickback",
+   "equipment": "bodyweight",
+   "movement": "glute",
+   "compound": false,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Glute_Kickback",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "glutes"
+    ]
+   }
+  },
+  {
+   "id": "good-morning",
+   "name": "Good Morning",
+   "equipment": "barbell",
+   "movement": "hinge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "hamstrings",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Good_Morning",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "hamstrings"
+    ]
+   }
+  },
+  {
+   "id": "hack-squat",
+   "name": "Hack Squat",
+   "equipment": "plateMachine",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Hack_Squat",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "half-kneeling-one-arm-lat-pulldown",
+   "name": "Half-Kneeling One-Arm Lat Pulldown",
+   "equipment": "cable",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+   }
+  },
+  {
+   "id": "hammer-curls",
+   "name": "Hammer Curls",
+   "equipment": "dumbbell",
+   "movement": "hammer",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    },
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Hammer_Curls",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   },
+   "planIds": [
+    "db-hammer-curl"
+   ]
+  },
+  {
+   "id": "hammer-grip-incline-db-bench-press",
+   "name": "Hammer Grip Incline DB Bench Press",
+   "equipment": "dumbbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Hammer_Grip_Incline_DB_Bench_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "handstand-push-ups",
+   "name": "Handstand Push-Ups",
+   "equipment": "bodyweight",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "bodyweight only",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Handstand_Push-Ups",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "high-cable-curls",
+   "name": "High Cable Curls",
+   "equipment": "cable",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "High_Cable_Curls",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "hyperextensions-back-extensions",
+   "name": "Hyperextensions (Back Extensions)",
+   "equipment": "bodyweight",
+   "movement": "backExt",
+   "compound": false,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    },
+    {
+     "group": "hamstrings",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Hyperextensions_Back_Extensions",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "lower back"
+    ]
+   }
+  },
+  {
+   "id": "hyperextensions-with-no-hyperextension-bench",
+   "name": "Hyperextensions With No Hyperextension Bench",
+   "equipment": "bodyweight",
+   "movement": "backExt",
+   "compound": false,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    },
+    {
+     "group": "hamstrings",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Hyperextensions_With_No_Hyperextension_Bench",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lower back"
+    ]
+   }
+  },
+  {
+   "id": "incline-barbell-triceps-extension",
+   "name": "Incline Barbell Triceps Extension",
+   "equipment": "barbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Incline_Barbell_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   },
+   "planIds": [
+    "ez-bar-incline-tricep-extension"
+   ]
+  },
+  {
+   "id": "incline-bench-pull",
+   "name": "Incline Bench Pull",
+   "equipment": "barbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Incline_Bench_Pull",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "incline-cable-chest-press",
+   "name": "Incline Cable Chest Press",
+   "equipment": "cable",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Incline_Cable_Chest_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "incline-cable-flye",
+   "name": "Incline Cable Flye",
+   "equipment": "cable",
+   "movement": "fly",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Incline_Cable_Flye",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "incline-dumbbell-bench-with-palms-facing-in",
+   "name": "Incline Dumbbell Bench With Palms Facing In",
+   "equipment": "dumbbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Incline_Dumbbell_Bench_With_Palms_Facing_In",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "incline-dumbbell-curl",
+   "name": "Incline Dumbbell Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Incline_Dumbbell_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   },
+   "planIds": [
+    "db-incline-curl"
+   ]
+  },
+  {
+   "id": "incline-dumbbell-flyes",
+   "name": "Incline Dumbbell Flyes",
+   "equipment": "dumbbell",
+   "movement": "fly",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Incline_Dumbbell_Flyes",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "incline-dumbbell-press",
+   "name": "Incline Dumbbell Press",
+   "equipment": "dumbbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Incline_Dumbbell_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "incline-hammer-curls",
+   "name": "Incline Hammer Curls",
+   "equipment": "dumbbell",
+   "movement": "hammer",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    },
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Incline_Hammer_Curls",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "incline-inner-biceps-curl",
+   "name": "Incline Inner Biceps Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Incline_Inner_Biceps_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "incline-push-up",
+   "name": "Incline Push-Up",
+   "equipment": "bodyweight",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "bodyweight only",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Incline_Push-Up",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "inverted-row-with-straps",
+   "name": "Inverted Row with Straps",
+   "equipment": "bodyweight",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "bodyweight only",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Inverted_Row_with_Straps",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "jm-press",
+   "name": "JM Press",
+   "equipment": "barbell",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "weight travels over the face",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "JM_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "katana-cable-triceps-extension",
+   "name": "Katana Cable Triceps Extension",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+   }
+  },
+  {
+   "id": "kelso-shrug",
+   "name": "Kelso Shrug",
+   "equipment": "machine",
+   "movement": "shrug",
+   "compound": false,
+   "volume": [
+    {
+     "group": "traps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "nippard": "https://boxlifemagazine.com/overlooked-exercises-backed-by-science/"
+   },
+   "planIds": [
+    "kelso-shrug"
+   ]
+  },
+  {
+   "id": "kneeling-cable-triceps-extension",
+   "name": "Kneeling Cable Triceps Extension",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Kneeling_Cable_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "kroc-row",
+   "name": "Kroc Row",
+   "equipment": "dumbbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+   }
+  },
+  {
+   "id": "lateral-shrug-hybrid",
+   "name": "Lateral/Shrug Hybrid",
+   "equipment": "dumbbell",
+   "movement": "shrug",
+   "compound": false,
+   "volume": [
+    {
+     "group": "traps",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "plan": "Leo v3.1"
+   },
+   "planIds": [
+    "lateral-shrug-hybrid"
+   ]
+  },
+  {
+   "id": "lean-away-dumbbell-lateral-raise",
+   "name": "Lean-Away Dumbbell Lateral Raise",
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   },
+   "planIds": [
+    "lean-away-lateral-raise"
+   ]
+  },
+  {
+   "id": "lean-in-dumbbell-lateral-raise",
+   "name": "Lean-In Dumbbell Lateral Raise",
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  {
+   "id": "leg-extensions",
+   "name": "Leg Extensions",
+   "equipment": "machine",
+   "movement": "legExt",
+   "compound": false,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Leg_Extensions",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   },
+   "planIds": [
+    "leg-extension"
+   ]
+  },
+  {
+   "id": "leg-press",
+   "name": "Leg Press",
+   "equipment": "plateMachine",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Leg_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   },
+   "planIds": [
+    "leg-press"
+   ]
+  },
+  {
+   "id": "leverage-chest-press",
+   "name": "Leverage Chest Press",
+   "equipment": "plateMachine",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Leverage_Chest_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "leverage-deadlift",
+   "name": "Leverage Deadlift",
+   "equipment": "plateMachine",
+   "movement": "deadlift",
+   "compound": true,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    },
+    {
+     "group": "hamstrings",
+     "weight": 1
+    },
+    {
+     "group": "back",
+     "weight": 0.5
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    },
+    {
+     "group": "quads",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Leverage_Deadlift",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "leverage-decline-chest-press",
+   "name": "Leverage Decline Chest Press",
+   "equipment": "plateMachine",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Leverage_Decline_Chest_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "leverage-high-row",
+   "name": "Leverage High Row",
+   "equipment": "plateMachine",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Leverage_High_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "leverage-incline-chest-press",
+   "name": "Leverage Incline Chest Press",
+   "equipment": "plateMachine",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Leverage_Incline_Chest_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "leverage-iso-row",
+   "name": "Leverage Iso Row",
+   "equipment": "plateMachine",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Leverage_Iso_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lats"
+    ]
+   }
+  },
+  {
+   "id": "leverage-shoulder-press",
+   "name": "Leverage Shoulder Press",
+   "equipment": "plateMachine",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Leverage_Shoulder_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "leverage-shrug",
+   "name": "Leverage Shrug",
+   "equipment": "plateMachine",
+   "movement": "shrug",
+   "compound": false,
+   "volume": [
+    {
+     "group": "traps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Leverage_Shrug",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "traps"
+    ]
+   }
+  },
+  {
+   "id": "low-cable-crossover",
+   "name": "Low Cable Crossover",
+   "equipment": "cable",
+   "movement": "fly",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Low_Cable_Crossover",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "low-cable-triceps-extension",
+   "name": "Low Cable Triceps Extension",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Low_Cable_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "low-pulley-row-to-neck",
+   "name": "Low Pulley Row To Neck",
+   "equipment": "cable",
+   "movement": "rear",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Low_Pulley_Row_To_Neck",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "lying-cable-curl",
+   "name": "Lying Cable Curl",
+   "equipment": "cable",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_Cable_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "lying-cambered-barbell-row",
+   "name": "Lying Cambered Barbell Row",
+   "equipment": "barbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_Cambered_Barbell_Row",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "lying-close-grip-bar-curl-on-high-pulley",
+   "name": "Lying Close-Grip Bar Curl On High Pulley",
+   "equipment": "cable",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_Close-Grip_Bar_Curl_On_High_Pulley",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "lying-close-grip-barbell-triceps-extension-behind-the-head",
+   "name": "Lying Close-Grip Barbell Triceps Extension Behind The Head",
+   "equipment": "barbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_Close-Grip_Barbell_Triceps_Extension_Behind_The_Head",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "lying-dumbbell-tricep-extension",
+   "name": "Lying Dumbbell Tricep Extension",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_Dumbbell_Tricep_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "lying-high-bench-barbell-curl",
+   "name": "Lying High Bench Barbell Curl",
+   "equipment": "barbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_High_Bench_Barbell_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "lying-leg-curls",
+   "name": "Lying Leg Curls",
+   "equipment": "machine",
+   "movement": "legCurl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "hamstrings",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_Leg_Curls",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "hamstrings"
+    ]
+   },
+   "aliases": [
+    "Prone Leg Curl"
+   ],
+   "planIds": [
+    "prone-leg-curl"
+   ]
+  },
+  {
+   "id": "lying-one-arm-lateral-raise",
+   "name": "Lying One-Arm Lateral Raise",
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_One-Arm_Lateral_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "lying-rear-delt-raise",
+   "name": "Lying Rear Delt Raise",
+   "equipment": "dumbbell",
+   "movement": "rear",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_Rear_Delt_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "lying-supine-dumbbell-curl",
+   "name": "Lying Supine Dumbbell Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_Supine_Dumbbell_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "lying-t-bar-row",
+   "name": "Lying T-Bar Row",
+   "equipment": "plateMachine",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_T-Bar_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "lying-triceps-press",
+   "name": "Lying Triceps Press",
+   "equipment": "barbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_Triceps_Press",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "machine-bench-press",
+   "name": "Machine Bench Press",
+   "equipment": "machine",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Machine_Bench_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   },
+   "aliases": [
+    "Machine Chest Press"
+   ]
+  },
+  {
+   "id": "machine-bicep-curl",
+   "name": "Machine Bicep Curl",
+   "equipment": "machine",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Machine_Bicep_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "machine-preacher-curls",
+   "name": "Machine Preacher Curls",
+   "equipment": "machine",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Machine_Preacher_Curls",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "machine-shoulder-military-press",
+   "name": "Machine Shoulder (Military) Press",
+   "equipment": "machine",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Machine_Shoulder_Military_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   },
+   "planIds": [
+    "machine-shoulder-press"
+   ]
+  },
+  {
+   "id": "machine-triceps-extension",
+   "name": "Machine Triceps Extension",
+   "equipment": "machine",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Machine_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "meadows-row",
+   "name": "Meadows Row",
+   "equipment": "plateMachine",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+   }
+  },
+  {
+   "id": "middle-back-shrug",
+   "name": "Middle Back Shrug",
+   "equipment": "dumbbell",
+   "movement": "shrug",
+   "compound": false,
+   "volume": [
+    {
+     "group": "traps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Middle_Back_Shrug",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "narrow-stance-hack-squats",
+   "name": "Narrow Stance Hack Squats",
+   "equipment": "plateMachine",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Narrow_Stance_Hack_Squats",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "narrow-stance-leg-press",
+   "name": "Narrow Stance Leg Press",
+   "equipment": "plateMachine",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Narrow_Stance_Leg_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "neutral-grip-lat-pulldown",
+   "name": "Neutral-Grip Lat Pulldown",
+   "equipment": "cable",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+   }
+  },
+  {
+   "id": "neutral-grip-pull-up",
+   "name": "Neutral-Grip Pull-Up",
+   "equipment": "bodyweight",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+   }
+  },
+  {
+   "id": "one-arm-dumbbell-bench-press",
+   "name": "One Arm Dumbbell Bench Press",
+   "equipment": "dumbbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One_Arm_Dumbbell_Bench_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "one-arm-dumbbell-preacher-curl",
+   "name": "One Arm Dumbbell Preacher Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One_Arm_Dumbbell_Preacher_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "one-arm-floor-press",
+   "name": "One Arm Floor Press",
+   "equipment": "barbell",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One_Arm_Floor_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "one-arm-lat-pulldown",
+   "name": "One Arm Lat Pulldown",
+   "equipment": "cable",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One_Arm_Lat_Pulldown",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lats"
+    ]
+   },
+   "planIds": [
+    "single-arm-cable-lat-pulldown"
+   ]
+  },
+  {
+   "id": "one-arm-pronated-dumbbell-triceps-extension",
+   "name": "One Arm Pronated Dumbbell Triceps Extension",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One_Arm_Pronated_Dumbbell_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "one-arm-supinated-dumbbell-triceps-extension",
+   "name": "One Arm Supinated Dumbbell Triceps Extension",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One_Arm_Supinated_Dumbbell_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "one-leg-barbell-squat",
+   "name": "One Leg Barbell Squat",
+   "equipment": "barbell",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "balance limits the load",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One_Leg_Barbell_Squat",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "one-arm-dumbbell-row",
+   "name": "One-Arm Dumbbell Row",
+   "equipment": "dumbbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One-Arm_Dumbbell_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   },
+   "planIds": [
+    "single-arm-db-row"
+   ]
+  },
+  {
+   "id": "one-arm-flat-bench-dumbbell-flye",
+   "name": "One-Arm Flat Bench Dumbbell Flye",
+   "equipment": "dumbbell",
+   "movement": "fly",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One-Arm_Flat_Bench_Dumbbell_Flye",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "one-arm-incline-lateral-raise",
+   "name": "One-Arm Incline Lateral Raise",
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One-Arm_Incline_Lateral_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "one-arm-long-bar-row",
+   "name": "One-Arm Long Bar Row",
+   "equipment": "plateMachine",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One-Arm_Long_Bar_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "one-arm-side-laterals",
+   "name": "One-Arm Side Laterals",
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One-Arm_Side_Laterals",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "one-legged-cable-kickback",
+   "name": "One-Legged Cable Kickback",
+   "equipment": "cable",
+   "movement": "glute",
+   "compound": false,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One-Legged_Cable_Kickback",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "glutes"
+    ]
+   }
+  },
+  {
+   "id": "overhead-cable-curl",
+   "name": "Overhead Cable Curl",
+   "equipment": "cable",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Overhead_Cable_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "overhead-cable-triceps-extension-bar",
+   "name": "Overhead Cable Triceps Extension (Bar)",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+   }
+  },
+  {
+   "id": "overhead-trap",
+   "name": "Overhead Trap",
+   "equipment": "cable",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "traps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "plan": "Leo v3.1"
+   },
+   "planIds": [
+    "overhead-trap"
+   ]
+  },
+  {
+   "id": "palms-down-dumbbell-wrist-curl-over-a-bench",
+   "name": "Palms-Down Dumbbell Wrist Curl Over A Bench",
+   "equipment": "dumbbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "palms-down-wrist-curl-over-a-bench",
+   "name": "Palms-Down Wrist Curl Over A Bench",
+   "equipment": "barbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Palms-Down_Wrist_Curl_Over_A_Bench",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "palms-up-barbell-wrist-curl-over-a-bench",
+   "name": "Palms-Up Barbell Wrist Curl Over A Bench",
+   "equipment": "barbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "palms-up-dumbbell-wrist-curl-over-a-bench",
+   "name": "Palms-Up Dumbbell Wrist Curl Over A Bench",
+   "equipment": "dumbbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Palms-Up_Dumbbell_Wrist_Curl_Over_A_Bench",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "parallel-bar-dip",
+   "name": "Parallel Bar Dip",
+   "equipment": "bodyweight",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Parallel_Bar_Dip",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "pendlay-row",
+   "name": "Pendlay Row",
+   "equipment": "barbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+   }
+  },
+  {
+   "id": "pendulum-squat",
+   "name": "Pendulum Squat",
+   "equipment": "plateMachine",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "nippard": "https://fitnessvolt.com/jeff-nippard-leg-routine-one-year/"
+   }
+  },
+  {
+   "id": "preacher-curl",
+   "name": "Preacher Curl",
+   "equipment": "barbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Preacher_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   },
+   "planIds": [
+    "barbell-preacher-curl"
+   ]
+  },
+  {
+   "id": "preacher-hammer-dumbbell-curl",
+   "name": "Preacher Hammer Dumbbell Curl",
+   "equipment": "dumbbell",
+   "movement": "hammer",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    },
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Preacher_Hammer_Dumbbell_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "pull-through",
+   "name": "Pull Through",
+   "equipment": "cable",
+   "movement": "glute",
+   "compound": false,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Pull_Through",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "glutes"
+    ]
+   }
+  },
+  {
+   "id": "pullups",
+   "name": "Pullups",
+   "equipment": "bodyweight",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Pullups",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lats"
+    ]
+   }
+  },
+  {
+   "id": "push-up-wide",
+   "name": "Push-Up Wide",
+   "equipment": "bodyweight",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "bodyweight only",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Push-Up_Wide",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "push-ups-close-triceps-position",
+   "name": "Push-Ups - Close Triceps Position",
+   "equipment": "bodyweight",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "bodyweight only",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Push-Ups_-_Close_Triceps_Position",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "push-ups-with-feet-elevated",
+   "name": "Push-Ups With Feet Elevated",
+   "equipment": "bodyweight",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "bodyweight only",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Push-Ups_With_Feet_Elevated",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "pushups",
+   "name": "Pushups",
+   "equipment": "bodyweight",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "bodyweight only",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Pushups",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "rack-pulls",
+   "name": "Rack Pulls",
+   "equipment": "barbell",
+   "movement": "deadlift",
+   "compound": true,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    },
+    {
+     "group": "hamstrings",
+     "weight": 1
+    },
+    {
+     "group": "back",
+     "weight": 0.5
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    },
+    {
+     "group": "quads",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Rack_Pulls",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lower back"
+    ]
+   }
+  },
+  {
+   "id": "reverse-barbell-curl",
+   "name": "Reverse Barbell Curl",
+   "equipment": "barbell",
+   "movement": "reverseCurl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Reverse_Barbell_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "reverse-barbell-preacher-curls",
+   "name": "Reverse Barbell Preacher Curls",
+   "equipment": "barbell",
+   "movement": "reverseCurl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Reverse_Barbell_Preacher_Curls",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "reverse-cable-crossover",
+   "name": "Reverse Cable Crossover",
+   "equipment": "cable",
+   "movement": "rear",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  {
+   "id": "reverse-cable-curl",
+   "name": "Reverse Cable Curl",
+   "equipment": "cable",
+   "movement": "reverseCurl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Reverse_Cable_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "reverse-flyes",
+   "name": "Reverse Flyes",
+   "equipment": "dumbbell",
+   "movement": "rear",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Reverse_Flyes",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "reverse-flyes-with-external-rotation",
+   "name": "Reverse Flyes With External Rotation",
+   "equipment": "dumbbell",
+   "movement": "rotation",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rotatorCuff",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Reverse_Flyes_With_External_Rotation",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "reverse-grip-bent-over-rows",
+   "name": "Reverse Grip Bent-Over Rows",
+   "equipment": "barbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Reverse_Grip_Bent-Over_Rows",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "reverse-grip-triceps-pushdown",
+   "name": "Reverse Grip Triceps Pushdown",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Reverse_Grip_Triceps_Pushdown",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "reverse-machine-flyes",
+   "name": "Reverse Machine Flyes",
+   "equipment": "machine",
+   "movement": "rear",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Reverse_Machine_Flyes",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   },
+   "aliases": [
+    "Reverse Pec Deck"
+   ],
+   "planIds": [
+    "machine-reverse-fly"
+   ]
+  },
+  {
+   "id": "rocking-standing-calf-raise",
+   "name": "Rocking Standing Calf Raise",
+   "equipment": "barbell",
+   "movement": "calf",
+   "compound": false,
+   "volume": [
+    {
+     "group": "calves",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Rocking_Standing_Calf_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "calves"
+    ]
+   }
+  },
+  {
+   "id": "romanian-deadlift",
+   "name": "Romanian Deadlift",
+   "equipment": "barbell",
+   "movement": "hinge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "hamstrings",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Romanian_Deadlift",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "hamstrings"
+    ]
+   }
+  },
+  {
+   "id": "rope-straight-arm-pulldown",
+   "name": "Rope Straight-Arm Pulldown",
+   "equipment": "cable",
+   "movement": "straightArm",
+   "compound": false,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Rope_Straight-Arm_Pulldown",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "lats"
+    ]
+   }
+  },
+  {
+   "id": "seated-barbell-military-press",
+   "name": "Seated Barbell Military Press",
+   "equipment": "barbell",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Barbell_Military_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "seated-bent-over-one-arm-dumbbell-triceps-extension",
+   "name": "Seated Bent-Over One-Arm Dumbbell Triceps Extension",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "seated-bent-over-rear-delt-raise",
+   "name": "Seated Bent-Over Rear Delt Raise",
+   "equipment": "dumbbell",
+   "movement": "rear",
+   "compound": false,
+   "volume": [
+    {
+     "group": "rearDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Bent-Over_Rear_Delt_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "seated-bent-over-two-arm-dumbbell-triceps-extension",
+   "name": "Seated Bent-Over Two-Arm Dumbbell Triceps Extension",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "seated-cable-fly",
+   "name": "Seated Cable Fly",
+   "aliases": [
+    "Seated super-stretch cable fly"
+   ],
+   "equipment": "cable",
+   "movement": "fly",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
+   }
+  },
+  {
+   "id": "seated-cable-rows",
+   "name": "Seated Cable Rows",
+   "equipment": "cable",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Cable_Rows",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   },
+   "planIds": [
+    "cable-seated-row"
+   ]
+  },
+  {
+   "id": "seated-cable-shoulder-press",
+   "name": "Seated Cable Shoulder Press",
+   "equipment": "cable",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Cable_Shoulder_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "seated-calf-raise",
+   "name": "Seated Calf Raise",
+   "equipment": "machine",
+   "movement": "calf",
+   "compound": false,
+   "volume": [
+    {
+     "group": "calves",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Calf_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "calves"
+    ]
+   },
+   "planIds": [
+    "seated-calf-raise"
+   ]
+  },
+  {
+   "id": "seated-close-grip-concentration-barbell-curl",
+   "name": "Seated Close-Grip Concentration Barbell Curl",
+   "equipment": "barbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Close-Grip_Concentration_Barbell_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "seated-dumbbell-curl",
+   "name": "Seated Dumbbell Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Dumbbell_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "seated-dumbbell-inner-biceps-curl",
+   "name": "Seated Dumbbell Inner Biceps Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Dumbbell_Inner_Biceps_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "seated-dumbbell-palms-down-wrist-curl",
+   "name": "Seated Dumbbell Palms-Down Wrist Curl",
+   "equipment": "dumbbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Dumbbell_Palms-Down_Wrist_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "seated-dumbbell-palms-up-wrist-curl",
+   "name": "Seated Dumbbell Palms-Up Wrist Curl",
+   "equipment": "dumbbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Dumbbell_Palms-Up_Wrist_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "seated-dumbbell-press",
+   "name": "Seated Dumbbell Press",
+   "equipment": "dumbbell",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Dumbbell_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "seated-leg-curl",
+   "name": "Seated Leg Curl",
+   "equipment": "machine",
+   "movement": "legCurl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "hamstrings",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Leg_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "hamstrings"
+    ]
+   },
+   "aliases": [
+    "Seated Hamstring Curl"
+   ],
+   "planIds": [
+    "seated-leg-curl"
+   ]
+  },
+  {
+   "id": "seated-machine-lateral-raise",
+   "name": "Seated Machine Lateral Raise",
+   "equipment": "machine",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  {
+   "id": "seated-one-arm-cable-pulley-rows",
+   "name": "Seated One-arm Cable Pulley Rows",
+   "equipment": "cable",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_One-arm_Cable_Pulley_Rows",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "seated-one-arm-dumbbell-palms-down-wrist-curl",
+   "name": "Seated One-Arm Dumbbell Palms-Down Wrist Curl",
+   "equipment": "dumbbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_One-Arm_Dumbbell_Palms-Down_Wrist_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "seated-one-arm-dumbbell-palms-up-wrist-curl",
+   "name": "Seated One-Arm Dumbbell Palms-Up Wrist Curl",
+   "equipment": "dumbbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "seated-palm-up-barbell-wrist-curl",
+   "name": "Seated Palm-Up Barbell Wrist Curl",
+   "equipment": "barbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Palm-Up_Barbell_Wrist_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "seated-palms-down-barbell-wrist-curl",
+   "name": "Seated Palms-Down Barbell Wrist Curl",
+   "equipment": "barbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Palms-Down_Barbell_Wrist_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "seated-side-lateral-raise",
+   "name": "Seated Side Lateral Raise",
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Side_Lateral_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "seated-triceps-press",
+   "name": "Seated Triceps Press",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Triceps_Press",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "seated-two-arm-palms-up-low-pulley-wrist-curl",
+   "name": "Seated Two-Arm Palms-Up Low-Pulley Wrist Curl",
+   "equipment": "cable",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Two-Arm_Palms-Up_Low-Pulley_Wrist_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "side-lateral-raise",
+   "name": "Side Lateral Raise",
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Side_Lateral_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "side-laterals-to-front-raise",
+   "name": "Side Laterals to Front Raise",
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Side_Laterals_to_Front_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "side-lying-dumbbell-lateral-raise",
+   "name": "Side-Lying Dumbbell Lateral Raise",
+   "aliases": [
+    "Arnold-style side-lying dumbbell raise"
+   ],
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  {
+   "id": "single-dumbbell-raise",
+   "name": "Single Dumbbell Raise",
+   "equipment": "dumbbell",
+   "movement": "frontRaise",
+   "compound": false,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Single_Dumbbell_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "single-leg-glute-bridge",
+   "name": "Single Leg Glute Bridge",
+   "equipment": "bodyweight",
+   "movement": "hipThrust",
+   "compound": true,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    },
+    {
+     "group": "hamstrings",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "bodyweight only",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Single_Leg_Glute_Bridge",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "glutes"
+    ]
+   }
+  },
+  {
+   "id": "single-arm-cable-crossover",
+   "name": "Single-Arm Cable Crossover",
+   "equipment": "cable",
+   "movement": "fly",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Single-Arm_Cable_Crossover",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "single-leg-leg-extension",
+   "name": "Single-Leg Leg Extension",
+   "equipment": "machine",
+   "movement": "legExt",
+   "compound": false,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Single-Leg_Leg_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-behind-the-back-shrug",
+   "name": "Smith Machine Behind the Back Shrug",
+   "equipment": "smith",
+   "movement": "shrug",
+   "compound": false,
+   "volume": [
+    {
+     "group": "traps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Behind_the_Back_Shrug",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "traps"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-bench-press",
+   "name": "Smith Machine Bench Press",
+   "equipment": "smith",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Bench_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-bent-over-row",
+   "name": "Smith Machine Bent Over Row",
+   "equipment": "smith",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Bent_Over_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-calf-raise",
+   "name": "Smith Machine Calf Raise",
+   "equipment": "smith",
+   "movement": "calf",
+   "compound": false,
+   "volume": [
+    {
+     "group": "calves",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Calf_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "calves"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-close-grip-bench-press",
+   "name": "Smith Machine Close-Grip Bench Press",
+   "equipment": "smith",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Close-Grip_Bench_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-decline-press",
+   "name": "Smith Machine Decline Press",
+   "equipment": "smith",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Decline_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-incline-bench-press",
+   "name": "Smith Machine Incline Bench Press",
+   "equipment": "smith",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Incline_Bench_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-jm-press",
+   "name": "Smith Machine JM Press",
+   "equipment": "smith",
+   "movement": "closePress",
+   "compound": true,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    },
+    {
+     "group": "chest",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "weight travels over the face",
+   "source": {
+    "nippard": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+   }
+  },
+  {
+   "id": "smith-machine-leg-press",
+   "name": "Smith Machine Leg Press",
+   "equipment": "smith",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Leg_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-one-arm-upright-row",
+   "name": "Smith Machine One-Arm Upright Row",
+   "equipment": "smith",
+   "movement": "upright",
+   "compound": true,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "small muscles drive it",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_One-Arm_Upright_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-overhead-shoulder-press",
+   "name": "Smith Machine Overhead Shoulder Press",
+   "equipment": "smith",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Overhead_Shoulder_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-squat",
+   "name": "Smith Machine Squat",
+   "equipment": "smith",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Squat",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   },
+   "planIds": [
+    "smith-squat"
+   ]
+  },
+  {
+   "id": "smith-machine-stiff-legged-deadlift",
+   "name": "Smith Machine Stiff-Legged Deadlift",
+   "equipment": "smith",
+   "movement": "hinge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "hamstrings",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Stiff-Legged_Deadlift",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "hamstrings"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-upright-row",
+   "name": "Smith Machine Upright Row",
+   "equipment": "smith",
+   "movement": "upright",
+   "compound": true,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "small muscles drive it",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Upright_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "traps"
+    ]
+   }
+  },
+  {
+   "id": "smith-single-leg-split-squat",
+   "name": "Smith Single-Leg Split Squat",
+   "equipment": "smith",
+   "movement": "lunge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Single-Leg_Split_Squat",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "spider-curl",
+   "name": "Spider Curl",
+   "equipment": "barbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Spider_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "split-squat-with-dumbbells",
+   "name": "Split Squat with Dumbbells",
+   "equipment": "dumbbell",
+   "movement": "lunge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "balance limits the load",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Split_Squat_with_Dumbbells",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-alternating-dumbbell-press",
+   "name": "Standing Alternating Dumbbell Press",
+   "equipment": "dumbbell",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Alternating_Dumbbell_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "standing-barbell-calf-raise",
+   "name": "Standing Barbell Calf Raise",
+   "equipment": "barbell",
+   "movement": "calf",
+   "compound": false,
+   "volume": [
+    {
+     "group": "calves",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Barbell_Calf_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "calves"
+    ]
+   }
+  },
+  {
+   "id": "standing-bent-over-one-arm-dumbbell-triceps-extension",
+   "name": "Standing Bent-Over One-Arm Dumbbell Triceps Extension",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-bent-over-two-arm-dumbbell-triceps-extension",
+   "name": "Standing Bent-Over Two-Arm Dumbbell Triceps Extension",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-biceps-cable-curl",
+   "name": "Standing Biceps Cable Curl",
+   "equipment": "cable",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Biceps_Cable_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-cable-chest-press",
+   "name": "Standing Cable Chest Press",
+   "equipment": "cable",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Cable_Chest_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "standing-calf-raises",
+   "name": "Standing Calf Raises",
+   "equipment": "machine",
+   "movement": "calf",
+   "compound": false,
+   "volume": [
+    {
+     "group": "calves",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Calf_Raises",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "calves"
+    ]
+   },
+   "planIds": [
+    "standing-calf-raise"
+   ]
+  },
+  {
+   "id": "standing-concentration-curl",
+   "name": "Standing Concentration Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Concentration_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-dumbbell-calf-raise",
+   "name": "Standing Dumbbell Calf Raise",
+   "equipment": "dumbbell",
+   "movement": "calf",
+   "compound": false,
+   "volume": [
+    {
+     "group": "calves",
+     "weight": 1
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Dumbbell_Calf_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "calves"
+    ]
+   }
+  },
+  {
+   "id": "standing-dumbbell-press",
+   "name": "Standing Dumbbell Press",
+   "equipment": "dumbbell",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Dumbbell_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "standing-dumbbell-reverse-curl",
+   "name": "Standing Dumbbell Reverse Curl",
+   "equipment": "dumbbell",
+   "movement": "reverseCurl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Dumbbell_Reverse_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-dumbbell-triceps-extension",
+   "name": "Standing Dumbbell Triceps Extension",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Dumbbell_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-dumbbell-upright-row",
+   "name": "Standing Dumbbell Upright Row",
+   "equipment": "dumbbell",
+   "movement": "upright",
+   "compound": true,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "small muscles drive it",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Dumbbell_Upright_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "traps"
+    ]
+   }
+  },
+  {
+   "id": "standing-inner-biceps-curl",
+   "name": "Standing Inner-Biceps Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Inner-Biceps_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-leg-curl",
+   "name": "Standing Leg Curl",
+   "equipment": "machine",
+   "movement": "legCurl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "hamstrings",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Leg_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "hamstrings"
+    ]
+   }
+  },
+  {
+   "id": "standing-low-pulley-deltoid-raise",
+   "name": "Standing Low-Pulley Deltoid Raise",
+   "equipment": "cable",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Low-Pulley_Deltoid_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "standing-low-pulley-one-arm-triceps-extension",
+   "name": "Standing Low-Pulley One-Arm Triceps Extension",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Low-Pulley_One-Arm_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-machine-lateral-raise",
+   "name": "Standing Machine Lateral Raise",
+   "aliases": [
+    "Atlantis standing lateral raise"
+   ],
+   "equipment": "machine",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  {
+   "id": "standing-military-press",
+   "name": "Standing Military Press",
+   "equipment": "barbell",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Military_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "standing-one-arm-cable-curl",
+   "name": "Standing One-Arm Cable Curl",
+   "equipment": "cable",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_One-Arm_Cable_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-one-arm-dumbbell-curl-over-incline-bench",
+   "name": "Standing One-Arm Dumbbell Curl Over Incline Bench",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_One-Arm_Dumbbell_Curl_Over_Incline_Bench",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-one-arm-dumbbell-triceps-extension",
+   "name": "Standing One-Arm Dumbbell Triceps Extension",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_One-Arm_Dumbbell_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-overhead-barbell-triceps-extension",
+   "name": "Standing Overhead Barbell Triceps Extension",
+   "equipment": "barbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Overhead_Barbell_Triceps_Extension",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "standing-palm-in-one-arm-dumbbell-press",
+   "name": "Standing Palm-In One-Arm Dumbbell Press",
+   "equipment": "dumbbell",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Palm-In_One-Arm_Dumbbell_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "standing-palms-in-dumbbell-press",
+   "name": "Standing Palms-In Dumbbell Press",
+   "equipment": "dumbbell",
+   "movement": "ohp",
+   "compound": true,
+   "volume": [
+    {
+     "group": "frontDelts",
+     "weight": 1
+    },
+    {
+     "group": "sideDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Palms-In_Dumbbell_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "standing-palms-up-barbell-behind-the-back-wrist-curl",
+   "name": "Standing Palms-Up Barbell Behind The Back Wrist Curl",
+   "equipment": "barbell",
+   "movement": "wrist",
+   "compound": false,
+   "volume": [
+    {
+     "group": "forearms",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Palms-Up_Barbell_Behind_The_Back_Wrist_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "forearms"
+    ]
+   }
+  },
+  {
+   "id": "stiff-leg-barbell-good-morning",
+   "name": "Stiff Leg Barbell Good Morning",
+   "equipment": "barbell",
+   "movement": "hinge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "hamstrings",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Stiff_Leg_Barbell_Good_Morning",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lower back"
+    ]
+   }
+  },
+  {
+   "id": "stiff-legged-barbell-deadlift",
+   "name": "Stiff-Legged Barbell Deadlift",
+   "equipment": "barbell",
+   "movement": "hinge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "hamstrings",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Stiff-Legged_Barbell_Deadlift",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "hamstrings"
+    ]
+   }
+  },
+  {
+   "id": "stiff-legged-dumbbell-deadlift",
+   "name": "Stiff-Legged Dumbbell Deadlift",
+   "equipment": "dumbbell",
+   "movement": "hinge",
+   "compound": true,
+   "volume": [
+    {
+     "group": "hamstrings",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Stiff-Legged_Dumbbell_Deadlift",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "hamstrings"
+    ]
+   }
+  },
+  {
+   "id": "straight-bar-bench-mid-rows",
+   "name": "Straight Bar Bench Mid Rows",
+   "equipment": "barbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Straight_Bar_Bench_Mid_Rows",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   }
+  },
+  {
+   "id": "straight-arm-dumbbell-pullover",
+   "name": "Straight-Arm Dumbbell Pullover",
+   "equipment": "dumbbell",
+   "movement": "pulloverChest",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "back",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Straight-Arm_Dumbbell_Pullover",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "straight-arm-pulldown",
+   "name": "Straight-Arm Pulldown",
+   "equipment": "cable",
+   "movement": "straightArm",
+   "compound": false,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Straight-Arm_Pulldown",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "lats"
+    ]
+   },
+   "planIds": [
+    "straight-arm-cable-pulldown"
+   ]
+  },
+  {
+   "id": "sumo-deadlift",
+   "name": "Sumo Deadlift",
+   "equipment": "barbell",
+   "movement": "deadlift",
+   "compound": true,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    },
+    {
+     "group": "hamstrings",
+     "weight": 1
+    },
+    {
+     "group": "back",
+     "weight": 0.5
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    },
+    {
+     "group": "quads",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Sumo_Deadlift",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "hamstrings"
+    ]
+   }
+  },
+  {
+   "id": "super-rom-lateral-raise",
+   "name": "Super ROM Lateral Raise",
+   "equipment": "dumbbell",
+   "movement": "lateral",
+   "compound": false,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "nippard": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  {
+   "id": "t-bar-row-with-handle",
+   "name": "T-Bar Row with Handle",
+   "equipment": "plateMachine",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "T-Bar_Row_with_Handle",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "middle back"
+    ]
+   },
+   "planIds": [
+    "t-bar-reverse-row"
+   ]
+  },
+  {
+   "id": "tate-press",
+   "name": "Tate Press",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Tate_Press",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "thigh-abductor",
+   "name": "Thigh Abductor",
+   "equipment": "machine",
+   "movement": "abduction",
+   "compound": false,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Thigh_Abductor",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abductors"
+    ]
+   },
+   "aliases": [
+    "Hip Abduction Machine"
+   ]
+  },
+  {
+   "id": "thigh-adductor",
+   "name": "Thigh Adductor",
+   "equipment": "machine",
+   "movement": "adduction",
+   "compound": false,
+   "volume": [
+    {
+     "group": "adductors",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Thigh_Adductor",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "adductors"
+    ]
+   },
+   "aliases": [
+    "Hip Adduction Machine"
+   ],
+   "planIds": [
+    "hip-adduction"
+   ]
+  },
+  {
+   "id": "trap-bar-deadlift",
+   "name": "Trap Bar Deadlift",
+   "equipment": "barbell",
+   "movement": "deadlift",
+   "compound": true,
+   "volume": [
+    {
+     "group": "glutes",
+     "weight": 1
+    },
+    {
+     "group": "hamstrings",
+     "weight": 1
+    },
+    {
+     "group": "back",
+     "weight": 0.5
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    },
+    {
+     "group": "quads",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Trap_Bar_Deadlift",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "tricep-dumbbell-kickback",
+   "name": "Tricep Dumbbell Kickback",
+   "equipment": "dumbbell",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Tricep_Dumbbell_Kickback",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "triceps-overhead-extension-with-rope",
+   "name": "Triceps Overhead Extension with Rope",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Triceps_Overhead_Extension_with_Rope",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   },
+   "planIds": [
+    "rope-overhead-tricep-extension"
+   ]
+  },
+  {
+   "id": "triceps-pushdown",
+   "name": "Triceps Pushdown",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Triceps_Pushdown",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "triceps-pushdown-rope-attachment",
+   "name": "Triceps Pushdown - Rope Attachment",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Triceps_Pushdown_-_Rope_Attachment",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   }
+  },
+  {
+   "id": "triceps-pushdown-v-bar-attachment",
+   "name": "Triceps Pushdown - V-Bar Attachment",
+   "equipment": "cable",
+   "movement": "triceps",
+   "compound": false,
+   "volume": [
+    {
+     "group": "triceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Triceps_Pushdown_-_V-Bar_Attachment",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "triceps"
+    ]
+   },
+   "planIds": [
+    "v-bar-pushdown"
+   ]
+  },
+  {
+   "id": "two-arm-dumbbell-preacher-curl",
+   "name": "Two-Arm Dumbbell Preacher Curl",
+   "equipment": "dumbbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Two-Arm_Dumbbell_Preacher_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "underhand-cable-pulldowns",
+   "name": "Underhand Cable Pulldowns",
+   "equipment": "cable",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Underhand_Cable_Pulldowns",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lats"
+    ]
+   }
+  },
+  {
+   "id": "upright-barbell-row",
+   "name": "Upright Barbell Row",
+   "equipment": "barbell",
+   "movement": "upright",
+   "compound": true,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "small muscles drive it",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Upright_Barbell_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "upright-cable-row",
+   "name": "Upright Cable Row",
+   "equipment": "cable",
+   "movement": "upright",
+   "compound": true,
+   "volume": [
+    {
+     "group": "sideDelts",
+     "weight": 1
+    },
+    {
+     "group": "traps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "small muscles drive it",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Upright_Cable_Row",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "traps"
+    ]
+   }
+  },
+  {
+   "id": "v-bar-pulldown",
+   "name": "V-Bar Pulldown",
+   "equipment": "cable",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "V-Bar_Pulldown",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lats"
+    ]
+   }
+  },
+  {
+   "id": "v-bar-pullup",
+   "name": "V-Bar Pullup",
+   "equipment": "bodyweight",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "V-Bar_Pullup",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lats"
+    ]
+   }
+  },
+  {
+   "id": "weighted-pull-ups",
+   "name": "Weighted Pull Ups",
+   "equipment": "bodyweight",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Weighted_Pull_Ups",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lats"
+    ]
+   }
+  },
+  {
+   "id": "weighted-sissy-squat",
+   "name": "Weighted Sissy Squat",
+   "equipment": "barbell",
+   "movement": "legExt",
+   "compound": false,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Weighted_Sissy_Squat",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "wide-grip-barbell-bench-press",
+   "name": "Wide-Grip Barbell Bench Press",
+   "equipment": "barbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Wide-Grip_Barbell_Bench_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "wide-grip-cable-row",
+   "name": "Wide-Grip Cable Row",
+   "equipment": "cable",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+   }
+  },
+  {
+   "id": "wide-grip-decline-barbell-bench-press",
+   "name": "Wide-Grip Decline Barbell Bench Press",
+   "equipment": "barbell",
+   "movement": "press",
+   "compound": true,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "triceps",
+     "weight": 0.5
+    },
+    {
+     "group": "frontDelts",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Wide-Grip_Decline_Barbell_Bench_Press",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "wide-grip-decline-barbell-pullover",
+   "name": "Wide-Grip Decline Barbell Pullover",
+   "equipment": "barbell",
+   "movement": "pulloverChest",
+   "compound": false,
+   "volume": [
+    {
+     "group": "chest",
+     "weight": 1
+    },
+    {
+     "group": "back",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Wide-Grip_Decline_Barbell_Pullover",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "chest"
+    ]
+   }
+  },
+  {
+   "id": "wide-grip-lat-pulldown",
+   "name": "Wide-Grip Lat Pulldown",
+   "equipment": "cable",
+   "movement": "pulldown",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Wide-Grip_Lat_Pulldown",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "lats"
+    ]
+   },
+   "planIds": [
+    "wide-grip-lat-pulldown"
+   ]
+  },
+  {
+   "id": "wide-grip-standing-barbell-curl",
+   "name": "Wide-Grip Standing Barbell Curl",
+   "equipment": "barbell",
+   "movement": "curl",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Wide-Grip_Standing_Barbell_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "yates-row",
+   "name": "Yates Row",
+   "equipment": "barbell",
+   "movement": "row",
+   "compound": true,
+   "volume": [
+    {
+     "group": "back",
+     "weight": 1
+    },
+    {
+     "group": "rearDelts",
+     "weight": 0.5
+    },
+    {
+     "group": "biceps",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "nippard": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+   }
+  },
+  {
+   "id": "zercher-squats",
+   "name": "Zercher Squats",
+   "equipment": "barbell",
+   "movement": "squat",
+   "compound": true,
+   "volume": [
+    {
+     "group": "quads",
+     "weight": 1
+    },
+    {
+     "group": "glutes",
+     "weight": 0.5
+    },
+    {
+     "group": "adductors",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": true,
+   "heavyWhy": "multi-joint, big muscles, stable",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Zercher_Squats",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "zottman-curl",
+   "name": "Zottman Curl",
+   "equipment": "dumbbell",
+   "movement": "zottman",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    },
+    {
+     "group": "forearms",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Zottman_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  },
+  {
+   "id": "zottman-preacher-curl",
+   "name": "Zottman Preacher Curl",
+   "equipment": "dumbbell",
+   "movement": "zottman",
+   "compound": false,
+   "volume": [
+    {
+     "group": "biceps",
+     "weight": 1
+    },
+    {
+     "group": "forearms",
+     "weight": 0.5
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Zottman_Preacher_Curl",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "biceps"
+    ]
+   }
+  }
+ ]
+}
