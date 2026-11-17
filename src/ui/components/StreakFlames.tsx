@@ -4,9 +4,9 @@ import { useId } from "react";
 
 export const FLAME_PATH = "M12 21c4 0 6.5-2.6 6.5-6.3 0-4.4-4.2-6.4-4.8-11.2-2.3 1.6-3.7 4.3-3.4 7.2-1.5-.6-2.4-2-2.6-3.4C5.9 9.2 5.5 11.4 5.5 14.7 5.5 18.4 8 21 12 21z";
 
-/** A six-armed snowflake centered on (x, y). */
-const Flake = ({ x, y, r, delay }: { x: number; y: number; r: number; delay: number }) => (
-  <g className="twinkle" style={{ animationDelay: `${delay}s`, transformOrigin: `${x}px ${y}px` }}>
+/** A six-armed snowflake centered on (x, y); `cls` picks its drift rhythm. */
+const Flake = ({ x, y, r, cls }: { x: number; y: number; r: number; cls: string }) => (
+  <g className={"flake " + cls}>
     {[0, 60, 120].map((a) => {
       const c = Math.cos((a * Math.PI) / 180) * r, s = Math.sin((a * Math.PI) / 180) * r;
       return <line key={a} x1={x - c} y1={y - s} x2={x + c} y2={y + s} />;
@@ -46,10 +46,10 @@ export function StreakFlame({ kind, size = 34 }: { kind: "fire" | "ice"; size?: 
       {fire ? (
         <Sparks y={5.4} />
       ) : (
-        <g stroke="#FFFFFF" strokeWidth=".7" strokeLinecap="round">
-          <Flake x={8.4} y={3.6} r={1.5} delay={0} />
-          <Flake x={15.8} y={2.4} r={1.9} delay={0.6} />
-          <Flake x={12.2} y={0.6} r={1.1} delay={1.2} />
+        <g stroke="#FFFFFF" strokeWidth=".6" strokeLinecap="round" style={{ filter: "drop-shadow(0 0 1px rgba(160,220,255,.9))" }}>
+          <Flake x={9} y={2.6} r={1} cls="flake-a" />
+          <Flake x={15.2} y={1.8} r={1.2} cls="flake-b" />
+          <Flake x={12.2} y={0.4} r={0.8} cls="flake-c" />
         </g>
       )}
     </svg>
