@@ -62,7 +62,7 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 - **Deload suggestion** (top, §5.16; not while a workout is running or a deload is active): REST figure, "SUGGESTION", "TIME FOR A DELOAD?", the reason ("It's been 7 weeks since your last deload." or "…since your first logged workout." / "18 of your 30 exercises haven't gone up in 4 weeks."), the rule ("Half the sets, 10% lighter, stop every set with 3–4 reps left. Same days and exercises. Until Friday."), **Deload this week** (starts it; toast "Deload week on · Back to normal after Friday.") and **Not now**. Native app: this becomes a notification.
 - **During a deload week:** cyan badge "Deload week · until Fri" under the day title; set counts (tiles and list) show the deload sets in cyan; Start workout creates a deload session.
 - **Backup reminder** (top, only when there are finished workouts and the last backup is 14+ days old or never, and not snoozed): amber-edged glass row "You haven't backed up your workouts yet." / "Last backup n days ago.", **Back up** (downloads the backup file right away) and × (remind again in 7 days).
-- **Header:** small static FLEX figure + "BLUE FIT" in neon, today's date (e.g. "NOV 14").
+- **Header:** small static logo figure (arms up, biceps flexed, as in §6.7) + "BLUE FIT" in neon, today's date (e.g. "NOV 14").
 - **Week strip:** 7 buttons Mon→Sun (always calendar order). Today's weekday is preselected. The selected day is a neon gradient pill; today's day (if not selected) is neon text. A green glowing dot marks days of the current training week (§4.6) with a finished workout for that routine day.
 - **Training day card:** eyebrow "TODAY · MONDAY" (or just the weekday when previewing another day); day title huge in neon gradient (e.g. "BACK & BICEPS"); "✓ Done today" badge if a finished session today has this day. A large animated figure cycles through the day's exercises, one per animation loop (at that exercise's tempo), with the exercise name under it. Three stat tiles: exercises · sets · ~minutes (time estimate §5.8).
 - **Exercises list:** number, small static figure, name, ★ if heavy, the slot note (or primary muscles), "sets × reps". Tap opens the exercise detail sheet.
@@ -421,7 +421,7 @@ Glass card (with gradient hairline edge), primary button (neon→cyan gradient, 
 24 × 24 line icons, stroke 1.9, round caps/joins, same style as the figure: today (dumbbell), plan (clipboard), history (calendar), progress (rising line), settings (sliders), plus, minus, check, close, more, swap, back, chevron, up, down, trash, note, link, info, timer, play, search, download, upload, copy, bolt, flame, trophy.
 
 ### 6.7 Logo and app icon
-The FLEX pose (front double-biceps) drawn by the figure engine at progress 1, stroke #6CC0FF 3.2, with a soft blue glow (Gaussian blur 1.3 in figure units, merged twice under the crisp line), on a radial gradient #0F2350 → #070D1D → #03050B with a blue halo. Sizes: 192, 512, maskable 512 (figure at 62 % for the safe zone), Apple touch 180, SVG favicon (rounded).
+The splash's end pose (front double-biceps, both arms up) drawn by the figure engine at progress 1, with the flexed bicep bumps on both upper arms (5 units high, filled), stroke #6CC0FF 3.2, with a soft blue glow (Gaussian blur 1.3 in figure units, merged twice under the crisp line), on a radial gradient #0F2350 → #070D1D → #03050B with a blue halo. Sizes: 192, 512, maskable 512 (figure at 62 % for the safe zone), Apple touch 180, SVG favicon (rounded).
 
 ## 7. Storage
 

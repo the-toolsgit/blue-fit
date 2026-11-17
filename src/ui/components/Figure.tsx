@@ -1,4 +1,5 @@
 // Thin SVG renderer for the figure engine. One shared animation loop (~30 fps) paints only visible figures.
+import { bicepBumps, bumpsToSvg } from "../../core/figure/flex";
 import { useEffect, useRef } from "react";
 import { phase, poseFrame, type Timing } from "../../core/figure/engine";
 import { frameToSvg } from "../../core/figure/svg";
@@ -20,21 +21,24 @@ const io = typeof IntersectionObserver === "function"
   : null;
 
 /** `timing`: per-exercise speed from its tempo (core/figure/tempo.ts); each figure starts its loop when it appears. */
-export function Figure({ spec, size = 112, className = "", still, k = 1, label, speed = 1, timing }: {
+export function Figure({ spec, size = 112, className = "", still, k = 1, label, speed = 1, timing, bumps }: {
   spec: FigureSpec | null | undefined; size?: number; className?: string; still?: boolean; k?: number; label?: string; speed?: number; timing?: Timing;
+  /** Flexed biceps on the upper arms (still figures only, e.g. the logo) */
+  bumps?: boolean;
 }) {
   const ref = useRef<SVGSVGElement>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el || !spec) return;
-    el.innerHTML = frameToSvg(poseFrame(spec, still || reducedMotion() ? k : 0));
+    const f0 = poseFrame(spec, still || reducedMotion() ? k : 0);
+    el.innerHTML = frameToSvg(f0) + (bumps && still ? bumpsToSvg(bicepBumps(f0, 1, 5)) : "");
     if (still || reducedMotion()) return;
     registry.set(el, { spec, visible: !io, speed, timing, t0: performance.now() });
     io?.observe(el);
     if (!raf) raf = requestAnimationFrame(loop);
     return () => { registry.delete(el); io?.unobserve(el); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [spec, still, k, speed, timing?.ab, timing?.ba, timing?.holdA, timing?.holdB]);
+  }, [spec, still, bumps, k, speed, timing?.ab, timing?.ba, timing?.holdA, timing?.holdB]);
   if (!spec) return null;
   return (
     <svg ref={ref} className={"fig " + className} viewBox="0 -24 120 131" width={size} height={(size * 131) / 120}

@@ -1,13 +1,16 @@
-// Generates the app icon, maskable icon, apple-touch-icon and favicon from the FLEX pose,
+// Generates the app icon, maskable icon, apple-touch-icon and favicon from the flex pose (arms up, biceps flexed),
 // drawn by the same figure engine as the app. Usage: npm run icons
 import { Resvg } from "@resvg/resvg-js";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { poseFrame } from "../src/core/figure/engine";
 import { frameToSvg } from "../src/core/figure/svg";
-import { FLEX } from "../src/core/figure/poses";
+import { SPLASH_FLEX } from "../src/core/figure/poses";
+import { bicepBumps, bumpsToSvg } from "../src/core/figure/flex";
 
-const fig = frameToSvg(poseFrame(FLEX, 1)).replace(/<line class="floor"[^>]*\/>/, "");
-const STYLE = `.mn polyline,.mn circle{fill:none;stroke:#6cc0ff;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}`;
+// Logo: arms up with flexed biceps (the splash's end pose)
+const frame = poseFrame(SPLASH_FLEX, 1);
+const fig = (frameToSvg(frame) + bumpsToSvg(bicepBumps(frame, 1, 5))).replace(/<line class="floor"[^>]*\/>/, "");
+const STYLE = `.mn polyline,.mn circle{fill:none;stroke:#6cc0ff;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}.bump path{fill:#6cc0ff;stroke:#6cc0ff;stroke-width:1;stroke-linejoin:round}`;
 
 /** pad = fraction of the canvas the figure's box occupies (smaller for maskable safe zone). */
 function icon(size: number, pad: number, rounded: boolean) {

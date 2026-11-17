@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { FLEX, REST } from "../../core/figure/poses";
+import { REST, SPLASH_FLEX } from "../../core/figure/poses";
 import { createSessionFromDay } from "../../core/session";
 import { FailFlame, useWeekFailure } from "../components/FailFlame";
 import { estimateMinutes } from "../../core/timeEstimate";
@@ -77,7 +77,7 @@ export function TodayScreen() {
     <div className="page">
       <header className="spread" style={{ marginBottom: 14 }}>
         <div className="row" style={{ gap: 6 }}>
-          <Figure spec={FLEX} size={30} still />
+          <Figure spec={SPLASH_FLEX} size={30} still bumps />
           <span style={{ font: "700 22px var(--display)", letterSpacing: ".12em" }} className="brand">BLUE FIT</span>
         </div>
         <span className="eyebrow">{now.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
