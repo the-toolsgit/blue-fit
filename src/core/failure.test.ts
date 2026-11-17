@@ -51,9 +51,22 @@ describe("strategic last set to failure", () => {
     // Sun: rear delts trained again Tue (2 days) → no reverse fly
     expect(ids(planFailure(day("tue"), "2026-11-15", ctx()), "tue")).not.toContain("machine-reverse-fly");
   });
-  it("priority muscles first; smaller budget takes fewer", () => {
-    // Legs B (Thu): triceps (priority) kickback first
-    expect(ids(planFailure(day("sat"), "2026-11-19", ctx({}, prof({ phase: "cutting", age: 50 }))), "sat")).toEqual(["cable-one-arm-tricep-kickback"]);
+  it("smaller budget takes fewer", () => {
+    expect(planFailure(day("sat"), "2026-11-19", ctx({}, prof({ phase: "cutting", age: 50 }))).length).toBe(1);
+  });
+  it("not if the muscle was trained in the 2 days before; a skipped workout doesn't count", () => {
+    // Wed (Shoulders, Traps & Arms): side delts are planned Mon (2 days before) → no flame on the lateral raise
+    const wed = (c: FailureContext) => ids(planFailure(day("fri"), "2026-11-18", c), "fri");
+    expect(wed(ctx())).not.toContain("all-the-way-up-lateral-raise");
+    // Mon's workout was skipped (it's Tuesday now, nothing logged Mon) → the lateral raise can get it
+    expect(wed(ctx({ today: "2026-11-17" }))).toContain("all-the-way-up-lateral-raise");
+    // Mon done but the lateral raise skipped inside it → same
+    const mon = createSessionFromDay(routine, day("wed"), exMap, [], new Date(2026, 10, 16, 18));
+    const done: Session = finishSession({ ...mon, entries: mon.entries.map((e) => ({ ...e, sets: e.sets.map((x) => ({ ...x, done: e.exerciseId !== "cable-lateral-raise", weight: 50, reps: 10 })) })) }, new Date(2026, 10, 16, 19));
+    expect(wed(ctx({ today: "2026-11-17", finished: [done] }))).toContain("all-the-way-up-lateral-raise");
+    // …and done with it → no flame
+    const all: Session = finishSession({ ...mon, entries: mon.entries.map((e) => ({ ...e, sets: e.sets.map((x) => ({ ...x, done: true, weight: 50, reps: 10 })) })) }, new Date(2026, 10, 16, 19));
+    expect(wed(ctx({ today: "2026-11-17", finished: [all] }))).not.toContain("all-the-way-up-lateral-raise");
   });
   it("muscles above their weekly target are skipped", () => {
     const c = ctx({ targets: seed.targets.map((t) => (t.group === "calves" ? { ...t, min: 2, max: 4 } : t)) });

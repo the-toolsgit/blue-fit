@@ -80,11 +80,25 @@ function nextTrained(r: Routine, exMap: Map<string, Exercise>, g: MuscleGroup, d
   return null;
 }
 
+/** Whether the muscle was worked directly in the 2 days before `date`: what was actually logged for past days
+ *  (a skipped workout doesn't count), the plan for days still ahead. */
+function trainedRecently(c: FailureContext, g: MuscleGroup, date: string): boolean {
+  const direct = (exId: string) => !!c.exMap.get(exId)?.volume.some((v) => v.group === g && v.weight === 1);
+  for (let i = 1; i <= FAILURE_GAP_DAYS; i++) {
+    const d = addDays(date, -i);
+    const logged = c.finished.filter((s) => s.status === "finished" && s.date === d);
+    if (logged.some((s) => s.entries.some((e) => direct(e.exerciseId) && e.sets.some((x) => x.done && countsForVolume(x.type))))) return true;
+    if (logged.length || d < c.today) continue;
+    if (dayOn(c.routine, d)?.slots.some((s) => direct(s.exerciseId))) return true;
+  }
+  return false;
+}
+
 /**
  * Which slots of `day` (on `date`) take their last set to failure, with the reasons.
  * Manual on/off (slot.toFailure) wins. The app picks the rest, best first:
  *   only the last exercise for its muscle in the workout · not if that muscle is above its weekly target ·
- *   not if it's trained again within 2 days · priority muscles first · then muscles below target · then later in the workout.
+ *   not if it's trained again within 2 days, or was trained in the 2 days before (logged, or planned if still ahead) · priority muscles first · then muscles below target · then later in the workout.
  */
 export function planFailure(day: RoutineDay, date: string, c: FailureContext): FailurePick[] {
   const p = c.settings.profile;
@@ -113,6 +127,7 @@ export function planFailure(day: RoutineDay, date: string, c: FailureContext): F
     if (isFocus(t) && t.max != null && sets > t.max) return;
     const gap = nextTrained(c.routine, c.exMap, g, date);
     if (gap != null && gap <= FAILURE_GAP_DAYS) return;
+    if (trainedRecently(c, g, date)) return;
     const pr = priorityOf(g, t);
     const below = isFocus(t) && sets < t.min;
     const why = [`Last ${label(g)} exercise in this workout`];
