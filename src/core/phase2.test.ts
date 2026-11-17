@@ -69,6 +69,16 @@ describe("streak freeze and calendar flames", async () => {
     expect(toggleFreeze(on, "2026-11-16")).toEqual([]);
     expect(toggleFreeze(on, "2026-11-20")).toEqual([{ start: "2026-11-16", end: "2026-11-20" }]);
   });
+  it("skipped days: past planned days not done that week (a moved workout isn't skipped)", async () => {
+    const { skippedDays } = await import("./history");
+    // Seed plan: Mon = day "wed" (Legs A), Tue = "thu", Wed = "fri"
+    const mon = sess("2026-11-02", "leg-press", [set(100, 10)], "wed");
+    expect([...skippedDays([mon], routine, "2026-11-05", 1)]).toEqual(["2026-11-03", "2026-11-04"]);
+    // Tuesday's workout done on Wednesday → neither day is skipped
+    const moved = sess("2026-11-04", "barbell-shrug", [set(100, 10)], "thu");
+    expect([...skippedDays([mon, moved], routine, "2026-11-05", 1)]).toEqual([]);
+    expect(skippedDays([mon], routine, "2026-11-02", 1).size).toBe(0); // today never
+  });
   it("fire on the rest day of each complete week, ice on the day a freeze started", () => {
     // Monday weeks; the seed plan trains Sat–Thu (rest day Fri)
     expect(restDayOf("2026-11-02", routine)).toBe("2026-11-06");

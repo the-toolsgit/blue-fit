@@ -90,6 +90,24 @@ export function restDayOf(ws: string, routine: Routine | undefined): string {
   return addDays(ws, 6);
 }
 
+/**
+ * Skipped days: past planned training days whose routine day wasn't done that week (by dayId, so a workout
+ * moved to another day of the same week isn't "skipped"). Only from the first logged workout on, never today.
+ */
+export function skippedDays(sessions: Session[], routine: Routine | undefined, today: string, startDay = 1): Set<string> {
+  const out = new Set<string>();
+  const finished = sessions.filter((s) => s.status === "finished");
+  if (!finished.length || !routine) return out;
+  const first = finished.reduce((a, s) => (s.date < a ? s.date : a), finished[0].date);
+  for (let d = first; d < today; d = addDays(d, 1)) {
+    const day = routine.days.find((x) => x.weekday === parseLocalDate(d).getDay() && x.slots.length);
+    if (!day) continue;
+    const ws = weekStart(d, startDay);
+    if (!finished.some((s) => s.dayId === day.id && weekStart(s.date, startDay) === ws) && !finished.some((s) => s.date === d)) out.add(d);
+  }
+  return out;
+}
+
 /** Calendar marks: a fire on the rest day of every complete week, ice on each day a freeze started. */
 export function streakMarks(st: Streak, routine: Routine | undefined, freezes: StreakFreeze[] = []): Map<string, "fire" | "ice"> {
   const m = new Map<string, "fire" | "ice">();
