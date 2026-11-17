@@ -3,7 +3,7 @@
 Goal: one internal list of the gym exercises the app knows, each marked heavy (★) or not, for manual and (later)
 automatic plan building. Nothing is guessed: every exercise comes from a source, every ★ from a written rule.
 
-Status: built (Nov 17 2026). Rule agreed; shrugs and calf raises ★ (Leo). Open: the ★ differences on Leo's own plan (step 6) and the second-pass disagreements.
+Status: built (Nov 17 2026). Rule agreed; shrugs and calf raises ★ (Leo). Leo's plan ★ differences applied; second-pass disagreements decided (see the end).
 
 ## Defaults (Leo said "go ahead" without picking)
 - Size: 350 gym exercises after filtering (not the full 876; stretches, cardio and odd variations left out; abs and neck included since Nov 17 2026).
@@ -58,3 +58,7 @@ Update APP_SPEC.md.
 
 Sources: strengthlevel.com strength standards (per exercise pages); free-exercise-db; coaching write-ups on main vs
 accessory lifts (setforset.com, outlift.com); Nippard write-ups (fitnessvolt.com, barbend.com, generationiron.com).
+
+## Second-pass disagreements (decided)
+The independent pass disagreed on 2 of 346: Cable Pull-Through and Cross-Body Lat Pull-Around. Leo (Nov 17 2026):
+**neither is ★** (as built).
