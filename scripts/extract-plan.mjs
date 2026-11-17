@@ -58,6 +58,8 @@ const LOWER = new Set(["Smith Squat","Leg Extension","Prone Leg Curl","Hip Adduc
 /** ★ in the plan but not a heavy lift (Leo, Nov 17 2026): small single-joint move, can't be loaded like a row or press. */
 const NOT_HEAVY = new Set(["db-hammer-curl"]);
 /** Not ★ in the plan but ★ by the library rule (Leo, Nov 17 2026): calf raises, shrugs, one-arm rows/pulldowns. */
+/** Multi-joint plan exercises (as in the exercise library, src/core/seed/library.json). */
+const COMPOUND = new Set(["t-bar-reverse-row", "single-arm-cable-lat-pulldown", "single-arm-db-row", "machine-shoulder-press", "smith-squat", "wide-grip-lat-pulldown", "cable-seated-row", "machine-dip", "leg-press"]);
 const HEAVY = new Set(["standing-calf-raise", "seated-calf-raise", "kelso-shrug", "single-arm-cable-lat-pulldown", "single-arm-db-row"]);
 
 // Slot notes from Leo_Workout_Routine.md (per day, in order)
@@ -86,7 +88,7 @@ for (const day of DAYS) {
         id, name: base, aliases: [m.jefit],
         muscles: e.muscles, secondaryMuscles: e.sec,
         volume: [...m.D.map((g) => ({ group: g, weight: 1 })), ...m.I.map((g) => ({ group: g, weight: 0.5 }))],
-        equipment: m.eq, loadMode: m.load, ...(m.single ? { singleSleeve: true } : {}), isHeavy: (!!e.star || HEAVY.has(id)) && !NOT_HEAVY.has(id), bodyRegion: LOWER.has(base) ? "lower" : "upper",
+        equipment: m.eq, loadMode: m.load, ...(m.single ? { singleSleeve: true } : {}), isHeavy: (!!e.star || HEAVY.has(id)) && !NOT_HEAVY.has(id), compound: COMPOUND.has(id), bodyRegion: LOWER.has(base) ? "lower" : "upper",
         why: e.why, setup: e.setup, form: e.form, tips: e.tips, avoid: e.mistakes,
         rangeOfMotion: e.rom, tempo: "1–2 s up, 2–3 s down",
         defaultRestSec: 120, incrementLb: m.inc,

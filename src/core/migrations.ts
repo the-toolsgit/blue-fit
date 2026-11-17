@@ -64,8 +64,8 @@ export const MIGRATIONS: Migration[] = [
   },
   {
     // Nov 17 2026: the stall check now uses every exercise, so the ★ card says what ★ means: heavy lift
-    // ("-2": was "heavy compound lifts"). Works on the card under its old or new title; only if it still shows an earlier app text.
-    id: "2026-11-17-key-lift-text-2",
+    // ("-3": was "heavy compound lifts", then "…never takes them to failure", no longer true since the Nov 17 failure rule). Works on the card under its old or new title; only if it still shows an earlier app text.
+    id: "2026-11-17-key-lift-text-3",
     run(d) {
       let changed = false;
       const oldTitle = (title: string) => Object.keys(RULE_TITLE).find((k) => RULE_TITLE[k] === title) ?? title;
@@ -95,6 +95,17 @@ export const MIGRATIONS: Migration[] = [
       const ids = new Set(["standing-calf-raise", "seated-calf-raise", "kelso-shrug", "single-arm-cable-lat-pulldown", "single-arm-db-row"]);
       if (!d.exercises.some((e) => ids.has(e.id) && !e.isCustom && !e.isHeavy)) return null;
       return { ...d, exercises: d.exercises.map((e) => (ids.has(e.id) && !e.isCustom ? { ...e, isHeavy: true } : e)) };
+    },
+  },
+  {
+    // Nov 17 2026: built-in exercises learn whether they're multi-joint (used by the failure rule: free-weight
+    // compounds are never taken to failure).
+    id: "2026-11-17-compound-flag",
+    run(d) {
+      const comp = new Set(["t-bar-reverse-row", "single-arm-cable-lat-pulldown", "single-arm-db-row", "machine-shoulder-press", "smith-squat", "wide-grip-lat-pulldown", "cable-seated-row", "machine-dip", "leg-press"]);
+      const seedIds = new Set(Object.keys(OLD_TEXT)); // the built-in exercise ids
+      if (!d.exercises.some((e) => seedIds.has(e.id) && !e.isCustom && e.compound === undefined)) return null;
+      return { ...d, exercises: d.exercises.map((e) => (seedIds.has(e.id) && !e.isCustom && e.compound === undefined ? { ...e, compound: comp.has(e.id) } : e)) };
     },
   },
   {

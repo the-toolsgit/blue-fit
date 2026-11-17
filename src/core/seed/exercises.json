@@ -30,6 +30,7 @@
     "equipment": "plateMachine",
     "loadMode": "total",
     "isHeavy": true,
+"compound": true,
     "bodyRegion": "upper",
     "why": "Back day version: a heavy row aimed at the lats.",
     "setup": [
@@ -112,6 +113,7 @@
     "equipment": "cable",
     "loadMode": "total",
     "isHeavy": true,
+"compound": true,
     "bodyRegion": "upper",
     "why": "Lats in the stretched position. Training one arm lets you reach further overhead.",
     "setup": [
@@ -196,6 +198,7 @@
     "equipment": "dumbbell",
     "loadMode": "perHand",
     "isHeavy": true,
+"compound": true,
     "bodyRegion": "upper",
     "why": "Lower lats. The elbow travels toward the hip in an arc.",
     "setup": [
@@ -280,6 +283,7 @@
     "equipment": "cable",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "The only lat move with no biceps involvement. Takes the lats from stretched to fully contracted.",
     "setup": [
@@ -352,6 +356,7 @@
     "equipment": "dumbbell",
     "loadMode": "perHand",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Arms hang behind the body, which stretches the long head of the biceps.",
     "setup": [
@@ -442,6 +447,7 @@
     "equipment": "fixedBar",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Hardest near the bottom, so it trains the biceps lengthened.",
     "setup": [
@@ -533,6 +539,7 @@
     "equipment": "machine",
     "loadMode": "total",
     "isHeavy": true,
+"compound": true,
     "bodyRegion": "upper",
     "why": "Your only direct front-delt work, plus triceps.",
     "setup": [
@@ -611,6 +618,7 @@
     "equipment": "cable",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Side delts with tension through the whole range, including the bottom.",
     "setup": [
@@ -686,6 +694,7 @@
     "equipment": "dumbbell",
     "loadMode": "perHand",
     "isHeavy": true,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Your locked-in heavy trap move: a partial lateral raise combined with a shrug.",
     "setup": [
@@ -751,6 +760,7 @@
     "equipment": "barbell",
     "loadMode": "perSide",
     "isHeavy": true,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Heavy upper-trap loading.",
     "setup": [
@@ -816,6 +826,7 @@
     "equipment": "cable",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Your lower-trap exercise. Raising the arm overhead makes the shoulder blade rotate up, and the lower traps work hardest above the head.",
     "setup": [
@@ -889,6 +900,7 @@
     "equipment": "machine",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Rear delts in a fixed path.",
     "setup": [
@@ -978,6 +990,7 @@
     "equipment": "smith",
     "loadMode": "perSide",
     "isHeavy": true,
+"compound": true,
     "bodyRegion": "lower",
     "why": "Heavy quad work. Stopping at parallel grows the quads about as well as going deep, with much less glute work.",
     "setup": [
@@ -1056,6 +1069,7 @@
     "equipment": "machine",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "lower",
     "why": "Isolates the quads with no glute involvement, which fits the plan.",
     "setup": [
@@ -1146,6 +1160,7 @@
     "equipment": "machine",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "lower",
     "why": "Hamstrings in the short (contracted) position.",
     "setup": [
@@ -1234,6 +1249,7 @@
     "equipment": "machine",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "lower",
     "why": "Inner thighs. Large muscles that add thigh size without involving the glutes.",
     "setup": [
@@ -1312,6 +1328,7 @@
     "equipment": "machine",
     "loadMode": "total",
     "isHeavy": true,
+"compound": false,
     "bodyRegion": "lower",
     "why": "Straight knees work the upper calf.",
     "setup": [
@@ -1379,6 +1396,7 @@
     "equipment": "cable",
     "loadMode": "total",
     "isHeavy": true,
+"compound": true,
     "bodyRegion": "upper",
     "why": "Heavy vertical pull.",
     "setup": [
@@ -1477,6 +1495,7 @@
     "equipment": "cable",
     "loadMode": "total",
     "isHeavy": true,
+"compound": true,
     "bodyRegion": "upper",
     "why": "Heavy horizontal pull.",
     "setup": [
@@ -1562,6 +1581,7 @@
     "equipment": "fixedBar",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Long head of the triceps stretched with the arms angled back.",
     "setup": [
@@ -1653,6 +1673,7 @@
     "equipment": "machine",
     "loadMode": "total",
     "isHeavy": true,
+"compound": true,
     "bodyRegion": "upper",
     "why": "Heavy triceps compound.",
     "setup": [
@@ -1725,6 +1746,7 @@
     "equipment": "cable",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Triceps with the arms at your sides.",
     "setup": [
@@ -1808,6 +1830,7 @@
     "equipment": "cable",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Rear delts and mid traps, plus shoulder health.",
     "setup": [
@@ -1904,6 +1927,7 @@
     "equipment": "dumbbell",
     "loadMode": "perHand",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Leaning away makes the bottom of the raise hard, so side delts work stretched.",
     "setup": [
@@ -1995,6 +2019,7 @@
     "equipment": "dumbbell",
     "loadMode": "perHand",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Side delts up to shoulder height, then upper traps above it.",
     "setup": [
@@ -2058,6 +2083,7 @@
     "equipment": "machine",
     "loadMode": "total",
     "isHeavy": true,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Mid traps, an angle the shrugs miss.",
     "setup": [
@@ -2130,6 +2156,7 @@
     "equipment": "cable",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Rear delts with a cable, a second angle to the machine.",
     "setup": [
@@ -2200,6 +2227,7 @@
     "equipment": "cable",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Long head stretched overhead.",
     "setup": [
@@ -2275,6 +2303,7 @@
     "equipment": "dumbbell",
     "loadMode": "perHand",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Heavy neutral-grip curl. Builds arm thickness under the biceps.",
     "setup": [
@@ -2344,6 +2373,7 @@
     "equipment": "plateMachine",
     "loadMode": "perSide",
     "isHeavy": true,
+"compound": true,
     "bodyRegion": "lower",
     "why": "Second heavy quad move.",
     "setup": [
@@ -2418,6 +2448,7 @@
     "equipment": "machine",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "lower",
     "why": "Hamstrings stretched. Grew more than lying curls in research.",
     "setup": [
@@ -2504,6 +2535,7 @@
     "equipment": "machine",
     "loadMode": "total",
     "isHeavy": true,
+"compound": false,
     "bodyRegion": "lower",
     "why": "Bent knees switch work to the soleus, the lower calf.",
     "setup": [
@@ -2568,6 +2600,7 @@
     "equipment": "cable",
     "loadMode": "total",
     "isHeavy": false,
+"compound": false,
     "bodyRegion": "upper",
     "why": "Triceps in the short (fully contracted) position, the one angle the other triceps moves miss.",
     "setup": [

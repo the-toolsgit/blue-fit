@@ -12,16 +12,33 @@ import { deloadActive } from "./deload";
 /** Mass gain and endurance use it. Strength and maintain don't. No profile yet counts as mass gain. */
 export const failureApplies = (goal: Goal | undefined) => { const g = goal ?? "growth"; return g === "growth" || g === "endurance"; };
 
-/** Never to failure, even though they look like isolation moves: free weight over the face, free-weight compound row. */
+/** Never to failure: free weight over the face, free-weight compound row (also covered by the rule below). */
 export const UNSAFE_FAILURE = new Set(["ez-bar-incline-tricep-extension", "single-arm-db-row"]);
-const MACHINE_LIKE = new Set(["machine", "plateMachine", "cable"]);
-const FREE_ISOLATION = new Set(["dumbbell", "fixedBar", "bodyweight", "other"]);
+/** A failed rep is harmless: the stack/carriage stops it (Smith: safety stops assumed set) or you just let go/step down. */
+const SAFE_TO_FAIL = new Set(["machine", "plateMachine", "cable", "smith", "bodyweight"]);
+/** Arm muscles: a move whose direct muscles are only these is still one joint (e.g. hammer curl: biceps + forearms). */
+const ARM = new Set<MuscleGroup>(["biceps", "forearms"]);
 
-/** Safe to take to failure: machine, cable and isolation moves; never ★ heavy lifts or the unsafe list. */
+/** Single-joint (isolation): from the exercise's compound flag; if unknown (older custom exercises), only a move that
+ *  works one muscle and nothing else, or only arm muscles, counts (a free-weight compound is never let through by guess). */
+export function isolationMove(ex: Exercise): boolean {
+  if (ex.compound != null) return !ex.compound;
+  const direct = ex.volume.filter((v) => v.weight === 1).map((v) => v.group);
+  if (direct.length > 0 && ex.volume.every((v) => ARM.has(v.group))) return true;
+  return direct.length === 1 && ex.volume.length === 1;
+}
+
+/**
+ * Safe to take to failure (Nov 17 2026, agreed with Leo): a failed rep must be harmless. Machines, plate-loaded
+ * machines, cables, the Smith machine and bodyweight moves: yes. Free weights (barbell, dumbbell, fixed bar, other):
+ * only isolation moves. ★ doesn't matter. Never the unsafe list.
+ * Basis: coaches keep heavy free-weight compounds 1–2 reps short (risk of a failed rep, bigger fatigue cost) and use
+ * failure on machines, cables and isolation work (expert consensus; no injury study compares them).
+ */
 export function failureEligible(ex: Exercise | undefined): boolean {
-  if (!ex || ex.isHeavy || UNSAFE_FAILURE.has(ex.id)) return false;
-  if (MACHINE_LIKE.has(ex.equipment)) return true;
-  return FREE_ISOLATION.has(ex.equipment) && ex.volume.filter((v) => v.weight === 1).length === 1;
+  if (!ex || UNSAFE_FAILURE.has(ex.id)) return false;
+  if (SAFE_TO_FAIL.has(ex.equipment)) return true;
+  return isolationMove(ex);
 }
 
 /** The muscle an exercise is mainly for (its first direct group). */

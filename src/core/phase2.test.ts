@@ -243,7 +243,7 @@ describe("plain rule text", () => {
     expect(seed.exercises.find((e) => e.id === "db-hammer-curl")!.isHeavy).toBe(false);
   });
   it("Nov 17: ★ Key lift card says what ★ means (old wording only)", () => {
-    const m2 = MIGRATIONS.find((x) => x.id === "2026-11-17-key-lift-text-2")!;
+    const m2 = MIGRATIONS.find((x) => x.id === "2026-11-17-key-lift-text-3")!;
     const r = structuredClone(seed.routines[0]);
     r.rules = [{ title: "★ Key lift", text: "★ Key lifts: the app tracks these to measure your strength progress, and suggests a deload when they stall." }, { title: "Effort", text: "x" }];
     const out = m2.run({ ...seed, routines: [r] }, "2026-11-17")!;

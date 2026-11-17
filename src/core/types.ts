@@ -57,6 +57,8 @@ export interface Exercise {
   /** No longer used (failure is now picked per workout, see core/failure.ts). Kept so older backups still import. */
   failureLastSet?: boolean;
   isHeavy: boolean;
+  /** Multi-joint movement (from the exercise library). Unknown on older custom exercises. */
+  compound?: boolean;
   bodyRegion: "upper" | "lower";
   why: string;
   setup: string[];

@@ -17,8 +17,14 @@ const ctx = (over: Partial<FailureContext> = {}, p: ProfileDraft | null = prof()
 const ids = (xs: { slotId: string }[], d: string) => xs.map((x) => day(d).slots.find((s) => s.id === x.slotId)!.exerciseId);
 
 describe("strategic last set to failure", () => {
-  it("only safe moves: machine, cable, isolation; never ★ lifts or the unsafe list", () => {
-    expect(seed.exercises.filter((e) => e.isHeavy && failureEligible(e))).toEqual([]);
+  it("only where a failed rep is harmless: machines, cables, Smith, bodyweight, free-weight isolation; ★ doesn't matter", () => {
+    for (const id of ["leg-press", "smith-squat", "machine-shoulder-press", "standing-calf-raise", "kelso-shrug", "barbell-shrug", "db-hammer-curl", "wide-grip-lat-pulldown"])
+      expect(failureEligible(exMap.get(id)), id).toBe(true);
+    expect(failureEligible({ ...exMap.get("smith-squat")!, equipment: "barbell" })).toBe(false); // free-weight compound
+    // Unknown compound flag (older custom exercise): only a one-muscle move or an arm-only move counts as isolation
+    const { compound: _c, ...noFlag } = exMap.get("smith-squat")!;
+    expect(failureEligible({ ...noFlag, equipment: "barbell" })).toBe(false);
+    expect(failureEligible({ ...noFlag, equipment: "barbell", volume: [{ group: "biceps", weight: 1 }] })).toBe(true);
     expect(failureEligible(exMap.get("ez-bar-incline-tricep-extension"))).toBe(false);
     expect(failureEligible(exMap.get("single-arm-db-row"))).toBe(false);
     expect(failureEligible(exMap.get("leg-extension"))).toBe(true);
@@ -44,10 +50,10 @@ describe("strategic last set to failure", () => {
   it("picks only the last exercise for a muscle, and never one trained again within 2 days", () => {
     // Back & Biceps (Sat): last back move and last biceps move
     expect(ids(planFailure(day("mon"), "2026-11-14", ctx()), "mon")).toEqual(["straight-arm-cable-pulldown", "barbell-preacher-curl"]);
-    // Legs A (Mon): side delts are trained again Wed (2 days) → no lateral raise; 3 leg candidates left (calf raises are ★), budget 3
+    // Legs A (Mon): side delts are trained again Wed (2 days) → no lateral raise; budget 3, later in the workout wins
     const legs = ids(planFailure(day("wed"), "2026-11-16", ctx()), "wed");
     expect(legs).not.toContain("cable-lateral-raise");
-    expect(legs).toEqual(["leg-extension", "prone-leg-curl", "hip-adduction"]); // calf raises are ★ (Nov 17), so not eligible
+    expect(legs).toEqual(["prone-leg-curl", "hip-adduction", "standing-calf-raise"]);
     // Sun: rear delts trained again Tue (2 days) → no reverse fly
     expect(ids(planFailure(day("tue"), "2026-11-15", ctx()), "tue")).not.toContain("machine-reverse-fly");
   });
@@ -95,9 +101,18 @@ describe("strategic last set to failure", () => {
     const w = weekFailure(later);
     expect(w.get("wed")!.size).toBe(3);
     expect(w.get("fri")!.size).toBe(0);
-    // Swapping a picked exercise to a ★ lift drops the flame
+    // Swapping a picked exercise to one that isn't safe to fail drops the flame
     const calf = s.entries.find((e) => e.exerciseId === "standing-calf-raise")!;
-    expect(swapEntry(s, calf.id, exMap.get("smith-squat")!, []).entries.find((e) => e.id === calf.id)!.toFailure).toBeUndefined();
+    expect(calf.toFailure).toBe(true);
+    expect(swapEntry(s, calf.id, exMap.get("single-arm-db-row")!, []).entries.find((e) => e.id === calf.id)!.toFailure).toBeUndefined();
+  });
+  it("migration gives built-in exercises their compound flag once", () => {
+    const m = MIGRATIONS.find((x) => x.id === "2026-11-17-compound-flag")!;
+    const old = { ...seed, exercises: seed.exercises.map(({ compound: _c, ...e }) => e) };
+    const out = m.run(old, "2026-11-17")!;
+    expect(out.exercises.find((e) => e.id === "leg-press")!.compound).toBe(true);
+    expect(out.exercises.find((e) => e.id === "leg-extension")!.compound).toBe(false);
+    expect(m.run(out, "2026-11-17")).toBeNull();
   });
   it("migration drops the old per-exercise defaults once", () => {
     const m = MIGRATIONS.find((x) => x.id === "2026-11-16-failure-strategic")!;
