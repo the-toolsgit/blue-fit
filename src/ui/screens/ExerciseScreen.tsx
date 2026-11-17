@@ -61,7 +61,7 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride, failWhy }: { ex: E
       <Section title="Avoid" items={ex.avoid} tone="bad" />
       <div className={"info-tiles" + (/hold/i.test(ex.tempo) ? " tempo-hold" : "")}>
         <div className="info-tile wide"><span className="info-ic"><Icon name="range" size={20} /></span><div><div className="eyebrow">Range</div><div>{ex.rangeOfMotion}</div></div></div>
-        <div className="info-tile"><span className="info-ic"><Icon name="tempo" size={20} /></span><div><div className="eyebrow">Tempo</div>
+        <div className="info-tile tempo-tile"><span className="info-ic"><Icon name="tempo" size={20} /></span><div><div className="eyebrow">Tempo</div>
           <div className="tempo">{tempoPhases(ex.tempo).map((p, i) => <span key={i}>{i > 0 && <span className="muted" aria-hidden="true">→ </span>}<b>{p.word}</b> <span className="mono">{p.sec.replace(" ", "")}</span></span>)}</div></div></div>
         <div className="info-tile rest-tile"><span className="info-ic"><Icon name="timer" size={20} /></span><div><div className="eyebrow">Rest</div><div className="mono">{fmtRest(restSec)}</div></div></div>
         <div className="info-tile wide"><span className="info-ic"><Icon name="today" size={20} /></span><div><div className="eyebrow">Equipment</div>

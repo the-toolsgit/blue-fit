@@ -207,7 +207,7 @@ textarea.input { min-height: 84px; resize: vertical; }
 /* Tempo with a hold (3 phases): Rest takes only the room it needs */
 .info-tiles.tempo-hold { grid-template-columns: minmax(0, 1fr) auto; }
 .info-tiles.tempo-hold .tempo { font-size: 12px; gap: 2px 4px; white-space: nowrap; }
-.info-tiles.tempo-hold .rest-tile .info-ic { display: none; }
+.info-tiles.tempo-hold .tempo-tile .info-ic { display: none; }
 .info-tile { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); font-size: 14px; line-height: 1.35; }
 .info-tile.wide { grid-column: 1 / -1; }
 .info-tile .eyebrow { font-size: 10px; margin-bottom: 3px; }
