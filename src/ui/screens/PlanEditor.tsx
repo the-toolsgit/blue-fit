@@ -18,6 +18,7 @@ import { Seg, Stepper } from "../components/Controls";
 import { Dock } from "../components/Dock";
 import { ExercisePicker } from "../components/ExercisePicker";
 import { Figure } from "../components/Figure";
+import { tempoTiming } from "../../core/figure/tempo";
 import { Icon } from "../components/Icon";
 import { Confirm, Sheet } from "../components/Sheet";
 import { VolumeTable } from "../components/VolumeTable";
@@ -187,7 +188,7 @@ export function PlanEditorScreen({ id }: { id?: string }) {
         {slot && day && (
           <div className="stack" style={{ gap: 12 }}>
             <div className="row">
-              <Figure spec={exMap.get(slot.exerciseId)?.figure} size={54} />
+              <Figure spec={exMap.get(slot.exerciseId)?.figure} size={54} timing={tempoTiming(exMap.get(slot.exerciseId)?.tempo, slot.exerciseId)} />
               <h3 className="title-md grow">{exMap.get(slot.exerciseId)?.name}</h3>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>

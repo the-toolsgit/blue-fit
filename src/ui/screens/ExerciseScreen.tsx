@@ -4,6 +4,7 @@ import { lastEntryFor } from "../../core/session";
 import { EQUIPMENT_LABEL, muscleLabel, type Exercise } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { Figure } from "../components/Figure";
+import { tempoTiming } from "../../core/figure/tempo";
 import { ExerciseEditor } from "../components/ExerciseEditor";
 import { lazy, Suspense, useState } from "react";
 const ExerciseProgress = lazy(() => import("../components/ExerciseProgress").then((m) => ({ default: m.ExerciseProgress })));
@@ -37,7 +38,7 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride }: { ex: Exercise; 
   const restSec = ex.defaultRestSec || settings.restDefaultSec;
   return (
     <div className="stack" style={{ gap: 16 }}>
-      <div className="fig-stage" style={{ padding: "8px 0 0" }}><Figure spec={ex.figure} size={200} label={`Animation: ${ex.name}`} /></div>
+      <div className="fig-stage" style={{ padding: "8px 0 0" }}><Figure spec={ex.figure} size={200} timing={tempoTiming(ex.tempo, ex.id)} label={`Animation: ${ex.name}`} /></div>
       <div>
         <h2 className="title-lg">{ex.name} {ex.isHeavy && <span className="star">★</span>}</h2>
         <div className="row" style={{ flexWrap: "wrap", gap: 6, marginTop: 10 }}>

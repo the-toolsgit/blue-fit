@@ -1,17 +1,17 @@
 // Thin SVG renderer for the figure engine. One shared animation loop (~30 fps) paints only visible figures.
 import { useEffect, useRef } from "react";
-import { phase, poseFrame } from "../../core/figure/engine";
+import { phase, poseFrame, type Timing } from "../../core/figure/engine";
 import { frameToSvg } from "../../core/figure/svg";
 import type { FigureSpec } from "../../core/types";
 import { reducedMotion } from "../device";
 
-type Reg = { spec: FigureSpec; visible: boolean; speed: number };
+type Reg = { spec: FigureSpec; visible: boolean; speed: number; timing?: Timing; t0: number };
 const registry = new Map<SVGSVGElement, Reg>();
 let raf = 0, last = 0;
 const loop = (ms: number) => {
   if (ms - last > 32) {
     last = ms;
-    registry.forEach((r, el) => { if (r.visible) el.innerHTML = frameToSvg(poseFrame(r.spec, phase(ms * r.speed))); });
+    registry.forEach((r, el) => { if (r.visible) el.innerHTML = frameToSvg(poseFrame(r.spec, phase((ms - r.t0) * r.speed, r.timing))); });
   }
   raf = registry.size ? requestAnimationFrame(loop) : 0;
 };
@@ -19,8 +19,9 @@ const io = typeof IntersectionObserver === "function"
   ? new IntersectionObserver((es) => es.forEach((e) => { const r = registry.get(e.target as SVGSVGElement); if (r) r.visible = e.isIntersecting; }), { rootMargin: "80px" })
   : null;
 
-export function Figure({ spec, size = 112, className = "", still, k = 1, label, speed = 1 }: {
-  spec: FigureSpec | null | undefined; size?: number; className?: string; still?: boolean; k?: number; label?: string; speed?: number;
+/** `timing`: per-exercise speed from its tempo (core/figure/tempo.ts); each figure starts its loop when it appears. */
+export function Figure({ spec, size = 112, className = "", still, k = 1, label, speed = 1, timing }: {
+  spec: FigureSpec | null | undefined; size?: number; className?: string; still?: boolean; k?: number; label?: string; speed?: number; timing?: Timing;
 }) {
   const ref = useRef<SVGSVGElement>(null);
   useEffect(() => {
@@ -28,11 +29,12 @@ export function Figure({ spec, size = 112, className = "", still, k = 1, label, 
     if (!el || !spec) return;
     el.innerHTML = frameToSvg(poseFrame(spec, still || reducedMotion() ? k : 0));
     if (still || reducedMotion()) return;
-    registry.set(el, { spec, visible: !io, speed });
+    registry.set(el, { spec, visible: !io, speed, timing, t0: performance.now() });
     io?.observe(el);
     if (!raf) raf = requestAnimationFrame(loop);
     return () => { registry.delete(el); io?.unobserve(el); };
-  }, [spec, still, k, speed]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [spec, still, k, speed, timing?.ab, timing?.ba, timing?.hold]);
   if (!spec) return null;
   return (
     <svg ref={ref} className={"fig " + className} viewBox="0 -24 120 131" width={size} height={(size * 131) / 120}

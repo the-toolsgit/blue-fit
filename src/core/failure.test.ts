@@ -107,3 +107,21 @@ describe("strategic last set to failure", () => {
     expect(m.run(out, "2026-11-16")).toBeNull();
   });
 });
+
+describe("figure tempo", async () => {
+  const { tempoSeconds, tempoTiming, TURN_MS } = await import("./figure/tempo");
+  const { phase, DEFAULT_TIMING } = await import("./figure/engine");
+  it("reads the tempo text; pose A→B follows the matching phase", () => {
+    expect(tempoSeconds("Up 1 s · Down 3 s")).toEqual([1, 3]);
+    expect(tempoSeconds("2-0-1")).toBeNull();
+    expect(tempoTiming("Up 1 s · Down 3 s", "prone-leg-curl")).toEqual({ ab: 1000, ba: 3000, hold: TURN_MS });
+    // Calf raise: tempo starts "Down 3 s", the figure starts at the bottom → A→B is the 1 s "Up"
+    expect(tempoTiming("Down 3 s · Up 1 s", "standing-calf-raise")).toMatchObject({ ab: 1000, ba: 3000 });
+    expect(tempoTiming("", "x")).toBe(DEFAULT_TIMING);
+    const t = tempoTiming("Up 1 s · Down 3 s");
+    expect(phase(500, t)).toBeCloseTo(0.5);
+    expect(phase(1100, t)).toBe(1);
+    expect(phase(1250 + 1500, t)).toBeCloseTo(0.5);
+    expect(phase(4400, t)).toBe(0);
+  });
+});

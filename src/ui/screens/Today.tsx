@@ -6,6 +6,8 @@ import { estimateMinutes } from "../../core/timeEstimate";
 import { localDate, weekOrder, weekStart } from "../../core/util";
 import { reducedMotion } from "../device";
 import { Figure } from "../components/Figure";
+import { tempoTiming } from "../../core/figure/tempo";
+import { loopMs } from "../../core/figure/engine";
 import { Icon } from "../components/Icon";
 import { Dock } from "../components/Dock";
 import { DeloadBanner } from "../components/DeloadBanner";
@@ -52,13 +54,16 @@ export function TodayScreen() {
 
   // Hero figure cycles through the day's exercises, one per animation loop
   const [hero, setHero] = useState(0);
-  useEffect(() => {
-    setHero(0);
-    if (reducedMotion() || slots.length < 2) return;
-    const t = setInterval(() => setHero((h) => (h + 1) % slots.length), 3200);
-    return () => clearInterval(t);
-  }, [wd, slots.length]);
+  useEffect(() => { setHero(0); }, [wd, slots.length]);
   const heroEx = exMap.get(slots[hero]?.exerciseId ?? "");
+  const heroTiming = tempoTiming(heroEx?.tempo, heroEx?.id);
+  const heroLoop = loopMs(heroTiming);
+  // Next exercise after one full loop at this exercise's tempo
+  useEffect(() => {
+    if (reducedMotion() || slots.length < 2) return;
+    const t = setTimeout(() => setHero((h) => (h + 1) % slots.length), heroLoop);
+    return () => clearTimeout(t);
+  }, [hero, heroLoop, slots.length]);
 
   const start = () => {
     if (active) return go("workout"); // one workout at a time
@@ -123,7 +128,7 @@ export function TodayScreen() {
                 {doneToday && <span className="badge" style={{ marginTop: 10, color: "var(--good)", borderColor: "var(--good)" }}><Icon name="check" size={14} /> Done today</span>}
               </div>
               <div className="fig-stage" style={{ marginRight: -6 }}>
-                <Figure key={heroEx?.id} spec={heroEx?.figure} size={118} label={heroEx ? `Animation: ${heroEx.name}` : undefined} />
+                <Figure key={heroEx?.id} spec={heroEx?.figure} size={118} timing={heroTiming} label={heroEx ? `Animation: ${heroEx.name}` : undefined} />
               </div>
             </div>
             <div className="muted" style={{ fontSize: 12, textAlign: "right", minHeight: 18, transition: "opacity .3s" }} key={heroEx?.id}>{heroEx?.name}</div>
