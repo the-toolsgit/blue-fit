@@ -46,7 +46,8 @@ export function ProgressScreen() {
   const [exId, setExId] = useState<string | null>(null);
   const ex = exMap.get(exId ?? logged[0]?.id ?? "");
 
-  const intensity = Object.fromEntries(MUSCLE_GROUPS.map((m) => { const t = tmap.get(m.id); return [m.id, avg[m.id] / (t?.max ?? t?.min ?? 12)]; }));
+  const thisWeek = weeks[weeks.length - 1]?.sets ?? ({} as Record<MuscleGroup, number>);
+  const intensity = Object.fromEntries(MUSCLE_GROUPS.map((m) => { const t = tmap.get(m.id); return [m.id, (thisWeek[m.id] ?? 0) / (t?.max ?? t?.min ?? 12)]; }));
   const recMap = Object.fromEntries(MUSCLE_GROUPS.map((m) => [m.id, rec[m.id].status])) as Record<MuscleGroup, Recovery>;
   const t = tmap.get(muscle);
 
@@ -77,14 +78,14 @@ export function ProgressScreen() {
 
       <h2 className="section-title">Muscle map</h2>
       <section className="glass" style={{ padding: 14 }}>
-        <Seg label="Map mode" value={mapMode} onChange={(v) => { setMapMode(v); setSel(null); }} options={[{ v: "volume", label: "Weekly sets" }, { v: "recovery", label: "Recovery" }]} />
+        <Seg label="Map mode" value={mapMode} onChange={(v) => { setMapMode(v); setSel(null); }} options={[{ v: "volume", label: "This week" }, { v: "recovery", label: "Recovery" }]} />
         <div style={{ marginTop: 10 }}>
           <MuscleMap intensity={mapMode === "volume" ? intensity : undefined} recovery={mapMode === "recovery" ? recMap : undefined} selected={sel} onSelect={(g) => setSel(sel === g ? null : g)} />
         </div>
         <div style={{ minHeight: 40, marginTop: 6, textAlign: "center", fontSize: 14 }}>
           {sel ? (
             mapMode === "volume"
-              ? <><b>{muscleLabel(sel)}</b> · <span className="mono">{fmtNum(avg[sel])}</span> sets/week avg <span className="muted">· target {formatTarget(tmap.get(sel))}</span></>
+              ? <><b>{muscleLabel(sel)}</b> · <span className="mono">{fmtNum(thisWeek[sel] ?? 0)}</span> sets this week <span className="muted">· target {formatTarget(tmap.get(sel))}</span></>
               : <><b>{muscleLabel(sel)}</b> · <span style={{ color: RECOVERY_COLOR[rec[sel].status] }}>{REC_LABEL[rec[sel].status]}</span> <span className="muted">· {recNote(rec[sel])}</span></>
           ) : mapMode === "volume"
             ? <span className="muted">Brighter = closer to the top of the target. Tap a muscle.</span>

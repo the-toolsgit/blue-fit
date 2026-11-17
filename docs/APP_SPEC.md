@@ -152,7 +152,7 @@ Empty (no finished workouts): LOADING figure, "Finish a workout and your charts,
 - **Range:** segmented 4 wk · 12 wk (default) · 6 mo · All (§5.14).
 - **Tiles:** workouts in range, per week, volume lb.
 - **Muscle map** (§8.6) with a toggle:
-  - *Weekly sets:* each region's brightness = average weekly sets in the range ÷ (target max, else target min, else 12), capped at 1; regions above 0.55 glow. Tap a region: "Biceps · 14.5 sets/week avg · target 14–20".
+  - *This week:* each region's brightness = sets done so far this training week (any range) ÷ (target max, else target min, else 12), capped at 1; regions above 0.55 glow. Tap a region: "Biceps · 6 sets this week · target 14–20".
   - *Recovery:* recovering = pink, partly recovered = amber, fresh = green (faint); legend. Tap: "Quads · Recovering · 6 sets yesterday", "Traps · Partly recovered · 4 sets 3 days ago · +1 day: age 40+", "Calves · Fresh · no hard day lately".
 - **Weekly sets vs target:** muscle chips; bar chart of that muscle's sets per week with the target as a green band; then a toggle "This week | Average · range" for the volume table (§3.10). Default: This week; the last choice is remembered on the phone.
 - **Weekly volume:** bar chart of tonnage per week (readout shows workouts that week).
