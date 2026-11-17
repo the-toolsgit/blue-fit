@@ -33,8 +33,11 @@ function StreakCard() {
     <section className="glass edge" style={{ padding: 16, display: "grid", gridTemplateColumns: "auto 1fr", gap: 16, alignItems: "center" }}>
       <button onClick={toggle} aria-label={frozen ? "Streak frozen. Tap to unfreeze." : "Tap to freeze the streak"} style={{ display: "grid", justifyItems: "center", minWidth: 74 }}>
         {/* Frozen: ice flame. Otherwise it fills up as this week's planned days get logged */}
-        {frozen ? <StreakFlame kind="ice" size={30} />
-          : <span className={st.thisWeek.daysLogged > 0 ? "flicker" : undefined}><FillFlame fill={planned ? st.thisWeek.daysLogged / planned : 0} size={30} /></span>}
+        {/* Same 30 px box either way, so the flame doesn't move when (un)freezing; the ice svg has 3.75 px of snow room on top */}
+        <span style={{ display: "block", height: 30, lineHeight: 0 }}>
+          {frozen ? <span style={{ display: "block", marginTop: -3.75 }}><StreakFlame kind="ice" size={30} /></span>
+            : <span className={st.thisWeek.daysLogged > 0 ? "flicker" : undefined} style={{ display: "block" }}><FillFlame fill={planned ? st.thisWeek.daysLogged / planned : 0} size={30} /></span>}
+        </span>
         <span className="mono" style={{ fontSize: 40, lineHeight: 1, color: frozen ? "#5AB8FF" : hot ? "var(--ink)" : "var(--muted)", textShadow: frozen ? "0 0 16px rgba(80,170,255,.7)" : hot ? "0 0 16px var(--pink-glow)" : undefined }}>{st.current}</span>
         <span className="eyebrow" style={{ fontSize: 9, marginTop: 4, color: frozen ? "#5AB8FF" : undefined }}>{frozen ? "frozen" : "streak"}</span>
       </button>
