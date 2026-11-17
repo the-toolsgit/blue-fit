@@ -79,7 +79,7 @@
     "tips": ["Shoulders to ears is what matters. Arm height doesn't."],
     "avoid": ["Turning it into a light side raise.", "Dropping the weight fast."],
     "rangeOfMotion": "Arms at your sides → small raise with a full shrug",
-    "tempo": "Up 1 s · Down 3 s"
+    "tempo": "Up 1 s · Hold 1 s · Down 3 s"
   },
   "barbell-shrug": {
     "why": "Heavy work for your upper traps.",
@@ -88,7 +88,7 @@
     "tips": ["Use straps so your grip doesn't give out first."],
     "avoid": ["Rolling your shoulders.", "Bending your elbows.", "Short, bouncy reps."],
     "rangeOfMotion": "Shoulders down → shoulders up",
-    "tempo": "Up 1 s · Down 3 s"
+    "tempo": "Up 1 s · Hold 1 s · Down 3 s"
   },
   "overhead-trap": {
     "why": "Works your lower traps, which work hardest with your arm overhead.",
@@ -133,7 +133,7 @@
     "tips": ["Keep your hips pressed into the pad."],
     "avoid": ["Hips lifting up.", "Dropping the weight."],
     "rangeOfMotion": "Legs almost straight → full curl",
-    "tempo": "Up 1 s · Down 3 s"
+    "tempo": "Up 1 s · Hold 1 s · Down 3 s"
   },
   "hip-adduction": {
     "why": "Works your inner thighs.",
@@ -151,7 +151,7 @@
     "tips": ["The pause at the bottom matters most."],
     "avoid": ["Bouncing at the bottom.", "Bending your knees."],
     "rangeOfMotion": "Heels all the way down → all the way up",
-    "tempo": "Down 3 s · Up 1 s"
+    "tempo": "Down 3 s · Hold 2 s · Up 1 s"
   },
   "wide-grip-lat-pulldown": {
     "why": "A heavy pulldown for your back.",
@@ -205,7 +205,7 @@
     "tips": ["Go light and controlled."],
     "avoid": ["Leaning back.", "Elbows dropping below your hands."],
     "rangeOfMotion": "Arms straight → hands beside your ears",
-    "tempo": "Pull 1 s · Return 3 s"
+    "tempo": "Pull 1 s · Hold 1 s · Return 3 s"
   },
   "lean-away-lateral-raise": {
     "why": "Leaning away makes the start of the raise harder for the side of your shoulder.",
@@ -232,7 +232,7 @@
     "tips": ["It's a short move. Make the squeeze count."],
     "avoid": ["Bending your elbows."],
     "rangeOfMotion": "Shoulder blades apart → together",
-    "tempo": "Back 1 s · Forward 3 s"
+    "tempo": "Back 1 s · Hold 1 s · Forward 3 s"
   },
   "single-arm-cable-reverse-fly": {
     "why": "Works the back of your shoulder with a cable.",
@@ -277,7 +277,7 @@
     "tips": ["Leaning forward gives a bigger stretch."],
     "avoid": ["Letting the weight yank your legs straight."],
     "rangeOfMotion": "Legs straight → full curl",
-    "tempo": "Curl 1 s · Straighten 3 s"
+    "tempo": "Curl 1 s · Hold 1 s · Straighten 3 s"
   },
   "seated-calf-raise": {
     "why": "Works your lower calves (knees bent).",
@@ -286,7 +286,7 @@
     "tips": ["Pause at the bottom every rep."],
     "avoid": ["Bouncing."],
     "rangeOfMotion": "Heels all the way down → all the way up",
-    "tempo": "Down 3 s · Up 1 s"
+    "tempo": "Down 3 s · Hold 2 s · Up 1 s"
   },
   "cable-one-arm-tricep-kickback": {
     "why": "Works your triceps with the arm fully straight.",

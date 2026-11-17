@@ -75,6 +75,22 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
+    // Nov 16 2026: holds in the tempo (calf raises 2 s at the bottom; shrugs, face pull, leg curls 1 s squeeze).
+    // Only exercises still showing an earlier app tempo.
+    id: "2026-11-16-tempo-holds",
+    run(d) {
+      const text = plainText as unknown as Record<string, Partial<Exercise>>;
+      const old: Record<string, string[]> = {"standing-calf-raise": ["Down 3 s · Up 1 s"], "seated-calf-raise": ["Down 3 s · Up 1 s"], "barbell-shrug": ["Up 1 s · Down 3 s"], "lateral-shrug-hybrid": ["Up 1 s · Down 3 s"], "kelso-shrug": ["Back 1 s · Forward 3 s"], "rope-face-pull": ["Pull 1 s · Return 3 s"], "prone-leg-curl": ["Up 1 s · Down 3 s", "Curl 1 s · Straighten 3 s"], "seated-leg-curl": ["Curl 1 s · Straighten 3 s"]};
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        if (!old[e.id]?.includes(e.tempo) || !text[e.id]?.tempo) return e;
+        changed = true;
+        return { ...e, tempo: text[e.id].tempo! };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
+  {
     // Nov 16 2026: prone leg curl tempo reads "Up · Down" (legs go up, then down). Only if still the earlier app text.
     id: "2026-11-16-prone-curl-tempo",
     run(d) {

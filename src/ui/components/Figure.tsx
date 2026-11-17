@@ -34,7 +34,7 @@ export function Figure({ spec, size = 112, className = "", still, k = 1, label, 
     if (!raf) raf = requestAnimationFrame(loop);
     return () => { registry.delete(el); io?.unobserve(el); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [spec, still, k, speed, timing?.ab, timing?.ba, timing?.hold]);
+  }, [spec, still, k, speed, timing?.ab, timing?.ba, timing?.holdA, timing?.holdB]);
   if (!spec) return null;
   return (
     <svg ref={ref} className={"fig " + className} viewBox="0 -24 120 131" width={size} height={(size * 131) / 120}

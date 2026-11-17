@@ -163,7 +163,7 @@ describe("plain exercise texts", () => {
   const m = MIGRATIONS.find((x) => x.id === "2026-11-16-plain-exercise-text")!;
   it("every built-in exercise has a plain text and a two-phase tempo in movement order", () => {
     for (const e of seed.exercises) {
-      expect(e.tempo).toMatch(/^[A-Z][a-z]+ \d s · [A-Z][a-z]+ \d s$/);
+      expect(e.tempo).toMatch(/^[A-Z][a-z]+ \d s( · Hold \d s)? · [A-Z][a-z]+ \d s$/);
       expect(e.why.toLowerCase()).not.toMatch(/your only|back day|traps days|fits the plan|locked-in/);
     }
     expect(seed.exercises.find((e) => e.id === "smith-squat")!.tempo).toBe("Down 3 s · Up 1 s");

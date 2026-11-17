@@ -114,14 +114,30 @@ describe("figure tempo", async () => {
   it("reads the tempo text; pose A→B follows the matching phase", () => {
     expect(tempoSeconds("Up 1 s · Down 3 s")).toEqual([1, 3]);
     expect(tempoSeconds("2-0-1")).toBeNull();
-    expect(tempoTiming("Up 1 s · Down 3 s", "prone-leg-curl")).toEqual({ ab: 1000, ba: 3000, hold: TURN_MS });
+    expect(tempoTiming("Up 1 s · Down 3 s", "x")).toEqual({ ab: 1000, holdB: TURN_MS, ba: 3000, holdA: TURN_MS });
+    expect(tempoTiming("Up 1 s · Hold 1 s · Down 3 s", "prone-leg-curl")).toEqual({ ab: 1000, holdB: 1000, ba: 3000, holdA: TURN_MS });
     // Calf raise: tempo starts "Down 3 s", the figure starts at the bottom → A→B is the 1 s "Up"
-    expect(tempoTiming("Down 3 s · Up 1 s", "standing-calf-raise")).toMatchObject({ ab: 1000, ba: 3000 });
+    // …and the 2 s hold after "Down" is at the bottom = pose A
+    expect(tempoTiming("Down 3 s · Hold 2 s · Up 1 s", "standing-calf-raise")).toEqual({ ab: 1000, holdB: TURN_MS, ba: 3000, holdA: 2000 });
     expect(tempoTiming("", "x")).toBe(DEFAULT_TIMING);
     const t = tempoTiming("Up 1 s · Down 3 s");
     expect(phase(500, t)).toBeCloseTo(0.5);
     expect(phase(1100, t)).toBe(1);
     expect(phase(1250 + 1500, t)).toBeCloseTo(0.5);
     expect(phase(4400, t)).toBe(0);
+  });
+});
+
+describe("tempo holds migration", () => {
+  it("adds holds only where the old app tempo is still there, once", () => {
+    const m = MIGRATIONS.find((x) => x.id === "2026-11-16-tempo-holds")!;
+    const old = { ...seed, exercises: seed.exercises.map((e) =>
+      e.id === "standing-calf-raise" ? { ...e, tempo: "Down 3 s · Up 1 s" } : e.id === "prone-leg-curl" ? { ...e, tempo: "Curl 1 s · Straighten 3 s" } : e.id === "barbell-shrug" ? { ...e, tempo: "My tempo" } : e) };
+    const out = m.run(old, "2026-11-16")!;
+    const t = (id: string) => out.exercises.find((e) => e.id === id)!.tempo;
+    expect(t("standing-calf-raise")).toBe("Down 3 s · Hold 2 s · Up 1 s");
+    expect(t("prone-leg-curl")).toBe("Up 1 s · Hold 1 s · Down 3 s");
+    expect(t("barbell-shrug")).toBe("My tempo");
+    expect(m.run(out, "2026-11-16")).toBeNull();
   });
 });

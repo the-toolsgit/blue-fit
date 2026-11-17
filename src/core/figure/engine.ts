@@ -121,16 +121,16 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
   return { floor: { x1: 0, y1: 105, x2: 120, y2: 105 }, light, main: J.lines, head: { cx: J.head[0], cy: J.head[1], r: 7 } };
 }
 
-/** Animation timing (ms): ease A→B, hold, ease B→A, hold. Default: 3.2 s loop (42 % / 8 % / 42 % / 8 %). */
-export interface Timing { ab: number; ba: number; hold: number }
-export const DEFAULT_TIMING: Timing = { ab: 1344, ba: 1344, hold: 256 };
+/** Animation timing (ms): ease A→B, hold at B, ease B→A, hold at A. Default: 3.2 s loop (42 % / 8 % / 42 % / 8 %). */
+export interface Timing { ab: number; holdB: number; ba: number; holdA: number }
+export const DEFAULT_TIMING: Timing = { ab: 1344, holdB: 256, ba: 1344, holdA: 256 };
 export const PHASE_MS = 3200;
-export const loopMs = (t: Timing = DEFAULT_TIMING) => t.ab + t.ba + 2 * t.hold;
+export const loopMs = (t: Timing = DEFAULT_TIMING) => t.ab + t.holdB + t.ba + t.holdA;
 export function phase(ms: number, t: Timing = DEFAULT_TIMING): number {
   const e = (u: number) => (u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2);
   const x = ms % loopMs(t);
   if (x < t.ab) return e(x / t.ab);
-  if (x < t.ab + t.hold) return 1;
-  if (x < t.ab + t.hold + t.ba) return 1 - e((x - t.ab - t.hold) / t.ba);
+  if (x < t.ab + t.holdB) return 1;
+  if (x < t.ab + t.holdB + t.ba) return 1 - e((x - t.ab - t.holdB) / t.ba);
   return 0;
 }
