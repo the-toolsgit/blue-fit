@@ -5,6 +5,7 @@ import { tonnage } from "../../core/volume";
 import { addDays, localDate, parseLocalDate, weekOrder, weekStart } from "../../core/util";
 import { FlexFigure } from "../components/FlexFigure";
 import { Icon } from "../components/Icon";
+import { FillFlame } from "../components/FillFlame";
 import { fmtDate, fmtVolume } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
@@ -24,7 +25,8 @@ function StreakCard() {
   return (
     <section className="glass edge" style={{ padding: 16, display: "grid", gridTemplateColumns: "auto 1fr", gap: 16, alignItems: "center" }}>
       <div style={{ display: "grid", justifyItems: "center", minWidth: 74 }}>
-        <span style={{ color: hot ? "var(--pink)" : "var(--faint)", filter: hot ? "drop-shadow(0 0 8px var(--pink-glow))" : undefined }} className={hot ? "flicker" : undefined}><Icon name="flame" size={30} /></span>
+        {/* Fills up as this week's planned days get logged */}
+        <span className={st.thisWeek.daysLogged > 0 ? "flicker" : undefined}><FillFlame fill={planned ? st.thisWeek.daysLogged / planned : 0} size={30} /></span>
         <span className="mono" style={{ fontSize: 40, lineHeight: 1, color: hot ? "var(--ink)" : "var(--muted)", textShadow: hot ? "0 0 16px var(--pink-glow)" : undefined }}>{st.current}</span>
         <span className="eyebrow" style={{ fontSize: 9, marginTop: 4 }}>week streak</span>
       </div>
