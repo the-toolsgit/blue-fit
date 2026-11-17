@@ -125,6 +125,8 @@ const targets = [
   { group: "glutes", min: null, max: null, note: "tracked only" },
   { group: "rotatorCuff", min: null, max: null, note: "tracked only" },
   { group: "forearms", min: null, max: null, note: "tracked only" },
+  { group: "abs", min: null, max: null, off: true, note: "tracked only" },
+  { group: "neck", min: null, max: null, off: true, note: "tracked only" },
 ];
 
 const out = (f, d) => writeFileSync(new URL(`../src/core/seed/${f}`, import.meta.url), JSON.stringify(d, null, 2) + "\n");

@@ -3,6 +3,75 @@
  "built": "see git history",
  "exercises": [
   {
+   "id": "3-4-sit-up",
+   "name": "3/4 Sit-Up",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "3_4_Sit-Up",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "ab-crunch-machine",
+   "name": "Ab Crunch Machine",
+   "equipment": "machine",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Ab_Crunch_Machine",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "ab-roller",
+   "name": "Ab Roller",
+   "equipment": "other",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Ab_Roller",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "all-the-way-up-lateral-raise",
    "name": "All-the-way-up Lateral Raise",
    "equipment": "dumbbell",
@@ -51,6 +120,29 @@
     "mechanic": "isolation",
     "primaryMuscles": [
      "biceps"
+    ]
+   }
+  },
+  {
+   "id": "alternate-heel-touchers",
+   "name": "Alternate Heel Touchers",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Alternate_Heel_Touchers",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -159,6 +251,52 @@
     "mechanic": "compound",
     "primaryMuscles": [
      "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "barbell-ab-rollout",
+   "name": "Barbell Ab Rollout",
+   "equipment": "barbell",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Ab_Rollout",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "barbell-ab-rollout-on-knees",
+   "name": "Barbell Ab Rollout - On Knees",
+   "equipment": "barbell",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Ab_Rollout_-_On_Knees",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -449,6 +587,29 @@
    }
   },
   {
+   "id": "barbell-rollout-from-bench",
+   "name": "Barbell Rollout from Bench",
+   "equipment": "barbell",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Rollout_from_Bench",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "barbell-seated-calf-raise",
    "name": "Barbell Seated Calf Raise",
    "equipment": "barbell",
@@ -548,6 +709,29 @@
     "mechanic": "isolation",
     "primaryMuscles": [
      "traps"
+    ]
+   }
+  },
+  {
+   "id": "barbell-side-bend",
+   "name": "Barbell Side Bend",
+   "equipment": "barbell",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Barbell_Side_Bend",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -1001,6 +1185,29 @@
    }
   },
   {
+   "id": "bent-knee-hip-raise",
+   "name": "Bent-Knee Hip Raise",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Bent-Knee_Hip_Raise",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "bodyweight-squat",
    "name": "Bodyweight Squat",
    "equipment": "bodyweight",
@@ -1166,6 +1373,29 @@
     "mechanic": "isolation",
     "primaryMuscles": [
      "chest"
+    ]
+   }
+  },
+  {
+   "id": "cable-crunch",
+   "name": "Cable Crunch",
+   "equipment": "cable",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Crunch",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -1423,6 +1653,29 @@
    ]
   },
   {
+   "id": "cable-reverse-crunch",
+   "name": "Cable Reverse Crunch",
+   "equipment": "cable",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Reverse_Crunch",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "cable-rope-overhead-triceps-extension",
    "name": "Cable Rope Overhead Triceps Extension",
    "equipment": "cable",
@@ -1465,6 +1718,52 @@
     "mechanic": "compound",
     "primaryMuscles": [
      "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "cable-russian-twists",
+   "name": "Cable Russian Twists",
+   "equipment": "cable",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Russian_Twists",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "cable-seated-crunch",
+   "name": "Cable Seated Crunch",
+   "equipment": "cable",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cable_Seated_Crunch",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -1972,6 +2271,29 @@
    }
   },
   {
+   "id": "cross-body-crunch",
+   "name": "Cross-Body Crunch",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Cross-Body_Crunch",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "cross-body-lat-pull-around",
    "name": "Cross-Body Lat Pull-Around",
    "equipment": "cable",
@@ -1987,6 +2309,98 @@
    "heavyWhy": "single-joint",
    "source": {
     "nippard": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+   }
+  },
+  {
+   "id": "crunch-hands-overhead",
+   "name": "Crunch - Hands Overhead",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Crunch_-_Hands_Overhead",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "crunch-legs-on-exercise-ball",
+   "name": "Crunch - Legs On Exercise Ball",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Crunch_-_Legs_On_Exercise_Ball",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "crunches",
+   "name": "Crunches",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Crunches",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "dead-bug",
+   "name": "Dead Bug",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dead_Bug",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
    }
   },
   {
@@ -2017,6 +2431,29 @@
     "mechanic": "compound",
     "primaryMuscles": [
      "chest"
+    ]
+   }
+  },
+  {
+   "id": "decline-crunch",
+   "name": "Decline Crunch",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Decline_Crunch",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -2117,6 +2554,52 @@
     "mechanic": "isolation",
     "primaryMuscles": [
      "triceps"
+    ]
+   }
+  },
+  {
+   "id": "decline-oblique-crunch",
+   "name": "Decline Oblique Crunch",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Decline_Oblique_Crunch",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "decline-reverse-crunch",
+   "name": "Decline Reverse Crunch",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Decline_Reverse_Crunch",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -2913,6 +3396,29 @@
    }
   },
   {
+   "id": "dumbbell-side-bend",
+   "name": "Dumbbell Side Bend",
+   "equipment": "dumbbell",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Dumbbell_Side_Bend",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "dumbbell-skullcrusher",
    "name": "Dumbbell Skullcrusher",
    "equipment": "dumbbell",
@@ -3012,6 +3518,29 @@
     "mechanic": "isolation",
     "primaryMuscles": [
      "triceps"
+    ]
+   }
+  },
+  {
+   "id": "elbow-to-knee",
+   "name": "Elbow to Knee",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Elbow_to_Knee",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -3168,6 +3697,52 @@
     "mechanic": "isolation",
     "primaryMuscles": [
      "chest"
+    ]
+   }
+  },
+  {
+   "id": "flat-bench-leg-pull-in",
+   "name": "Flat Bench Leg Pull-In",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Flat_Bench_Leg_Pull-In",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "flat-bench-lying-leg-raise",
+   "name": "Flat Bench Lying Leg Raise",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Flat_Bench_Lying_Leg_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -3617,6 +4192,52 @@
    }
   },
   {
+   "id": "hanging-leg-raise",
+   "name": "Hanging Leg Raise",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Hanging_Leg_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "hanging-pike",
+   "name": "Hanging Pike",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Hanging_Pike",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "high-cable-curls",
    "name": "High Cable Curls",
    "equipment": "cable",
@@ -4028,6 +4649,52 @@
    }
   },
   {
+   "id": "jackknife-sit-up",
+   "name": "Jackknife Sit-Up",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Jackknife_Sit-Up",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "janda-sit-up",
+   "name": "Janda Sit-Up",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Janda_Sit-Up",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "jm-press",
    "name": "JM Press",
    "equipment": "barbell",
@@ -4096,6 +4763,52 @@
    "planIds": [
     "kelso-shrug"
    ]
+  },
+  {
+   "id": "knee-hip-raise-on-parallel-bars",
+   "name": "Knee/Hip Raise On Parallel Bars",
+   "equipment": "other",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Knee_Hip_Raise_On_Parallel_Bars",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "kneeling-cable-crunch-with-alternating-oblique-twists",
+   "name": "Kneeling Cable Crunch With Alternating Oblique Twists",
+   "equipment": "cable",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Kneeling_Cable_Crunch_With_Alternating_Oblique_Twists",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
   },
   {
    "id": "kneeling-cable-triceps-extension",
@@ -4269,6 +4982,29 @@
    "planIds": [
     "leg-press"
    ]
+  },
+  {
+   "id": "leg-pull-in",
+   "name": "Leg Pull-In",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Leg_Pull-In",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
   },
   {
    "id": "leverage-chest-press",
@@ -4707,6 +5443,52 @@
     "mechanic": "isolation",
     "primaryMuscles": [
      "triceps"
+    ]
+   }
+  },
+  {
+   "id": "lying-face-down-plate-neck-resistance",
+   "name": "Lying Face Down Plate Neck Resistance",
+   "equipment": "other",
+   "movement": "neck",
+   "compound": false,
+   "volume": [
+    {
+     "group": "neck",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_Face_Down_Plate_Neck_Resistance",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "neck"
+    ]
+   }
+  },
+  {
+   "id": "lying-face-up-plate-neck-resistance",
+   "name": "Lying Face Up Plate Neck Resistance",
+   "equipment": "other",
+   "movement": "neck",
+   "compound": false,
+   "volume": [
+    {
+     "group": "neck",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Lying_Face_Up_Plate_Neck_Resistance",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "neck"
     ]
    }
   },
@@ -5178,6 +5960,52 @@
    }
   },
   {
+   "id": "oblique-crunches",
+   "name": "Oblique Crunches",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Oblique_Crunches",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "oblique-crunches-on-the-floor",
+   "name": "Oblique Crunches - On The Floor",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Oblique_Crunches_-_On_The_Floor",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "one-arm-dumbbell-bench-press",
    "name": "One Arm Dumbbell Bench Press",
    "equipment": "dumbbell",
@@ -5427,6 +6255,29 @@
    }
   },
   {
+   "id": "one-arm-high-pulley-cable-side-bends",
+   "name": "One-Arm High-Pulley Cable Side Bends",
+   "equipment": "cable",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "One-Arm_High-Pulley_Cable_Side_Bends",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "one-arm-incline-lateral-raise",
    "name": "One-Arm Incline Lateral Raise",
    "equipment": "dumbbell",
@@ -5587,6 +6438,52 @@
    "planIds": [
     "overhead-trap"
    ]
+  },
+  {
+   "id": "pallof-press",
+   "name": "Pallof Press",
+   "equipment": "cable",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Pallof_Press",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "pallof-press-with-rotation",
+   "name": "Pallof Press With Rotation",
+   "equipment": "cable",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Pallof_Press_With_Rotation",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
   },
   {
    "id": "palms-down-dumbbell-wrist-curl-over-a-bench",
@@ -5764,6 +6661,52 @@
    }
   },
   {
+   "id": "plank",
+   "name": "Plank",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Plank",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "plate-twist",
+   "name": "Plate Twist",
+   "equipment": "other",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Plate_Twist",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "preacher-curl",
    "name": "Preacher Curl",
    "equipment": "barbell",
@@ -5813,6 +6756,29 @@
     "mechanic": "isolation",
     "primaryMuscles": [
      "biceps"
+    ]
+   }
+  },
+  {
+   "id": "press-sit-up",
+   "name": "Press Sit-Up",
+   "equipment": "barbell",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Press_Sit-Up",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -6129,6 +7095,29 @@
    }
   },
   {
+   "id": "reverse-crunch",
+   "name": "Reverse Crunch",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Reverse_Crunch",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "reverse-flyes",
    "name": "Reverse Flyes",
    "equipment": "dumbbell",
@@ -6308,6 +7297,29 @@
    }
   },
   {
+   "id": "rope-crunch",
+   "name": "Rope Crunch",
+   "equipment": "cable",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Rope_Crunch",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "rope-straight-arm-pulldown",
    "name": "Rope Straight-Arm Pulldown",
    "equipment": "cable",
@@ -6327,6 +7339,29 @@
     "mechanic": "isolation",
     "primaryMuscles": [
      "lats"
+    ]
+   }
+  },
+  {
+   "id": "russian-twist",
+   "name": "Russian Twist",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Russian_Twist",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -6358,6 +7393,29 @@
     "mechanic": "compound",
     "primaryMuscles": [
      "shoulders"
+    ]
+   }
+  },
+  {
+   "id": "seated-barbell-twist",
+   "name": "Seated Barbell Twist",
+   "equipment": "barbell",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Barbell_Twist",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -6689,6 +7747,52 @@
    }
   },
   {
+   "id": "seated-flat-bench-leg-pull-in",
+   "name": "Seated Flat Bench Leg Pull-In",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Flat_Bench_Leg_Pull-In",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "seated-head-harness-neck-resistance",
+   "name": "Seated Head Harness Neck Resistance",
+   "equipment": "other",
+   "movement": "neck",
+   "compound": false,
+   "volume": [
+    {
+     "group": "neck",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Head_Harness_Neck_Resistance",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "neck"
+    ]
+   }
+  },
+  {
    "id": "seated-leg-curl",
    "name": "Seated Leg Curl",
    "equipment": "machine",
@@ -6716,6 +7820,29 @@
    "planIds": [
     "seated-leg-curl"
    ]
+  },
+  {
+   "id": "seated-leg-tucks",
+   "name": "Seated Leg Tucks",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Seated_Leg_Tucks",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
   },
   {
    "id": "seated-machine-lateral-raise",
@@ -6928,6 +8055,52 @@
    }
   },
   {
+   "id": "side-bridge",
+   "name": "Side Bridge",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Side_Bridge",
+    "mechanic": null,
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "side-jackknife",
+   "name": "Side Jackknife",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Side_Jackknife",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "side-lateral-raise",
    "name": "Side Lateral Raise",
    "equipment": "dumbbell",
@@ -7087,6 +8260,29 @@
     "mechanic": "isolation",
     "primaryMuscles": [
      "quadriceps"
+    ]
+   }
+  },
+  {
+   "id": "sit-up",
+   "name": "Sit-Up",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Sit-Up",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -7257,6 +8453,29 @@
     "mechanic": "compound",
     "primaryMuscles": [
      "chest"
+    ]
+   }
+  },
+  {
+   "id": "smith-machine-hip-raise",
+   "name": "Smith Machine Hip Raise",
+   "equipment": "smith",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Smith_Machine_Hip_Raise",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -7730,6 +8949,52 @@
     "mechanic": "compound",
     "primaryMuscles": [
      "chest"
+    ]
+   }
+  },
+  {
+   "id": "standing-cable-lift",
+   "name": "Standing Cable Lift",
+   "equipment": "cable",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Cable_Lift",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
+   "id": "standing-cable-wood-chop",
+   "name": "Standing Cable Wood Chop",
+   "equipment": "cable",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Cable_Wood_Chop",
+    "mechanic": "compound",
+    "primaryMuscles": [
+     "abdominals"
     ]
    }
   },
@@ -8235,6 +9500,29 @@
    }
   },
   {
+   "id": "standing-rope-crunch",
+   "name": "Standing Rope Crunch",
+   "equipment": "cable",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Standing_Rope_Crunch",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
+  },
+  {
    "id": "stiff-leg-barbell-good-morning",
    "name": "Stiff Leg Barbell Good Morning",
    "equipment": "barbell",
@@ -8727,6 +10015,29 @@
    "planIds": [
     "v-bar-pushdown"
    ]
+  },
+  {
+   "id": "tuck-crunch",
+   "name": "Tuck Crunch",
+   "equipment": "bodyweight",
+   "movement": "abs",
+   "compound": false,
+   "volume": [
+    {
+     "group": "abs",
+     "weight": 1
+    }
+   ],
+   "isHeavy": false,
+   "heavyWhy": "single-joint",
+   "source": {
+    "db": "free-exercise-db",
+    "id": "Tuck_Crunch",
+    "mechanic": "isolation",
+    "primaryMuscles": [
+     "abdominals"
+    ]
+   }
   },
   {
    "id": "two-arm-dumbbell-preacher-curl",

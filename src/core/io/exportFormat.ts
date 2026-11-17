@@ -5,7 +5,7 @@ import { ACCENTS, type AppData } from "../types";
 export const APP_ID = "blue-fit";
 export const SCHEMA_VERSION = 1;
 
-const group = z.enum(["back", "biceps", "triceps", "sideDelts", "rearDelts", "traps", "frontDelts", "chest", "quads", "hamstrings", "adductors", "calves", "glutes", "rotatorCuff", "forearms"]);
+const group = z.enum(["back", "biceps", "triceps", "sideDelts", "rearDelts", "traps", "frontDelts", "chest", "quads", "hamstrings", "adductors", "calves", "glutes", "rotatorCuff", "forearms", "abs", "neck"]);
 const str = z.string();
 const strs = z.array(z.string());
 

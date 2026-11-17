@@ -6,7 +6,7 @@ automatic plan building. Nothing is guessed: every exercise comes from a source,
 Status: built (Nov 17 2026). Rule agreed; shrugs and calf raises ★ (Leo). Open: the ★ differences on Leo's own plan (step 6) and the second-pass disagreements.
 
 ## Defaults (Leo said "go ahead" without picking)
-- Size: 350 gym exercises after filtering (not the full 876; stretches, cardio, abs/neck and odd variations left out).
+- Size: 350 gym exercises after filtering (not the full 876; stretches, cardio and odd variations left out; abs and neck included since Nov 17 2026).
 - The exercise picker keeps showing the current list; the new library is used when plan building comes.
 
 ## Step 1 — the rule (agreed)

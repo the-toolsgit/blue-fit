@@ -42,6 +42,8 @@ export const REGIONS: MapRegion[] = [
   { group: "quads", view: "front", shape: p([66, 104], [77, 101], [79, 128], [74.5, 151], [67, 149], [64.5, 124]), mirror: true },
   { group: "adductors", view: "front", shape: p([61.5, 110], [65.5, 107], [64, 127], [62.5, 134]), mirror: true },
   { group: "calves", view: "front", shape: e(75, 172, 2.4, 12, 4), mirror: true },
+  { group: "abs", view: "front", shape: p([61.5, 55], [70, 54.5], [71.5, 70], [70.5, 86], [61.5, 92]), mirror: true },
+  { group: "neck", view: "front", shape: p([60.8, 22.6], [63.4, 22.6], [63.6, 27.6], [60.8, 28.6]), mirror: true },
   // back
   { group: "traps", view: "back", shape: p([60, 24], [67, 28.5], [79, 32], [70, 41], [60, 62], [50, 41], [41, 32], [53, 28.5]), mirror: false },
   { group: "rearDelts", view: "back", shape: e(84, 40.5, 4.8, 5.5, 20), mirror: true },
@@ -53,6 +55,7 @@ export const REGIONS: MapRegion[] = [
   { group: "glutes", view: "back", shape: e(68.5, 104, 8.4, 8.6), mirror: true },
   { group: "hamstrings", view: "back", shape: p([63.5, 115], [77, 113], [78, 136], [72.5, 151], [65.5, 149]), mirror: true },
   { group: "calves", view: "back", shape: e(71, 170, 4.8, 13, 3), mirror: true },
+  { group: "neck", view: "back", shape: p([56.6, 21.8], [63.4, 21.8], [63.6, 25.2], [60, 23.6], [56.4, 25.2]), mirror: false },
 ];
 
 /** Region shapes for a view, with mirrored copies expanded. */

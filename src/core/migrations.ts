@@ -109,6 +109,15 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
+    // Nov 17 2026: new muscle groups abs and neck. Their targets start on Skip until the user sets one.
+    id: "2026-11-17-abs-neck",
+    run(d) {
+      const add = (["abs", "neck"] as const).filter((g) => !d.targets.some((t) => t.group === g));
+      if (!add.length) return null;
+      return { ...d, targets: [...d.targets, ...add.map((group) => ({ group, min: null, max: null, off: true, note: "tracked only" }))] };
+    },
+  },
+  {
     // Nov 16 2026: plain-language how-to texts and one-number tempos for the built-in exercises.
     // Skips any exercise whose texts were edited in the app.
     id: "2026-11-16-plain-exercise-text",

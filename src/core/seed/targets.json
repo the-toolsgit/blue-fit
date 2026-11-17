@@ -92,5 +92,19 @@
     "min": null,
     "max": null,
     "note": "tracked only"
+  },
+  {
+    "group": "abs",
+    "min": null,
+    "max": null,
+    "off": true,
+    "note": "tracked only"
+  },
+  {
+    "group": "neck",
+    "min": null,
+    "max": null,
+    "off": true,
+    "note": "tracked only"
   }
 ]

@@ -10,8 +10,8 @@ const URL = `https://raw.githubusercontent.com/yuhonas/free-exercise-db/${COMMIT
 // ---------- 1. Which source exercises are kept ----------
 const KEEP_CATEGORY = new Set(["strength", "powerlifting"]);
 const KEEP_EQUIPMENT = new Set(["barbell", "dumbbell", "cable", "machine", "body only", "e-z curl bar", "other"]);
-// Muscles we don't track as a group yet (no weekly targets): left out for now, listed in the report.
-const NO_GROUP = new Set(["abdominals", "neck"]);
+// Muscles we don't track as a group: left out, listed in the report. (Abs and neck were added Nov 17 2026.)
+const NO_GROUP = new Set([]);
 // Not common gym strength exercises: banded/chained/speed/explosive variants, strongman, odd or unsafe drills.
 const DROP = [
   /band/i, /chain/i, /speed /i, /jump/i, /clean/i, /snatch/i, /jerk/i, /sled/i, /suspended/i, /plate movers/i,
@@ -28,7 +28,7 @@ const DROP = [
   /barbell incline shoulder raise/i, /smith incline shoulder raise/i, /dumbbell incline shoulder raise/i,
   /straight raises on incline/i, /standing front barbell raise over head/i, /straight-arm front delt raise above head/i,
   /see-saw press/i, /bosu/i, /reverse plate curls/i, /chain handle/i, /platform hamstring slides/i,
-  /reverse hyperextension/i, /reverse calf raise/i, /^dumbbell raise$/i, /natural glute ham/i, /barbell side split squat/i, /narrow stance squats/i,
+  /reverse hyperextension/i, /cocoons/i, /otis-up/i, /gorilla chin/i, /spider crawl/i, /judo flip/i, /butt-ups/i, /bottoms up/i, /frog sit-ups/i, /reverse calf raise/i, /^dumbbell raise$/i, /natural glute ham/i, /barbell side split squat/i, /narrow stance squats/i,
   /wide stance barbell squat/i, /barbell full squat/i, /^weighted squat$/i, /elevated back lunge/i, /plie dumbbell/i,
   /kneeling single-arm high pulley/i, /kneeling high pulley row/i, /shotgun row/i, /elevated cable rows/i,
   /bodyweight mid row/i, /sled row/i, /mixed grip chin/i, /wide-grip rear pull-up/i, /bodyweight flyes/i,
@@ -73,6 +73,8 @@ const T = {
   zottman: [["biceps", 1], ["forearms", 0.5]],
   triceps: [["triceps", 1]],
   wrist: [["forearms", 1]],
+  abs: [["abs", 1]],
+  neck: [["neck", 1]],
 };
 // Compound = more than one joint moves under load. Hip thrust / RDL / good morning count as compound, as the source
 // and coaches class them (hip hinge with the trunk); back extensions don't.
@@ -81,6 +83,8 @@ const COMPOUND = new Set(["squat", "lunge", "deadlift", "hinge", "hipThrust", "p
 /** Template for a source exercise, by name first, then by its primary muscle. Order matters. */
 function templateFor(name, primary) {
   const n = name.toLowerCase();
+  if (primary === "abdominals") return "abs";
+  if (primary === "neck") return "neck";
   const rules = [
     [/face pull/, "facePull"],
     [/rear-delt rows|rear delt row/, "rear"],

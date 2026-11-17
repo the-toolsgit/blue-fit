@@ -37,6 +37,10 @@ export const MUSCLES: Record<MuscleGroup, Muscle> = {
   glutes: { functions: 2, recoveryDays: 3, why: "2 jobs: hip extension, abduction; heavy, slow to recover" },
   rotatorCuff: { functions: 1, recoveryDays: 2, why: "1 job: rotate and stabilize the shoulder" },
   forearms: { functions: 2, recoveryDays: 2, why: "2 groups: flexors, extensors; recovers fast" },
+  // Added Nov 17 2026 (*judgment*, coaching sources: abs adapt to a lot of work and recover fast, RP; neck grows with
+  // direct work, Conley 1997, trained 2–3×/week, Stump 1993). Start on Skip until the user sets a target.
+  abs: { functions: 2, recoveryDays: 2, why: "2 jobs: crunch/leg raise (flexion), twist/side bend (obliques); recovers fast" },
+  neck: { functions: 2, recoveryDays: 2, why: "2 jobs: flexion (front), extension (back); grows only with direct work" },
 };
 
 /** Hard sets one session can use, by number of functions (Pelland 2024: ~11 fractional sets/session, no detectable extra growth beyond). */

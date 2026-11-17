@@ -33,3 +33,15 @@ describe("exercise library", () => {
     expect(LIBRARY.find((e) => e.name === "JM Press")!.isHeavy).toBe(false); // over the face
   });
 });
+
+describe("abs and neck", () => {
+  it("migration adds both targets on Skip once", async () => {
+    const { MIGRATIONS } = await import("./migrations");
+    const m = MIGRATIONS.find((x) => x.id === "2026-11-17-abs-neck")!;
+    const seed = buildSeed();
+    const old = { ...seed, targets: seed.targets.filter((t) => t.group !== "abs" && t.group !== "neck") };
+    const out = m.run(old, "2026-11-17")!;
+    expect(out.targets.filter((t) => t.group === "abs" || t.group === "neck").map((t) => [t.group, t.off])).toEqual([["abs", true], ["neck", true]]);
+    expect(m.run(out, "2026-11-17")).toBeNull();
+  });
+});
