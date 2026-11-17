@@ -37,6 +37,8 @@ export function failureBudget(p: ProfileDraft | null | undefined): { sets: numbe
 }
 /** A muscle trained again within this many days doesn't get a failure set (*judgment*, from the recovery research). */
 export const FAILURE_GAP_DAYS = 2;
+/** …or was trained directly this many days before (*judgment*: normal sets 0–2 reps short are mostly recovered by 48 h). */
+export const FAILURE_BEFORE_DAYS = 1;
 
 export interface FailurePick { slotId: string; why: string[]; manual?: boolean }
 
@@ -80,11 +82,11 @@ function nextTrained(r: Routine, exMap: Map<string, Exercise>, g: MuscleGroup, d
   return null;
 }
 
-/** Whether the muscle was worked directly in the 2 days before `date`: what was actually logged for past days
+/** Whether the muscle was worked directly in the day before `date`: what was actually logged for past days
  *  (a skipped workout doesn't count), the plan for days still ahead. */
 function trainedRecently(c: FailureContext, g: MuscleGroup, date: string): boolean {
   const direct = (exId: string) => !!c.exMap.get(exId)?.volume.some((v) => v.group === g && v.weight === 1);
-  for (let i = 1; i <= FAILURE_GAP_DAYS; i++) {
+  for (let i = 1; i <= FAILURE_BEFORE_DAYS; i++) {
     const d = addDays(date, -i);
     const logged = c.finished.filter((s) => s.status === "finished" && s.date === d);
     if (logged.some((s) => s.entries.some((e) => direct(e.exerciseId) && e.sets.some((x) => x.done && countsForVolume(x.type))))) return true;
@@ -98,7 +100,7 @@ function trainedRecently(c: FailureContext, g: MuscleGroup, date: string): boole
  * Which slots of `day` (on `date`) take their last set to failure, with the reasons.
  * Manual on/off (slot.toFailure) wins. The app picks the rest, best first:
  *   only the last exercise for its muscle in the workout · not if that muscle is above its weekly target ·
- *   not if it's trained again within 2 days, or was trained in the 2 days before (logged, or planned if still ahead) · priority muscles first · then muscles below target · then later in the workout.
+ *   not if it's trained again within 2 days, or was trained the day before (logged, or planned if still ahead) · priority muscles first · then muscles below target · then later in the workout.
  */
 export function planFailure(day: RoutineDay, date: string, c: FailureContext): FailurePick[] {
   const p = c.settings.profile;

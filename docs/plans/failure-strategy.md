@@ -49,7 +49,7 @@ Evidence: growth rises as sets end closer to failure (Robinson 2024); true failu
 - [x] 4.8 APP_SPEC.md §5.19 rewritten in the same commit; checked in the preview. Leo's review pending.
 
 ## 5. Final check
-- [x] F1–F6 implemented as written. Notes: "trained again within 2 days" uses the plan; "trained in the 2 days before" uses logged sets for past days (skips don't count), the plan for days ahead (added Nov 16); manual On counts against the budget; Skip muscles rank last; beginners still get manual On.
+- [x] F1–F6 implemented as written. Notes: "trained again within 2 days" uses the plan; "trained the day before" (was 2 days; Leo agreed 1 is enough) uses logged sets for past days (skips don't count), the plan for days ahead (added Nov 16); manual On counts against the budget; Skip muscles rank last; beginners still get manual On.
 - [x] Every number has a source or a *judgment* note.
 - [x] No personal values committed (tests use made-up profiles).
 - [x] Nothing left unticked without a reason.
