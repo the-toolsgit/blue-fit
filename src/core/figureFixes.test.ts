@@ -16,5 +16,8 @@ describe("lateral raise stretch migration", () => {
     expect(ex.setup[1]).toMatch(/Hold the machine/);
     expect(ex.form).toEqual(["My own form note."]);
     expect(ex.rangeOfMotion).toBe("Hand across your body → shoulder height");
+    expect(ex.setup[0]).toBe("Pulley low, one arm, cable in front of your body.");
+    const ran = run("2026-11-17-lateral-raise-cable-front", { ...d, exercises: [{ ...ex, setup: ["Pulley low, one arm, cable behind your body.", "x"] }] })!;
+    expect(ran.exercises[0].setup).toEqual(["Pulley low, one arm, cable in front of your body.", "x"]);
   });
 });

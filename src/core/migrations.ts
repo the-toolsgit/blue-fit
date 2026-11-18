@@ -158,6 +158,15 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
+    // Nov 17 2026: cable lateral raise setup says the cable runs in front of the body (Leo's version).
+    id: "2026-11-17-lateral-raise-cable-front",
+    run(d) {
+      const old = "Pulley low, one arm, cable behind your body.", now = "Pulley low, one arm, cable in front of your body.";
+      if (!d.exercises.some((e) => e.id === "cable-lateral-raise" && !e.isCustom && e.setup[0] === old)) return null;
+      return { ...d, exercises: d.exercises.map((e) => (e.id === "cable-lateral-raise" && !e.isCustom && e.setup[0] === old ? { ...e, setup: [now, ...e.setup.slice(1)] } : e)) };
+    },
+  },
+  {
     // Nov 16 2026: plain-language how-to texts and one-number tempos for the built-in exercises.
     // Skips any exercise whose texts were edited in the app.
     id: "2026-11-16-plain-exercise-text",
