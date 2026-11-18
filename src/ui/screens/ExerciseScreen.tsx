@@ -161,11 +161,11 @@ export function ExerciseScreen({ id, slotId }: { id?: string; slotId?: string })
     <div className="page">
       <div className="spread">
         <button className="icon-btn" onClick={() => back("plan")} aria-label="Back" style={{ marginLeft: -10 }}><Icon name="back" /></button>
+        {ex && <button className="btn btn-ghost" style={{ minHeight: 40 }} onClick={() => setEditing(true)}><Icon name="note" size={18} /> Edit</button>}
       </div>
       {ex?.archived && <p className="badge" style={{ marginBottom: 8 }}>Hidden from the exercise picker</p>}
       <ExerciseEditor open={editing} exercise={ex} onClose={() => setEditing(false)} />
       {ex ? <ExerciseInfo ex={ex} failWhy={failWhy} /> : <div className="empty">Exercise not found.</div>}
-      {ex && <button className="btn btn-quiet" style={{ display: "flex", margin: "18px auto 0", minHeight: 44, fontSize: 14 }} onClick={() => setEditing(true)}><Icon name="note" size={16} /> Edit exercise</button>}
     </div>
   );
 }

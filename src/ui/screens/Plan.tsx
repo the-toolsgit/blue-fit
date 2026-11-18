@@ -1,25 +1,22 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { deloadActive, deloadWeek, endDeload } from "../../core/deload";
 import { localDate } from "../../core/util";
 import { DELOAD_RULE } from "../components/DeloadBanner";
-import { copyName, duplicateRoutine, routineUsed, setCurrent, swapSlotExercise } from "../../core/routineEdit";
+import { copyName, duplicateRoutine, moveSlot, routineUsed, setCurrent } from "../../core/routineEdit";
 import { Confirm, Sheet } from "../components/Sheet";
 import type { Exercise, Routine, RoutineDay, VolumeTarget } from "../../core/types";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { formatTarget, planVolume } from "../../core/volume";
-import { FailFlame, useWeekFailure } from "../components/FailFlame";
-import { Figure } from "../components/Figure";
+import { useWeekFailure } from "../components/FailFlame";
 import { muscleLabel } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { Icon } from "../components/Icon";
-import { fmtDate, fmtRest, repRange } from "../format";
+import { fmtDate } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
-import { SlotSheet } from "../components/SlotSheet";
-import { ExercisePicker } from "../components/ExercisePicker";
-import { ExerciseSheet } from "./ExerciseScreen";
 
 const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const SortableDayList = lazy(() => import("../components/SortableDayList").then((m) => ({ default: m.SortableDayList })));
 
 /**
  * What this workout adds to the week: only the muscles it works, with its sets (indirect = ½) on top of the rest
@@ -63,9 +60,6 @@ export function PlanScreen() {
   const deloading = deloadActive(settings, today);
   const [confirmDeload, setConfirmDeload] = useState(false);
   const [manage, setManage] = useState(false);
-  const [slotOpen, setSlotOpen] = useState<string | null>(null);
-  const [swapFor, setSwapFor] = useState<string | null>(null);
-  const [howTo, setHowTo] = useState<string | null>(null);
   const [del, setDel] = useState<Routine | null>(null);
   const days = (routine?.days ?? []).filter((d) => d.slots.length).sort((a, b) => ((a.weekday ?? 9) + 6) % 7 - ((b.weekday ?? 9) + 6) % 7);
   const [dayId, setDayId] = useState(days.find((d) => d.weekday === new Date().getDay())?.id ?? days[0]?.id);
@@ -96,22 +90,12 @@ export function PlanScreen() {
             <span className="mono muted" style={{ fontSize: 13 }}>{sets} sets · ~{estimateMinutes(sets, day.slots.length)} min</span>
           </div>
           <div className="glass" style={{ padding: 4 }}>
-            {day.slots.filter((s) => exMap.has(s.exerciseId)).map((s, i) => {
-              const ex = exMap.get(s.exerciseId)!;
-              return (
-                <button key={s.id} className="list-row" onClick={() => setSlotOpen(s.id)}>
-                  <span className="mono muted" style={{ width: 16, fontSize: 13 }}>{i + 1}</span>
-                  <Figure spec={ex.figure} size={44} still className="thin" />
-                  <span className="grow">
-                    <span style={{ display: "block", fontWeight: 600 }}>{ex.name} {ex.isHeavy && <span className="star">★</span>}<FailFlame why={weekFail.get(day.id)?.get(s.id)} /></span>
-                    <span className="muted" style={{ fontSize: 12 }}>{s.notes ? `${s.notes} · ` : ""}rest {fmtRest(s.restSec)}</span>
-                  </span>
-                  <span className="mono" style={{ whiteSpace: "nowrap" }}>{s.sets} × {repRange(s.repMin, s.repMax)}</span>
-                  <Icon name="chevron" size={16} />
-                </button>
-              );
-            })}
+            <Suspense fallback={<div style={{ minHeight: day.slots.length * 64 }} />}>
+              <SortableDayList slots={day.slots} exMap={exMap} onOpen={(s) => go(`exercise/${s.exerciseId}/${s.id}`)}
+                onMove={(from, to) => saveRoutine(moveSlot(routine, day.id, from, to))} fail={weekFail.get(day.id)} />
+            </Suspense>
           </div>
+          <p className="muted" style={{ fontSize: 12, margin: "6px 4px 0" }}>Press and hold an exercise to move it.</p>
         </>
       )}
 
@@ -142,11 +126,6 @@ export function PlanScreen() {
           ? <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px", fontSize: 14 }} onClick={() => { saveSettings(endDeload(settings, today)); toast({ kind: "info", title: "Deload ended", body: "Back to your normal plan." }); }}>End</button>
           : <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px", fontSize: 14 }} onClick={() => setConfirmDeload(true)}>Start</button>}
       </section>
-      {routine && <SlotSheet routine={routine} day={day} slotId={slotOpen} exMap={exMap} settings={settings} why={day && slotOpen ? weekFail.get(day.id)?.get(slotOpen) : undefined}
-        onChange={saveRoutine} onClose={() => setSlotOpen(null)} onSwap={setSwapFor} onHowTo={setHowTo} />}
-      <ExercisePicker open={!!swapFor} title="Swap exercise" exclude={day?.slots.find((s) => s.id === swapFor)?.exerciseId}
-        onClose={() => setSwapFor(null)} onPick={(ex) => { if (routine && day && swapFor) saveRoutine(swapSlotExercise(routine, day.id, swapFor, ex)); }} />
-      <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} failWhy={day && slotOpen ? weekFail.get(day.id)?.get(slotOpen) : undefined} />
       <Confirm open={confirmDeload} title="Start a deload week?" confirm="Start deload"
         body={<>{DELOAD_RULE} It lasts until {fmtDate(deloadWeek(today, settings.weekStartDay).end, { weekday: "long" })}, then your normal plan comes back.</>}
         onClose={() => setConfirmDeload(false)} onConfirm={() => saveSettings({ ...settings, deload: deloadWeek(today, settings.weekStartDay), deloadDismissedAt: null })} />
