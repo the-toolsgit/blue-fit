@@ -3,6 +3,7 @@ import type { AppData, Exercise, Routine } from "./types";
 import plainText from "./seed/exercise-text.json";
 import figureFixes from "./seed/figure-fixes.json";
 import textWas from "./seed/text-review-was.json";
+import shortWas from "./seed/text-short-was.json";
 import { TEXT_FIELDS, textFingerprint } from "./textFields";
 import { RULE_TEXT, RULE_TITLE } from "./seed/rule-text";
 
@@ -211,6 +212,24 @@ export const MIGRATIONS: Migration[] = [
         return n;
       });
       return changed ? { ...fixed, exercises } : null;
+    },
+  },
+  {
+    // Nov 17 2026: shorter how-to texts for the phone screen (same information, duplicates removed).
+    // Only fields that still read as before.
+    id: "2026-11-17-short-texts",
+    run(d) {
+      const now = plainText as unknown as Record<string, Record<string, unknown>>;
+      const was = shortWas as unknown as Record<string, Record<string, unknown>>;
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        const old = was[e.id];
+        if (!old || e.isCustom) return e;
+        const n: any = { ...e };
+        for (const [k, v] of Object.entries(old)) if (JSON.stringify(n[k]) === JSON.stringify(v)) { n[k] = now[e.id][k]; changed = true; }
+        return n as Exercise;
+      });
+      return changed ? { ...d, exercises } : null;
     },
   },
   {

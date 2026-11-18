@@ -1,0 +1,468 @@
+{
+  "_about": "Texts before the Nov 17 2026 shortening. The migration swaps in the short text only where a field still reads like this.",
+  "t-bar-reverse-row": {
+    "why": "A heavy row for your lats.",
+    "setup": [
+      "Chest on the pad, feet flat.",
+      "Start with your arms straight."
+    ],
+    "form": [
+      "Pull your shoulders back first, then pull your elbows toward your hips.",
+      "Hold 1 second at the top.",
+      "Lower slowly until your arms are straight and your shoulder blades spread."
+    ],
+    "tips": [
+      "Elbows close to your body work the lats more. Elbows out wide work the upper back more."
+    ],
+    "avoid": [
+      "Lifting your chest off the pad.",
+      "Shrugging up instead of pulling back."
+    ]
+  },
+  "single-arm-cable-lat-pulldown": {
+    "why": "Stretches and works your lats, one arm at a time.",
+    "setup": [
+      "Pulley up high. Kneel or sit facing it.",
+      "Hold one handle with your arm straight up."
+    ],
+    "form": [
+      "Pull your elbow down to your side.",
+      "Let your arm go back up slowly until you feel the stretch."
+    ],
+    "tips": [
+      "Pull with your elbow, not your hand.",
+      "Pause 1 second at the top."
+    ],
+    "avoid": [
+      "Twisting your body.",
+      "Stopping before your arm is fully up."
+    ]
+  },
+  "single-arm-db-row": {
+    "why": "Works the lower part of your lats.",
+    "setup": [
+      "One hand and knee on a bench, back flat.",
+      "Dumbbell hangs straight below your shoulder."
+    ],
+    "form": [
+      "Pull your elbow back toward your hip.",
+      "Lower until your arm is straight and your shoulder blade spreads forward."
+    ],
+    "tips": [
+      "Pull toward your hip, not your chest."
+    ],
+    "avoid": [
+      "Turning your body to lift more.",
+      "Jerking the weight up."
+    ]
+  },
+  "straight-arm-cable-pulldown": {
+    "why": "Works your lats without your biceps helping.",
+    "setup": [
+      "Pulley up high, bar or rope.",
+      "Step back and lean forward a little."
+    ],
+    "form": [
+      "Keep your arms almost straight.",
+      "Pull the bar down in an arc to your thighs and squeeze.",
+      "Let your arms go back up slowly."
+    ],
+    "tips": [
+      "A rope lets your hands go a bit past your hips."
+    ]
+  },
+  "db-incline-curl": {
+    "why": "Your arms hang behind you, which stretches the biceps.",
+    "setup": [
+      "Bench tilted back to 45–60°, lie on it.",
+      "Arms hanging straight down, palms forward."
+    ],
+    "form": [
+      "Curl up without moving your elbows forward.",
+      "Lower all the way until your arms are straight."
+    ],
+    "tips": [
+      "Keep your head and shoulders on the bench."
+    ],
+    "avoid": [
+      "Elbows moving forward.",
+      "Stopping before your arms are straight."
+    ]
+  },
+  "barbell-preacher-curl": {
+    "why": "Works the biceps hardest near the bottom.",
+    "setup": [
+      "Armpits at the top of the pad, upper arms flat on it.",
+      "An EZ bar is fine if a straight bar hurts your wrists."
+    ],
+    "form": [
+      "Curl up and stop just before your forearms point straight up.",
+      "Lower slowly until your arms are almost straight."
+    ],
+    "avoid": [
+      "Dropping fast at the bottom. It's hard on the elbows.",
+      "Lifting your elbows off the pad."
+    ]
+  },
+  "machine-shoulder-press": {
+    "why": "Works the front of your shoulders and your triceps.",
+    "setup": [
+      "Set the seat so the handles start at chin height.",
+      "Back flat on the pad."
+    ],
+    "tips": [
+      "Don't arch your back off the pad."
+    ],
+    "avoid": [
+      "Bouncing at the bottom.",
+      "Only doing the top half."
+    ]
+  },
+  "cable-lateral-raise": {
+    "why": "Works the side of your shoulders the whole way up and down.",
+    "setup": [
+      "Pulley low, one arm, cable in front of your body.",
+      "Hold the machine with your free hand and lean away."
+    ],
+    "form": [
+      "Start with your hand across in front of your body to stretch the shoulder.",
+      "Raise your arm out to the side to shoulder height, elbow leading.",
+      "Lower slowly, all the way back across."
+    ]
+  },
+  "lateral-shrug-hybrid": {
+    "why": "A heavy trap exercise: a small side raise and a shrug in one move.",
+    "setup": [
+      "Heavy dumbbells at your sides.",
+      "Use straps if your grip gives out first."
+    ],
+    "form": [
+      "Lift your arms out a little while shrugging your shoulders up to your ears.",
+      "Hold 1 second, then lower slowly."
+    ],
+    "tips": [
+      "Shoulders to ears is what matters. Arm height doesn't."
+    ]
+  },
+  "barbell-shrug": {
+    "why": "Heavy work for your upper traps.",
+    "setup": [
+      "Bar in front of you, hands just outside your thighs.",
+      "Stand tall."
+    ],
+    "form": [
+      "Shrug straight up and hold 1 second.",
+      "Lower all the way down."
+    ],
+    "tips": [
+      "Use straps so your grip doesn't give out first."
+    ]
+  },
+  "overhead-trap": {
+    "why": "Works your lower traps, which work hardest with your arm overhead.",
+    "form": [
+      "Raise your arm in a big arc until it's over your head.",
+      "Finish in a Y, slightly in front of your head, thumb up.",
+      "Hold 1 second at the top, lower slowly."
+    ],
+    "tips": [
+      "At the top, reach up as high as you can.",
+      "Go light enough to reach the top every rep."
+    ]
+  },
+  "machine-reverse-fly": {
+    "why": "Works the back of your shoulders.",
+    "form": [
+      "Open your arms back wide until they line up with your body.",
+      "Bring them back slowly."
+    ],
+    "tips": [
+      "Don't squeeze your shoulder blades together hard."
+    ]
+  },
+  "smith-squat": {
+    "why": "A heavy squat for your quads.",
+    "setup": [
+      "Bar across your upper back.",
+      "Feet shoulder width, under or a little in front of the bar."
+    ],
+    "form": [
+      "Sit down until your thighs are level with the floor, no deeper.",
+      "Stand up, pushing through the middle of your feet."
+    ],
+    "tips": [
+      "Feet more under the bar works the quads more."
+    ],
+    "avoid": [
+      "Going below level. It works the glutes more.",
+      "Knees caving in.",
+      "Stopping well above level."
+    ]
+  },
+  "leg-extension": {
+    "why": "Works only your quads.",
+    "setup": [
+      "Back of your knees at the edge of the seat, knees lined up with the machine's pivot.",
+      "Pad just above your ankles."
+    ],
+    "form": [
+      "Straighten your legs and squeeze 1 second.",
+      "Lower slowly."
+    ],
+    "tips": [
+      "Leaning back a little gives the quads a bigger stretch."
+    ],
+    "avoid": [
+      "Kicking the weight up and letting it drop.",
+      "Lifting your hips off the seat."
+    ]
+  },
+  "prone-leg-curl": {
+    "why": "Works your hamstrings with the knees fully bent.",
+    "setup": [
+      "Lie face down, knees just past the edge of the pad.",
+      "Pad just above your heels."
+    ],
+    "form": [
+      "Curl your heels up toward your butt.",
+      "Lower slowly until your legs are almost straight."
+    ],
+    "tips": [
+      "Keep your hips pressed into the pad."
+    ],
+    "avoid": [
+      "Hips lifting up.",
+      "Dropping the weight."
+    ]
+  },
+  "hip-adduction": {
+    "why": "Works your inner thighs.",
+    "setup": [
+      "Sit tall, pads on the inside of your knees.",
+      "Start as wide as you can control."
+    ],
+    "form": [
+      "Squeeze your legs together and hold 1 second.",
+      "Open slowly back to the stretch."
+    ]
+  },
+  "standing-calf-raise": {
+    "why": "Works your upper calves (knees straight).",
+    "form": [
+      "Lower your heels as far as you can and pause 1 second.",
+      "Rise up as high as you can."
+    ],
+    "avoid": [
+      "Bouncing at the bottom.",
+      "Bending your knees."
+    ]
+  },
+  "wide-grip-lat-pulldown": {
+    "why": "A heavy pulldown for your back.",
+    "form": [
+      "Pull the bar to your upper chest.",
+      "Let it go back up until your arms are straight."
+    ],
+    "tips": [
+      "Let your shoulders rise at the top to feel the stretch."
+    ]
+  },
+  "cable-seated-row": {
+    "why": "A heavy row for your back.",
+    "form": [
+      "Row to your lower ribs and squeeze 1 second.",
+      "Let your arms go straight and your shoulder blades spread."
+    ],
+    "tips": [
+      "Leaning forward a little at the stretch is fine. Swinging back isn't."
+    ],
+    "avoid": [
+      "Using your lower back to throw the weight.",
+      "Shrugging at the end."
+    ]
+  },
+  "ez-bar-incline-tricep-extension": {
+    "why": "Stretches and works your triceps.",
+    "setup": [
+      "Lie on a bench tilted back to 30–45°.",
+      "Arms straight up, tilted slightly back."
+    ],
+    "form": [
+      "Bend only your elbows and lower the bar behind your head.",
+      "Straighten your arms back up."
+    ],
+    "tips": [
+      "Keep your upper arms still. Only your forearms move."
+    ],
+    "avoid": [
+      "Elbows flaring out.",
+      "Moving your upper arms."
+    ]
+  },
+  "machine-dip": {
+    "why": "A heavy press for your triceps.",
+    "setup": [
+      "Sit up straight."
+    ],
+    "form": [
+      "Push down until your arms are straight.",
+      "Let the handles come back up as far as is comfortable."
+    ],
+    "tips": [
+      "Sitting upright keeps the work on your triceps."
+    ]
+  },
+  "v-bar-pushdown": {
+    "why": "Works your triceps with your arms at your sides.",
+    "setup": [
+      "Pulley up high, V-bar.",
+      "Elbows at your sides, lean forward a little."
+    ],
+    "form": [
+      "Push down until your arms are straight and squeeze.",
+      "Let your forearms come up just past level."
+    ],
+    "tips": [
+      "The squeeze with straight arms is the point."
+    ]
+  },
+  "rope-face-pull": {
+    "why": "Works the back of your shoulders and upper back. Good for shoulder health.",
+    "form": [
+      "Pull toward your forehead and pull the rope apart.",
+      "Finish with your hands beside your ears, elbows high."
+    ],
+    "tips": [
+      "Go light and controlled."
+    ]
+  },
+  "lean-away-lateral-raise": {
+    "why": "Leaning away gives a longer range of motion, so your side delts work from a deeper stretch.",
+    "setup": [
+      "Pulley low. Hold the machine with one hand and lean away, about 15–30°.",
+      "Cable handle in the other hand."
+    ],
+    "form": [
+      "Raise your arm to shoulder height.",
+      "Lower slowly."
+    ]
+  },
+  "all-the-way-up-lateral-raise": {
+    "why": "Side of your shoulders up to shoulder height, then traps above it.",
+    "setup": [
+      "Light dumbbells."
+    ],
+    "form": [
+      "Raise your arms out to the sides, past shoulder height, almost overhead.",
+      "Lower slowly."
+    ],
+    "tips": [
+      "Use lighter weights than a normal side raise."
+    ],
+    "avoid": [
+      "Swinging to get the weight up."
+    ]
+  },
+  "kelso-shrug": {
+    "why": "Works your middle traps.",
+    "setup": [
+      "Chest on the pad of a row machine.",
+      "Arms straight, holding the handles."
+    ],
+    "form": [
+      "Squeeze your shoulder blades together without bending your elbows.",
+      "Hold 1 second, then let them go forward."
+    ],
+    "tips": [
+      "It's a short move. Make the squeeze count."
+    ]
+  },
+  "single-arm-cable-reverse-fly": {
+    "why": "Works the back of your shoulder with a cable.",
+    "setup": [
+      "Pulley at shoulder height.",
+      "Hold the handle with the far hand, across your body."
+    ],
+    "form": [
+      "Swing your arm out and back at shoulder height, elbow slightly bent.",
+      "Bring it back across slowly."
+    ],
+    "tips": [
+      "Keep your shoulder down and your body still."
+    ]
+  },
+  "rope-overhead-tricep-extension": {
+    "why": "Stretches and works your triceps overhead.",
+    "tips": [
+      "Keep your elbows pointing forward and still."
+    ],
+    "avoid": [
+      "Elbows flaring out.",
+      "Cutting the stretch short."
+    ]
+  },
+  "db-hammer-curl": {
+    "why": "A heavy curl with palms facing in. Builds thicker arms.",
+    "setup": [
+      "Palms facing each other, elbows at your sides."
+    ],
+    "form": [
+      "Curl one arm at a time up to your shoulder.",
+      "Lower all the way."
+    ],
+    "tips": [
+      "Add weight once you get 10 clean reps on every set."
+    ]
+  },
+  "leg-press": {
+    "why": "A heavy press for your quads.",
+    "setup": [
+      "Feet low on the platform, shoulder width."
+    ],
+    "form": [
+      "Lower until your knees are bent about 90°.",
+      "Push back up without locking your knees hard."
+    ],
+    "tips": [
+      "Feet lower on the platform works the quads more."
+    ],
+    "avoid": [
+      "Going so deep your lower back rounds.",
+      "Snapping your knees straight."
+    ]
+  },
+  "seated-leg-curl": {
+    "why": "Works your hamstrings with a big stretch.",
+    "setup": [
+      "Lap pad tight, knees lined up with the machine's hinge."
+    ],
+    "form": [
+      "Curl your legs all the way.",
+      "Straighten them slowly."
+    ],
+    "tips": [
+      "Leaning forward gives a bigger stretch."
+    ]
+  },
+  "seated-calf-raise": {
+    "why": "Works your lower calves (knees bent).",
+    "form": [
+      "Lower your heels all the way and pause.",
+      "Rise up as high as you can."
+    ],
+    "tips": [
+      "Pause at the bottom every rep."
+    ]
+  },
+  "cable-one-arm-tricep-kickback": {
+    "why": "Works your triceps with the arm fully straight.",
+    "setup": [
+      "Pulley low, one handle, lean forward.",
+      "Upper arm at your side, level with the floor."
+    ],
+    "form": [
+      "Straighten your arm and squeeze 1 second.",
+      "Bend it back to about 90°."
+    ]
+  }
+}

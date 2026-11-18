@@ -219,7 +219,7 @@ describe("plain exercise texts", () => {
     const raw = (await import("./seed/exercises.json")).default as unknown as typeof seed.exercises;
     const old = { ...seed, exercises: raw.map((e) => (e.id === "leg-press" ? { ...e, why: "My own note" } : structuredClone(e))) };
     const out = m.run(old, "2026-11-16")!;
-    expect(out.exercises.find((e) => e.id === "t-bar-reverse-row")!.why).toBe("A heavy row for your lats.");
+    expect(out.exercises.find((e) => e.id === "t-bar-reverse-row")!.why).toBe("Heavy row for your lats.");
     expect(out.exercises.find((e) => e.id === "leg-press")!.why).toBe("My own note");
     expect(m.run(out, "2026-11-16")).toBeNull();
   });
