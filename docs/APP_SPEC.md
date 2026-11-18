@@ -171,7 +171,7 @@ Width-fitting SVG (320-unit wide coordinate space). Line: neon→cyan gradient s
 If a screen fails, it's replaced (not the tab bar) by: REST figure, "SOMETHING WENT WRONG", "This screen hit an error. Your workouts are stored safely on this phone. Save a backup to be sure, then go back.", **Save a backup** (reads storage directly and downloads the backup file; shows "Backup downloaded." or the reason it failed), Go to Today, Reload the app, and the error message in small mono text. Navigating to another screen clears it.
 
 ### 3.12 Toasts
-Top of screen, auto-dismiss (3.2 s; PR 4.2 s), tap to dismiss. Slides down into place (0.28 s, fade + 16 px) and slides all the way up off the screen when it closes (0.24 s, no fade); no bounce. Kinds: info (bolt icon), PR (pink border and glow, flexing blue figure with 10 sparks), error (red border).
+Top of screen, auto-dismiss (3.2 s; PR 4.2 s), tap or **swipe up** to dismiss (it follows the finger and fades; past 36 px or a quick flick it slides away, otherwise it springs back; pulling down barely moves it). Slides down into place (0.28 s, fade + 16 px) and slides all the way up off the screen when it closes (0.24 s, no fade); no bounce. Kinds: info (bolt icon), PR (pink border and glow, flexing blue figure with 10 sparks), error (red border).
 
 ## 4. Data model
 
