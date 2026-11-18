@@ -1,5 +1,5 @@
-// What one plan day does for the week, per muscle (tiles), and whether it "checks all the boxes" for the user's
-// goal (Plan → Workout check). Pure and framework-free.
+// The whole week of a plan at a glance: per muscle (tiles), and whether the routine "checks all the boxes" for the
+// user's goal (Plan → Week check). Pure and framework-free.
 // Sources: weekly targets and angle lists come from the user's plan (targets.json); recovery days from the volume
 // model (volumeModel.ts). Stretch: training a muscle at long length grows it more (Maeo 2021/2023, Pedrosa 2022).
 // Heavy + light: both build muscle when taken close to failure (Schoenfeld 2017); mixing them is *judgment*, as are
@@ -10,20 +10,20 @@ import { MUSCLES } from "./volumeModel";
 import { estimateMinutes } from "./timeEstimate";
 import { fmtNum } from "./util";
 
-export type AngleState = "today" | "week" | "none";
+export type AngleState = "hit" | "none";
 export interface Tile {
   group: MuscleGroup;
-  /** Sets this workout adds (indirect = ½) */
-  sets: number;
-  /** Planned sets for the whole week */
+  /** Planned sets for the week (indirect = ½) */
   week: number;
+  /** Days that train it directly */
+  days: number;
   target?: VolumeTarget;
   status: "ok" | "below" | "above" | "off";
   angles: { name: string; state: AngleState }[];
 }
 export type CheckId = "volume" | "angles" | "stretch" | "mix" | "recovery" | "length" | "heavy" | "rest" | "reps";
 export interface Check { id: CheckId; label: string; pass: boolean; detail: string }
-export interface DayInsight { sets: number; minutes: number; muscles: number; tiles: Tile[]; checks: Check[] }
+export interface WeekInsight { days: number; sets: number; minutes: number; longest: number; muscles: number; tiles: Tile[]; checks: Check[] }
 
 /** Longest workout that still passes "Length" (*judgment*). */
 export const MAX_MINUTES = 75;
@@ -40,30 +40,31 @@ export const angleList = (t: VolumeTarget | undefined): string[] =>
 const direct = (ex: Exercise | undefined, g: MuscleGroup) => !!ex?.volume.some((v) => v.group === g && v.weight === 1);
 const mid = (s: Slot) => (s.repMin + s.repMax) / 2;
 
-export function dayInsight(routine: Routine, day: RoutineDay, exMap: Map<string, Exercise>, targets: VolumeTarget[], goal: Goal = "growth"): DayInsight {
-  const slots = day.slots.filter((s) => exMap.has(s.exerciseId));
+export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targets: VolumeTarget[], goal: Goal = "growth"): WeekInsight {
+  const days = routine.days.map((d) => ({ ...d, slots: d.slots.filter((s) => exMap.has(s.exerciseId)) })).filter((d) => d.slots.length);
+  const slots = days.flatMap((d) => d.slots);
+  const dayMin = (d: RoutineDay) => estimateMinutes(d.slots.reduce((a, s) => a + s.sets, 0), d.slots.length);
+  const mins = days.map(dayMin);
   const sets = slots.reduce((a, s) => a + s.sets, 0);
-  const minutes = estimateMinutes(sets, slots.length);
   const tmap = new Map(targets.map((t) => [t.group, t]));
   const week = new Map(planVolume(routine, exMap).map((v) => [v.group, v.sets]));
-  const anglesIn = (d: RoutineDay, g: MuscleGroup) => new Set(d.slots.map((s) => exMap.get(s.exerciseId)?.angles?.[g]).filter((x): x is string => !!x));
+  const anglesOf = (g: MuscleGroup) => new Set(slots.map((s) => exMap.get(s.exerciseId)?.angles?.[g]).filter((x): x is string => !!x));
+  const daysFor = (g: MuscleGroup) => days.filter((d) => d.slots.some((s) => direct(exMap.get(s.exerciseId), g)));
 
-  const tiles: Tile[] = planVolume({ ...routine, days: [day] }, exMap).filter((v) => v.sets > 0).sort((a, b) => b.sets - a.sets).map((v) => {
-    const t = tmap.get(v.group), total = week.get(v.group) ?? v.sets;
-    const today = anglesIn(day, v.group);
-    const all = new Set(routine.days.flatMap((d) => [...anglesIn(d, v.group)]));
+  const tiles: Tile[] = [...week].filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]).map(([g, n]) => {
+    const t = tmap.get(g), hit = anglesOf(g);
     return {
-      group: v.group, sets: v.sets, week: total, target: t,
-      status: !isFocus(t) ? "off" : total < t.min ? "below" : t.max != null && total > t.max ? "above" : "ok",
-      angles: angleList(t).map((name) => ({ name, state: today.has(name) ? "today" : all.has(name) ? "week" : "none" })),
+      group: g, week: n, days: daysFor(g).length, target: t,
+      status: !isFocus(t) ? "off" : n < t.min ? "below" : t.max != null && n > t.max ? "above" : "ok",
+      angles: angleList(t).map((name) => ({ name, state: hit.has(name) ? "hit" : "none" })),
     };
   });
 
-  // Muscles this workout trains directly and that are a focus (skipped muscles never fail a check)
+  // Focus muscles the week trains directly (skipped muscles never fail a check)
   const main = [...new Set(slots.flatMap((s) => exMap.get(s.exerciseId)!.volume.filter((v) => v.weight === 1).map((v) => v.group)))]
     .filter((g) => isFocus(tmap.get(g)));
   const label = (g: MuscleGroup) => muscleLabel(g);
-  const list = (xs: string[]) => xs.slice(0, 2).join(" · ") + (xs.length > 2 ? ` · +${xs.length - 2} more` : "");
+  const list = (xs: string[]) => xs.slice(0, 3).join(" · ") + (xs.length > 3 ? ` · +${xs.length - 3} more` : "");
   const check = (id: CheckId, l: string, bad: string[], ok: string): Check => ({ id, label: l, pass: bad.length === 0, detail: bad.length ? list(bad) : ok });
 
   const volume = (minOnly: boolean) => check("volume", "Weekly volume", main.flatMap((g) => {
@@ -74,18 +75,15 @@ export function dayInsight(routine: Routine, day: RoutineDay, exMap: Map<string,
   }), "Every muscle in its weekly range");
 
   const angles = check("angles", "All angles", main.flatMap((g) => {
-    const names = angleList(tmap.get(g));
-    if (names.length < 2) return [];
-    const hit = new Set(routine.days.flatMap((d) => [...anglesIn(d, g)]));
-    const miss = names.filter((n) => !hit.has(n));
+    const names = angleList(tmap.get(g)), hit = anglesOf(g);
+    const miss = names.length < 2 ? [] : names.filter((n) => !hit.has(n));
     return miss.length ? [`${label(g)}: no ${miss.join(", ")}`] : [];
-  }), "Every angle hit this week");
+  }), "Every angle of every muscle");
 
   const stretch = check("stretch", "Stretch", main.flatMap((g) => {
-    const names = angleList(tmap.get(g)).filter((n) => STRETCH.test(n));
-    if (!names.length) return [];
-    return [...anglesIn(day, g)].some((n) => STRETCH.test(n)) ? [] : [`${label(g)}: no stretch today`];
-  }), "Each muscle loaded at a long length");
+    if (!angleList(tmap.get(g)).some((n) => STRETCH.test(n))) return [];
+    return [...anglesOf(g)].some((n) => STRETCH.test(n)) ? [] : [`${label(g)}: no stretch exercise`];
+  }), "Every muscle loaded at a long length");
 
   const mix = check("mix", "Heavy and light", main.flatMap((g) => {
     const own = slots.filter((s) => direct(exMap.get(s.exerciseId), g));
@@ -94,28 +92,30 @@ export function dayInsight(routine: Routine, day: RoutineDay, exMap: Map<string,
     return heavy && light ? [] : [`${label(g)}: all ${heavy ? `≤${HEAVY_REPS}` : `${LIGHT_REPS}+`} reps`];
   }), `Heavy (≤${HEAVY_REPS}) and light (${LIGHT_REPS}+) sets per muscle`);
 
-  const recovery = check("recovery", "Recovery", day.weekday == null ? [] : main.flatMap((g) => {
+  const recovery = check("recovery", "Recovery", main.flatMap((g) => {
     const need = Math.floor(MUSCLES[g]?.recoveryDays ?? 2);
-    const gaps = routine.days.filter((d) => d.id !== day.id && d.weekday != null && d.slots.some((s) => direct(exMap.get(s.exerciseId), g)))
-      .map((d) => { const k = (d.weekday! - day.weekday! + 7) % 7; return Math.min(k, 7 - k); });
-    const gap = gaps.length ? Math.min(...gaps) : Infinity;
-    return gap < need ? [`${label(g)} again ${gap === 0 ? "the same day" : `after ${gap} day${gap === 1 ? "" : "s"}`} (needs ${need})`] : [];
-  }), "Every muscle rested before its next workout");
+    const wd = [...new Set(daysFor(g).map((d) => d.weekday).filter((w): w is number => w != null))].sort((a, b) => a - b);
+    if (wd.length < 2) return [];
+    const gap = Math.min(...wd.map((w, i) => ((wd[(i + 1) % wd.length] - w + 7) % 7) || 7));
+    return gap < need ? [`${label(g)} ${gap} day${gap === 1 ? "" : "s"} apart (needs ${need})`] : [];
+  }), "Every muscle rested between workouts");
 
-  const length = check("length", "Length", minutes > MAX_MINUTES ? [`~${minutes} min (aim for ${MAX_MINUTES} or less)`] : [], `~${minutes} min`);
+  const longest = mins.length ? Math.max(...mins) : 0;
+  const length = check("length", "Length", days.filter((d) => dayMin(d) > MAX_MINUTES).map((d) => `${d.title} ~${dayMin(d)} min`),
+    `Every workout ~${MAX_MINUTES} min or less`);
 
   const stars = slots.filter((s) => exMap.get(s.exerciseId)?.isHeavy);
   const checks: Check[] =
     goal === "maintenance" ? [volume(true), recovery]
     : goal === "strength" ? [volume(false), angles,
-        check("heavy", "Heavy lift", stars.some((s) => s.repMin <= 6) ? [] : ["No ★ lift at 6 reps or less"], "A ★ lift at 6 reps or less"),
+        check("heavy", "Heavy lifts", stars.some((s) => s.repMin <= 6) ? [] : ["No ★ lift at 6 reps or less"], "★ lifts at 6 reps or less"),
         check("rest", "Long rests", stars.filter((s) => s.restSec < 180).map((s) => `${exMap.get(s.exerciseId)!.name}: rest under 3 min`), "3+ min rest on ★ lifts"),
         recovery, length]
     : goal === "endurance" ? [volume(false), angles,
-        check("reps", "High reps", slots.filter((s) => mid(s) >= 15).length * 2 >= slots.length ? [] : ["Most sets under 15 reps"], "Most sets 15+ reps"),
-        check("rest", "Short rests", slots.filter((s) => s.restSec > 90).map((s) => `${exMap.get(s.exerciseId)!.name}: rest over 90 s`), "Rests 90 s or less"),
+        check("reps", "High reps", slots.filter((s) => mid(s) >= 15).length * 2 >= slots.length ? [] : ["Most exercises under 15 reps"], "Most exercises 15+ reps"),
+        check("rest", "Short rests", [...new Set(slots.filter((s) => s.restSec > 90).map((s) => `${exMap.get(s.exerciseId)!.name}: rest over 90 s`))], "Rests 90 s or less"),
         recovery, length]
     : [volume(false), angles, stretch, mix, recovery, length];
 
-  return { sets, minutes, muscles: main.length, tiles, checks };
+  return { days: days.length, sets, minutes: mins.length ? Math.round(mins.reduce((a, b) => a + b, 0) / mins.length / 5) * 5 : 0, longest, muscles: main.length, tiles, checks };
 }

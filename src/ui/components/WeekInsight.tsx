@@ -1,26 +1,26 @@
-// A plan day at a glance (Plan tab, view and edit mode): quick facts, a tile per muscle with the week's total and the
-// angles it hits, and the Workout check (does it tick every box for the user's goal).
-import type { Exercise, Routine, RoutineDay, VolumeTarget } from "../../core/types";
+// The whole week of a plan at a glance (Plan tab, view and edit mode): quick facts, a tile per muscle with the week's
+// total and the angles it hits, and the Week check (does the routine tick every box for the user's goal).
+import type { Exercise, Routine, VolumeTarget } from "../../core/types";
 import { muscleLabel } from "../../core/types";
 import { formatTarget } from "../../core/volume";
 import { fmtNum } from "../../core/util";
-import { dayInsight } from "../../core/workoutCheck";
+import { weekInsight } from "../../core/workoutCheck";
 import { useStore } from "../store";
 import { FlexFigure } from "./FlexFigure";
 import { Icon } from "./Icon";
 import { Ring } from "./RestTimer";
 
-export function WorkoutInsight({ routine, day, exMap, targets, failures }: {
-  routine: Routine; day: RoutineDay; exMap: Map<string, Exercise>; targets: VolumeTarget[]; failures: number;
+export function WeekInsight({ routine, exMap, targets, failures }: {
+  routine: Routine; exMap: Map<string, Exercise>; targets: VolumeTarget[]; failures: number;
 }) {
   const { settings } = useStore();
-  const i = dayInsight(routine, day, exMap, targets, settings.profile?.goal);
+  const i = weekInsight(routine, exMap, targets, settings.profile?.goal);
   if (!i.tiles.length) return null;
   const passed = i.checks.filter((c) => c.pass).length, all = passed === i.checks.length;
   return (
     <>
       <div className="insight-facts">
-        {[[i.sets, "sets"], [`~${i.minutes}`, "min"], [failures, "to failure"], [i.muscles, i.muscles === 1 ? "muscle" : "muscles"]].map(([v, l]) => (
+        {[[i.days, "workouts"], [i.sets, "sets"], [`~${i.minutes}`, "min each"], [failures, "to failure"]].map(([v, l]) => (
           <div key={l} className="insight-fact"><b className="mono">{v}</b><span>{l}</span></div>
         ))}
       </div>
@@ -32,9 +32,9 @@ export function WorkoutInsight({ routine, day, exMap, targets, failures }: {
               <span className="insight-name">{muscleLabel(t.group)}</span>
               {t.status === "ok" && <span className="insight-ok"><Icon name="check" size={14} stroke={3} /></span>}
             </div>
-            <div className="mono insight-sets">+{fmtNum(t.sets)}</div>
+            <div className="mono insight-sets">{fmtNum(t.week)}<span className="insight-unit"> sets</span></div>
             <div className="muted mono" style={{ fontSize: 11 }}>
-              {t.status === "off" ? `${fmtNum(t.week)} a week · skipped` : `week ${fmtNum(t.week)} · ${formatTarget(t.target)}`}
+              {t.status === "off" ? "skipped" : `target ${formatTarget(t.target)}`}{t.days ? ` · ${t.days}×/wk` : ""}
               {t.status === "below" && <span style={{ color: "var(--warn)" }}> · below</span>}
               {t.status === "above" && <span style={{ color: "var(--warn)" }}> · above</span>}
             </div>
@@ -46,16 +46,16 @@ export function WorkoutInsight({ routine, day, exMap, targets, failures }: {
           </div>
         ))}
       </div>
-      <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>+ sets this workout adds (indirect = ½). Angles: bright = today, dim outline = another day this week, faded = not in the plan.</p>
+      <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Sets a week (indirect = ½) · days that train it directly. Angles: bright = in the plan, faded = missing.</p>
 
-      <h2 className="section-title">Workout check</h2>
+      <h2 className="section-title">Week check</h2>
       <div className={"glass insight-check" + (all ? " complete" : "")}>
         {all ? (
           <div className="insight-reward">
             <FlexFigure size={96} />
             <div>
-              <div className="insight-reward-title">Complete workout</div>
-              <div className="muted" style={{ fontSize: 13 }}>Every box ticked for your goal.</div>
+              <div className="insight-reward-title">Complete week</div>
+              <div className="muted" style={{ fontSize: 13 }}>Your routine ticks every box for your goal.</div>
             </div>
           </div>
         ) : (
@@ -64,7 +64,7 @@ export function WorkoutInsight({ routine, day, exMap, targets, failures }: {
               <Ring frac={passed / i.checks.length} size={56} stroke={4} />
               <span className="mono" style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", fontSize: 15 }}>{passed}/{i.checks.length}</span>
             </div>
-            <div className="muted" style={{ fontSize: 13 }}>Tick every box for a complete workout.</div>
+            <div className="muted" style={{ fontSize: 13 }}>Tick every box for a complete week.</div>
           </div>
         )}
         {i.checks.map((c) => (

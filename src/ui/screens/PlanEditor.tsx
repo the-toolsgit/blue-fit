@@ -25,7 +25,7 @@ import { VolumeTable } from "../components/VolumeTable";
 import { fmtRest, repRange } from "../format";
 import { replace } from "../router";
 import { useStore } from "../store";
-import { WorkoutInsight } from "../components/WorkoutInsight";
+import { WeekInsight } from "../components/WeekInsight";
 import { ExerciseSheet } from "./ExerciseScreen";
 
 const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -169,10 +169,12 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
             <p className="muted" style={{ fontSize: 12 }}>Tap an exercise to change it. Drag ⋮⋮ to move it.</p>
             <button className="btn btn-quiet" style={{ color: "var(--bad)", fontSize: 13, minHeight: 36, padding: 0, whiteSpace: "nowrap" }} onClick={() => setConfirm("deleteDay")} disabled={!day.slots.length}><Icon name="trash" size={16} /> Delete day</button>
           </div>
-          <h2 className="section-title">This workout</h2>
-          <WorkoutInsight routine={draft} day={day} exMap={exMap} targets={tdraft} failures={weekFail.get(day.id)?.size ?? 0} />
+          
         </>
       )}
+
+<h2 className="section-title">Your week</h2>
+      <WeekInsight routine={draft} exMap={exMap} targets={tdraft} failures={[...weekFail.values()].reduce((a, m) => a + m.size, 0)} />
 
       <h2 className="section-title">Weekly targets</h2>
       <p className="muted" style={{ fontSize: 12, margin: "-2px 4px 8px" }}>Tap a muscle to change its weekly target, make it a priority or skip it.</p>

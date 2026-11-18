@@ -12,7 +12,7 @@ import { fmtDate } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
 import { ExerciseSheet } from "./ExerciseScreen";
-import { WorkoutInsight } from "../components/WorkoutInsight";
+import { WeekInsight } from "../components/WeekInsight";
 const PlanEditorScreen = lazy(() => import("./PlanEditor").then((m) => ({ default: m.PlanEditorScreen })));
 
 const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -68,10 +68,8 @@ export function PlanScreen() {
         </>
       )}
 
-      {day && <>
-        <h2 className="section-title">This workout</h2>
-        <WorkoutInsight routine={routine} day={day} exMap={exMap} targets={targets} failures={weekFail.get(day.id)?.size ?? 0} />
-      </>}
+      <h2 className="section-title">Your week</h2>
+      <WeekInsight routine={routine} exMap={exMap} targets={targets} failures={[...weekFail.values()].reduce((a, m) => a + m.size, 0)} />
 
       {routine.rules?.length ? (
         <div className="chips-scroll" style={{ marginTop: 22, gap: 10 }}>

@@ -382,8 +382,6 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .insight-sets { font-size: 26px; line-height: 1.15; color: var(--neon-ink); text-shadow: 0 0 14px var(--glow); }
 .insight-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
 .insight-chip { font-size: 11px; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); opacity: .55; white-space: nowrap; }
-.insight-chip.week { opacity: 1; border-color: var(--line-strong); }
-.insight-chip.today { opacity: 1; color: var(--neon-ink); border-color: var(--neon); box-shadow: 0 0 8px -2px var(--glow); }
 .insight-check { padding: 14px; }
 .insight-check.complete { border-color: var(--good); box-shadow: 0 0 0 1px var(--good), 0 0 30px -10px var(--good); }
 .insight-row { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-top: 1px solid var(--line); }
@@ -391,3 +389,5 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .insight-row.pass .insight-mark { color: var(--on-neon); background: var(--good); border-color: var(--good); box-shadow: 0 0 10px -2px var(--good); }
 .insight-reward { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
 .insight-reward-title { font: 700 24px/1.05 var(--display); letter-spacing: .02em; text-transform: uppercase; color: var(--good); text-shadow: 0 0 16px color-mix(in srgb, var(--good) 60%, transparent); }
+.insight-chip.hit { opacity: 1; color: var(--neon-ink); border-color: var(--neon); box-shadow: 0 0 8px -2px var(--glow); }
+.insight-unit { font-size: 12px; color: var(--muted); text-shadow: none; }
