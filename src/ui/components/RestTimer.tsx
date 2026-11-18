@@ -137,8 +137,8 @@ export function WorkoutRestPill({ left, frac, open, onToggle }: { left: number; 
   );
 }
 
-/** The full rest timer, shown right under the workout header: ring with icon, time, −15 / +15 (tap the pill again to close it). */
-export function WorkoutRestPanel({ left, frac, adjust }: { left: number; frac: number; adjust: (d: number) => void }) {
+/** The full rest timer, shown right under the workout header: ring with icon, time, −15 / +15 / Skip (tap the pill again to close it). */
+export function WorkoutRestPanel({ left, frac, adjust, skip }: { left: number; frac: number; adjust: (d: number) => void; skip: () => void }) {
   return (
     <div className="row" style={{ marginTop: 10, gap: 8 }}>
       <div style={{ position: "relative", width: 46, height: 46, flex: "none" }}>
@@ -151,6 +151,7 @@ export function WorkoutRestPanel({ left, frac, adjust }: { left: number; frac: n
       </div>
       <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52 }} onClick={() => adjust(-15)} aria-label="15 seconds less">−15</button>
       <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52 }} onClick={() => adjust(15)} aria-label="15 seconds more">+15</button>
+      <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52, fontSize: 14 }} onClick={skip} aria-label="End rest now">Skip</button>
     </div>
   );
 }

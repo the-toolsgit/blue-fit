@@ -170,7 +170,7 @@ export function WorkoutScreen() {
           <div style={{ height: "100%", width: `${total ? (done / total) * 100 : 0}%`, borderRadius: 6, background: "linear-gradient(90deg,var(--neon),var(--neon-2))", boxShadow: "0 0 12px var(--glow)", transition: "width .5s var(--ease)" }} />
         </div>
         <div className="muted mono" style={{ fontSize: 12, marginTop: 4, textAlign: "right" }}>{done}/{total} sets</div>
-        {rest.running && restOpen && <WorkoutRestPanel left={rest.left} frac={rest.frac} adjust={rest.adjust} />}
+        {rest.running && restOpen && <WorkoutRestPanel left={rest.left} frac={rest.frac} adjust={rest.adjust} skip={rest.skip} />}
       </header>
 
       {s.entries.length === 0 && (
