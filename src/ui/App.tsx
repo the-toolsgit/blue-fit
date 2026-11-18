@@ -157,11 +157,13 @@ export function App() {
       <nav className="tabbar glass" aria-label="Main" onClick={() => { delete document.documentElement.dataset.compact; }}>
         {TABS.map((t) => (
           <button key={t.id} className="tab" aria-current={tab === t.id ? "page" : undefined}
-            // Act when the finger lifts: right after a scroll iOS spends the first tap stopping the page and sends no click
-            onPointerDown={(e) => { tapStart.current = { x: e.clientX, y: e.clientY, id: t.id }; }}
-            onPointerUp={(e) => {
+            // Act on touch end: a tap that stops a scrolling page gets no click (and its pointer events are cancelled) on iOS,
+            // but touch events still arrive.
+            onTouchStart={(e) => { tapStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, id: t.id }; }}
+            onTouchEnd={(e) => {
               const p = tapStart.current; tapStart.current = null;
-              if (e.pointerType === "mouse" || !p || p.id !== t.id || Math.hypot(e.clientX - p.x, e.clientY - p.y) > 12) return;
+              const c = e.changedTouches[0];
+              if (!p || p.id !== t.id || Math.hypot(c.clientX - p.x, c.clientY - p.y) > 12) return;
               delete document.documentElement.dataset.compact; tapHandled.current = performance.now(); go(t.id);
             }}
             onClick={() => { if (performance.now() - tapHandled.current < 600) return; go(t.id); }}>
