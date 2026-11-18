@@ -103,7 +103,6 @@ export function RestTimerDock() {
             <button className="btn btn-ghost" style={{ minWidth: 280, minHeight: 52, marginTop: 6 }} onClick={() => { setBig(false); if (name !== "workout") go("workout"); }}>
               <Icon name={name === "workout" ? "back" : "play"} size={18} /> {name === "workout" ? "Back to workout" : "Go to workout"}
             </button>
-            <p className="muted" style={{ fontSize: 12, margin: 0 }}>The timer keeps running.</p>
           </div>
         </div>
       )}
