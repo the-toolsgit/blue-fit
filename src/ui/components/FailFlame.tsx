@@ -1,6 +1,6 @@
 // "Last set to failure" flame, and the hook that works out this week's flames.
 import { useMemo } from "react";
-import { weekFailure } from "../../core/failure";
+import { weekExtraSets, weekFailure } from "../../core/failure";
 import type { Routine, VolumeTarget } from "../../core/types";
 import { localDate } from "../../core/util";
 import { useStore } from "../store";
@@ -19,4 +19,18 @@ export function useWeekFailure(routine: Routine | undefined, targetsDraft?: Volu
 export function FailFlame({ why, size = 14 }: { why: string[] | undefined; size?: number }) {
   if (!why) return null;
   return <span className="fail-icon" title="Last set to failure" aria-label="Last set to failure"><Icon name="flame" size={size} /></span>;
+}
+
+/** This week's extra sets (work skipped earlier this week made up): dayId → slotId → reasons. */
+export function useWeekExtraSets(routine: Routine | undefined) {
+  const { exMap, targets, settings, finished } = useStore();
+  const today = localDate(new Date());
+  return useMemo(() => (routine ? weekExtraSets({ routine, exMap, targets, settings, finished, today }) : new Map<string, Map<string, string[]>>()),
+    [routine, exMap, targets, settings, finished, today]);
+}
+
+/** "+1" next to the sets of an exercise that gets an extra set this week. */
+export function ExtraTag({ why }: { why: string[] | undefined }) {
+  if (!why) return null;
+  return <span className="extra-tag" title={why.join(" · ")} aria-label={`One extra set: ${why.join(", ")}`}>+1</span>;
 }

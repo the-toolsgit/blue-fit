@@ -4,7 +4,8 @@
 // short and costs more fatigue (Refalo 2023); failure needs roughly 24–48 h more recovery (Morán-Navarro 2017).
 // Numbers marked *judgment* are our own reasoning. Plan: docs/plans/failure-strategy.md.
 import { muscleLabel, type Exercise, type Goal, type MuscleGroup, type ProfileDraft, type Routine, type RoutineDay, type Session, type Settings, type Slot, type VolumeTarget } from "./types";
-import { countsForVolume, isFocus } from "./volume";
+import { countsForVolume, isFocus, planVolume } from "./volume";
+import { HARD_SETS, MAX_SESSION_SETS } from "./workoutCheck";
 import { priorityOf } from "./volumeModel";
 import { addDays, parseLocalDate, weekStart } from "./util";
 import { deloadActive } from "./deload";
@@ -133,7 +134,12 @@ export function planFailure(day: RoutineDay, date: string, c: FailureContext): F
   const budget = failureBudget(p);
   const left = budget.sets - manual.length;
   if (left <= 0) return manual;
+  // Extra sets come first: a muscle they bring back to its target doesn't also need failure
   const week = projectedWeek(c);
+  for (const x of planExtraSets(day, date, c)) {
+    const slot = day.slots.find((sl) => sl.id === x.slotId);
+    for (const v of c.exMap.get(slot?.exerciseId ?? "")?.volume ?? []) week.set(v.group, (week.get(v.group) ?? 0) + v.weight);
+  }
   const tmap = new Map(c.targets.map((t) => [t.group, t]));
   type Cand = { slot: Slot; index: number; prio: number; below: number; why: string[] };
   const cands: Cand[] = [];
@@ -184,6 +190,81 @@ export function weekFailure(c: FailureContext): Map<string, Map<string, string[]
     const m = new Map<string, string[]>();
     if (done) { for (const e of done.entries) if (e.toFailure && e.slotId) m.set(e.slotId, e.failWhy ?? []); }
     else for (const x of planFailure(day, date, c)) m.set(x.slotId, x.why);
+    out.set(day.id, m);
+  }
+  return out;
+}
+
+// ── Extra set: make up work skipped earlier this week ────────────────────────────────────────────────────────────
+// When a muscle is behind this week because sets or a whole day were skipped, the next workout that trains it adds
+// one set to its last exercise for that muscle. More weekly sets grow muscle fairly reliably (Pelland 2024), so this
+// comes before failure. Limits: at most EXTRA_SET_MAX sets on the exercise, +1 only; the muscle stays at
+// MAX_SESSION_SETS or fewer that workout; not if it's trained hard (HARD_SETS+) the next day; never above the weekly
+// target's max; focus muscles only; never on a deload. Picking the last exercise for the muscle is *judgment*.
+
+/** Most sets an exercise can have after the extra set (Leo, Nov 18 2026). */
+export const EXTRA_SET_MAX = 4;
+export interface ExtraPick { slotId: string; why: string[] }
+const SHORT_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const directIn = (day: RoutineDay | undefined, g: MuscleGroup, exMap: Map<string, Exercise>) =>
+  (day?.slots ?? []).filter((s) => exMap.get(s.exerciseId)?.volume.some((v) => v.group === g && v.weight === 1));
+
+/** Slots of `day` (on `date`) that get one extra set, with the reasons. */
+export function planExtraSets(day: RoutineDay, date: string, c: FailureContext): ExtraPick[] {
+  if (deloadActive(c.settings, date) || date < c.today) return [];
+  const ws = weekStart(c.today, c.settings.weekStartDay), we = addDays(ws, 6);
+  if (date > we) return [];
+  const doneThisWeek = (dayId: string) => c.finished.some((s) => s.status === "finished" && s.date >= ws && s.date <= we && s.dayId === dayId);
+  if (doneThisWeek(day.id)) return [];
+  const full = new Map(planVolume(c.routine, c.exMap).map((r) => [r.group, r.sets]));
+  const week = projectedWeek(c);
+  const tmap = new Map(c.targets.map((t) => [t.group, t]));
+  const picks = new Map<string, string[]>();
+  for (const [g, planned] of full) {
+    const t = tmap.get(g);
+    if (!isFocus(t)) continue;
+    const now = week.get(g) ?? 0;
+    if (planned - now < 1) continue; // nothing skipped
+    if (t.max != null && now + 1 > t.max) continue;
+    const mine = directIn(day, g, c.exMap);
+    if (!mine.length) continue;
+    // Only the first workout still ahead this week that trains it (later ones see the result)
+    let first: string | null = null;
+    for (let d = c.today; d <= we; d = addDays(d, 1)) {
+      const dd = dayOn(c.routine, d);
+      if (dd && !doneThisWeek(dd.id) && directIn(dd, g, c.exMap).length) { first = d; break; }
+    }
+    if (first !== date) continue;
+    const direct = mine.reduce((a, s) => a + s.sets, 0);
+    if (direct + 1 > MAX_SESSION_SETS) continue;
+    const next = directIn(dayOn(c.routine, addDays(date, 1)), g, c.exMap).reduce((a, s) => a + s.sets, 0);
+    if (next >= HARD_SETS) continue;
+    const slot = [...mine].reverse().find((s) => s.sets < EXTRA_SET_MAX);
+    if (!slot) continue;
+    // Which planned days this week were skipped for it
+    const missed: string[] = [];
+    for (let d = ws; d < c.today; d = addDays(d, 1)) {
+      const dd = dayOn(c.routine, d);
+      if (dd && directIn(dd, g, c.exMap).length && !doneThisWeek(dd.id)) missed.push(SHORT_DAY[parseLocalDate(d).getDay()]);
+    }
+    const why = `${muscleLabel(g)} behind this week (${missed.length ? `skipped ${missed.join(", ")}` : "skipped sets"})`;
+    picks.set(slot.id, [...(picks.get(slot.id) ?? []), why]);
+  }
+  return day.slots.filter((s) => picks.has(s.id)).map((s) => ({ slotId: s.id, why: picks.get(s.id)! }));
+}
+
+/** Extra sets for every day of the routine this week: dayId → slotId → reasons. Finished days show what was stored. */
+export function weekExtraSets(c: FailureContext): Map<string, Map<string, string[]>> {
+  const out = new Map<string, Map<string, string[]>>();
+  const ws = weekStart(c.today, c.settings.weekStartDay), we = addDays(ws, 6);
+  for (const day of c.routine.days) {
+    const date = dateInWeek(day, c.today, c.settings.weekStartDay);
+    if (!date) continue;
+    const done = c.finished.find((s) => s.status === "finished" && s.dayId === day.id && s.date >= ws && s.date <= we);
+    const m = new Map<string, string[]>();
+    if (done) { for (const e of done.entries) if (e.extraSet && e.slotId) m.set(e.slotId, e.extraSet); }
+    else for (const x of planExtraSets(day, date, c)) m.set(x.slotId, x.why);
     out.set(day.id, m);
   }
   return out;

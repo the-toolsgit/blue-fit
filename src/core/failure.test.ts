@@ -173,3 +173,38 @@ describe("tempo holds migration", () => {
     expect(m.run(out, "2026-11-16")).toBeNull();
   });
 });
+
+describe("extra set for skipped work", async () => {
+  const { planExtraSets, weekExtraSets, EXTRA_SET_MAX } = await import("./failure");
+  const { weekStart, addDays } = await import("./util");
+  const ws = weekStart("2026-11-18", seed.settings.weekStartDay);
+  it("nothing skipped at the start of the week; nothing on a deload", () => {
+    const all = [...weekExtraSets(ctx({ today: ws })).values()].flatMap((m) => [...m.keys()]);
+    expect(all).toEqual([]);
+    const late = ctx({ today: addDays(ws, 5) });
+    late.settings = { ...late.settings, deload: { start: ws, end: addDays(ws, 6) } };
+    expect([...weekExtraSets(late).values()].flatMap((m) => [...m.keys()])).toEqual([]);
+  });
+  it("after skipped days, +1 set on a later workout: one per muscle, max 4 sets, never on a past day", () => {
+    const c = ctx({ today: addDays(ws, 4) });
+    const picks = [...weekExtraSets(c)].flatMap(([dayId, m]) => [...m].map(([slotId, why]) => ({ d: day(dayId), slot: day(dayId).slots.find((s) => s.id === slotId)!, why })));
+    expect(picks.length).toBeGreaterThan(0);
+    for (const p of picks) {
+      expect(p.slot.sets).toBeLessThan(EXTRA_SET_MAX);
+      expect(p.why.join(" ")).toMatch(/behind this week \(skipped/);
+    }
+    // A day already in the past this week gets nothing
+    const past = routine.days.find((d) => d.weekday === new Date(`${addDays(ws, 1)}T12:00:00`).getDay());
+    if (past) expect(planExtraSets(past, addDays(ws, 1), c)).toEqual([]);
+  });
+  it("the workout starts with the extra set stored on the entry", () => {
+    const d = routine.days.find((x) => x.slots.some((s) => s.sets < EXTRA_SET_MAX))!;
+    const slot = d.slots.find((s) => s.sets < EXTRA_SET_MAX)!;
+    const s = createSessionFromDay(routine, d, exMap, [], new Date("2026-11-18T10:00:00"), { extra: [{ slotId: slot.id, why: ["Biceps behind this week (skipped Tue)"] }] });
+    const e = s.entries.find((x) => x.slotId === slot.id)!;
+    expect(e.sets).toHaveLength(slot.sets + 1);
+    expect(e.extraSet).toEqual(["Biceps behind this week (skipped Tue)"]);
+    const dl = createSessionFromDay(routine, d, exMap, [], new Date("2026-11-18T10:00:00"), { deload: true, extra: [{ slotId: slot.id, why: ["x"] }] });
+    expect(dl.entries.find((x) => x.slotId === slot.id)!.extraSet).toBeUndefined();
+  });
+});

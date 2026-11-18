@@ -41,7 +41,7 @@ export const sessionSchema = z.object({
   skipped: z.array(z.object({ exerciseId: str.min(1), sets: z.number().int().min(1) })).optional(),
   entries: z.array(z.object({
     id: str.min(1), exerciseId: str.min(1), swappedFromId: str.optional(), slotId: str.optional(), supersetGroup: str.optional(),
-    restSec: z.number().int().min(0).max(1800), repMin: z.number().int().optional(), repMax: z.number().int().optional(), notes: str.optional(), toFailure: z.boolean().optional(), failWhy: strs.optional(),
+    restSec: z.number().int().min(0).max(1800), repMin: z.number().int().optional(), repMax: z.number().int().optional(), notes: str.optional(), toFailure: z.boolean().optional(), failWhy: strs.optional(), extraSet: strs.optional(),
     sets: z.array(setSchema),
   })),
 });

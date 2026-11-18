@@ -45,13 +45,17 @@ export function buildEntry(ex: Exercise, history: Session[], opts: { sets?: numb
   };
 }
 
-/** `failure`: the day's "last set to failure" picks (core/failure.ts planFailure), stored on the entries so they stay fixed. */
-export function createSessionFromDay(routine: Routine, day: RoutineDay, exercises: Map<string, Exercise>, history: Session[], now: Date, opts: { deload?: boolean; failure?: { slotId: string; why: string[] }[] } = {}): Session {
+/** `failure`: the day's "last set to failure" picks (core/failure.ts planFailure); `extra`: slots that get one more set
+ *  (planExtraSets). Both are stored on the entries so they stay fixed. */
+export function createSessionFromDay(routine: Routine, day: RoutineDay, exercises: Map<string, Exercise>, history: Session[], now: Date, opts: { deload?: boolean; failure?: { slotId: string; why: string[] }[]; extra?: { slotId: string; why: string[] }[] } = {}): Session {
   const fail = new Map((opts.failure ?? []).map((x) => [x.slotId, x.why]));
+  const extra = new Map((opts.deload ? [] : opts.extra ?? []).map((x) => [x.slotId, x.why]));
   const entries = day.slots.flatMap((slot) => {
     const ex = exercises.get(slot.exerciseId);
     if (!ex) return [];
-    const e = buildEntry(ex, history, { slot, deload: opts.deload });
+    const more = extra.get(slot.id);
+    const e0 = buildEntry(ex, history, { slot: more ? { ...slot, sets: slot.sets + 1 } : slot, deload: opts.deload });
+    const e = more ? { ...e0, extraSet: more } : e0;
     const why = fail.get(slot.id);
     return [why ? { ...e, toFailure: true, failWhy: why } : e];
   });

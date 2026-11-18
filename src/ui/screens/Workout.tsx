@@ -409,6 +409,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
             {e.sets.filter((x) => x.type !== "warmup").length} × {repRange(e.repMin, e.repMax) || "—"} · rest {fmtRest(e.restSec)}
             {swappedFrom && <> · <span style={{ color: "var(--neon-2)" }}>swapped from {swappedFrom}</span></>}
           </div>
+          {e.extraSet && <div className="extra-why"><span className="extra-tag">+1 set</span> {e.extraSet.join(" · ")}</div>}
           </span>
           <Figure spec={ex.figure} size={focused ? 74 : 54} still={!focused} timing={tempoTiming(ex.tempo, ex.id)} />
         </button>

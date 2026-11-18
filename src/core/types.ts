@@ -154,6 +154,8 @@ export interface SessionEntry {
   /** Last set to failure, fixed when the workout started (with the reasons shown when the flame is tapped) */
   toFailure?: boolean;
   failWhy?: string[];
+  /** One set added to make up work skipped earlier this week (the reasons), fixed when the workout started */
+  extraSet?: string[];
   sets: LoggedSet[];
 }
 

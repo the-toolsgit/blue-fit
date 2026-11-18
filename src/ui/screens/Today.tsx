@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { moveSlot } from "../../core/routineEdit";
 import { REST, SPLASH_FLEX } from "../../core/figure/poses";
 import { createSessionFromDay } from "../../core/session";
-import { FailFlame, useWeekFailure } from "../components/FailFlame";
+import { ExtraTag, FailFlame, useWeekExtraSets, useWeekFailure } from "../components/FailFlame";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { localDate, weekOrder, weekStart } from "../../core/util";
 import { reducedMotion } from "../device";
@@ -38,8 +38,10 @@ export function TodayScreen() {
   const today = localDate(now);
   const deloading = deloadActive(settings, today);
   const fail = useWeekFailure(routine).get(day?.id ?? "");
-  const slotSets = (n: number) => (deloading ? deloadSets(n) : n);
-  const sets = slots.reduce((a, s) => a + slotSets(s.sets), 0);
+  // Extra sets making up work skipped earlier this week (none on a deload)
+  const extra = useWeekExtraSets(routine).get(day?.id ?? "");
+  const slotSets = (n: number, id?: string) => (deloading ? deloadSets(n) : n + (id && extra?.has(id) ? 1 : 0));
+  const sets = slots.reduce((a, s) => a + slotSets(s.sets, s.id), 0);
   const suggestion = useMemo(() => (active || !settings.deloadSuggestions ? null : deloadSuggestion(finished, routine, exMap, settings, today)), [active, finished, routine, exMap, settings, today]);
 
   // Days of this week (starting on the chosen week-start day) that have a finished workout
@@ -71,7 +73,7 @@ export function TodayScreen() {
   const start = () => {
     if (active) return go("workout"); // one workout at a time
     if (!routine || !day) return;
-    const s = createSessionFromDay(routine, day, exMap, finished, new Date(), { deload: deloading, failure: [...(fail ?? [])].map(([slotId, why]) => ({ slotId, why })) });
+    const s = createSessionFromDay(routine, day, exMap, finished, new Date(), { deload: deloading, failure: [...(fail ?? [])].map(([slotId, why]) => ({ slotId, why })), extra: [...(extra ?? [])].map(([slotId, why]) => ({ slotId, why })) });
     saveSession(s);
     go("workout");
   };
@@ -157,7 +159,7 @@ export function TodayScreen() {
                     <span style={{ display: "block", fontWeight: 600 }}>{ex.name} {ex.isHeavy && <span className="star">★</span>}<FailFlame why={fail?.get(s.id)} /></span>
                     <span className="muted" style={{ fontSize: 13 }}>{s.notes ?? ex.muscles.join(", ")}</span>
                   </span>
-                  <span className="mono" style={{ fontSize: 15, whiteSpace: "nowrap", color: deloading ? "var(--neon-2)" : undefined }}>{slotSets(s.sets)} × {repRange(s.repMin, s.repMax)}</span>
+                  <span className="mono" style={{ fontSize: 15, whiteSpace: "nowrap", color: deloading ? "var(--neon-2)" : undefined }}>{!deloading && <ExtraTag why={extra?.get(s.id)} />}{slotSets(s.sets, s.id)} × {repRange(s.repMin, s.repMax)}</span>
                 </>} />
             </Suspense>
           </div>

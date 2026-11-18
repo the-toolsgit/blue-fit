@@ -438,3 +438,7 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .note-ic.up { color: var(--neon-ink); }
 .note-ic.good { color: var(--good); }
 .note-ic.info { color: var(--muted); }
+
+/* Extra set (making up work skipped earlier this week): a small neon "+1" tag, the reason under the name in a workout */
+.extra-tag { display: inline-flex; align-items: center; margin-right: 6px; padding: 1px 6px; border-radius: 99px; font: 700 11px var(--mono); color: var(--neon-ink); border: 1px solid color-mix(in srgb, var(--neon) 50%, transparent); background: color-mix(in srgb, var(--neon) 10%, transparent); vertical-align: 1px; }
+.extra-why { font-size: 12px; margin-top: 4px; color: var(--muted); }
