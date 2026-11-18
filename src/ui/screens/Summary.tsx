@@ -62,7 +62,8 @@ export function SummaryScreen({ id }: { id?: string }) {
           <div className="grow">
             <div className="eyebrow" style={{ fontSize: 10 }}>You lifted</div>
             <div style={{ font: "800 24px/1.05 var(--display)", textTransform: "uppercase", color: "var(--neon-ink)" }}>{animal.label}</div>
-            <div className="muted" style={{ fontSize: 12, marginTop: 4 }}>{fmtVolume(sum.tonnage)} lb · {animal.count === 1 ? "about" : "each about"} {animal.animal.lb.toLocaleString("en-US")} lb</div>
+            <div style={{ fontSize: 13, marginTop: 4, fontStyle: "italic" }}>{animal.animal.quip}</div>
+            <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{fmtVolume(sum.tonnage)} lb · {animal.count === 1 ? "about" : "each about"} {animal.animal.lb.toLocaleString("en-US")} lb</div>
           </div>
         </section>
       )}

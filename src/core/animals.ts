@@ -3,18 +3,19 @@
 // Pure and framework-free; the drawings live in the UI (ui/components/Animal.tsx).
 
 export type AnimalId = "cat" | "dog" | "panda" | "lion" | "cow" | "hippo" | "elephant" | "humpback" | "blueWhale";
-export interface Animal { id: AnimalId; name: string; plural: string; lb: number }
+/** quip: a dry one-liner for adults, shown under the count */
+export interface Animal { id: AnimalId; name: string; plural: string; lb: number; quip: string }
 
 export const ANIMALS: Animal[] = [
-  { id: "cat", name: "cat", plural: "cats", lb: 10 },
-  { id: "dog", name: "Labrador", plural: "Labradors", lb: 70 },
-  { id: "panda", name: "panda", plural: "pandas", lb: 230 },
-  { id: "lion", name: "lion", plural: "lions", lb: 420 },
-  { id: "cow", name: "cow", plural: "cows", lb: 1500 },
-  { id: "hippo", name: "hippo", plural: "hippos", lb: 3300 },
-  { id: "elephant", name: "elephant", plural: "elephants", lb: 13000 },
-  { id: "humpback", name: "humpback whale", plural: "humpback whales", lb: 66000 },
-  { id: "blueWhale", name: "blue whale", plural: "blue whales", lb: 300000 },
+  { id: "cat", name: "cat", plural: "cats", lb: 10, quip: "Unimpressed. Cats always are." },
+  { id: "dog", name: "Labrador", plural: "Labradors", lb: 70, quip: "Very good boy. Very heavy boy." },
+  { id: "panda", name: "panda", plural: "pandas", lb: 230, quip: "It ate all day. You lifted." },
+  { id: "lion", name: "lion", plural: "lions", lb: 420, quip: "Even the king takes rest days." },
+  { id: "cow", name: "cow", plural: "cows", lb: 1500, quip: "Holy cow. Literally." },
+  { id: "hippo", name: "hippo", plural: "hippos", lb: 3300, quip: "Never skips leg day." },
+  { id: "elephant", name: "elephant", plural: "elephants", lb: 13000, quip: "It will remember this workout." },
+  { id: "humpback", name: "humpback whale", plural: "humpback whales", lb: 66000, quip: "Your back will remember it too." },
+  { id: "blueWhale", name: "blue whale", plural: "blue whales", lb: 300000, quip: "Largest animal ever. Sit down." },
 ];
 
 export interface AnimalMatch { animal: Animal; count: number; label: string }

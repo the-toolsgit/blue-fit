@@ -16,7 +16,12 @@ const hi = { className: "an-hi" };
 const mp = { className: "an-m an-patch" };
 const dp = { className: "an-d an-patch" };
 
-const eye = (x: number, y: number, r = 2.6) => (<><circle cx={x} cy={y} r={r} {...dot} /><circle cx={x + r * 0.35} cy={y - r * 0.35} r={r * 0.35} className="an-shine" /></>);
+// Deadpan, half-closed eyes: unimpressed, the joke for adults (no blush, no sparkle)
+const eye = (f: string, x: number, y: number, r = 2.6) => (<>
+  <circle cx={x} cy={y} r={r} {...dot} />
+  <path d={`M${x - r - 0.8} ${y + 0.2} A${r + 0.8} ${r + 0.8} 0 0 1 ${x + r + 0.8} ${y + 0.2} Z`} fill={f} stroke="none" />
+  <path {...d} d={`M${x - r - 1} ${y + 0.2} L${x + r + 1} ${y + 0.2}`} />
+</>);
 
 const ART: Record<AnimalId, Art> = {
   cat: (f) => (<>
@@ -27,10 +32,9 @@ const ART: Record<AnimalId, Art> = {
     <path {...d} d="M62 30 L61 20 L70 27" /><path {...d} d="M98 30 L99 20 L90 27" />
     <ellipse {...m(f)} cx="80" cy="46" rx="25" ry="21" />
     <path {...hi} d="M62 40 Q65 31 74 28" />
-    {eye(71, 45)}{eye(89, 45)}
+    {eye(f, 71, 45)}{eye(f, 89, 45)}
     <path {...dot} d="M77.5 51 L82.5 51 L80 54 Z" />
-    <path {...d} d="M75 56 Q77.5 59 80 56 Q82.5 59 85 56" />
-    <ellipse className="an-blush" cx="66" cy="53" rx="4.5" ry="2.6" /><ellipse className="an-blush" cx="94" cy="53" rx="4.5" ry="2.6" />
+    <path {...d} d="M76.5 57 L83.5 57" />
     <path {...d} d="M58 50 L49 48 M58 54 L49 55 M102 50 L111 48 M102 54 L111 55" opacity=".7" />
     <ellipse {...m(f)} cx="72" cy="104" rx="9" ry="5" /><ellipse {...m(f)} cx="92" cy="104" rx="9" ry="5" />
   </>),
@@ -46,8 +50,7 @@ const ART: Record<AnimalId, Art> = {
     <ellipse {...m(f)} cx="121" cy="59" rx="12" ry="8.5" />
     <ellipse {...dot} cx="131" cy="56" rx="3.8" ry="2.8" />
     <path {...d} d="M120 66 Q125 69 130 64" />
-    {eye(111, 48)}
-    <ellipse className="an-blush" cx="114" cy="58" rx="3.5" ry="2.2" />
+    {eye(f, 111, 48)}
     <path {...m(f)} d="M97 40 C87 42 86 64 95 67 C102 63 103 48 97 40 Z" />
     <path {...d} d="M92 66 Q98 74 108 71" />
     <circle {...dot} cx="100" cy="72" r="2.2" />
@@ -64,10 +67,9 @@ const ART: Record<AnimalId, Art> = {
     <path {...hi} d="M60 36 Q64 27 73 24" />
     <ellipse {...dp} cx="70.5" cy="44" rx="6" ry="8.5" transform="rotate(-28 70.5 44)" />
     <ellipse {...dp} cx="89.5" cy="44" rx="6" ry="8.5" transform="rotate(28 89.5 44)" />
-    {eye(71, 44, 2.4)}{eye(89, 44, 2.4)}
+    {eye(f, 71, 44, 2.4)}{eye(f, 89, 44, 2.4)}
     <ellipse {...dot} cx="80" cy="53" rx="3.6" ry="2.6" />
-    <path {...d} d="M76 57 Q78 60 80 57 Q82 60 84 57" />
-    <ellipse className="an-blush" cx="64" cy="53" rx="4" ry="2.4" /><ellipse className="an-blush" cx="96" cy="53" rx="4" ry="2.4" />
+    <path {...d} d="M77 58 L83 58" />
   </>),
 
   lion: (f) => (<>
@@ -79,10 +81,9 @@ const ART: Record<AnimalId, Art> = {
     <circle {...m(f)} cx="66" cy="33" r="5.5" /><circle {...m(f)} cx="94" cy="33" r="5.5" />
     <circle {...m(f)} cx="80" cy="49" r="18" />
     <path {...hi} d="M66 42 Q69 35 76 33" />
-    {eye(73, 46, 2.4)}{eye(87, 46, 2.4)}
+    {eye(f, 73, 46, 2.4)}{eye(f, 87, 46, 2.4)}
     <ellipse {...d} cx="76" cy="57" rx="5" ry="3.8" /><ellipse {...d} cx="84" cy="57" rx="5" ry="3.8" />
     <path {...dot} d="M77 51.5 L83 51.5 L80 55 Z" />
-    <ellipse className="an-blush" cx="68" cy="54" rx="3.6" ry="2.2" /><ellipse className="an-blush" cx="92" cy="54" rx="3.6" ry="2.2" />
     <ellipse {...m(f)} cx="74" cy="104" rx="9" ry="5" /><ellipse {...m(f)} cx="94" cy="104" rx="9" ry="5" />
   </>),
 
@@ -101,8 +102,7 @@ const ART: Record<AnimalId, Art> = {
     <ellipse {...m(f)} cx="116" cy="56" rx="15" ry="13" />
     <ellipse {...m(f)} cx="122" cy="65" rx="12" ry="8.5" />
     <ellipse {...dot} cx="118" cy="65" rx="1.6" ry="2.2" /><ellipse {...dot} cx="126" cy="65" rx="1.6" ry="2.2" />
-    {eye(118, 52, 2.4)}
-    <ellipse className="an-blush" cx="110" cy="58" rx="3.4" ry="2" />
+    {eye(f, 118, 52, 2.4)}
   </>),
 
   hippo: (f) => (<>
@@ -116,10 +116,9 @@ const ART: Record<AnimalId, Art> = {
     <circle {...m(f)} cx="117" cy="52" r="5.5" />
     <ellipse {...m(f)} cx="116" cy="66" rx="18" ry="16" />
     <ellipse {...m(f)} cx="129" cy="72" rx="13" ry="12" />
-    {eye(118, 52, 2.2)}
+    {eye(f, 118, 52, 2.2)}
     <ellipse {...dot} cx="131" cy="66" rx="1.8" ry="1.4" /><ellipse {...dot} cx="137" cy="68" rx="1.8" ry="1.4" />
     <path {...d} d="M120 78 Q128 84 138 78" />
-    <ellipse className="an-blush" cx="112" cy="68" rx="4" ry="2.4" />
   </>),
 
   elephant: (f) => (<>
@@ -135,8 +134,7 @@ const ART: Record<AnimalId, Art> = {
     <path {...dot} d="M124 64 Q130 70 134 68 Q128 66 126 61 Z" />
     <ellipse {...m(f)} cx="100" cy="52" rx="14" ry="18" />
     <ellipse {...d} cx="100" cy="53" rx="8" ry="11.5" opacity=".7" />
-    {eye(120, 45, 2.4)}
-    <ellipse className="an-blush" cx="121" cy="54" rx="3.6" ry="2.2" />
+    {eye(f, 120, 45, 2.4)}
   </>),
 
   humpback: (f) => (<>
@@ -146,9 +144,8 @@ const ART: Record<AnimalId, Art> = {
     <path {...d} d="M104 80 Q124 82 144 75 M102 85 Q120 87 138 80" opacity=".7" />
     <circle {...dot} cx="70" cy="58" r="1.6" /><circle {...dot} cx="82" cy="54" r="1.4" /><circle {...dot} cx="60" cy="64" r="1.3" />
     <path {...m(f)} d="M84 86 C80 98 66 106 56 106 C64 100 72 92 74 86 Z" />
-    {eye(128, 68, 2.4)}
+    {eye(f, 128, 68, 2.4)}
     <path {...d} d="M134 77 Q140 78 144 74" />
-    <ellipse className="an-blush" cx="124" cy="75" rx="4" ry="2.2" />
     <path {...d} d="M112 46 C110 38 106 34 102 32 M114 46 C114 38 116 32 120 30 M113 46 L113 34" />
   </>),
 
@@ -160,9 +157,8 @@ const ART: Record<AnimalId, Art> = {
     {[[70, 66], [84, 62], [98, 68], [60, 72], [110, 62], [88, 74]].map(([x, y]) => <circle key={`${x}${y}`} {...dot} cx={x} cy={y} r="1.4" opacity=".7" />)}
     <path {...d} d="M112 78 Q132 80 152 75 M110 82 Q128 84 146 79" opacity=".6" />
     <path {...m(f)} d="M96 84 C94 92 86 98 78 99 C84 94 88 88 88 84 Z" />
-    {eye(136, 70, 2.2)}
+    {eye(f, 136, 70, 2.2)}
     <path {...d} d="M142 77 Q148 78 152 75" />
-    <ellipse className="an-blush" cx="132" cy="76" rx="3.6" ry="2" />
     <path {...d} d="M126 54 C124 46 120 42 116 40 M128 54 C128 46 130 40 134 38" />
   </>),
 };
