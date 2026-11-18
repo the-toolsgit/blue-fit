@@ -98,17 +98,19 @@ ul { margin: 0; padding-left: 18px; }
   height: var(--tabbar-h); display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px; border-radius: 22px;
   background: color-mix(in srgb, var(--surface-solid) 92%, transparent); box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--line);
   transition: height 0.32s var(--ease), padding 0.32s var(--ease); }
-/* Compact tab bar while scrolling down (icons only); full again on scroll up, at the bottom, or on a new screen */
+/* Compact tab bar once scrolled down (icons only); full again at the top, on a tap, or on a new screen */
 .tab span { max-height: 14px; overflow: hidden; transition: opacity 0.2s, max-height 0.32s var(--ease); }
-:root[data-compact] { --tabbar-h: 46px; }
-:root[data-compact] .tabbar { padding: 4px 6px; }
+:root[data-compact] { --tabbar-h: 36px; }
+:root[data-compact] .tabbar { padding: 2px 6px; border-radius: 18px; }
+/* The thin bar keeps 44 px tap targets: each tab's touch area reaches above and below it */
+:root[data-compact] .tab::before { content: ""; position: absolute; inset: -6px 0; }
 :root[data-compact] .tab { gap: 0; }
 :root[data-compact] .tab span { opacity: 0; max-height: 0; }
 .tab svg { width: 24px; height: 24px; }
 :root[data-compact] .tab { align-content: center; }
-:root[data-compact] .tab svg { width: 20px; height: 20px; }
+:root[data-compact] .tab svg { width: 17px; height: 17px; }
 :root[data-compact] .tab[aria-current="page"] svg { transform: none; }
-:root[data-compact] .tab[aria-current="page"]::after { top: auto; bottom: 2px; width: 14px; height: 2.5px; }
+:root[data-compact] .tab[aria-current="page"]::after { top: auto; bottom: 1px; width: 12px; height: 2px; }
 .tab { position: relative; display: grid; place-items: center; gap: 2px; border-radius: 16px; color: var(--muted); font: 600 10.5px var(--body); letter-spacing: 0.04em; transition: color 0.25s; }
 .tab svg { transition: transform 0.3s var(--ease), filter 0.3s, width 0.32s var(--ease), height 0.32s var(--ease); }
 .tab[aria-current="page"] { color: var(--neon-ink); }

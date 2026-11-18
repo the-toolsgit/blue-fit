@@ -73,17 +73,14 @@ export function App() {
     if (needRefresh) toast({ kind: "info", title: "Update ready", body: "Open Settings → Update app, or it applies next launch." });
   }, [needRefresh, toast]);
 
-  // Compact tab bar: icons only while scrolling down; full again when scrolling up, near the top/bottom, or on a new screen
+  // Compact tab bar: icons only once you scroll down; it stays compact until you're back at the top of the page,
+  // tap the bar, or open another screen.
   useEffect(() => {
     const root = document.documentElement;
-    let last = window.scrollY;
     const onScroll = () => {
-      const y = window.scrollY, d = y - last;
-      const atEdge = y < 60 || window.innerHeight + y >= root.scrollHeight - 40;
-      if (atEdge) { delete root.dataset.compact; last = y; return; }
-      if (Math.abs(d) < 10) return;
-      if (d > 0) root.dataset.compact = ""; else delete root.dataset.compact;
-      last = y;
+      const y = window.scrollY;
+      if (y < 60) delete root.dataset.compact;
+      else if (y > 80) root.dataset.compact = "";
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -111,7 +108,7 @@ export function App() {
       <main key={route.join("/")}><ErrorBoundary resetKey={route.join("/")}><Suspense fallback={<Loading />}>{screen}</Suspense></ErrorBoundary></main>
       {ready && <RestTimerDock />}
       <div className="bottom-fade" aria-hidden="true" />
-      <nav className="tabbar glass" aria-label="Main">
+      <nav className="tabbar glass" aria-label="Main" onClick={() => { delete document.documentElement.dataset.compact; }}>
         {TABS.map((t) => (
           <button key={t.id} className="tab" aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id)}>
             <Icon name={t.icon} size={24} />
