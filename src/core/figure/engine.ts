@@ -161,3 +161,22 @@ export function phase(ms: number, t: Timing = DEFAULT_TIMING): number {
   if (x < t.ab + t.holdB + t.ba) return 1 - eAB((x - t.ab - t.holdB) / t.ba);
   return 0;
 }
+
+/** Left edge and width (viewBox units) of everything a figure draws over its whole movement, plus a margin;
+ *  the floor line is left out. Used to line figures up at an edge without changing their size. */
+export function figureXSpan(f: FigureSpec, margin = 4): [number, number] {
+  let lo = Infinity, hi = -Infinity;
+  const x = (v: number | string) => { const n = Number(v); if (Number.isFinite(n)) { lo = Math.min(lo, n); hi = Math.max(hi, n); } };
+  for (const k of [0, 0.25, 0.5, 0.75, 1]) {
+    const fr = poseFrame(f, k);
+    fr.main.forEach((l) => l.forEach((q) => x(q[0])));
+    x(fr.head.cx - fr.head.r); x(fr.head.cx + fr.head.r);
+    for (const s of fr.light) {
+      if (s.kind === "line") { x(s.x1); x(s.x2); }
+      else if (s.kind === "circle") { x(s.cx - s.r); x(s.cx + s.r); }
+      else s.points.forEach((q) => x(q[0]));
+    }
+  }
+  if (!Number.isFinite(lo)) return [0, 120];
+  return [lo - margin, hi - lo + 2 * margin];
+}

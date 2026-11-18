@@ -411,7 +411,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           </div>
           {e.extraSet && <div className="extra-why"><span className="extra-tag">+1 set</span> {e.extraSet.map((w) => w.replace(/ \(skipped[^)]*\)$/, "")).join(" · ")}</div>}
           </span>
-          <Figure spec={ex.figure} size={focused ? 74 : 54} still={!focused} timing={tempoTiming(ex.tempo, ex.id)} />
+          <Figure spec={ex.figure} size={64} trim still={!focused} timing={tempoTiming(ex.tempo, ex.id)} />
         </button>
         <button className="icon-btn" style={{ marginRight: -8, marginTop: -6 }} onClick={(ev) => { ev.stopPropagation(); onMenu(); }} aria-label={`Options for ${ex.name}`}><Icon name="more" /></button>
       </div>

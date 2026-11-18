@@ -91,6 +91,8 @@ ul { margin: 0; padding-left: 18px; }
 
 /* ---------- Figure ---------- */
 .fig { display: block; overflow: visible; filter: drop-shadow(0 0 2px var(--fig-glow)) drop-shadow(0 0 7px var(--fig-glow-soft)); }
+/* Trimmed figure: the floor line (drawn full width) stays inside the cropped box */
+.fig.trim { overflow: hidden; }
 .fig .mn polyline, .fig .mn circle { fill: none; stroke: var(--fig); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .fig .lt line, .fig .lt polyline, .fig .lt circle { fill: none; stroke: var(--fig2); stroke-width: 1.6; stroke-linecap: round; }
 .fig .floor { stroke: var(--fig2); stroke-width: 1; opacity: 0.7; }
