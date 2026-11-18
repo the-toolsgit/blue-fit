@@ -1,9 +1,8 @@
 // Edit a finished workout: title, date, duration, notes, exercises and every set. Saves on every change.
 import { useEffect, useState } from "react";
-import { setSessionDate, setSessionDuration } from "../../core/history";
-import { addEntry, addSet, buildEntry, durationMin, reconcileSkipped, removeEntry, removeSet, setEntry, swapEntry, updateSet } from "../../core/session";
+import { setSessionDate } from "../../core/history";
+import { addEntry, addSet, buildEntry, reconcileSkipped, removeEntry, removeSet, setEntry, swapEntry, updateSet } from "../../core/session";
 import type { LoggedSet, Session, SetType } from "../../core/types";
-import { Stepper } from "../components/Controls";
 import { ExercisePicker } from "../components/ExercisePicker";
 import { Figure } from "../components/Figure";
 import { Icon } from "../components/Icon";
@@ -63,14 +62,10 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
         <button className="btn btn-primary" style={{ minHeight: 42 }} onClick={done}><Icon name="check" size={18} /> Done</button>
       </div>
       <span className="eyebrow">Edit workout</span>
-      <div className="glass" style={{ padding: 14, marginTop: 10, display: "grid", gap: 12 }}>
-        <div className="field"><label htmlFor="ttl">Title</label>
-          <input id="ttl" className="input" defaultValue={s.title} onBlur={(e) => e.target.value.trim() && e.target.value !== s.title && commit({ ...s, title: e.target.value.trim() })} /></div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, alignItems: "end" }}>
-          <div className="field"><label htmlFor="dt">Date</label>
-            <input id="dt" type="date" className="input" value={s.date} max={localDate(new Date())} onChange={(e) => e.target.value && commit(setSessionDate(s, e.target.value))} /></div>
-          <Stepper label="Minutes" value={durationMin(s)} step={5} decimals={false} onChange={(v) => commit(setSessionDuration(s, v ?? 0))} />
-        </div>
+      <h1 className="title-md" style={{ textTransform: "uppercase", marginTop: 4 }}>{s.title}</h1>
+      <div className="glass" style={{ padding: 14, marginTop: 10 }}>
+        <div className="field"><label htmlFor="dt">Date</label>
+          <input id="dt" type="date" className="input" value={s.date} max={localDate(new Date())} onChange={(e) => e.target.value && commit(setSessionDate(s, e.target.value))} /></div>
       </div>
 
       {s.entries.map((e) => {
