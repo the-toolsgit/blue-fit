@@ -72,8 +72,11 @@ export function SummaryScreen({ id }: { id?: string }) {
               <div key={m.id} style={{ display: "grid", gridTemplateColumns: "96px 1fr 34px", alignItems: "center", gap: 10, fontSize: 14 }}>
                 <span>{m.label}</span>
                 <div className="vbar">
-                  <div className="fill" style={{ width: `${(sum.perGroup[m.id] / maxG) * 100}%` }} />
-                  {sk(m.id) > 0 && <div className="fill skipped" style={{ left: `${(sum.perGroup[m.id] / maxG) * 100}%`, width: `${(sk(m.id) / maxG) * 100}%` }} />}
+                  {sk(m.id) > 0
+                    ? <div className="fill split" style={{ width: `${((sum.perGroup[m.id] + sk(m.id)) / maxG) * 100}%` }}>
+                        <span style={{ width: `${(sum.perGroup[m.id] / (sum.perGroup[m.id] + sk(m.id))) * 100}%` }} /><span className="skipped" />
+                      </div>
+                    : <div className="fill" style={{ width: `${(sum.perGroup[m.id] / maxG) * 100}%` }} />}
                 </div>
                 <span className="mono" style={{ textAlign: "right" }}>{fmtNum(sum.perGroup[m.id])}</span>
               </div>
