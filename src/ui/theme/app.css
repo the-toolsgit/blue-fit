@@ -412,3 +412,29 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .insight-reward-title { font: 700 24px/1.05 var(--display); letter-spacing: .02em; text-transform: uppercase; color: var(--good); text-shadow: 0 0 16px color-mix(in srgb, var(--good) 60%, transparent); }
 .insight-chip.hit { opacity: 1; color: var(--neon-ink); border-color: var(--neon); box-shadow: 0 0 8px -2px var(--glow); }
 .insight-unit { font-size: 12px; color: var(--muted); text-shadow: none; }
+
+/* Volume animal (summary): neon outline like the line man, lighter details, shaded fill for depth */
+.animal { overflow: visible; display: block; --an-d: color-mix(in srgb, var(--neon) 50%, var(--ink)); }
+.animal .s0 { stop-color: color-mix(in srgb, var(--neon) 32%, var(--surface-solid)); }
+.animal .s1 { stop-color: color-mix(in srgb, var(--neon) 10%, var(--surface-solid)); }
+.animal .s2 { stop-color: var(--bg); }
+.animal .an-m { stroke: var(--neon); stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; filter: drop-shadow(0 0 3px var(--glow)); }
+.animal .an-far { opacity: .55; filter: none; }
+.animal .an-d { fill: none; stroke: var(--an-d); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.animal .an-dot { fill: var(--an-d); stroke: none; }
+.animal .an-shine { fill: #fff; }
+.animal .an-hi { fill: none; stroke: var(--an-d); stroke-width: 2; stroke-linecap: round; opacity: .45; }
+.animal .an-blush { fill: var(--an-d); opacity: .22; }
+.animal .an-patch { fill: color-mix(in srgb, var(--an-d) 18%, var(--surface-solid)); }
+.animal .an-shadow { fill: var(--neon); opacity: .14; transform-origin: 80px 109px; animation: an-shadow 3.2s ease-in-out infinite; }
+.animal .an-body { animation: an-bob 3.2s ease-in-out infinite; }
+@keyframes an-bob { 50% { transform: translateY(-3px); } }
+@keyframes an-shadow { 50% { transform: scaleX(.92); opacity: .1; } }
+@media (prefers-reduced-motion: reduce) { .animal .an-body, .animal .an-shadow { animation: none; } }
+
+/* Summary notes: icon tinted by tone */
+.note-ic { display: inline-flex; flex: none; margin-top: 2px; }
+.note-ic.warn { color: var(--warn); }
+.note-ic.up { color: var(--neon-ink); }
+.note-ic.good { color: var(--good); }
+.note-ic.info { color: var(--muted); }
