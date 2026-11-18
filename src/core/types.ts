@@ -168,6 +168,8 @@ export interface Session {
   importKey?: string;
   /** Logged during a deload week (lighter on purpose): skipped for pre-fill, progression hints and stall checks */
   deload?: boolean;
+  /** Working sets left undone when the workout was finished (per exercise), shown red on the finish screen */
+  skipped?: { exerciseId: string; sets: number }[];
   entries: SessionEntry[];
 }
 

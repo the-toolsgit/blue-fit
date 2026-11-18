@@ -1,11 +1,11 @@
 // Session (logged workout) logic. Pure functions: every operation returns a new Session.
 import { progressionHint } from "./progression";
 import { prsForEntry, type PrKind } from "./records";
-import type { Exercise, LoggedSet, Routine, RoutineDay, Session, SessionEntry, Slot } from "./types";
+import type { Exercise, LoggedSet, MuscleGroup, Routine, RoutineDay, Session, SessionEntry, Slot } from "./types";
 import { localDate, uid } from "./util";
 import { deloadSets, deloadWeight } from "./deload";
 import { failureEligible } from "./failure";
-import { countsForLoad, sessionsVolume, tonnage, type GroupTotals } from "./volume";
+import { countsForLoad, countsForVolume, sessionsVolume, tonnage, type GroupTotals } from "./volume";
 
 const byNewest = (a: Session, b: Session) => (b.startedAt > a.startedAt ? 1 : b.startedAt < a.startedAt ? -1 : 0);
 
@@ -159,10 +159,21 @@ export function afterSetDone(s: Session, entryId: string): { rest: boolean; next
   return { rest: true, nextEntryId: pending(e) ? e.id : s.entries[lastIdx + 1]?.id ?? null };
 }
 
-/** Finish: drop sets that weren't done and exercises with no done sets. */
+/** Finish: drop sets that weren't done and exercises with no done sets. Undone sets that would have counted
+ * toward weekly volume are remembered per exercise (`skipped`) for the finish screen. */
 export function finishSession(s: Session, now: Date): Session {
+  const skipped = s.entries
+    .map((e) => ({ exerciseId: e.exerciseId, sets: e.sets.filter((x) => !x.done && countsForVolume(x.type)).length }))
+    .filter((x) => x.sets > 0);
   const entries = s.entries.map((e) => ({ ...e, sets: e.sets.filter((x) => x.done) })).filter((e) => e.sets.length > 0);
-  return { ...s, entries, status: "finished", finishedAt: now.toISOString() };
+  return { ...s, entries, status: "finished", finishedAt: now.toISOString(), ...(skipped.length ? { skipped } : {}) };
+}
+
+/** Sets per muscle that were skipped (same weights as weekly volume: direct 1, indirect ½). */
+export function skippedVolume(s: Session, exercises: Map<string, Exercise>): Partial<Record<MuscleGroup, number>> {
+  const t: Partial<Record<MuscleGroup, number>> = {};
+  for (const k of s.skipped ?? []) for (const v of exercises.get(k.exerciseId)?.volume ?? []) t[v.group] = (t[v.group] ?? 0) + k.sets * v.weight;
+  return t;
 }
 
 export const durationMin = (s: Session, now: Date = new Date()): number =>

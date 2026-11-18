@@ -1,3 +1,4 @@
+import { skippedVolume } from "./session";
 import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
 import { groupsLeftThisWeek, planVolume, sessionsVolume, targetStatus, tonnage } from "./volume";
@@ -193,6 +194,9 @@ describe("session logic", () => {
     expect(sum.perGroup.biceps).toBe(0.5);
     expect(sessionsVolume([s], exMap).rearDelts).toBe(0.5);
     expect(tonnage([s])).toBe(1480);
+    // Undone working sets are remembered for the finish screen: 2 left on the first exercise, every set of the rest
+    expect(s.skipped![0]).toEqual({ exerciseId: "t-bar-reverse-row", sets: 2 });
+    expect(skippedVolume(s, exMap).back).toBeGreaterThanOrEqual(2);
   });
 });
 

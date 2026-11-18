@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import { FLEX } from "../../core/figure/poses";
 import { PR_LABEL } from "../../core/records";
-import { summarize } from "../../core/session";
+import { skippedVolume, summarize } from "../../core/session";
 import { MUSCLE_GROUPS } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { CountUp } from "../components/CountUp";
@@ -20,8 +20,12 @@ export function SummaryScreen({ id }: { id?: string }) {
   const fresh = !!s?.finishedAt && Date.now() - Date.parse(s.finishedAt) < 10 * 60_000;
   const sum = useMemo(() => (s ? summarize(s, exMap, finished) : null), [s, exMap, finished]);
   if (!s || !sum) return <div className="page"><div className="empty">Workout not found.<button className="btn btn-ghost" onClick={() => go("history")}>History</button></div></div>;
-  const groups = MUSCLE_GROUPS.filter((m) => sum.perGroup[m.id] > 0);
-  const maxG = Math.max(1, ...groups.map((m) => sum.perGroup[m.id]));
+  // Finish screen only: sets left undone show as a red part after the blue (done) part.
+  const skip = fresh && s ? skippedVolume(s, exMap) : {};
+  const sk = (g: keyof typeof skip) => skip[g] ?? 0;
+  const groups = MUSCLE_GROUPS.filter((m) => sum.perGroup[m.id] > 0 || sk(m.id) > 0);
+  const maxG = Math.max(1, ...groups.map((m) => sum.perGroup[m.id] + sk(m.id)));
+  const anySkipped = groups.some((m) => sk(m.id) > 0);
 
   return (
     <div className="page">
@@ -67,10 +71,14 @@ export function SummaryScreen({ id }: { id?: string }) {
             {groups.map((m) => (
               <div key={m.id} style={{ display: "grid", gridTemplateColumns: "96px 1fr 34px", alignItems: "center", gap: 10, fontSize: 14 }}>
                 <span>{m.label}</span>
-                <div className="vbar"><div className="fill" style={{ width: `${(sum.perGroup[m.id] / maxG) * 100}%` }} /></div>
+                <div className="vbar">
+                  <div className="fill" style={{ width: `${(sum.perGroup[m.id] / maxG) * 100}%` }} />
+                  {sk(m.id) > 0 && <div className="fill skipped" style={{ left: `${(sum.perGroup[m.id] / maxG) * 100}%`, width: `${(sk(m.id) / maxG) * 100}%` }} />}
+                </div>
                 <span className="mono" style={{ textAlign: "right" }}>{fmtNum(sum.perGroup[m.id])}</span>
               </div>
             ))}
+            {anySkipped && <p className="muted" style={{ fontSize: 12 }}><span style={{ color: "var(--bad)" }}>Red</span> = sets skipped.</p>}
           </div>
         </>
       )}
