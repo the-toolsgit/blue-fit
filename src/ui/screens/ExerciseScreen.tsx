@@ -73,7 +73,7 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride, failWhy }: { ex: E
           {ex.isHeavy && <span className="badge star">★ key lift</span>}
           {failWhy && <span className="badge fail-badge"><Icon name="flame" size={12} /> last set to failure</span>}
         </div>
-        {failWhy && failWhy.length > 0 && <p className="muted" style={{ fontSize: 13, marginTop: 6 }}>{failWhy.join(" · ")}</p>}
+        {failWhy && failWhy.length > 0 && <p className="muted" style={{ fontSize: 13, marginTop: 6 }}><b style={{ color: "var(--warn)" }}>Why to failure?</b> {failWhy.map((w) => w.replace(/ (in this workout|today)$/, "")).join(" · ")}</p>}
       </div>
       <div>
         <p style={{ fontSize: 16 }}>{whyOverride ?? ex.why}</p>
