@@ -20,8 +20,8 @@ export function SummaryScreen({ id }: { id?: string }) {
   const fresh = !!s?.finishedAt && Date.now() - Date.parse(s.finishedAt) < 10 * 60_000;
   const sum = useMemo(() => (s ? summarize(s, exMap, finished) : null), [s, exMap, finished]);
   if (!s || !sum) return <div className="page"><div className="empty">Workout not found.<button className="btn btn-ghost" onClick={() => go("history")}>History</button></div></div>;
-  // Finish screen only: sets left undone show as a red part after the blue (done) part.
-  const skip = fresh && s ? skippedVolume(s, exMap) : {};
+  // Sets left undone show as a red part after the blue (done) part.
+  const skip = s ? skippedVolume(s, exMap) : {};
   const sk = (g: keyof typeof skip) => skip[g] ?? 0;
   const groups = MUSCLE_GROUPS.filter((m) => sum.perGroup[m.id] > 0 || sk(m.id) > 0);
   const maxG = Math.max(1, ...groups.map((m) => sum.perGroup[m.id] + sk(m.id)));

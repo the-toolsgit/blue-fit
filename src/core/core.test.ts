@@ -1,4 +1,5 @@
-import { skippedVolume } from "./session";
+import { deriveSkipped, skippedVolume } from "./session";
+import { MIGRATIONS } from "./migrations";
 import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
 import { groupsLeftThisWeek, planVolume, sessionsVolume, targetStatus, tonnage } from "./volume";
@@ -197,6 +198,11 @@ describe("session logic", () => {
     // Undone working sets are remembered for the finish screen: 2 left on the first exercise, every set of the rest
     expect(s.skipped![0]).toEqual({ exerciseId: "t-bar-reverse-row", sets: 2 });
     expect(skippedVolume(s, exMap).back).toBeGreaterThanOrEqual(2);
+    // Older workouts without `skipped`: worked out from the plan day, and a migration saves it
+    const old = { ...s, skipped: undefined };
+    expect(deriveSkipped(old, routine)).toEqual(s.skipped);
+    const m = MIGRATIONS.find((x) => x.id === "2026-11-17-backfill-skipped")!;
+    expect(m.run({ ...seed, sessions: [old] }, "2026-11-17")!.sessions[0].skipped).toEqual(s.skipped);
   });
 });
 

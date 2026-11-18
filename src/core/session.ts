@@ -169,6 +169,19 @@ export function finishSession(s: Session, now: Date): Session {
   return { ...s, entries, status: "finished", finishedAt: now.toISOString(), ...(skipped.length ? { skipped } : {}) };
 }
 
+/** For workouts finished before `skipped` was saved: planned working sets of the day (from the plan) minus the
+ * ones done, per slot. Approximate if the plan changed since. Empty when the workout has no plan day. */
+export function deriveSkipped(s: Session, routine: Routine | undefined): { exerciseId: string; sets: number }[] {
+  const day = routine && s.routineId === routine.id ? routine.days.find((d) => d.id === s.dayId) : undefined;
+  if (!day) return [];
+  return day.slots.map((slot) => {
+    const e = s.entries.find((x) => x.slotId === slot.id);
+    const planned = s.deload ? deloadSets(slot.sets) : slot.sets;
+    const done = e ? e.sets.filter((x) => x.done && countsForVolume(x.type)).length : 0;
+    return { exerciseId: e?.exerciseId ?? slot.exerciseId, sets: Math.max(0, planned - done) };
+  }).filter((x) => x.sets > 0);
+}
+
 /** Sets per muscle that were skipped (same weights as weekly volume: direct 1, indirect ½). */
 export function skippedVolume(s: Session, exercises: Map<string, Exercise>): Partial<Record<MuscleGroup, number>> {
   const t: Partial<Record<MuscleGroup, number>> = {};

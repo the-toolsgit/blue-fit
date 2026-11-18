@@ -1,5 +1,6 @@
 // One-time data migrations applied on launch. Each runs once (its id is remembered in meta).
 import type { AppData, Exercise, Routine } from "./types";
+import { deriveSkipped } from "./session";
 import plainText from "./seed/exercise-text.json";
 import figureFixes from "./seed/figure-fixes.json";
 import textWas from "./seed/text-review-was.json";
@@ -230,6 +231,22 @@ export const MIGRATIONS: Migration[] = [
         return n as Exercise;
       });
       return changed ? { ...d, exercises } : null;
+    },
+  },
+  {
+    // Nov 17 2026: skipped sets are saved when a workout is finished. Workouts finished just before that
+    // (from Nov 16, the app's first days) get them worked out from the plan day.
+    id: "2026-11-17-backfill-skipped",
+    run(d) {
+      let changed = false;
+      const sessions = d.sessions.map((s) => {
+        if (s.status !== "finished" || s.source !== "app" || s.skipped || s.date < "2026-11-16") return s;
+        const sk = deriveSkipped(s, d.routines.find((r) => r.id === s.routineId));
+        if (!sk.length) return s;
+        changed = true;
+        return { ...s, skipped: sk };
+      });
+      return changed ? { ...d, sessions } : null;
     },
   },
   {
