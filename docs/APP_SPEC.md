@@ -229,7 +229,7 @@ Groups: back, biceps, triceps, sideDelts, rearDelts, traps, frontDelts, chest, q
 | V-Bar Pushdown | triceps | — | cable | 5 |
 | Rope Face Pull | rear delts | traps, back, rotator cuff | cable | 5 |
 | Lean-away Lateral Raise | side delts | — | cable | 5 |
-| Lean-in Lateral Raise (not in the plan; added Nov 18 2026, `seed/extra-exercises.json`, migration `2026-11-18-lean-in-lateral-raise`): lean toward the machine, top of the raise hardest | side delts | — | cable | 5 |
+| Lean-in Lateral Raise (not in the plan; added Nov 18 2026, `seed/extra-exercises.json`, migration `2026-11-18-lean-in-lateral-raise`): lean toward the machine, start with the hand across the body (stretch), top of the raise hardest; migration `2026-11-18-lean-in-across` updates copies stored before that | side delts | — | cable | 5 |
 | All-the-way-up Lateral Raise | side delts | traps | dumbbell / per hand | 5 |
 | Kelso Shrug | traps | — | T-bar row machine (one sleeve, log the plates on it) | 5 |
 | Single-arm Cable Reverse Fly | rear delts | — | cable | 5 |

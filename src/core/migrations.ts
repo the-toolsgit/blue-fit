@@ -376,5 +376,25 @@ export const MIGRATIONS: Migration[] = [
       return add.length ? { ...d, exercises: [...d.exercises, ...structuredClone(add)] } : null;
     },
   },
+  {
+    // Nov 18 2026: the lean-in raise starts with the hand across the body (stretch), not at the side.
+    // Only fields still reading as first added.
+    id: "2026-11-18-lean-in-across",
+    run(d) {
+      const t = (extraExercises as unknown as Exercise[]).find((x) => x.id === "lean-in-lateral-raise")!;
+      const old = { why: "Leaning in makes the top of the raise hardest.", form: ["Start with your hand at your side.", "Raise to shoulder height, lower slowly."], range: "Hand at your side → shoulder height" };
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        if (e.id !== t.id || e.isCustom) return e;
+        const n: Exercise = { ...e };
+        if (e.why === old.why) { n.why = t.why; changed = true; }
+        if (JSON.stringify(e.form) === JSON.stringify(old.form)) { n.form = t.form; changed = true; }
+        if (e.rangeOfMotion === old.range) { n.rangeOfMotion = t.rangeOfMotion; changed = true; }
+        if (e.figure && e.figure.A.ua === 5) { n.figure = structuredClone(t.figure); changed = true; }
+        return n;
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
 ];
 

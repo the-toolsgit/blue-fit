@@ -18,13 +18,13 @@
     "isHeavy": false,
     "compound": false,
     "bodyRegion": "upper",
-    "why": "Leaning in makes the top of the raise hardest.",
+    "why": "Leaning in makes the top of the raise hardest; starting across the body stretches the shoulder.",
     "setup": [
       "Pulley low. Hold the machine, lean in toward it 15–30°.",
       "Handle in the other hand."
     ],
     "form": [
-      "Start with your hand at your side.",
+      "Start with your hand across your body.",
       "Raise to shoulder height, lower slowly."
     ],
     "tips": [
@@ -34,7 +34,7 @@
       "Swinging.",
       "Changing how far you lean."
     ],
-    "rangeOfMotion": "Hand at your side → shoulder height",
+    "rangeOfMotion": "Hand across your body → shoulder height",
     "tempo": "Up 1 s · Down 3 s",
     "defaultRestSec": 120,
     "incrementLb": 5,
@@ -52,8 +52,8 @@
         }
       },
       "A": {
-        "ua": 5,
-        "fa": 5
+        "ua": -30,
+        "fa": -30
       },
       "B": {
         "ua": 98,
