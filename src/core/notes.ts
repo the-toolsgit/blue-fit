@@ -7,26 +7,22 @@ import type { Exercise, LoggedSet, Routine, Session, SessionEntry } from "./type
 import { fmtNum } from "./util";
 import { tonnage } from "./volume";
 
-export type NoteKind = "deload" | "below" | "drop" | "stuck" | "above" | "effort" | "rest" | "skipped" | "volume";
+export type NoteKind = "deload" | "below" | "drop" | "stuck" | "above" | "effort" | "skipped" | "volume";
 export type NoteTone = "warn" | "up" | "good" | "info";
 export interface WorkoutNote { kind: NoteKind; tone: NoteTone; exerciseId?: string; title: string; text: string }
 
 /** At most this many notes, most important first (*judgment*: a short list gets read). */
 export const MAX_NOTES = 6;
-/** Rests count as short when the time between sets is under this share of the planned rest (*judgment*; the time
- *  between sets also includes the set itself, so a real short rest is even shorter). */
-export const SHORT_REST = 0.75;
 /** Volume change worth a note (*judgment*). */
 export const VOLUME_NOTE = 0.05;
 /** Weight for next time aims at the bottom of the range with 2 reps left (Epley; *judgment*). */
 const AIM_LEFT = 2;
 
-const ORDER: NoteKind[] = ["deload", "below", "drop", "stuck", "above", "effort", "rest", "skipped", "volume"];
+const ORDER: NoteKind[] = ["deload", "below", "drop", "stuck", "above", "effort", "skipped", "volume"];
 const isWork = (x: LoggedSet) => x.done && (x.type === "working" || x.type === "failure") && x.weight != null && x.reps != null && x.reps > 0;
 const topWeight = (sets: LoggedSet[]) => Math.max(0, ...sets.filter(isWork).map((x) => x.weight!));
 const step = (ex: Exercise) => (ex.incrementLb > 0 ? ex.incrementLb : 5);
 const pct = (n: number) => `${n > 0 ? "+" : ""}${Math.round(n * 100)}%`;
-const mmss = (sec: number) => (sec % 60 === 0 ? `${sec / 60} min` : `${Math.floor(sec / 60)}:${String(Math.round(sec % 60)).padStart(2, "0")}`);
 
 /** Suggested weights are round: multiples of 10 from 40 up (Leo: easier to load and remember), else the exercise's step. */
 export const ROUND_FROM = 40;
@@ -48,15 +44,6 @@ function previous(history: Session[], s: Session, exerciseId: string): SessionEn
     if (e) return e;
   }
   return undefined;
-}
-
-/** Median time between done sets (completedAt), or null with fewer than 2 timed sets. */
-function medianGapSec(e: SessionEntry): number | null {
-  const t = e.sets.filter((x) => x.done && x.completedAt).map((x) => Date.parse(x.completedAt!)).sort((a, b) => a - b);
-  const gaps = t.slice(1).map((v, i) => (v - t[i]) / 1000).filter((g) => g > 0 && g < 15 * 60);
-  if (!gaps.length) return null;
-  gaps.sort((a, b) => a - b);
-  return gaps[Math.floor(gaps.length / 2)];
 }
 
 /** Which sets at this weight fell short, in plain words: "on every set" / "on sets 1–2" / "on set 1". */
@@ -90,8 +77,6 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
     const repMin = e.repMin, repMax = e.repMax ?? e.repMin;
     const range = repMin == null ? "" : repMin === repMax ? String(repMin) : `${repMin}–${repMax}`;
     const lastTime = previous(all, s, e.exerciseId);
-    const gap = medianGapSec(e);
-    const shortRest = gap != null && e.restSec > 0 && gap < e.restSec * SHORT_REST;
 
     if (!s.deload) {
       // Lighter than last time (same exercise, top working weight)
@@ -117,16 +102,11 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
 
       // Stuck (not covered by a deload note)
       if (!notes.some((n) => n.kind === "deload") && stuck.some((l) => l.exerciseId === e.exerciseId))
-        notes.push({ kind: "stuck", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: not improving`, text: shortRest
-          ? `No progress in ${DELOAD.stallWeeks} weeks, and rests ran short. Rest the full ${mmss(e.restSec)} first.`
-          : `No progress in ${DELOAD.stallWeeks} weeks. Try a different rep range, or swap to another exercise for the same job.` });
+        notes.push({ kind: "stuck", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: not improving`, text: `No progress in ${DELOAD.stallWeeks} weeks. Try a different rep range, or swap to another exercise for the same job.` });
     }
 
     const g = effortGap(e, s.deload);
     if (g) notes.push({ kind: "effort", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too easy`, text: `${effortLine(g)}. ${EFFORT_RULE}` });
-
-    if (shortRest && !notes.some((n) => n.kind === "stuck" && n.exerciseId === e.exerciseId))
-      notes.push({ kind: "rest", tone: "info", exerciseId: e.exerciseId, title: `${ex.name}: short rests`, text: `About ${mmss(Math.round(gap!))} between sets, ${mmss(e.restSec)} planned. Shorter rests cost reps.` });
   }
 
   const skipped = (s.skipped ?? []).filter((k) => k.sets > 0);

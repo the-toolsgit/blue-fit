@@ -24,10 +24,6 @@ describe("workout notes", () => {
     expect(workoutNotes(session("2026-11-08", [entry([set(60, 7), set(60, 7)])]), [], exMap).find((x) => x.kind === "below")!.text).toMatch(/^You got 7 reps at 60 on every set, but the plan says 10–12\. Try \d+ next time\.$/);
     expect(kinds(session("2026-11-08", [entry([set(50, 11), set(50, 10)])]), [])).toEqual([]);
   });
-  it("short rests from the set times", () => {
-    const s = session("2026-11-08", [entry([set(50, 11, "working", "2026-11-08T10:00:00Z"), set(50, 11, "working", "2026-11-08T10:01:00Z"), set(50, 11, "working", "2026-11-08T10:02:00Z")])]);
-    expect(kinds(s, [])).toContain("rest");
-  });
   it("skips weight notes on a deload, and compares volume with the same day", () => {
     const a = session("2026-11-01", [entry([set(50, 11), set(50, 11)])]);
     expect(kinds(session("2026-11-08", [entry([set(40, 11)])], { deload: true }), [a])).not.toContain("drop");

@@ -355,12 +355,12 @@ Every set still stops with 0–2 good reps left. On top of that, for the **mass 
   1. **Time for a deload**: the deload stall rule (§ deload: half or more of the judged plan exercises stalled over 4 weeks) → "start a deload week".
   2. **Too heavy**: set 1 under the bottom of the rep range ("You got 10 reps at 210 on every set, but the plan says 12. Try 190 next time."; "on every set" when every regular set at that weight fell short, else "on set 1" / "on sets 1–2") → a lighter weight (est. 1RM by Epley, aiming at the bottom of the range with 2 reps left, rounded down to a round number: multiples of 10 from 40 lb up, else the exercise's step (Leo: no weights ending in 5); *judgment*).
   3. **Lighter**: top working weight below last time → "Go back to X next time, unless it was on purpose."
-  4. **Not improving**: the exercise is stalled (same rule) → rest the full planned time if rests ran short, else "Try a different rep range, or swap to another exercise for the same job" (*judgment*).
+  4. **Not improving**: the exercise is stalled (same rule) → "Try a different rep range, or swap to another exercise for the same job" (*judgment*).
   5. **Go heavier**: every regular set (not the failure set) above the top of the range → the next weight (at least one step up; same Epley aim; rounded up to a round number).
   6. **Too easy**: the effort check.
-  7. **Short rests**: the median time between done sets under 75% of the planned rest (*judgment*; that time includes the set, so the real rest was even shorter).
-  8. **Sets skipped**: count and per exercise.
-  9. **Volume** vs the last time this plan day was done: "+8%" (green) / "−6%" / "about the same" (under 5%; *judgment*).
+  (No rest-time note: set times aren't reliable, a set is sometimes logged late, right before the next one; Leo, Nov 18 2026.)
+  7. **Sets skipped**: count and per exercise.
+  8. **Volume** vs the last time this plan day was done: "+8%" (green) / "−6%" / "about the same" (under 5%; *judgment*).
 ### 5.20 Exercise library and ★ heavy lifts (Nov 17 2026)
 An internal library of the gym exercises the app knows (`core/library.ts`, data in `core/seed/library.json`, built by `scripts/build-library.mjs`); used later for manual and automatic plan building (not shown in the exercise picker yet). Plan and sources: `docs/plans/exercise-library.md`.
 - **Sources:** free-exercise-db (public domain, pinned commit; strength/powerlifting exercises with gym equipment, minus banded/chained/speed/Olympic/strongman and odd variations); Jeff Nippard exercises missing from it, each with a source; and the few exercises only in Leo's plan. Each entry keeps its source. Abs and neck exercises are included (template: abs 1 / neck 1).
