@@ -57,6 +57,9 @@ export const FAILURE_GAP_DAYS = 2;
 /** …or was trained directly this many days before (*judgment*: normal sets 0–2 reps short are mostly recovered by 48 h). */
 export const FAILURE_BEFORE_DAYS = 1;
 
+/** The reason stored for a set the user turned on in Edit plan (the logger shows no "Why?" for it). */
+export const MANUAL_WHY = "You turned this on in Edit plan";
+
 export interface FailurePick { slotId: string; why: string[]; manual?: boolean }
 
 export interface FailureContext {
@@ -124,7 +127,7 @@ export function planFailure(day: RoutineDay, date: string, c: FailureContext): F
   if (!failureApplies(p?.goal) || deloadActive(c.settings, date)) return [];
   const label = (g: MuscleGroup) => muscleLabel(g).toLowerCase();
   const manual: FailurePick[] = day.slots.filter((s) => s.toFailure === true && c.exMap.has(s.exerciseId))
-    .map((s) => ({ slotId: s.id, why: ["You turned this on in Edit plan"], manual: true }));
+    .map((s) => ({ slotId: s.id, why: [MANUAL_WHY], manual: true }));
   // Beginners (< 1 year): they grow fine without it and are still learning form
   if (p?.yearsTraining != null && p.yearsTraining < 1) return manual;
   const budget = failureBudget(p);
