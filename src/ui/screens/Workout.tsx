@@ -8,7 +8,7 @@ import { groupPlates, platesFor } from "../../core/plates";
 import { progressionHint } from "../../core/progression";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
-  addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, moveEntry, removeEntry, removeSet,
+  addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, moveEntry, refitFailure, removeEntry, removeSet,
   setEntry, swapEntry, toggleDone, toggleSupersetWithNext, updateSet,
 } from "../../core/session";
 import type { Exercise, LoggedSet, Session, SessionEntry, SetType } from "../../core/types";
@@ -109,6 +109,7 @@ export function WorkoutScreen() {
   const total = s.entries.reduce((a, e) => a + e.sets.length, 0);
   const done = s.entries.reduce((a, e) => a + e.sets.filter((x) => x.done).length, 0);
   const day = routine?.days.find((d) => d.id === s.dayId);
+  const offSlots = new Set(day?.slots.filter((x) => x.toFailure === false).map((x) => x.id) ?? []);
 
   /** Target button: scroll to the current card, or flash its border when it's already in view. */
   const goToCurrent = () => {
@@ -236,8 +237,8 @@ export function WorkoutScreen() {
             )}
             <button className="menu-item" onClick={() => { setNoteFor(menuEntry.id); setMenu(null); }}><Icon name="note" /> {menuEntry.notes ? "Edit note" : "Add note"}</button>
             <button className="menu-item" onClick={() => { commit(addSet(s, menuEntry.id, "warmup")); setMenu(null); }}><Icon name="plus" /> Add warm-up set</button>
-            {menuIdx > 0 && <button className="menu-item" onClick={() => { commit(moveEntry(s, menuEntry.id, -1)); setMenu(null); }}><Icon name="up" /> Move up</button>}
-            {menuIdx < s.entries.length - 1 && <button className="menu-item" onClick={() => { commit(moveEntry(s, menuEntry.id, 1)); setMenu(null); }}><Icon name="down" /> Move down</button>}
+            {menuIdx > 0 && <button className="menu-item" onClick={() => { commit(refitFailure(moveEntry(s, menuEntry.id, -1), exMap, offSlots)); setMenu(null); }}><Icon name="up" /> Move up</button>}
+            {menuIdx < s.entries.length - 1 && <button className="menu-item" onClick={() => { commit(refitFailure(moveEntry(s, menuEntry.id, 1), exMap, offSlots)); setMenu(null); }}><Icon name="down" /> Move down</button>}
             <button className="menu-item" onClick={() => { setDetail(menuEntry.id); setMenu(null); }}><Icon name="info" /> How to do it</button>
             <button className="menu-item danger" onClick={() => { setConfirmRemove(menuEntry.id); setMenu(null); }}><Icon name="trash" /> Remove from workout</button>
           </div>

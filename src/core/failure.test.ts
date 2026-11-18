@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
-import { failureApplies, failureBudget, failureEligible, planFailure, weekFailure, type FailureContext } from "./failure";
-import { createSessionFromDay, finishSession, swapEntry } from "./session";
+import { failureApplies, failureBudget, failureEligible, mainMuscle, MANUAL_WHY, planFailure, weekFailure, type FailureContext } from "./failure";
+import { createSessionFromDay, finishSession, moveEntry, refitFailure, swapEntry } from "./session";
 import { MIGRATIONS } from "./migrations";
 import type { ProfileDraft, Session } from "./types";
 
@@ -105,6 +105,23 @@ describe("strategic last set to failure", () => {
     const calf = s.entries.find((e) => e.exerciseId === "standing-calf-raise")!;
     expect(calf.toFailure).toBe(true);
     expect(swapEntry(s, calf.id, exMap.get("single-arm-db-row")!, []).entries.find((e) => e.id === calf.id)!.toFailure).toBeUndefined();
+  });
+  it("reorder keeps an app-picked failure on the last exercise for its muscle", () => {
+    const elig = seed.exercises.filter((e) => failureEligible(e) && mainMuscle(e));
+    const a = elig[0], b = elig.find((e) => e.id !== a.id && mainMuscle(e) === mainMuscle(a))!;
+    const other = seed.exercises.find((e) => mainMuscle(e) && mainMuscle(e) !== mainMuscle(a))!;
+    const set = (id: string) => ({ id, type: "working" as const, weight: 10, reps: 10, done: false });
+    const en = (id: string, ex: string, f?: string[]) => ({ id, exerciseId: ex, slotId: "s" + id, restSec: 60, sets: [set(id + "1")], ...(f ? { toFailure: true, failWhy: f } : {}) });
+    const s0 = { id: "x", date: "2026-11-18", title: "t", startedAt: "", entries: [en("1", b.id), en("2", other.id), en("3", a.id, ["Last x exercise"])] } as unknown as Session;
+    // Move b below a: failure follows to b
+    const moved = refitFailure(moveEntry(moveEntry(s0, "1", 1), "1", 1), exMap);
+    expect(moved.entries.map((e) => [e.id, !!e.toFailure])).toEqual([["2", false], ["3", false], ["1", true]]);
+    expect(moved.entries[2].failWhy).toEqual(["Last x exercise"]);
+    // Turned off in Edit plan: dropped instead
+    expect(refitFailure(moveEntry(moveEntry(s0, "1", 1), "1", 1), exMap, new Set(["s1"])).entries.some((e) => e.toFailure)).toBe(false);
+    // Turned on by the user: stays put
+    const manual = { ...s0, entries: s0.entries.map((e) => e.id === "3" ? { ...e, failWhy: [MANUAL_WHY] } : e) };
+    expect(refitFailure(moveEntry(moveEntry(manual, "1", 1), "1", 1), exMap).entries.find((e) => e.id === "3")!.toFailure).toBe(true);
   });
   it("migration gives built-in exercises their compound flag once", () => {
     const m = MIGRATIONS.find((x) => x.id === "2026-11-17-compound-flag")!;

@@ -4,7 +4,7 @@ import { prsForEntry, type PrKind } from "./records";
 import type { Exercise, LoggedSet, MuscleGroup, Routine, RoutineDay, Session, SessionEntry, Slot } from "./types";
 import { localDate, uid } from "./util";
 import { deloadSets, deloadWeight } from "./deload";
-import { failureEligible } from "./failure";
+import { failureEligible, mainMuscle, MANUAL_WHY } from "./failure";
 import { countsForLoad, countsForVolume, sessionsVolume, tonnage, type GroupTotals } from "./volume";
 
 const byNewest = (a: Session, b: Session) => (b.startedAt > a.startedAt ? 1 : b.startedAt < a.startedAt ? -1 : 0);
@@ -102,6 +102,30 @@ export function moveEntry(s: Session, entryId: string, dir: -1 | 1): Session {
   const entries = [...s.entries];
   [entries[i], entries[j]] = [entries[j], entries[i]];
   return { ...s, entries };
+}
+
+/**
+ * After a reorder, keep each app-picked failure set on the last exercise for its muscle (the rule it was picked by).
+ * It moves to the exercise that is now last for that muscle, if that one is safe to fail and wasn't turned off in
+ * Edit plan (`offSlotIds`); otherwise it's dropped. Failure the user turned on, or one already done, stays put.
+ */
+export function refitFailure(s: Session, exMap: Map<string, Exercise>, offSlotIds: Set<string> = new Set()): Session {
+  let entries = s.entries;
+  for (const e of s.entries) {
+    if (!e.toFailure || e.failWhy?.includes(MANUAL_WHY)) continue;
+    const cur = entries.find((x) => x.id === e.id)!;
+    if (!cur.toFailure) continue;
+    const lastWork = [...cur.sets].reverse().find((x) => x.type === "working" || x.type === "failure");
+    if (lastWork?.done) continue;
+    const g = mainMuscle(exMap.get(cur.exerciseId));
+    if (!g) continue;
+    const last = [...entries].reverse().find((x) => mainMuscle(exMap.get(x.exerciseId)) === g)!;
+    if (last.id === cur.id) continue;
+    const ok = !last.toFailure && failureEligible(exMap.get(last.exerciseId)) && !(last.slotId && offSlotIds.has(last.slotId));
+    entries = entries.map((x) => x.id === cur.id ? { ...x, toFailure: undefined, failWhy: undefined }
+      : x.id === last.id && ok ? { ...x, toFailure: true, failWhy: cur.failWhy } : x);
+  }
+  return entries === s.entries ? s : { ...s, entries };
 }
 
 /** Swap an exercise for this session only. Keeps set count, rest and rep range; pre-fills from the new exercise's history. */
