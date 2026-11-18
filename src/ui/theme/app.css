@@ -315,13 +315,13 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .day-row.dragging { z-index: 5; background: var(--surface-solid); box-shadow: 0 0 0 1px var(--neon), 0 16px 40px -10px var(--glow); }
 
 /* "Last set to failure" (mass gain): a small flame tag on the set and a cue when it's open */
-/* The set to failure (not done yet): an amber spark orbits its outline */
+/* The set to failure (not done yet): amber → red colors flow around its outline */
 @property --fail-a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 .fail-set { position: relative; }
 .fail-set::before { content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none;
-  background: conic-gradient(from var(--fail-a), transparent 0 70%, var(--warn) 85%, #ff7a2c 95%, transparent);
+  background: conic-gradient(from var(--fail-a), var(--warn), #ff7a2c, #ff2c55, #ff7a2c, var(--warn)); opacity: .85;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
-  animation: fail-orbit 2.6s linear infinite; }
+  animation: fail-orbit 5s linear infinite; }
 @keyframes fail-orbit { to { --fail-a: 360deg; } }
 @media (prefers-reduced-motion: reduce) { .fail-set::before { animation: none; background: color-mix(in srgb, var(--warn) 60%, transparent); } }
 .fail-tag { display: inline-flex; align-items: center; gap: 3px; margin-left: 8px; padding: 2px 7px; border-radius: 99px; font: 600 11px var(--body); letter-spacing: .02em; color: var(--warn); border: 1px solid color-mix(in srgb, var(--warn) 45%, transparent); vertical-align: 2px; }
