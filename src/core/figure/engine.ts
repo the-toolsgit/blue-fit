@@ -9,8 +9,8 @@ export type LightShape =
   | { kind: "line"; x1: number | string; y1: number | string; x2: number | string; y2: number | string; width?: number }
   | { kind: "cable"; points: Pt[]; anchor: Pt }
   | { kind: "circle"; cx: number; cy: number; r: number }
-  /** Solid light curve (a muscle, e.g. the traps squeezing) */
-  | { kind: "curve"; points: Pt[]; width?: number };
+  /** A muscle drawn as a filled shape in the body color (e.g. the traps squeezing), closed back along the body line */
+  | { kind: "curve"; points: Pt[] };
 
 export interface FigureFrame {
   floor: { x1: number; y1: number; x2: number; y2: number };
@@ -132,7 +132,7 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
         return [0, 0.25, 0.5, 0.75, 1].map((t) => [(1 - t) ** 2 * a[0] + 2 * (1 - t) * t * c[0] + t * t * b[0], (1 - t) ** 2 * a[1] + 2 * (1 - t) * t * c[1] + t * t * b[1]] as Pt);
       };
       const pts: Pt[] = [...half(p0, peak), ...half(peak, p2).slice(1)];
-      light.push({ kind: "curve", points: pts, width: 2 + 2.2 * q });
+      light.push({ kind: "curve", points: pts });
     }
     if (o.perp) {
       const h = J[o.perp], v = V(o.ang, o.len / 2);
