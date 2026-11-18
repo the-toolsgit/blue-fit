@@ -32,7 +32,7 @@ function NumField({ value, onChange, label, decimals }: { value: number | null; 
 }
 
 export function EditWorkoutScreen({ id }: { id?: string }) {
-  const { sessions, exMap, finished, saveSession, settings } = useStore();
+  const { sessions, exMap, finished, saveSession, settings, routines } = useStore();
   const s = sessions.find((x) => x.id === id);
   const [menu, setMenu] = useState<string | null>(null);
   const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; entryId: string } | null>(null);
@@ -54,6 +54,21 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
     commit(updateSet(n, entryId, last.id, { done: true, completedAt: s.finishedAt ?? s.startedAt }));
   };
   const menuEntry = s.entries.find((e) => e.id === menu);
+  // The day's full plan: exercises that weren't recorded show (dimmed) in plan order so a forgotten one can be added.
+  const planDay = routines.find((r) => r.id === s.routineId)?.days.find((d) => d.id === s.dayId);
+  type Item = { kind: "entry"; e: Session["entries"][number] } | { kind: "missing"; slot: NonNullable<typeof planDay>["slots"][number] };
+  const items: Item[] = [];
+  for (const slot of planDay?.slots ?? []) {
+    const e = s.entries.find((x) => x.slotId === slot.id);
+    items.push(e ? { kind: "entry", e } : { kind: "missing", slot });
+  }
+  for (const e of s.entries) if (!items.some((i) => i.kind === "entry" && i.e.id === e.id)) items.push({ kind: "entry", e });
+  const recordSlot = (slot: NonNullable<typeof planDay>["slots"][number]) => {
+    const ex = exMap.get(slot.exerciseId);
+    if (!ex) return;
+    const ne = buildEntry(ex, history, { slot, deload: s.deload });
+    commit(addEntry(s, { ...ne, sets: ne.sets.map((x) => ({ ...x, done: true, completedAt: s.finishedAt ?? s.startedAt })) }));
+  };
 
   return (
     <div className="page">
@@ -68,7 +83,23 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
           <input id="dt" type="date" className="input" value={s.date} max={localDate(new Date())} onChange={(e) => e.target.value && commit(setSessionDate(s, e.target.value))} /></div>
       </div>
 
-      {s.entries.map((e) => {
+      {items.map((it) => {
+        if (it.kind === "missing") {
+          const ex = exMap.get(it.slot.exerciseId);
+          return (
+            <section key={it.slot.id} className="glass" style={{ padding: 12, marginTop: 12, borderStyle: "dashed" }}>
+              <div className="row" style={{ opacity: 0.6 }}>
+                <Figure spec={ex?.figure} size={40} still className="thin" />
+                <span className="grow">
+                  <span style={{ display: "block", font: "700 19px var(--display)" }}>{ex?.name ?? it.slot.exerciseId} {ex?.isHeavy && <span className="star">★</span>}</span>
+                  <span className="muted" style={{ fontSize: 13 }}>Not recorded · plan {it.slot.sets} × {it.slot.repMin === it.slot.repMax ? it.slot.repMin : `${it.slot.repMin}–${it.slot.repMax}`}</span>
+                </span>
+              </div>
+              <button className="btn btn-quiet btn-block" style={{ minHeight: 40, fontSize: 14, color: "var(--neon-ink)" }} onClick={() => recordSlot(it.slot)}><Icon name="plus" size={18} /> Record it</button>
+            </section>
+          );
+        }
+        const e = it.e;
         const ex = exMap.get(e.exerciseId);
         return (
           <section key={e.id} className="glass" style={{ padding: 12, marginTop: 12 }}>
