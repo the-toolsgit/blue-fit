@@ -1945,8 +1945,8 @@
         "weight": 1
       }
     ],
-    "equipment": "dumbbell",
-    "loadMode": "perHand",
+    "equipment": "cable",
+    "loadMode": "total",
     "isHeavy": false,
     "compound": false,
     "bodyRegion": "upper",
@@ -2009,7 +2009,11 @@
           ]
         },
         {
-          "db": "haR"
+          "cable": [
+            28,
+            96
+          ],
+          "to": "haR"
         }
       ]
     },

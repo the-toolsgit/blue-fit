@@ -36,3 +36,17 @@ describe("text review migration", () => {
     expect(out.find((e) => e.id === "lean-away-lateral-raise")!.figure!.A.ua).toBe(-10);
   });
 });
+
+describe("lean-away cable migration", () => {
+  it("switches a dumbbell lean-away raise to cable with the new texts and a cable in the figure", () => {
+    const d = buildSeed();
+    d.exercises = d.exercises.map((e) => e.id === "lean-away-lateral-raise"
+      ? { ...e, equipment: "dumbbell", loadMode: "perHand", why: "Leaning away makes the start of the raise harder for the side of your shoulder.", setup: ["Hold a post with one hand and lean away.", "Dumbbell in the other hand."], figure: { ...e.figure!, props: [{ db: "haR" }] } } as any
+      : e);
+    const ex = run("2026-11-17-lean-away-cable", d)!.exercises.find((e) => e.id === "lean-away-lateral-raise")!;
+    expect([ex.equipment, ex.loadMode]).toEqual(["cable", "total"]);
+    expect(ex.setup[1]).toBe("Cable handle in the other hand.");
+    expect(ex.why).toMatch(/longer range of motion/);
+    expect(ex.figure!.props!.some((p) => "cable" in p)).toBe(true);
+  });
+});

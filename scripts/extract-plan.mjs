@@ -43,7 +43,7 @@ const META = {
   "Machine Dip":                  { D: ["triceps"], I: ["chest", "frontDelts"], eq: "machine", load: "total", inc: 5, jefit: "Machine Dip" },
   "V-Bar Pushdown":               { D: ["triceps"], I: [], eq: "cable", load: "total", inc: 5, jefit: "Cable Tricep Pushdown (V-Bar)" },
   "Rope Face Pull":               { D: ["rearDelts"], I: ["traps", "back", "rotatorCuff"], eq: "cable", load: "total", inc: 5, jefit: "Cable Rope Face Pull" },
-  "Lean-away Lateral Raise":      { D: ["sideDelts"], I: [], eq: "dumbbell", load: "perHand", inc: 5, jefit: "Dumbbell One-Arm Lateral Raise" },
+  "Lean-away Lateral Raise":      { D: ["sideDelts"], I: [], eq: "cable", load: "total", inc: 5, jefit: "Dumbbell One-Arm Lateral Raise" },
   "All-the-way-up Lateral Raise": { D: ["sideDelts"], I: ["traps"], eq: "dumbbell", load: "perHand", inc: 5, jefit: "All the way up lateral raise" },
   "Kelso Shrug":                  { D: ["traps"], I: [], eq: "machine", load: "total", inc: 5, jefit: "Machine Seated Row" },
   "Single-arm Cable Reverse Fly": { D: ["rearDelts"], I: [], eq: "cable", load: "total", inc: 5, jefit: "Single arm cable reverse fly" },

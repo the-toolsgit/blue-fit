@@ -192,6 +192,28 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
+    // Nov 17 2026: the lean-away lateral raise is a cable exercise (Leo: always was). Equipment and log mode
+    // switch only if still dumbbell / per hand; why and setup only where they still read as before.
+    id: "2026-11-17-lean-away-cable",
+    run(d) {
+      const id = "lean-away-lateral-raise";
+      const t = (plainText as unknown as Record<string, Partial<Exercise>>)[id];
+      const was = { why: "Leaning away makes the start of the raise harder for the side of your shoulder.", setup: ["Hold a post with one hand and lean away, about 15–30°.", "Dumbbell in the other hand."], setupOld: ["Hold a post with one hand and lean away.", "Dumbbell in the other hand."] };
+      const fixed = applyFigureFixes(d, id) ?? d;
+      let changed = fixed !== d;
+      const exercises = fixed.exercises.map((e) => {
+        if (e.id !== id || e.isCustom) return e;
+        const n: Exercise = { ...e };
+        if (e.equipment === "dumbbell" && e.loadMode === "perHand") { n.equipment = "cable"; n.loadMode = "total"; changed = true; }
+        if (e.why === was.why) { n.why = t.why!; changed = true; }
+        const s = JSON.stringify(e.setup);
+        if (s === JSON.stringify(was.setup) || s === JSON.stringify(was.setupOld)) { n.setup = t.setup!; changed = true; }
+        return n;
+      });
+      return changed ? { ...fixed, exercises } : null;
+    },
+  },
+  {
     // Nov 16 2026: plain-language how-to texts and one-number tempos for the built-in exercises.
     // Skips any exercise whose texts were edited in the app.
     id: "2026-11-16-plain-exercise-text",
