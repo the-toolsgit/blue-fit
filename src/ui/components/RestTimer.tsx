@@ -74,7 +74,7 @@ export function RestTimerDock() {
               <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52 }} onClick={() => adjust(15)} aria-label="15 seconds more">+15</button>
             </>}
             {showResume
-              ? <button className="btn btn-primary" style={{ padding: "0 16px", minHeight: 46, fontSize: 15 }} onClick={() => go("workout")} aria-label="Back to workout"><Icon name="play" size={16} /> Back to workout</button>
+              ? <button className="btn btn-primary" style={{ padding: 0, minHeight: 46, minWidth: 52 }} onClick={() => go("workout")} aria-label="Back to workout"><Icon name="play" size={20} /></button>
               : <button className="icon-btn" onClick={() => setRestTimer(null)} aria-label="Skip rest"><Icon name="close" /></button>}
           </div>
         )}
