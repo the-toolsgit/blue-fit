@@ -122,9 +122,9 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
       const u: Pt = [(J.sh[0] - J.hip[0]) / len, (J.sh[1] - J.hip[1]) / len];
       const back: Pt = [u[1], -u[0]];
       const q = p.tq ?? 0;
-      // Starts just below the head circle (head center is 11 along the spine, radius 7) and peaks in the middle.
-      const p0 = add(add(J.sh, u, 2.2), back, 0.6), p2 = add(add(J.sh, u, -7), back, 0.6);
-      const peak = add(add(J.sh, u, -1.5), back, 1.6 + 4 * q);
+      // Starts where the back line starts (the shoulder point, below the head) and peaks in the middle.
+      const p0 = add(J.sh, back, 0.6), p2 = add(add(J.sh, u, -8.5), back, 0.6);
+      const peak = add(add(J.sh, u, -4), back, 1.6 + 4 * q);
       // Two outward-bowed halves meeting at the peak: round, with a soft point in the middle (not a triangle).
       const bow = 0.9 + 1.6 * q;
       const half = (a: Pt, b: Pt): Pt[] => {
