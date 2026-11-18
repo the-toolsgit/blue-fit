@@ -167,6 +167,11 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
+    // Nov 17 2026: cable lateral raise stands with feet together so both feet touch the floor while leaning.
+    id: "2026-11-17-lateral-raise-feet",
+    run: (d) => applyFigureFixes(d, "cable-lateral-raise"),
+  },
+  {
     // Nov 16 2026: plain-language how-to texts and one-number tempos for the built-in exercises.
     // Skips any exercise whose texts were edited in the app.
     id: "2026-11-16-plain-exercise-text",
