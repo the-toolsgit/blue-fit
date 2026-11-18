@@ -5,7 +5,7 @@ import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalList
 import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useMemo, useState } from "react";
 import {
-  addDay, addSlot, moveSlot, removeDay, removeSlot, renameDay, setDayWeekday, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine,
+  addDay, addSlot, moveSlot, removeDay, removeSlot, renameDay, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine,
 } from "../../core/routineEdit";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { completeProfile, MUSCLE_GROUPS, type Exercise, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
@@ -166,18 +166,8 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
             {!day.slots.length && <p className="muted" style={{ textAlign: "center", fontSize: 14, padding: 12 }}>No exercises. A day without exercises is a rest day.</p>}
             <button className="list-row" style={{ color: "var(--neon-ink)", justifyContent: "center" }} onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
           </div>
-          <p className="muted" style={{ fontSize: 12, margin: "6px 4px 0" }}>Tap an exercise to change it. Drag ⋮⋮ to move it.</p>
           <div className="spread" style={{ margin: "6px 4px 0" }}>
-            <label className="row muted" style={{ gap: 6, fontSize: 13 }}>Weekday
-              <select className="input" aria-label="Weekday (picking a used one swaps the two days)" value={day.weekday ?? ""} style={{ minHeight: 36, padding: "0 8px", width: 96, flex: "none", fontSize: 14 }}
-                onChange={(e) => setDraft(setDayWeekday(draft, day.id, e.target.value === "" ? null : Number(e.target.value)))}>
-                {[1, 2, 3, 4, 5, 6, 0].map((w) => {
-                  const owner = draft.days.find((d) => d.id !== day.id && d.weekday === w);
-                  return <option key={w} value={w}>{SHORT[w]}{owner ? ` (swap with ${owner.title})` : ""}</option>;
-                })}
-                <option value="">None</option>
-              </select>
-            </label>
+            <p className="muted" style={{ fontSize: 12 }}>Tap an exercise to change it. Drag ⋮⋮ to move it.</p>
             <button className="btn btn-quiet" style={{ color: "var(--bad)", fontSize: 13, minHeight: 36, padding: 0, whiteSpace: "nowrap" }} onClick={() => setConfirm("deleteDay")}><Icon name="trash" size={16} /> Delete day</button>
           </div>
           <h2 className="section-title">This workout's volume</h2>
