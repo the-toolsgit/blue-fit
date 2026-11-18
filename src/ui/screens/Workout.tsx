@@ -61,6 +61,7 @@ export function WorkoutScreen() {
   const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; entryId: string } | null>(null);
   const [noteFor, setNoteFor] = useState<string | "workout" | null>(null);
   const [finishOpen, setFinishOpen] = useState(false);
+  const [noteFromFinish, setNoteFromFinish] = useState(false);
   // Rest timer in the header while it runs (in place of Finish); tapping it opens the full timer under the header
   const rest = useRest();
   const [restOpen, setRestOpen] = useState(false);
@@ -161,7 +162,7 @@ export function WorkoutScreen() {
             <div className="eyebrow" style={{ fontSize: 11 }}>{s.deload ? <span style={{ color: "var(--neon-2)" }}>Deload · </span> : null}{day ? "Workout" : "Free workout"} · <Elapsed s={s} /></div>
             <h1 className="title-md" style={{ textTransform: "uppercase", fontSize: 24, marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.title}</h1>
           </div>
-          <button className="icon-btn" aria-label="Workout notes" onClick={() => setNoteFor("workout")} style={{ color: s.notes ? "var(--neon-ink)" : undefined }}><Icon name="note" /></button>
+          <button className="icon-btn" aria-label="Go to the current exercise" onClick={() => current && scrollTo(current)}><Icon name="target" /></button>
           {rest.running
             ? <WorkoutRestPill left={rest.left} frac={rest.frac} open={restOpen} onToggle={() => setRestOpen((o) => !o)} />
             : <button className="btn btn-primary" style={{ minHeight: 42, padding: "0 16px", fontSize: 16 }} onClick={() => setFinishOpen(true)}>Finish</button>}
@@ -246,12 +247,17 @@ export function WorkoutScreen() {
           if (noteFor === "workout") commit({ ...s, notes: v || undefined });
           else if (noteFor) commit(setEntry(s, noteFor, { notes: v || undefined }));
         }}
-        onClose={() => setNoteFor(null)}
+        onClose={() => { setNoteFor(null); if (noteFromFinish) { setNoteFromFinish(false); setFinishOpen(true); } }}
       />
 
       <Sheet open={finishOpen} onClose={() => setFinishOpen(false)} label="Finish workout">
         <div className="stack" style={{ padding: "0 4px" }}>
-          <h3 className="title-lg">Finish workout?</h3>
+          <div className="spread">
+            <h3 className="title-lg">Finish workout?</h3>
+            {/* Workout notes live here now: add one before finishing (comes back to this sheet after) */}
+            <button className="icon-btn" aria-label="Workout notes" style={{ color: s.notes ? "var(--neon-ink)" : undefined }}
+              onClick={() => { setFinishOpen(false); setNoteFromFinish(true); setNoteFor("workout"); }}><Icon name="note" /></button>
+          </div>
           <p className="muted">{done} of {total} sets done · {durationMin(s)} min.{total - done > 0 ? ` ${total - done} set${total - done > 1 ? "s" : ""} not done will be dropped.` : ""}</p>
           <button className="btn btn-primary btn-xl" onClick={doFinish}><Icon name="check" /> Finish</button>
           <button className="btn btn-ghost btn-block" onClick={() => setFinishOpen(false)}>Keep going</button>
