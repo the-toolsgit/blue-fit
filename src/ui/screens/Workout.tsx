@@ -110,6 +110,22 @@ export function WorkoutScreen() {
   const done = s.entries.reduce((a, e) => a + e.sets.filter((x) => x.done).length, 0);
   const day = routine?.days.find((d) => d.id === s.dayId);
 
+  /** Target button: scroll to the current card, or flash its border when it's already in view. */
+  const goToCurrent = () => {
+    const el = current ? refs.current.get(current) : undefined;
+    if (!el) return;
+    const header = (document.querySelector(".page > header") as HTMLElement | null)?.getBoundingClientRect().bottom ?? 0;
+    const r = el.getBoundingClientRect();
+    const inView = r.top >= header - 12 && r.top < window.innerHeight * 0.5;
+    if (!inView) return scrollTo(current);
+    const card = el.querySelector("article");
+    if (!card) return;
+    card.classList.remove("card-flash");
+    void (card as HTMLElement).offsetWidth; // restart the animation on repeat taps
+    card.classList.add("card-flash");
+    card.addEventListener("animationend", () => card.classList.remove("card-flash"), { once: true });
+  };
+
   const scrollTo = (id: string | null) => {
     if (!id) return;
     setTimeout(() => scrollBelowHeader(refs.current.get(id), reducedMotion() ? "auto" : "smooth"), 60);
@@ -162,7 +178,7 @@ export function WorkoutScreen() {
             <div className="eyebrow" style={{ fontSize: 11 }}>{s.deload ? <span style={{ color: "var(--neon-2)" }}>Deload · </span> : null}{day ? "Workout" : "Free workout"} · <Elapsed s={s} /></div>
             <h1 className="title-md" style={{ textTransform: "uppercase", fontSize: 24, marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.title}</h1>
           </div>
-          <button className="icon-btn" aria-label="Go to the current exercise" onClick={() => current && scrollTo(current)}><Icon name="target" /></button>
+          <button className="icon-btn" aria-label="Go to the current exercise" onClick={goToCurrent}><Icon name="target" /></button>
           {rest.running
             ? <WorkoutRestPill left={rest.left} frac={rest.frac} open={restOpen} onToggle={() => setRestOpen((o) => !o)} />
             : <button className="btn btn-primary" style={{ minHeight: 42, padding: "0 16px", fontSize: 16 }} onClick={() => setFinishOpen(true)}>Finish</button>}
