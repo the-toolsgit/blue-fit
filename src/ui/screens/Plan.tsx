@@ -1,22 +1,22 @@
-import { lazy, Suspense, useState } from "react";
+import { useState } from "react";
 import { deloadActive, deloadWeek, endDeload } from "../../core/deload";
 import { localDate } from "../../core/util";
 import { DELOAD_RULE } from "../components/DeloadBanner";
-import { copyName, duplicateRoutine, moveSlot, routineUsed, setCurrent } from "../../core/routineEdit";
+import { copyName, duplicateRoutine, routineUsed, setCurrent } from "../../core/routineEdit";
 import { Confirm, Sheet } from "../components/Sheet";
 import type { Exercise, Routine, RoutineDay, VolumeTarget } from "../../core/types";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { formatTarget, planVolume } from "../../core/volume";
-import { useWeekFailure } from "../components/FailFlame";
+import { FailFlame, useWeekFailure } from "../components/FailFlame";
+import { Figure } from "../components/Figure";
 import { muscleLabel } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { Icon } from "../components/Icon";
-import { fmtDate } from "../format";
+import { fmtDate, fmtRest, repRange } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
 
 const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const SortableDayList = lazy(() => import("../components/SortableDayList").then((m) => ({ default: m.SortableDayList })));
 
 /**
  * What this workout adds to the week: only the muscles it works, with its sets (indirect = ½) on top of the rest
@@ -90,12 +90,22 @@ export function PlanScreen() {
             <span className="mono muted" style={{ fontSize: 13 }}>{sets} sets · ~{estimateMinutes(sets, day.slots.length)} min</span>
           </div>
           <div className="glass" style={{ padding: 4 }}>
-            <Suspense fallback={<div style={{ minHeight: day.slots.length * 64 }} />}>
-              <SortableDayList slots={day.slots} exMap={exMap} onOpen={(s) => go(`exercise/${s.exerciseId}/${s.id}`)}
-                onMove={(from, to) => saveRoutine(moveSlot(routine, day.id, from, to))} fail={weekFail.get(day.id)} />
-            </Suspense>
+            {day.slots.filter((s) => exMap.has(s.exerciseId)).map((s, i) => {
+              const ex = exMap.get(s.exerciseId)!;
+              return (
+                <button key={s.id} className="list-row" onClick={() => go(`exercise/${s.exerciseId}/${s.id}`)}>
+                  <span className="mono muted" style={{ width: 16, fontSize: 13 }}>{i + 1}</span>
+                  <Figure spec={ex.figure} size={44} still className="thin" />
+                  <span className="grow">
+                    <span style={{ display: "block", fontWeight: 600 }}>{ex.name} {ex.isHeavy && <span className="star">★</span>}<FailFlame why={weekFail.get(day.id)?.get(s.id)} /></span>
+                    <span className="muted" style={{ fontSize: 12 }}>{s.notes ? `${s.notes} · ` : ""}rest {fmtRest(s.restSec)}</span>
+                  </span>
+                  <span className="mono" style={{ whiteSpace: "nowrap" }}>{s.sets} × {repRange(s.repMin, s.repMax)}</span>
+                  <Icon name="chevron" size={16} />
+                </button>
+              );
+            })}
           </div>
-          <p className="muted" style={{ fontSize: 12, margin: "6px 4px 0" }}>Press and hold an exercise to move it.</p>
         </>
       )}
 
