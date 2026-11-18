@@ -61,8 +61,10 @@ export interface Exercise {
   isHeavy: boolean;
   /** Multi-joint movement (from the exercise library). Unknown on older custom exercises. */
   compound?: boolean;
-  /** Which of a muscle's angles (from its weekly target's "angles" list) this exercise trains, e.g. { biceps: "hammer" } */
-  angles?: Partial<Record<MuscleGroup, string>>;
+  /** Which job of each muscle this exercise trains (names from JOBS in workoutCheck.ts), e.g. { biceps: "hammer" } */
+  jobs?: Partial<Record<MuscleGroup, string>>;
+  /** Muscles this exercise loads at a long length (stretched position) */
+  stretch?: MuscleGroup[];
   bodyRegion: "upper" | "lower";
   why: string;
   setup: string[];

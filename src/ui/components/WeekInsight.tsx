@@ -38,15 +38,15 @@ export function WeekInsight({ routine, exMap, targets, failures }: {
               {t.status === "below" && <span style={{ color: "var(--warn)" }}> · below</span>}
               {t.status === "above" && <span style={{ color: "var(--warn)" }}> · above</span>}
             </div>
-            {t.angles.length > 1 && (
+            {t.jobs.length > 1 && (
               <div className="insight-chips">
-                {t.angles.map((a) => <span key={a.name} className={"insight-chip " + a.state}>{a.name}</span>)}
+                {t.jobs.map((a) => <span key={a.name} className={"insight-chip " + a.state}>{a.name}</span>)}
               </div>
             )}
           </div>
         ))}
       </div>
-      <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Sets a week (indirect = ½) · days that train it directly. Angles: bright = in the plan, faded = missing.</p>
+      <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Sets a week (indirect = ½) · days that train it directly. Movements: bright = in the plan, faded = missing.</p>
 
       <h2 className="section-title">Week check</h2>
       <div className={"glass insight-check" + (all ? " complete" : "")}>

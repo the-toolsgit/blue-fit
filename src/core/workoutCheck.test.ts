@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
-import { angleList, weekInsight } from "./workoutCheck";
+import { JOBS, weekInsight } from "./workoutCheck";
 import { MIGRATIONS } from "./migrations";
 
 const seed = buildSeed();
@@ -8,32 +8,38 @@ const exMap = new Map(seed.exercises.map((e) => [e.id, e]));
 const r = seed.routines[0];
 
 describe("workout check", () => {
-  it("every built-in angle tag is one of its muscle's plan angles", () => {
-    const t = new Map(seed.targets.map((x) => [x.group, angleList(x)]));
-    for (const e of seed.exercises) for (const [g, a] of Object.entries(e.angles ?? {})) expect(t.get(g as never), `${e.id} ${g}`).toContain(a);
+  it("every built-in job tag is one of its muscle's universal jobs", () => {
+    for (const e of seed.exercises) for (const [g, j] of Object.entries(e.jobs ?? {})) expect(JOBS[g as keyof typeof JOBS], `${e.id} ${g}`).toContain(j);
   });
-  it("tiles light the week's angles and list the checks for each goal", () => {
+  it("lists the checks for each goal", () => {
     const w = weekInsight(r, exMap, seed.targets);
-    const bi = w.tiles.find((t) => t.group === "biceps")!;
-    expect(bi.angles.every((a) => a.state === "hit")).toBe(true);
-    expect(w.checks.map((c) => c.id)).toEqual(["volume", "angles", "stretch", "mix", "recovery", "length"]);
+    expect(w.checks.map((c) => c.id)).toEqual(["volume", "jobs", "stretch", "frequency", "dose", "recovery", "reps", "mix", "rest"]);
     expect(weekInsight(r, exMap, seed.targets, "maintenance").checks.map((c) => c.id)).toEqual(["volume", "recovery"]);
     expect(weekInsight(r, exMap, seed.targets, "strength").checks.map((c) => c.id)).toContain("heavy");
     expect(weekInsight(r, exMap, seed.targets, "endurance").checks.map((c) => c.id)).toContain("reps");
   });
-  it("a missing angle fails the angle check", () => {
+  it("a missing job fails the job check and fades its chip", () => {
     const noHammer = { ...r, days: r.days.map((d) => ({ ...d, slots: d.slots.filter((s) => s.exerciseId !== "db-hammer-curl") })) };
     const w = weekInsight(noHammer, exMap, seed.targets);
-    const c = w.checks.find((x) => x.id === "angles")!;
-    expect(c.pass).toBe(false);
-    expect(c.detail).toContain("hammer");
-    expect(w.tiles.find((t) => t.group === "biceps")!.angles.find((a) => a.name === "hammer")!.state).toBe("none");
+    const c = w.checks.find((x) => x.id === "jobs")!;
+    expect(c.detail).toContain("Biceps: no hammer");
+    expect(w.tiles.find((t) => t.group === "biceps")!.jobs.find((a) => a.name === "hammer")!.state).toBe("none");
   });
-  it("migration tags built-in exercises once", () => {
-    const m = MIGRATIONS.find((x) => x.id === "2026-11-18-exercise-angles")!;
-    const old = { ...seed, exercises: seed.exercises.map(({ angles: _a, ...e }) => e) };
+  it("hard work on back-to-back days fails recovery; light work doesn't", () => {
+    const day = (id: string, weekday: number, exerciseId: string, sets: number) => ({ id, weekday, title: id, slots: [{ id: id + "s", exerciseId, sets, repMin: 8, repMax: 12, restSec: 120 }] });
+    const mk = (a: number, b: number) => ({ ...r, days: [day("a", 1, "v-bar-pushdown", a), day("b", 2, "rope-overhead-tricep-extension", b)] }) as typeof r;
+    const rec = (x: typeof r) => weekInsight(x, exMap, seed.targets).checks.find((c) => c.id === "recovery")!.pass;
+    expect(rec(mk(5, 5))).toBe(false);
+    expect(rec(mk(5, 3))).toBe(true);
+  });
+  it("migration tags built-in exercises with jobs once", () => {
+    const m = MIGRATIONS.find((x) => x.id === "2026-11-18-exercise-jobs")!;
+    const old = { ...seed, exercises: seed.exercises.map(({ jobs: _j, stretch: _s, ...e }) => (e.id === "db-hammer-curl" ? { ...e, angles: { biceps: "hammer" } } : e)) };
     const out = m.run(old, "2026-11-18")!;
-    expect(out.exercises.find((e) => e.id === "db-hammer-curl")!.angles).toEqual({ biceps: "hammer" });
+    const h = out.exercises.find((e) => e.id === "db-hammer-curl")!;
+    expect(h.jobs).toEqual({ biceps: "hammer" });
+    expect("angles" in h).toBe(false);
+    expect(out.exercises.find((e) => e.id === "seated-leg-curl")!.stretch).toEqual(["hamstrings"]);
     expect(m.run(out, "2026-11-18")).toBeNull();
   });
 });

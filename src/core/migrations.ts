@@ -3,7 +3,7 @@ import type { AppData, Exercise, Routine } from "./types";
 import { deriveSkipped } from "./session";
 import plainText from "./seed/exercise-text.json";
 import figureFixes from "./seed/figure-fixes.json";
-import exerciseAngles from "./seed/exercise-angles.json";
+import exerciseJobs from "./seed/exercise-jobs.json";
 import textWas from "./seed/text-review-was.json";
 import shortWas from "./seed/text-short-was.json";
 import { TEXT_FIELDS, textFingerprint } from "./textFields";
@@ -337,12 +337,24 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
-    // Nov 18 2026: built-in exercises learn which angle of each muscle they train (Plan → Workout check).
+    // Nov 18 2026 (replaced the same day by "exercise-jobs": angles came from the plan, jobs are universal). Kept so the
+    // id stays known; does nothing now.
     id: "2026-11-18-exercise-angles",
+    run() { return null; },
+  },
+  {
+    // Nov 18 2026: built-in exercises learn which job of each muscle they train and which muscles they stretch
+    // (Plan → Week check). Drops the short-lived plan-based "angles" tags.
+    id: "2026-11-18-exercise-jobs",
     run(d) {
-      const a = exerciseAngles as Record<string, Exercise["angles"]>;
-      if (!d.exercises.some((e) => a[e.id] && !e.isCustom && !e.angles)) return null;
-      return { ...d, exercises: d.exercises.map((e) => (a[e.id] && !e.isCustom && !e.angles ? { ...e, angles: a[e.id] } : e)) };
+      const tags = exerciseJobs as Record<string, Pick<Exercise, "jobs" | "stretch">>;
+      const fix = (e: Exercise) => !e.isCustom && ((tags[e.id] && !e.jobs) || "angles" in e);
+      if (!d.exercises.some(fix)) return null;
+      return { ...d, exercises: d.exercises.map((e) => {
+        if (!fix(e)) return e;
+        const { angles: _a, ...rest } = e as Exercise & { angles?: unknown };
+        return tags[e.id] && !e.jobs ? { ...rest, ...tags[e.id] } : rest;
+      }) };
     },
   },
 ];
