@@ -9,7 +9,12 @@ import { createPortal } from "react-dom";
 export function Sheet({ open, onClose, children, label }: { open: boolean; onClose: () => void; children: ReactNode; label: string }) {
   const sheet = useRef<HTMLDivElement>(null);
   const backdrop = useRef<HTMLDivElement>(null);
+  // Parents often pass a new onClose on every render (e.g. the workout screen re-renders with the rest timer each
+  // tick); reading it through a ref keeps the swipe handlers from being torn down mid-drag (the sheet got stuck).
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
   useEffect(() => {
+    const onClose = () => closeRef.current();
     const el = sheet.current;
     if (!open || !el) return;
     let startY = 0, dy = 0, t0 = 0, dragging = false, armed = false;
@@ -55,15 +60,15 @@ export function Sheet({ open, onClose, children, label }: { open: boolean; onClo
       el.removeEventListener("touchstart", ts); el.removeEventListener("touchmove", tm); el.removeEventListener("touchend", end);
       el.removeEventListener("touchcancel", end); el.removeEventListener("pointerdown", pd); window.removeEventListener("pointermove", pm);
     };
-  }, [open, onClose]);
+  }, [open]);
   useEffect(() => {
     if (!open) return;
-    const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const k = (e: KeyboardEvent) => e.key === "Escape" && closeRef.current();
     window.addEventListener("keydown", k);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => { window.removeEventListener("keydown", k); document.body.style.overflow = prev; };
-  }, [open, onClose]);
+  }, [open]);
   if (!open) return null;
   return createPortal(
     <>

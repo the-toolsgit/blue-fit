@@ -6,7 +6,7 @@ import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-
 import { CSS } from "@dnd-kit/utilities";
 import { MANUAL_WHY } from "../../core/failure";
 import { orderSlotsLike } from "../../core/routineEdit";
-import { useRest, WorkoutRestPanel, WorkoutRestPill } from "../components/RestTimer";
+import { useRestRunning, WorkoutRestPanel, WorkoutRestPill } from "../components/RestTimer";
 import { LOADING } from "../../core/figure/poses";
 import { groupPlates, platesFor } from "../../core/plates";
 import { progressionHint } from "../../core/progression";
@@ -67,9 +67,9 @@ export function WorkoutScreen() {
   const [finishOpen, setFinishOpen] = useState(false);
   const [noteFromFinish, setNoteFromFinish] = useState(false);
   // Rest timer in the header while it runs (in place of Finish); tapping it opens the full timer under the header
-  const rest = useRest();
+  const resting = useRestRunning();
   const [restOpen, setRestOpen] = useState(false);
-  useEffect(() => { if (!rest.running) setRestOpen(false); }, [rest.running]);
+  useEffect(() => { if (!resting) setRestOpen(false); }, [resting]);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const [confirmRemove, setConfirmRemove] = useState<string | null>(null);
   const refs = useRef(new Map<string, HTMLElement>());
@@ -218,15 +218,15 @@ export function WorkoutScreen() {
             <h1 className="title-md" style={{ textTransform: "uppercase", fontSize: 24, marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.title}</h1>
           </div>
           <button className="icon-btn" aria-label="Go to the current exercise" onClick={goToCurrent}><Icon name="target" /></button>
-          {rest.running
-            ? <WorkoutRestPill left={rest.left} frac={rest.frac} open={restOpen} onToggle={() => setRestOpen((o) => !o)} />
+          {resting
+            ? <WorkoutRestPill open={restOpen} onToggle={() => setRestOpen((o) => !o)} />
             : <button className="btn btn-primary" style={{ minHeight: 42, padding: "0 16px", fontSize: 16 }} onClick={() => setFinishOpen(true)}>Finish</button>}
         </div>
         <div style={{ marginTop: 10, height: 6, borderRadius: 6, background: "var(--surface-2)", overflow: "hidden" }} role="progressbar" aria-valuenow={done} aria-valuemax={total} aria-label="Sets done">
           <div style={{ height: "100%", width: `${total ? (done / total) * 100 : 0}%`, borderRadius: 6, background: "linear-gradient(90deg,var(--neon),var(--neon-2))", boxShadow: "0 0 12px var(--glow)", transition: "width .5s var(--ease)" }} />
         </div>
         <div className="muted mono" style={{ fontSize: 12, marginTop: 4, textAlign: "right" }}>{done}/{total} sets</div>
-        {rest.running && restOpen && <WorkoutRestPanel left={rest.left} frac={rest.frac} adjust={rest.adjust} skip={rest.skip} />}
+        {resting && restOpen && <WorkoutRestPanel />}
       </header>
 
       {s.entries.length === 0 && (

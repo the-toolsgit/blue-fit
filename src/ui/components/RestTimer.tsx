@@ -126,8 +126,23 @@ export function useRest() {
   return { running, left, frac: restTimer ? Math.max(0, left) / restTimer.durationSec : 0, adjust, skip: () => setRestTimer(null) };
 }
 
+/** Whether a rest is running, without a clock tick: re-checks once when the rest ends (so the parent screen
+ *  doesn't re-render 4× a second; only the pill and panel below tick). */
+export function useRestRunning() {
+  const { restTimer } = useStore();
+  const [, bump] = useState(0);
+  const ms = restTimer ? restTimer.endsAt - Date.now() : 0;
+  useEffect(() => {
+    if (!restTimer || ms <= 0) return;
+    const t = setTimeout(() => bump((n) => n + 1), ms + 20);
+    return () => clearTimeout(t);
+  }, [restTimer, ms > 0]); // eslint-disable-line react-hooks/exhaustive-deps
+  return ms > 0;
+}
+
 /** Workout header: the running rest timer in place of Finish. Tap opens the full timer under the header. */
-export function WorkoutRestPill({ left, frac, open, onToggle }: { left: number; frac: number; open: boolean; onToggle: () => void }) {
+export function WorkoutRestPill({ open, onToggle }: { open: boolean; onToggle: () => void }) {
+  const { left, frac } = useRest();
   return (
     <button onClick={onToggle} aria-expanded={open} aria-label="Rest timer"
       style={{ position: "relative", width: 48, height: 48, padding: 0, border: 0, background: "none", color: "var(--ink)", cursor: "pointer", flex: "none" }}>
@@ -138,7 +153,8 @@ export function WorkoutRestPill({ left, frac, open, onToggle }: { left: number; 
 }
 
 /** The full rest timer, shown right under the workout header: ring with icon, time, −15 / +15 / Skip (tap the pill again to close it). */
-export function WorkoutRestPanel({ left, frac, adjust, skip }: { left: number; frac: number; adjust: (d: number) => void; skip: () => void }) {
+export function WorkoutRestPanel() {
+  const { left, frac, adjust, skip } = useRest();
   return (
     <div className="row" style={{ marginTop: 10, gap: 8 }}>
       <div style={{ position: "relative", width: 46, height: 46, flex: "none" }}>
