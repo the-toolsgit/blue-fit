@@ -147,11 +147,17 @@ export interface Timing { ab: number; holdB: number; ba: number; holdA: number }
 export const DEFAULT_TIMING: Timing = { ab: 1344, holdB: 256, ba: 1344, holdA: 256 };
 export const PHASE_MS = 3200;
 export const loopMs = (t: Timing = DEFAULT_TIMING) => t.ab + t.holdB + t.ba + t.holdA;
+/** Holds longer than this are real "Hold N s" phases (the short turn at an end is 250 ms). */
+const REAL_HOLD_MS = 400;
 export function phase(ms: number, t: Timing = DEFAULT_TIMING): number {
   const e = (u: number) => (u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2);
+  // Next to a real hold, a gentler ease (60 % linear): the quadratic one creeps so slowly near the end that a
+  // 1 s hold looked nearly twice as long. The hold itself stays exactly its length.
+  const soft = (u: number) => 0.6 * u + 0.4 * e(u);
+  const eAB = t.holdB > REAL_HOLD_MS || t.holdA > REAL_HOLD_MS ? soft : e;
   const x = ms % loopMs(t);
-  if (x < t.ab) return e(x / t.ab);
+  if (x < t.ab) return eAB(x / t.ab);
   if (x < t.ab + t.holdB) return 1;
-  if (x < t.ab + t.holdB + t.ba) return 1 - e((x - t.ab - t.holdB) / t.ba);
+  if (x < t.ab + t.holdB + t.ba) return 1 - eAB((x - t.ab - t.holdB) / t.ba);
   return 0;
 }
