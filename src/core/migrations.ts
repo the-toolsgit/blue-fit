@@ -1,6 +1,7 @@
 // One-time data migrations applied on launch. Each runs once (its id is remembered in meta).
 import type { AppData, Exercise, Routine } from "./types";
 import plainText from "./seed/exercise-text.json";
+import figureFixes from "./seed/figure-fixes.json";
 import { TEXT_FIELDS, textFingerprint } from "./textFields";
 import { RULE_TEXT, RULE_TITLE } from "./seed/rule-text";
 
@@ -115,6 +116,24 @@ export const MIGRATIONS: Migration[] = [
       const add = (["abs", "neck"] as const).filter((g) => !d.targets.some((t) => t.group === g));
       if (!add.length) return null;
       return { ...d, targets: [...d.targets, ...add.map((group) => ({ group, min: null, max: null, off: true, note: "tracked only" }))] };
+    },
+  },
+  {
+    // Nov 17 2026: figures must follow the exercise text (seated row and face pull no longer lean back;
+    // cable lateral raise leans away a little). Built-in exercises only.
+    id: "2026-11-17-figure-fixes",
+    run(d) {
+      const fixes = figureFixes as unknown as Record<string, Record<string, Record<string, number>>>;
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        const fx = fixes[e.id];
+        if (!fx || e.isCustom || !e.figure) return e;
+        changed = true;
+        const f: any = { ...e.figure };
+        for (const [k, v] of Object.entries(fx)) f[k] = { ...f[k], ...v };
+        return { ...e, figure: f };
+      });
+      return changed ? { ...d, exercises } : null;
     },
   },
   {

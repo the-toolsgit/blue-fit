@@ -74,6 +74,10 @@ const NOTES = {
 // The plan page lists Mon–Sun; since Nov 16 2026 the week starts on Saturday, so each day moves two weekdays earlier.
 const WEEKDAY = { Mon: 6, Tue: 0, Wed: 1, Thu: 2, Fri: 3, Sat: 4, Sun: 5 };
 
+/** Figure corrections (src/core/seed/figure-fixes.json): the animation must follow the exercise text. */
+const FIG_FIX = JSON.parse(readFileSync(new URL("../src/core/seed/figure-fixes.json", import.meta.url), "utf8"));
+const fixFigure = (id, f) => (f && FIG_FIX[id] ? { ...f, ...Object.fromEntries(Object.entries(FIG_FIX[id]).map(([k, v]) => [k, { ...f[k], ...v }])) } : f);
+
 const exercises = new Map();
 const days = [];
 for (const day of DAYS) {
@@ -92,7 +96,7 @@ for (const day of DAYS) {
         why: e.why, setup: e.setup, form: e.form, tips: e.tips, avoid: e.mistakes,
         rangeOfMotion: e.rom, tempo: "1–2 s up, 2–3 s down",
         defaultRestSec: 120, incrementLb: m.inc,
-        figure: FIG[base] ?? null, isCustom: false, archived: false,
+        figure: fixFigure(id, FIG[base] ?? null), isCustom: false, archived: false,
       });
     }
     const [lo, hi] = e.r.split("–").map(Number);

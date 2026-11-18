@@ -128,7 +128,7 @@ export function WorkoutScreen() {
 
   return (
     <div className="page" style={{ paddingTop: 0 }}>
-      <header className="glass" style={{ position: "sticky", top: 0, zIndex: 20, margin: "0 -16px 14px", padding: "calc(env(safe-area-inset-top) + 10px) 16px 12px", borderRadius: "0 0 22px 22px", borderTop: 0 }}>
+      <header className="glass" style={{ position: "sticky", top: 0, zIndex: 20, background: "var(--surface-solid)", backdropFilter: "none", WebkitBackdropFilter: "none", margin: "0 -16px 14px", padding: "calc(env(safe-area-inset-top) + 10px) 16px 12px", borderRadius: "0 0 22px 22px", borderTop: 0 }}>
         <div className="spread">
           <div className="grow">
             <div className="eyebrow" style={{ fontSize: 11 }}>{s.deload ? <span style={{ color: "var(--neon-2)" }}>Deload · </span> : null}{day ? "Workout" : "Free workout"} · <Elapsed s={s} /></div>
