@@ -170,12 +170,20 @@ export function finishSession(s: Session, now: Date): Session {
 }
 
 /** Editing a finished workout: sets added for an exercise that had skipped sets take them off the skipped count
- * (a forgotten set recorded later). Deleting sets never adds skipped ones. */
+ * (a forgotten set recorded later). Removing a whole plan exercise (one linked to a plan slot) makes its done sets
+ * skipped again. Deleting single sets never adds skipped ones (it may be a wrongly recorded extra set). */
 export function reconcileSkipped(before: Session, after: Session): Session {
-  if (!after.skipped?.length) return after;
-  const done = (x: Session, id: string) => x.entries.filter((e) => e.exerciseId === id).reduce((a, e) => a + e.sets.filter((y) => y.done && countsForVolume(y.type)).length, 0);
-  const skipped = after.skipped
-    .map((k) => ({ ...k, sets: k.sets - Math.max(0, done(after, k.exerciseId) - done(before, k.exerciseId)) }))
+  const doneSets = (e: SessionEntry) => e.sets.filter((y) => y.done && countsForVolume(y.type)).length;
+  const done = (x: Session, id: string) => x.entries.filter((e) => e.exerciseId === id).reduce((a, e) => a + doneSets(e), 0);
+  const list = (after.skipped ?? []).map((k) => ({ ...k }));
+  for (const e of before.entries) {
+    if (!e.slotId || after.entries.some((x) => x.id === e.id) || !doneSets(e)) continue;
+    const k = list.find((x) => x.exerciseId === e.exerciseId);
+    if (k) k.sets += doneSets(e); else list.push({ exerciseId: e.exerciseId, sets: doneSets(e) });
+  }
+  const removed = new Set(before.entries.filter((e) => !after.entries.some((x) => x.id === e.id)).map((e) => e.exerciseId));
+  const skipped = list
+    .map((k) => (removed.has(k.exerciseId) ? k : { ...k, sets: k.sets - Math.max(0, done(after, k.exerciseId) - done(before, k.exerciseId)) }))
     .filter((k) => k.sets > 0);
   const { skipped: _drop, ...rest } = after;
   return skipped.length ? { ...after, skipped } : rest;

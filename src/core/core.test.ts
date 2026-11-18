@@ -8,7 +8,7 @@ import { groupPlates, platesFor } from "./plates";
 import { epley } from "./oneRm";
 import { computeRecords, prsForSet, prsForEntry } from "./records";
 import { progressionHint } from "./progression";
-import { addSet, afterSetDone, removeSet, applyHint, createSessionFromDay, finishSession, summarize, swapEntry, toggleDone, toggleSupersetWithNext, updateSet } from "./session";
+import { addSet, afterSetDone, removeEntry, removeSet, applyHint, createSessionFromDay, finishSession, summarize, swapEntry, toggleDone, toggleSupersetWithNext, updateSet } from "./session";
 import { dayForDate } from "./today";
 import { buildBackup, parseBackup } from "./io/exportFormat";
 import { MemoryAdapter } from "./storage/memoryAdapter";
@@ -209,6 +209,9 @@ describe("session logic", () => {
     const withSet = updateSet(added, e0.id, added.entries[0].sets.at(-1)!.id, { weight: 100, reps: 10, done: true });
     expect(reconcileSkipped(s, withSet).skipped![0]).toEqual({ exerciseId: "t-bar-reverse-row", sets: 1 });
     expect(reconcileSkipped(s, removeSet(s, e0.id, e0.sets[0].id)).skipped).toEqual(s.skipped);
+    // Removing a whole plan exercise makes its done sets skipped again
+    const rec = reconcileSkipped(s, withSet);
+    expect(reconcileSkipped(rec, removeEntry(rec, e0.id)).skipped![0]).toEqual({ exerciseId: "t-bar-reverse-row", sets: 3 }); // all 3 planned sets
   });
 });
 
