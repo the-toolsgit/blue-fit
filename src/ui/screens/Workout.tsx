@@ -439,7 +439,7 @@ function FailWhy({ why }: { why: string[] }) {
   return (
     <>
       <button className="fail-why-btn" aria-expanded={open} onClick={(ev) => { ev.stopPropagation(); setOpen((o) => !o); }}>{open ? "Hide" : "Why?"}</button>
-      {open && <ul className="fail-why muted">{why.map((w) => <li key={w}>{w}</li>)}</ul>}
+      {open && <ul className="fail-why muted">{why.map((w) => <li key={w}>{w.replace(/ (in this workout|today)$/, "")}</li>)}</ul>}
     </>
   );
 }

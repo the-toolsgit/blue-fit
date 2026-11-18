@@ -149,7 +149,7 @@ export function planFailure(day: RoutineDay, date: string, c: FailureContext): F
     if (trainedRecently(c, g, date)) return;
     const pr = priorityOf(g, t);
     const below = isFocus(t) && sets < t.min;
-    const why = [`Last ${label(g)} exercise today`];
+    const why = [`Last ${label(g)} exercise`];
     if (pr === "priority") why.push("Priority muscle");
     if (below) why.push("Below weekly target");
     why.push(gap == null ? "Not trained again this week" : `${gap} days rest after`);
