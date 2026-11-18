@@ -17,6 +17,8 @@ export interface EffortGap {
   max: number;
   weight: number;
   failReps: number;
+  /** Every earlier working set was flagged */
+  all: boolean;
 }
 
 const isWork = (x: LoggedSet) => x.type === "working" || x.type === "failure";
@@ -38,15 +40,23 @@ export function effortGap(e: SessionEntry, deload = false): EffortGap | null {
   const bad = before.flatMap((x, i) => (x.done && x.reps != null && x.weight === f.weight && f.reps! - x.reps > REPS_LEFT_MAX ? [{ n: i + 1, left: f.reps! - x.reps }] : []));
   if (!bad.length) return null;
   const lefts = bad.map((b) => b.left);
-  return { sets: bad.map((b) => b.n), min: Math.min(...lefts), max: Math.max(...lefts), weight: f.weight, failReps: f.reps };
+  return { sets: bad.map((b) => b.n), min: Math.min(...lefts), max: Math.max(...lefts), weight: f.weight, failReps: f.reps, all: bad.length === before.length };
 }
 
-/** "Sets 1–2" / "Set 1" / "Sets 1, 3" */
-export function setsLabel(n: number[]): string {
+/** "Regular sets" (all of them) / "Sets 1–2" / "Set 1" / "Sets 1, 3" */
+export function setsLabel(g: Pick<EffortGap, "sets" | "all">): string {
+  const n = g.sets;
+  if (g.all && n.length > 1) return "Regular sets";
   if (n.length === 1) return `Set ${n[0]}`;
   const run = n.every((x, i) => i === 0 || x === n[i - 1] + 1);
   return `Sets ${run ? `${n[0]}–${n[n.length - 1]}` : n.join(", ")}`;
 }
 
-/** "~5 reps" / "~4–6 reps" */
-export const repsLeftLabel = (g: EffortGap) => `~${g.min === g.max ? g.min : `${g.min}–${g.max}`} reps`;
+/** "Regular sets were 3 reps short of failure" / "Set 1 was 3–4 reps short of failure" */
+export function effortLine(g: EffortGap): string {
+  const many = g.sets.length > 1;
+  return `${setsLabel(g)} ${many ? "were" : "was"} ${g.min === g.max ? g.min : `${g.min}–${g.max}`} reps short of failure`;
+}
+
+/** The rule, shown after the line */
+export const EFFORT_RULE = "Stop each set with 0–2 reps left.";

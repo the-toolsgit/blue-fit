@@ -10,7 +10,7 @@ import { useRestRunning, WorkoutRestPanel, WorkoutRestPill } from "../components
 import { LOADING } from "../../core/figure/poses";
 import { groupPlates, platesFor } from "../../core/plates";
 import { progressionHint } from "../../core/progression";
-import { effortGap, repsLeftLabel, setsLabel } from "../../core/effort";
+import { EFFORT_RULE, effortGap, effortLine } from "../../core/effort";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
   addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
@@ -427,7 +427,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
             </div>
           )}
           {lastGap && !allDone && !gap && (
-            <div className="effort-note"><Icon name="flame" size={18} /><span>Last time <b>{setsLabel(lastGap.sets).toLowerCase()} had {repsLeftLabel(lastGap)} left.</b> Stop each set with 0–2 left.</span></div>
+            <div className="effort-note"><Icon name="flame" size={18} /><span><b>Last time: {effortLine(lastGap).replace(/^R/, "r").replace(/^S/, "s")}.</b> {EFFORT_RULE}</span></div>
           )}
           {hint.kind !== "none" && !allDone && (
             <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
@@ -495,7 +495,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           );
         })}
       </div>
-      {gap && <div className="effort-note" style={{ marginTop: 8 }}><Icon name="flame" size={18} /><span><b>{setsLabel(gap.sets)} had {repsLeftLabel(gap)} left</b> (failure set: {gap.failReps}). Stop each set with 0–2 left.</span></div>}
+      {gap && <div className="effort-note" style={{ marginTop: 8 }}><Icon name="flame" size={18} /><span><b>{effortLine(gap)}.</b> {EFFORT_RULE}</span></div>}
       <button className="btn btn-quiet btn-block" style={{ marginTop: 4, minHeight: 40, fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(addSet(s, e.id)); onFocus(); }}>
         <Icon name="plus" size={18} /> Add set
       </button>
