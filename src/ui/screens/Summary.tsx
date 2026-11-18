@@ -2,6 +2,7 @@
 import { useMemo, useState } from "react";
 import { FLEX } from "../../core/figure/poses";
 import { PR_LABEL } from "../../core/records";
+import { effortGap, repsLeftLabel, setsLabel } from "../../core/effort";
 import { skippedVolume, summarize } from "../../core/session";
 import { MUSCLE_GROUPS } from "../../core/types";
 import { fmtNum } from "../../core/util";
@@ -26,6 +27,8 @@ export function SummaryScreen({ id }: { id?: string }) {
   const groups = MUSCLE_GROUPS.filter((m) => sum.perGroup[m.id] > 0 || sk(m.id) > 0);
   const maxG = Math.max(1, ...groups.map((m) => sum.perGroup[m.id] + sk(m.id)));
   const anySkipped = groups.some((m) => sk(m.id) > 0);
+  // Effort check: exercises whose failure set shows earlier sets stopped too early
+  const gaps = s.entries.flatMap((e) => { const g = effortGap(e, s.deload); return g ? [{ e, g }] : []; });
 
   return (
     <div className="page">
@@ -60,6 +63,21 @@ export function SummaryScreen({ id }: { id?: string }) {
                 <span className="grow"><b>{exMap.get(p.exerciseId)?.name}</b><br /><span className="muted" style={{ fontSize: 13 }}>{p.kinds.map((k) => PR_LABEL[k]).join(" · ")}</span></span>
               </div>
             ))}
+          </div>
+        </>
+      )}
+
+      {gaps.length > 0 && (
+        <>
+          <h2 className="section-title" style={{ color: "var(--warn)" }}>Effort</h2>
+          <div className="glass" style={{ padding: 6, borderColor: "color-mix(in srgb,var(--warn) 35%,transparent)" }}>
+            {gaps.map(({ e, g }) => (
+              <div key={e.id} className="list-row">
+                <span style={{ color: "var(--warn)" }}><Icon name="flame" /></span>
+                <span className="grow"><b>{exMap.get(e.exerciseId)?.name}</b><br /><span className="muted" style={{ fontSize: 13 }}>{setsLabel(g.sets)} had {repsLeftLabel(g)} left (failure set: {g.failReps})</span></span>
+              </div>
+            ))}
+            <p className="muted" style={{ fontSize: 12, margin: "2px 12px 8px" }}>Stop each set with 0–2 good reps left.</p>
           </div>
         </>
       )}

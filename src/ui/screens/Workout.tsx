@@ -10,6 +10,7 @@ import { useRestRunning, WorkoutRestPanel, WorkoutRestPill } from "../components
 import { LOADING } from "../../core/figure/poses";
 import { groupPlates, platesFor } from "../../core/plates";
 import { progressionHint } from "../../core/progression";
+import { effortGap, repsLeftLabel, setsLabel } from "../../core/effort";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
   addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
@@ -375,6 +376,9 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   // Deload: no progression push; a fixed reminder instead.
   const hint = s.deload || !settings.progressionHints ? ({ kind: "none" } as const) : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb);
   const allDone = e.sets.length > 0 && e.sets.every((x) => x.done);
+  // Effort check: the failure set shows earlier sets at the same weight left too many reps (today, and last time)
+  const gap = effortGap(e, s.deload);
+  const lastGap = last ? effortGap(last.entry) : null;
   // The first set that isn't done is the open one; a picked set counts only if it's done or that one (sets go in order)
   const firstOpen = e.sets.find((x) => !x.done) ?? null;
   const picked = e.sets.find((x) => x.id === sel);
@@ -413,7 +417,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
 
       {e.notes && <div className="row" style={{ gap: 8, alignItems: "center", fontSize: 13, marginTop: 8, padding: "8px 10px", borderRadius: 10, background: "var(--surface-2)" }}><span style={{ display: "inline-flex", flex: "none" }}><Icon name="note" size={15} /></span><span>{e.notes}</span></div>}
 
-      {(last || hint.kind !== "none" || s.deload) && (
+      {(last || hint.kind !== "none" || s.deload || (lastGap && !allDone)) && (
         <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
           {last && <div className="mono muted" style={{ fontSize: 13 }}>Last: {setsLine(last.entry.sets)}</div>}
           {s.deload && !allDone && (
@@ -421,6 +425,9 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               <span style={{ color: "var(--neon-2)" }}><Icon name="timer" size={18} /></span>
               <span className="grow">Deload: weights are 10% lighter. Stop every set with {DELOAD.repsLeft} reps left.</span>
             </div>
+          )}
+          {lastGap && !allDone && !gap && (
+            <div className="effort-note"><Icon name="flame" size={18} /><span>Last time <b>{setsLabel(lastGap.sets).toLowerCase()} had {repsLeftLabel(lastGap)} left.</b> Stop each set with 0–2 left.</span></div>
           )}
           {hint.kind !== "none" && !allDone && (
             <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
@@ -488,6 +495,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           );
         })}
       </div>
+      {gap && <div className="effort-note" style={{ marginTop: 8 }}><Icon name="flame" size={18} /><span><b>{setsLabel(gap.sets)} had {repsLeftLabel(gap)} left</b> (failure set: {gap.failReps}). Stop each set with 0–2 left.</span></div>}
       <button className="btn btn-quiet btn-block" style={{ marginTop: 4, minHeight: 40, fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(addSet(s, e.id)); onFocus(); }}>
         <Icon name="plus" size={18} /> Add set
       </button>
