@@ -191,7 +191,7 @@ describe("extra set for skipped work", async () => {
     expect(picks.length).toBeGreaterThan(0);
     for (const p of picks) {
       expect(p.slot.sets).toBeLessThan(EXTRA_SET_MAX);
-      expect(p.why.join(" ")).toMatch(/behind this week \(skipped/);
+      expect(p.why.join(" ")).toMatch(/behind this week$/);
     }
     // A day already in the past this week gets nothing
     const past = routine.days.find((d) => d.weekday === new Date(`${addDays(ws, 1)}T12:00:00`).getDay());
@@ -200,10 +200,10 @@ describe("extra set for skipped work", async () => {
   it("the workout starts with the extra set stored on the entry", () => {
     const d = routine.days.find((x) => x.slots.some((s) => s.sets < EXTRA_SET_MAX))!;
     const slot = d.slots.find((s) => s.sets < EXTRA_SET_MAX)!;
-    const s = createSessionFromDay(routine, d, exMap, [], new Date("2026-11-18T10:00:00"), { extra: [{ slotId: slot.id, why: ["Biceps behind this week (skipped Tue)"] }] });
+    const s = createSessionFromDay(routine, d, exMap, [], new Date("2026-11-18T10:00:00"), { extra: [{ slotId: slot.id, why: ["Biceps behind this week"] }] });
     const e = s.entries.find((x) => x.slotId === slot.id)!;
     expect(e.sets).toHaveLength(slot.sets + 1);
-    expect(e.extraSet).toEqual(["Biceps behind this week (skipped Tue)"]);
+    expect(e.extraSet).toEqual(["Biceps behind this week"]);
     const dl = createSessionFromDay(routine, d, exMap, [], new Date("2026-11-18T10:00:00"), { deload: true, extra: [{ slotId: slot.id, why: ["x"] }] });
     expect(dl.entries.find((x) => x.slotId === slot.id)!.extraSet).toBeUndefined();
   });

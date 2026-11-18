@@ -205,7 +205,6 @@ export function weekFailure(c: FailureContext): Map<string, Map<string, string[]
 /** Most sets an exercise can have after the extra set (Leo, Nov 18 2026). */
 export const EXTRA_SET_MAX = 4;
 export interface ExtraPick { slotId: string; why: string[] }
-const SHORT_DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const directIn = (day: RoutineDay | undefined, g: MuscleGroup, exMap: Map<string, Exercise>) =>
   (day?.slots ?? []).filter((s) => exMap.get(s.exerciseId)?.volume.some((v) => v.group === g && v.weight === 1));
@@ -242,13 +241,7 @@ export function planExtraSets(day: RoutineDay, date: string, c: FailureContext):
     if (next >= HARD_SETS) continue;
     const slot = [...mine].reverse().find((s) => s.sets < EXTRA_SET_MAX);
     if (!slot) continue;
-    // Which planned days this week were skipped for it
-    const missed: string[] = [];
-    for (let d = ws; d < c.today; d = addDays(d, 1)) {
-      const dd = dayOn(c.routine, d);
-      if (dd && directIn(dd, g, c.exMap).length && !doneThisWeek(dd.id)) missed.push(SHORT_DAY[parseLocalDate(d).getDay()]);
-    }
-    const why = `${muscleLabel(g)} behind this week (${missed.length ? `skipped ${missed.join(", ")}` : "skipped sets"})`;
+    const why = `${muscleLabel(g)} behind this week`;
     picks.set(slot.id, [...(picks.get(slot.id) ?? []), why]);
   }
   return day.slots.filter((s) => picks.has(s.id)).map((s) => ({ slotId: s.id, why: picks.get(s.id)! }));
