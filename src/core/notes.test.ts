@@ -20,7 +20,7 @@ describe("workout notes", () => {
   });
   it("above the range suggests a heavier weight; below suggests lighter", () => {
     const up = workoutNotes(session("2026-11-08", [entry([set(40, 15), set(40, 15)])]), [], exMap).find((x) => x.kind === "above")!;
-    expect(up.text).toMatch(/Try \d+ next time/);
+    expect(up.text).toMatch(/Use \d+ next time/);
     expect(kinds(session("2026-11-08", [entry([set(60, 7), set(60, 7)])]), [])).toContain("below");
     expect(kinds(session("2026-11-08", [entry([set(50, 11), set(50, 10)])]), [])).toEqual([]);
   });
