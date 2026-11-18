@@ -1,7 +1,7 @@
 // Edit a finished workout: title, date, duration, notes, exercises and every set. Saves on every change.
 import { useEffect, useState } from "react";
 import { setSessionDate, setSessionDuration } from "../../core/history";
-import { addEntry, addSet, buildEntry, durationMin, removeEntry, removeSet, setEntry, swapEntry, updateSet } from "../../core/session";
+import { addEntry, addSet, buildEntry, durationMin, reconcileSkipped, removeEntry, removeSet, setEntry, swapEntry, updateSet } from "../../core/session";
 import type { LoggedSet, Session, SetType } from "../../core/types";
 import { Stepper } from "../components/Controls";
 import { ExercisePicker } from "../components/ExercisePicker";
@@ -40,7 +40,7 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
   const [remove, setRemove] = useState<string | null>(null);
   const [noteFor, setNoteFor] = useState<string | null>(null);
   if (!s) return <div className="page"><div className="empty">Workout not found.</div></div>;
-  const commit = (n: Session) => saveSession(n);
+  const commit = (n: Session) => saveSession(reconcileSkipped(s, n));
   const history = finished.filter((x) => x.id !== s.id);
   const done = () => {
     // Drop exercises left without sets

@@ -91,14 +91,14 @@ export function SummaryScreen({ id }: { id?: string }) {
         {s.entries.map((e) => {
           const ex = exMap.get(e.exerciseId);
           return (
-            <button key={e.id} className="list-row" onClick={() => go(`exercise/${e.exerciseId}`)}>
+            <div key={e.id} className="list-row">
               <Figure spec={ex?.figure} size={38} still className="thin" />
               <span className="grow">
                 <span style={{ display: "block", fontWeight: 600 }}>{ex?.name ?? e.exerciseId}</span>
                 <span className="mono muted" style={{ fontSize: 13 }}>{setsLine(e.sets)}{ex && e.sets.some((x) => x.weight) ? loadSuffix(ex) : ""}</span>
                 {e.notes && <span className="muted" style={{ display: "block", fontSize: 12 }}>{e.notes}</span>}
               </span>
-            </button>
+            </div>
           );
         })}
       </div>

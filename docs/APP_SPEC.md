@@ -93,11 +93,11 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 
 ### 3.4 Workout summary
 - Fresh finish (within 10 min): big FLEX figure flexing, date, "WORKOUT COMPLETE" in neon gradient, the workout title. Past workout: back button and the title instead. Deload workouts add "· Deload" to the date line.
-- **Sets per muscle** (finish screen and past workouts): working sets left undone (stored on the workout as `skipped`, per exercise, when it is finished; weighted like weekly volume) show as a dark red part (#721d1d, solid, no glow; Leo's pick) joined to the blue done part in one bar, rounded only at its outer ends, with a small dark red swatch and "= sets skipped" under the bars. Muscles that were only skipped appear with 0. Workouts finished from Nov 16 2026 before this existed get `skipped` worked out once from their plan day (planned working sets, halved on deload, minus done; migration `2026-11-17-backfill-skipped`). Free workouts and imports have none.
+- **Sets per muscle** (finish screen and past workouts): working sets left undone (stored on the workout as `skipped`, per exercise, when it is finished; weighted like weekly volume) show as a dark red part (#721d1d, solid, no glow; Leo's pick) joined to the blue done part in one bar, rounded only at its outer ends, with a small dark red swatch and "= sets skipped" under the bars. Muscles that were only skipped appear with 0. Workouts finished from Nov 16 2026 before this existed get `skipped` worked out once from their plan day (planned working sets, halved on deload, minus done; migration `2026-11-17-backfill-skipped`). Free workouts and imports have none. **Edit workout** changes only that day's recorded workout (never the plan); recording a forgotten set or exercise there takes it off the skipped count (deleting sets never adds skipped ones).
 - Three tiles counting up from zero: minutes, sets (non-warm-up done sets), volume lb (tonnage §5.3).
 - **Personal records** (pink section) per exercise with the PR kinds.
 - **Sets per muscle** this session (fractional, §5.2) as neon bars.
-- **Exercises** with sets line and notes (tap → exercise page). Workout notes.
+- **Exercises** with sets line and notes (read only: tapping does nothing, it's a summary). Workout notes.
 - **Done** (fresh) → Today. **Edit workout** → editor (§3.7.1). **Delete workout** (confirm).
 
 ### 3.5 Exercise detail

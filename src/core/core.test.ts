@@ -1,4 +1,4 @@
-import { deriveSkipped, skippedVolume } from "./session";
+import { deriveSkipped, reconcileSkipped, skippedVolume } from "./session";
 import { MIGRATIONS } from "./migrations";
 import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
@@ -8,7 +8,7 @@ import { groupPlates, platesFor } from "./plates";
 import { epley } from "./oneRm";
 import { computeRecords, prsForSet, prsForEntry } from "./records";
 import { progressionHint } from "./progression";
-import { addSet, afterSetDone, applyHint, createSessionFromDay, finishSession, summarize, swapEntry, toggleDone, toggleSupersetWithNext, updateSet } from "./session";
+import { addSet, afterSetDone, removeSet, applyHint, createSessionFromDay, finishSession, summarize, swapEntry, toggleDone, toggleSupersetWithNext, updateSet } from "./session";
 import { dayForDate } from "./today";
 import { buildBackup, parseBackup } from "./io/exportFormat";
 import { MemoryAdapter } from "./storage/memoryAdapter";
@@ -203,6 +203,12 @@ describe("session logic", () => {
     expect(deriveSkipped(old, routine)).toEqual(s.skipped);
     const m = MIGRATIONS.find((x) => x.id === "2026-11-17-backfill-skipped")!;
     expect(m.run({ ...seed, sessions: [old] }, "2026-11-17")!.sessions[0].skipped).toEqual(s.skipped);
+    // Editing: a forgotten set recorded later takes one off the skipped count; deleting a set never adds one
+    const e0 = s.entries[0];
+    const added = addSet(s, e0.id, "working");
+    const withSet = updateSet(added, e0.id, added.entries[0].sets.at(-1)!.id, { weight: 100, reps: 10, done: true });
+    expect(reconcileSkipped(s, withSet).skipped![0]).toEqual({ exerciseId: "t-bar-reverse-row", sets: 1 });
+    expect(reconcileSkipped(s, removeSet(s, e0.id, e0.sets[0].id)).skipped).toEqual(s.skipped);
   });
 });
 

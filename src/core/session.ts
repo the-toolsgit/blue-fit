@@ -169,6 +169,18 @@ export function finishSession(s: Session, now: Date): Session {
   return { ...s, entries, status: "finished", finishedAt: now.toISOString(), ...(skipped.length ? { skipped } : {}) };
 }
 
+/** Editing a finished workout: sets added for an exercise that had skipped sets take them off the skipped count
+ * (a forgotten set recorded later). Deleting sets never adds skipped ones. */
+export function reconcileSkipped(before: Session, after: Session): Session {
+  if (!after.skipped?.length) return after;
+  const done = (x: Session, id: string) => x.entries.filter((e) => e.exerciseId === id).reduce((a, e) => a + e.sets.filter((y) => y.done && countsForVolume(y.type)).length, 0);
+  const skipped = after.skipped
+    .map((k) => ({ ...k, sets: k.sets - Math.max(0, done(after, k.exerciseId) - done(before, k.exerciseId)) }))
+    .filter((k) => k.sets > 0);
+  const { skipped: _drop, ...rest } = after;
+  return skipped.length ? { ...after, skipped } : rest;
+}
+
 /** For workouts finished before `skipped` was saved: planned working sets of the day (from the plan) minus the
  * ones done, per slot. Approximate if the plan changed since. Empty when the workout has no plan day. */
 export function deriveSkipped(s: Session, routine: Routine | undefined): { exerciseId: string; sets: number }[] {
