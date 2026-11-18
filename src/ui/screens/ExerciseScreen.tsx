@@ -161,7 +161,7 @@ export function ExerciseScreen({ id, slotId }: { id?: string; slotId?: string })
     <div className="page">
       <div className="spread">
         <button className="icon-btn" onClick={() => back("plan")} aria-label="Back" style={{ marginLeft: -10 }}><Icon name="back" /></button>
-        {ex && <button className="btn btn-ghost" style={{ minHeight: 40 }} onClick={() => setEditing(true)}><Icon name="note" size={18} /> Edit</button>}
+        {ex?.isCustom && <button className="btn btn-ghost" style={{ minHeight: 40 }} onClick={() => setEditing(true)}><Icon name="note" size={18} /> Edit</button>}
       </div>
       {ex?.archived && <p className="badge" style={{ marginBottom: 8 }}>Hidden from the exercise picker</p>}
       <ExerciseEditor open={editing} exercise={ex} onClose={() => setEditing(false)} />
