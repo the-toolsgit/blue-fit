@@ -26,6 +26,8 @@ export function addDay(r: Routine, weekday?: number | null): { routine: Routine;
   return { routine: { ...r, days: [...r.days, day] }, dayId: id };
 }
 export const removeDay = (r: Routine, dayId: string): Routine => ({ ...r, days: r.days.filter((d) => d.id !== dayId) });
+/** Remove every exercise from a day; the day stays (as a rest day) with its weekday and name. */
+export const clearDay = (r: Routine, dayId: string): Routine => ({ ...r, days: r.days.map((d) => (d.id === dayId ? { ...d, slots: [] } : d)) });
 export const renameDay = (r: Routine, dayId: string, title: string): Routine => mapDay(r, dayId, (d) => ({ ...d, title }));
 
 /** Set a day's weekday. If another day has it, the two days swap weekdays. */

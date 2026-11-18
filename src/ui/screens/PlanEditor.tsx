@@ -5,7 +5,7 @@ import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalList
 import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useMemo, useState } from "react";
 import {
-  addDay, addSlot, moveSlot, removeDay, removeSlot, renameDay, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine,
+  addSlot, clearDay, moveSlot, removeSlot, renameDay, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine,
 } from "../../core/routineEdit";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { completeProfile, MUSCLE_GROUPS, type Exercise, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
@@ -143,7 +143,6 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
             {d.weekday != null ? SHORT[d.weekday] : d.title.length > 10 ? d.title.slice(0, 9) + "…" : d.title || "New"}
           </button>
         ))}
-        <button className="chip" onClick={() => { const r = addDay(draft); setDraft(r.routine); setDayId(r.dayId); }}><Icon name="plus" size={16} /> Day</button>
       </div>
 
       {day && (
@@ -168,7 +167,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
           </div>
           <div className="spread" style={{ margin: "6px 4px 0" }}>
             <p className="muted" style={{ fontSize: 12 }}>Tap an exercise to change it. Drag ⋮⋮ to move it.</p>
-            <button className="btn btn-quiet" style={{ color: "var(--bad)", fontSize: 13, minHeight: 36, padding: 0, whiteSpace: "nowrap" }} onClick={() => setConfirm("deleteDay")}><Icon name="trash" size={16} /> Delete day</button>
+            <button className="btn btn-quiet" style={{ color: "var(--bad)", fontSize: 13, minHeight: 36, padding: 0, whiteSpace: "nowrap" }} onClick={() => setConfirm("deleteDay")} disabled={!day.slots.length}><Icon name="trash" size={16} /> Delete day</button>
           </div>
           <h2 className="section-title">This workout's volume</h2>
           <DayVolume routine={draft} day={day} exMap={exMap} targets={tdraft} />
@@ -241,8 +240,8 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
         }} />
       <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} failWhy={day && slot ? weekFail.get(day.id)?.get(slot.id) : undefined} />
       <Confirm open={confirm === "cancel"} title="Discard changes?" body="Your edits to this plan are thrown away." confirm="Discard" danger onClose={() => setConfirm(null)} onConfirm={leave} />
-      <Confirm open={confirm === "deleteDay"} title={`Delete ${day?.title ?? "this day"}?`} body="Past workouts of this day stay in history." confirm="Delete" danger
-        onClose={() => setConfirm(null)} onConfirm={() => { if (day) { setDraft(removeDay(draft, day.id)); setDayId(null); } }} />
+      <Confirm open={confirm === "deleteDay"} title={`Delete ${day?.title ?? "this day"}?`} body="All its exercises are removed and it becomes a rest day. Past workouts stay in history." confirm="Delete" danger
+        onClose={() => setConfirm(null)} onConfirm={() => { if (day) setDraft(clearDay(draft, day.id)); }} />
       <Confirm open={confirm === "resetTargets"} title="Reset targets?" body={profile ? "Every muscle gets the target worked out from your training profile, with default priorities and none skipped. Nothing is saved until you tap Save plan." : "Every muscle goes back to the plan's original target. Fill in your training profile in Settings to get targets worked out for you. Nothing is saved until you tap Save plan."} confirm="Reset"
         onClose={() => setConfirm(null)} onConfirm={resetTargets} />
     </div>
