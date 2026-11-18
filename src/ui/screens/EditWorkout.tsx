@@ -1,5 +1,6 @@
 // Edit a finished workout: title, date, duration, notes, exercises and every set. Saves on every change.
 import { useEffect, useState } from "react";
+import { deloadSets } from "../../core/deload";
 import { setSessionDate } from "../../core/history";
 import { addEntry, addSet, buildEntry, reconcileSkipped, removeEntry, removeSet, setEntry, swapEntry, updateSet } from "../../core/session";
 import type { LoggedSet, Session, SetType } from "../../core/types";
@@ -39,23 +40,35 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
   const [remove, setRemove] = useState<string | null>(null);
   const [noteFor, setNoteFor] = useState<string | null>(null);
   if (!s) return <div className="page"><div className="empty">Workout not found.</div></div>;
-  const commit = (n: Session) => saveSession(reconcileSkipped(s, n));
+  // The day's full plan: exercises that weren't recorded show (dimmed) in plan order so a forgotten one can be added.
+  const planDay = routines.find((r) => r.id === s.routineId)?.days.find((d) => d.id === s.dayId);
+  // Working sets the plan day asks for, per exercise (by the recorded exercise when it was swapped)
+  const planned: Record<string, number> | undefined = planDay ? {} : undefined;
+  for (const slot of planDay?.slots ?? []) {
+    const id = s.entries.find((e) => e.slotId === slot.id)?.exerciseId ?? slot.exerciseId;
+    planned![id] = (planned![id] ?? 0) + (s.deload ? deloadSets(slot.sets) : slot.sets);
+  }
+  const commit = (n: Session) => saveSession(reconcileSkipped(s, n, planned));
+  /** Typing reps records the set; clearing them un-records it. */
+  const editSet = (entryId: string, setId: string, patch: Partial<LoggedSet>) => {
+    const x = s.entries.find((e) => e.id === entryId)?.sets.find((y) => y.id === setId);
+    const reps = "reps" in patch ? patch.reps : x?.reps;
+    commit(updateSet(s, entryId, setId, { ...patch, done: (reps ?? 0) > 0, completedAt: s.finishedAt ?? s.startedAt }));
+  };
   const history = finished.filter((x) => x.id !== s.id);
   const done = () => {
-    // Drop exercises left without sets
-    const cleaned = { ...s, entries: s.entries.filter((e) => e.sets.length > 0) };
-    if (cleaned.entries.length !== s.entries.length) commit(cleaned);
+    // Drop sets left empty, then exercises left without sets (they show as "Not recorded" again)
+    const cleaned = { ...s, entries: s.entries.map((e) => ({ ...e, sets: e.sets.filter((x) => x.done && (x.reps ?? 0) > 0) })).filter((e) => e.sets.length > 0) };
+    if (JSON.stringify(cleaned.entries) !== JSON.stringify(s.entries)) commit(cleaned);
     replace(`summary/${s.id}`);
   };
   const addDoneSet = (entryId: string) => {
     const n = addSet(s, entryId);
     const e = n.entries.find((x) => x.id === entryId)!;
     const last = e.sets[e.sets.length - 1];
-    commit(updateSet(n, entryId, last.id, { done: true, completedAt: s.finishedAt ?? s.startedAt }));
+    commit(updateSet(n, entryId, last.id, { done: (last.reps ?? 0) > 0, completedAt: s.finishedAt ?? s.startedAt }));
   };
   const menuEntry = s.entries.find((e) => e.id === menu);
-  // The day's full plan: exercises that weren't recorded show (dimmed) in plan order so a forgotten one can be added.
-  const planDay = routines.find((r) => r.id === s.routineId)?.days.find((d) => d.id === s.dayId);
   type Item = { kind: "entry"; e: Session["entries"][number] } | { kind: "missing"; slot: NonNullable<typeof planDay>["slots"][number] };
   const items: Item[] = [];
   for (const slot of planDay?.slots ?? []) {
@@ -67,7 +80,8 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
     const ex = exMap.get(slot.exerciseId);
     if (!ex) return;
     const ne = buildEntry(ex, history, { slot, deload: s.deload });
-    commit(addEntry(s, { ...ne, sets: ne.sets.map((x) => ({ ...x, done: true, completedAt: s.finishedAt ?? s.startedAt })) }));
+    // The planned sets, empty: each one counts once you type its reps
+    commit(addEntry(s, { ...ne, sets: ne.sets.map((x) => ({ ...x, weight: null, reps: null, done: false, completedAt: null })) }));
   };
 
   return (
@@ -116,9 +130,9 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
                 return [
                   <button key={x.id + "t"} aria-label={`Set type: ${t.long}. Tap to change`} onClick={() => commit(updateSet(s, e.id, x.id, { type: TYPES[(TYPES.indexOf(x.type) + 1) % 4] }))}
                     style={{ height: 40, borderRadius: 10, font: "700 15px var(--mono)", color: t.color, border: `1px solid color-mix(in srgb, ${t.color} 45%, transparent)` }}>{t.short || wi}</button>,
-                  <NumField key={x.id + "w"} label="Weight" decimals value={x.weight} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />,
+                  <NumField key={x.id + "w"} label="Weight" decimals value={x.weight} onChange={(v) => editSet(e.id, x.id, { weight: v })} />,
                   <span key={x.id + "x"} className="muted" style={{ textAlign: "center" }}>×</span>,
-                  <NumField key={x.id + "r"} label="Reps" value={x.reps} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />,
+                  <NumField key={x.id + "r"} label="Reps" value={x.reps} onChange={(v) => editSet(e.id, x.id, { reps: v })} />,
                   <button key={x.id + "d"} className="icon-btn" aria-label="Delete set" onClick={() => commit(removeSet(s, e.id, x.id))}><Icon name="trash" size={18} /></button>,
                 ];
               })}

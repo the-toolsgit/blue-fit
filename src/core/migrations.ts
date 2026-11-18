@@ -250,6 +250,24 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
+    // Nov 17 2026: "Add" in Edit workout used to save the planned sets as done even when left empty, so they
+    // counted as done. Drop done sets without reps from finished workouts and work out their skipped sets again.
+    id: "2026-11-17-drop-empty-done-sets",
+    run(d) {
+      let changed = false;
+      const sessions = d.sessions.map((s) => {
+        if (s.status !== "finished" || !s.entries.some((e) => e.sets.some((x) => x.done && !((x.reps ?? 0) > 0)))) return s;
+        changed = true;
+        const entries = s.entries.map((e) => ({ ...e, sets: e.sets.filter((x) => !(x.done && !((x.reps ?? 0) > 0))) })).filter((e) => e.sets.length > 0);
+        const cleaned = { ...s, entries };
+        const sk = deriveSkipped(cleaned, d.routines.find((r) => r.id === s.routineId));
+        const { skipped: _old, ...rest } = cleaned;
+        return sk.length ? { ...rest, skipped: sk } : rest;
+      });
+      return changed ? { ...d, sessions } : null;
+    },
+  },
+  {
     // Nov 16 2026: plain-language how-to texts and one-number tempos for the built-in exercises.
     // Skips any exercise whose texts were edited in the app.
     id: "2026-11-16-plain-exercise-text",

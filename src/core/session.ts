@@ -169,21 +169,18 @@ export function finishSession(s: Session, now: Date): Session {
   return { ...s, entries, status: "finished", finishedAt: now.toISOString(), ...(skipped.length ? { skipped } : {}) };
 }
 
-/** Editing a finished workout: sets added for an exercise that had skipped sets take them off the skipped count
- * (a forgotten set recorded later). Removing a whole plan exercise (one linked to a plan slot) makes its done sets
- * skipped again. Deleting single sets never adds skipped ones (it may be a wrongly recorded extra set). */
-export function reconcileSkipped(before: Session, after: Session): Session {
-  const doneSets = (e: SessionEntry) => e.sets.filter((y) => y.done && countsForVolume(y.type)).length;
-  const done = (x: Session, id: string) => x.entries.filter((e) => e.exerciseId === id).reduce((a, e) => a + doneSets(e), 0);
-  const list = (after.skipped ?? []).map((k) => ({ ...k }));
-  for (const e of before.entries) {
-    if (!e.slotId || after.entries.some((x) => x.id === e.id) || !doneSets(e)) continue;
-    const k = list.find((x) => x.exerciseId === e.exerciseId);
-    if (k) k.sets += doneSets(e); else list.push({ exerciseId: e.exerciseId, sets: doneSets(e) });
-  }
-  const removed = new Set(before.entries.filter((e) => !after.entries.some((x) => x.id === e.id)).map((e) => e.exerciseId));
-  const skipped = list
-    .map((k) => (removed.has(k.exerciseId) ? k : { ...k, sets: k.sets - Math.max(0, done(after, k.exerciseId) - done(before, k.exerciseId)) }))
+/** A recorded set counts once it has reps (an empty set added in Edit workout doesn't). */
+export const isRecorded = (x: LoggedSet) => x.done && (x.reps ?? 0) > 0;
+
+/** Editing a finished workout keeps `skipped` in line with what's recorded. For each exercise that was planned
+ * (`planned`: working sets per exercise from the plan day; otherwise done + skipped before the edit is used as the
+ * plan), skipped = planned − recorded, never below 0. Exercises outside the plan never get skipped sets. */
+export function reconcileSkipped(before: Session, after: Session, planned?: Record<string, number>): Session {
+  const done = (x: Session, id: string) => x.entries.filter((e) => e.exerciseId === id).reduce((a, e) => a + e.sets.filter((y) => isRecorded(y) && countsForVolume(y.type)).length, 0);
+  const skipBefore = (id: string) => before.skipped?.find((k) => k.exerciseId === id)?.sets ?? 0;
+  const ids = new Set([...(before.skipped ?? []).map((k) => k.exerciseId), ...Object.keys(planned ?? {}), ...before.entries.filter((e) => e.slotId).map((e) => e.exerciseId)]);
+  const skipped = [...ids]
+    .map((id) => ({ exerciseId: id, sets: Math.max(0, (planned?.[id] ?? done(before, id) + skipBefore(id)) - done(after, id)) }))
     .filter((k) => k.sets > 0);
   const { skipped: _drop, ...rest } = after;
   return skipped.length ? { ...after, skipped } : rest;

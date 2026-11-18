@@ -208,7 +208,14 @@ describe("session logic", () => {
     const added = addSet(s, e0.id, "working");
     const withSet = updateSet(added, e0.id, added.entries[0].sets.at(-1)!.id, { weight: 100, reps: 10, done: true });
     expect(reconcileSkipped(s, withSet).skipped![0]).toEqual({ exerciseId: "t-bar-reverse-row", sets: 1 });
-    expect(reconcileSkipped(s, removeSet(s, e0.id, e0.sets[0].id)).skipped).toEqual(s.skipped);
+    // Deleting a recorded set of a plan exercise brings its skipped set back
+    expect(reconcileSkipped(s, removeSet(s, e0.id, e0.sets[0].id)).skipped![0]).toEqual({ exerciseId: "t-bar-reverse-row", sets: 3 });
+    // Empty sets (no reps) don't count as recorded
+    const emptyAdded = addSet(s, e0.id, "working");
+    const emptyDone = updateSet(emptyAdded, e0.id, emptyAdded.entries[0].sets.at(-1)!.id, { weight: null, reps: null, done: true });
+    expect(reconcileSkipped(s, emptyDone).skipped![0]).toEqual({ exerciseId: "t-bar-reverse-row", sets: 2 });
+    const mig = MIGRATIONS.find((x) => x.id === "2026-11-17-drop-empty-done-sets")!.run({ ...seed, sessions: [emptyDone] }, "2026-11-17")!;
+    expect(mig.sessions[0].entries[0].sets.every((x) => (x.reps ?? 0) > 0)).toBe(true);
     // Removing a whole plan exercise makes its done sets skipped again
     const rec = reconcileSkipped(s, withSet);
     expect(reconcileSkipped(rec, removeEntry(rec, e0.id)).skipped![0]).toEqual({ exerciseId: "t-bar-reverse-row", sets: 3 }); // all 3 planned sets
