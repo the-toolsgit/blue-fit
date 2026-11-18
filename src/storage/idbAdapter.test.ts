@@ -21,7 +21,7 @@ describe("IdbAdapter", () => {
 
     const db = new IdbAdapter(name);
     await db.init(() => { throw new Error("must not reseed"); });
-    expect(await db.all("exercises")).toHaveLength(33);
+    expect(await db.all("exercises")).toHaveLength(34);
     expect((await db.all("sessions"))[0].entries[0].sets[0].weight).toBe(90);
     expect((await db.getSettings()).restDefaultSec).toBe(90);
     expect(await db.getMeta("migrations")).toEqual(["x"]);
@@ -42,7 +42,7 @@ describe("IdbAdapter", () => {
     const data = await db.exportAll();
     await db.replaceAll({ ...data, sessions: [] });
     expect(await db.all("sessions")).toHaveLength(0);
-    expect(await db.all("exercises")).toHaveLength(33);
+    expect(await db.all("exercises")).toHaveLength(34);
     expect(await db.getMeta("restTimer")).toBeUndefined();
   });
 });

@@ -62,3 +62,16 @@ describe("short texts migration", () => {
     expect(out.find((e) => e.id === "leg-press")!.why).toBe("My own note");
   });
 });
+
+describe("lean-in lateral raise", () => {
+  it("is in a new seed and added to stored data that lacks it", async () => {
+    const { buildSeed } = await import("./seed");
+    const { MIGRATIONS } = await import("./migrations");
+    expect(buildSeed().exercises.some((e) => e.id === "lean-in-lateral-raise")).toBe(true);
+    const d = buildSeed();
+    d.exercises = d.exercises.filter((e) => e.id !== "lean-in-lateral-raise");
+    const m = MIGRATIONS.find((x) => x.id === "2026-11-18-lean-in-lateral-raise")!;
+    expect(m.run(d, "2026-11-18")!.exercises.find((e) => e.id === "lean-in-lateral-raise")?.equipment).toBe("cable");
+    expect(m.run(buildSeed(), "2026-11-18")).toBeNull();
+  });
+});

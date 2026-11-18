@@ -1,5 +1,7 @@
-// Seed data, extracted from the plan page (see scripts/extract-plan.mjs).
+// Seed data, extracted from the plan page (see scripts/extract-plan.mjs). Built-in exercises added later (not in the
+// plan page) live in extra-exercises.json so `npm run seed` keeps them.
 import exercises from "./exercises.json";
+import extraExercises from "./extra-exercises.json";
 import routine from "./routine-leo-v3-1.json";
 import targets from "./targets.json";
 import plainText from "./exercise-text.json";
@@ -19,7 +21,7 @@ export const withRuleText = (r: Routine): Routine =>
 export function buildSeed(): AppData {
   // Plain-language how-to texts override the extracted ones (kept in their own file so `npm run seed` doesn't undo them)
   const text = plainText as unknown as Record<string, Partial<Exercise>>;
-  const ex = (structuredClone(exercises) as unknown as Exercise[]).map((e) => ({ ...e, ...(text[e.id] ?? {}) }))
+  const ex = (structuredClone([...exercises, ...extraExercises]) as unknown as Exercise[]).map((e) => ({ ...e, ...(text[e.id] ?? {}) }))
     .map((e) => (JOB_TAGS[e.id] ? { ...e, ...JOB_TAGS[e.id] } : e));
   return {
     exercises: ex,

@@ -1,0 +1,91 @@
+[
+  {
+    "id": "lean-in-lateral-raise",
+    "name": "Lean-in Lateral Raise",
+    "aliases": [],
+    "muscles": [
+      "Side delts"
+    ],
+    "secondaryMuscles": [],
+    "volume": [
+      {
+        "group": "sideDelts",
+        "weight": 1
+      }
+    ],
+    "equipment": "cable",
+    "loadMode": "total",
+    "isHeavy": false,
+    "compound": false,
+    "bodyRegion": "upper",
+    "why": "Leaning in makes the top of the raise hardest.",
+    "setup": [
+      "Pulley low. Hold the machine, lean in toward it 15–30°.",
+      "Handle in the other hand."
+    ],
+    "form": [
+      "Start with your hand at your side.",
+      "Raise to shoulder height, lower slowly."
+    ],
+    "tips": [
+      "Start each rep from a full stop."
+    ],
+    "avoid": [
+      "Swinging.",
+      "Changing how far you lean."
+    ],
+    "rangeOfMotion": "Hand at your side → shoulder height",
+    "tempo": "Up 1 s · Down 3 s",
+    "defaultRestSec": 120,
+    "incrementLb": 5,
+    "figure": {
+      "v": "f",
+      "base": {
+        "cx": 84,
+        "la": 0,
+        "sa": 0,
+        "hw": 1.5,
+        "rot": -20,
+        "L": {
+          "ua": 60,
+          "fa": 60
+        }
+      },
+      "A": {
+        "ua": 5,
+        "fa": 5
+      },
+      "B": {
+        "ua": 98,
+        "fa": 98
+      },
+      "props": [
+        {
+          "line": [
+            22,
+            -14,
+            22,
+            104
+          ]
+        },
+        {
+          "line": [
+            16,
+            104,
+            30,
+            104
+          ]
+        },
+        {
+          "cable": [
+            22,
+            96
+          ],
+          "to": "haR"
+        }
+      ]
+    },
+    "isCustom": false,
+    "archived": false
+  }
+]

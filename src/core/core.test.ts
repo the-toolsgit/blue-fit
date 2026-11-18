@@ -236,7 +236,7 @@ describe("backup export / import", () => {
     const r = parseBackup(text);
     expect(r.ok).toBe(true);
     if (!r.ok) return;
-    expect(r.counts).toEqual({ sessions: 1, exercises: 33, routines: 1 });
+    expect(r.counts).toEqual({ sessions: 1, exercises: 34, routines: 1 });
     const db2 = new MemoryAdapter();
     await db2.replaceAll(r.backup.data);
     expect(await db2.all("sessions")).toHaveLength(1);

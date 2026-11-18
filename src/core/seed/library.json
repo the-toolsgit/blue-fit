@@ -4921,7 +4921,10 @@
    "heavyWhy": "single-joint",
    "source": {
     "nippard": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
-   }
+   },
+   "planIds": [
+    "lean-in-lateral-raise"
+   ]
   },
   {
    "id": "leg-extensions",

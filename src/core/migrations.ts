@@ -4,6 +4,7 @@ import { deriveSkipped } from "./session";
 import plainText from "./seed/exercise-text.json";
 import figureFixes from "./seed/figure-fixes.json";
 import exerciseJobs from "./seed/exercise-jobs.json";
+import extraExercises from "./seed/extra-exercises.json";
 import textWas from "./seed/text-review-was.json";
 import shortWas from "./seed/text-short-was.json";
 import { TEXT_FIELDS, textFingerprint } from "./textFields";
@@ -365,6 +366,14 @@ export const MIGRATIONS: Migration[] = [
       if (!k || k.singleSleeve) return null;
       const setup = k.setup.length === 1 && k.setup[0] === "Chest on a row-machine pad, arms straight." ? ["Chest on the T-bar row pad, arms straight."] : k.setup;
       return { ...d, exercises: d.exercises.map((e) => (e.id === k.id ? { ...e, equipment: "plateMachine", loadMode: "total", singleSleeve: true, setup } : e)) };
+    },
+  },
+  {
+    // Nov 18 2026: new built-in exercise, the lean-in lateral raise (lean toward the machine). Added if missing.
+    id: "2026-11-18-lean-in-lateral-raise",
+    run(d) {
+      const add = (extraExercises as unknown as Exercise[]).filter((x) => !d.exercises.some((e) => e.id === x.id));
+      return add.length ? { ...d, exercises: [...d.exercises, ...structuredClone(add)] } : null;
     },
   },
 ];
