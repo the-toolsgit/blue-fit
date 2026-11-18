@@ -38,6 +38,15 @@ const TABS = [
   { id: "progress", label: "Progress", icon: "progress" },
   { id: "settings", label: "Settings", icon: "settings" },
 ];
+// Swipe slide-in: once it has played, the page keeps its final state ("done": no animation, so nothing replays and
+// jumps); the next navigation clears it so normal page entrances come back. Registered before the router's listener.
+if (typeof window !== "undefined") {
+  const root = document.documentElement;
+  window.addEventListener("animationend", (e) => {
+    if ((e.target as Element).classList?.contains("page") && (root.dataset.swipe === "next" || root.dataset.swipe === "prev")) root.dataset.swipe = "done";
+  });
+  window.addEventListener("hashchange", () => { if (root.dataset.swipe === "done") delete root.dataset.swipe; });
+}
 const TAB_OF: Record<string, string> = { workout: "today", summary: "history", edit: "history", exercise: "plan", "plan-edit": "plan" };
 
 export function App() {
@@ -114,7 +123,6 @@ export function App() {
       if (i < 0 || j < 0 || j >= TABS.length) return;
       document.documentElement.dataset.swipe = dx < 0 ? "next" : "prev";
       go(TABS[j].id);
-      setTimeout(() => { delete document.documentElement.dataset.swipe; }, 500);
     };
     window.addEventListener("touchstart", start, { passive: true });
     window.addEventListener("touchend", end, { passive: true });
