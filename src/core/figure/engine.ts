@@ -124,8 +124,14 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
       const q = p.tq ?? 0;
       // Starts just below the head circle (head center is 11 along the spine, radius 7) and peaks in the middle.
       const p0 = add(add(J.sh, u, 2.2), back, 0.6), p2 = add(add(J.sh, u, -7), back, 0.6);
-      const peak = add(add(J.sh, u, -1.5), back, 2 + 5 * q);
-      const pts: Pt[] = [p0, peak, p2];
+      const peak = add(add(J.sh, u, -1.5), back, 1.6 + 4 * q);
+      // Two outward-bowed halves meeting at the peak: round, with a soft point in the middle (not a triangle).
+      const bow = 0.9 + 1.6 * q;
+      const half = (a: Pt, b: Pt): Pt[] => {
+        const c = add([(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], back, bow);
+        return [0, 0.25, 0.5, 0.75, 1].map((t) => [(1 - t) ** 2 * a[0] + 2 * (1 - t) * t * c[0] + t * t * b[0], (1 - t) ** 2 * a[1] + 2 * (1 - t) * t * c[1] + t * t * b[1]] as Pt);
+      };
+      const pts: Pt[] = [...half(p0, peak), ...half(peak, p2).slice(1)];
       light.push({ kind: "curve", points: pts, width: 2 + 2.2 * q });
     }
     if (o.perp) {
