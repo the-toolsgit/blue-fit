@@ -509,6 +509,8 @@ Joints: hip; knee = hip + V(th, 24); ankle = knee + V(sh, 23); toe = ankle + V(s
 Main lines: polylines, stroke fig 2.6, round caps/joins, no fill; head circle r 7. Props: stroke fig2 1.6. Floor: fig2, 1. Neon: a glow drop-shadow under the whole figure.
 
 ### 8.4 Timing
+**Muscle curve** (side view, prop `trap`): the traps drawn as a light curve on the upper back, from the base of the neck down between the shoulder blades, bulging out and thickening as `tq` goes 0 → 1, so the squeeze shows, not just the shoulder moving. Used by the Kelso Shrug (shoulder blades squeeze back 6 units; migration `2026-11-18-kelso-traps`).
+
 Exercise figures move at the exercise's **tempo** (`core/figure/tempo.ts`): "Up 1 s · Down 3 s" → A→B 1 s, B→A 3 s, with a 0.25 s pause at each end; a "Hold N s" phase holds that position for N s instead (calf raises: 2 s at the bottom; shrugs, Kelso shrug, face pull, leg curls: 1 s squeeze); each loop starts when the figure appears. For figures that start at the tempo's second position (standing and seated calf raise, leg press, EZ-bar incline extension, machine dip), the phases swap. No usable tempo, and the other figures (splash, loading, rest, flex): loop 3.2 s, ease-in-out A→B over 42 %, hold B 8 %, ease B→A 42 %, hold A 8 % (ease = quadratic in-out). Redraw about 30 fps, only while visible. Reduced motion: draw pose B once.
 
 ### 8.5 Brand poses

@@ -8,7 +8,9 @@ export type Pt = [number, number];
 export type LightShape =
   | { kind: "line"; x1: number | string; y1: number | string; x2: number | string; y2: number | string; width?: number }
   | { kind: "cable"; points: Pt[]; anchor: Pt }
-  | { kind: "circle"; cx: number; cy: number; r: number };
+  | { kind: "circle"; cx: number; cy: number; r: number }
+  /** Solid light curve (a muscle, e.g. the traps squeezing) */
+  | { kind: "curve"; points: Pt[]; width?: number };
 
 export interface FigureFrame {
   floor: { x1: number; y1: number; x2: number; y2: number };
@@ -113,6 +115,22 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
       light.push({ kind: "line", x1: (a[0] - 7).toFixed(1), y1: a[1].toFixed(1), x2: (b[0] + 7).toFixed(1), y2: b[1].toFixed(1), width: 2.5 });
     }
     if (o.pad) { const h = J[o.pad]; light.push({ kind: "circle", cx: h[0], cy: h[1], r: o.r || 2.6 }); }
+    if (o.trap && J.hip && J.sh) {
+      // Side view: the traps as a curve on the upper back, from the base of the neck down between the shoulder
+      // blades. It bulges out as `tq` goes 0 → 1 (the squeeze), so the work shows, not just the shoulder moving.
+      const len = Math.hypot(J.sh[0] - J.hip[0], J.sh[1] - J.hip[1]) || 1;
+      const u: Pt = [(J.sh[0] - J.hip[0]) / len, (J.sh[1] - J.hip[1]) / len];
+      const back: Pt = [u[1], -u[0]];
+      const q = p.tq ?? 0;
+      const p0 = add(add(J.sh, u, 6), back, 0.5), p2 = add(add(J.sh, u, -18), back, 0.8);
+      const c = add(add(J.sh, u, -5), back, 2 + 9 * q);
+      const pts: Pt[] = [];
+      for (let i = 0; i <= 8; i++) {
+        const t = i / 8, a1 = (1 - t) * (1 - t), b1 = 2 * (1 - t) * t, c1 = t * t;
+        pts.push([a1 * p0[0] + b1 * c[0] + c1 * p2[0], a1 * p0[1] + b1 * c[1] + c1 * p2[1]]);
+      }
+      light.push({ kind: "curve", points: pts, width: 2 + 2.6 * q });
+    }
     if (o.perp) {
       const h = J[o.perp], v = V(o.ang, o.len / 2);
       light.push({ kind: "line", x1: (h[0] - v[0]).toFixed(1), y1: (h[1] - v[1]).toFixed(1), x2: (h[0] + v[0]).toFixed(1), y2: (h[1] + v[1]).toFixed(1), width: 2.5 });

@@ -396,5 +396,10 @@ export const MIGRATIONS: Migration[] = [
       return changed ? { ...d, exercises } : null;
     },
   },
+  {
+    // Nov 18 2026: Kelso shrug figure shows the traps squeezing (a light curve on the upper back that bulges).
+    id: "2026-11-18-kelso-traps",
+    run: (d) => applyFigureFixes(d, "kelso-shrug"),
+  },
 ];
 
