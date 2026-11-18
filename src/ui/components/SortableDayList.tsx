@@ -1,8 +1,9 @@
-// The Plan tab's exercise list for one day. Tap a row to open the exercise; press and hold (or drag with a mouse)
+// A plan day's exercise list (Plan tab and Today). Tap a row to open the exercise; press and hold (or drag with a mouse)
 // to move it up or down. Loaded lazily so the drag library isn't in the startup bundle.
 import { DndContext, KeyboardSensor, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors, type DragEndEvent, type Modifier } from "@dnd-kit/core";
 import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import type { ReactNode } from "react";
 import type { Exercise, Slot } from "../../core/types";
 import { fmtRest, repRange } from "../format";
 import { vibrate } from "../device";
@@ -13,12 +14,13 @@ import { Icon } from "./Icon";
 /** Rows only move up and down. */
 const verticalOnly: Modifier = ({ transform }) => ({ ...transform, x: 0 });
 
-function Row({ slot, ex, index, onOpen, fail }: { slot: Slot; ex: Exercise; index: number; onOpen: () => void; fail?: string[] }) {
+function Row({ slot, ex, index, onOpen, fail, content }: { slot: Slot; ex: Exercise; index: number; onOpen: () => void; fail?: string[]; content?: ReactNode }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: slot.id });
   return (
     <div ref={setNodeRef} className={"day-row" + (isDragging ? " dragging" : "")}
       style={{ transform: CSS.Transform.toString(transform), transition }}>
       <button className="list-row" onClick={onOpen} {...attributes} {...listeners} aria-roledescription="Exercise. Press and hold to move it.">
+        {content ?? <>
         <span className="mono muted" style={{ width: 16, fontSize: 13 }}>{index + 1}</span>
         <Figure spec={ex.figure} size={44} still className="thin" />
         <span className="grow">
@@ -27,13 +29,16 @@ function Row({ slot, ex, index, onOpen, fail }: { slot: Slot; ex: Exercise; inde
         </span>
         <span className="mono" style={{ whiteSpace: "nowrap" }}>{slot.sets} × {repRange(slot.repMin, slot.repMax)}</span>
         <Icon name="chevron" size={16} />
+        </>}
       </button>
     </div>
   );
 }
 
-export function SortableDayList({ slots, exMap, onOpen, onMove, fail }: {
+export function SortableDayList({ slots, exMap, onOpen, onMove, fail, row }: {
   slots: Slot[]; exMap: Map<string, Exercise>; onOpen: (slot: Slot) => void; onMove: (from: number, to: number) => void; fail?: Map<string, string[]>;
+  /** Custom row content (Today's list); defaults to the Plan tab's row */
+  row?: (slot: Slot, ex: Exercise, index: number) => ReactNode;
 }) {
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
@@ -48,7 +53,7 @@ export function SortableDayList({ slots, exMap, onOpen, onMove, fail }: {
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} modifiers={[verticalOnly]} onDragStart={() => vibrate(10)} onDragEnd={onDragEnd}>
       <SortableContext items={shown.map((s) => s.id)} strategy={verticalListSortingStrategy}>
-        {shown.map((s, i) => <Row key={s.id} slot={s} ex={exMap.get(s.exerciseId)!} index={i} onOpen={() => onOpen(s)} fail={fail?.get(s.id)} />)}
+        {shown.map((s, i) => <Row key={s.id} slot={s} ex={exMap.get(s.exerciseId)!} index={i} onOpen={() => onOpen(s)} fail={fail?.get(s.id)} content={row?.(s, exMap.get(s.exerciseId)!, i)} />)}
       </SortableContext>
     </DndContext>
   );

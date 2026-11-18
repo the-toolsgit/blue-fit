@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { moveSlot } from "../../core/routineEdit";
 import { REST, SPLASH_FLEX } from "../../core/figure/poses";
 import { createSessionFromDay } from "../../core/session";
 import { FailFlame, useWeekFailure } from "../components/FailFlame";
@@ -18,10 +19,12 @@ import { fmtDate, repRange } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
 
+const SortableDayList = lazy(() => import("../components/SortableDayList").then((m) => ({ default: m.SortableDayList })));
+
 const LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export function TodayScreen() {
-  const { routine, exMap, finished, active, saveSession, settings, backup, markBackup, snoozeBackup, exportAll, toast } = useStore();
+  const { routine, exMap, finished, active, saveSession, saveRoutine, settings, backup, markBackup, snoozeBackup, exportAll, toast } = useStore();
   const since = daysSince(backup.lastAt);
   const remind = finished.length > 0 && (since == null || since >= REMIND_AFTER_DAYS) && !(backup.snoozedUntil && backup.snoozedUntil > new Date().toISOString());
   const sd = settings.weekStartDay;
@@ -144,11 +147,10 @@ export function TodayScreen() {
 
           <h2 className="section-title">Exercises</h2>
           <div className="glass" style={{ padding: 4 }}>
-            {slots.map((s, i) => {
-              const ex = exMap.get(s.exerciseId);
-              if (!ex) return null;
-              return (
-                <button key={s.id} className="list-row" onClick={() => setOpen(ex.id)}>
+            <Suspense fallback={null}>
+              <SortableDayList slots={slots} exMap={exMap} onOpen={(s) => setOpen(s.exerciseId)}
+                onMove={(from, to) => routine && day && saveRoutine(moveSlot(routine, day.id, from, to))}
+                row={(s, ex, i) => <>
                   <span className="mono muted" style={{ width: 18, fontSize: 13 }}>{i + 1}</span>
                   <Figure spec={ex.figure} size={40} still className="thin" />
                   <span className="grow">
@@ -156,9 +158,8 @@ export function TodayScreen() {
                     <span className="muted" style={{ fontSize: 13 }}>{s.notes ?? ex.muscles.join(", ")}</span>
                   </span>
                   <span className="mono" style={{ fontSize: 15, whiteSpace: "nowrap", color: deloading ? "var(--neon-2)" : undefined }}>{slotSets(s.sets)} × {repRange(s.repMin, s.repMax)}</span>
-                </button>
-              );
-            })}
+                </>} />
+            </Suspense>
           </div>
         </>
       )}
