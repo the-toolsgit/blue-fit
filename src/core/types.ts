@@ -61,6 +61,8 @@ export interface Exercise {
   isHeavy: boolean;
   /** Multi-joint movement (from the exercise library). Unknown on older custom exercises. */
   compound?: boolean;
+  /** Which of a muscle's angles (from its weekly target's "angles" list) this exercise trains, e.g. { biceps: "hammer" } */
+  angles?: Partial<Record<MuscleGroup, string>>;
   bodyRegion: "upper" | "lower";
   why: string;
   setup: string[];

@@ -3,6 +3,7 @@ import type { AppData, Exercise, Routine } from "./types";
 import { deriveSkipped } from "./session";
 import plainText from "./seed/exercise-text.json";
 import figureFixes from "./seed/figure-fixes.json";
+import exerciseAngles from "./seed/exercise-angles.json";
 import textWas from "./seed/text-review-was.json";
 import shortWas from "./seed/text-short-was.json";
 import { TEXT_FIELDS, textFingerprint } from "./textFields";
@@ -333,6 +334,15 @@ export const MIGRATIONS: Migration[] = [
       const h = d.targets.find((t) => t.group === "hamstrings");
       if (!h?.acceptedBelow) return null;
       return { ...d, targets: d.targets.map((t) => (t.group === "hamstrings" ? { group: "hamstrings", min: 8, max: 10, angles: t.angles, gap: t.gap } : t)) };
+    },
+  },
+  {
+    // Nov 18 2026: built-in exercises learn which angle of each muscle they train (Plan → Workout check).
+    id: "2026-11-18-exercise-angles",
+    run(d) {
+      const a = exerciseAngles as Record<string, Exercise["angles"]>;
+      if (!d.exercises.some((e) => a[e.id] && !e.isCustom && !e.angles)) return null;
+      return { ...d, exercises: d.exercises.map((e) => (a[e.id] && !e.isCustom && !e.angles ? { ...e, angles: a[e.id] } : e)) };
     },
   },
 ];
