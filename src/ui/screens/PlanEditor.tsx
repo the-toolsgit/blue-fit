@@ -55,14 +55,15 @@ function SlotRow({ slot, ex, groupStart, groupEnd, onOpen, fail }: {
   );
 }
 
-export function PlanEditorScreen({ id }: { id?: string }) {
+/** `onExit`: used when the Plan tab edits in place (no route change); `initialDayId`: keep the day the user was looking at. */
+export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; onExit?: () => void; initialDayId?: string }) {
   const { routines, exMap, targets, settings, saveRoutine, saveTargets, toast } = useStore();
   const original = routines.find((r) => r.id === id);
   const [draft, setDraft] = useState<Routine | null>(() => {
     try { const s = sessionStorage.getItem(draftKey(id ?? "")); if (s) return JSON.parse(s); } catch { /* ignore */ }
     return original ? structuredClone(original) : null;
   });
-  const [dayId, setDayId] = useState<string | null>(null);
+  const [dayId, setDayId] = useState<string | null>(initialDayId ?? null);
   const [slotOpen, setSlotOpen] = useState<string | null>(null);
   const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; slotId: string } | null>(null);
   const [howTo, setHowTo] = useState<string | null>(null);
@@ -101,7 +102,7 @@ export function PlanEditorScreen({ id }: { id?: string }) {
   const slot = day?.slots.find((s) => s.id === slotOpen);
   const slotIdx = day?.slots.findIndex((s) => s.id === slotOpen) ?? -1;
 
-  const leave = () => { try { sessionStorage.removeItem(draftKey(id!)); sessionStorage.removeItem(draftKey(id!) + "-targets"); } catch { /* ignore */ } replace("plan"); };
+  const leave = () => { try { sessionStorage.removeItem(draftKey(id!)); sessionStorage.removeItem(draftKey(id!) + "-targets"); } catch { /* ignore */ } if (onExit) onExit(); else replace("plan"); };
   const save = () => {
     if (issues.length) return toast({ kind: "error", title: "Can't save yet", body: issues[0].message });
     saveRoutine({ ...draft, name: draft.name.trim(), days: draft.days.map((d) => ({ ...d, title: d.title.trim() })) });

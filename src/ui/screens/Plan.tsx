@@ -14,6 +14,7 @@ import { Icon } from "../components/Icon";
 import { fmtDate } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
+const PlanEditorScreen = lazy(() => import("./PlanEditor").then((m) => ({ default: m.PlanEditorScreen })));
 
 const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const SortableDayList = lazy(() => import("../components/SortableDayList").then((m) => ({ default: m.SortableDayList })));
@@ -60,11 +61,14 @@ export function PlanScreen() {
   const deloading = deloadActive(settings, today);
   const [confirmDeload, setConfirmDeload] = useState(false);
   const [manage, setManage] = useState(false);
+  const [editing, setEditing] = useState(false);
   const [del, setDel] = useState<Routine | null>(null);
   const days = (routine?.days ?? []).filter((d) => d.slots.length).sort((a, b) => ((a.weekday ?? 9) + 6) % 7 - ((b.weekday ?? 9) + 6) % 7);
   const [dayId, setDayId] = useState(days.find((d) => d.weekday === new Date().getDay())?.id ?? days[0]?.id);
   if (!routine) return <div className="page"><div className="empty">No routine.</div></div>;
   const day = days.find((d) => d.id === dayId) ?? days[0];
+  // Edit happens in place: same tab and URL, the plan just becomes editable (tap an exercise → sets, reps, rest…).
+  if (editing) return <Suspense fallback={<div className="page" />}><PlanEditorScreen id={routine.id} initialDayId={day?.id} onExit={() => setEditing(false)} /></Suspense>;
   const allSets = routine.days.reduce((a, d) => a + d.slots.reduce((b, s) => b + s.sets, 0), 0);
   const sets = day?.slots.reduce((a, s) => a + s.sets, 0) ?? 0;
 
@@ -74,7 +78,7 @@ export function PlanScreen() {
         <span className="eyebrow">Current plan</span>
         <div className="row" style={{ gap: 6 }}>
           <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px" }} onClick={() => setManage(true)}>Plans</button>
-          <button className="btn btn-primary" style={{ minHeight: 40, padding: "0 14px" }} onClick={() => go(`plan-edit/${routine.id}`)}><Icon name="note" size={18} /> Edit</button>
+          <button className="btn btn-primary" style={{ minHeight: 40, padding: "0 14px" }} onClick={() => setEditing(true)}><Icon name="note" size={18} /> Edit</button>
         </div>
       </div>
       <h1 className="title-lg neon-grad" style={{ marginTop: 6 }}>{routine.name}</h1>
