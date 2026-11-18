@@ -294,7 +294,7 @@ Uses the last finished session with done sets of the exercise; considers its don
 - **Use** applies weight and target reps to the working sets not done yet.
 
 ### 5.6 Pre-fill and carry-forward
-New entries get the slot's set count (working sets) pre-filled per position from the last session's done working/failure sets (weight and reps; the last one repeats when there are more sets). No history → empty values. When a set is marked done, later not-done sets of the same type with empty weight/reps copy its values.
+New entries get the slot's set count (working sets) pre-filled per position from the last session's done working/failure sets (weight and reps; the last one repeats when there are more sets). No history → reps start at the low end of the plan's rep range (e.g. 10 for 10–12), weight empty. (Edit workout's **+ Add** still starts empty.) When a set is marked done, later not-done sets of the same type with empty weight/reps copy its values.
 
 ### 5.7 Rest timer and supersets
 After a set is marked done (auto-start on, entry rest > 0): start a timer for the entry's rest seconds, unless the entry is in a superset and not the last of the group in this round. Superset order: after a set in group member *i*, go to the next member with sets left; rest only when the round wraps to the start of the group. The timer stores an absolute end time, shows a ring + m:ss, can be adjusted −15/+15 s (never below 1 s left) and skipped; tapping it opens a full-screen ring with the REST figure. At zero: three-tone chime (880, 1175, 1568 Hz, 0.16 s apart), vibration where supported, "GO!" in green, auto-clears after 6 s. Timers that ended more than 60 s before a restart are discarded.

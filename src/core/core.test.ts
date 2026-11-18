@@ -170,6 +170,11 @@ describe("session logic", () => {
     s = toggleDone(s, e.id, e.sets[0].id, new Date());
     expect(s.entries[1].sets.map((x) => [x.weight, x.reps, x.done])).toEqual([[50, 10, true], [50, 10, false], [50, 10, false]]);
   });
+  it("first time (no history): reps start at the low end of the plan's rep range, weight empty", () => {
+    const s = createSessionFromDay(routine, mon, exMap, [], new Date());
+    const slot = mon.slots[0];
+    expect(s.entries[0].sets.every((x) => x.reps === slot.repMin && x.weight == null)).toBe(true);
+  });
   it("swap keeps sets count and remembers the original", () => {
     let s = createSessionFromDay(routine, mon, exMap, [], new Date());
     s = swapEntry(s, s.entries[0].id, exMap.get("cable-seated-row")!, []);

@@ -32,7 +32,7 @@ export function buildEntry(ex: Exercise, history: Session[], opts: { sets?: numb
   const n = opts.deload ? deloadSets(planned) : planned;
   const top = lastWork.length ? lastWork[lastWork.length - 1] : undefined;
   const w = (v: number | null | undefined) => (v == null ? null : opts.deload ? deloadWeight(v, ex.incrementLb) : v);
-  const sets = Array.from({ length: n }, (_, i) => newSet(w(lastWork[i]?.weight ?? top?.weight), lastWork[i]?.reps ?? top?.reps ?? null));
+  const sets = Array.from({ length: n }, (_, i) => newSet(w(lastWork[i]?.weight ?? top?.weight), lastWork[i]?.reps ?? top?.reps ?? opts.slot?.repMin ?? opts.repMin ?? null)); // no history: reps start at the low end of the plan's range
   return {
     id: uid(),
     exerciseId: ex.id,
