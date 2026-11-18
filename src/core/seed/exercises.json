@@ -2105,14 +2105,15 @@
         "weight": 1
       }
     ],
-    "equipment": "machine",
+    "equipment": "plateMachine",
     "loadMode": "total",
+    "singleSleeve": true,
     "isHeavy": true,
     "compound": false,
     "bodyRegion": "upper",
     "why": "Mid traps, an angle the shrugs miss.",
     "setup": [
-      "Chest-supported row machine, chest on the pad.",
+      "T-bar row machine, chest on the pad.",
       "Arms straight, holding the handles."
     ],
     "form": [

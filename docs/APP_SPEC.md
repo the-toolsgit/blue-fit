@@ -230,7 +230,7 @@ Groups: back, biceps, triceps, sideDelts, rearDelts, traps, frontDelts, chest, q
 | Rope Face Pull | rear delts | traps, back, rotator cuff | cable | 5 |
 | Lean-away Lateral Raise | side delts | — | dumbbell / per hand | 5 |
 | All-the-way-up Lateral Raise | side delts | traps | dumbbell / per hand | 5 |
-| Kelso Shrug | traps | — | machine | 5 |
+| Kelso Shrug | traps | — | T-bar row machine (one sleeve, log the plates on it) | 5 |
 | Single-arm Cable Reverse Fly | rear delts | — | cable | 5 |
 | Rope Overhead Tricep Extension | triceps | — | cable | 5 |
 | DB Hammer Curl ★ | biceps, forearms | — | dumbbell / per hand | 5 |
@@ -272,7 +272,7 @@ At most one session is `active`. Duration = finishedAt − startedAt (minutes, r
 ## 5. Business rules
 
 ### 5.1 Weights
-Stored exactly as typed. Plate-loaded lifts with two sides (Smith Squat, Leg Press, Barbell Shrug): weight on **one side**, bar not included. T-Bar Row has one sleeve (`singleSleeve`): the weight is all the plates on it (one-time migration Nov 16 2026; earlier numbers mean the same plates). Dumbbells: **per hand**. Fixed bars (EZ, preacher): the number on the bar (10 lb steps). Machines and cables: the stack number. There is no bar-weight setting; tonnage is a personal trend number.
+Stored exactly as typed. Plate-loaded lifts with two sides (Smith Squat, Leg Press, Barbell Shrug): weight on **one side**, bar not included. T-Bar Row and Kelso Shrug (done on the T-bar row machine) have one sleeve (`singleSleeve`): the weight is all the plates on it, and the workout shows those plates (migrations Nov 16 and Nov 18 2026; earlier numbers mean the same load). Dumbbells: **per hand**. Fixed bars (EZ, preacher): the number on the bar (10 lb steps). Machines and cables: the stack number. There is no bar-weight setting; tonnage is a personal trend number.
 
 ### 5.2 Fractional volume (weekly sets)
 For each done set whose type is **working or failure**: for each `{group, weight}` in the exercise's `volume`, add `weight` (1 or 0.5) to that group. Warm-ups and drop sets add nothing.

@@ -357,5 +357,15 @@ export const MIGRATIONS: Migration[] = [
       }) };
     },
   },
+  {
+    // Nov 18 2026: Kelso shrug is done on the T-bar row machine (one sleeve): log the plates on it, show the plates.
+    id: "2026-11-18-kelso-tbar",
+    run(d) {
+      const k = d.exercises.find((e) => e.id === "kelso-shrug");
+      if (!k || k.singleSleeve) return null;
+      const setup = k.setup.length === 1 && k.setup[0] === "Chest on a row-machine pad, arms straight." ? ["Chest on the T-bar row pad, arms straight."] : k.setup;
+      return { ...d, exercises: d.exercises.map((e) => (e.id === k.id ? { ...e, equipment: "plateMachine", loadMode: "total", singleSleeve: true, setup } : e)) };
+    },
+  },
 ];
 
