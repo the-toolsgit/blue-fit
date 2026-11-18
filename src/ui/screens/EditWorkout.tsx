@@ -88,7 +88,6 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
     <div className="page">
       <div className="spread" style={{ marginBottom: 6 }}>
         <button className="icon-btn" onClick={done} aria-label="Back" style={{ marginLeft: -10 }}><Icon name="back" /></button>
-        <button className="btn btn-primary" style={{ minHeight: 42 }} onClick={done}><Icon name="check" size={18} /> Done</button>
       </div>
       <span className="eyebrow">Edit workout</span>
       <h1 className="title-md" style={{ textTransform: "uppercase", marginTop: 4 }}>{s.title}</h1>
@@ -147,6 +146,7 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
       {!planDay && <button className="btn btn-ghost btn-block" style={{ marginTop: 14, minHeight: 52 }} onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>}
       <div className="field" style={{ marginTop: 14 }}><label htmlFor="nts">Workout notes</label>
         <textarea id="nts" className="input" defaultValue={s.notes ?? ""} onBlur={(e) => e.target.value !== (s.notes ?? "") && commit({ ...s, notes: e.target.value.trim() || undefined })} /></div>
+      <button className="btn btn-primary btn-xl btn-block" style={{ marginTop: 16 }} onClick={done}><Icon name="check" size={20} /> Done</button>
 
       <Sheet open={!!menuEntry} onClose={() => setMenu(null)} label="Exercise options">
         {menuEntry && (
