@@ -2,6 +2,7 @@
 import type { AppData, Exercise, Routine } from "./types";
 import plainText from "./seed/exercise-text.json";
 import figureFixes from "./seed/figure-fixes.json";
+import textWas from "./seed/text-review-was.json";
 import { TEXT_FIELDS, textFingerprint } from "./textFields";
 import { RULE_TEXT, RULE_TITLE } from "./seed/rule-text";
 
@@ -170,6 +171,25 @@ export const MIGRATIONS: Migration[] = [
     // Nov 17 2026: cable lateral raise stands with feet together so both feet touch the floor while leaning.
     id: "2026-11-17-lateral-raise-feet",
     run: (d) => applyFigureFixes(d, "cable-lateral-raise"),
+  },
+  {
+    // Nov 17 2026: text review (stretch cues, setup details, holds in the tempo, machine dip avoid) and the
+    // lean-away raise figure starting across the body. Texts only where they still read as before the review.
+    id: "2026-11-17-text-review",
+    run(d) {
+      const now = plainText as unknown as Record<string, Record<string, unknown>>;
+      const was = textWas as unknown as Record<string, Record<string, unknown>>;
+      const fixed = applyFigureFixes(d, "lean-away-lateral-raise") ?? d;
+      let changed = fixed !== d;
+      const exercises = fixed.exercises.map((e) => {
+        const old = was[e.id];
+        if (!old || e.isCustom) return e;
+        const n: any = { ...e };
+        for (const [k, v] of Object.entries(old)) if (JSON.stringify(n[k]) === JSON.stringify(v)) { n[k] = now[e.id][k]; changed = true; }
+        return n as Exercise;
+      });
+      return changed ? { ...fixed, exercises } : null;
+    },
   },
   {
     // Nov 16 2026: plain-language how-to texts and one-number tempos for the built-in exercises.

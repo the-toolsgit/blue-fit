@@ -55,5 +55,11 @@
         "to": "haR"
       }
     ]
+  },
+  "lean-away-lateral-raise": {
+    "A": {
+      "ua": -10,
+      "fa": -10
+    }
   }
 }

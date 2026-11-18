@@ -3,11 +3,11 @@
   "t-bar-reverse-row": {
     "why": "A heavy row for your lats.",
     "setup": ["Chest on the pad, feet flat.", "Start with your arms straight."],
-    "form": ["Pull your shoulders back first, then pull your elbows toward your hips.", "Hold 1 second at the top.", "Lower slowly until your arms are straight."],
+    "form": ["Pull your shoulders back first, then pull your elbows toward your hips.", "Hold 1 second at the top.", "Lower slowly until your arms are straight and your shoulder blades spread."],
     "tips": ["Elbows close to your body work the lats more. Elbows out wide work the upper back more."],
     "avoid": ["Lifting your chest off the pad.", "Shrugging up instead of pulling back."],
     "rangeOfMotion": "Arms straight → elbows just past your body",
-    "tempo": "Up 1 s · Down 3 s"
+    "tempo": "Up 1 s · Hold 1 s · Down 3 s"
   },
   "single-arm-cable-lat-pulldown": {
     "why": "Stretches and works your lats, one arm at a time.",
@@ -16,12 +16,12 @@
     "tips": ["Pull with your elbow, not your hand.", "Pause 1 second at the top."],
     "avoid": ["Twisting your body.", "Stopping before your arm is fully up."],
     "rangeOfMotion": "Arm straight up → elbow at your side",
-    "tempo": "Down 1 s · Up 3 s"
+    "tempo": "Down 1 s · Up 3 s · Hold 1 s"
   },
   "single-arm-db-row": {
     "why": "Works the lower part of your lats.",
     "setup": ["One hand and knee on a bench, back flat.", "Dumbbell hangs straight below your shoulder."],
-    "form": ["Pull your elbow back toward your hip.", "Lower until your arm is straight."],
+    "form": ["Pull your elbow back toward your hip.", "Lower until your arm is straight and your shoulder blade spreads forward."],
     "tips": ["Pull toward your hip, not your chest."],
     "avoid": ["Turning your body to lift more.", "Jerking the weight up."],
     "rangeOfMotion": "Arm hanging → dumbbell at your hip",
@@ -38,7 +38,7 @@
   },
   "db-incline-curl": {
     "why": "Your arms hang behind you, which stretches the biceps.",
-    "setup": ["Bench tilted back, lie on it.", "Arms hanging straight down, palms forward."],
+    "setup": ["Bench tilted back to 45–60°, lie on it.", "Arms hanging straight down, palms forward."],
     "form": ["Curl up without moving your elbows forward.", "Lower all the way until your arms are straight."],
     "tips": ["Keep your head and shoulders on the bench."],
     "avoid": ["Elbows moving forward.", "Stopping before your arms are straight."],
@@ -92,12 +92,12 @@
   },
   "overhead-trap": {
     "why": "Works your lower traps, which work hardest with your arm overhead.",
-    "setup": ["Cable on the lowest setting.", "Stand about an arm's length away."],
-    "form": ["Raise your arm in a big arc until it's over your head, thumb up.", "Hold 1 second at the top, lower slowly."],
+    "setup": ["Cable on the lowest setting.", "Stand 3–4 feet away."],
+    "form": ["Raise your arm in a big arc until it's over your head.", "Finish in a Y, slightly in front of your head, thumb up.", "Hold 1 second at the top, lower slowly."],
     "tips": ["At the top, reach up as high as you can.", "Go light enough to reach the top every rep."],
     "avoid": ["Arching your lower back.", "Stopping at shoulder height."],
     "rangeOfMotion": "Hand by your side → arm straight overhead",
-    "tempo": "Up 1 s · Down 3 s"
+    "tempo": "Up 1 s · Hold 1 s · Down 3 s"
   },
   "machine-reverse-fly": {
     "why": "Works the back of your shoulders.",
@@ -111,20 +111,20 @@
   "smith-squat": {
     "why": "A heavy squat for your quads.",
     "setup": ["Bar across your upper back.", "Feet shoulder width, under or a little in front of the bar."],
-    "form": ["Sit down until your thighs are level with the floor.", "Stand up, pushing through the middle of your feet."],
+    "form": ["Sit down until your thighs are level with the floor, no deeper.", "Stand up, pushing through the middle of your feet."],
     "tips": ["Feet more under the bar works the quads more."],
-    "avoid": ["Knees caving in.", "Stopping well above level."],
+    "avoid": ["Going below level. It works the glutes more.", "Knees caving in.", "Stopping well above level."],
     "rangeOfMotion": "Standing → thighs level with the floor",
     "tempo": "Down 3 s · Up 1 s"
   },
   "leg-extension": {
     "why": "Works only your quads.",
-    "setup": ["Back of your knees at the edge of the seat.", "Pad just above your ankles."],
+    "setup": ["Back of your knees at the edge of the seat, knees lined up with the machine's pivot.", "Pad just above your ankles."],
     "form": ["Straighten your legs and squeeze 1 second.", "Lower slowly."],
     "tips": ["Leaning back a little gives the quads a bigger stretch."],
     "avoid": ["Kicking the weight up and letting it drop.", "Lifting your hips off the seat."],
     "rangeOfMotion": "Knees bent → legs straight",
-    "tempo": "Up 1 s · Down 3 s"
+    "tempo": "Up 1 s · Hold 1 s · Down 3 s"
   },
   "prone-leg-curl": {
     "why": "Works your hamstrings with the knees fully bent.",
@@ -142,7 +142,7 @@
     "tips": ["The wide part does the most. Don't cut it short."],
     "avoid": ["Letting the weights slam.", "Rocking your body."],
     "rangeOfMotion": "Legs wide → legs together",
-    "tempo": "In 1 s · Out 3 s"
+    "tempo": "In 1 s · Hold 1 s · Out 3 s"
   },
   "standing-calf-raise": {
     "why": "Works your upper calves (knees straight).",
@@ -164,16 +164,16 @@
   },
   "cable-seated-row": {
     "why": "A heavy row for your back.",
-    "setup": ["Close-grip handle, feet on the plate, knees slightly bent."],
-    "form": ["Pull the handle to your belly and squeeze 1 second.", "Let your arms go straight."],
+    "setup": ["Neutral handle, feet on the plate, knees slightly bent."],
+    "form": ["Row to your lower ribs and squeeze 1 second.", "Let your arms go straight and your shoulder blades spread."],
     "tips": ["Leaning forward a little at the stretch is fine. Swinging back isn't."],
     "avoid": ["Using your lower back to throw the weight.", "Shrugging at the end."],
-    "rangeOfMotion": "Arms straight → handle at your belly",
-    "tempo": "Pull 1 s · Return 3 s"
+    "rangeOfMotion": "Arms straight → handle at your lower ribs",
+    "tempo": "Pull 1 s · Hold 1 s · Return 3 s"
   },
   "ez-bar-incline-tricep-extension": {
     "why": "Stretches and works your triceps.",
-    "setup": ["Lie on a bench tilted back a little.", "Arms straight up, tilted slightly back."],
+    "setup": ["Lie on a bench tilted back to 30–45°.", "Arms straight up, tilted slightly back."],
     "form": ["Bend only your elbows and lower the bar behind your head.", "Straighten your arms back up."],
     "tips": ["Keep your upper arms still. Only your forearms move."],
     "avoid": ["Elbows flaring out.", "Moving your upper arms."],
@@ -185,7 +185,7 @@
     "setup": ["Sit up straight."],
     "form": ["Push down until your arms are straight.", "Let the handles come back up as far as is comfortable."],
     "tips": ["Sitting upright keeps the work on your triceps."],
-    "avoid": ["Only doing the bottom half.", "Leaning far forward."],
+    "avoid": ["Short reps that skip the deep part.", "Leaning far forward."],
     "rangeOfMotion": "Handles up → arms straight",
     "tempo": "Down 1 s · Up 3 s"
   },
@@ -209,11 +209,11 @@
   },
   "lean-away-lateral-raise": {
     "why": "Leaning away makes the start of the raise harder for the side of your shoulder.",
-    "setup": ["Hold a post with one hand and lean away.", "Dumbbell in the other hand."],
+    "setup": ["Hold a post with one hand and lean away, about 15–30°.", "Dumbbell in the other hand."],
     "form": ["Raise your arm to shoulder height.", "Lower slowly."],
     "tips": ["Start each rep from a full stop."],
     "avoid": ["Swinging.", "Changing how far you lean."],
-    "rangeOfMotion": "Hand in front of you → shoulder height",
+    "rangeOfMotion": "Hand across your body → shoulder height",
     "tempo": "Up 1 s · Down 3 s"
   },
   "all-the-way-up-lateral-raise": {
@@ -295,6 +295,6 @@
     "tips": ["Go light. The squeeze is the point."],
     "avoid": ["Upper arm dropping.", "Swinging from the shoulder."],
     "rangeOfMotion": "Elbow at 90° → arm straight",
-    "tempo": "Straighten 1 s · Bend 3 s"
+    "tempo": "Straighten 1 s · Hold 1 s · Bend 3 s"
   }
 }

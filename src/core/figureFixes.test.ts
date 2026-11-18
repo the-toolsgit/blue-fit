@@ -21,3 +21,18 @@ describe("lateral raise stretch migration", () => {
     expect(ran.exercises[0].setup).toEqual(["Pulley low, one arm, cable in front of your body.", "x"]);
   });
 });
+
+describe("text review migration", () => {
+  it("updates untouched texts and tempos, keeps edited ones", () => {
+    const d = buildSeed();
+    d.exercises = d.exercises.map((e) =>
+      e.id === "machine-dip" ? { ...e, avoid: ["Only doing the bottom half.", "Leaning far forward."], tempo: "my tempo" }
+      : e.id === "hip-adduction" ? { ...e, tempo: "In 1 s · Out 3 s" } : e);
+    const out = run("2026-11-17-text-review", d)!.exercises;
+    const dip = out.find((e) => e.id === "machine-dip")!;
+    expect(dip.avoid[0]).toBe("Short reps that skip the deep part.");
+    expect(dip.tempo).toBe("my tempo");
+    expect(out.find((e) => e.id === "hip-adduction")!.tempo).toBe("In 1 s · Hold 1 s · Out 3 s");
+    expect(out.find((e) => e.id === "lean-away-lateral-raise")!.figure!.A.ua).toBe(-10);
+  });
+});

@@ -1,0 +1,90 @@
+{
+  "_about": "Texts before the Nov 17 2026 text review. The migration swaps in the new text only where a field still reads like this.",
+  "t-bar-reverse-row": {
+    "form": [
+      "Pull your shoulders back first, then pull your elbows toward your hips.",
+      "Hold 1 second at the top.",
+      "Lower slowly until your arms are straight."
+    ],
+    "tempo": "Up 1 s · Down 3 s"
+  },
+  "single-arm-cable-lat-pulldown": {
+    "tempo": "Down 1 s · Up 3 s"
+  },
+  "single-arm-db-row": {
+    "form": [
+      "Pull your elbow back toward your hip.",
+      "Lower until your arm is straight."
+    ]
+  },
+  "db-incline-curl": {
+    "setup": [
+      "Bench tilted back, lie on it.",
+      "Arms hanging straight down, palms forward."
+    ]
+  },
+  "overhead-trap": {
+    "setup": [
+      "Cable on the lowest setting.",
+      "Stand about an arm's length away."
+    ],
+    "form": [
+      "Raise your arm in a big arc until it's over your head, thumb up.",
+      "Hold 1 second at the top, lower slowly."
+    ],
+    "tempo": "Up 1 s · Down 3 s"
+  },
+  "smith-squat": {
+    "form": [
+      "Sit down until your thighs are level with the floor.",
+      "Stand up, pushing through the middle of your feet."
+    ],
+    "avoid": [
+      "Knees caving in.",
+      "Stopping well above level."
+    ]
+  },
+  "leg-extension": {
+    "setup": [
+      "Back of your knees at the edge of the seat.",
+      "Pad just above your ankles."
+    ],
+    "tempo": "Up 1 s · Down 3 s"
+  },
+  "hip-adduction": {
+    "tempo": "In 1 s · Out 3 s"
+  },
+  "cable-seated-row": {
+    "setup": [
+      "Close-grip handle, feet on the plate, knees slightly bent."
+    ],
+    "form": [
+      "Pull the handle to your belly and squeeze 1 second.",
+      "Let your arms go straight."
+    ],
+    "rangeOfMotion": "Arms straight → handle at your belly",
+    "tempo": "Pull 1 s · Return 3 s"
+  },
+  "ez-bar-incline-tricep-extension": {
+    "setup": [
+      "Lie on a bench tilted back a little.",
+      "Arms straight up, tilted slightly back."
+    ]
+  },
+  "machine-dip": {
+    "avoid": [
+      "Only doing the bottom half.",
+      "Leaning far forward."
+    ]
+  },
+  "lean-away-lateral-raise": {
+    "setup": [
+      "Hold a post with one hand and lean away.",
+      "Dumbbell in the other hand."
+    ],
+    "rangeOfMotion": "Hand in front of you → shoulder height"
+  },
+  "cable-one-arm-tricep-kickback": {
+    "tempo": "Straighten 1 s · Bend 3 s"
+  }
+}
