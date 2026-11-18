@@ -36,6 +36,9 @@ describe("workout notes", () => {
   });
   it("weightFor aims at the bottom of the range with 2 reps left", () => {
     expect(weightFor(100, 10, ex)).toBe(70); // 100 / (1 + 12/30) = 71.4 → 70
+    expect(weightFor(300, 12, ex)).toBe(200); // 204.5 → round number below: 200, not 200 + 5
+    expect(weightFor(40, 10, ex)).toBe(25); // under 40 lb: the exercise's 5 lb step
+
   });
 });
 

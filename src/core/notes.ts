@@ -28,10 +28,15 @@ const step = (ex: Exercise) => (ex.incrementLb > 0 ? ex.incrementLb : 5);
 const pct = (n: number) => `${n > 0 ? "+" : ""}${Math.round(n * 100)}%`;
 const mmss = (sec: number) => (sec % 60 === 0 ? `${sec / 60} min` : `${Math.floor(sec / 60)}:${String(Math.round(sec % 60)).padStart(2, "0")}`);
 
-/** Weight that leaves AIM_LEFT reps at `reps`, from an est. 1RM, rounded down to the exercise's step. */
+/** Suggested weights are round: multiples of 10 from 40 up (Leo: easier to load and remember), else the exercise's step. */
+export const ROUND_FROM = 40;
+const unit = (w: number, ex: Exercise) => (w >= ROUND_FROM ? 10 : step(ex));
+export const roundDown = (w: number, ex: Exercise) => Math.floor(w / unit(w, ex)) * unit(w, ex);
+export const roundUp = (w: number, ex: Exercise) => Math.ceil(w / unit(w, ex)) * unit(w, ex);
+
+/** Weight that leaves AIM_LEFT reps at `reps`, from an est. 1RM, rounded down (round number). */
 export function weightFor(e1rm: number, reps: number, ex: Exercise): number {
-  const s = step(ex);
-  return Math.floor(e1rm / (1 + (reps + AIM_LEFT) / 30) / s) * s;
+  return roundDown(e1rm / (1 + (reps + AIM_LEFT) / 30), ex);
 }
 
 /** The last finished, non-deload workout before `s` that did this exercise. */
@@ -95,7 +100,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
       if (repMax != null && repMin != null && regular.length && regular.every((x) => x.reps! > repMax)) {
         const best = Math.max(...regular.map((x) => epley(x.weight!, x.reps!)));
         const top = Math.max(...regular.map((x) => x.weight!));
-        const w = Math.max(top + step(ex), weightFor(best, repMin, ex));
+        const w = roundUp(Math.max(top + step(ex), weightFor(best, repMin, ex)), ex);
         notes.push({ kind: "above", tone: "up", exerciseId: e.exerciseId, title: `${ex.name}: go heavier`, text: `Every set went past the plan's ${range} reps. Use ${fmtNum(w)} next time.` });
       }
 
