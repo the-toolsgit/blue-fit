@@ -129,10 +129,10 @@ export function useRest() {
 /** Workout header: the running rest timer in place of Finish. Tap opens the full timer under the header. */
 export function WorkoutRestPill({ left, frac, open, onToggle }: { left: number; frac: number; open: boolean; onToggle: () => void }) {
   return (
-    <button className="btn btn-ghost" style={{ minHeight: 42, padding: "0 12px 0 8px", gap: 8, borderColor: "color-mix(in srgb, var(--neon) 55%, transparent)", boxShadow: "0 0 18px -6px var(--glow)" }}
-      onClick={onToggle} aria-expanded={open} aria-label="Rest timer">
-      <span style={{ position: "relative", width: 26, height: 26 }}><Ring frac={frac} size={26} stroke={3} /></span>
-      <span className="mono" style={{ fontSize: 18, letterSpacing: 0, color: "var(--ink)" }}>{fmtClock(left)}</span>
+    <button onClick={onToggle} aria-expanded={open} aria-label="Rest timer"
+      style={{ position: "relative", width: 48, height: 48, padding: 0, border: 0, background: "none", color: "var(--ink)", cursor: "pointer", flex: "none" }}>
+      <Ring frac={frac} size={48} stroke={3} />
+      <span className="mono" style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", fontSize: 13, letterSpacing: 0 }}>{fmtClock(left)}</span>
     </button>
   );
 }
