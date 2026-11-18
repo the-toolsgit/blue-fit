@@ -268,6 +268,15 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
+    // Nov 18 2026: machine dip setup says "Back against the pad." (seats on many machines lean forward by design).
+    id: "2026-11-18-dip-setup",
+    run(d) {
+      const old = [["Sit upright (keeps it on the triceps)."], ["Sit up straight."]].map((x) => JSON.stringify(x));
+      if (!d.exercises.some((e) => e.id === "machine-dip" && !e.isCustom && old.includes(JSON.stringify(e.setup)))) return null;
+      return { ...d, exercises: d.exercises.map((e) => (e.id === "machine-dip" && !e.isCustom && old.includes(JSON.stringify(e.setup)) ? { ...e, setup: ["Back against the pad."] } : e)) };
+    },
+  },
+  {
     // Nov 16 2026: plain-language how-to texts and one-number tempos for the built-in exercises.
     // Skips any exercise whose texts were edited in the app.
     id: "2026-11-16-plain-exercise-text",
