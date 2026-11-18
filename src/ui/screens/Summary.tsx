@@ -81,7 +81,7 @@ export function SummaryScreen({ id }: { id?: string }) {
                 <span className="mono" style={{ textAlign: "right" }}>{fmtNum(sum.perGroup[m.id])}</span>
               </div>
             ))}
-            {anySkipped && <p className="muted" style={{ fontSize: 12 }}><span style={{ color: "var(--bad)" }}>Red</span> = sets skipped.</p>}
+            {anySkipped && <p className="muted row" style={{ fontSize: 12, gap: 6 }}><span aria-hidden style={{ width: 14, height: 8, borderRadius: 4, background: "#721d1d", display: "inline-block" }} /> = sets skipped</p>}
           </div>
         </>
       )}
