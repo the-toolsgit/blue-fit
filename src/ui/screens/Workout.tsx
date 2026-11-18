@@ -516,7 +516,7 @@ function Plates({ weight, single }: { weight: number; single?: boolean }) {
           </span>
         ))}
       </div>
-      {r.remainder > 0 && <span style={{ color: "var(--warn)", fontSize: 13 }}>+{fmtNum(r.remainder)} lb can't be loaded with standard plates</span>}
+      {r.remainder > 0 && <span className="plates-warn" style={{ color: "var(--warn)", fontSize: 13 }}>+{fmtNum(r.remainder)} lb can't be loaded with standard plates</span>}
     </div>
   );
 }

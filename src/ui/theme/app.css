@@ -227,8 +227,9 @@ textarea.input { min-height: 84px; resize: vertical; }
 .tempo { display: flex; flex-wrap: wrap; gap: 2px 6px; }
 .tempo > span { white-space: nowrap; }
 .tempo b { font-weight: 600; }
-.plates { display: grid; gap: 6px; }
-.plates-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.plates { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 12px; }
+.plates > .plates-warn { flex-basis: 100%; text-align: center; }
+.plates-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
 .plate-group { display: inline-flex; align-items: center; gap: 5px; }
 .plate { width: var(--d); height: var(--d); border-radius: 50%; display: grid; place-items: center; flex: none;
   background: radial-gradient(circle, var(--surface-solid) 0 54%, color-mix(in srgb, var(--neon-ink) 22%, var(--surface-2)) 56% 100%);
