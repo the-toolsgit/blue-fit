@@ -120,6 +120,7 @@ function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => v
 }
 
 function Row({ s }: { s: Session }) {
+  const { exMap } = useStore();
   return (
     <button className="list-row" onClick={() => go(`summary/${s.id}`)}>
       <span style={{ width: 44, textAlign: "center" }}>
@@ -128,7 +129,7 @@ function Row({ s }: { s: Session }) {
       </span>
       <span className="grow">
         <span style={{ display: "block", fontWeight: 600 }}>{s.title}{s.deload && <span style={{ color: "var(--neon-2)", fontWeight: 400, fontSize: 13 }}> · Deload</span>}</span>
-        <span className="muted mono" style={{ fontSize: 12 }}>{durationMin(s)} min · {s.entries.reduce((a, e) => a + e.sets.length, 0)} sets · {fmtVolume(tonnage([s]))} lb</span>
+        <span className="muted mono" style={{ fontSize: 12 }}>{durationMin(s)} min · {s.entries.reduce((a, e) => a + e.sets.length, 0)} sets · {fmtVolume(tonnage([s], exMap))} lb</span>
       </span>
       <Icon name="chevron" size={18} />
     </button>

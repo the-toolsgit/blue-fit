@@ -46,7 +46,7 @@ export function weeklyTotals(sessions: Session[], exMap: Map<string, Exercise>, 
   const out: WeekTotals[] = [];
   for (let w = first; w <= weekStart(today, startDay); w = addDays(w, 7)) {
     const wk = list.filter((s) => weekStart(s.date, startDay) === w);
-    out.push({ weekStart: w, tonnage: tonnage(wk), sets: sessionsVolume(wk, exMap), workouts: wk.length });
+    out.push({ weekStart: w, tonnage: tonnage(wk, exMap), sets: sessionsVolume(wk, exMap), workouts: wk.length });
   }
   return out;
 }

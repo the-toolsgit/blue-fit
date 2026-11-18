@@ -257,7 +257,7 @@ export function summarize(s: Session, exercises: Map<string, Exercise>, history:
   return {
     durationMin: durationMin(s),
     setsDone: s.entries.reduce((a, e) => a + e.sets.filter((x) => x.done && countsForLoad(x.type)).length, 0),
-    tonnage: tonnage([s]),
+    tonnage: tonnage([s], exercises),
     perGroup: sessionsVolume([s], exercises),
     prs,
   };

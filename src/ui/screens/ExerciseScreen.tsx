@@ -1,5 +1,6 @@
 // Exercise detail: the full card from the plan page + records. Used as a page and as a sheet (logger, Today).
 import { computeRecords } from "../../core/records";
+import { loadFactor } from "../../core/volume";
 import { lastEntryFor } from "../../core/session";
 import { EQUIPMENT_LABEL, muscleLabel, type Exercise } from "../../core/types";
 import { fmtNum } from "../../core/util";
@@ -99,7 +100,7 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride, failWhy }: { ex: E
             {[
               ["Heaviest", `${fmtNum(rec.heaviest.weight)}${loadSuffix(ex)}`, `× ${rec.heaviest.reps} · ${fmtDate(rec.heaviest.date)}`],
               ["Best est. 1RM", fmtNum(Math.round(rec.bestE1rm!.value)), `${fmtNum(rec.bestE1rm!.weight)} × ${rec.bestE1rm!.reps}`],
-              ["Best volume", fmtVolume(rec.bestSessionVolume?.value ?? 0), rec.bestSessionVolume ? fmtDate(rec.bestSessionVolume.date) : ""],
+              ["Best volume", fmtVolume((rec.bestSessionVolume?.value ?? 0) * loadFactor(ex)), rec.bestSessionVolume ? fmtDate(rec.bestSessionVolume.date) : ""],
               ["Last time", last ? setsLine(last.entry.sets) : "—", last ? fmtDate(last.session.date) : ""],
             ].map(([l, v, s]) => (
               <div key={l} className="glass" style={{ padding: 12, borderRadius: 16 }}>

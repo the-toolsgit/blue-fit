@@ -122,7 +122,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
   if (s.dayId && !s.deload) {
     const last = all.filter((h) => h.id !== s.id && h.dayId === s.dayId && h.status === "finished" && !h.deload && h.startedAt < s.startedAt)
       .sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1))[0];
-    const now = tonnage([s]), then = last ? tonnage([last]) : 0;
+    const now = tonnage([s], exMap), then = last ? tonnage([last], exMap) : 0;
     if (then > 0) {
       const d = (now - then) / then;
       if (Math.abs(d) >= VOLUME_NOTE)

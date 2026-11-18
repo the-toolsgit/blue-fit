@@ -115,7 +115,7 @@ describe("progress series", () => {
     expect(w.map((x) => x.weekStart)).toEqual(["2026-10-26", "2026-11-02", "2026-11-09", "2026-11-16"]);
     expect(w[1].sets.quads).toBe(2);
     expect(w[1].sets.adductors).toBe(1);
-    expect(w[1].tonnage).toBe(1660);
+    expect(w[1].tonnage).toBe(3320); // leg press is logged per side: both sides count
     expect(averageSets(w).quads).toBe(0.8); // 3 / 4 weeks = 0.75 → 0.8
     expect(muscleFrequency(hist, exMap, 4).quads).toBe(0.5);
     expect(muscleFrequency(hist, exMap, 4).adductors).toBe(0);

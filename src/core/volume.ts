@@ -40,11 +40,16 @@ export function sessionsVolume(sessions: Session[], exercises: Map<string, Exerc
   return t;
 }
 
-/** Tonnage: Σ weight × reps of done non-warm-up sets, using the weight exactly as logged. */
-export function tonnage(sessions: Session[]): number {
+/** Weights logged per side (plates, no bar) or per hand (dumbbells) count twice in volume: both sides were lifted. */
+export const loadFactor = (ex: Exercise | undefined) => (ex?.loadMode === "perSide" || ex?.loadMode === "perHand" ? 2 : 1);
+
+/** Tonnage: Σ weight × reps of done non-warm-up sets, per-side and per-hand weights doubled (bar not included). */
+export function tonnage(sessions: Session[], exMap?: Map<string, Exercise>): number {
   let t = 0;
-  for (const s of sessions) for (const e of s.entries) for (const x of e.sets)
-    if (x.done && countsForLoad(x.type) && x.weight != null && x.reps != null) t += x.weight * x.reps;
+  for (const s of sessions) for (const e of s.entries) {
+    const k = loadFactor(exMap?.get(e.exerciseId));
+    for (const x of e.sets) if (x.done && countsForLoad(x.type) && x.weight != null && x.reps != null) t += x.weight * x.reps * k;
+  }
   return t;
 }
 
