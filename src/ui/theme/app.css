@@ -31,6 +31,11 @@ ul { margin: 0; padding-left: 18px; }
 .app { min-height: 100%; }
 .page { max-width: 640px; margin: 0 auto; padding: calc(env(safe-area-inset-top) + 14px) 16px calc(64px + env(safe-area-inset-bottom) + 112px); animation: pageIn 0.42s var(--ease) both; }
 @keyframes pageIn { from { opacity: 0; transform: translateY(14px) scale(0.99); } to { opacity: 1; transform: none; } }
+/* Switching tabs with a swipe: the new tab slides in from the side you swiped toward */
+:root[data-swipe="next"] .page { animation-name: pageInNext; }
+:root[data-swipe="prev"] .page { animation-name: pageInPrev; }
+@keyframes pageInNext { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+@keyframes pageInPrev { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
 .stack { display: grid; gap: var(--s3); }
 .row { display: flex; align-items: center; gap: var(--s2); }
 .spread { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); }

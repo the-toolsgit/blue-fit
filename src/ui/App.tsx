@@ -85,12 +85,48 @@ export function App() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+  // Swipe left / right on a main tab screen switches to the next / previous tab. Skipped where a sideways swipe
+  // already means something: horizontally scrolling rows, charts and the muscle-map caption (touch-action pan-y),
+  // sheets, form fields and the plan editor.
+  const tabRef = useRef("");
+  useEffect(() => {
+    let st: { x: number; y: number; t: number } | null = null;
+    const ownsSwipe = (el: Element | null): boolean => {
+      for (let n = el; n && n !== document.body; n = n.parentElement) {
+        if (n.matches("input, textarea, select, .sheet, [data-noswipe]")) return true;
+        const cs = getComputedStyle(n);
+        if (cs.touchAction === "pan-y" || cs.touchAction === "none") return true;
+        if ((cs.overflowX === "auto" || cs.overflowX === "scroll") && n.scrollWidth > n.clientWidth + 2) return true;
+      }
+      return false;
+    };
+    const start = (e: TouchEvent) => {
+      const name = location.hash.replace(/^#\/?/, "").split("/")[0] || "today";
+      st = e.touches.length === 1 && TABS.some((t) => t.id === name) && !ownsSwipe(e.target as Element)
+        ? { x: e.touches[0].clientX, y: e.touches[0].clientY, t: performance.now() } : null;
+    };
+    const end = (e: TouchEvent) => {
+      if (!st) return;
+      const dx = e.changedTouches[0].clientX - st.x, dy = e.changedTouches[0].clientY - st.y, ms = performance.now() - st.t;
+      st = null;
+      if (Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 2 || ms > 700) return;
+      const i = TABS.findIndex((t) => t.id === tabRef.current), j = i + (dx < 0 ? 1 : -1);
+      if (i < 0 || j < 0 || j >= TABS.length) return;
+      document.documentElement.dataset.swipe = dx < 0 ? "next" : "prev";
+      go(TABS[j].id);
+      setTimeout(() => { delete document.documentElement.dataset.swipe; }, 500);
+    };
+    window.addEventListener("touchstart", start, { passive: true });
+    window.addEventListener("touchend", end, { passive: true });
+    return () => { window.removeEventListener("touchstart", start); window.removeEventListener("touchend", end); };
+  }, []);
   useEffect(() => { delete document.documentElement.dataset.compact; }, [route.join("/")]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const tapStart = useRef<{ x: number; y: number; id: string } | null>(null);
   const tapHandled = useRef(0); // when a touch already switched tabs (its click, if any, follows right after)
   const [name, id, sub] = route;
   const tab = TAB_OF[name] ?? name;
+  tabRef.current = tab;
   let screen;
   if (!ready) screen = <Loading />;
   else if (name === "workout") screen = <WorkoutScreen />;
