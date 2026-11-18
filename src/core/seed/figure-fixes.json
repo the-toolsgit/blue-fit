@@ -1,6 +1,58 @@
 {
-  "_about": "Figure corrections so the animation follows the exercise text (Nov 17 2026). Merged over the plan page's figures by npm run seed and over saved data by a migration.",
-  "cable-seated-row": { "B": { "t": 0 } },
-  "rope-face-pull": { "B": { "t": 0 } },
-  "cable-lateral-raise": { "base": { "rot": 10 } }
+  "_about": "Figure corrections so the animation follows the exercise text (Nov 17 2026). Merged over the plan page's figures by npm run seed and over saved data by a migration (objects merge, arrays replace).",
+  "cable-seated-row": {
+    "B": {
+      "t": 0
+    }
+  },
+  "rope-face-pull": {
+    "B": {
+      "t": 0
+    }
+  },
+  "cable-lateral-raise": {
+    "base": {
+      "cx": 56,
+      "rot": 14,
+      "la": 2,
+      "sa": 2,
+      "L": {
+        "ua": 72,
+        "fa": 80
+      }
+    },
+    "A": {
+      "ua": -30,
+      "fa": -32
+    },
+    "B": {
+      "ua": 90,
+      "fa": 92
+    },
+    "props": [
+      {
+        "line": [
+          22,
+          -14,
+          22,
+          104
+        ]
+      },
+      {
+        "line": [
+          16,
+          104,
+          30,
+          104
+        ]
+      },
+      {
+        "cable": [
+          22,
+          96
+        ],
+        "to": "haR"
+      }
+    ]
+  }
 }

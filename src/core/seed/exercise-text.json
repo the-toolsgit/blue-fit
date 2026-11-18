@@ -65,11 +65,11 @@
   },
   "cable-lateral-raise": {
     "why": "Works the side of your shoulders the whole way up and down.",
-    "setup": ["Pulley low, one arm, cable behind your body.", "Lean away a little."],
-    "form": ["Raise your arm out to the side to shoulder height, elbow leading.", "Lower slowly."],
+    "setup": ["Pulley low, one arm, cable behind your body.", "Hold the machine with your free hand and lean away."],
+    "form": ["Start with your hand across in front of your body to stretch the shoulder.", "Raise your arm out to the side to shoulder height, elbow leading.", "Lower slowly, all the way back across."],
     "tips": ["Push your hand out wide, not up."],
     "avoid": ["Shrugging.", "Swinging your body."],
-    "rangeOfMotion": "Hand by your hip → shoulder height",
+    "rangeOfMotion": "Hand across your body → shoulder height",
     "tempo": "Up 1 s · Down 3 s"
   },
   "lateral-shrug-hybrid": {

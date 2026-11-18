@@ -13,6 +13,21 @@ export function shiftWeekdays(r: Routine, by: number): Routine {
   return { ...r, days: r.days.map((d) => (d.weekday == null ? d : { ...d, weekday: (((d.weekday + by) % 7) + 7) % 7 })) };
 }
 
+/** Merge seed/figure-fixes.json over built-in figures (objects merge, arrays replace). Null if nothing to fix. */
+function applyFigureFixes(d: AppData, only?: string): AppData | null {
+  const fixes = figureFixes as unknown as Record<string, Record<string, unknown>>;
+  let changed = false;
+  const exercises = d.exercises.map((e) => {
+    const fx = fixes[e.id];
+    if (!fx || e.id === "_about" || (only && e.id !== only) || e.isCustom || !e.figure) return e;
+    changed = true;
+    const f: any = { ...e.figure };
+    for (const [k, v] of Object.entries(fx)) f[k] = Array.isArray(v) ? v : { ...f[k], ...(v as object) };
+    return { ...e, figure: f };
+  });
+  return changed ? { ...d, exercises } : null;
+}
+
 export interface Migration { id: string; run(d: AppData, today: string): AppData | null }
 
 export const MIGRATIONS: Migration[] = [
@@ -122,18 +137,24 @@ export const MIGRATIONS: Migration[] = [
     // Nov 17 2026: figures must follow the exercise text (seated row and face pull no longer lean back;
     // cable lateral raise leans away a little). Built-in exercises only.
     id: "2026-11-17-figure-fixes",
+    run: (d) => applyFigureFixes(d),
+  },
+  {
+    // Nov 17 2026: cable lateral raise holds the machine and starts with the hand across the body (stretch).
+    // Figure always; texts only where they still read as before.
+    id: "2026-11-17-lateral-raise-stretch",
     run(d) {
-      const fixes = figureFixes as unknown as Record<string, Record<string, Record<string, number>>>;
-      let changed = false;
-      const exercises = d.exercises.map((e) => {
-        const fx = fixes[e.id];
-        if (!fx || e.isCustom || !e.figure) return e;
-        changed = true;
-        const f: any = { ...e.figure };
-        for (const [k, v] of Object.entries(fx)) f[k] = { ...f[k], ...v };
-        return { ...e, figure: f };
+      const t = (plainText as unknown as Record<string, Partial<Exercise>>)["cable-lateral-raise"];
+      const was = { setup: ["Pulley low, one arm, cable behind your body.", "Lean away a little."], form: ["Raise your arm out to the side to shoulder height, elbow leading.", "Lower slowly."], rangeOfMotion: "Hand by your hip → shoulder height" };
+      const fixed = applyFigureFixes(d, "cable-lateral-raise") ?? d;
+      let changed = fixed !== d;
+      const exercises = fixed.exercises.map((e) => {
+        if (e.id !== "cable-lateral-raise" || e.isCustom) return e;
+        const n: Exercise = { ...e };
+        for (const k of ["setup", "form", "rangeOfMotion"] as const) if (JSON.stringify(e[k]) === JSON.stringify(was[k])) { (n as any)[k] = t[k]; changed = true; }
+        return n;
       });
-      return changed ? { ...d, exercises } : null;
+      return changed ? { ...fixed, exercises } : null;
     },
   },
   {

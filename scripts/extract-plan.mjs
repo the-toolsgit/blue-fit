@@ -76,7 +76,7 @@ const WEEKDAY = { Mon: 6, Tue: 0, Wed: 1, Thu: 2, Fri: 3, Sat: 4, Sun: 5 };
 
 /** Figure corrections (src/core/seed/figure-fixes.json): the animation must follow the exercise text. */
 const FIG_FIX = JSON.parse(readFileSync(new URL("../src/core/seed/figure-fixes.json", import.meta.url), "utf8"));
-const fixFigure = (id, f) => (f && FIG_FIX[id] ? { ...f, ...Object.fromEntries(Object.entries(FIG_FIX[id]).map(([k, v]) => [k, { ...f[k], ...v }])) } : f);
+const fixFigure = (id, f) => (f && FIG_FIX[id] ? { ...f, ...Object.fromEntries(Object.entries(FIG_FIX[id]).map(([k, v]) => [k, Array.isArray(v) ? v : { ...f[k], ...v }])) } : f);
 
 const exercises = new Map();
 const days = [];
