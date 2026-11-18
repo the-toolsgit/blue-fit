@@ -154,10 +154,13 @@ body:has(.dock > *) .bottom-fade { height: calc(env(safe-area-inset-bottom) + va
 @keyframes spark { from { transform: translate(0, 0) scale(1); opacity: 1; } to { transform: translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; } }
 
 /* ---------- Forms ---------- */
-.field { display: grid; gap: 6px; }
+.field { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
 .field label, .field .label { font: 600 12px var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .input { width: 100%; min-height: var(--tap); padding: 10px 14px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface-2); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
 .input:focus { border-color: var(--neon-ink); box-shadow: 0 0 0 3px var(--glow-soft); }
+/* iOS gives date fields a built-in minimum width that pushes them out of their box; make them fill it instead */
+input.input[type="date"] { -webkit-appearance: none; appearance: none; display: block; min-width: 0; max-width: 100%; text-align: left; }
+input.input[type="date"]::-webkit-date-and-time-value { text-align: left; }
 textarea.input { min-height: 84px; resize: vertical; }
 .switch::before { content: ""; position: absolute; inset: -7px -4px; } /* 44px+ hit area */
 .switch { position: relative; width: 52px; height: 32px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--line-strong); transition: background 0.25s; flex: none; }
