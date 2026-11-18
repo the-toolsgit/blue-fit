@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
 import { LOADING } from "../core/figure/poses";
 import { Figure } from "./components/Figure";
@@ -87,6 +87,8 @@ export function App() {
   }, []);
   useEffect(() => { delete document.documentElement.dataset.compact; }, [route.join("/")]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const tapStart = useRef<{ x: number; y: number; id: string } | null>(null);
+  const tapHandled = useRef(0); // when a touch already switched tabs (its click, if any, follows right after)
   const [name, id, sub] = route;
   const tab = TAB_OF[name] ?? name;
   let screen;
@@ -110,7 +112,15 @@ export function App() {
       <div className="bottom-fade" aria-hidden="true" />
       <nav className="tabbar glass" aria-label="Main" onClick={() => { delete document.documentElement.dataset.compact; }}>
         {TABS.map((t) => (
-          <button key={t.id} className="tab" aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id)}>
+          <button key={t.id} className="tab" aria-current={tab === t.id ? "page" : undefined}
+            // Act when the finger lifts: right after a scroll iOS spends the first tap stopping the page and sends no click
+            onPointerDown={(e) => { tapStart.current = { x: e.clientX, y: e.clientY, id: t.id }; }}
+            onPointerUp={(e) => {
+              const p = tapStart.current; tapStart.current = null;
+              if (e.pointerType === "mouse" || !p || p.id !== t.id || Math.hypot(e.clientX - p.x, e.clientY - p.y) > 12) return;
+              delete document.documentElement.dataset.compact; tapHandled.current = performance.now(); go(t.id);
+            }}
+            onClick={() => { if (performance.now() - tapHandled.current < 600) return; go(t.id); }}>
             <Icon name={t.icon} size={24} />
             <span>{t.label}</span>
           </button>

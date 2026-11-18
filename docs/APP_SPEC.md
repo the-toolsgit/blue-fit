@@ -17,7 +17,7 @@ Blue Fit is a single-user training app that replaces Jefit for one advanced lift
 
 ## 2. Navigation
 
-Bottom tab bar (always visible, floating glass bar): **Today · Plan · History · Progress · Settings**. Once you scroll down it shrinks to a thin icons-only bar (64 → 36 px, labels fade, icons 24 → 17 px and centered, the active marker moves under the icon; 0.32 s; each tab's touch area still reaches 44+ px). It stays thin when scrolling back up and grows back only at the top of the page, when the bar is tapped, or on a new screen. The dock above it follows.
+Bottom tab bar (always visible, floating glass bar): **Today · Plan · History · Progress · Settings**. Once you scroll down it shrinks to a thin icons-only bar (64 → 36 px, labels fade, icons 24 → 17 px and centered, the active marker moves under the icon; 0.32 s; each tab's touch area still reaches 44+ px). Tabs switch when the finger lifts (a touch that moved under 12 px), so one tap works right after scrolling (iOS otherwise spends that tap stopping the scroll and sends no click). It stays thin when scrolling back up and grows back only at the top of the page, when the bar is tapped, or on a new screen. The dock above it follows.
 
 The app doesn't zoom: pinch and double-tap zoom are blocked (viewport `user-scalable=no`, iOS gesture events cancelled, `touch-action: manipulation`), like a native app.
 
