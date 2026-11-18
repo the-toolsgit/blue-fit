@@ -149,14 +149,14 @@ export function planFailure(day: RoutineDay, date: string, c: FailureContext): F
     if (trainedRecently(c, g, date)) return;
     const pr = priorityOf(g, t);
     const below = isFocus(t) && sets < t.min;
-    const why = [`Last ${label(g)} exercise in this workout`];
-    if (pr === "priority") why.push("priority muscle");
-    if (below) why.push(`${label(g)} below weekly target`);
-    why.push(gap == null ? `${label(g)} not trained again this week` : `${label(g)} rests ${gap} days`);
+    const why = [`Last ${label(g)} exercise today`];
+    if (pr === "priority") why.push("Priority muscle");
+    if (below) why.push("Below weekly target");
+    why.push(gap == null ? "Not trained again this week" : `${gap} days rest after`);
     cands.push({ slot, index, prio: pr === "priority" ? 2 : pr === "normal" ? 1 : 0, below: below ? 1 : 0, why });
   });
   cands.sort((a, b) => b.prio - a.prio || b.below - a.below || b.index - a.index);
-  const note = budget.why.length ? [`Up to ${budget.sets} per workout (${budget.why.join(", ")})`] : [];
+  const note = budget.why.length ? [`Max ${budget.sets} today (${budget.why.join(", ")})`] : [];
   const auto = cands.slice(0, left).map((x) => ({ slotId: x.slot.id, why: [...x.why, ...note] }));
   // Back in workout order
   const order = new Map(day.slots.map((s, i) => [s.id, i]));
