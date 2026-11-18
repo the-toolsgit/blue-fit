@@ -95,7 +95,7 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
                   <span className="muted" style={{ fontSize: 13 }}>Not recorded · plan {it.slot.sets} × {it.slot.repMin === it.slot.repMax ? it.slot.repMin : `${it.slot.repMin}–${it.slot.repMax}`}</span>
                 </span>
               </div>
-              <button className="btn btn-quiet btn-block" style={{ minHeight: 40, fontSize: 14, color: "var(--neon-ink)" }} onClick={() => recordSlot(it.slot)}><Icon name="plus" size={18} /> Record it</button>
+              <button className="btn btn-quiet btn-block" style={{ minHeight: 40, fontSize: 14, color: "var(--neon-ink)" }} onClick={() => recordSlot(it.slot)}><Icon name="plus" size={18} /> Add</button>
             </section>
           );
         }
