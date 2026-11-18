@@ -109,9 +109,11 @@ export function App() {
       }
       return false;
     };
+    // A screen with a back arrow: swipe right goes back (runs that screen's own Back button)
+    const backBtn = () => [...document.querySelectorAll<HTMLButtonElement>('.page button[aria-label="Back"]')].find((b) => b.offsetParent !== null);
     const start = (e: TouchEvent) => {
       const name = location.hash.replace(/^#\/?/, "").split("/")[0] || "today";
-      st = e.touches.length === 1 && TABS.some((t) => t.id === name) && !ownsSwipe(e.target as Element)
+      st = e.touches.length === 1 && (TABS.some((t) => t.id === name) || !!backBtn()) && !ownsSwipe(e.target as Element)
         ? { x: e.touches[0].clientX, y: e.touches[0].clientY, t: performance.now() } : null;
     };
     const end = (e: TouchEvent) => {
@@ -119,6 +121,8 @@ export function App() {
       const dx = e.changedTouches[0].clientX - st.x, dy = e.changedTouches[0].clientY - st.y, ms = performance.now() - st.t;
       st = null;
       if (Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 2 || ms > 700) return;
+      const b = dx > 0 ? backBtn() : undefined;
+      if (b) { document.documentElement.dataset.swipe = "prev"; b.click(); return; }
       const i = TABS.findIndex((t) => t.id === tabRef.current), j = i + (dx < 0 ? 1 : -1);
       if (i < 0 || j < 0 || j >= TABS.length) return;
       document.documentElement.dataset.swipe = dx < 0 ? "next" : "prev";
