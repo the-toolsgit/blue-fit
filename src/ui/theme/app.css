@@ -263,6 +263,13 @@ textarea.input { min-height: 84px; resize: vertical; }
 .cal-d.out { opacity: 0.25; }
 /* A planned training day that was skipped: gray dashed outline, grayed-out stripes inside (same stripes as skipped muscles) */
 .cal-d.skip { color: var(--muted); border: 1px dashed color-mix(in srgb, var(--muted) 70%, transparent); background: repeating-linear-gradient(-45deg, color-mix(in srgb, var(--faint) 45%, transparent) 0 3px, transparent 3px 7px); background-clip: padding-box; }
+.cal-tip { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); z-index: 5; padding: 5px 10px; border-radius: 10px; white-space: nowrap; pointer-events: none;
+  font: 700 12px var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: var(--surface-solid);
+  border: 1px solid color-mix(in srgb, var(--neon) 55%, transparent); box-shadow: 0 0 14px -4px var(--glow); animation: cal-tip 3s ease both; }
+.cal-tip.l { left: 0; transform: none; }
+.cal-tip.r { left: auto; right: 0; transform: none; }
+@keyframes cal-tip { 0% { opacity: 0; translate: 0 4px; } 8%, 88% { opacity: 1; translate: 0 0; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .cal-tip { animation: none; } }
 .flicker { animation: flicker 2.6s ease-in-out infinite; display: inline-block; }
 @keyframes flicker { 0%, 100% { transform: scale(1) rotate(0); } 30% { transform: scale(1.08) rotate(-3deg); } 60% { transform: scale(0.97) rotate(2deg); } }
 

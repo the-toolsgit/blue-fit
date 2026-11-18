@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { activeFreeze, dailyLoad, plannedDays, skippedDays, streakMarks, toggleFreeze, weeklyStreak } from "../../core/history";
 import { durationMin } from "../../core/session";
 import { tonnage } from "../../core/volume";
@@ -73,6 +73,9 @@ function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => v
   }, [finished, routine, today, settings.weekStartDay, settings.streakFreezes]);
   const skipped = useMemo(() => skippedDays(finished, routine, today, settings.weekStartDay), [finished, routine, today, settings.weekStartDay]);
   const [month, setMonth] = useState(today.slice(0, 7) + "-01");
+  // Tapping a skipped day shows a "Skipped" tooltip for 3 s
+  const [tip, setTip] = useState<string | null>(null);
+  useEffect(() => { if (!tip) return; const t = setTimeout(() => setTip(null), 3000); return () => clearTimeout(t); }, [tip]);
   const load = useMemo(() => dailyLoad(finished), [finished]);
   const max = Math.max(12, ...[...load.values()].map((d) => d.sets));
   const first = weekStart(month); // calendar grid is always Mon → Sun
@@ -92,15 +95,17 @@ function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => v
       </div>
       <div className="cal">
         {weekOrder(1).map((d) => <div key={d} className="cal-h">{WD[d]}</div>)}
-        {cells.slice(0, rows * 7).map((c) => {
+        {cells.slice(0, rows * 7).map((c, i) => {
           const l = load.get(c);
           const k = l ? Math.min(1, 0.25 + 0.75 * (l.sets / max)) : 0;
           const mark = marks.get(c);
-          const cls = ["cal-d", l ? "on" : "", mark ? "mark" : "", !l && !mark && skipped.has(c) ? "skip" : "", c === today ? "today" : "", c.slice(0, 7) !== month.slice(0, 7) ? "out" : ""].join(" ");
+          const skip = !l && !mark && skipped.has(c);
+          const cls = ["cal-d", l ? "on" : "", mark ? "mark" : "", skip ? "skip" : "", c === today ? "today" : "", c.slice(0, 7) !== month.slice(0, 7) ? "out" : ""].join(" ");
           return (
-            <button key={c} className={cls} disabled={!l} onClick={() => l && onPickDay(c, l.sessionIds)} aria-label={`${fmtDate(c)}${l ? `: ${l.sessionIds.length} workout, ${l.sets} sets` : skipped.has(c) ? ": skipped" : ""}`}
+            <button key={c} className={cls} disabled={!l && !skip} onClick={() => l ? onPickDay(c, l.sessionIds) : skip && setTip(c)} aria-label={`${fmtDate(c)}${l ? `: ${l.sessionIds.length} workout, ${l.sets} sets` : skipped.has(c) ? ": skipped" : ""}`}
               style={l ? { background: `linear-gradient(140deg, color-mix(in srgb, var(--neon) ${Math.round(k * 100)}%, transparent), color-mix(in srgb, var(--neon-2) ${Math.round(k * 85)}%, transparent))`, color: k > 0.6 ? "var(--on-neon)" : undefined, fontWeight: 700, boxShadow: k > 0.5 ? `0 0 ${Math.round(16 * k)}px -3px var(--glow)` : undefined } : undefined}>
               {mark ? <><span className="cal-flame"><StreakFlame kind={mark} size={38} /></span><span className="cal-num">{Number(c.slice(8))}</span></> : Number(c.slice(8))}
+              {tip === c && <span className={"cal-tip" + (i % 7 === 0 ? " l" : i % 7 === 6 ? " r" : "")} role="status">Skipped</span>}
             </button>
           );
         })}
