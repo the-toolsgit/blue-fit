@@ -444,7 +444,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           const locked = !x.done && e.sets.slice(0, xi).some((y) => !y.done);
           const t = TYPE_UI[x.type];
           return (
-            <div key={x.id} className={x.id === failSetId && !x.done ? "fail-set" : undefined} style={{ borderRadius: 14, background: isSel ? "var(--surface-2)" : "transparent", border: `1px solid ${x.id === failSetId && !x.done ? "color-mix(in srgb, var(--warn) 25%, transparent)" : isSel ? "var(--line-strong)" : "transparent"}`, transition: "all .25s var(--ease)" }}>
+            <div key={x.id} className={x.id === failSetId && isSel && !x.done ? "fail-set" : undefined} style={{ borderRadius: 14, background: isSel ? "var(--surface-2)" : "transparent", border: `1px solid ${isSel ? "var(--line-strong)" : "transparent"}`, transition: "all .25s var(--ease)" }}>
               <div className="row" style={{ minHeight: 48, padding: "0 4px 0 6px" }}>
                 <button aria-label={`Set type: ${t.long}. Tap to change`} title={t.long}
                   onClick={(ev) => { ev.stopPropagation(); commit(updateSet(s, e.id, x.id, { type: TYPES[(TYPES.indexOf(x.type) + 1) % TYPES.length] })); }}
