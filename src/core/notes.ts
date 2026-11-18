@@ -72,6 +72,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
     const f = failureSet(e, s.deload);
     const regular = e.sets.filter((x) => isWork(x) && x.type === "working" && x !== f);
     const repMin = e.repMin, repMax = e.repMax ?? e.repMin;
+    const range = repMin == null ? "" : repMin === repMax ? String(repMin) : `${repMin}–${repMax}`;
     const lastTime = previous(all, s, e.exerciseId);
     const gap = medianGapSec(e);
     const shortRest = gap != null && e.restSec > 0 && gap < e.restSec * SHORT_REST;
@@ -87,7 +88,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
       if (repMin != null && first && first.reps! < repMin) {
         const w = weightFor(epley(first.weight!, first.reps!), repMin, ex);
         if (w > 0 && w < first.weight!)
-          notes.push({ kind: "below", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too heavy`, text: `${first.reps} reps on set 1, the range starts at ${repMin}. Try ${fmtNum(w)}.` });
+          notes.push({ kind: "below", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too heavy`, text: `Set 1: ${first.reps} reps at ${fmtNum(first.weight!)}, but the plan says ${range} reps. Use ${fmtNum(w)} next time to reach ${repMin}.` });
       }
 
       // Above the range: every regular set went past the top → heavier next time
@@ -95,7 +96,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
         const best = Math.max(...regular.map((x) => epley(x.weight!, x.reps!)));
         const top = Math.max(...regular.map((x) => x.weight!));
         const w = Math.max(top + step(ex), weightFor(best, repMin, ex));
-        notes.push({ kind: "above", tone: "up", exerciseId: e.exerciseId, title: `${ex.name}: go heavier`, text: `Every set above ${repMin === repMax ? repMax : `${repMin}–${repMax}`} reps. Try ${fmtNum(w)} next time.` });
+        notes.push({ kind: "above", tone: "up", exerciseId: e.exerciseId, title: `${ex.name}: go heavier`, text: `Every set went past the plan's ${range} reps. Use ${fmtNum(w)} next time.` });
       }
 
       // Stuck (not covered by a deload note)
