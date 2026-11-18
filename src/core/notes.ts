@@ -59,6 +59,17 @@ function medianGapSec(e: SessionEntry): number | null {
   return gaps[Math.floor(gaps.length / 2)];
 }
 
+/** Which sets at this weight fell short, and their reps: "All sets: 10 reps" / "Sets 1–2: 9–10 reps" / "Set 1: 10 reps". */
+function shortSets(sets: LoggedSet[], repMin: number): string {
+  const short = sets.map((x, i) => ({ n: i + 1, r: x.reps! })).filter((x) => x.r < repMin);
+  const lo = Math.min(...short.map((x) => x.r)), hi = Math.max(...short.map((x) => x.r));
+  const reps = `${lo === hi ? lo : `${lo}–${hi}`} reps`;
+  if (short.length === sets.length && sets.length > 1) return `All sets: ${reps}`;
+  if (short.length === 1) return `Set ${short[0].n}: ${reps}`;
+  const run = short.every((x, i) => i === 0 || x.n === short[i - 1].n + 1);
+  return `Sets ${run ? `${short[0].n}–${short[short.length - 1].n}` : short.map((x) => x.n).join(", ")}: ${reps}`;
+}
+
 export function workoutNotes(s: Session, history: Session[], exMap: Map<string, Exercise>, routine?: Routine): WorkoutNote[] {
   const notes: WorkoutNote[] = [];
   const all = history.some((h) => h.id === s.id) ? history : [...history, s];
@@ -93,7 +104,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
       if (repMin != null && first && first.reps! < repMin) {
         const w = weightFor(epley(first.weight!, first.reps!), repMin, ex);
         if (w > 0 && w < first.weight!)
-          notes.push({ kind: "below", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too heavy`, text: `Set 1: ${first.reps} reps at ${fmtNum(first.weight!)}, but the plan says ${range} reps. Use ${fmtNum(w)} next time to reach ${repMin}.` });
+          notes.push({ kind: "below", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too heavy`, text: `${shortSets(regular.filter((x) => x.weight === first.weight), repMin)} at ${fmtNum(first.weight!)}, but the plan says ${range}. Use ${fmtNum(w)} next time to reach ${repMin}.` });
       }
 
       // Above the range: every regular set went past the top → heavier next time
