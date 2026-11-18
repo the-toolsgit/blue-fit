@@ -38,6 +38,16 @@ function Elapsed({ s }: { s: Session }) {
   return <span className="mono">{fmtClock((Date.now() - Date.parse(s.startedAt)) / 1000)}</span>;
 }
 
+/** Scroll so the card's top sits just under the sticky workout header (its height differs per phone). */
+function scrollBelowHeader(el: HTMLElement | undefined, behavior: ScrollBehavior) {
+  if (!el) return;
+  // Layout positions (offsetTop) ignore the page's slide-in animation, which would throw a measurement off.
+  const header = (document.querySelector(".page > header") as HTMLElement | null)?.offsetHeight ?? 0;
+  let top = 0;
+  for (let n: HTMLElement | null = el; n; n = n.offsetParent as HTMLElement | null) top += n.offsetTop;
+  window.scrollTo({ top: Math.max(0, top - header - 10), behavior });
+}
+
 export function WorkoutScreen() {
   const store = useStore();
   const { active, exMap, finished, settings, saveSession, setRestTimer, toast, routine } = store;
@@ -74,7 +84,7 @@ export function WorkoutScreen() {
     if (arrived.current || !current) return;
     arrived.current = true;
     if (current === active?.entries[0]?.id) return;
-    requestAnimationFrame(() => refs.current.get(current)?.scrollIntoView({ behavior: "auto", block: "start" }));
+    requestAnimationFrame(() => scrollBelowHeader(refs.current.get(current), "auto"));
   }, [current, active]);
 
   if (!active) {
@@ -95,7 +105,7 @@ export function WorkoutScreen() {
 
   const scrollTo = (id: string | null) => {
     if (!id) return;
-    setTimeout(() => refs.current.get(id)?.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" }), 60);
+    setTimeout(() => scrollBelowHeader(refs.current.get(id), reducedMotion() ? "auto" : "smooth"), 60);
   };
 
   const onToggle = (e: SessionEntry, x: LoggedSet) => {
