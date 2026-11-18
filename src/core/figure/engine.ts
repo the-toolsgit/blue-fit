@@ -116,20 +116,20 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
     }
     if (o.pad) { const h = J[o.pad]; light.push({ kind: "circle", cx: h[0], cy: h[1], r: o.r || 2.6 }); }
     if (o.trap && J.hip && J.sh) {
-      // Side view: the traps as a curve on the upper back, from the base of the neck down between the shoulder
-      // blades. It bulges out as `tq` goes 0 → 1 (the squeeze), so the work shows, not just the shoulder moving.
+      // Side view: the traps as a small arch under the back of the head, from the neck to the top of the back.
+      // It bulges out as `tq` goes 0 → 1 (the squeeze), so the work shows while the chest stays on the pad.
       const len = Math.hypot(J.sh[0] - J.hip[0], J.sh[1] - J.hip[1]) || 1;
       const u: Pt = [(J.sh[0] - J.hip[0]) / len, (J.sh[1] - J.hip[1]) / len];
       const back: Pt = [u[1], -u[0]];
       const q = p.tq ?? 0;
-      const p0 = add(add(J.sh, u, 6), back, 0.5), p2 = add(add(J.sh, u, -18), back, 0.8);
-      const c = add(add(J.sh, u, -5), back, 2 + 9 * q);
+      const p0 = add(add(J.sh, u, 6.5), back, 0.6), p2 = add(add(J.sh, u, -7), back, 0.6);
+      const c = add(add(J.sh, u, 0), back, 2 + 6 * q);
       const pts: Pt[] = [];
       for (let i = 0; i <= 8; i++) {
         const t = i / 8, a1 = (1 - t) * (1 - t), b1 = 2 * (1 - t) * t, c1 = t * t;
         pts.push([a1 * p0[0] + b1 * c[0] + c1 * p2[0], a1 * p0[1] + b1 * c[1] + c1 * p2[1]]);
       }
-      light.push({ kind: "curve", points: pts, width: 2 + 2.6 * q });
+      light.push({ kind: "curve", points: pts, width: 2 + 2.2 * q });
     }
     if (o.perp) {
       const h = J[o.perp], v = V(o.ang, o.len / 2);

@@ -401,5 +401,11 @@ export const MIGRATIONS: Migration[] = [
     id: "2026-11-18-kelso-traps",
     run: (d) => applyFigureFixes(d, "kelso-shrug"),
   },
+  {
+    // Nov 18 2026: Kelso shrug figure keeps the chest on the pad: arms come up (shoulder blades pull back),
+    // the traps arch under the head bulges. Replaces the moving-torso version.
+    id: "2026-11-18-kelso-traps-pad",
+    run: (d) => applyFigureFixes(d, "kelso-shrug"),
+  },
 ];
 
