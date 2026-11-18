@@ -20,8 +20,8 @@ describe("workout notes", () => {
   });
   it("above the range suggests a heavier weight; below suggests lighter", () => {
     const up = workoutNotes(session("2026-11-08", [entry([set(40, 15), set(40, 15)])]), [], exMap).find((x) => x.kind === "above")!;
-    expect(up.text).toMatch(/Use \d+ next time/);
-    expect(workoutNotes(session("2026-11-08", [entry([set(60, 7), set(60, 7)])]), [], exMap).find((x) => x.kind === "below")!.text).toMatch(/^All sets: 7 reps at 60, but the plan says 10–12\. Use \d+ next time to reach 10\.$/);
+    expect(up.text).toMatch(/Try \d+ next time/);
+    expect(workoutNotes(session("2026-11-08", [entry([set(60, 7), set(60, 7)])]), [], exMap).find((x) => x.kind === "below")!.text).toMatch(/^You got 7 reps at 60 on every set, but the plan says 10–12\. Try \d+ next time\.$/);
     expect(kinds(session("2026-11-08", [entry([set(50, 11), set(50, 10)])]), [])).toEqual([]);
   });
   it("short rests from the set times", () => {

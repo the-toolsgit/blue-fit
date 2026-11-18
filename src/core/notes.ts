@@ -59,15 +59,15 @@ function medianGapSec(e: SessionEntry): number | null {
   return gaps[Math.floor(gaps.length / 2)];
 }
 
-/** Which sets at this weight fell short, and their reps: "All sets: 10 reps" / "Sets 1–2: 9–10 reps" / "Set 1: 10 reps". */
-function shortSets(sets: LoggedSet[], repMin: number): string {
+/** Which sets at this weight fell short, in plain words: "on every set" / "on sets 1–2" / "on set 1". */
+function shortSets(sets: LoggedSet[], repMin: number): { reps: string; where: string } {
   const short = sets.map((x, i) => ({ n: i + 1, r: x.reps! })).filter((x) => x.r < repMin);
   const lo = Math.min(...short.map((x) => x.r)), hi = Math.max(...short.map((x) => x.r));
   const reps = `${lo === hi ? lo : `${lo}–${hi}`} reps`;
-  if (short.length === sets.length && sets.length > 1) return `All sets: ${reps}`;
-  if (short.length === 1) return `Set ${short[0].n}: ${reps}`;
+  if (short.length === sets.length && sets.length > 1) return { reps, where: "on every set" };
+  if (short.length === 1) return { reps, where: `on set ${short[0].n}` };
   const run = short.every((x, i) => i === 0 || x.n === short[i - 1].n + 1);
-  return `Sets ${run ? `${short[0].n}–${short[short.length - 1].n}` : short.map((x) => x.n).join(", ")}: ${reps}`;
+  return { reps, where: `on sets ${run ? `${short[0].n}–${short[short.length - 1].n}` : short.map((x) => x.n).join(", ")}` };
 }
 
 export function workoutNotes(s: Session, history: Session[], exMap: Map<string, Exercise>, routine?: Routine): WorkoutNote[] {
@@ -104,7 +104,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
       if (repMin != null && first && first.reps! < repMin) {
         const w = weightFor(epley(first.weight!, first.reps!), repMin, ex);
         if (w > 0 && w < first.weight!)
-          notes.push({ kind: "below", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too heavy`, text: `${shortSets(regular.filter((x) => x.weight === first.weight), repMin)} at ${fmtNum(first.weight!)}, but the plan says ${range}. Use ${fmtNum(w)} next time to reach ${repMin}.` });
+          notes.push({ kind: "below", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too heavy`, text: (({ reps, where }) => `You got ${reps} at ${fmtNum(first.weight!)} ${where}, but the plan says ${range}. Try ${fmtNum(w)} next time.`)(shortSets(regular.filter((x) => x.weight === first.weight), repMin)) });
       }
 
       // Above the range: every regular set went past the top → heavier next time
@@ -112,7 +112,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
         const best = Math.max(...regular.map((x) => epley(x.weight!, x.reps!)));
         const top = Math.max(...regular.map((x) => x.weight!));
         const w = roundUp(Math.max(top + step(ex), weightFor(best, repMin, ex)), ex);
-        notes.push({ kind: "above", tone: "up", exerciseId: e.exerciseId, title: `${ex.name}: go heavier`, text: `Every set went past the plan's ${range} reps. Use ${fmtNum(w)} next time.` });
+        notes.push({ kind: "above", tone: "up", exerciseId: e.exerciseId, title: `${ex.name}: go heavier`, text: `You went past the plan's ${range} reps on every set. Try ${fmtNum(w)} next time.` });
       }
 
       // Stuck (not covered by a deload note)
