@@ -4,13 +4,14 @@ import { localDate } from "../../core/util";
 import { DELOAD_RULE } from "../components/DeloadBanner";
 import { copyName, duplicateRoutine, moveSlot, routineUsed, setCurrent } from "../../core/routineEdit";
 import { Confirm, Sheet } from "../components/Sheet";
-import type { Routine } from "../../core/types";
+import type { Routine, Slot } from "../../core/types";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { useWeekFailure } from "../components/FailFlame";
 import { Icon } from "../components/Icon";
 import { fmtDate } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
+import { ExerciseSheet } from "./ExerciseScreen";
 import { DayVolume } from "../components/DayVolume";
 const PlanEditorScreen = lazy(() => import("./PlanEditor").then((m) => ({ default: m.PlanEditorScreen })));
 
@@ -25,6 +26,7 @@ export function PlanScreen() {
   const [confirmDeload, setConfirmDeload] = useState(false);
   const [manage, setManage] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [info, setInfo] = useState<Slot | null>(null);
   const [del, setDel] = useState<Routine | null>(null);
   const days = (routine?.days ?? []).filter((d) => d.slots.length).sort((a, b) => ((a.weekday ?? 9) + 6) % 7 - ((b.weekday ?? 9) + 6) % 7);
   const [dayId, setDayId] = useState(days.find((d) => d.weekday === new Date().getDay())?.id ?? days[0]?.id);
@@ -58,7 +60,7 @@ export function PlanScreen() {
           </div>
           <div className="glass" style={{ padding: 4 }}>
             <Suspense fallback={<div style={{ minHeight: day.slots.length * 64 }} />}>
-              <SortableDayList slots={day.slots} exMap={exMap} onOpen={(s) => go(`exercise/${s.exerciseId}/${s.id}`)}
+              <SortableDayList slots={day.slots} exMap={exMap} onOpen={(s) => setInfo(s)}
                 onMove={(from, to) => saveRoutine(moveSlot(routine, day.id, from, to))} fail={weekFail.get(day.id)} />
             </Suspense>
           </div>
@@ -93,6 +95,7 @@ export function PlanScreen() {
           ? <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px", fontSize: 14 }} onClick={() => { saveSettings(endDeload(settings, today)); toast({ kind: "info", title: "Deload ended", body: "Back to your normal plan." }); }}>End</button>
           : <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px", fontSize: 14 }} onClick={() => setConfirmDeload(true)}>Start</button>}
       </section>
+      <ExerciseSheet id={info?.exerciseId ?? null} onClose={() => setInfo(null)} failWhy={day && info ? weekFail.get(day.id)?.get(info.id) : undefined} />
       <Confirm open={confirmDeload} title="Start a deload week?" confirm="Start deload"
         body={<>{DELOAD_RULE} It lasts until {fmtDate(deloadWeek(today, settings.weekStartDay).end, { weekday: "long" })}, then your normal plan comes back.</>}
         onClose={() => setConfirmDeload(false)} onConfirm={() => saveSettings({ ...settings, deload: deloadWeek(today, settings.weekStartDay), deloadDismissedAt: null })} />
