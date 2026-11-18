@@ -129,7 +129,8 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
         );
       })}
 
-      <button className="btn btn-ghost btn-block" style={{ marginTop: 14, minHeight: 52 }} onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
+      {/* Plan workouts can only record what the plan day has (see "Record it"); free workouts can add any exercise */}
+      {!planDay && <button className="btn btn-ghost btn-block" style={{ marginTop: 14, minHeight: 52 }} onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>}
       <div className="field" style={{ marginTop: 14 }}><label htmlFor="nts">Workout notes</label>
         <textarea id="nts" className="input" defaultValue={s.notes ?? ""} onBlur={(e) => e.target.value !== (s.notes ?? "") && commit({ ...s, notes: e.target.value.trim() || undefined })} /></div>
 
