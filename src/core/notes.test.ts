@@ -39,12 +39,12 @@ describe("workout notes", () => {
   });
 });
 
-describe("volume animal", async () => {
-  const { animalFor } = await import("./animals");
-  it("picks the heaviest animal reached and how many", () => {
-    expect(animalFor(5)).toBeNull();
-    expect(animalFor(13000)?.label).toBe("an elephant");
-    expect(animalFor(30000)?.label).toBe("2.3 elephants");
-    expect(animalFor(1600)?.label).toBe("a cow");
+describe("volume object", async () => {
+  const { liftedFor } = await import("./lifted");
+  it("picks the heaviest object reached and how many", () => {
+    expect(liftedFor(100)).toBeNull();
+    expect(liftedFor(3600)?.label).toBe("a car");
+    expect(liftedFor(30000)?.label).toBe("1.2 school buses");
+    expect(liftedFor(90000)?.label).toBe("a jet airliner");
   });
 });

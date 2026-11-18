@@ -3,8 +3,8 @@ import { useMemo, useState } from "react";
 import { FLEX } from "../../core/figure/poses";
 import { PR_LABEL } from "../../core/records";
 import { workoutNotes, type NoteTone } from "../../core/notes";
-import { animalFor } from "../../core/animals";
-import { Animal } from "../components/Animal";
+import { liftedFor } from "../../core/lifted";
+import { Lifted } from "../components/Lifted";
 import { skippedVolume, summarize } from "../../core/session";
 import { MUSCLE_GROUPS } from "../../core/types";
 import { fmtNum } from "../../core/util";
@@ -29,9 +29,9 @@ export function SummaryScreen({ id }: { id?: string }) {
   const groups = MUSCLE_GROUPS.filter((m) => sum.perGroup[m.id] > 0 || sk(m.id) > 0);
   const maxG = Math.max(1, ...groups.map((m) => sum.perGroup[m.id] + sk(m.id)));
   const anySkipped = groups.some((m) => sk(m.id) > 0);
-  // Notes: what changed against past workouts and what to do; the volume as an animal of about that weight
+  // Notes: what changed against past workouts and what to do; the volume as an object of about that weight
   const notes = workoutNotes(s, finished, exMap, routines.find((r) => r.id === s.routineId) ?? routines.find((r) => r.isCurrent));
-  const animal = animalFor(sum.tonnage);
+  const lifted = liftedFor(sum.tonnage);
 
   return (
     <div className="page">
@@ -56,14 +56,14 @@ export function SummaryScreen({ id }: { id?: string }) {
         ))}
       </div>
 
-      {animal && (
-        <section className="glass row animal-card" style={{ marginTop: 10, padding: "12px 14px", gap: 12, borderRadius: 18 }}>
-          <Animal id={animal.animal.id} size={118} label={animal.animal.name} />
+      {lifted && (
+        <section className="glass row lifted-card" style={{ marginTop: 10, padding: "12px 14px", gap: 12, borderRadius: 18 }}>
+          <Lifted id={lifted.thing.id} size={118} label={lifted.thing.name} />
           <div className="grow">
             <div className="eyebrow" style={{ fontSize: 10 }}>You lifted</div>
-            <div style={{ font: "800 24px/1.05 var(--display)", textTransform: "uppercase", color: "var(--neon-ink)" }}>{animal.label}</div>
-            <div style={{ fontSize: 13, marginTop: 4, fontStyle: "italic" }}>{animal.animal.quip}</div>
-            <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{fmtVolume(sum.tonnage)} lb · {animal.count === 1 ? "about" : "each about"} {animal.animal.lb.toLocaleString("en-US")} lb</div>
+            <div style={{ font: "800 24px/1.05 var(--display)", textTransform: "uppercase", color: "var(--neon-ink)" }}>{lifted.label}</div>
+            <div style={{ fontSize: 13, marginTop: 4, fontStyle: "italic" }}>{lifted.thing.quip}</div>
+            <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{fmtVolume(sum.tonnage)} lb · {lifted.count === 1 ? "about" : "each about"} {lifted.thing.lb.toLocaleString("en-US")} lb</div>
           </div>
         </section>
       )}

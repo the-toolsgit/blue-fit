@@ -413,24 +413,22 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .insight-chip.hit { opacity: 1; color: var(--neon-ink); border-color: var(--neon); box-shadow: 0 0 8px -2px var(--glow); }
 .insight-unit { font-size: 12px; color: var(--muted); text-shadow: none; }
 
-/* Volume animal (summary): neon outline like the line man, lighter details, shaded fill for depth */
-.animal { overflow: visible; display: block; --an-d: color-mix(in srgb, var(--neon) 50%, var(--ink)); }
-.animal .s0 { stop-color: color-mix(in srgb, var(--neon) 32%, var(--surface-solid)); }
-.animal .s1 { stop-color: color-mix(in srgb, var(--neon) 10%, var(--surface-solid)); }
-.animal .s2 { stop-color: var(--bg); }
-.animal .an-m { stroke: var(--neon); stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; filter: drop-shadow(0 0 3px var(--glow)); }
-.animal .an-far { opacity: .55; filter: none; }
-.animal .an-d { fill: none; stroke: var(--an-d); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
-.animal .an-dot { fill: var(--an-d); stroke: none; }
-.animal .an-shine { fill: #fff; }
-.animal .an-hi { fill: none; stroke: var(--an-d); stroke-width: 2; stroke-linecap: round; opacity: .45; }
-.animal .an-blush { fill: var(--an-d); opacity: .22; }
-.animal .an-patch { fill: color-mix(in srgb, var(--an-d) 18%, var(--surface-solid)); }
-.animal .an-shadow { fill: var(--neon); opacity: .14; transform-origin: 80px 109px; animation: an-shadow 3.2s ease-in-out infinite; }
-.animal .an-body { animation: an-bob 3.2s ease-in-out infinite; }
-@keyframes an-bob { 50% { transform: translateY(-3px); } }
-@keyframes an-shadow { 50% { transform: scaleX(.92); opacity: .1; } }
-@media (prefers-reduced-motion: reduce) { .animal .an-body, .animal .an-shadow { animation: none; } }
+/* "You lifted" object (summary): neon outline like the line man, lighter details, shaded fill for depth */
+.lifted { overflow: visible; display: block; --lf-d: color-mix(in srgb, var(--neon) 50%, var(--ink)); }
+.lifted .s0 { stop-color: color-mix(in srgb, var(--neon) 30%, var(--surface-solid)); }
+.lifted .s1 { stop-color: color-mix(in srgb, var(--neon) 10%, var(--surface-solid)); }
+.lifted .s2 { stop-color: var(--bg); }
+.lifted .lf-m { stroke: var(--neon); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; filter: drop-shadow(0 0 3px var(--glow)); }
+.lifted .lf-far { opacity: .55; filter: none; }
+.lifted .lf-d { fill: none; stroke: var(--lf-d); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.lifted .lf-glass { fill: color-mix(in srgb, var(--lf-d) 18%, transparent); }
+.lifted .lf-dot { fill: var(--lf-d); stroke: none; }
+.lifted .lf-hi { fill: none; stroke: var(--lf-d); stroke-width: 1.8; stroke-linecap: round; opacity: .45; }
+.lifted .lf-shadow { fill: var(--neon); opacity: .14; transform-origin: 80px 109px; animation: lf-shadow 3.2s ease-in-out infinite; }
+.lifted .lf-body { animation: lf-lift 3.2s ease-in-out infinite; }
+@keyframes lf-lift { 0%, 20%, 100% { transform: translateY(0); } 50%, 70% { transform: translateY(-4px); } }
+@keyframes lf-shadow { 0%, 20%, 100% { transform: scaleX(1); } 50%, 70% { transform: scaleX(.9); opacity: .09; } }
+@media (prefers-reduced-motion: reduce) { .lifted .lf-body, .lifted .lf-shadow { animation: none; } }
 
 /* Summary notes: icon tinted by tone */
 .note-ic { display: inline-flex; flex: none; margin-top: 2px; }
