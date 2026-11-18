@@ -49,6 +49,16 @@ export const updateSlot = (r: Routine, dayId: string, slotId: string, patch: Par
   mapDay(r, dayId, (d) => ({ ...d, slots: d.slots.map((s) => (s.id === slotId ? { ...s, ...patch } : s)) }));
 export const moveSlot = (r: Routine, dayId: string, from: number, to: number): Routine =>
   mapDay(r, dayId, (d) => ({ ...d, slots: regroup(move(d.slots, from, to)) }));
+/** Put the day's slots in the order of `slotIds` (a reordered workout); slots not listed keep their places. */
+export function orderSlotsLike(r: Routine, dayId: string, slotIds: string[]): Routine {
+  const day = r.days.find((d) => d.id === dayId);
+  if (!day) return r;
+  const listed = slotIds.filter((id) => day.slots.some((s) => s.id === id));
+  let k = 0;
+  const slots = day.slots.map((s) => { if (!listed.includes(s.id)) return s; const id = listed[k++]; return day.slots.find((x) => x.id === id)!; });
+  if (slots.every((s, i) => s === day.slots[i])) return r;
+  return mapDay(r, dayId, (d) => ({ ...d, slots: regroup(slots) }));
+}
 /** Swap the exercise in a slot. Day-specific text overrides are dropped (they described the old exercise). */
 export const swapSlotExercise = (r: Routine, dayId: string, slotId: string, ex: Exercise): Routine =>
   mapDay(r, dayId, (d) => ({ ...d, slots: d.slots.map((s) => (s.id === slotId ? { ...s, exerciseId: ex.id, whyOverride: undefined, tipsOverride: undefined } : s)) }));

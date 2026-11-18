@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
-import { addDay, addSlot, clearDay, copyName, duplicateRoutine, moveSlot, removeDay, removeSlot, setCurrent, setDayWeekday, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine } from "./routineEdit";
+import { addDay, addSlot, clearDay, copyName, duplicateRoutine, moveSlot, orderSlotsLike, removeDay, removeSlot, setCurrent, setDayWeekday, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine } from "./routineEdit";
 import { exerciseInUse, newCustomExercise, withDerivedMuscles, defaultLoadMode } from "./customExercise";
 import { planVolume } from "./volume";
 
@@ -10,6 +10,14 @@ const r0 = seed.routines[0];
 const mon = r0.days.find((d) => d.id === "mon")!; // Back & Biceps (Saturday)
 
 describe("routine editing", () => {
+  it("a reordered workout reorders the plan day; slots not in the workout keep their places", () => {
+    const ids = mon.slots.map((x) => x.id);
+    const [a, b, c] = ids;
+    // Workout without slot b, with c moved first
+    const out = orderSlotsLike(r0, mon.id, [c, a, ...ids.slice(3)]).days.find((d) => d.id === mon.id)!.slots.map((x) => x.id);
+    expect(out.slice(0, 3)).toEqual([c, b, a]);
+    expect(orderSlotsLike(r0, mon.id, ids)).toBe(r0);
+  });
   it("add slot uses defaults and updates live volume", () => {
     const before = planVolume(r0, exMap).find((v) => v.group === "chest")!.sets;
     const { routine } = addSlot(r0, mon.id, exMap.get("machine-dip")!, 120);

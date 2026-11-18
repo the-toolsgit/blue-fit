@@ -354,3 +354,10 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 }
 .card-flash { animation: cardFlash .6s ease-out; }
 @media (prefers-reduced-motion: reduce) { .card-flash { animation-duration: .01s; } }
+
+/* Workout: press and hold an exercise's name to drag the card */
+.entry-handle { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.entry-dragging > article { border-color: var(--neon) !important; box-shadow: 0 0 0 1px var(--neon), 0 20px 50px -12px var(--glow) !important; background: var(--surface-solid) !important; }
+.sorting article { padding: 10px 14px !important; }
+.sorting article > :not(:first-child) { display: none !important; }
+.sorting article svg { max-height: 40px; }

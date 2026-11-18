@@ -104,6 +104,15 @@ export function moveEntry(s: Session, entryId: string, dir: -1 | 1): Session {
   return { ...s, entries };
 }
 
+/** Move an exercise from one position to another (drag and drop). */
+export function moveEntryTo(s: Session, from: number, to: number): Session {
+  if (from === to || from < 0 || to < 0 || from >= s.entries.length || to >= s.entries.length) return s;
+  const entries = [...s.entries];
+  const [e] = entries.splice(from, 1);
+  entries.splice(to, 0, e);
+  return { ...s, entries };
+}
+
 /**
  * After a reorder, keep each app-picked failure set on the last exercise for its muscle (the rule it was picked by).
  * It moves to the exercise that is now last for that muscle, if that one is safe to fail and wasn't turned off in

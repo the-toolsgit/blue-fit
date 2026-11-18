@@ -1,14 +1,18 @@
 // Workout logger. Built for one hand and sweaty fingers: the current set is expanded with big steppers
 // and one big Done button; everything saves on every tap; rest starts automatically.
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { DndContext, MeasuringStrategy, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors, type DragEndEvent, type DragStartEvent, type DraggableAttributes, type DraggableSyntheticListeners, type Modifier } from "@dnd-kit/core";
+import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { MANUAL_WHY } from "../../core/failure";
+import { orderSlotsLike } from "../../core/routineEdit";
 import { useRest, WorkoutRestPanel, WorkoutRestPill } from "../components/RestTimer";
 import { LOADING } from "../../core/figure/poses";
 import { groupPlates, platesFor } from "../../core/plates";
 import { progressionHint } from "../../core/progression";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
-  addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, moveEntry, refitFailure, removeEntry, removeSet,
+  addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
   setEntry, swapEntry, toggleDone, toggleSupersetWithNext, updateSet,
 } from "../../core/session";
 import type { Exercise, LoggedSet, Session, SessionEntry, SetType } from "../../core/types";
@@ -52,7 +56,7 @@ function scrollBelowHeader(el: HTMLElement | undefined, behavior: ScrollBehavior
 
 export function WorkoutScreen() {
   const store = useStore();
-  const { active, exMap, finished, settings, saveSession, setRestTimer, toast, routine } = store;
+  const { active, exMap, finished, settings, saveSession, saveRoutine, setRestTimer, toast, routine } = store;
   // The exercise you're on survives switching tabs (and a reload): remembered per workout.
   const [focus, setFocusState] = useState<string | null>(() => { try { return sessionStorage.getItem("bf-focus-" + active?.id); } catch { return null; } });
   const setFocus = (id: string | null) => { setFocusState(id); try { if (active && id) sessionStorage.setItem("bf-focus-" + active.id, id); } catch { /* ignore */ } };
@@ -127,6 +131,40 @@ export function WorkoutScreen() {
     card.addEventListener("animationend", () => card.classList.remove("card-flash"), { once: true });
   };
 
+  // Press and hold an exercise's name to drag it (a mouse drags at once)
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 280, tolerance: 8 } }),
+  );
+  // While dragging, every card shrinks to its name row so the whole list fits; the grabbed card stays under the finger
+  const [sorting, setSorting] = useState(false);
+  const keepTop = useRef<{ id: string; top: number } | null>(null);
+  const onDragStart = (ev: DragStartEvent) => {
+    vibrate(10);
+    const el = refs.current.get(String(ev.active.id));
+    keepTop.current = el ? { id: String(ev.active.id), top: el.getBoundingClientRect().top } : null;
+    setSorting(true);
+  };
+  useLayoutEffect(() => {
+    const k = keepTop.current;
+    if (!sorting || !k) return;
+    keepTop.current = null;
+    const el = refs.current.get(k.id);
+    if (el) window.scrollBy(0, el.getBoundingClientRect().top - k.top);
+  }, [sorting]);
+  const onDragEnd = (ev: DragEndEvent) => {
+    setSorting(false);
+    if (!ev.over || ev.active.id === ev.over.id) return;
+    const from = s.entries.findIndex((x) => x.id === ev.active.id), to = s.entries.findIndex((x) => x.id === ev.over!.id);
+    const next = refitFailure(moveEntryTo(s, from, to), exMap, offSlots);
+    commit(next);
+    // The plan day takes the new order too
+    if (routine && day) {
+      const r = orderSlotsLike(routine, day.id, next.entries.map((x) => x.slotId).filter((x): x is string => !!x));
+      if (r !== routine) saveRoutine(r);
+    }
+  };
+
   const scrollTo = (id: string | null) => {
     if (!id) return;
     setTimeout(() => scrollBelowHeader(refs.current.get(id), reducedMotion() ? "auto" : "smooth"), 60);
@@ -195,13 +233,16 @@ export function WorkoutScreen() {
         <div className="empty"><Figure spec={LOADING} size={110} /><p>Add your first exercise.</p></div>
       )}
 
-      <div className="stack" style={{ gap: 14 }}>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} modifiers={[verticalOnly]} measuring={{ droppable: { strategy: MeasuringStrategy.Always } }}
+        onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={() => setSorting(false)}>
+      <SortableContext items={s.entries.map((e) => e.id)} strategy={verticalListSortingStrategy}>
+      <div className={"stack" + (sorting ? " sorting" : "")} style={{ gap: sorting ? 8 : 14 }}>
         {s.entries.map((e, i) => {
           const ex = exMap.get(e.exerciseId);
           if (!ex) return null;
           const g = groupInfo(i);
           return (
-            <div key={e.id} ref={(el) => { if (el) refs.current.set(e.id, el); }} style={{ scrollMarginTop: 120, position: "relative", paddingLeft: g ? 14 : 0 }}>
+            <SortableEntry key={e.id} id={e.id} setRef={(el) => { if (el) refs.current.set(e.id, el); }} style={{ scrollMarginTop: 120, position: "relative", paddingLeft: g ? 14 : 0 }}>{(drag) => (<>
               {g && (
                 <div aria-hidden style={{ position: "absolute", left: 0, top: g.first ? 18 : -14, bottom: g.last ? 18 : -14, width: 3, borderRadius: 3, background: "var(--neon-2)", boxShadow: "0 0 10px var(--neon-2)" }} />
               )}
@@ -209,12 +250,14 @@ export function WorkoutScreen() {
               <EntryCard
                 s={s} e={e} ex={ex} index={i} focused={current === e.id}
                 onFocus={() => setFocus(e.id)} onToggle={(x) => onToggle(e, x)} commit={commit}
-                onDetail={() => setDetail(e.id)} onMenu={() => setMenu(e.id)}
+                onDetail={() => setDetail(e.id)} onMenu={() => setMenu(e.id)} drag={drag}
               />
-            </div>
+            </>)}</SortableEntry>
           );
         })}
       </div>
+      </SortableContext>
+      </DndContext>
 
       <button className="btn btn-ghost btn-block" style={{ marginTop: 16, minHeight: 54 }} onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
 
@@ -237,8 +280,6 @@ export function WorkoutScreen() {
             )}
             <button className="menu-item" onClick={() => { setNoteFor(menuEntry.id); setMenu(null); }}><Icon name="note" /> {menuEntry.notes ? "Edit note" : "Add note"}</button>
             <button className="menu-item" onClick={() => { commit(addSet(s, menuEntry.id, "warmup")); setMenu(null); }}><Icon name="plus" /> Add warm-up set</button>
-            {menuIdx > 0 && <button className="menu-item" onClick={() => { commit(refitFailure(moveEntry(s, menuEntry.id, -1), exMap, offSlots)); setMenu(null); }}><Icon name="up" /> Move up</button>}
-            {menuIdx < s.entries.length - 1 && <button className="menu-item" onClick={() => { commit(refitFailure(moveEntry(s, menuEntry.id, 1), exMap, offSlots)); setMenu(null); }}><Icon name="down" /> Move down</button>}
             <button className="menu-item" onClick={() => { setDetail(menuEntry.id); setMenu(null); }}><Icon name="info" /> How to do it</button>
             <button className="menu-item danger" onClick={() => { setConfirmRemove(menuEntry.id); setMenu(null); }}><Icon name="trash" /> Remove from workout</button>
           </div>
@@ -304,9 +345,25 @@ export function NoteSheet({ open, title, value, onSave, onClose }: { open: boole
   );
 }
 
-function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDetail, onMenu }: {
+type DragProps = { attributes: DraggableAttributes; listeners: DraggableSyntheticListeners };
+
+/** Rows only move up and down. */
+const verticalOnly: Modifier = ({ transform }) => ({ ...transform, x: 0 });
+
+/** One exercise in the drag-and-drop list; the card's name area is the handle. */
+function SortableEntry({ id, setRef, style, children }: { id: string; setRef: (el: HTMLDivElement | null) => void; style: React.CSSProperties; children: (d: DragProps) => ReactNode }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+  return (
+    <div ref={(el) => { setNodeRef(el); setRef(el); }} className={isDragging ? "entry-dragging" : undefined}
+      style={{ ...style, transform: CSS.Translate.toString(transform), transition, zIndex: isDragging ? 5 : undefined }}>
+      {children({ attributes, listeners })}
+    </div>
+  );
+}
+
+function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDetail, onMenu, drag }: {
   s: Session; e: SessionEntry; ex: Exercise; index: number; focused: boolean;
-  onFocus: () => void; onToggle: (x: LoggedSet) => void; commit: (n: Session) => void; onDetail: () => void; onMenu: () => void;
+  onFocus: () => void; onToggle: (x: LoggedSet) => void; commit: (n: Session) => void; onDetail: () => void; onMenu: () => void; drag?: DragProps;
 }) {
   const { finished, exMap, settings } = useStore();
   const [sel, setSel] = useState<string | null>(null);
@@ -337,7 +394,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
         opacity: allDone && !focused ? 0.9 : 1 }}>
       <div className="row" style={{ alignItems: "flex-start", gap: 10 }}>
         {/* Number, name and figure: one tap target that opens how to do it */}
-        <button className="row grow" style={{ textAlign: "left", alignItems: "flex-start", gap: 10, minWidth: 0 }} onClick={(ev) => { ev.stopPropagation(); onDetail(); }} aria-label={`${ex.name}: how to do it`}>
+        <button className="row grow entry-handle" style={{ textAlign: "left", alignItems: "flex-start", gap: 10, minWidth: 0 }} onClick={(ev) => { ev.stopPropagation(); onDetail(); }} {...drag?.attributes} {...drag?.listeners} aria-label={`${ex.name}: how to do it`} aria-roledescription="Exercise. Press and hold to move it.">
           <span className="mono" style={{ width: 26, height: 26, flex: "none", display: "grid", placeItems: "center", borderRadius: 8, fontSize: 13, marginTop: 2,
             background: allDone ? "var(--good)" : focused ? "var(--neon)" : "var(--surface-2)", color: allDone || focused ? "var(--on-neon)" : "var(--muted)", boxShadow: allDone ? "0 0 12px var(--good)" : focused ? "0 0 12px var(--glow)" : "none", transition: "all .3s" }}>
             {allDone ? <Icon name="check" size={16} stroke={3} /> : index + 1}
