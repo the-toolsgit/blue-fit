@@ -2,6 +2,7 @@
 // and one big Done button; everything saves on every tap; rest starts automatically.
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MANUAL_WHY } from "../../core/failure";
+import { useRest, WorkoutRestPanel, WorkoutRestPill } from "../components/RestTimer";
 import { LOADING } from "../../core/figure/poses";
 import { groupPlates, platesFor } from "../../core/plates";
 import { progressionHint } from "../../core/progression";
@@ -60,6 +61,10 @@ export function WorkoutScreen() {
   const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; entryId: string } | null>(null);
   const [noteFor, setNoteFor] = useState<string | "workout" | null>(null);
   const [finishOpen, setFinishOpen] = useState(false);
+  // Rest timer in the header while it runs (in place of Finish); tapping it opens the full timer under the header
+  const rest = useRest();
+  const [restOpen, setRestOpen] = useState(false);
+  useEffect(() => { if (!rest.running) setRestOpen(false); }, [rest.running]);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const [confirmRemove, setConfirmRemove] = useState<string | null>(null);
   const refs = useRef(new Map<string, HTMLElement>());
@@ -157,12 +162,15 @@ export function WorkoutScreen() {
             <h1 className="title-md" style={{ textTransform: "uppercase", fontSize: 24, marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.title}</h1>
           </div>
           <button className="icon-btn" aria-label="Workout notes" onClick={() => setNoteFor("workout")} style={{ color: s.notes ? "var(--neon-ink)" : undefined }}><Icon name="note" /></button>
-          <button className="btn btn-primary" style={{ minHeight: 42, padding: "0 16px", fontSize: 16 }} onClick={() => setFinishOpen(true)}>Finish</button>
+          {rest.running
+            ? <WorkoutRestPill left={rest.left} frac={rest.frac} open={restOpen} onToggle={() => setRestOpen((o) => !o)} />
+            : <button className="btn btn-primary" style={{ minHeight: 42, padding: "0 16px", fontSize: 16 }} onClick={() => setFinishOpen(true)}>Finish</button>}
         </div>
         <div style={{ marginTop: 10, height: 6, borderRadius: 6, background: "var(--surface-2)", overflow: "hidden" }} role="progressbar" aria-valuenow={done} aria-valuemax={total} aria-label="Sets done">
           <div style={{ height: "100%", width: `${total ? (done / total) * 100 : 0}%`, borderRadius: 6, background: "linear-gradient(90deg,var(--neon),var(--neon-2))", boxShadow: "0 0 12px var(--glow)", transition: "width .5s var(--ease)" }} />
         </div>
         <div className="muted mono" style={{ fontSize: 12, marginTop: 4, textAlign: "right" }}>{done}/{total} sets</div>
+        {rest.running && restOpen && <WorkoutRestPanel left={rest.left} frac={rest.frac} adjust={rest.adjust} skip={rest.skip} />}
       </header>
 
       {s.entries.length === 0 && (

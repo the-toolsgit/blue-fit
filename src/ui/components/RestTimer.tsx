@@ -10,7 +10,7 @@ import { useStore } from "../store";
 import { Figure } from "./Figure";
 import { Icon } from "./Icon";
 
-function Ring({ frac, size, stroke, done }: { frac: number; size: number; stroke: number; done?: boolean }) {
+export function Ring({ frac, size, stroke, done }: { frac: number; size: number; stroke: number; done?: boolean }) {
   const r = (size - stroke) / 2, c = 2 * Math.PI * r;
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: "rotate(-90deg)", filter: "drop-shadow(0 0 6px var(--glow))" }} aria-hidden>
@@ -50,6 +50,8 @@ export function RestTimerDock() {
   const adjust = (d: number) => restTimer && setRestTimer({ ...restTimer, endsAt: Math.max(Date.now() + 1000, restTimer.endsAt + d * 1000), durationSec: Math.max(1, restTimer.durationSec + d) });
   const frac = restTimer ? Math.max(0, left) / restTimer.durationSec : 0;
   const showResume = active && name !== "workout";
+  // On the workout screen the timer lives in the header (WorkoutRestPill / WorkoutRestPanel); this keeps the chime.
+  if (name === "workout") return null;
   if (!restTimer && !showResume) return null;
 
   return (
@@ -106,5 +108,50 @@ export function RestTimerDock() {
         </div>
       )}
     </>
+  );
+}
+
+/** Rest timer state for the workout header: seconds left, ticking 4× a second while a timer runs. */
+export function useRest() {
+  const { restTimer, setRestTimer } = useStore();
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    if (!restTimer) return;
+    const t = setInterval(() => setNow(Date.now()), 250);
+    return () => clearInterval(t);
+  }, [restTimer]);
+  const left = restTimer ? (restTimer.endsAt - now) / 1000 : 0;
+  const running = !!restTimer && left > 0;
+  const adjust = (d: number) => restTimer && setRestTimer({ ...restTimer, endsAt: Math.max(Date.now() + 1000, restTimer.endsAt + d * 1000), durationSec: Math.max(1, restTimer.durationSec + d) });
+  return { running, left, frac: restTimer ? Math.max(0, left) / restTimer.durationSec : 0, adjust, skip: () => setRestTimer(null) };
+}
+
+/** Workout header: the running rest timer in place of Finish. Tap opens the full timer under the header. */
+export function WorkoutRestPill({ left, frac, open, onToggle }: { left: number; frac: number; open: boolean; onToggle: () => void }) {
+  return (
+    <button className="btn btn-ghost" style={{ minHeight: 42, padding: "0 12px 0 8px", gap: 8, borderColor: "color-mix(in srgb, var(--neon) 55%, transparent)", boxShadow: "0 0 18px -6px var(--glow)" }}
+      onClick={onToggle} aria-expanded={open} aria-label="Rest timer">
+      <span style={{ position: "relative", width: 26, height: 26 }}><Ring frac={frac} size={26} stroke={3} /></span>
+      <span className="mono" style={{ fontSize: 18, letterSpacing: 0, color: "var(--ink)" }}>{fmtClock(left)}</span>
+    </button>
+  );
+}
+
+/** The full rest timer, shown right under the workout header: ring with icon, time, −15 / +15, skip. */
+export function WorkoutRestPanel({ left, frac, adjust, skip }: { left: number; frac: number; adjust: (d: number) => void; skip: () => void }) {
+  return (
+    <div className="row" style={{ marginTop: 10, gap: 8 }}>
+      <div style={{ position: "relative", width: 46, height: 46, flex: "none" }}>
+        <Ring frac={frac} size={46} stroke={4} />
+        <span style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", color: "var(--neon-ink)" }}><Icon name="timer" size={18} /></span>
+      </div>
+      <div className="grow">
+        <div className="eyebrow" style={{ fontSize: 10 }}>Rest</div>
+        <div className="mono" style={{ fontSize: 28, lineHeight: 1 }} aria-live="off">{fmtClock(left)}</div>
+      </div>
+      <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52 }} onClick={() => adjust(-15)} aria-label="15 seconds less">−15</button>
+      <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52 }} onClick={() => adjust(15)} aria-label="15 seconds more">+15</button>
+      <button className="icon-btn" onClick={skip} aria-label="Skip rest"><Icon name="close" /></button>
+    </div>
   );
 }
