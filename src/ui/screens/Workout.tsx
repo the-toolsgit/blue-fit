@@ -335,7 +335,7 @@ export function NoteSheet({ open, title, value, onSave, onClose }: { open: boole
   useEffect(() => setV(value), [value, open]);
   const close = () => { if (v !== value) onSave(v.trim()); onClose(); };
   return (
-    <Sheet open={open} onClose={close} label={title}>
+    <Sheet open={open} onClose={close} label={title} floating>
       <div className="stack">
         <h3 className="title-md">{title}</h3>
         <textarea className="input" autoFocus value={v} onChange={(e) => setV(e.target.value)} placeholder="Seat height, grip, how it felt…" />

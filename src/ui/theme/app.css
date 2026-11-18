@@ -361,3 +361,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .sorting article { padding: 10px 14px !important; }
 .sorting article > :not(:first-child) { display: none !important; }
 .sorting article svg { max-height: 40px; }
+
+/* Floating sheet (notes): a card centered in the visible area, all four corners rounded */
+.sheet.sheet-float { bottom: auto; top: 50%; width: min(520px, calc(100% - 32px)); max-height: 80dvh; border: 1px solid var(--line-strong); border-radius: 24px;
+  padding: 18px 16px 16px; transform: translate(-50%, -50%); box-shadow: 0 20px 60px -20px var(--glow); animation: sheetPop 0.28s var(--ease) both; transition: top .2s ease; }
+@keyframes sheetPop { from { opacity: 0; transform: translate(-50%, -46%) scale(.96); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }

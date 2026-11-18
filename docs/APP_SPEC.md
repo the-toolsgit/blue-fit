@@ -87,6 +87,7 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 - **⋯ menu per exercise:** Swap for this workout · Superset with next exercise / Unlink from next · Add note / Edit note · Add warm-up set · How to do it · Remove from workout (confirm).
 - **+ Add exercise** opens the exercise picker (§3.9).
 - **Marking a set done:** saves immediately; later empty sets of the same type copy its weight/reps; light haptic where supported; PR check (§5.4) shows a pink "NEW PR!" toast with a flexing figure and sparks; the rest timer starts (§5.7) if auto-start is on; focus moves to the next exercise when this one is finished (smooth scroll).
+- **Notes** (exercise and workout): a card floating in the middle of the visible screen (above the keyboard), all corners rounded: title, text box, **Save**. Tap outside to close (a change is saved).
 - **Finish sheet:** "FINISH WORKOUT?" with a **notes** button on the right (neon when notes exist; opens Workout notes, and closing them returns to this sheet), "x of y sets done · n min. k sets not done will be dropped.", **Finish**, Keep going, Discard workout (confirm: "Everything logged in it is deleted. This can't be undone."). Finishing with no done sets goes to the discard confirmation.
 - **Empty states:** no active workout → LOADING figure, "No workout running", button to Today. A workout with no exercises → "Add your first exercise."
 - Screen stays on while the logger is open (setting, §3.8).

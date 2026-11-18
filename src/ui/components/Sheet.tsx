@@ -6,17 +6,26 @@ import { createPortal } from "react-dom";
  * Bottom sheet. Closes with a swipe down like iOS (and Escape on a keyboard): drag down from the grip, or anywhere
  * while the sheet is scrolled to the top; let go past ~110 px (or with a quick flick) to close, else it springs back.
  */
-export function Sheet({ open, onClose, children, label }: { open: boolean; onClose: () => void; children: ReactNode; label: string }) {
+export function Sheet({ open, onClose, children, label, floating }: { open: boolean; onClose: () => void; children: ReactNode; label: string; floating?: boolean }) {
   const sheet = useRef<HTMLDivElement>(null);
   const backdrop = useRef<HTMLDivElement>(null);
   // Parents often pass a new onClose on every render (e.g. the workout screen re-renders with the rest timer each
   // tick); reading it through a ref keeps the swipe handlers from being torn down mid-drag (the sheet got stuck).
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
+  // Floating card: centered in the visible area (above the iPhone keyboard), all corners rounded; tap outside to close
+  useEffect(() => {
+    const el = sheet.current, vv = window.visualViewport;
+    if (!open || !floating || !el) return;
+    const place = () => { el.style.top = `${(vv ? vv.offsetTop + vv.height / 2 : window.innerHeight / 2)}px`; };
+    place();
+    vv?.addEventListener("resize", place); vv?.addEventListener("scroll", place);
+    return () => { vv?.removeEventListener("resize", place); vv?.removeEventListener("scroll", place); };
+  }, [open, floating]);
   useEffect(() => {
     const onClose = () => closeRef.current();
     const el = sheet.current;
-    if (!open || !el) return;
+    if (!open || !el || floating) return;
     let startY = 0, dy = 0, t0 = 0, dragging = false, armed = false;
     const set = (y: number, animate: boolean) => {
       el.style.animation = "none";
@@ -60,7 +69,7 @@ export function Sheet({ open, onClose, children, label }: { open: boolean; onClo
       el.removeEventListener("touchstart", ts); el.removeEventListener("touchmove", tm); el.removeEventListener("touchend", end);
       el.removeEventListener("touchcancel", end); el.removeEventListener("pointerdown", pd); window.removeEventListener("pointermove", pm);
     };
-  }, [open]);
+  }, [open, floating]);
   useEffect(() => {
     if (!open) return;
     const k = (e: KeyboardEvent) => e.key === "Escape" && closeRef.current();
@@ -72,9 +81,9 @@ export function Sheet({ open, onClose, children, label }: { open: boolean; onClo
   if (!open) return null;
   return createPortal(
     <>
-      <div ref={backdrop} className="sheet-backdrop" />
-      <div ref={sheet} className="sheet" role="dialog" aria-modal="true" aria-label={label}>
-        <div className="sheet-grip-area" aria-hidden="true"><div className="sheet-grip" /></div>
+      <div ref={backdrop} className="sheet-backdrop" onClick={floating ? () => closeRef.current() : undefined} />
+      <div ref={sheet} className={"sheet" + (floating ? " sheet-float" : "")} role="dialog" aria-modal="true" aria-label={label}>
+        {!floating && <div className="sheet-grip-area" aria-hidden="true"><div className="sheet-grip" /></div>}
         {children}
       </div>
     </>,
