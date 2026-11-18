@@ -72,7 +72,7 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 
 ### 3.3 Workout logger
 - **Sticky header** (solid surface, no backdrop blur so the text stays sharp on iPhone): "WORKOUT · m:ss" (elapsed, live), the session title, notes button (neon when notes exist), **Finish** button, a neon progress bar of done/total sets, and "n/N sets".
-- **Exercise cards** in order. The current exercise (focus) has a neon border and glow and an animated figure; others are slightly dimmed when complete and show a still figure. Tapping the card header (number, name or figure; not the ⋯ menu) opens the exercise page in a sheet.
+- **Exercise cards** in order. Coming back to the workout from another tab (or after a reload) jumps straight to the exercise you were on (remembered per workout); if none is remembered, to the first exercise already started but not finished, else the first with a set left. The current exercise (focus) has a neon border and glow and an animated figure; others are slightly dimmed when complete and show a still figure. Tapping the card header (number, name or figure; not the ⋯ menu) opens the exercise page in a sheet.
   - Number badge (neon when focused, green ✓ when all sets done). When all sets are done the whole card gets a green outline with a soft green glow (slightly dimmed when not focused).
   - Name (tap → exercise detail sheet) with ★ if heavy; "sets × rep range · rest 2 min"; "swapped from X" if swapped.
   - Note (if any).

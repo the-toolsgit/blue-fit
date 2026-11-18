@@ -41,7 +41,9 @@ function Elapsed({ s }: { s: Session }) {
 export function WorkoutScreen() {
   const store = useStore();
   const { active, exMap, finished, settings, saveSession, setRestTimer, toast, routine } = store;
-  const [focus, setFocus] = useState<string | null>(null);
+  // The exercise you're on survives switching tabs (and a reload): remembered per workout.
+  const [focus, setFocusState] = useState<string | null>(() => { try { return sessionStorage.getItem("bf-focus-" + active?.id); } catch { return null; } });
+  const setFocus = (id: string | null) => { setFocusState(id); try { if (active && id) sessionStorage.setItem("bf-focus-" + active.id, id); } catch { /* ignore */ } };
   const [detail, setDetail] = useState<string | null>(null);
   const [menu, setMenu] = useState<string | null>(null);
   const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; entryId: string } | null>(null);
@@ -63,8 +65,17 @@ export function WorkoutScreen() {
   const current = useMemo(() => {
     if (!active) return null;
     if (focus && active.entries.some((e) => e.id === focus && e.sets.some((x) => !x.done))) return focus;
-    return active.entries.find((e) => e.sets.some((x) => !x.done))?.id ?? null;
+    // Else an exercise already started but not finished (the first one if several), else the first with a set left
+    return (active.entries.find((e) => e.sets.some((x) => x.done) && e.sets.some((x) => !x.done)) ?? active.entries.find((e) => e.sets.some((x) => !x.done)))?.id ?? null;
   }, [active, focus]);
+  // Coming back to the workout (from another tab): jump straight to that exercise.
+  const arrived = useRef(false);
+  useEffect(() => {
+    if (arrived.current || !current) return;
+    arrived.current = true;
+    if (current === active?.entries[0]?.id) return;
+    requestAnimationFrame(() => refs.current.get(current)?.scrollIntoView({ behavior: "auto", block: "start" }));
+  }, [current, active]);
 
   if (!active) {
     return (
