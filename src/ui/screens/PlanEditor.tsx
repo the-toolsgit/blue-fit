@@ -25,30 +25,34 @@ import { VolumeTable } from "../components/VolumeTable";
 import { fmtRest, repRange } from "../format";
 import { replace } from "../router";
 import { useStore } from "../store";
+import { DayVolume } from "../components/DayVolume";
 import { ExerciseSheet } from "./ExerciseScreen";
 
 const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const mondayFirst = (w: number | null) => (w == null ? 9 : (w + 6) % 7);
 const draftKey = (id: string) => "bf-plan-draft-" + id;
 
-function SlotRow({ slot, ex, groupStart, groupEnd, onOpen, fail }: {
-  slot: Slot; ex: Exercise | undefined; groupStart: boolean; groupEnd: boolean; onOpen: () => void; fail?: string[];
+function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, fail }: {
+  slot: Slot; ex: Exercise | undefined; index: number; groupStart: boolean; groupEnd: boolean; onOpen: () => void; fail?: string[];
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: slot.id });
   return (
-    <div ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition, position: "relative", zIndex: isDragging ? 5 : undefined, paddingLeft: slot.supersetGroup ? 14 : 0 }}>
-      {slot.supersetGroup && <div aria-hidden style={{ position: "absolute", left: 0, top: groupStart ? 16 : -6, bottom: groupEnd ? 16 : -6, width: 3, borderRadius: 3, background: "var(--neon-2)", boxShadow: "0 0 10px var(--neon-2)" }} />}
-      {slot.supersetGroup && groupStart && <div className="eyebrow" style={{ color: "var(--neon-2)", fontSize: 10, margin: "2px 0 4px" }}>Superset {slot.supersetGroup}</div>}
-      <div className="glass row" style={{ padding: "6px 6px 6px 2px", borderRadius: 16, boxShadow: isDragging ? "0 0 0 1px var(--neon), 0 16px 40px -10px var(--glow)" : undefined }}>
-        <button className="icon-btn" style={{ touchAction: "none", cursor: "grab", width: 36 }} aria-label={`Drag to reorder ${ex?.name}`} {...attributes} {...listeners}>
+    <div ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition, position: "relative", zIndex: isDragging ? 5 : undefined, paddingLeft: slot.supersetGroup ? 10 : 0,
+      background: isDragging ? "var(--surface-solid)" : undefined, borderRadius: 14, boxShadow: isDragging ? "0 0 0 1px var(--neon), 0 16px 40px -10px var(--glow)" : undefined }}>
+      {slot.supersetGroup && <div aria-hidden style={{ position: "absolute", left: 2, top: groupStart ? 16 : 0, bottom: groupEnd ? 16 : 0, width: 3, borderRadius: 3, background: "var(--neon-2)", boxShadow: "0 0 10px var(--neon-2)" }} />}
+      <div className="row" style={{ gap: 0 }}>
+        <button className="icon-btn" style={{ touchAction: "none", cursor: "grab", width: 32, flex: "none" }} aria-label={`Drag to reorder ${ex?.name}`} {...attributes} {...listeners}>
           <svg width="16" height="22" viewBox="0 0 16 22" aria-hidden><g fill="currentColor">{[5, 11, 17].flatMap((y) => [<circle key={"a" + y} cx="5" cy={y} r="1.8" />, <circle key={"b" + y} cx="11" cy={y} r="1.8" />])}</g></svg>
         </button>
-        <button className="row grow" style={{ textAlign: "left", minHeight: 52 }} onClick={onOpen}>
-          <Figure spec={ex?.figure} size={40} still className="thin" />
+        <button className="list-row grow" style={{ paddingLeft: 0 }} onClick={onOpen}>
+          <span className="mono muted" style={{ width: 16, fontSize: 13 }}>{index + 1}</span>
+          <Figure spec={ex?.figure} size={44} still className="thin" />
           <span className="grow" style={{ minWidth: 0 }}>
-            <span style={{ display: "block", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{ex?.name ?? slot.exerciseId} {ex?.isHeavy && <span className="star">★</span>}<FailFlame why={fail} /></span>
-            <span className="mono muted" style={{ fontSize: 12 }}>{slot.sets} × {repRange(slot.repMin, slot.repMax)} · {fmtRest(slot.restSec)}</span>
+            <span style={{ display: "block", fontWeight: 600 }}>{ex?.name ?? slot.exerciseId} {ex?.isHeavy && <span className="star">★</span>}<FailFlame why={fail} /></span>
+            <span className="muted" style={{ fontSize: 12 }}>{slot.supersetGroup && groupStart ? `Superset ${slot.supersetGroup} · ` : ""}{slot.notes ? `${slot.notes} · ` : ""}rest {fmtRest(slot.restSec)}</span>
           </span>
+          <span className="mono" style={{ whiteSpace: "nowrap" }}>{slot.sets} × {repRange(slot.repMin, slot.repMax)}</span>
+          <Icon name="chevron" size={16} />
         </button>
       </div>
     </div>
@@ -116,66 +120,72 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
     setDraft(moveSlot(draft, day.id, from, to));
   };
 
+  const allSets = draft.days.reduce((a, d) => a + d.slots.reduce((b, s) => b + s.sets, 0), 0);
+  const daySets = day ? day.slots.reduce((a, s) => a + s.sets, 0) : 0;
+  // Same layout as the Plan tab's view, with the parts that can change turned into fields (edit in place).
+  const field = { background: "transparent", border: 0, borderBottom: "1px dashed var(--line-strong)", borderRadius: 0, padding: "2px 0", width: "100%", color: "inherit" } as const;
   return (
-    <div className="page">
-      <div className="spread" style={{ marginBottom: 8 }}>
-        <button className="btn btn-quiet" style={{ paddingLeft: 0 }} onClick={() => (dirty ? setConfirm("cancel") : leave())}>Cancel</button>
-        <span className="eyebrow">Edit plan</span>
-        <button className="btn btn-primary" style={{ minHeight: 40 }} onClick={dirty ? save : leave}>{dirty ? "Save" : "Done"}</button>
+    <div className="page" style={{ animation: onExit ? "none" : undefined }}>
+      <div className="spread">
+        <span className="eyebrow" style={{ color: "var(--neon-2)" }}>Editing plan</span>
+        <div className="row" style={{ gap: 6 }}>
+          <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px" }} onClick={() => (dirty ? setConfirm("cancel") : leave())}>Cancel</button>
+          <button className="btn btn-primary" style={{ minHeight: 40, padding: "0 14px" }} onClick={dirty ? save : leave}><Icon name="check" size={18} /> {dirty ? "Save" : "Done"}</button>
+        </div>
       </div>
-      <input className="input" aria-label="Plan name" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-        style={{ font: "700 28px var(--display)", textTransform: "uppercase", letterSpacing: ".02em", background: "transparent", border: "1px dashed var(--line-strong)" }} />
+      <input className="title-lg" aria-label="Plan name" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+        style={{ ...field, marginTop: 6, font: "700 32px/1 var(--display)", textTransform: "uppercase", letterSpacing: ".02em", color: "var(--neon-ink)" }} />
+      <p className="muted" style={{ marginTop: 4, fontSize: 14 }}>{draft.days.filter((d) => d.slots.length).length} days · {draft.days.flatMap((d) => d.slots).length} exercises · {allSets} sets a week</p>
 
       <div className="chips-scroll" style={{ marginTop: 12 }}>
         {days.map((d) => (
           <button key={d.id} className="chip" aria-pressed={d.id === day?.id} onClick={() => setDayId(d.id)} title={d.title}>
-            {d.weekday != null ? SHORT[d.weekday] : "—"} · {d.title.length > 14 ? d.title.slice(0, 13) + "…" : d.title}
+            {d.weekday != null ? SHORT[d.weekday] : d.title.length > 10 ? d.title.slice(0, 9) + "…" : d.title || "New"}
           </button>
         ))}
         <button className="chip" onClick={() => { const r = addDay(draft); setDraft(r.routine); setDayId(r.dayId); }}><Icon name="plus" size={16} /> Day</button>
       </div>
 
       {day && (
-        <section className="glass" style={{ padding: 14, marginTop: 10, display: "grid", gap: 12 }}>
-          <div className="field"><label htmlFor="dtitle">Day name</label>
-            <input id="dtitle" className="input" value={day.title} onChange={(e) => setDraft(renameDay(draft, day.id, e.target.value))} /></div>
-          <div className="field"><span className="label">Weekday · picking a used one swaps the two days</span>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(8,1fr)", gap: 4 }}>
-              {[1, 2, 3, 4, 5, 6, 0].map((w) => {
-                const owner = draft.days.find((d) => d.id !== day.id && d.weekday === w);
-                return (
-                  <button key={w} className="chip" aria-pressed={day.weekday === w} title={owner ? `Swap with ${owner.title}` : undefined}
-                    style={{ padding: 0, justifyContent: "center", minHeight: 40, opacity: owner && day.weekday !== w ? 0.7 : 1 }}
-                    onClick={() => setDraft(setDayWeekday(draft, day.id, w))}>{SHORT[w]}</button>
-                );
-              })}
-              <button className="chip" aria-pressed={day.weekday == null} style={{ padding: 0, justifyContent: "center", minHeight: 40 }} onClick={() => setDraft(setDayWeekday(draft, day.id, null))}>None</button>
-            </div>
+        <>
+          <div className="spread" style={{ margin: "14px 4px 8px", alignItems: "flex-end" }}>
+            <input className="title-md" aria-label="Day name" value={day.title} onChange={(e) => setDraft(renameDay(draft, day.id, e.target.value))}
+              style={{ ...field, font: "700 22px/1.05 var(--display)", textTransform: "uppercase", letterSpacing: ".02em", flex: 1, minWidth: 0 }} />
+            <span className="mono muted" style={{ fontSize: 13, whiteSpace: "nowrap" }}>{daySets} sets · ~{estimateMinutes(daySets, day.slots.length)} min</span>
           </div>
-          <div className="spread">
-            <span className="mono muted" style={{ fontSize: 13 }}>{day.slots.length} exercises · {day.slots.reduce((a, s) => a + s.sets, 0)} sets · ~{estimateMinutes(day.slots.reduce((a, s) => a + s.sets, 0), day.slots.length)} min</span>
+          <div className="glass" style={{ padding: 4, marginTop: 8 }}>
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+              <SortableContext items={day.slots.map((s) => s.id)} strategy={verticalListSortingStrategy}>
+                {day.slots.map((s, i) => (
+                  <SlotRow key={s.id} slot={s} ex={exMap.get(s.exerciseId)} index={i}
+                    groupStart={s.supersetGroup !== day.slots[i - 1]?.supersetGroup} groupEnd={s.supersetGroup !== day.slots[i + 1]?.supersetGroup}
+                    onOpen={() => setSlotOpen(s.id)} fail={weekFail.get(day.id)?.get(s.id)} />
+                ))}
+              </SortableContext>
+            </DndContext>
+            {!day.slots.length && <p className="muted" style={{ textAlign: "center", fontSize: 14, padding: 12 }}>No exercises. A day without exercises is a rest day.</p>}
+            <button className="list-row" style={{ color: "var(--neon-ink)", justifyContent: "center" }} onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
+          </div>
+          <p className="muted" style={{ fontSize: 12, margin: "6px 4px 0" }}>Tap an exercise to change it. Drag ⋮⋮ to move it.</p>
+          <div className="spread" style={{ margin: "6px 4px 0" }}>
+            <label className="row muted" style={{ gap: 6, fontSize: 13 }}>Weekday
+              <select className="input" aria-label="Weekday (picking a used one swaps the two days)" value={day.weekday ?? ""} style={{ minHeight: 36, padding: "0 8px", width: 96, flex: "none", fontSize: 14 }}
+                onChange={(e) => setDraft(setDayWeekday(draft, day.id, e.target.value === "" ? null : Number(e.target.value)))}>
+                {[1, 2, 3, 4, 5, 6, 0].map((w) => {
+                  const owner = draft.days.find((d) => d.id !== day.id && d.weekday === w);
+                  return <option key={w} value={w}>{SHORT[w]}{owner ? ` (swap with ${owner.title})` : ""}</option>;
+                })}
+                <option value="">None</option>
+              </select>
+            </label>
             <button className="btn btn-quiet" style={{ color: "var(--bad)", fontSize: 13, minHeight: 36, padding: 0, whiteSpace: "nowrap" }} onClick={() => setConfirm("deleteDay")}><Icon name="trash" size={16} /> Delete day</button>
           </div>
-        </section>
+          <h2 className="section-title">This workout's volume</h2>
+          <DayVolume routine={draft} day={day} exMap={exMap} targets={tdraft} />
+        </>
       )}
 
-      {day && (
-        <div style={{ display: "grid", gap: 8, marginTop: 12 }}>
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-            <SortableContext items={day.slots.map((s) => s.id)} strategy={verticalListSortingStrategy}>
-              {day.slots.map((s, i) => (
-                <SlotRow key={s.id} slot={s} ex={exMap.get(s.exerciseId)}
-                  groupStart={s.supersetGroup !== day.slots[i - 1]?.supersetGroup} groupEnd={s.supersetGroup !== day.slots[i + 1]?.supersetGroup}
-                  onOpen={() => setSlotOpen(s.id)} fail={weekFail.get(day.id)?.get(s.id)} />
-              ))}
-            </SortableContext>
-          </DndContext>
-          {!day.slots.length && <p className="muted" style={{ textAlign: "center", fontSize: 14, padding: 12 }}>No exercises. A day without exercises is a rest day.</p>}
-          <button className="btn btn-ghost btn-block" style={{ minHeight: 52 }} onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
-        </div>
-      )}
-
-      <h2 className="section-title">Weekly volume</h2>
+      <h2 className="section-title">Weekly targets</h2>
       <p className="muted" style={{ fontSize: 12, margin: "-2px 4px 8px" }}>Tap a muscle to change its weekly target, make it a priority or skip it.</p>
       <VolumeTable totals={totals} targets={tdraft} days={dayCount} onEdit={editTarget} defaults={defaults} />
       {!profile && <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Fill in Settings → Training profile to get targets worked out for you.</p>}
