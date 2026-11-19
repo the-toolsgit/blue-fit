@@ -6,7 +6,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { GUIDES, HEAD, MAP_H, MAP_PARTS, MAP_W, OUTLINE, partsKey, regionsFor, viewOf, zoomBox, type MapView } from "../../core/muscleMap";
 import { fmtNum } from "../../core/util";
 import { muscleLabel, type MuscleGroup } from "../../core/types";
-import type { Tile } from "../../core/workoutCheck";
+import { exercisesFor, type Tile } from "../../core/workoutCheck";
+import type { Exercise, Routine } from "../../core/types";
 import { reducedMotion } from "../device";
 import { Icon } from "./Icon";
 
@@ -23,7 +24,7 @@ export function tileColor(t: Tile | undefined): string {
 const stateText = (t: Tile | undefined) => !t || !t.week ? "Not trained in this plan" : t.status === "off" ? "Skipped"
   : t.status === "above" ? "Above target" : t.target?.min != null && t.week >= t.target.min ? "In target" : `${fmtNum((t.target?.min ?? 0) - t.week)} sets short`;
 
-export function WeekMap({ tiles }: { tiles: Tile[] }) {
+export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Routine; exMap: Map<string, Exercise> }) {
   const byGroup = new Map(tiles.map((t) => [t.group, t]));
   const [view, setView] = useState<MapView>("front");
   const [sel, setSel] = useState<MuscleGroup | null>(null);
@@ -65,12 +66,6 @@ export function WeekMap({ tiles }: { tiles: Tile[] }) {
   });
 
   const flip = () => setView((v) => (v === "front" ? "back" : "front"));
-  // The opened muscle scrolls to the top of the list (inside it, not the page)
-  const listRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const list = listRef.current, row = list?.querySelector<HTMLElement>(".weekmap-row.sel");
-    if (list && row) list.scrollTo({ top: row.offsetTop - 2, behavior: reducedMotion() ? "auto" : "smooth" });
-  }, [sel, view]);
   const pick = (g: MuscleGroup) => {
     if (sel && partsKey(sel) === partsKey(g)) { setSel(null); return; }
     setSel(g);
@@ -133,8 +128,8 @@ export function WeekMap({ tiles }: { tiles: Tile[] }) {
           {/* Always takes its space, so the section doesn't grow when a muscle is picked */}
           <button type="button" className="weekmap-out" onClick={() => setSel(null)} style={{ visibility: sel ? "visible" : "hidden" }} tabIndex={sel ? 0 : -1}>Whole body</button>
         </div>
-        <div className="weekmap-listbox"><div className="weekmap-list" ref={listRef}>
-          {groups.map((g) => {
+        <div className="weekmap-list">
+          {(sel && groups.includes(sel) ? [sel] : groups).map((g) => {
             const t = byGroup.get(g), open = sel === g;
             return (
               <div key={g}>
@@ -146,8 +141,9 @@ export function WeekMap({ tiles }: { tiles: Tile[] }) {
               </div>
             );
           })}
-        </div></div>
+        </div>
       </div>
+      {sel && <MuscleExercises g={sel} routine={routine} exMap={exMap} t={byGroup.get(sel)} />}
       <div className="weekmap-legend">
         {[["var(--good)", "in target"], ["hsl(50 100% 58%)", "a bit short"], ["hsl(0 100% 58%)", "far short"], ["var(--pink-2)", "above"], ["var(--faint)", "skipped"]].map(([c, l]) => <span key={l}><i style={{ background: c }} />{l}</span>)}
       </div>
@@ -179,6 +175,32 @@ function MuscleDetail({ t }: { t: Tile | undefined }) {
             return <li key={j.name} className={cls}><Icon name={ok ? "check" : "close"} size={13} stroke={3} />{j.name}</li>;
           })}
         </ul>
+      )}
+    </div>
+  );
+}
+
+/** Below the map, for the picked muscle: the routine's exercises for each of its parts (red when a part has none),
+ *  then exercises that work it indirectly. */
+function MuscleExercises({ g, routine, exMap, t }: { g: MuscleGroup; routine: Routine; exMap: Map<string, Exercise>; t: Tile | undefined }) {
+  const x = exercisesFor(routine, exMap, g);
+  const focus = !!t && t.status !== "off";
+  const line = (e: { exerciseId: string; name: string; sets: number; days: string[] }) => (
+    <li key={e.exerciseId}><span className="grow">{e.name}</span><span className="mono muted">{fmtNum(e.sets)} sets</span></li>
+  );
+  return (
+    <div className="wm-ex">
+      <div className="eyebrow">{muscleLabel(g)} · exercises in your plan</div>
+      {x.parts.map((p) => (
+        <div key={p.job} className={"wm-ex-part" + (!p.exercises.length && focus ? " miss" : "")}>
+          <div className="wm-ex-job">{p.job}</div>
+          {p.exercises.length ? <ul>{p.exercises.map(line)}</ul> : <p className="wm-ex-none">{focus ? "Nothing in your plan trains this part" : "None"}</p>}
+        </div>
+      ))}
+      {!!x.other.length && <div className="wm-ex-part">{!!x.parts.length && <div className="wm-ex-job">other</div>}<ul>{x.other.map(line)}</ul></div>}
+      {!x.parts.length && !x.other.length && <p className="wm-ex-none">No exercise in your plan works it directly.</p>}
+      {!!x.indirect.length && (
+        <div className="wm-ex-part"><div className="wm-ex-job">also works it (½ set each)</div><ul className="wm-ex-ind">{x.indirect.map(line)}</ul></div>
       )}
     </div>
   );

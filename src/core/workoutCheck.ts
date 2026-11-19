@@ -199,3 +199,28 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const mins = days.map((d) => estimateMinutes(d.slots.reduce((a, s) => a + s.sets, 0), d.slots.length));
   return { days: days.length, sets, minutes: mins.length ? Math.round(mins.reduce((a, b) => a + b, 0) / mins.length / 5) * 5 : 0, muscles: main.length, tiles, checks, score };
 }
+
+/** One exercise of the routine as it works a muscle: where and how much */
+export interface MuscleExercise { exerciseId: string; name: string; days: string[]; sets: number }
+/** The routine's exercises for one muscle, grouped by the part (job) they train; `other` = direct work with no job
+ *  tag, `indirect` = exercises that work it at ½ (e.g. rows for biceps). Pure. */
+export function exercisesFor(routine: Routine, exMap: Map<string, Exercise>, g: MuscleGroup): { parts: { job: string; exercises: MuscleExercise[] }[]; other: MuscleExercise[]; indirect: MuscleExercise[] } {
+  const found = new Map<string, MuscleExercise & { weight: number }>();
+  for (const d of routine.days) for (const s of d.slots) {
+    const ex = exMap.get(s.exerciseId), v = ex?.volume.find((x) => x.group === g);
+    if (!ex || !v) continue;
+    const cur = found.get(ex.id) ?? { exerciseId: ex.id, name: ex.name, days: [], sets: 0, weight: v.weight };
+    if (!cur.days.includes(d.title)) cur.days.push(d.title);
+    cur.sets += s.sets;
+    found.set(ex.id, cur);
+  }
+  const jobsOf = (id: string) => { const j = exMap.get(id)?.jobs?.[g]; return j == null ? [] : Array.isArray(j) ? j : [j]; };
+  const all = [...found.values()];
+  const strip = ({ weight: _w, ...x }: MuscleExercise & { weight: number }) => x;
+  const parts = (JOBS[g] ?? []).map((job) => ({ job, exercises: all.filter((x) => x.weight === 1 && jobsOf(x.exerciseId).includes(job)).map(strip) }));
+  return {
+    parts: parts.length > 1 ? parts : [],
+    other: all.filter((x) => x.weight === 1 && (parts.length < 2 || !jobsOf(x.exerciseId).some((j) => (JOBS[g] ?? []).includes(j)))).map(strip),
+    indirect: all.filter((x) => x.weight < 1).map(strip),
+  };
+}

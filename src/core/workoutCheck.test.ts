@@ -104,3 +104,15 @@ describe("week score", () => {
     expect(w.checks.find((c) => c.id === "frequency")!.detail).not.toContain("Front delts");
   });
 });
+
+describe("exercises per muscle", () => {
+  it("groups the routine's biceps exercises by part, with indirect ones apart", async () => {
+    const { exercisesFor } = await import("./workoutCheck");
+    const b = exercisesFor(r, exMap, "biceps");
+    expect(b.parts.map((p) => p.job)).toEqual(["long head", "short head", "brachialis"]);
+    expect(b.parts.find((p) => p.job === "brachialis")!.exercises.map((x) => x.exerciseId)).toContain("db-hammer-curl");
+    expect(b.indirect.length).toBeGreaterThan(0);
+    expect(exercisesFor(r, exMap, "adductors").parts).toEqual([]);
+    expect(exercisesFor(r, exMap, "adductors").other.length).toBeGreaterThan(0);
+  });
+});

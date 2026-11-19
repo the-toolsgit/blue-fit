@@ -477,9 +477,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .weekmap-nav .icon-btn { color: var(--neon-ink); font-size: 20px; }
 .weekmap-nav span { font: 600 11px var(--body); letter-spacing: .18em; color: var(--muted); min-width: 50px; text-align: center; }
 .weekmap-out { display: block; margin: 0 auto; min-height: 32px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--line-strong); color: var(--muted); font: 600 12px var(--body); }
-/* The list scrolls inside; the section keeps the body's height even when a muscle opens */
-.weekmap-listbox { position: relative; align-self: stretch; }
-.weekmap-list { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 2px; }
+/* The list: every muscle on this side; a picked muscle shows alone (tap it again or "Whole body" for the full list) */
+.weekmap-list { display: flex; flex-direction: column; gap: 2px; }
 .weekmap-row { width: 100%; display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 8px; border-radius: 10px; font-size: 14px; text-align: left; }
 .weekmap-row.sel { background: var(--surface-2); }
 .weekmap-row i { width: 9px; height: 9px; border-radius: 50%; flex: none; }
@@ -508,3 +507,14 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .score-card { margin-top: 8px; padding: 6px 14px 12px; }
 .score-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
 .score-row .muted { font-size: 12px; }
+
+/* Exercises for the picked muscle, by part */
+.wm-ex { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); display: grid; gap: 10px; }
+.wm-ex-part { display: grid; gap: 4px; }
+.wm-ex-job { font: 700 13px var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--neon-ink); }
+.wm-ex-part.miss .wm-ex-job, .wm-ex-part.miss .wm-ex-none { color: var(--bad); }
+.wm-ex ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.wm-ex li { display: flex; gap: 8px; align-items: baseline; font-size: 14px; }
+.wm-ex li .mono { font-size: 12px; }
+.wm-ex-ind li { color: var(--muted); font-size: 13px; }
+.wm-ex-none { margin: 0; font-size: 13px; color: var(--muted); }

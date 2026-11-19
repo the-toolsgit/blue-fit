@@ -53,7 +53,7 @@ export function WeekInsight({ routine, exMap, targets, weekFail }: {
         </div>
       )}
 
-      <WeekMap tiles={i.tiles} />
+      <WeekMap tiles={i.tiles} routine={routine} exMap={exMap} />
       <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Sets a week (indirect = ½) / target. Tap a muscle for its details.</p>
 
       <h2 className="section-title">Week check</h2>
