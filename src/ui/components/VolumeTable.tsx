@@ -4,7 +4,7 @@ import { MUSCLE_GROUPS, type MuscleGroup, type VolumeTarget } from "../../core/t
 import { fmtNum } from "../../core/util";
 import { useState } from "react";
 import { Seg, Stepper } from "./Controls";
-import { priorityOf, type ModelTarget, type Priority } from "../../core/volumeModel";
+import { priorityOf, type Priority } from "../../core/volumeModel";
 import { Icon } from "./Icon";
 
 const STATUS = {
@@ -32,8 +32,7 @@ export function withPriority(t: VolumeTarget, p: Priority, fallbackMin: number):
   return { ...rest, min: t.min ?? fallbackMin, ...(isDefault ? {} : { priority: p === "priority" }) };
 }
 
-/** defaults: the model's suggestion per muscle (shown in the edit panel with its reasons). */
-export function VolumeTable({ totals, targets, days, stillPlanned, onEdit, defaults }: { totals: GroupTotals; targets: VolumeTarget[]; days?: Record<string, number>; stillPlanned?: Set<MuscleGroup>; onEdit?: (t: VolumeTarget) => void; defaults?: Map<MuscleGroup, ModelTarget> }) {
+export function VolumeTable({ totals, targets, days, stillPlanned, onEdit }: { totals: GroupTotals; targets: VolumeTarget[]; days?: Record<string, number>; stillPlanned?: Set<MuscleGroup>; onEdit?: (t: VolumeTarget) => void }) {
   const tmap = new Map(targets.map((t) => [t.group, t]));
   const [open, setOpen] = useState<MuscleGroup | null>(null);
   const scale = Math.max(24, ...MUSCLE_GROUPS.map((m) => totals[m.id]), ...targets.map((t) => t.max ?? t.min ?? 0));
@@ -44,7 +43,6 @@ export function VolumeTable({ totals, targets, days, stillPlanned, onEdit, defau
         const off = st === "off";
         const note = off ? offNote(t?.note) : t?.gap;
         const isOpen = onEdit && open === m.id;
-        const def = defaults?.get(m.id);
         return (
           <div key={m.id} className={off ? "vrow off" : "vrow"} style={{ padding: "10px 0", borderBottom: "1px solid var(--line)" }}>
             <div className="spread" style={{ alignItems: "baseline", cursor: onEdit ? "pointer" : undefined }} onClick={onEdit ? () => setOpen(isOpen ? null : m.id) : undefined}
@@ -65,7 +63,7 @@ export function VolumeTable({ totals, targets, days, stillPlanned, onEdit, defau
                 {days && `${days[m.id] ?? 0} day${days[m.id] === 1 ? "" : "s"}`}{days && t?.angles ? ` · ${t.angles}` : ""}{note ? `${days ? " · " : ""}${note}` : ""}
               </div>
             )}
-            {isOpen && <TargetEdit group={m.id} label={m.label} t={t} current={v} def={def} onEdit={onEdit!} />}
+            {isOpen && <TargetEdit group={m.id} label={m.label} t={t} current={v} onEdit={onEdit!} />}
           </div>
         );
       })}
@@ -74,10 +72,10 @@ export function VolumeTable({ totals, targets, days, stillPlanned, onEdit, defau
   );
 }
 
-/** Change one muscle's weekly target: min/max sets, Priority · Normal · Skip, and the suggestion from the training profile.
+/** Change one muscle's weekly target: min/max sets and Priority · Normal · Skip.
  *  current: its sets a week now (seeds empty steppers). Used by the targets table and the week map's muscle card. */
-export function TargetEdit({ group, label, t, current, def, onEdit }: {
-  group: MuscleGroup; label: string; t?: VolumeTarget; current: number; def?: ModelTarget; onEdit: (t: VolumeTarget) => void;
+export function TargetEdit({ group, label, t, current, onEdit }: {
+  group: MuscleGroup; label: string; t?: VolumeTarget; current: number; onEdit: (t: VolumeTarget) => void;
 }) {
   const edit = t ?? { group, min: null, max: null };
   const set = (p: Partial<VolumeTarget>) => onEdit({ ...edit, ...p });
@@ -95,13 +93,6 @@ export function TargetEdit({ group, label, t, current, def, onEdit }: {
           options={[{ v: "priority", label: "Priority" }, { v: "normal", label: "Normal" }, { v: "off", label: "Skip" }]} />
         <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>{prio === "priority" ? "Aims for the top half of its range." : prio === "off" ? "Skipped: grayed out, no warnings. Your numbers are kept." : "Full range."}</p>
       </div>
-      {def && (
-        <div className="vdefault">
-          <div className="spread"><span className="eyebrow">Suggested for you</span><span className="mono">{def.min}–{def.max} sets</span></div>
-          {!!def.why.length && <ul className="vdefault-why">{def.why.map((w) => <li key={w}>{w}</li>)}</ul>}
-          {(def.min !== edit.min || def.max !== edit.max) && <button className="btn btn-quiet" style={{ minHeight: 40, padding: 0, fontSize: 14 }} onClick={() => set({ min: def.min, max: def.max })}>Use {def.min}–{def.max}</button>}
-        </div>
-      )}
     </div>
   );
 }

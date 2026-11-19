@@ -3,8 +3,6 @@ import { deloadActive, deloadWeek, endDeload } from "../../core/deload";
 import { localDate } from "../../core/util";
 import { DELOAD_RULE } from "../components/DeloadBanner";
 import { addSlot, clearDay, copyName, duplicateRoutine, moveSlot, removeSlot, renameDay, routineUsed, setCurrent, swapSlotExercise, toggleSlotSuperset, updateSlot } from "../../core/routineEdit";
-import { completeProfile, MUSCLE_GROUPS } from "../../core/types";
-import { modelTarget, priorityOf } from "../../core/volumeModel";
 import { failureApplies, failureEligible } from "../../core/failure";
 import { tempoTiming } from "../../core/figure/tempo";
 import { Seg, Stepper } from "../components/Controls";
@@ -52,8 +50,6 @@ export function PlanScreen() {
     saveRoutine(removeSlot(routine, day.id, s.id));
     toast({ kind: "info", title: "Exercise removed", body: exMap.get(s.exerciseId)?.name, action: { label: "Undo", run: () => saveRoutine(before) } });
   };
-  const profile = completeProfile(settings.profile);
-  const defaults = profile ? new Map(MUSCLE_GROUPS.map((m) => [m.id, modelTarget(m.id, profile, priorityOf(m.id, targets.find((x) => x.group === m.id)))])) : undefined;
   const allSets = routine.days.reduce((a, d) => a + d.slots.reduce((b, s) => b + s.sets, 0), 0);
   const sets = day?.slots.reduce((a, s) => a + s.sets, 0) ?? 0;
 
@@ -91,7 +87,7 @@ export function PlanScreen() {
       )}
 
       <h2 className="section-title">Your week</h2>
-      <WeekInsight routine={routine} exMap={exMap} targets={targets} weekFail={weekFail} edit={{ targets, defaults, onEdit: (t) => saveTargets([t]) }} />
+      <WeekInsight routine={routine} exMap={exMap} targets={targets} weekFail={weekFail} edit={{ targets, onEdit: (t) => saveTargets([t]) }} />
 
       {routine.rules?.length ? (
         <div className="chips-scroll" style={{ marginTop: 22, gap: 10 }}>

@@ -93,7 +93,6 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   // Interview: the model's suggestion for each muscle, from the training profile and the muscle's priority
   const profile = completeProfile(settings.profile);
   const suggest = (g: VolumeTarget["group"], t?: VolumeTarget) => (profile ? modelTarget(g, profile, priorityOf(g, t)) : null);
-  const defaults = profile ? new Map(MUSCLE_GROUPS.map((m) => [m.id, suggest(m.id, tdraft.find((x) => x.group === m.id))!])) : undefined;
   /** Reset: model numbers when the profile is filled in, else the plan's original numbers. Notes are kept; no muscle is skipped; priorities go back to the default. */
   const resetTargets = () => setTdraft((defaultTargets as VolumeTarget[]).map((t) => {
     const s = suggest(t.group);
@@ -178,7 +177,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
 
       <h2 className="section-title">Weekly targets</h2>
       <p className="muted" style={{ fontSize: 12, margin: "-2px 4px 8px" }}>Tap a muscle to change its weekly target, make it a priority or skip it.</p>
-      <VolumeTable totals={totals} targets={tdraft} days={dayCount} onEdit={editTarget} defaults={defaults} />
+      <VolumeTable totals={totals} targets={tdraft} days={dayCount} onEdit={editTarget} />
       {!profile && <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Fill in Settings → Training profile to get targets worked out for you.</p>}
       <button className="btn btn-quiet btn-block" style={{ marginTop: 8 }} onClick={() => setConfirm("resetTargets")}><Icon name="undo" size={18} /> Reset targets to defaults</button>
 

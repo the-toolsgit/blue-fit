@@ -8,7 +8,6 @@ import { fmtNum } from "../../core/util";
 import { muscleLabel, type MuscleGroup } from "../../core/types";
 import { exercisesFor, type Tile } from "../../core/workoutCheck";
 import type { Exercise, Routine, VolumeTarget } from "../../core/types";
-import type { ModelTarget } from "../../core/volumeModel";
 import { TargetEdit } from "./VolumeTable";
 import { reducedMotion } from "../device";
 import { Icon } from "./Icon";
@@ -27,7 +26,7 @@ const stateText = (t: Tile | undefined) => !t || !t.week ? "Not trained in this 
   : t.status === "above" ? "Above target" : t.target?.min != null && t.week >= t.target.min ? "In target" : `${fmtNum((t.target?.min ?? 0) - t.week)} sets short`;
 
 /** Target editing (Plan tab): the muscle card gets a Change target button. */
-export interface TargetEditing { targets: VolumeTarget[]; onEdit: (t: VolumeTarget) => void; defaults?: Map<MuscleGroup, ModelTarget> }
+export interface TargetEditing { targets: VolumeTarget[]; onEdit: (t: VolumeTarget) => void }
 
 export function WeekMap({ tiles, routine, exMap, edit }: { tiles: Tile[]; routine: Routine; exMap: Map<string, Exercise>; edit?: TargetEditing }) {
   const byGroup = new Map(tiles.map((t) => [t.group, t]));
@@ -181,7 +180,7 @@ function MuscleDetail({ g, t, edit }: { g: MuscleGroup; t: Tile | undefined; edi
       </div>
       {edit && editing && (
         <div style={{ width: "100%" }}>
-          <TargetEdit group={g} label={muscleLabel(g)} t={edit.targets.find((x) => x.group === g)} current={week} def={edit.defaults?.get(g)} onEdit={edit.onEdit} />
+          <TargetEdit group={g} label={muscleLabel(g)} t={edit.targets.find((x) => x.group === g)} current={week} onEdit={edit.onEdit} />
         </div>
       )}
       {!!t && t.jobs.length > 1 && (
