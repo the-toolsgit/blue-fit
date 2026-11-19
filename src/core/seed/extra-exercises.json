@@ -1,91 +1,172 @@
 [
-  {
-    "id": "lean-in-lateral-raise",
-    "name": "Lean-in Lateral Raise",
-    "aliases": [],
-    "muscles": [
-      "Side delts"
-    ],
-    "secondaryMuscles": [],
-    "volume": [
-      {
-        "group": "sideDelts",
-        "weight": 1
-      }
-    ],
-    "equipment": "cable",
-    "loadMode": "total",
-    "isHeavy": false,
-    "compound": false,
-    "bodyRegion": "upper",
-    "why": "Leaning in makes the top of the raise hardest; starting across the body stretches the shoulder.",
-    "setup": [
-      "Pulley low. Hold the machine, lean in toward it 15–30°.",
-      "Handle in the other hand."
-    ],
-    "form": [
-      "Start with your hand across your body.",
-      "Raise to shoulder height, lower slowly."
-    ],
-    "tips": [
-      "Start each rep from a full stop."
-    ],
-    "avoid": [
-      "Swinging.",
-      "Changing how far you lean."
-    ],
-    "rangeOfMotion": "Hand across your body → shoulder height",
-    "tempo": "Up 1 s · Down 3 s",
-    "defaultRestSec": 120,
-    "incrementLb": 5,
-    "figure": {
-      "v": "f",
-      "base": {
-        "cx": 84,
-        "la": 0,
-        "sa": 0,
-        "hw": 1.5,
-        "rot": -20,
-        "L": {
-          "ua": 60,
-          "fa": 60
-        }
-      },
-      "A": {
-        "ua": -30,
-        "fa": -30
-      },
-      "B": {
-        "ua": 98,
-        "fa": 98
-      },
-      "props": [
-        {
-          "line": [
-            22,
-            -14,
-            22,
-            104
-          ]
-        },
-        {
-          "line": [
-            16,
-            104,
-            30,
-            104
-          ]
-        },
-        {
-          "cable": [
-            22,
-            96
-          ],
-          "to": "haR"
-        }
-      ]
+ {
+  "id": "lean-in-lateral-raise",
+  "name": "Lean-in Lateral Raise",
+  "aliases": [],
+  "muscles": [
+   "Side delts"
+  ],
+  "secondaryMuscles": [],
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "isHeavy": false,
+  "compound": false,
+  "bodyRegion": "upper",
+  "why": "Leaning in makes the top of the raise hardest; starting across the body stretches the shoulder.",
+  "setup": [
+   "Pulley low. Hold the machine, lean in toward it 15–30°.",
+   "Handle in the other hand."
+  ],
+  "form": [
+   "Start with your hand across your body.",
+   "Raise to shoulder height, lower slowly."
+  ],
+  "tips": [
+   "Start each rep from a full stop."
+  ],
+  "avoid": [
+   "Swinging.",
+   "Changing how far you lean."
+  ],
+  "rangeOfMotion": "Hand across your body → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "figure": {
+   "v": "f",
+   "base": {
+    "cx": 84,
+    "la": 0,
+    "sa": 0,
+    "hw": 1.5,
+    "rot": -20,
+    "L": {
+     "ua": 60,
+     "fa": 60
+    }
+   },
+   "A": {
+    "ua": -30,
+    "fa": -30
+   },
+   "B": {
+    "ua": 98,
+    "fa": 98
+   },
+   "props": [
+    {
+     "line": [
+      22,
+      -14,
+      22,
+      104
+     ]
     },
-    "isCustom": false,
-    "archived": false
-  }
+    {
+     "line": [
+      16,
+      104,
+      30,
+      104
+     ]
+    },
+    {
+     "cable": [
+      22,
+      96
+     ],
+     "to": "haR"
+    }
+   ]
+  },
+  "isCustom": false,
+  "archived": false
+ },
+ {
+  "id": "standing-cable-tricep-kickback",
+  "name": "Standing Cable Tricep Kickback",
+  "aliases": [],
+  "muscles": [
+   "Triceps"
+  ],
+  "secondaryMuscles": [],
+  "volume": [
+   {
+    "group": "triceps",
+    "weight": 1
+   }
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "isHeavy": false,
+  "compound": false,
+  "bodyRegion": "upper",
+  "why": "Triceps fully contracted, standing upright.",
+  "setup": [
+   "Pulley at chest height. Face the machine, step back.",
+   "Upper arm at your side, slightly behind you."
+  ],
+  "form": [
+   "Straighten your arm down and back, squeeze 1 s.",
+   "Bend until your forearm points at the pulley."
+  ],
+  "tips": [
+   "Go light. The squeeze is the point."
+  ],
+  "avoid": [
+   "Upper arm moving.",
+   "Leaning back."
+  ],
+  "rangeOfMotion": "Elbow at 90° → arm straight",
+  "tempo": "Straighten 1 s · Hold 1 s · Bend 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "jobs": {
+   "triceps": [
+    "lateral head",
+    "medial head"
+   ]
+  },
+  "figure": {
+   "base": {
+    "hx": 56,
+    "hy": 58,
+    "t": 0,
+    "th": 0,
+    "sh": 0,
+    "ua": -20
+   },
+   "A": {
+    "fa": 70
+   },
+   "B": {
+    "fa": -20
+   },
+   "props": [
+    {
+     "line": [
+      108,
+      -14,
+      108,
+      104
+     ]
+    },
+    {
+     "cable": [
+      106,
+      34
+     ],
+     "to": "ha"
+    }
+   ]
+  },
+  "isCustom": false,
+  "archived": false
+ }
 ]

@@ -508,5 +508,20 @@ export const MIGRATIONS: Migration[] = [
       return changed ? { ...d, exercises } : null;
     },
   },
+  {
+    // Nov 19 2026: new built-in standing cable kickback (Leo); it replaces the bent-over kickback in the current plan.
+    // History keeps the bent-over one (a different exercise).
+    id: "2026-11-19-standing-kickback",
+    run(d) {
+      const add = (extraExercises as unknown as Exercise[]).filter((x) => !d.exercises.some((e) => e.id === x.id));
+      let changed = add.length > 0;
+      const routines = d.routines.map((r) => {
+        if (!r.isCurrent || !r.days.some((dy) => dy.slots.some((sl) => sl.exerciseId === "cable-one-arm-tricep-kickback"))) return r;
+        changed = true;
+        return { ...r, days: r.days.map((dy) => ({ ...dy, slots: dy.slots.map((sl) => (sl.exerciseId === "cable-one-arm-tricep-kickback" ? { ...sl, exerciseId: "standing-cable-tricep-kickback" } : sl)) })) };
+      });
+      return changed ? { ...d, exercises: [...d.exercises, ...structuredClone(add)], routines } : null;
+    },
+  },
 ];
 

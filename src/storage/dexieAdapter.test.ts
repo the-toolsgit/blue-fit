@@ -7,7 +7,7 @@ describe("DexieAdapter", () => {
   it("seeds once, writes through, replaces atomically", async () => {
     const db = new DexieAdapter("test-" + Math.random());
     await db.init(buildSeed);
-    expect(await db.all("exercises")).toHaveLength(34);
+    expect(await db.all("exercises")).toHaveLength(35);
     const r = (await db.all("routines"))[0];
     await db.put("routines", { ...r, name: "Edited" });
     await db.init(buildSeed); // second launch must not reseed

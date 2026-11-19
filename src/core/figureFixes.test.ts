@@ -75,3 +75,19 @@ describe("lean-in lateral raise", () => {
     expect(m.run(buildSeed(), "2026-11-18")).toBeNull();
   });
 });
+
+describe("standing cable kickback", () => {
+  it("is added and replaces the bent-over kickback in the current plan only", async () => {
+    const { buildSeed } = await import("./seed");
+    const { MIGRATIONS } = await import("./migrations");
+    const d = buildSeed();
+    d.exercises = d.exercises.filter((e) => e.id !== "standing-cable-tricep-kickback");
+    const m = MIGRATIONS.find((x) => x.id === "2026-11-19-standing-kickback")!;
+    const out = m.run(d, "2026-11-19")!;
+    expect(out.exercises.some((e) => e.id === "standing-cable-tricep-kickback")).toBe(true);
+    const ids = out.routines.find((r) => r.isCurrent)!.days.flatMap((x) => x.slots.map((s) => s.exerciseId));
+    expect(ids).toContain("standing-cable-tricep-kickback");
+    expect(ids).not.toContain("cable-one-arm-tricep-kickback");
+    expect(m.run(out, "2026-11-19")).toBeNull();
+  });
+});
