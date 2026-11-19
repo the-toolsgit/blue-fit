@@ -448,7 +448,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                 {hint.kind === "addWeight"
                   ? <>You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>
                   : hint.kind === "hold"
-                    ? <>Stay at <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps} once more{e.failWhy?.includes(TEST_WHY) ? "; your last set tests if you're ready for more" : ""}.</>
+                    ? <>You hit {hint.reps} on every set last time. {e.failWhy?.includes(TEST_WHY) ? "Your last set to failure shows if you're ready for more weight." : <>Do it once more at <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b>, then add weight.</>}</>
                     : <>Beat last time: <b className="mono">{fmtNum(hint.weight)} × {hint.targetReps.join(", ")}</b></>}
               </span>
               <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}

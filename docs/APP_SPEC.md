@@ -293,7 +293,7 @@ Status vs target: no target, min null, `off` or `acceptedBelow` → skipped (off
 Uses the last finished session with done sets of the exercise; considers its done **working and failure** sets.
 - None → no hint.
 - **Ready for more weight** (Nov 18 2026; the top alone can be a one-off) when every regular set (the failure set left out) at the top weight reached the top of the range (`reps ≥ repMax`) **and** either the workout before also did (two workouts in a row, not weeks) or the failure set beat the top by 2+ reps (`READY_MARGIN`); also when the failure set shows failure reps − 2 is already past the top. → "You reached {repMax} reps on every set last time. Go up to {next} × {repMin}." Next = heaviest + increment, rounded up to a multiple of 10 from 40 lb (Leo: round numbers). Thresholds are *judgment*.
-- **Top reached once, not proven yet** → "Stay at {weight} × {repMax} once more." (plus "; your last set tests if you're ready for more" when today's failure pick is that test, §5.19).
+- **Top reached once, not proven yet** → "You hit {repMax} on every set last time. Do it once more at {weight}, then add weight." When today's failure pick is that test (§5.19), the second sentence is "Your last set to failure shows if you're ready for more weight."
 - Otherwise → "Beat last time: {heaviest} × {reps}", where the target reps are last time's reps with +1 on the first set below `repMax`.
 - **Use** applies weight and target reps to the working sets not done yet.
 
