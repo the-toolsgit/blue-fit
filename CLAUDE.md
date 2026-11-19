@@ -8,6 +8,7 @@ Leo's personal training app (replaces Jefit). Mobile-first PWA on GitHub Pages: 
 - **Be short and direct — less verbose in every reply.** Say what changed and what to test. No long recaps, no extra explanation unless asked.
 - **Don't guess training facts.** Exercise content, sets, reps, targets and rules come from the plan data (`src/core/seed/`, extracted from Leo's plan page). If something is missing, ask.
 - **Look: neon, built from the blue line man.** Glowing blue lines, dark-led, fun, smooth animations, very easy to navigate. This is a must. Keep 44px+ tap targets, actions at the bottom, and respect `prefers-reduced-motion`.
+- **Bump the version on every push** (`npm version patch --no-git-tag-version`, shown in Settings as "Blue Fit · version x.y.z") and tell Leo the new number in the reply, so he knows which build he is testing.
 - Leo uses an **iPhone** (no web vibration, no alerts while the screen is locked; native app later).
 
 ## Architecture rules
