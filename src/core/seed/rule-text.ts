@@ -16,4 +16,9 @@ export const RULE_TEXT: Record<string, { old: string[]; text: string }> = {
     ],
     text: "★ Key lifts: heavy lifts. Add weight whenever you can.",
   },
+  // Nov 18 2026 (Leo): say "a couple short of failure", not "0–2"
+  Effort: {
+    old: ["Stop every set when only 0–2 good reps are left. Drop sets only on the last set of an exercise."],
+    text: "Stop every set a couple of reps short of failure. Drop sets only on the last set of an exercise.",
+  },
 };

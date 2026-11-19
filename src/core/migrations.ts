@@ -425,5 +425,19 @@ export const MIGRATIONS: Migration[] = [
       return changed ? { ...d, exercises, targets } : null;
     },
   },
+  {
+    // Nov 18 2026: the Effort rule card says "a couple of reps short of failure" instead of "0–2" (only if unedited).
+    id: "2026-11-18-effort-card-couple",
+    run(d) {
+      const t = RULE_TEXT.Effort;
+      let changed = false;
+      const routines = d.routines.map((r) => !r.rules ? r : { ...r, rules: r.rules.map((x) => {
+        if (x.title !== "Effort" || !t.old.includes(x.text)) return x;
+        changed = true;
+        return { ...x, text: t.text };
+      }) });
+      return changed ? { ...d, routines } : null;
+    },
+  },
 ];
 
