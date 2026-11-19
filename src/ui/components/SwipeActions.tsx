@@ -1,7 +1,7 @@
 // Swipe a card left to show its actions: the card's header (the part marked data-swipe-cover) slides out to the left
 // while a bar slides in from the right in its place, both inside the card's edges, until it's swiped back right. Replaces the ⋯ menu on workout cards. A thin
-// handle on the header's right edge opens it too (and shows the swipe exists). Touch: a mostly-horizontal move past
-// 10 px locks to the swipe; anything else scrolls as usual. One card open at a time (the parent owns `open`).
+// handle on the header's right edge opens it too (and shows the swipe exists). Touch: after 6 px the move locks to
+// whichever direction is larger (sideways = swipe, else the page scrolls); a quick flick opens or closes by direction. One card open at a time (the parent owns `open`).
 // It stays open (also while an action's sheet is up) until it's swiped back right, the handle is tapped again, or
 // another card is opened.
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
@@ -42,21 +42,28 @@ export function SwipeActions({ open, onOpen, onClose, actions, label, peek, chil
   useEffect(() => {
     const el = wrap.current;
     if (!el) return;
+    // The wrapper has touch-action: pan-y, so the browser only ever scrolls vertically here and every sideways move
+    // reaches us from the first pixel (iOS ignores preventDefault once it has started a pan).
     let st: { x: number; y: number; base: number } | null = null, lock: "x" | "y" | null = null;
+    let vel = 0, lastX = 0, lastT = 0; // finger speed (px/ms, + = to the right), for flicks
     const start = (e: TouchEvent) => {
       if (e.touches.length !== 1) { st = null; return; }
       st = { x: e.touches[0].clientX, y: e.touches[0].clientY, base: openRef.current ? widthRef.current : 0 };
-      lock = null;
+      lock = null; vel = 0; lastX = st.x; lastT = performance.now();
     };
     const move = (e: TouchEvent) => {
       if (!st) return;
-      const dx = e.touches[0].clientX - st.x, dy = e.touches[0].clientY - st.y;
+      const x = e.touches[0].clientX, dx = x - st.x, dy = e.touches[0].clientY - st.y;
       if (!lock) {
-        if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy) * 1.3) lock = "x";
-        else if (Math.abs(dy) > 10) lock = "y";
+        // Decide early (6 px), by whichever direction the finger moved more
+        if (Math.max(Math.abs(dx), Math.abs(dy)) < 6) return;
+        lock = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
       }
       if (lock !== "x") return;
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
+      const now = performance.now(), dt = now - lastT;
+      if (dt > 0) vel = 0.7 * ((x - lastX) / dt) + 0.3 * vel;
+      lastX = x; lastT = now;
       const v = Math.max(0, Math.min(widthRef.current, st.base - dx));
       live.current = v; setDrag(v);
     };
@@ -66,7 +73,9 @@ export function SwipeActions({ open, onOpen, onClose, actions, label, peek, chil
         swallowClick.current = true;
         setTimeout(() => { swallowClick.current = false; }, 350);
         const v = live.current ?? 0;
-        if (v > widthRef.current / 2) cb.current.onOpen(); else cb.current.onClose();
+        // A quick flick decides by its direction; a slow drag by how far it got
+        const open = Math.abs(vel) > 0.35 ? vel < 0 : v > widthRef.current / 2;
+        if (open) cb.current.onOpen(); else cb.current.onClose();
       }
       st = null; lock = null; live.current = null; setDrag(null);
     };
