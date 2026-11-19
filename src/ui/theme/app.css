@@ -445,9 +445,9 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .extra-tag { display: inline-flex; align-items: center; margin-right: 6px; padding: 1px 6px; border-radius: 99px; font: 700 11px var(--mono); word-spacing: -0.35em; color: var(--neon-ink); border: 1px solid color-mix(in srgb, var(--neon) 50%, transparent); background: color-mix(in srgb, var(--neon) 10%, transparent); vertical-align: 1px; }
 .extra-why { font-size: 12px; margin-top: 4px; color: var(--muted); }
 
-/* Workout card actions: swipe a card left (or tap the handle on its right edge) to show a 2 × 3 grid of actions */
+/* Workout card actions: swipe a card left (or tap the handle on its right edge) to show a 2 × 3 grid of actions, as tall as the card */
 .swipe-wrap { position: relative; }
-.swipe-actions { position: absolute; top: 0; right: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 64px; gap: 1px;
+.swipe-actions { position: absolute; top: 0; bottom: 0; right: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; gap: 1px;
   border-radius: 18px; overflow: hidden; background: var(--line); border: 1px solid var(--line-strong); transition: opacity .2s; }
 .swipe-act { display: grid; place-items: center; align-content: center; gap: 3px; min-height: 44px; background: var(--surface-solid); color: var(--neon-ink); font: 600 11px var(--body); }
 .swipe-act span { color: var(--ink); }
