@@ -176,6 +176,12 @@ describe("session logic", () => {
     s = toggleSupersetWithNext(s, a.id);
     expect(s.entries[4].supersetGroup).toBeUndefined();
   });
+  it("no rest after the workout's last set", () => {
+    let s = createSessionFromDay(routine, mon, exMap, [], new Date());
+    for (const e of s.entries) for (const x of e.sets) s = toggleDone(s, e.id, x.id, new Date());
+    const last = s.entries[s.entries.length - 1];
+    expect(afterSetDone(s, last.id).rest).toBe(false);
+  });
   it("done set fills later empty sets", () => {
     let s = createSessionFromDay(routine, mon, exMap, [], new Date());
     const e = s.entries[1];

@@ -194,6 +194,8 @@ export function afterSetDone(s: Session, entryId: string): { rest: boolean; next
   const i = s.entries.findIndex((e) => e.id === entryId);
   const e = s.entries[i];
   if (!e) return { rest: false, nextEntryId: null };
+  // The workout's last set: nothing left to rest for
+  if (s.entries.every((x) => x.sets.every((y) => y.done))) return { rest: false, nextEntryId: e.id };
   if (!e.supersetGroup) return { rest: true, nextEntryId: e.sets.some((x) => !x.done) ? e.id : s.entries[i + 1]?.id ?? null };
   const group = s.entries.filter((x) => x.supersetGroup === e.supersetGroup);
   const gi = group.findIndex((x) => x.id === e.id);
