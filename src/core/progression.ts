@@ -35,6 +35,15 @@ export function atTop(p: PastSets | undefined, repMax: number): boolean {
 /** Next weight: one step up, as a round number from 40 lb (multiples of 10; Leo, Nov 18 2026) */
 const nextWeight = (w: number, inc: number) => { const n = w + inc; return n >= 40 ? Math.ceil(n / 10) * 10 : n; };
 
+/**
+ * How much to add when the failure set shows the weight was too light (Leo, Nov 19 2026; *judgment*, each spare rep ≈
+ * 2–3 % of the load): reps past the target (a couple short of failure = failure − 2) beyond the top of the range,
+ * 1–2 → +5 lb, 3+ → +10 lb. Steps of 5 lb allowed here.
+ */
+export function failureJump(failReps: number, repMax: number): number {
+  return failReps - READY_MARGIN - repMax >= 3 ? 10 : 5;
+}
+
 export function progressionHint(lastSets: LoggedSet[] | undefined, repMin: number, repMax: number, increment: number,
   opts: { fail?: LoggedSet; prev?: PastSets } = {}): Hint {
   const work = (lastSets ?? []).filter(isWork);
@@ -45,8 +54,9 @@ export function progressionHint(lastSets: LoggedSet[] | undefined, repMin: numbe
   const topNow = atTop(last, repMax);
   const proven = f != null && f >= repMax + READY_MARGIN;
   const twice = topNow && atTop(opts.prev, repMax) && Math.max(...(opts.prev?.sets ?? []).filter(isWork).map((x) => x.weight!)) >= top;
-  if ((topNow && (proven || twice)) || (f != null && f - READY_MARGIN > repMax))
-    return { kind: "addWeight", weight: nextWeight(top, increment), reps: repMin, from: top };
+  // The failure set says too light: add by how far past (5 or 10 lb, not rounded to 10)
+  if (f != null && f - READY_MARGIN > repMax) return { kind: "addWeight", weight: top + failureJump(f, repMax), reps: repMin, from: top };
+  if (topNow && (proven || twice)) return { kind: "addWeight", weight: nextWeight(top, increment), reps: repMin, from: top };
   if (topNow) return { kind: "hold", weight: top, reps: repMax };
   const lastReps = work.map((x) => x.reps!);
   const targetReps = [...lastReps];

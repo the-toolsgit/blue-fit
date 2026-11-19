@@ -10,7 +10,7 @@ describe("effort check", () => {
     const g = effortGap(entry([set("w", 100, 10, "warmup"), set("a", 170, 12), set("b", 170, 12), set("c", 170, 17)]));
     expect(g).toMatchObject({ sets: [1, 2], min: 5, max: 5, failReps: 17 });
     expect(effortLine(g!)).toBe("Failure at 17 reps. Go from 12 to 15 reps to stay a couple short of failure.");
-    expect(effortLine(g!, 12)).toBe("Failure at 17 reps. The weight was too light: go heavier.");
+    expect(effortLine(g!, 12)).toBe("Failure at 17 reps. The weight was too light: add 10 lb.");
   });
   it("passes when within 2 reps, at another weight, or not done", () => {
     expect(effortGap(entry([set("a", 170, 12), set("b", 170, 14)]))).toBeNull();
@@ -27,5 +27,16 @@ describe("effort check", () => {
     const g = effortGap(entry([set("a", 100, 8), set("b", 100, 8), set("c", 100, 14)]))!;
     expect(alignHint({ kind: "beatReps", targetReps: [9, 8, 14] }, g, 15).targetReps).toEqual([12, 12, 14]);
     expect(alignHint({ kind: "beatReps", targetReps: [9, 8, 14] }, g, 10).targetReps).toEqual([9, 8, 14]); // past the range: go heavier
+  });
+});
+
+describe("too light by the failure set", () => {
+  it("adds 5 lb for 1–2 spare reps past the range, 10 lb for 3+", async () => {
+    const { failureJump, progressionHint } = await import("./progression");
+    expect(failureJump(15, 12)).toBe(5);
+    expect(failureJump(16, 12)).toBe(5);
+    expect(failureJump(17, 12)).toBe(10);
+    const set = (reps: number, type: "working" | "failure" = "working") => ({ id: String(reps) + type, weight: 110, reps, type, done: true }) as never;
+    expect(progressionHint([set(12), set(12), set(12), set(15, "failure")], 10, 12, 10)).toMatchObject({ kind: "addWeight", weight: 115 });
   });
 });

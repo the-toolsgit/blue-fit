@@ -5,6 +5,7 @@
 // a set that was too easy, but never flags one that wasn't. Too-hard sets can't be told apart from fatigue, so
 // they're not flagged. Pure and framework-free.
 import type { LoggedSet, SessionEntry } from "./types";
+import { failureJump } from "./progression";
 
 /** Every set stops with 0–2 good reps left (APP_SPEC §5.19). */
 export const REPS_LEFT_MAX = 2;
@@ -70,7 +71,7 @@ export function effortLine(g: EffortGap, repMax?: number): string {
   const lo = g.failReps - g.max, hi = g.failReps - g.min;
   const from = lo === hi ? `${lo}` : `${lo} or ${hi}`, to = g.failReps - REPS_SHORT;
   const head = `Failure at ${g.failReps} reps.`;
-  if (repMax != null && to > repMax) return `${head} The weight was too light: go heavier.`;
+  if (repMax != null && to > repMax) return `${head} The weight was too light: add ${failureJump(g.failReps, repMax)} lb.`;
   const where = g.all ? "" : ` on ${setsLabel(g).toLowerCase()}`;
   return `${head} Go from ${from} to ${to} reps${where} to stay a couple short of failure.`;
 }
