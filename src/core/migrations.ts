@@ -523,5 +523,18 @@ export const MIGRATIONS: Migration[] = [
       return changed ? { ...d, exercises: [...d.exercises, ...structuredClone(add)], routines } : null;
     },
   },
+  {
+    // Nov 19 2026: standing kickback is done with the pulley high, leaning back a little (Leo). Updates copies stored
+    // with the first (chest-height) setup.
+    id: "2026-11-19-standing-kickback-high-v2",
+    run(d) {
+      const t = (extraExercises as unknown as Exercise[]).find((x) => x.id === "standing-cable-tricep-kickback")!;
+      const e = d.exercises.find((x) => x.id === t.id);
+      const first = e?.setup[0] === "Pulley at chest height. Face the machine, step back.";
+      const sameText = JSON.stringify(e?.setup) === JSON.stringify(t.setup);
+      if (!e || (!first && !sameText) || (sameText && JSON.stringify(e.figure) === JSON.stringify(t.figure))) return null;
+      return { ...d, exercises: d.exercises.map((x) => (x.id === t.id ? { ...x, why: t.why, setup: t.setup, form: t.form, avoid: t.avoid, figure: structuredClone(t.figure) } : x)) };
+    },
+  },
 ];
 

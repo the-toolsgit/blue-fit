@@ -107,21 +107,22 @@
   "isHeavy": false,
   "compound": false,
   "bodyRegion": "upper",
-  "why": "Triceps fully contracted, standing upright.",
+  "why": "Triceps fully contracted, standing.",
   "setup": [
-   "Pulley at chest height. Face the machine, step back.",
-   "Upper arm at your side, slightly behind you."
+   "Pulley high. Face the machine, feet close to it.",
+   "Hold the frame with your free hand, lean back a little.",
+   "Upper arm at your side."
   ],
   "form": [
    "Straighten your arm down and back, squeeze 1 s.",
-   "Bend until your forearm points at the pulley."
+   "Bend back to about 90°."
   ],
   "tips": [
    "Go light. The squeeze is the point."
   ],
   "avoid": [
    "Upper arm moving.",
-   "Leaning back."
+   "Bending at the hips."
   ],
   "rangeOfMotion": "Elbow at 90° → arm straight",
   "tempo": "Straighten 1 s · Hold 1 s · Bend 3 s",
@@ -135,32 +136,32 @@
   },
   "figure": {
    "base": {
-    "hx": 56,
+    "hx": 66,
     "hy": 58,
-    "t": 0,
-    "th": 0,
-    "sh": 0,
-    "ua": -20
+    "t": -12,
+    "th": 12,
+    "sh": 12,
+    "ua": -15
    },
    "A": {
-    "fa": 70
+    "fa": 80
    },
    "B": {
-    "fa": -20
+    "fa": -15
    },
    "props": [
     {
      "line": [
-      108,
+      94,
       -14,
-      108,
+      94,
       104
      ]
     },
     {
      "cable": [
-      106,
-      34
+      92,
+      -8
      ],
      "to": "ha"
     }
