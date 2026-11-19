@@ -369,7 +369,6 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 @media (prefers-reduced-motion: reduce) { .streak-flame .spark, .streak-flame .flake { animation: none; opacity: 1; } }
 .cal-d.mark { color: #fff; font-weight: 700; text-shadow: 0 1px 3px rgba(0, 0, 0, .85); }
 .cal-d .cal-flame { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
-.cal-d .cal-num { position: relative; margin-top: 12px; }
 
 /* Muscle map caption: swipe between muscles */
 .map-caption { user-select: none; -webkit-user-select: none; cursor: grab; }

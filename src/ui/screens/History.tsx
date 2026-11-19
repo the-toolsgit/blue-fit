@@ -104,7 +104,7 @@ function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => v
           return (
             <button key={c} className={cls} disabled={!l && !skip} onClick={() => l ? onPickDay(c, l.sessionIds) : skip && setTip(c)} aria-label={`${fmtDate(c)}${l ? `: ${l.sessionIds.length} workout, ${l.sets} sets` : skipped.has(c) ? ": skipped" : ""}`}
               style={l ? { background: `linear-gradient(140deg, color-mix(in srgb, var(--neon) ${Math.round(k * 100)}%, transparent), color-mix(in srgb, var(--neon-2) ${Math.round(k * 85)}%, transparent))`, color: k > 0.6 ? "var(--on-neon)" : undefined, fontWeight: 700, boxShadow: k > 0.5 ? `0 0 ${Math.round(16 * k)}px -3px var(--glow)` : undefined } : undefined}>
-              {mark ? <><span className="cal-flame"><StreakFlame kind={mark} size={38} /></span><span className="cal-num">{Number(c.slice(8))}</span></> : Number(c.slice(8))}
+              {mark ? <><span className="cal-flame"><StreakFlame kind={mark} size={38} /></span></> : Number(c.slice(8))}
               {tip === c && <span className={"cal-tip" + (i % 7 === 0 ? " l" : i % 7 === 6 ? " r" : "")} role="status">Skipped</span>}
             </button>
           );
