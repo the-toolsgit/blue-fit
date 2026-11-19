@@ -107,22 +107,26 @@
   "isHeavy": false,
   "compound": false,
   "bodyRegion": "upper",
-  "why": "Triceps fully contracted, standing.",
+  "why": "Triceps fully contracted. Leaning back keeps the cable pulling right up to lockout.",
   "setup": [
-   "Pulley high. Face the machine, feet close to it.",
-   "Hold the frame with your free hand, lean back a little.",
-   "Upper arm at your side."
+   "Pulley high, single handle. Face the machine, feet close.",
+   "Hold the frame with your free hand, lean back with your body straight.",
+   "Upper arm at your side, slightly behind you."
   ],
   "form": [
    "Straighten your arm down and back, squeeze 1 s.",
-   "Bend back to about 90°."
+   "Bend slowly until your forearm points up at the pulley.",
+   "Only your forearm moves."
   ],
   "tips": [
-   "Go light. The squeeze is the point."
+   "Go light. The squeeze is the point.",
+   "Keep the same lean on every rep."
   ],
   "avoid": [
-   "Upper arm moving.",
-   "Bending at the hips."
+   "Elbow drifting forward (turns it into a pushdown).",
+   "Bending at the hips.",
+   "Swinging or using momentum.",
+   "Stopping before your arm is straight."
   ],
   "rangeOfMotion": "Elbow at 90° → arm straight",
   "tempo": "Straighten 1 s · Hold 1 s · Bend 3 s",

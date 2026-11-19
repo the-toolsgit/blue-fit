@@ -524,16 +524,18 @@ export const MIGRATIONS: Migration[] = [
     },
   },
   {
-    // Nov 19 2026: standing kickback is done with the pulley high, leaning back a little (Leo). Updates copies stored
-    // with the first (chest-height) setup.
-    id: "2026-11-19-standing-kickback-high-v4",
+    // Nov 19 2026: standing kickback with the pulley high, holding the frame, leaning back (Leo).
+    id: "2026-11-19-standing-kickback-v5",
     run(d) {
+      // Researched form, tips and avoids (Nov 19 2026). Updates the built-in copy while it still has any earlier
+      // version's setup (never a copy the user edited).
       const t = (extraExercises as unknown as Exercise[]).find((x) => x.id === "standing-cable-tricep-kickback")!;
       const e = d.exercises.find((x) => x.id === t.id);
-      const first = e?.setup[0] === "Pulley at chest height. Face the machine, step back.";
-      const sameText = JSON.stringify(e?.setup) === JSON.stringify(t.setup);
-      if (!e || (!first && !sameText) || (sameText && JSON.stringify(e.figure) === JSON.stringify(t.figure))) return null;
-      return { ...d, exercises: d.exercises.map((x) => (x.id === t.id ? { ...x, why: t.why, setup: t.setup, form: t.form, avoid: t.avoid, figure: structuredClone(t.figure) } : x)) };
+      const known = ["Pulley at chest height. Face the machine, step back.", "Pulley high. Face the machine, feet close to it.", t.setup[0]];
+      if (!e || e.isCustom || !known.includes(e.setup[0])) return null;
+      const keys = ["why", "setup", "form", "tips", "avoid", "figure"] as const;
+      if (keys.every((k) => JSON.stringify(e[k]) === JSON.stringify(t[k]))) return null;
+      return { ...d, exercises: d.exercises.map((x) => (x.id === t.id ? { ...x, ...structuredClone(Object.fromEntries(keys.map((k) => [k, t[k]]))) } : x)) };
     },
   },
 ];
