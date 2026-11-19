@@ -84,8 +84,7 @@ export function PlanScreen() {
             </Suspense>
             <button className="list-row add-row" onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
           </div>
-          <div className="spread" style={{ margin: "6px 4px 0" }}>
-            <p className="muted" style={{ fontSize: 12 }}>Hold to move · swipe left to delete</p>
+          <div className="row" style={{ margin: "6px 4px 0", justifyContent: "flex-end" }}>
             <button className="btn btn-quiet" style={{ color: "var(--bad)", fontSize: 13, minHeight: 44, padding: 0, whiteSpace: "nowrap" }} onClick={() => setDelDay(true)}><Icon name="trash" size={16} /> Delete day</button>
           </div>
         </>
