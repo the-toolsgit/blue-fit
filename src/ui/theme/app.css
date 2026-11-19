@@ -225,6 +225,7 @@ textarea.input { min-height: 84px; resize: vertical; }
 .vrow.off > .spread { color: var(--muted); opacity: 0.75; }
 .vedit { margin-top: 10px; padding: 12px; border-radius: var(--r-md); background: var(--surface-2); border: 1px solid var(--line); animation: fadeUp .3s var(--ease) both; }
 .vrow.off .vedit { opacity: 1; }
+.vdefault-why { margin: 4px 0 0; padding: 0 0 0 16px; font-size: 13px; color: var(--muted); display: grid; gap: 2px; }
 /* In the week map's muscle card: no box of its own, just the controls */
 .wm-detail .vedit { margin-top: 2px; padding: 0; background: none; border: 0; border-radius: 0; }
 .vdefault { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }

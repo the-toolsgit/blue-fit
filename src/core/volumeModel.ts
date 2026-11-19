@@ -63,7 +63,8 @@ export interface ModelTarget { group: MuscleGroup; min: number; max: number; why
  */
 export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Priority = "normal"): ModelTarget {
   const m = MUSCLES[group];
-  const why = [m.why];
+  // Plain reasons for the user, one per thing that changed the number (sources in the comments above).
+  const why: string[] = [];
   const perSession = SESSION_SETS[m.functions];
   const sessions = (rec: number) => Math.min(MAX_SESSIONS, 7 / rec);
   const growthMax = sessions(m.recoveryDays) * perSession;
@@ -72,26 +73,26 @@ export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Pr
   const goal = priority === "off" ? "maintenance" : p.goal;
   let min: number, max: number;
   if (goal === "growth") { min = growthMin; max = growthMax; }
-  else if (goal === "strength") { min = growthMin; max = growthMax * 0.6; why.push("strength: heavy sets, fewer but harder"); }
-  else if (goal === "endurance") { min = growthMin; max = sessions(Math.max(1.5, m.recoveryDays - 0.5)) * perSession; why.push("endurance: light sets recover sooner"); }
-  else { min = Math.max(2, growthMin / 3); max = growthMax / 3; why.push(priority === "off" ? "skipped: keep what you have (⅓, Bickel 2011)" : "maintenance: ⅓ keeps size (Bickel 2011)"); }
+  else if (goal === "strength") { min = growthMin; max = growthMax * 0.6; why.push("Strength goal: fewer, harder sets"); }
+  else if (goal === "endurance") { min = growthMin; max = sessions(Math.max(1.5, m.recoveryDays - 0.5)) * perSession; why.push("Endurance goal: light sets recover faster"); }
+  else { min = Math.max(2, growthMin / 3); max = growthMax / 3; why.push(priority === "off" ? "Skipped: a third of the sets keeps what you have" : "Maintain goal: a third of the sets keeps your size"); }
 
   // Profile: recovery capacity scales the ceiling
   let rec = 1;
-  if (p.yearsTraining < 1) { rec *= 0.75; min *= 0.75; why.push("new to training: less is enough"); }
-  else if (p.yearsTraining >= 3) { rec *= 1.1; why.push("3+ years: tolerates more"); }
-  if (p.age >= 60) { rec *= 0.85; if (goal === "maintenance") min *= 1.5; why.push("60+: slower recovery, needs more to maintain (Bickel 2011)"); }
-  else if (p.age >= 40) { rec *= 0.92; why.push("40+: a bit slower recovery"); }
-  if (p.sleepHours < 6) { rec *= 0.8; why.push("under 6 h sleep: less recovery (Lamon 2021)"); }
-  else if (p.sleepHours < 7) { rec *= 0.92; why.push("6–7 h sleep: a bit less recovery"); }
+  if (p.yearsTraining < 1) { rec *= 0.75; min *= 0.75; why.push("New to lifting: less is enough"); }
+  else if (p.yearsTraining >= 3) { rec *= 1.1; why.push("Lifting 3+ years: you can handle more"); }
+  if (p.age >= 60) { rec *= 0.85; if (goal === "maintenance") min *= 1.5; why.push("Age 60+: slower recovery"); }
+  else if (p.age >= 40) { rec *= 0.92; why.push("Age 40+: slightly slower recovery"); }
+  if (p.sleepHours < 6) { rec *= 0.8; why.push("Under 6 h sleep: slower recovery"); }
+  else if (p.sleepHours < 7) { rec *= 0.92; why.push("6–7 h sleep: slightly slower recovery"); }
   if (goal !== "maintenance") {
-    if (p.phase === "cutting") { rec *= 0.85; why.push("cutting: less fuel to recover and grow (Murphy & Koehler 2022)"); }
-    else if (p.phase === "bulking") { rec *= 1.1; why.push("bulking: extra fuel, recovers more"); }
+    if (p.phase === "cutting") { rec *= 0.85; why.push("Cutting: less food, slower recovery"); }
+    else if (p.phase === "bulking") { rec *= 1.1; why.push("Bulking: more food, faster recovery"); }
   }
   max *= rec;
   if (min > max - 2) min = max - 2;
 
-  if (priority === "priority" && goal !== "maintenance") { min = (min + max) / 2; why.push("priority: aim for the top half"); }
+  if (priority === "priority" && goal !== "maintenance") { min = (min + max) / 2; why.push("Priority: top half of the range"); }
 
   const lo = Math.max(1, Math.round(min));
   const hi = Math.max(lo + 2, Math.round(max));

@@ -97,8 +97,8 @@ export function TargetEdit({ group, label, t, current, def, onEdit }: {
       </div>
       {def && (
         <div className="vdefault">
-          <div className="spread"><span className="eyebrow">Suggested for you</span><span className="mono">{def.min}–{def.max}</span></div>
-          <p className="muted" style={{ fontSize: 12, margin: "4px 0 0" }}>{def.why.join(" · ")}</p>
+          <div className="spread"><span className="eyebrow">Suggested for you</span><span className="mono">{def.min}–{def.max} sets</span></div>
+          {!!def.why.length && <ul className="vdefault-why">{def.why.map((w) => <li key={w}>{w}</li>)}</ul>}
           {(def.min !== edit.min || def.max !== edit.max) && <button className="btn btn-quiet" style={{ minHeight: 40, padding: 0, fontSize: 14 }} onClick={() => set({ min: def.min, max: def.max })}>Use {def.min}–{def.max}</button>}
         </div>
       )}
