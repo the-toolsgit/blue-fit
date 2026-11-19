@@ -170,7 +170,7 @@ function MuscleDetail({ t }: { t: Tile | undefined }) {
           <span className="wm-fill" style={{ width: pct(week), background: c }} />
         </div>
       )}
-      <div className="wm-meta mono">{focus ? `target ${min}${max != null ? `–${max}` : "+"}` : "no target"}{t?.days ? ` · ${t.days}× a week` : ""}</div>
+      <div className="wm-meta mono">{focus ? `target ${min}${max != null ? `–${max}` : "+"}` : "no target"}{t?.days ? ` · ${t.days}×/wk` : ""}</div>
       <span className="wm-state" style={{ color: c, borderColor: c }}>{stateText(t)}</span>
       {!!t && t.jobs.length > 1 && (
         <ul className="wm-parts">
