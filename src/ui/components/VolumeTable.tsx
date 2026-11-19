@@ -90,7 +90,6 @@ export function TargetEdit({ group, label, t, current, def, onEdit }: {
         <Stepper label="Max sets" value={edit.max} step={1} decimals={false} min={edit.min ?? 0} empty={(edit.min ?? Math.max(1, Math.round(v))) + 4}
           onChange={(x) => set({ max: x })} />
       </div>
-      <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>Weekly sets. Leave max empty for no upper limit.</p>
       <div style={{ marginTop: 10 }}>
         <Seg label={`${label}: focus`} value={prio} onChange={(x: Priority) => onEdit(withPriority(edit, x, Math.max(1, Math.round(v))))}
           options={[{ v: "priority", label: "Priority" }, { v: "normal", label: "Normal" }, { v: "off", label: "Skip" }]} />
