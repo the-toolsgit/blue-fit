@@ -369,6 +369,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 @media (prefers-reduced-motion: reduce) { .streak-flame .spark, .streak-flame .flake { animation: none; opacity: 1; } }
 .cal-d.mark { color: #fff; font-weight: 700; text-shadow: 0 1px 3px rgba(0, 0, 0, .85); }
 .cal-d .cal-flame { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+/* The flame body sits 1.75 of 27 units below the svg's middle (room for sparks above): lift it so the flame itself is dead center */
+.cal-d .cal-flame svg { transform: translateY(-6.48%); }
 
 /* Muscle map caption: swipe between muscles */
 .map-caption { user-select: none; -webkit-user-select: none; cursor: grab; }
