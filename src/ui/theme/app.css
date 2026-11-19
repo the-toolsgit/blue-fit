@@ -229,7 +229,21 @@ textarea.input { min-height: 84px; resize: vertical; }
 .tempo { display: flex; flex-wrap: wrap; gap: 2px 6px; }
 .tempo > span { white-space: nowrap; }
 .tempo b { font-weight: 600; }
-.plates { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.plates { display: grid; gap: 6px; cursor: pointer; -webkit-user-select: none; user-select: none; }
+/* Look 1 · loaded sleeve: the sleeve side-on, plates on it, heaviest nearest the machine */
+.plates-sleeve { padding: 2px 0 14px; }
+.sleeve-top { display: flex; justify-content: space-between; align-items: baseline; }
+.sleeve { position: relative; height: 60px; }
+.sleeve-bar { position: absolute; left: 0; right: 0; top: 50%; height: 6px; border-radius: 3px; background: var(--line-strong); transform: translateY(-50%); }
+.sleeve-collar { position: absolute; left: 0; top: 50%; width: 10px; height: 22px; border-radius: 3px; background: var(--muted); transform: translateY(-50%); }
+.disc { position: absolute; top: 50%; width: 12px; border-radius: 4px; transform: translateY(-50%); border: 2px solid var(--neon); background: var(--surface-solid); box-shadow: 0 0 8px -2px var(--glow); }
+.disc span { position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%); font: 700 10px var(--mono); color: var(--muted); }
+/* Look 2 · spread across: label left, plates right, a band of its own */
+.plates-spread { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+/* Look 3 · compact chips */
+.plates-chips { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.plate-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 4px; border-radius: 99px; border: 1px solid var(--line-strong); font-size: 13px; }
+.plate-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--neon); display: grid; place-items: center; font: 700 9px var(--mono); }
 .plates > .plates-warn { flex-basis: 100%; }
 .plates-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .plate-group { display: inline-flex; align-items: center; gap: 5px; }
