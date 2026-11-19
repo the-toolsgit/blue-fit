@@ -22,4 +22,10 @@ describe("effort check", () => {
     expect(effortLine(effortGap(entry([set("a", 50, 8), set("b", 50, 11), set("c", 50, 12)]))!)).toBe("Failure at 12 reps. Go from 8 to 10 reps on set 1 to stay a couple short of failure.");
     expect(effortGap(entry([set("a", 50, 8), set("b", 50, 12)]), true)).toBeNull();
   });
+  it("the beat-last-time hint uses the effort target", async () => {
+    const { alignHint } = await import("./effort");
+    const g = effortGap(entry([set("a", 100, 8), set("b", 100, 8), set("c", 100, 14)]))!;
+    expect(alignHint({ kind: "beatReps", targetReps: [9, 8, 14] }, g, 15).targetReps).toEqual([12, 12, 14]);
+    expect(alignHint({ kind: "beatReps", targetReps: [9, 8, 14] }, g, 10).targetReps).toEqual([9, 8, 14]); // past the range: go heavier
+  });
 });

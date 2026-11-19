@@ -71,3 +71,16 @@ export function effortLine(g: EffortGap, repMax?: number): string {
   const where = g.all ? "" : ` on ${setsLabel(g).toLowerCase()}`;
   return `${head} Go from ${from} to ${to} reps${where} to stay a couple short of failure.`;
 }
+
+/**
+ * Make the "beat last time" hint agree with the effort tip: sets the failure set showed were too easy get the effort
+ * tip's target (failure reps − 2) instead of +1 rep. Only when that target is inside the rep range (past it, the tip
+ * says to go heavier instead). Other hints are returned as they are.
+ */
+export function alignHint<H extends { kind: string; targetReps?: number[] }>(hint: H, g: EffortGap | null, repMax: number): H {
+  if (!g || hint.kind !== "beatReps" || !hint.targetReps) return hint;
+  const to = g.failReps - REPS_SHORT;
+  if (to > repMax) return hint;
+  const targetReps = hint.targetReps.map((r, i) => (g.sets.includes(i + 1) ? Math.max(r, to) : r));
+  return { ...hint, targetReps };
+}

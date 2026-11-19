@@ -10,7 +10,7 @@ import { useRestRunning, WorkoutRestPanel, WorkoutRestPill } from "../components
 import { LOADING } from "../../core/figure/poses";
 import { groupPlates, platesFor } from "../../core/plates";
 import { progressionHint } from "../../core/progression";
-import { effortGap, effortLine } from "../../core/effort";
+import { alignHint, effortGap, effortLine } from "../../core/effort";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
   addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
@@ -381,11 +381,13 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const last = useMemo(() => lastEntryFor(finished, ex.id, s.id), [finished, ex.id, s.id]);
   const repMin = e.repMin ?? 8, repMax = e.repMax ?? repMin;
   // Deload: no progression push; a fixed reminder instead.
-  const hint = s.deload || !settings.progressionHints ? ({ kind: "none" } as const) : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb);
+  const hint0 = s.deload || !settings.progressionHints ? ({ kind: "none" } as const) : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb);
   const allDone = e.sets.length > 0 && e.sets.every((x) => x.done);
   // Effort check: the failure set shows earlier sets at the same weight left too many reps (today, and last time)
   const gap = effortGap(e, s.deload);
   const lastGap = last ? effortGap(last.entry) : null;
+  // The blue hint uses the same rep target as the effort tip, so the two never disagree
+  const hint = alignHint(hint0, lastGap, repMax);
   // The "last time" effort tip can be hidden for this exercise in this workout (remembered while the workout runs)
   const tipKey = `bf-tipx-${s.id}-${e.id}`;
   const [tipOff, setTipOff] = useState(() => { try { return sessionStorage.getItem(tipKey) === "1"; } catch { return false; } });
