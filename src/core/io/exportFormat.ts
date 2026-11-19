@@ -5,7 +5,7 @@ import { ACCENTS, type AppData } from "../types";
 export const APP_ID = "blue-fit";
 export const SCHEMA_VERSION = 1;
 
-const group = z.enum(["back", "biceps", "triceps", "sideDelts", "rearDelts", "traps", "frontDelts", "chest", "quads", "hamstrings", "adductors", "calves", "glutes", "rotatorCuff", "forearms", "abs", "neck"]);
+const group = z.enum(["back", "biceps", "triceps", "sideDelts", "rearDelts", "traps", "frontDelts", "chest", "quads", "hamstrings", "adductors", "calves", "glutes", "forearms", "abs", "neck"]);
 const str = z.string();
 const strs = z.array(z.string());
 
@@ -93,5 +93,20 @@ export function parseBackup(text: string): ParseResult {
 
 /** Upgrade older backup formats to the current one. Version 1 is the first format. */
 function migrate(raw: Record<string, unknown>): Record<string, unknown> {
-  return raw;
+  return stripRemovedGroups(raw);
+}
+
+/** Muscle groups the app no longer has (rotator cuff, removed Nov 18 2026): dropped from exercises and targets of
+ *  older backups so they still import. */
+const REMOVED_GROUPS = new Set(["rotatorCuff"]);
+function stripRemovedGroups(raw: Record<string, unknown>): Record<string, unknown> {
+  const d = raw.data as Record<string, unknown> | undefined;
+  if (!d || typeof d !== "object") return raw;
+  const ok = (g: unknown) => !REMOVED_GROUPS.has(g as string);
+  const exercises = Array.isArray(d.exercises) ? d.exercises.map((e: any) => (e && Array.isArray(e.volume)
+    ? { ...e, volume: e.volume.filter((v: any) => ok(v?.group)), stretch: Array.isArray(e.stretch) ? e.stretch.filter(ok) : e.stretch,
+        secondaryMuscles: Array.isArray(e.secondaryMuscles) ? e.secondaryMuscles.filter((m: unknown) => m !== "Rotator cuff") : e.secondaryMuscles }
+    : e)) : d.exercises;
+  const targets = Array.isArray(d.targets) ? d.targets.filter((t: any) => ok(t?.group)) : d.targets;
+  return { ...raw, data: { ...d, exercises, targets } };
 }

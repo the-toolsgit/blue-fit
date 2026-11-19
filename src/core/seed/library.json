@@ -1496,29 +1496,6 @@
    }
   },
   {
-   "id": "cable-internal-rotation",
-   "name": "Cable Internal Rotation",
-   "equipment": "cable",
-   "movement": "rotation",
-   "compound": false,
-   "volume": [
-    {
-     "group": "rotatorCuff",
-     "weight": 1
-    }
-   ],
-   "isHeavy": false,
-   "heavyWhy": "single-joint",
-   "source": {
-    "db": "free-exercise-db",
-    "id": "Cable_Internal_Rotation",
-    "mechanic": "compound",
-    "primaryMuscles": [
-     "shoulders"
-    ]
-   }
-  },
-  {
    "id": "cable-lateral-raise",
    "name": "Cable Lateral Raise",
    "equipment": "cable",
@@ -3545,52 +3522,6 @@
    }
   },
   {
-   "id": "external-rotation",
-   "name": "External Rotation",
-   "equipment": "dumbbell",
-   "movement": "rotation",
-   "compound": false,
-   "volume": [
-    {
-     "group": "rotatorCuff",
-     "weight": 1
-    }
-   ],
-   "isHeavy": false,
-   "heavyWhy": "single-joint",
-   "source": {
-    "db": "free-exercise-db",
-    "id": "External_Rotation",
-    "mechanic": "isolation",
-    "primaryMuscles": [
-     "shoulders"
-    ]
-   }
-  },
-  {
-   "id": "external-rotation-with-cable",
-   "name": "External Rotation with Cable",
-   "equipment": "cable",
-   "movement": "rotation",
-   "compound": false,
-   "volume": [
-    {
-     "group": "rotatorCuff",
-     "weight": 1
-    }
-   ],
-   "isHeavy": false,
-   "heavyWhy": "single-joint",
-   "source": {
-    "db": "free-exercise-db",
-    "id": "External_Rotation_with_Cable",
-    "mechanic": "isolation",
-    "primaryMuscles": [
-     "shoulders"
-    ]
-   }
-  },
-  {
    "id": "ez-bar-curl",
    "name": "EZ-Bar Curl",
    "equipment": "barbell",
@@ -3653,10 +3584,6 @@
     },
     {
      "group": "back",
-     "weight": 0.5
-    },
-    {
-     "group": "rotatorCuff",
      "weight": 0.5
     }
    ],
@@ -7137,29 +7064,6 @@
    "source": {
     "db": "free-exercise-db",
     "id": "Reverse_Flyes",
-    "mechanic": "isolation",
-    "primaryMuscles": [
-     "shoulders"
-    ]
-   }
-  },
-  {
-   "id": "reverse-flyes-with-external-rotation",
-   "name": "Reverse Flyes With External Rotation",
-   "equipment": "dumbbell",
-   "movement": "rotation",
-   "compound": false,
-   "volume": [
-    {
-     "group": "rotatorCuff",
-     "weight": 1
-    }
-   ],
-   "isHeavy": false,
-   "heavyWhy": "single-joint",
-   "source": {
-    "db": "free-exercise-db",
-    "id": "Reverse_Flyes_With_External_Rotation",
     "mechanic": "isolation",
     "primaryMuscles": [
      "shoulders"

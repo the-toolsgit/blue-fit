@@ -2,7 +2,7 @@
 
 export type MuscleGroup =
   | "back" | "biceps" | "triceps" | "sideDelts" | "rearDelts" | "traps" | "frontDelts" | "chest"
-  | "quads" | "hamstrings" | "adductors" | "calves" | "glutes" | "rotatorCuff" | "forearms" | "abs" | "neck";
+  | "quads" | "hamstrings" | "adductors" | "calves" | "glutes" | "forearms" | "abs" | "neck";
 
 export const MUSCLE_GROUPS: { id: MuscleGroup; label: string; region: "upper" | "lower"; priority?: boolean }[] = [
   { id: "back", label: "Back", region: "upper", priority: true },
@@ -18,7 +18,6 @@ export const MUSCLE_GROUPS: { id: MuscleGroup; label: string; region: "upper" | 
   { id: "adductors", label: "Adductors", region: "lower" },
   { id: "calves", label: "Calves", region: "lower" },
   { id: "glutes", label: "Glutes", region: "lower" },
-  { id: "rotatorCuff", label: "Rotator cuff", region: "upper" },
   { id: "forearms", label: "Forearms", region: "upper" },
   { id: "abs", label: "Abs", region: "upper" },
   { id: "neck", label: "Neck", region: "upper" },

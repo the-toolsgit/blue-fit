@@ -48,7 +48,6 @@ export const REGIONS: MapRegion[] = [
   { group: "traps", view: "back", shape: p([60, 24], [67, 28.5], [79, 32], [70, 41], [60, 62], [50, 41], [41, 32], [53, 28.5]), mirror: false },
   { group: "rearDelts", view: "back", shape: e(84, 40.5, 4.8, 5.5, 20), mirror: true },
   { group: "sideDelts", view: "back", shape: e(88.4, 45, 2.4, 6.5, -12), mirror: true },
-  { group: "rotatorCuff", view: "back", shape: e(71.5, 46, 5, 3.6, 18), mirror: true },
   { group: "back", view: "back", shape: p([62, 60], [74, 50], [77.5, 58], [76, 76], [69, 86], [62, 88]), mirror: true },
   { group: "triceps", view: "back", shape: e(87.6, 60, 3.8, 10.5, -10), mirror: true },
   { group: "forearms", view: "back", shape: e(92, 89, 3.6, 13, -10), mirror: true },

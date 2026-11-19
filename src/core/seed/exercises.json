@@ -1827,9 +1827,7 @@
       "Rear delts",
       "Mid traps"
     ],
-    "secondaryMuscles": [
-      "Rotator cuff"
-    ],
+    "secondaryMuscles": [],
     "volume": [
       {
         "group": "rearDelts",
@@ -1841,10 +1839,6 @@
       },
       {
         "group": "back",
-        "weight": 0.5
-      },
-      {
-        "group": "rotatorCuff",
         "weight": 0.5
       }
     ],

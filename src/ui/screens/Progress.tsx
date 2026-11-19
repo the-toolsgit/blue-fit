@@ -17,7 +17,7 @@ import { useStore } from "../store";
 const ago = (k: number) => (k === 0 ? "today" : k === 1 ? "yesterday" : `${k} days ago`);
 const recNote = (r: MuscleRecovery) => r.daysAgo == null ? "no hard day lately" : `${fmtNum(r.sets)} sets ${ago(r.daysAgo)}${r.slower.length ? ` · +1 day: ${r.slower.join(", ")}` : ""}`;
 /** Swipe order on the muscle map: top to bottom */
-const MAP_ORDER: MuscleGroup[] = ["neck", "traps", "frontDelts", "sideDelts", "rearDelts", "rotatorCuff", "chest", "back", "abs", "biceps", "triceps", "forearms", "glutes", "quads", "hamstrings", "adductors", "calves"];
+const MAP_ORDER: MuscleGroup[] = ["neck", "traps", "frontDelts", "sideDelts", "rearDelts", "chest", "back", "abs", "biceps", "triceps", "forearms", "glutes", "quads", "hamstrings", "adductors", "calves"];
 const REC_LABEL: Record<Recovery, string> = { recovering: "Recovering", partial: "Partly recovered", fresh: "Fresh" };
 
 export function ProgressScreen() {

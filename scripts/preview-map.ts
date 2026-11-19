@@ -4,7 +4,7 @@ import { writeFileSync } from "node:fs";
 import { GUIDES, HEAD, MAP_H, MAP_W, OUTLINE, regionsFor, type MapView } from "../src/core/muscleMap";
 
 const pts = (l: number[][]) => l.map((q) => q.join(",")).join(" ");
-const colors: Record<string, string> = { traps: "#ff3fa8", back: "#3d9bff", rearDelts: "#23e2ff", sideDelts: "#ffc53d", frontDelts: "#a6ff4d", chest: "#b14bff", biceps: "#ff7a45", triceps: "#ff7a45", forearms: "#888", quads: "#3d9bff", adductors: "#23e2ff", glutes: "#ffc53d", hamstrings: "#b14bff", calves: "#a6ff4d", rotatorCuff: "#ff3fa8" };
+const colors: Record<string, string> = { traps: "#ff3fa8", back: "#3d9bff", rearDelts: "#23e2ff", sideDelts: "#ffc53d", frontDelts: "#a6ff4d", chest: "#b14bff", biceps: "#ff7a45", triceps: "#ff7a45", forearms: "#888", quads: "#3d9bff", adductors: "#23e2ff", glutes: "#ffc53d", hamstrings: "#b14bff", calves: "#a6ff4d" };
 const view = (v: MapView, x: number) => `<g transform="translate(${x},0)">${regionsFor(v).map(({ group, shape }) => shape.kind === "ellipse"
   ? `<ellipse cx="${shape.cx}" cy="${shape.cy}" rx="${shape.rx}" ry="${shape.ry}" transform="rotate(${shape.rot ?? 0} ${shape.cx} ${shape.cy})" fill="${colors[group]}" opacity=".55"/>`
   : `<polygon points="${pts(shape.points)}" fill="${colors[group]}" opacity=".55"/>`).join("")}

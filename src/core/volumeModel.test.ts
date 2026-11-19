@@ -8,7 +8,7 @@ const base: TrainingProfile = { goal: "growth", phase: "maintaining", age: 30, y
 describe("volume model (draft 2)", () => {
   it("covers every muscle group with min < max", () => {
     const all = modelTargets(base);
-    expect(all).toHaveLength(17); // incl. abs and neck (Nov 17 2026)
+    expect(all).toHaveLength(16); // incl. abs and neck (Nov 17 2026)
     for (const t of all) expect(t.max).toBeGreaterThanOrEqual(t.min + 2);
   });
   it("biceps need fewer sets than back", () => {

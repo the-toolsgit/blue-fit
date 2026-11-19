@@ -35,7 +35,6 @@ export const MUSCLES: Record<MuscleGroup, Muscle> = {
   adductors: { functions: 1, recoveryDays: 2.5, why: "1 job: pull the leg in" },
   calves: { functions: 2, recoveryDays: 2, why: "2 muscles: straight-knee (gastroc), bent-knee (soleus); recovers fast" },
   glutes: { functions: 2, recoveryDays: 3, why: "2 jobs: hip extension, abduction; heavy, slow to recover" },
-  rotatorCuff: { functions: 1, recoveryDays: 2, why: "1 job: rotate and stabilize the shoulder" },
   forearms: { functions: 2, recoveryDays: 2, why: "2 groups: flexors, extensors; recovers fast" },
   // Added Nov 17 2026 (*judgment*, coaching sources: abs adapt to a lot of work and recover fast, RP; neck grows with
   // direct work, Conley 1997, trained 2–3×/week, Stump 1993). Start on Skip until the user sets a target.

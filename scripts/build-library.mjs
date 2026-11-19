@@ -64,8 +64,7 @@ const T = {
   upright: [["sideDelts", 1], ["traps", 0.5]],
   frontRaise: [["frontDelts", 1]],
   rear: [["rearDelts", 1]],
-  facePull: [["rearDelts", 1], ["traps", 0.5], ["back", 0.5], ["rotatorCuff", 0.5]], // as Rope Face Pull in the plan
-  rotation: [["rotatorCuff", 1]],
+  facePull: [["rearDelts", 1], ["traps", 0.5], ["back", 0.5]], // as Rope Face Pull in the plan
   shrug: [["traps", 1]],
   curl: [["biceps", 1]],
   hammer: [["biceps", 1], ["forearms", 1]],                             // as DB Hammer Curl in the plan

@@ -157,7 +157,7 @@ Empty (no finished workouts): LOADING figure, "Finish a workout and your charts,
 - **Muscle map** (§8.6) with a toggle:
   - *This week:* each region's brightness = sets done so far this training week (any range) ÷ (target max, else target min, else 12), capped at 1; regions above 0.55 glow. Caption with nothing selected: "Brighter = closer to the top of the target." Tap a region: "Biceps · 6 sets this week · target 14–20".
   - *Recovery:* recovering = pink, partly recovered = amber, fresh = green (faint); legend. Tap: "Quads · Recovering · 6 sets yesterday", "Traps · Partly recovered · 4 sets 3 days ago · +1 day: age 40+", "Calves · Fresh · no hard day lately".
-  - **Swipe** left/right on the caption under the map: selects the next/previous muscle, top to bottom (neck, traps, front delts, side delts, rear delts, rotator cuff, chest, back, abs, biceps, triceps, forearms, glutes, quads, hamstrings, adductors, calves; wraps around); the caption slides in. Faint ‹ › on both sides of the caption (vertically centered, also tappable) hint at the swipe. The chart below doesn't change.
+  - **Swipe** left/right on the caption under the map: selects the next/previous muscle, top to bottom (neck, traps, front delts, side delts, rear delts, chest, back, abs, biceps, triceps, forearms, glutes, quads, hamstrings, adductors, calves; wraps around); the caption slides in. Faint ‹ › on both sides of the caption (vertically centered, also tappable) hint at the swipe. The chart below doesn't change.
 - **Weekly sets vs target:** muscle chips; bar chart of that muscle's sets per week with the target as a green band; then a toggle "This week | Average · range" for the volume table (§3.10). Default: This week; the last choice is remembered on the phone.
 - **Weekly volume:** bar chart of tonnage per week (readout shows workouts that week).
 - **Frequency (times a week):** muscles with direct work, highest first, bar scaled to 3×/week, value "2.3×".
@@ -201,7 +201,7 @@ All IDs are strings. Dates: `YYYY-MM-DD` local calendar date; timestamps: ISO 86
 | isCustom, archived | boolean | |
 
 ### 4.2 Muscle groups and the approved mapping
-Groups: back, biceps, triceps, sideDelts, rearDelts, traps, frontDelts, chest, quads, hamstrings, adductors, calves, glutes, rotatorCuff, forearms, abs, neck (abs and neck added Nov 17 2026; their targets start on Skip, migration `2026-11-17-abs-neck`; volume model: 2 functions each, recover in 2 days, *judgment*). Priority (bold): back, biceps, triceps, side delts, rear delts, traps.
+Groups: back, biceps, triceps, sideDelts, rearDelts, traps, frontDelts, chest, quads, hamstrings, adductors, calves, glutes, forearms, abs, neck (rotator cuff removed Nov 18 2026: not trained at the gym; migration `2026-11-18-no-rotator-cuff` drops it from exercises and targets, and older backups import without it; abs and neck added Nov 17 2026; their targets start on Skip, migration `2026-11-17-abs-neck`; volume model: 2 functions each, recover in 2 days, *judgment*). Priority (bold): back, biceps, triceps, side delts, rear delts, traps.
 
 | Exercise | Direct (1) | Indirect (0.5) | Equipment / load | Increment |
 |---|---|---|---|---|
@@ -227,7 +227,7 @@ Groups: back, biceps, triceps, sideDelts, rearDelts, traps, frontDelts, chest, q
 | EZ Bar Incline Tricep Extension | triceps | — | fixed bar | 10 |
 | Machine Dip ★ | triceps | chest, front delts | machine | 5 |
 | V-Bar Pushdown | triceps | — | cable | 5 |
-| Rope Face Pull | rear delts | traps, back, rotator cuff | cable | 5 |
+| Rope Face Pull | rear delts | traps, back | cable | 5 |
 | Lean-away Lateral Raise | side delts | — | cable | 5 |
 | Lean-in Lateral Raise (not in the plan; added Nov 18 2026, `seed/extra-exercises.json`, migration `2026-11-18-lean-in-lateral-raise`): lean toward the machine, start with the hand across the body (stretch), top of the raise hardest; migration `2026-11-18-lean-in-across` updates copies stored before that | side delts | — | cable | 5 |
 | All-the-way-up Lateral Raise | side delts | traps | dumbbell / per hand | 5 |
@@ -240,7 +240,7 @@ Groups: back, biceps, triceps, sideDelts, rearDelts, traps, frontDelts, chest, q
 | Seated Calf Raise | calves | — | machine | 10 |
 | Cable One-Arm Tricep Kickback | triceps | — | cable | 5 |
 
-With the seed plan this gives exactly: back 20, biceps 16.5, triceps 18, side delts 15.5, rear delts 14.5, traps 15.5, front delts 6, chest 2, quads 13, hamstrings 8, adductors 10.5, calves 8, glutes 3.5, rotator cuff 2, forearms 3.
+With the seed plan this gives exactly: back 20, biceps 16.5, triceps 18, side delts 15.5, rear delts 14.5, traps 15.5, front delts 6, chest 2, quads 13, hamstrings 8, adductors 10.5, calves 8, glutes 3.5, forearms 3.
 
 ### 4.3 Routine
 `Routine { id, name, isCurrent, createdAt, rules?: {title, text}[], days: RoutineDay[] }`
@@ -249,7 +249,7 @@ With the seed plan this gives exactly: back 20, biceps 16.5, triceps 18, side de
 Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Sat Back & Biceps, Sun Shoulders & Traps, Mon Legs A, Tue Back & Triceps, Wed Shoulders, Traps & Arms, Thu Legs B, Fri Rest), all rests 120 s. Day ids keep their original names (mon … sun) so history stays linked.
 
 ### 4.4 Volume target
-`VolumeTarget { group, min: number | null, max: number | null, angles?, gap?, note?, off?, priority?, acceptedBelow? }` (`priority` unset = app default: back, biceps, triceps, side delts, rear delts, traps) (`off` = Skip; `acceptedBelow` is the older flag and means the same). Seed: back 14–22, biceps 14–20, triceps 14–22, side delts 14–20, rear delts 14–20, traps 12–20, front delts 6–8, quads 10+, hamstrings 8–10 (2 leg curls × 4 sets; changed from "10+, below by choice" on Nov 16 2026 by a one-time migration)"), adductors 10+, calves 8+; chest (note "0 by plan"), glutes, rotator cuff, forearms have no target ("tracked only").
+`VolumeTarget { group, min: number | null, max: number | null, angles?, gap?, note?, off?, priority?, acceptedBelow? }` (`priority` unset = app default: back, biceps, triceps, side delts, rear delts, traps) (`off` = Skip; `acceptedBelow` is the older flag and means the same). Seed: back 14–22, biceps 14–20, triceps 14–22, side delts 14–20, rear delts 14–20, traps 12–20, front delts 6–8, quads 10+, hamstrings 8–10 (2 leg curls × 4 sets; changed from "10+, below by choice" on Nov 16 2026 by a one-time migration)"), adductors 10+, calves 8+; chest (note "0 by plan"), glutes, forearms have no target ("tracked only").
 
 ### 4.5 Session (logged workout)
 `Session { id, date, title, routineId?, dayId?, startedAt, finishedAt?, status: active | finished, notes?, source: app | jefit, importKey?, deload?: boolean, entries: SessionEntry[] }`
@@ -522,7 +522,7 @@ Two views side by side (front, back), each 120 × 210 units, centered on x = 60,
 Regions (right side, mirrored unless noted; ellipse = cx, cy, rx, ry, rotation°):
 - Front: traps polygon (64,28)(75,30.5)(67,33); front delts ellipse 82.5,39.5,4.6,6,−20; side delts 88,44,2.6,7,−12; chest polygon (62,36)(76.5,36)(77.5,47)(70,53)(62,51); biceps 87,60,3.6,10,−10; forearms 92,89,3.6,13,−10; quads polygon (66,104)(77,101)(79,128)(74.5,151)(67,149)(64.5,124); adductors polygon (61.5,110)(65.5,107)(64,127)(62.5,134); calves 75,172,2.4,12,4.
 - Abs (front): polygon (61.5,55)(70,54.5)(71.5,70)(70.5,86)(61.5,92), mirrored. Neck: front polygon (60.8,22.6)(63.4,22.6)(63.6,27.6)(60.8,28.6), mirrored; back polygon, not mirrored (56.6,21.8)(63.4,21.8)(63.6,25.2)(60,23.6)(56.4,25.2).
-- Back: traps polygon, not mirrored (60,24)(67,28.5)(79,32)(70,41)(60,62)(50,41)(41,32)(53,28.5); rear delts 84,40.5,4.8,5.5,20; side delts 88.4,45,2.4,6.5,−12; rotator cuff 71.5,46,5,3.6,18; back (lats) polygon (62,60)(74,50)(77.5,58)(76,76)(69,86)(62,88); triceps 87.6,60,3.8,10.5,−10; forearms 92,89,3.6,13,−10; glutes 68.5,104,8.4,8.6; hamstrings polygon (63.5,115)(77,113)(78,136)(72.5,151)(65.5,149); calves 71,170,4.8,13,3.
+- Back: traps polygon, not mirrored (60,24)(67,28.5)(79,32)(70,41)(60,62)(50,41)(41,32)(53,28.5); rear delts 84,40.5,4.8,5.5,20; side delts 88.4,45,2.4,6.5,−12; back (lats) polygon (62,60)(74,50)(77.5,58)(76,76)(69,86)(62,88); triceps 87.6,60,3.8,10.5,−10; forearms 92,89,3.6,13,−10; glutes 68.5,104,8.4,8.6; hamstrings polygon (63.5,115)(77,113)(78,136)(72.5,151)(65.5,149); calves 71,170,4.8,13,3.
 Mirrored ellipses negate the rotation. Region fill opacity: empty 0.05; value k → 0.14 + 0.7k; recovery: fresh 0.16, others 0.75. Selected region: white-ish stroke, fill ≥ 0.5. Fill changes animate over 0.6 s.
 
 ## 9. Offline, install, deploy

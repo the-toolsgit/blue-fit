@@ -407,5 +407,23 @@ export const MIGRATIONS: Migration[] = [
     id: "2026-11-18-kelso-traps-pad",
     run: (d) => applyFigureFixes(d, "kelso-shrug"),
   },
+  {
+    // Nov 18 2026: rotator cuff is no longer a muscle group (Leo: not something trained at the gym). Dropped from
+    // every exercise's volume, stretch tags and secondary muscles, and from the targets.
+    id: "2026-11-18-no-rotator-cuff",
+    run(d) {
+      const gone = (g: string) => g === "rotatorCuff";
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        const has = e.volume.some((v) => gone(v.group)) || e.stretch?.some((g) => gone(g)) || e.secondaryMuscles.includes("Rotator cuff");
+        if (!has) return e;
+        changed = true;
+        return { ...e, volume: e.volume.filter((v) => !gone(v.group)), stretch: e.stretch?.filter((g) => !gone(g)), secondaryMuscles: e.secondaryMuscles.filter((m) => m !== "Rotator cuff") };
+      });
+      const targets = d.targets.filter((t) => !gone(t.group));
+      if (targets.length !== d.targets.length) changed = true;
+      return changed ? { ...d, exercises, targets } : null;
+    },
+  },
 ];
 

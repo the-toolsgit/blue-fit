@@ -18,7 +18,7 @@ writeFileSync(new URL("../src/core/figure/reference.fixture.json", import.meta.u
 const slug = (s) => s.toLowerCase().replace(/\(leg day\)/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 // ---- Approved mapping (Nov 14): D = direct (1 set), I = indirect (0.5 set). Reproduces the weekly volume table.
-// Extra tracked groups without targets: Glutes, Rotator cuff, Forearms.
+// Extra tracked groups without targets: Glutes, Forearms. (Rotator cuff removed Nov 18 2026.)
 const META = {
   "T-Bar Reverse Row":            { D: ["back"], I: ["rearDelts", "biceps"], eq: "plateMachine", load: "total", single: true, inc: 2.5, jefit: "Machine T Bar Reverse Row" },
   "Single-arm Cable Lat Pulldown":{ D: ["back"], I: ["biceps"], eq: "cable", load: "total", inc: 5, jefit: "Cable One-Arm Lat Pulldown" },
@@ -42,7 +42,7 @@ const META = {
   "EZ Bar Incline Tricep Extension": { D: ["triceps"], I: [], eq: "fixedBar", load: "total", inc: 10, jefit: "EZ Bar Incline Tricep Extension" },
   "Machine Dip":                  { D: ["triceps"], I: ["chest", "frontDelts"], eq: "machine", load: "total", inc: 5, jefit: "Machine Dip" },
   "V-Bar Pushdown":               { D: ["triceps"], I: [], eq: "cable", load: "total", inc: 5, jefit: "Cable Tricep Pushdown (V-Bar)" },
-  "Rope Face Pull":               { D: ["rearDelts"], I: ["traps", "back", "rotatorCuff"], eq: "cable", load: "total", inc: 5, jefit: "Cable Rope Face Pull" },
+  "Rope Face Pull":               { D: ["rearDelts"], I: ["traps", "back"], eq: "cable", load: "total", inc: 5, jefit: "Cable Rope Face Pull" },
   "Lean-away Lateral Raise":      { D: ["sideDelts"], I: [], eq: "cable", load: "total", inc: 5, jefit: "Dumbbell One-Arm Lateral Raise" },
   "All-the-way-up Lateral Raise": { D: ["sideDelts"], I: ["traps"], eq: "dumbbell", load: "perHand", inc: 5, jefit: "All the way up lateral raise" },
   "Kelso Shrug":                  { D: ["traps"], I: [], eq: "machine", load: "total", inc: 5, jefit: "Machine Seated Row" },
@@ -127,7 +127,6 @@ const targets = [
   { group: "adductors", min: 10, max: null, angles: "machine, squat, leg press" },
   { group: "calves", min: 8, max: null, angles: "standing, seated" },
   { group: "glutes", min: null, max: null, note: "tracked only" },
-  { group: "rotatorCuff", min: null, max: null, note: "tracked only" },
   { group: "forearms", min: null, max: null, note: "tracked only" },
   { group: "abs", min: null, max: null, off: true, note: "tracked only" },
   { group: "neck", min: null, max: null, off: true, note: "tracked only" },

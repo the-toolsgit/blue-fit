@@ -44,7 +44,6 @@ describe("weekly volume (fractional)", () => {
     });
   it("tracks the extra groups", () => {
     expect(rows.get("glutes")!.sets).toBe(3.5);
-    expect(rows.get("rotatorCuff")!.sets).toBe(2);
     expect(rows.get("forearms")!.sets).toBe(3);
   });
   it("target status: not-a-focus groups are off; below turns in progress while the week still plans it", () => {
