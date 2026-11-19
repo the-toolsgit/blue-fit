@@ -2,7 +2,8 @@
 // marked data-swipe-cover), edge to edge, until it's swiped back right. Replaces the ⋯ menu on workout cards. A thin
 // handle on the header's right edge opens it too (and shows the swipe exists). Touch: a mostly-horizontal move past
 // 10 px locks to the swipe; anything else scrolls as usual. One card open at a time (the parent owns `open`).
-// Tapping an action, or anywhere outside the card, closes it.
+// It stays open (also while an action's sheet is up) until it's swiped back right, the handle is tapped again, or
+// another card is opened.
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { Icon } from "./Icon";
 
@@ -76,14 +77,6 @@ export function SwipeActions({ open, onOpen, onClose, actions, label, peek, chil
     return () => { el.removeEventListener("touchstart", start); el.removeEventListener("touchmove", move); el.removeEventListener("touchend", end); el.removeEventListener("touchcancel", end); };
   }, []);
 
-  // Tap anywhere outside the card closes it
-  useEffect(() => {
-    if (!open) return;
-    const away = (e: PointerEvent) => { if (!wrap.current?.contains(e.target as Node)) cb.current.onClose(); };
-    document.addEventListener("pointerdown", away, true);
-    return () => document.removeEventListener("pointerdown", away, true);
-  }, [open]);
-
   const shown = drag ?? (open ? width : 0);
   const peeking = !!peek && !open && drag == null;
   return (
@@ -99,7 +92,7 @@ export function SwipeActions({ open, onOpen, onClose, actions, label, peek, chil
             style={{ height: band.height, transform: peeking ? undefined : `translateX(${width - shown}px)`, transition: drag == null ? "transform .32s var(--ease)" : "none", visibility: shown > 0 || peeking ? "visible" : "hidden" }}>
             {actions.map((a) => (
               <button key={a.label} type="button" className={"swipe-act" + (a.danger ? " danger" : "")} disabled={a.disabled} tabIndex={open ? 0 : -1}
-                onClick={(e) => { e.stopPropagation(); cb.current.onClose(); a.onClick(); }}>
+                onClick={(e) => { e.stopPropagation(); a.onClick(); }}>
                 <Icon name={a.icon} size={20} /><span>{a.label}</span>
               </button>
             ))}
