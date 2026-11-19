@@ -70,7 +70,8 @@ export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Rou
   const pick = (g: MuscleGroup) => {
     if (sel && partsKey(sel) === partsKey(g)) { setSel(null); return; }
     setSel(g);
-    setView(viewOf(g));
+    // Stay on this side when the muscle is drawn here (side delts, traps, forearms are on both); else switch
+    if (!regionsFor(view).some((r) => r.group === g)) setView(viewOf(g));
   };
 
   const regions = regionsFor(view);
