@@ -58,7 +58,7 @@ export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
       <WeekMap tiles={i.tiles} routine={routine} exMap={exMap} edit={edit} />
       <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Sets a week (indirect = ½) / target. Tap a muscle for its details.</p>
 
-      <h2 className="section-title">Week check</h2>
+      <h2 className="section-title">Plan check</h2>
       <div className={"glass insight-check" + (all ? " complete" : "")}>
         {all ? (
           <div className="insight-reward">
@@ -74,7 +74,7 @@ export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
               <Ring frac={passed / i.checks.length} size={56} stroke={4} />
               <span className="mono" style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", fontSize: 15 }}>{passed}/{i.checks.length}</span>
             </div>
-            <div className="muted" style={{ fontSize: 13 }}>Tick every box for a complete week.</div>
+            <div className="muted" style={{ fontSize: 13 }}>Tick every box for a complete plan.</div>
           </div>
         )}
         {i.checks.map((c) => (

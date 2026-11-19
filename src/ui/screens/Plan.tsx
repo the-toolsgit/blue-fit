@@ -86,7 +86,7 @@ export function PlanScreen() {
         </>
       )}
 
-      <h2 className="section-title">Your week</h2>
+      <h2 className="section-title">Plan overview</h2>
       <WeekInsight routine={routine} exMap={exMap} targets={targets} weekFail={weekFail} edit={{ targets, onEdit: (t) => saveTargets([t]) }} />
 
       {routine.rules?.length ? (

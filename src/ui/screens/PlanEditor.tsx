@@ -172,7 +172,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
         </>
       )}
 
-<h2 className="section-title">Your week</h2>
+<h2 className="section-title">Plan overview</h2>
       <WeekInsight routine={draft} exMap={exMap} targets={tdraft} weekFail={weekFail} />
 
       <h2 className="section-title">Weekly targets</h2>
