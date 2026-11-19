@@ -9,7 +9,7 @@ const r = seed.routines[0];
 
 describe("workout check", () => {
   it("every built-in job tag is one of its muscle's universal jobs", () => {
-    for (const e of seed.exercises) for (const [g, j] of Object.entries(e.jobs ?? {})) expect(JOBS[g as keyof typeof JOBS], `${e.id} ${g}`).toContain(j);
+    for (const e of seed.exercises) for (const [g, j] of Object.entries(e.jobs ?? {})) for (const one of [j].flat()) expect(JOBS[g as keyof typeof JOBS], `${e.id} ${g}`).toContain(one);
   });
   it("lists the checks for each goal", () => {
     const w = weekInsight(r, exMap, seed.targets);
@@ -55,5 +55,19 @@ describe("biceps parts migration", () => {
     expect(out.exercises.find((e) => e.id === "db-incline-curl")!.jobs).toEqual({ biceps: "long head" });
     expect(out.exercises.find((e) => e.id === "db-hammer-curl")!.jobs).toEqual({ biceps: "brachialis" });
     expect(out.exercises.find((e) => e.id === "my-curl")!.jobs).toEqual({ back: "row" });
+  });
+});
+
+describe("triceps heads", () => {
+  it("pushdowns count for the lateral and medial head; the migration converts old tags", async () => {
+    const { buildSeed } = await import("./seed");
+    const { MIGRATIONS } = await import("./migrations");
+    const d = buildSeed();
+    d.exercises = d.exercises.map((e) => e.id === "v-bar-pushdown" ? { ...e, jobs: { triceps: "pushdown" } } : e.id === "rope-overhead-tricep-extension" ? { ...e, jobs: { triceps: "overhead" } } : e);
+    const out = MIGRATIONS.find((m) => m.id === "2026-11-18-triceps-heads")!.run(d, "2026-11-18")!;
+    expect(out.exercises.find((e) => e.id === "v-bar-pushdown")!.jobs).toEqual({ triceps: ["lateral head", "medial head"] });
+    expect(out.exercises.find((e) => e.id === "rope-overhead-tricep-extension")!.jobs).toEqual({ triceps: "long head" });
+    const w = weekInsight(r, exMap, seed.targets);
+    expect(w.tiles.find((t) => t.group === "triceps")!.jobs.every((j) => j.state === "hit")).toBe(true);
   });
 });

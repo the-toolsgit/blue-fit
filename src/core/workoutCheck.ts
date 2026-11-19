@@ -12,7 +12,8 @@ import { estimateMinutes } from "./timeEstimate";
  * biceps: long head (arm behind the body, e.g. incline curl) + short head (arm in front, e.g. preacher curl) + brachialis
  *   (a separate muscle under the biceps that pushes it up; neutral or palms-down grip shifts work to it: hammer, reverse
  *   curl). Regional growth differs with arm position (Pedrosa 2023); Leo, Nov 18 2026: counted as biceps;
- * triceps: overhead (long head at length, Maeo 2023) + arms down (pushdown, kickback, dip);
+ * triceps: long head (arm overhead: overhead extensions grow it most, Maeo 2023) + lateral head + medial head (arm at the
+ *   side: pushdown, kickback, dip; the medial head works in every extension, so it's tagged with the arm-down moves);
  * quads: squat/press + knee extension (only extensions grow the rectus femoris well, Ema 2016; Zabaleta-Korta 2021);
  * hamstrings: knee flexion + hip hinge (curls and hinges grow different parts, Maeo 2021; Bourne 2017);
  * calves: straight-knee (gastrocnemius) + bent-knee (soleus). A muscle with one job has no job check.
@@ -20,7 +21,7 @@ import { estimateMinutes } from "./timeEstimate";
 export const JOBS: Partial<Record<MuscleGroup, string[]>> = {
   back: ["vertical pull", "row", "straight-arm"],
   biceps: ["long head", "short head", "brachialis"],
-  triceps: ["overhead", "pushdown"],
+  triceps: ["long head", "lateral head", "medial head"],
   traps: ["shrug", "mid/lower"],
   chest: ["upper", "mid/lower"],
   quads: ["squat", "extension"],
@@ -74,7 +75,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const sets = slots.reduce((a, s) => a + s.sets, 0);
   const tmap = new Map(targets.map((t) => [t.group, t]));
   const week = new Map(planVolume(routine, exMap).map((v) => [v.group, v.sets]));
-  const jobsHit = (g: MuscleGroup) => new Set(slots.map((s) => ex(s).jobs?.[g]).filter((x): x is string => !!x));
+  const jobsHit = (g: MuscleGroup) => new Set(slots.flatMap((s) => { const j = ex(s).jobs?.[g]; return j == null ? [] : Array.isArray(j) ? j : [j]; }));
   const directSets = (d: RoutineDay, g: MuscleGroup) => d.slots.filter((s) => isDirect(ex(s), g)).reduce((a, s) => a + s.sets, 0);
   const daysFor = (g: MuscleGroup) => days.filter((d) => directSets(d, g) > 0);
 

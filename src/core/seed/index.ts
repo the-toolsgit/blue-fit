@@ -12,7 +12,7 @@ import { DEFAULT_SETTINGS, type AppData, type Exercise, type MuscleGroup, type R
 export const SEED_VERSION = 1;
 
 /** Each built-in exercise's job per muscle (names from JOBS in workoutCheck.ts) and the muscles it stretches. */
-export const JOB_TAGS = exerciseJobs as unknown as Record<string, { jobs: Partial<Record<MuscleGroup, string>>; stretch?: MuscleGroup[] }>;
+export const JOB_TAGS = exerciseJobs as unknown as Record<string, { jobs: Partial<Record<MuscleGroup, string | string[]>>; stretch?: MuscleGroup[] }>;
 
 /** Plain wording for rule cards whose text is still the original. */
 export const withRuleText = (r: Routine): Routine =>

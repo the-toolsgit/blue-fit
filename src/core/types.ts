@@ -61,7 +61,8 @@ export interface Exercise {
   /** Multi-joint movement (from the exercise library). Unknown on older custom exercises. */
   compound?: boolean;
   /** Which job of each muscle this exercise trains (names from JOBS in workoutCheck.ts), e.g. { biceps: "hammer" } */
-  jobs?: Partial<Record<MuscleGroup, string>>;
+  /** Job(s) the exercise does for each muscle (names from JOBS in workoutCheck.ts); a few do two (pushdown: lateral + medial head) */
+  jobs?: Partial<Record<MuscleGroup, string | string[]>>;
   /** Muscles this exercise loads at a long length (stretched position) */
   stretch?: MuscleGroup[];
   bodyRegion: "upper" | "lower";

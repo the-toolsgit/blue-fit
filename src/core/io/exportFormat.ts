@@ -14,7 +14,7 @@ export const exerciseSchema = z.object({
   volume: z.array(z.object({ group, weight: z.union([z.literal(1), z.literal(0.5)]) })),
   equipment: z.enum(["barbell", "smith", "fixedBar", "dumbbell", "cable", "machine", "plateMachine", "bodyweight", "other"]),
   loadMode: z.enum(["perSide", "total", "perHand"]), singleSleeve: z.boolean().optional(), failureLastSet: z.boolean().optional(),
-  isHeavy: z.boolean(), compound: z.boolean().optional(), angles: z.record(z.string(), z.string()).optional(), jobs: z.record(z.string(), z.string()).optional(), stretch: z.array(group).optional(), bodyRegion: z.enum(["upper", "lower"]),
+  isHeavy: z.boolean(), compound: z.boolean().optional(), angles: z.record(z.string(), z.string()).optional(), jobs: z.record(z.string(), z.union([z.string(), z.array(z.string())])).optional(), stretch: z.array(group).optional(), bodyRegion: z.enum(["upper", "lower"]),
   why: str, setup: strs, form: strs, tips: strs, avoid: strs, rangeOfMotion: str, tempo: str,
   defaultRestSec: z.number().int().min(0).max(1800), incrementLb: z.number().min(0).max(100),
   figure: z.object({ v: z.literal("f").optional(), base: z.record(str, z.unknown()), A: z.record(str, z.number()), B: z.record(str, z.number()), props: z.array(z.record(str, z.unknown())).optional() }).nullable(),

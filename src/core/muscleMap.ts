@@ -78,6 +78,7 @@ export interface MapPart { ref: string; x: number; y: number; label: string }
 export const MAP_PARTS: Partial<Record<MuscleGroup, Partial<Record<MapView, MapPart[]>>>> = {
   frontDelts: { front: [{ ref: "frontDelts", x: 82.5, y: 39.5, label: "front" }, { ref: "sideDelts", x: 88.5, y: 45, label: "side" }], back: [{ ref: "rearDelts", x: 84, y: 40.5, label: "rear" }, { ref: "sideDelts", x: 88.6, y: 46, label: "side" }] },
   biceps: { front: [{ ref: "job:long head", x: 89, y: 55, label: "long head" }, { ref: "job:short head", x: 85.3, y: 60, label: "short head" }, { ref: "job:brachialis", x: 88.6, y: 68, label: "brachialis" }] },
+  triceps: { back: [{ ref: "job:long head", x: 86, y: 55, label: "long head" }, { ref: "job:lateral head", x: 90, y: 58, label: "lateral head" }, { ref: "job:medial head", x: 88.5, y: 67, label: "medial head" }] },
   traps: { back: [{ ref: "job:shrug", x: 66, y: 29.5, label: "upper" }, { ref: "job:mid/lower", x: 64, y: 46, label: "mid/lower" }] },
   chest: { front: [{ ref: "job:upper", x: 70, y: 39, label: "upper" }, { ref: "job:mid/lower", x: 70, y: 48.5, label: "mid/lower" }] },
   calves: { back: [{ ref: "job:straight-knee", x: 71.5, y: 163, label: "outer" }, { ref: "job:bent-knee", x: 72, y: 179, label: "inner" }] },
@@ -105,4 +106,4 @@ export function zoomBox(g: MuscleGroup, view: MapView): [number, number, number,
   return [x0 - w * 0.12, (y0 + y1) / 2 - h / 2, w, h];
 }
 /** Which side to show a muscle on: back for the back-only ones, else front */
-export const viewOf = (g: MuscleGroup): MapView => (REGIONS.some((r) => r.group === g && r.view === "front") && !["traps", "calves"].includes(g) ? "front" : "back");
+export const viewOf = (g: MuscleGroup): MapView => (REGIONS.some((r) => r.group === g && r.view === "front") && !["traps", "calves", "triceps"].includes(g) ? "front" : "back");

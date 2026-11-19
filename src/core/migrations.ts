@@ -458,5 +458,22 @@ export const MIGRATIONS: Migration[] = [
       return changed ? { ...d, exercises } : null;
     },
   },
+  {
+    // Nov 18 2026: triceps jobs are now its heads: long head (overhead) and lateral + medial head (arm at the side;
+    // was overhead / pushdown). Built-in exercises take the seed's tag; others: overhead → long head, pushdown → both.
+    id: "2026-11-18-triceps-heads",
+    run(d) {
+      let changed = false;
+      const tags = exerciseJobs as Record<string, Pick<Exercise, "jobs">>;
+      const exercises = d.exercises.map((e) => {
+        const old = e.jobs?.triceps;
+        if (old !== "overhead" && old !== "pushdown") return e;
+        changed = true;
+        const seed = !e.isCustom ? tags[e.id]?.jobs?.triceps : undefined;
+        return { ...e, jobs: { ...e.jobs, triceps: seed ?? (old === "overhead" ? "long head" : ["lateral head", "medial head"]) } };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
 ];
 
