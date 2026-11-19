@@ -265,3 +265,16 @@ describe("backup export / import", () => {
     expect(parseBackup(JSON.stringify(bad))).toMatchObject({ ok: false });
   });
 });
+
+describe("adding a warm-up set", async () => {
+  const { addSet } = await import("./session");
+  it("goes at the top, after existing warm-ups, empty", () => {
+    const set = (id: string, type: "working" | "warmup") => ({ id, type, weight: 100, reps: 10, done: false });
+    const s = { id: "s", date: "2026-11-18", title: "x", startedAt: "", status: "active" as const, source: "app" as const,
+      entries: [{ id: "e", exerciseId: "x", restSec: 90, sets: [set("w1", "warmup"), set("a", "working"), set("b", "working")] }] };
+    const sets = addSet(s, "e", "warmup").entries[0].sets;
+    expect(sets.map((x) => x.type)).toEqual(["warmup", "warmup", "working", "working"]);
+    expect(sets[1]).toMatchObject({ weight: null, reps: null });
+    expect(addSet(s, "e").entries[0].sets.at(-1)!.type).toBe("working");
+  });
+});

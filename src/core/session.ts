@@ -89,8 +89,15 @@ export function toggleDone(s: Session, entryId: string, setId: string, now: Date
   });
 }
 
+/** Add a set. A warm-up goes at the top, after any warm-ups already there, and starts empty (it's lighter than the
+ *  working weight); other sets go at the end, copying the last one. */
 export const addSet = (s: Session, entryId: string, type: LoggedSet["type"] = "working"): Session =>
   mapEntry(s, entryId, (e) => {
+    if (type === "warmup") {
+      const at = e.sets.findIndex((x) => x.type !== "warmup");
+      const i = at < 0 ? e.sets.length : at;
+      return { ...e, sets: [...e.sets.slice(0, i), newSet(null, null, "warmup"), ...e.sets.slice(i)] };
+    }
     const prev = e.sets[e.sets.length - 1];
     return { ...e, sets: [...e.sets, newSet(prev?.weight ?? null, prev?.reps ?? null, type)] };
   });
