@@ -294,6 +294,7 @@ Uses the last finished session with done sets of the exercise; considers its don
 - None → no hint.
 - **Ready for more weight** (Nov 18 2026; the top alone can be a one-off) when every regular set (the failure set left out) at the top weight reached the top of the range (`reps ≥ repMax`) **and** either the workout before also did (two workouts in a row, not weeks) or the failure set beat the top by 2+ reps (`READY_MARGIN`); also when the failure set shows failure reps − 2 is already past the top. → "You reached {repMax} reps on every set last time. Go up to {next} × {repMin}." Next = heaviest + increment, rounded up to a multiple of 10 from 40 lb (Leo: round numbers). Thresholds are *judgment*.
 - **Top reached once, not proven yet** → no tip (works the same, just quiet).
+- Tapping **Use** fills the sets and hides the hint for the rest of that workout (and keeps the lower "too light" note hidden); the next workout works it out again from what was recorded.
 - Otherwise → no tip. **Only "go up" shows in the logger** (Leo, Nov 19 2026: no tips until the weight should change; the user just keeps training). The "beat last time" target still drives nothing visible.
 - **Use** applies weight and target reps to the working sets not done yet.
 

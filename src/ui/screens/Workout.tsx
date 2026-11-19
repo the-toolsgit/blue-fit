@@ -399,6 +399,10 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const tipKey = `bf-tipx-${s.id}-${e.id}`;
   const [tipOff, setTipOff] = useState(() => { try { return sessionStorage.getItem(tipKey) === "1"; } catch { return false; } });
   const hideTip = () => { setTipOff(true); try { sessionStorage.setItem(tipKey, "1"); } catch { /* fine */ } };
+  // Tapping Use on the blue hint applies it and hides it for the rest of this workout; next workout works it out again
+  const useKey = `bf-hintused-${s.id}-${e.id}`;
+  const [hintUsed, setHintUsed] = useState(() => { try { return sessionStorage.getItem(useKey) === "1"; } catch { return false; } });
+  const markUsed = () => { setHintUsed(true); try { sessionStorage.setItem(useKey, "1"); } catch { /* fine */ } };
   // The first set that isn't done is the open one; a picked set counts only if it's done or that one (sets go in order)
   const firstOpen = e.sets.find((x) => !x.done) ?? null;
   const picked = e.sets.find((x) => x.id === sel);
@@ -446,14 +450,14 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               <span className="grow">Deload: weights are 10% lighter. Stop every set with {DELOAD.repsLeft} reps left.</span>
             </div>
           )}
-          {hint.kind !== "none" && !allDone && (
+          {hint.kind !== "none" && !hintUsed && !allDone && (
             <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
               <span style={{ color: "var(--neon-ink)" }}><Icon name="up" size={18} /></span>
               <span className="grow" style={{ fontSize: 14 }}>
                 You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.
               </span>
               <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
-                onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.reps)); }}>Use</button>
+                onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.reps)); markUsed(); }}>Use</button>
             </div>
           )}
           {lastLight && hint.kind === "none" && !allDone && !nowLight && !tipOff && (
