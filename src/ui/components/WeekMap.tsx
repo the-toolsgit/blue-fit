@@ -75,7 +75,7 @@ export function WeekMap({ tiles }: { tiles: Tile[] }) {
   // The list: muscles drawn on this side, most sets first
   const groups = [...new Set(regions.map((r) => r.group))].sort((a, b) => (byGroup.get(b)?.week ?? 0) - (byGroup.get(a)?.week ?? 0));
   const parts = sel && settled ? MAP_PARTS[partsKey(sel)]?.[view] : undefined;
-  const [bx, by, bw] = target, fs = bw * 0.07, lx = bx + bw * 0.56;
+  const [bx, by, bw] = target, fs = bw * 0.066, lx = bx + bw * 0.54;
   const partColor = (ref: string) => {
     if (!ref.startsWith("job:")) return tileColor(byGroup.get(ref as MuscleGroup));
     const job = byGroup.get(partsKey(sel!) === "frontDelts" ? sel! : partsKey(sel!))?.jobs.find((j) => j.name === ref.slice(4));
@@ -109,7 +109,7 @@ export function WeekMap({ tiles }: { tiles: Tile[] }) {
                       <g key={q.label} className="weekmap-part">
                         <circle cx={q.x} cy={q.y} r={fs * 0.18} fill={c} />
                         <polyline points={`${q.x},${q.y} ${lx - fs * 0.3},${ys[i]}`} fill="none" stroke={c} strokeWidth={1.5} vectorEffect="non-scaling-stroke" />
-                        <text x={lx} y={ys[i] + fs * 0.35} fontSize={fs} fill={c}>{q.label}</text>
+                        <text x={lx} y={ys[i] + fs * 0.35} fontSize={fs} fill={c === "var(--faint)" ? "var(--muted)" : c} stroke="var(--surface-solid)" strokeWidth={fs * 0.32} paintOrder="stroke" strokeLinejoin="round">{q.label}</text>
                       </g>
                     );
                   });
