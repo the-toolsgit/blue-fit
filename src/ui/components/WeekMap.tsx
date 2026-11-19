@@ -129,7 +129,7 @@ export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Rou
           <button type="button" className="weekmap-out" onClick={() => setSel(null)} style={{ visibility: sel ? "visible" : "hidden" }} tabIndex={sel ? 0 : -1}>Whole body</button>
         </div>
         <div className="weekmap-list">
-          {(sel && groups.includes(sel) ? [sel] : groups).map((g) => {
+          {groups.map((g) => {
             const t = byGroup.get(g), open = sel === g;
             return (
               <div key={g}>
