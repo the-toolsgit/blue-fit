@@ -20,6 +20,7 @@ import type { Exercise, LoggedSet, Session, SessionEntry, SetType } from "../../
 import { fmtNum } from "../../core/util";
 import { Stepper } from "../components/Controls";
 import { ExercisePicker } from "../components/ExercisePicker";
+import { SwipeActions, type SwipeAction } from "../components/SwipeActions";
 import { Figure } from "../components/Figure";
 import { tempoTiming } from "../../core/figure/tempo";
 import { Icon } from "../components/Icon";
@@ -62,7 +63,9 @@ export function WorkoutScreen() {
   const [focus, setFocusState] = useState<string | null>(() => { try { return sessionStorage.getItem("bf-focus-" + active?.id); } catch { return null; } });
   const setFocus = (id: string | null) => { setFocusState(id); try { if (active && id) sessionStorage.setItem("bf-focus-" + active.id, id); } catch { /* ignore */ } };
   const [detail, setDetail] = useState<string | null>(null);
-  const [menu, setMenu] = useState<string | null>(null);
+  // The card swiped open to show its actions (one at a time), and the one-time hint that cards can be swiped
+  const [swiped, setSwiped] = useState<string | null>(null);
+  const [peekId, setPeekId] = useState<string | null>(null);
   const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; entryId: string } | null>(null);
   const [noteFor, setNoteFor] = useState<string | "workout" | null>(null);
   const [finishOpen, setFinishOpen] = useState(false);
@@ -200,6 +203,26 @@ export function WorkoutScreen() {
     go(`summary/${f.id}`);
   };
 
+  // The 6 actions behind a card (swipe left): what the ⋯ menu had
+  const entryActions = (e: SessionEntry, i: number): SwipeAction[] => {
+    const linked = !!e.supersetGroup && e.supersetGroup === s.entries[i + 1]?.supersetGroup;
+    return [
+      { label: "Swap", icon: "swap", onClick: () => setPicker({ mode: "swap", entryId: e.id }) },
+      { label: linked ? "Unlink" : "Superset", icon: "link", onClick: () => commit(toggleSupersetWithNext(s, e.id)), disabled: i >= s.entries.length - 1 },
+      { label: e.notes ? "Edit note" : "Note", icon: "note", onClick: () => setNoteFor(e.id) },
+      { label: "Warm-up", icon: "plus", onClick: () => commit(addSet(s, e.id, "warmup")) },
+      { label: "How to", icon: "info", onClick: () => setDetail(e.id) },
+      { label: "Remove", icon: "trash", onClick: () => setConfirmRemove(e.id), danger: true },
+    ];
+  };
+  // First workout after this change: the current card slides open a little and back once, to show the swipe
+  useEffect(() => {
+    if (!current) return;
+    try { if (localStorage.getItem("bf-swipe-hint")) return; localStorage.setItem("bf-swipe-hint", "1"); } catch { return; }
+    setPeekId(current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current != null]);
+
   // Group consecutive superset entries for the bracket
   const groupInfo = (i: number) => {
     const e = s.entries[i];
@@ -207,8 +230,6 @@ export function WorkoutScreen() {
     const prev = s.entries[i - 1], nxt = s.entries[i + 1];
     return { label: e.supersetGroup, first: prev?.supersetGroup !== e.supersetGroup, last: nxt?.supersetGroup !== e.supersetGroup };
   };
-  const menuEntry = s.entries.find((e) => e.id === menu);
-  const menuIdx = s.entries.findIndex((e) => e.id === menu);
 
   return (
     <div className="page" style={{ paddingTop: 0 }}>
@@ -248,11 +269,14 @@ export function WorkoutScreen() {
                 <div aria-hidden style={{ position: "absolute", left: 0, top: g.first ? 18 : -14, bottom: g.last ? 18 : -14, width: 3, borderRadius: 3, background: "var(--neon-2)", boxShadow: "0 0 10px var(--neon-2)" }} />
               )}
               {g?.first && <div className="eyebrow" style={{ color: "var(--neon-2)", margin: "0 0 6px 2px", fontSize: 11 }}>Superset {g.label}</div>}
-              <EntryCard
-                s={s} e={e} ex={ex} index={i} focused={current === e.id}
-                onFocus={() => setFocus(e.id)} onToggle={(x) => onToggle(e, x)} commit={commit}
-                onDetail={() => setDetail(e.id)} onMenu={() => setMenu(e.id)} drag={drag}
-              />
+              <SwipeActions open={swiped === e.id} onOpen={() => setSwiped(e.id)} onClose={() => setSwiped((v) => (v === e.id ? null : v))}
+                label={ex.name} peek={peekId === e.id} actions={entryActions(e, i)}>
+                <EntryCard
+                  s={s} e={e} ex={ex} index={i} focused={current === e.id}
+                  onFocus={() => setFocus(e.id)} onToggle={(x) => onToggle(e, x)} commit={commit}
+                  onDetail={() => setDetail(e.id)} drag={drag}
+                />
+              </SwipeActions>
             </>)}</SortableEntry>
           );
         })}
@@ -269,23 +293,6 @@ export function WorkoutScreen() {
         return <ExerciseSheet id={de?.exerciseId ?? null} onClose={() => setDetail(null)} failWhy={de?.toFailure && !s.deload ? de.failWhy ?? [] : undefined} whyOverride={de?.exerciseId === slot?.exerciseId ? slot?.whyOverride : undefined} tipsOverride={de?.exerciseId === slot?.exerciseId ? slot?.tipsOverride : undefined} />;
       })()}
 
-      <Sheet open={!!menuEntry} onClose={() => setMenu(null)} label="Exercise options">
-        {menuEntry && (
-          <div>
-            <div className="eyebrow" style={{ padding: "0 8px 8px" }}>{exMap.get(menuEntry.exerciseId)?.name}</div>
-            <button className="menu-item" onClick={() => { setPicker({ mode: "swap", entryId: menuEntry.id }); setMenu(null); }}><Icon name="swap" /> Swap for this workout</button>
-            {menuIdx < s.entries.length - 1 && (
-              <button className="menu-item" onClick={() => { commit(toggleSupersetWithNext(s, menuEntry.id)); setMenu(null); }}>
-                <Icon name="link" /> {menuEntry.supersetGroup && menuEntry.supersetGroup === s.entries[menuIdx + 1]?.supersetGroup ? "Unlink from next (end superset)" : "Superset with next exercise"}
-              </button>
-            )}
-            <button className="menu-item" onClick={() => { setNoteFor(menuEntry.id); setMenu(null); }}><Icon name="note" /> {menuEntry.notes ? "Edit note" : "Add note"}</button>
-            <button className="menu-item" onClick={() => { commit(addSet(s, menuEntry.id, "warmup")); setMenu(null); }}><Icon name="plus" /> Add warm-up set</button>
-            <button className="menu-item" onClick={() => { setDetail(menuEntry.id); setMenu(null); }}><Icon name="info" /> How to do it</button>
-            <button className="menu-item danger" onClick={() => { setConfirmRemove(menuEntry.id); setMenu(null); }}><Icon name="trash" /> Remove from workout</button>
-          </div>
-        )}
-      </Sheet>
 
       <ExercisePicker
         open={!!picker}
@@ -362,9 +369,9 @@ function SortableEntry({ id, setRef, style, children }: { id: string; setRef: (e
   );
 }
 
-function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDetail, onMenu, drag }: {
+function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDetail, drag }: {
   s: Session; e: SessionEntry; ex: Exercise; index: number; focused: boolean;
-  onFocus: () => void; onToggle: (x: LoggedSet) => void; commit: (n: Session) => void; onDetail: () => void; onMenu: () => void; drag?: DragProps;
+  onFocus: () => void; onToggle: (x: LoggedSet) => void; commit: (n: Session) => void; onDetail: () => void; drag?: DragProps;
 }) {
   const { finished, exMap, settings } = useStore();
   const [sel, setSel] = useState<string | null>(null);
@@ -413,7 +420,6 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           </span>
           <Figure spec={ex.figure} size={88} trim still={!focused} timing={tempoTiming(ex.tempo, ex.id)} />
         </button>
-        <button className="icon-btn" style={{ marginRight: -8, marginTop: -6 }} onClick={(ev) => { ev.stopPropagation(); onMenu(); }} aria-label={`Options for ${ex.name}`}><Icon name="more" /></button>
       </div>
 
       {e.notes && <div className="row" style={{ gap: 8, alignItems: "center", fontSize: 13, marginTop: 8, padding: "8px 10px", borderRadius: 10, background: "var(--surface-2)" }}><span style={{ display: "inline-flex", flex: "none" }}><Icon name="note" size={15} /></span><span>{e.notes}</span></div>}
