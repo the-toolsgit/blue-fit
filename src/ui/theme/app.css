@@ -451,7 +451,7 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .swipe-clip { position: absolute; top: 0; left: 0; right: 0; z-index: 3; overflow: hidden; border-radius: var(--r-lg) var(--r-lg) 0 0; }
 .swipe-cover { position: absolute; top: 0; left: 0; right: 0; display: grid; grid-template-columns: repeat(6, 1fr);
   background: var(--surface-solid); border-bottom: 1px solid var(--line-strong); border-radius: var(--r-lg) var(--r-lg) 0 0; overflow: hidden;
-  box-shadow: -12px 0 24px -12px rgba(0, 0, 0, .6); }
+}
 .swipe-act { display: grid; place-items: center; align-content: center; gap: 4px; background: var(--surface-solid); color: var(--neon-ink); font: 600 11px var(--body); }
 .swipe-act span { color: var(--ink); }
 .swipe-act + .swipe-act { border-left: 1px solid var(--line); }
