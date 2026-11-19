@@ -71,3 +71,17 @@ describe("triceps heads", () => {
     expect(w.tiles.find((t) => t.group === "triceps")!.jobs.every((j) => j.state === "hit")).toBe(true);
   });
 });
+
+describe("back, glutes and abs by region", () => {
+  it("old movement tags are renamed on stored exercises", async () => {
+    const { buildSeed } = await import("./seed");
+    const { MIGRATIONS } = await import("./migrations");
+    const d = buildSeed();
+    d.exercises = d.exercises.map((e) => e.id === "wide-grip-lat-pulldown" ? { ...e, jobs: { back: "vertical pull" } } : e.id === "leg-press" ? { ...e, jobs: { quads: "squat", glutes: "hip extension" } } : e);
+    d.exercises.push({ ...d.exercises[0], id: "my-crunch", isCustom: true, jobs: { abs: "flexion", back: "row" } });
+    const out = MIGRATIONS.find((m) => m.id === "2026-11-18-job-regions")!.run(d, "2026-11-18")!;
+    expect(out.exercises.find((e) => e.id === "wide-grip-lat-pulldown")!.jobs).toEqual({ back: "lats" });
+    expect(out.exercises.find((e) => e.id === "leg-press")!.jobs).toEqual({ quads: "squat", glutes: "glute max" });
+    expect(out.exercises.find((e) => e.id === "my-crunch")!.jobs).toEqual({ abs: "rectus abs", back: "upper back" });
+  });
+});

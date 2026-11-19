@@ -1,5 +1,5 @@
 // One-time data migrations applied on launch. Each runs once (its id is remembered in meta).
-import type { AppData, Exercise, Routine } from "./types";
+import type { AppData, Exercise, MuscleGroup, Routine } from "./types";
 import { deriveSkipped } from "./session";
 import plainText from "./seed/exercise-text.json";
 import figureFixes from "./seed/figure-fixes.json";
@@ -471,6 +471,39 @@ export const MIGRATIONS: Migration[] = [
         changed = true;
         const seed = !e.isCustom ? tags[e.id]?.jobs?.triceps : undefined;
         return { ...e, jobs: { ...e.jobs, triceps: seed ?? (old === "overhead" ? "long head" : ["lateral head", "medial head"]) } };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
+  {
+    // Nov 18 2026: back, glutes and abs jobs named by region/muscle. Built-in exercises take the seed's tags; others
+    // are renamed: vertical pull / straight-arm → lats, row → upper back, hip extension → glute max,
+    // abduction → glute medius, flexion → rectus abs, rotation → obliques.
+    id: "2026-11-18-job-regions",
+    run(d) {
+      const RENAME: Partial<Record<MuscleGroup, Record<string, string>>> = {
+        back: { "vertical pull": "lats", "straight-arm": "lats", row: "upper back" },
+        glutes: { "hip extension": "glute max", abduction: "glute medius" },
+        abs: { flexion: "rectus abs", rotation: "obliques" },
+      };
+      const tags = exerciseJobs as Record<string, Pick<Exercise, "jobs">>;
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        if (!e.jobs) return e;
+        let jobs = e.jobs, touched = false;
+        for (const [g, map] of Object.entries(RENAME) as [MuscleGroup, Record<string, string>][]) {
+          const cur = jobs[g];
+          if (cur == null) continue;
+          const list = Array.isArray(cur) ? cur : [cur];
+          if (!list.some((j) => j in map)) continue;
+          touched = true;
+          const seed = !e.isCustom ? tags[e.id]?.jobs?.[g] : undefined;
+          const next = seed ?? [...new Set(list.map((j) => map[j] ?? j))];
+          jobs = { ...jobs, [g]: Array.isArray(next) && next.length === 1 ? next[0] : next };
+        }
+        if (!touched) return e;
+        changed = true;
+        return { ...e, jobs };
       });
       return changed ? { ...d, exercises } : null;
     },

@@ -72,7 +72,7 @@ export function regionsFor(view: MapView): { group: MuscleGroup; shape: RegionSh
  * Parts drawn with a labeled line when a muscle is zoomed in (Plan → Your week). `ref` is the muscle group whose
  * color the line takes (shoulders), or "job:<name>" for one of the muscle's jobs (core/workoutCheck.ts JOBS): green
  * when the plan hits it. Points are on the figure's right side (x > 60), in the view's coordinates.
- * Muscles split by movement rather than by region (back, quads, hamstrings, glutes…) have none: their jobs show as pills.
+ * Every muscle with 2+ jobs has its parts here, so the zoom shows every angle the plan should cover.
  */
 export interface MapPart { ref: string; x: number; y: number; label: string }
 export const MAP_PARTS: Partial<Record<MuscleGroup, Partial<Record<MapView, MapPart[]>>>> = {
@@ -81,7 +81,14 @@ export const MAP_PARTS: Partial<Record<MuscleGroup, Partial<Record<MapView, MapP
   triceps: { back: [{ ref: "job:long head", x: 86, y: 55, label: "long head" }, { ref: "job:lateral head", x: 90, y: 58, label: "lateral head" }, { ref: "job:medial head", x: 88.5, y: 67, label: "medial head" }] },
   traps: { back: [{ ref: "job:shrug", x: 66, y: 29.5, label: "upper" }, { ref: "job:mid/lower", x: 64, y: 46, label: "mid/lower" }] },
   chest: { front: [{ ref: "job:upper", x: 70, y: 39, label: "upper" }, { ref: "job:mid/lower", x: 70, y: 48.5, label: "mid/lower" }] },
-  calves: { back: [{ ref: "job:straight-knee", x: 71.5, y: 163, label: "outer" }, { ref: "job:bent-knee", x: 72, y: 179, label: "inner" }] },
+  calves: { back: [{ ref: "job:straight-knee", x: 71.5, y: 163, label: "upper" }, { ref: "job:bent-knee", x: 72, y: 179, label: "lower" }] },
+  back: { back: [{ ref: "job:upper back", x: 67, y: 46, label: "upper back" }, { ref: "job:lats", x: 73, y: 64, label: "lats" }, { ref: "job:lower back", x: 63.5, y: 84, label: "lower back" }] },
+  glutes: { back: [{ ref: "job:glute medius", x: 73.5, y: 98, label: "medius" }, { ref: "job:glute max", x: 69, y: 107, label: "max" }] },
+  abs: { front: [{ ref: "job:rectus abs", x: 65, y: 66, label: "rectus" }, { ref: "job:obliques", x: 70.5, y: 78, label: "obliques" }] },
+  quads: { front: [{ ref: "job:extension", x: 70.5, y: 114, label: "extension" }, { ref: "job:squat", x: 76, y: 130, label: "squat" }] },
+  hamstrings: { back: [{ ref: "job:hip hinge", x: 70, y: 120, label: "hip hinge" }, { ref: "job:knee flexion", x: 72, y: 140, label: "knee flexion" }] },
+  forearms: { front: [{ ref: "job:flexors", x: 92, y: 89, label: "flexors" }], back: [{ ref: "job:extensors", x: 92, y: 89, label: "extensors" }] },
+  neck: { front: [{ ref: "job:flexion", x: 62.2, y: 25.5, label: "flexion" }], back: [{ ref: "job:extension", x: 61.5, y: 23.2, label: "extension" }] },
 };
 /** The three delts zoom together as "shoulders" */
 export const SHOULDERS: MuscleGroup[] = ["frontDelts", "sideDelts", "rearDelts"];
@@ -106,4 +113,4 @@ export function zoomBox(g: MuscleGroup, view: MapView): [number, number, number,
   return [x0 - w * 0.12, (y0 + y1) / 2 - h / 2, w, h];
 }
 /** Which side to show a muscle on: back for the back-only ones, else front */
-export const viewOf = (g: MuscleGroup): MapView => (REGIONS.some((r) => r.group === g && r.view === "front") && !["traps", "calves", "triceps"].includes(g) ? "front" : "back");
+export const viewOf = (g: MuscleGroup): MapView => (REGIONS.some((r) => r.group === g && r.view === "front") && !["traps", "calves", "triceps", "back", "glutes", "hamstrings"].includes(g) ? "front" : "back");

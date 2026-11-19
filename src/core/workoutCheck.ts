@@ -16,10 +16,15 @@ import { estimateMinutes } from "./timeEstimate";
  *   side: pushdown, kickback, dip; the medial head works in every extension, so it's tagged with the arm-down moves);
  * quads: squat/press + knee extension (only extensions grow the rectus femoris well, Ema 2016; Zabaleta-Korta 2021);
  * hamstrings: knee flexion + hip hinge (curls and hinges grow different parts, Maeo 2021; Bourne 2017);
- * calves: straight-knee (gastrocnemius) + bent-knee (soleus). A muscle with one job has no job check.
+ * calves: straight-knee (gastrocnemius) + bent-knee (soleus);
+ * back (Nov 18 2026, by region): lats (pulldowns, straight-arm pulldowns, rows with the elbow tucked) + upper back
+ *   (rows: rhomboids, mid traps, teres) + lower back (spinal erectors: hip hinges, back extensions);
+ * glutes: glute max (hip extension: thrusts, squats, presses) + glute medius (abduction);
+ * abs: rectus abs (crunches, leg raises: "upper/lower abs" is one muscle) + obliques (twists, side bends).
+ * A muscle with one job has no job check.
  */
 export const JOBS: Partial<Record<MuscleGroup, string[]>> = {
-  back: ["vertical pull", "row", "straight-arm"],
+  back: ["lats", "upper back", "lower back"],
   biceps: ["long head", "short head", "brachialis"],
   triceps: ["long head", "lateral head", "medial head"],
   traps: ["shrug", "mid/lower"],
@@ -27,9 +32,9 @@ export const JOBS: Partial<Record<MuscleGroup, string[]>> = {
   quads: ["squat", "extension"],
   hamstrings: ["knee flexion", "hip hinge"],
   calves: ["straight-knee", "bent-knee"],
-  glutes: ["hip extension", "abduction"],
+  glutes: ["glute max", "glute medius"],
   forearms: ["flexors", "extensors"],
-  abs: ["flexion", "rotation"],
+  abs: ["rectus abs", "obliques"],
   neck: ["flexion", "extension"],
 };
 /** Muscles with direct studies showing more growth from training at long length (stretched position):
