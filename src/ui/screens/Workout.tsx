@@ -437,10 +437,6 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               <span className="grow">Deload: weights are 10% lighter. Stop every set with {DELOAD.repsLeft} reps left.</span>
             </div>
           )}
-          {lastGap && !allDone && !gap && !tipOff && (
-            <div className="effort-note"><Icon name="flame" size={18} /><span className="grow"><b>Last time: {effortLine(lastGap).replace(/^R/, "r").replace(/^S/, "s")}.</b> {EFFORT_RULE}</span>
-              <button type="button" className="tip-x" aria-label="Hide this tip" onClick={(ev) => { ev.stopPropagation(); hideTip(); }}><Icon name="close" size={16} /></button></div>
-          )}
           {hint.kind !== "none" && !allDone && (
             <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
               <span style={{ color: "var(--neon-ink)" }}><Icon name={hint.kind === "addWeight" ? "up" : "bolt"} size={18} /></span>
@@ -452,6 +448,10 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
                 onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.kind === "addWeight" ? hint.reps : hint.targetReps)); }}>Use</button>
             </div>
+          )}
+          {lastGap && !allDone && !gap && !tipOff && (
+            <div className="effort-note"><Icon name="flame" size={18} /><span className="grow"><b>Last time: {effortLine(lastGap)}.</b> {EFFORT_RULE}</span>
+              <button type="button" className="tip-x" aria-label="Hide this tip" onClick={(ev) => { ev.stopPropagation(); hideTip(); }}><Icon name="close" size={16} /></button></div>
           )}
         </div>
       )}
@@ -507,7 +507,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           );
         })}
       </div>
-      {gap && <div className="effort-note" style={{ marginTop: 8 }}><Icon name="flame" size={18} /><span><b>{effortLine(gap)}.</b> {EFFORT_RULE}</span></div>}
+      {gap && <div className="effort-note" style={{ marginTop: 8 }}><Icon name="flame" size={18} /><span><b>{effortLine(gap).replace(/^./, (c) => c.toUpperCase())}.</b> {EFFORT_RULE}</span></div>}
       <button className="btn btn-quiet btn-block" style={{ marginTop: 4, minHeight: 40, fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(addSet(s, e.id)); onFocus(); }}>
         <Icon name="plus" size={18} /> Add set
       </button>

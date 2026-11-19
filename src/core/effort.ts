@@ -52,11 +52,12 @@ export function setsLabel(g: Pick<EffortGap, "sets" | "all">): string {
   return `Sets ${run ? `${n[0]}–${n[n.length - 1]}` : n.join(", ")}`;
 }
 
-/** "Regular sets were 3 reps short of failure" / "Set 1 was 3–4 reps short of failure" */
+/** Said from the failure set's side, so it's clear why: "your failure set did 3 more reps than your other sets" /
+ *  "… 3–4 more reps than sets 1–2" / "… than set 1". */
 export function effortLine(g: EffortGap): string {
-  const many = g.sets.length > 1;
-  return `${setsLabel(g)} ${many ? "were" : "was"} ${g.min === g.max ? g.min : `${g.min}–${g.max}`} reps short of failure`;
+  const n = `${g.min === g.max ? g.min : `${g.min}–${g.max}`} more reps`;
+  return `your failure set did ${n} than ${g.all ? "your other sets" : setsLabel(g).toLowerCase()}`;
 }
 
-/** The rule, shown after the line */
-export const EFFORT_RULE = "Stop each set with 0–2 reps left.";
+/** The rule, shown after the line (regular sets stop 0–2 reps short of failure, so within 2 of the failure set) */
+export const EFFORT_RULE = "Keep the gap to 2 or less.";

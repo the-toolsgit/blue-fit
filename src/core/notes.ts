@@ -106,7 +106,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
     }
 
     const g = effortGap(e, s.deload);
-    if (g) notes.push({ kind: "effort", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too easy`, text: `${effortLine(g)}. ${EFFORT_RULE}` });
+    if (g) notes.push({ kind: "effort", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too easy`, text: `${effortLine(g).replace(/^./, (c) => c.toUpperCase())}. ${EFFORT_RULE}` });
   }
 
   const skipped = (s.skipped ?? []).filter((k) => k.sets > 0);
