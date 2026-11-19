@@ -210,6 +210,15 @@ textarea.input { min-height: 84px; resize: vertical; }
 /* ---------- Empty / loading ---------- */
 .empty { display: grid; justify-items: center; text-align: center; gap: 10px; padding: 36px 16px; color: var(--muted); }
 .loading { min-height: 100dvh; display: grid; place-items: center; align-content: center; gap: 14px; }
+/* Loading run: air streaks behind the runner (its own svg; the figure redraws every frame), lighter blue, streaming left */
+.run-wrap { position: relative; }
+.run-air { position: absolute; left: -6px; top: 0; width: 60px; height: 100%; overflow: visible; pointer-events: none; }
+.run-air line { stroke: var(--neon-ink); stroke-width: 1.6; stroke-linecap: round; opacity: .5; stroke-dasharray: 12 36; animation: air-streak 1.4s linear infinite; filter: drop-shadow(0 0 3px var(--neon-ink)); }
+.run-air line:nth-child(2) { animation-duration: 1.8s; animation-delay: -.5s; opacity: .35; }
+.run-air line:nth-child(3) { animation-duration: 1.2s; animation-delay: -.9s; }
+.run-air line:nth-child(4) { animation-duration: 2s; animation-delay: -.3s; opacity: .3; }
+@keyframes air-streak { from { stroke-dashoffset: -48; } to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .run-air line { animation: none; } }
 
 /* ---------- Volume bars ---------- */
 .vbar { position: relative; height: 8px; border-radius: 8px; background: var(--surface-2); overflow: visible; }

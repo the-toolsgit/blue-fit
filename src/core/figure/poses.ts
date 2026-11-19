@@ -16,9 +16,10 @@ export const REST: FigureSpec = {
 export const CURL: FigureSpec = { base: { ua: 0 }, A: { fa: 0 }, B: { fa: 145 }, props: [{ db: "ha" }] };
 
 /** Loading: running to the right (both legs and arms, each pair half a stride apart). */
-export const LOADING: FigureSpec = { base: { hx: 58, hy: 61, t: 12 }, A: { th: 45, sh: 5, ua: -45, fa: 50 }, B: { th: -30, sh: -95, ua: 40, fa: 125 }, props: [{ run: true }] };
-/** Loading run speed: one stride each way, no pauses */
-export const LOADING_TIMING = { ab: 340, holdB: 0, ba: 340, holdA: 0 };
+export const LOADING: FigureSpec = { base: { hx: 58, hy: 61, t: 12 }, A: { th: 45, sh: 5, ua: -45, fa: 50 }, B: { th: -30, sh: -95, ua: 40, fa: 125 },
+  props: [{ run: true }] };
+/** Loading run speed: slow motion, one stride each way, no pauses */
+export const LOADING_TIMING = { ab: 900, holdB: 0, ba: 900, holdA: 0 };
 
 /**
  * Splash flex: upper arms stay flat (horizontal); forearms rotate inward toward the head.

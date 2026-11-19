@@ -21,7 +21,18 @@ import { WorkoutScreen } from "./screens/Workout";
 const ProgressScreen = lazy(() => import("./screens/Progress").then((m) => ({ default: m.ProgressScreen })));
 const PlanEditorScreen = lazy(() => import("./screens/PlanEditor").then((m) => ({ default: m.PlanEditorScreen })));
 const EditWorkoutScreen = lazy(() => import("./screens/EditWorkout").then((m) => ({ default: m.EditWorkoutScreen })));
-const Loading = () => <div className="loading"><Figure spec={LOADING} size={120} label="Loading" timing={LOADING_TIMING} /><span className="eyebrow">Loading</span></div>;
+// The runner with air streaks behind him (a separate svg, so the CSS animation isn't restarted by the figure's redraws)
+const Loading = () => (
+  <div className="loading">
+    <div className="run-wrap">
+      <svg className="run-air" viewBox="0 0 60 120" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="10" y1="34" x2="58" y2="34" /><line x1="2" y1="52" x2="54" y2="52" /><line x1="14" y1="68" x2="58" y2="68" /><line x1="4" y1="86" x2="50" y2="86" />
+      </svg>
+      <Figure spec={LOADING} size={120} label="Loading" timing={LOADING_TIMING} />
+    </div>
+    <span className="eyebrow">Loading</span>
+  </div>
+);
 
 let swReg: ServiceWorkerRegistration | null = null;
 /** Manual check (Settings). Resolves true if a new version was found. */
