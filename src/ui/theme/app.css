@@ -476,7 +476,6 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .weekmap-nav { display: flex; align-items: center; justify-content: center; }
 .weekmap-nav .icon-btn { color: var(--neon-ink); font-size: 20px; }
 .weekmap-nav span { font: 600 11px var(--body); letter-spacing: .18em; color: var(--muted); min-width: 50px; text-align: center; }
-.weekmap-out { display: block; margin: 0 auto; min-height: 32px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--line-strong); color: var(--muted); font: 600 12px var(--body); }
 /* The list: every muscle on this side, the picked one opens in place (no inner scroll) */
 .weekmap-list { display: flex; flex-direction: column; gap: 2px; }
 .weekmap-row { width: 100%; display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 8px; border-radius: 10px; font-size: 14px; text-align: left; }

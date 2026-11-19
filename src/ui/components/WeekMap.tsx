@@ -65,7 +65,8 @@ export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Rou
     return () => { el.removeEventListener("touchstart", s); el.removeEventListener("touchend", end); };
   });
 
-  const flip = () => setView((v) => (v === "front" ? "back" : "front"));
+  // ‹ › (or a swipe) shows the other side, whole body: it also lets go of the picked muscle
+  const flip = () => { setSel(null); setView((v) => (v === "front" ? "back" : "front")); };
   const pick = (g: MuscleGroup) => {
     if (sel && partsKey(sel) === partsKey(g)) { setSel(null); return; }
     setSel(g);
@@ -125,8 +126,6 @@ export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Rou
             <span>{view.toUpperCase()}</span>
             <button type="button" className="icon-btn" onClick={flip} aria-label="Show the other side">›</button>
           </div>
-          {/* Always takes its space, so the section doesn't grow when a muscle is picked */}
-          <button type="button" className="weekmap-out" onClick={() => setSel(null)} style={{ visibility: sel ? "visible" : "hidden" }} tabIndex={sel ? 0 : -1}>Whole body</button>
           {/* The picked muscle's details, under the body (the list stays a plain list) */}
           {sel && <MuscleDetail t={byGroup.get(sel)} />}
         </div>
