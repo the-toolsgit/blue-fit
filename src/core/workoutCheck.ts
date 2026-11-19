@@ -68,12 +68,25 @@ export interface Tile {
 }
 export type CheckId = "volume" | "jobs" | "stretch" | "frequency" | "dose" | "recovery" | "reps" | "mix" | "rest" | "heavy";
 export interface Check { id: CheckId; label: string; pass: boolean; detail: string }
-export interface WeekInsight { days: number; sets: number; minutes: number; muscles: number; tiles: Tile[]; checks: Check[] }
+export interface ScorePart { id: "volume" | "parts" | "recovery" | "failure" | "twice" | "dose"; label: string; points: number; max: number; note: string }
+export interface WeekScore { score: number; parts: ScorePart[] }
+export interface WeekInsight { days: number; sets: number; minutes: number; muscles: number; tiles: Tile[]; checks: Check[]; score: WeekScore }
+
+/** The week's score: starts at SCORE_BASE, the rest is earned (weights are *judgment*, Leo Nov 18 2026). */
+export const SCORE_BASE = 20;
+export const SCORE_WEIGHTS = { volume: 25, parts: 20, recovery: 15, failure: 10, twice: 10 } as const;
+/** Points off for each muscle-workout over MAX_SESSION_SETS (*judgment*) */
+export const DOSE_PENALTY = 2;
 
 const mid = (s: Slot) => (s.repMin + s.repMax) / 2;
 const isDirect = (ex: Exercise | undefined, g: MuscleGroup) => !!ex?.volume.some((v) => v.group === g && v.weight === 1);
 
-export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targets: VolumeTarget[], goal: Goal = "growth"): WeekInsight {
+/**
+ * `failure`: muscles that get a failure set this week (from the failure picks), and whether failure applies to the
+ * goal at all. Without it, failure points are given in full.
+ */
+export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targets: VolumeTarget[], goal: Goal = "growth",
+  failure?: { muscles: Set<MuscleGroup>; eligible: (ex: Exercise) => boolean; applies: boolean }): WeekInsight {
   const days = routine.days.map((d) => ({ ...d, slots: d.slots.filter((s) => exMap.has(s.exerciseId)) })).filter((d) => d.slots.length);
   const slots = days.flatMap((d) => d.slots);
   const ex = (s: Slot) => exMap.get(s.exerciseId)!;
@@ -83,6 +96,8 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const jobsHit = (g: MuscleGroup) => new Set(slots.flatMap((s) => { const j = ex(s).jobs?.[g]; return j == null ? [] : Array.isArray(j) ? j : [j]; }));
   const directSets = (d: RoutineDay, g: MuscleGroup) => d.slots.filter((s) => isDirect(ex(s), g)).reduce((a, s) => a + s.sets, 0);
   const daysFor = (g: MuscleGroup) => days.filter((d) => directSets(d, g) > 0);
+  /** Sets a muscle gets in one workout, indirect at ½ (as weekly volume counts them) */
+  const daySets = (d: RoutineDay, g: MuscleGroup) => d.slots.reduce((a, s) => a + s.sets * (ex(s).volume.find((v) => v.group === g)?.weight ?? 0), 0);
 
   const tiles: Tile[] = [...week].filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]).map(([g, n]) => {
     const t = tmap.get(g), hit = jobsHit(g);
@@ -115,11 +130,16 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const stretch = check("stretch", "Stretch", main.filter((g) => STRETCH_MUSCLES.has(g) && !slots.some((s) => ex(s).stretch?.includes(g)))
     .map((g) => `${L(g)}: nothing at a long length`), "Every muscle loaded in the stretch");
 
-  const frequency = check("frequency", "Twice a week", main.filter((g) => daysFor(g).length < 2).map((g) => `${L(g)}: once a week`),
-    "Every muscle on 2+ days");
+  // With the same weekly sets, once or twice a week grow a muscle about the same (Schoenfeld 2019; Pelland 2024); a
+  // second day matters when the week's sets would be too many for one workout. So only muscles over MAX_SESSION_SETS a
+  // week need 2+ days.
+  const needsTwo = (g: MuscleGroup) => (week.get(g) ?? 0) > MAX_SESSION_SETS;
+  const frequency = check("frequency", "Twice a week", main.filter((g) => needsTwo(g) && daysFor(g).length < 2).map((g) => `${L(g)}: ${fmtNum(week.get(g) ?? 0)} sets in one day`),
+    `Every muscle over ${MAX_SESSION_SETS} sets a week on 2+ days`);
 
-  const dose = check("dose", "Sets per workout", uniq(main.flatMap((g) => days.filter((d) => directSets(d, g) > MAX_SESSION_SETS)
-    .map((d) => `${L(g)}: ${directSets(d, g)} sets on ${d.title}`))), `${MAX_SESSION_SETS} or fewer sets per muscle per workout`);
+  const over = main.flatMap((g) => days.filter((d) => daySets(d, g) > MAX_SESSION_SETS).map((d) => ({ g, d, n: daySets(d, g) })));
+  const dose = check("dose", "Sets per workout", uniq(over.map((o) => `${L(o.g)}: ${fmtNum(o.n)} sets on ${o.d.title}`)),
+    `${MAX_SESSION_SETS} or fewer sets per muscle per workout (indirect count ½)`);
 
   const recovery = check("recovery", "Recovery", main.flatMap((g) => {
     const hard = days.filter((d) => d.weekday != null && directSets(d, g) >= HARD_SETS);
@@ -155,6 +175,27 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
         rest(null, ENDURANCE_REST)]
     : [volume(false), jobs, stretch, frequency, dose, recovery, reps, mix, rest(GROWTH_REST, null)];
 
+  // Score: each part earns its share of points
+  const share = (good: number, all: number) => (all ? good / all : 1);
+  const inTarget = main.filter((g) => { const t = tmap.get(g)!, w = week.get(g) ?? 0; return w >= t.min! && (t.max == null || w <= t.max); }).length;
+  const allJobs = main.flatMap((g) => (JOBS[g] ?? []).length > 1 ? (JOBS[g] ?? []).map((j) => jobsHit(g).has(j)) : []);
+  const backToBack = (g: MuscleGroup) => { const hard = days.filter((d) => d.weekday != null && directSets(d, g) >= HARD_SETS); return hard.some((a) => hard.some((b) => b !== a && (b.weekday! - a.weekday! + 7) % 7 === 1)); };
+  const failEligible = failure ? main.filter((g) => slots.some((s) => isDirect(ex(s), g) && failure.eligible(ex(s)))) : [];
+  const twoNeeded = main.filter(needsTwo);
+  const W = SCORE_WEIGHTS;
+  const parts: ScorePart[] = [
+    { id: "volume", label: "Weekly volume", max: W.volume, points: W.volume * share(inTarget, main.length), note: `${inTarget} of ${main.length} muscles in target` },
+    { id: "parts", label: "Every part", max: W.parts, points: W.parts * share(allJobs.filter(Boolean).length, allJobs.length), note: `${allJobs.filter(Boolean).length} of ${allJobs.length} parts trained` },
+    { id: "recovery", label: "Recovery", max: W.recovery, points: W.recovery * share(main.filter((g) => !backToBack(g)).length, main.length), note: `${main.filter((g) => !backToBack(g)).length} of ${main.length} muscles rested` },
+    { id: "failure", label: "Failure", max: W.failure, points: !failure || !failure.applies ? W.failure : W.failure * share(failEligible.filter((g) => failure.muscles.has(g)).length, failEligible.length),
+      note: !failure || !failure.applies ? "Not used for your goal" : `${failEligible.filter((g) => failure.muscles.has(g)).length} of ${failEligible.length} muscles get a failure set` },
+    { id: "twice", label: "Twice a week", max: W.twice, points: W.twice * share(twoNeeded.filter((g) => daysFor(g).length >= 2).length, twoNeeded.length), note: twoNeeded.length ? `${twoNeeded.filter((g) => daysFor(g).length >= 2).length} of ${twoNeeded.length} big muscles on 2+ days` : "No muscle needs it" },
+    { id: "dose", label: "Sets per workout", max: 0, points: -DOSE_PENALTY * over.length, note: over.length ? `${over.length} over ${MAX_SESSION_SETS} in one workout` : `None over ${MAX_SESSION_SETS}` },
+  ];
+  // An empty plan earns nothing beyond the base
+  const earned = main.length ? parts.reduce((a, p) => a + p.points, 0) : 0;
+  const score = { score: Math.max(SCORE_BASE, Math.min(100, Math.round(SCORE_BASE + earned))), parts: parts.map((p) => ({ ...p, points: Math.round(p.points * 10) / 10 })) };
+
   const mins = days.map((d) => estimateMinutes(d.slots.reduce((a, s) => a + s.sets, 0), d.slots.length));
-  return { days: days.length, sets, minutes: mins.length ? Math.round(mins.reduce((a, b) => a + b, 0) / mins.length / 5) * 5 : 0, muscles: main.length, tiles, checks };
+  return { days: days.length, sets, minutes: mins.length ? Math.round(mins.reduce((a, b) => a + b, 0) / mins.length / 5) * 5 : 0, muscles: main.length, tiles, checks, score };
 }

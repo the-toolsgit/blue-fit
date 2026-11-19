@@ -85,3 +85,22 @@ describe("back, glutes and abs by region", () => {
     expect(out.exercises.find((e) => e.id === "my-crunch")!.jobs).toEqual({ abs: "rectus abs", back: "upper back" });
   });
 });
+
+describe("week score", () => {
+  it("starts at 20, earns up to 100, and counts indirect sets per workout", async () => {
+    const { SCORE_BASE } = await import("./workoutCheck");
+    const w = weekInsight(r, exMap, seed.targets);
+    expect(w.score.score).toBeGreaterThanOrEqual(SCORE_BASE);
+    expect(w.score.score).toBeLessThanOrEqual(100);
+    expect(w.score.parts.map((p) => p.id)).toEqual(["volume", "parts", "recovery", "failure", "twice", "dose"]);
+    // An empty plan still scores the base
+    expect(weekInsight({ ...r, days: [] }, exMap, seed.targets).score.score).toBe(SCORE_BASE);
+    // Failure points: none of the muscles get a failure set → 0 of 10
+    const none = weekInsight(r, exMap, seed.targets, "growth", { muscles: new Set(), eligible: () => true, applies: true });
+    expect(none.score.parts.find((p) => p.id === "failure")!.points).toBe(0);
+  });
+  it("twice a week is only asked of muscles over 10 sets a week", () => {
+    const w = weekInsight(r, exMap, seed.targets);
+    expect(w.checks.find((c) => c.id === "frequency")!.detail).not.toContain("Front delts");
+  });
+});

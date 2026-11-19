@@ -174,7 +174,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
       )}
 
 <h2 className="section-title">Your week</h2>
-      <WeekInsight routine={draft} exMap={exMap} targets={tdraft} failures={[...weekFail.values()].reduce((a, m) => a + m.size, 0)} />
+      <WeekInsight routine={draft} exMap={exMap} targets={tdraft} weekFail={weekFail} />
 
       <h2 className="section-title">Weekly targets</h2>
       <p className="muted" style={{ fontSize: 12, margin: "-2px 4px 8px" }}>Tap a muscle to change its weekly target, make it a priority or skip it.</p>
