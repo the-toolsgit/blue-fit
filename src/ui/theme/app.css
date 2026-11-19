@@ -96,6 +96,9 @@ ul { margin: 0; padding-left: 18px; }
 .star { color: var(--star); text-shadow: 0 0 10px color-mix(in srgb, var(--star) 60%, transparent); }
 .chips-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 2px 16px 6px; margin: 0 -16px; scrollbar-width: none; }
 .chips-scroll::-webkit-scrollbar { display: none; }
+/* Plan tab weekdays: all 7 fit across a phone, tighter spacing */
+.day-chips { gap: 4px; }
+.day-chips .chip { flex: 1 0 auto; justify-content: center; padding: 0 9px; min-height: 36px; }
 
 /* ---------- Figure ---------- */
 .fig { display: block; overflow: visible; filter: drop-shadow(0 0 2px var(--fig-glow)) drop-shadow(0 0 7px var(--fig-glow-soft)); }

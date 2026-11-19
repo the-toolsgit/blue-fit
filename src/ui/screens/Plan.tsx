@@ -70,7 +70,7 @@ export function PlanScreen() {
         onSave={(name) => saveRoutine({ ...routine, name })} />
       <p className="muted" style={{ marginTop: 4, fontSize: 14 }}>{days.length} days · {routine.days.flatMap((d) => d.slots).length} exercises · {allSets} sets a week</p>
 
-      <div className="chips-scroll" style={{ marginTop: 12 }}>
+      <div className="chips-scroll day-chips" style={{ marginTop: 12 }}>
         {chips.map((c) => <button key={c.key} className={"chip" + (!c.day?.slots.length ? " chip-rest" : "")} aria-pressed={c.key === cur.key} onClick={() => setSel(c.key)}>{c.label}</button>)}
       </div>
       {rest ? (
