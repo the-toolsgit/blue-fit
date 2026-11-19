@@ -439,5 +439,24 @@ export const MIGRATIONS: Migration[] = [
       return changed ? { ...d, routines } : null;
     },
   },
+  {
+    // Nov 18 2026: biceps jobs are now its parts: long head, short head, brachialis (was curl / hammer).
+    // Built-in exercises take the seed's tag; any other "hammer" becomes brachialis, any other "curl" is dropped
+    // (which head it trains depends on the arm position, so it can't be guessed).
+    id: "2026-11-18-biceps-parts",
+    run(d) {
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        const old = e.jobs?.biceps;
+        if (old !== "curl" && old !== "hammer") return e;
+        changed = true;
+        const seed = (exerciseJobs as Record<string, Pick<Exercise, "jobs">>)[e.id]?.jobs?.biceps;
+        const next = !e.isCustom && seed ? seed : old === "hammer" ? "brachialis" : undefined;
+        const { biceps: _b, ...rest } = e.jobs!;
+        return { ...e, jobs: next ? { ...rest, biceps: next } : rest };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
 ];
 

@@ -9,7 +9,9 @@ import { estimateMinutes } from "./timeEstimate";
 /**
  * The jobs (movement patterns / regions) each muscle needs to be fully trained, from anatomy. Varying exercises across
  * these grows a muscle more evenly than one exercise (Costa 2021; Kassiano 2022). Examples:
- * biceps: curl + hammer (neutral grip shifts work to the brachialis, a separate muscle under the biceps);
+ * biceps: long head (arm behind the body, e.g. incline curl) + short head (arm in front, e.g. preacher curl) + brachialis
+ *   (a separate muscle under the biceps that pushes it up; neutral or palms-down grip shifts work to it: hammer, reverse
+ *   curl). Regional growth differs with arm position (Pedrosa 2023); Leo, Nov 18 2026: counted as biceps;
  * triceps: overhead (long head at length, Maeo 2023) + arms down (pushdown, kickback, dip);
  * quads: squat/press + knee extension (only extensions grow the rectus femoris well, Ema 2016; Zabaleta-Korta 2021);
  * hamstrings: knee flexion + hip hinge (curls and hinges grow different parts, Maeo 2021; Bourne 2017);
@@ -17,7 +19,7 @@ import { estimateMinutes } from "./timeEstimate";
  */
 export const JOBS: Partial<Record<MuscleGroup, string[]>> = {
   back: ["vertical pull", "row", "straight-arm"],
-  biceps: ["curl", "hammer"],
+  biceps: ["long head", "short head", "brachialis"],
   triceps: ["overhead", "pushdown"],
   traps: ["shrug", "mid/lower"],
   chest: ["upper", "mid/lower"],

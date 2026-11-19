@@ -466,3 +466,22 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 @keyframes swipe-peek { 0%, 100% { transform: translateX(100%); } 30%, 55% { transform: translateX(calc(100% - 64px)); } }
 .swipe-peek { animation: swipe-peek 1.6s var(--ease) .6s 1 both; }
 @media (prefers-reduced-motion: reduce) { .swipe-peek { animation: none; } .swipe-cover { transition: none !important; } }
+
+/* Plan → Your week: body (colored by weekly target) + the muscles on that side */
+.weekmap { padding: 12px; }
+.weekmap-split { display: grid; grid-template-columns: 46% 1fr; gap: 10px; align-items: start; }
+.weekmap-map { touch-action: pan-y; -webkit-user-select: none; user-select: none; }
+.weekmap-map svg { display: block; width: 100%; height: auto; overflow: hidden; }
+.weekmap-part text { font-family: var(--body); font-weight: 600; }
+.weekmap-nav { display: flex; align-items: center; justify-content: center; }
+.weekmap-nav .icon-btn { color: var(--neon-ink); font-size: 20px; }
+.weekmap-nav span { font: 600 11px var(--body); letter-spacing: .18em; color: var(--muted); min-width: 50px; text-align: center; }
+.weekmap-out { display: block; margin: 0 auto; min-height: 32px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--line-strong); color: var(--muted); font: 600 12px var(--body); }
+.weekmap-list { display: grid; gap: 2px; }
+.weekmap-row { width: 100%; display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 8px; border-radius: 10px; font-size: 14px; text-align: left; }
+.weekmap-row.sel { background: var(--surface-2); }
+.weekmap-row i { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.weekmap-row .mono { font-size: 12px; }
+.weekmap-detail { padding: 2px 8px 10px 25px; font-size: 12px; display: grid; gap: 4px; }
+.weekmap-legend { display: flex; gap: 8px; white-space: nowrap; font-size: 10.5px; color: var(--muted); margin-top: 10px; overflow: hidden; }
+.weekmap-legend i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }

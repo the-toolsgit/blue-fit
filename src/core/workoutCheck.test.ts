@@ -22,8 +22,8 @@ describe("workout check", () => {
     const noHammer = { ...r, days: r.days.map((d) => ({ ...d, slots: d.slots.filter((s) => s.exerciseId !== "db-hammer-curl") })) };
     const w = weekInsight(noHammer, exMap, seed.targets);
     const c = w.checks.find((x) => x.id === "jobs")!;
-    expect(c.detail).toContain("Biceps: no hammer");
-    expect(w.tiles.find((t) => t.group === "biceps")!.jobs.find((a) => a.name === "hammer")!.state).toBe("none");
+    expect(c.detail).toContain("Biceps: no brachialis");
+    expect(w.tiles.find((t) => t.group === "biceps")!.jobs.find((a) => a.name === "brachialis")!.state).toBe("none");
   });
   it("hard work on back-to-back days fails recovery; light work doesn't", () => {
     const day = (id: string, weekday: number, exerciseId: string, sets: number) => ({ id, weekday, title: id, slots: [{ id: id + "s", exerciseId, sets, repMin: 8, repMax: 12, restSec: 120 }] });
@@ -37,9 +37,23 @@ describe("workout check", () => {
     const old = { ...seed, exercises: seed.exercises.map(({ jobs: _j, stretch: _s, ...e }) => (e.id === "db-hammer-curl" ? { ...e, angles: { biceps: "hammer" } } : e)) };
     const out = m.run(old, "2026-11-18")!;
     const h = out.exercises.find((e) => e.id === "db-hammer-curl")!;
-    expect(h.jobs).toEqual({ biceps: "hammer" });
+    expect(h.jobs).toEqual({ biceps: "brachialis" });
     expect("angles" in h).toBe(false);
     expect(out.exercises.find((e) => e.id === "seated-leg-curl")!.stretch).toEqual(["hamstrings"]);
     expect(m.run(out, "2026-11-18")).toBeNull();
+  });
+});
+
+describe("biceps parts migration", () => {
+  it("curl/hammer tags become long head / short head / brachialis", async () => {
+    const { buildSeed } = await import("./seed");
+    const { MIGRATIONS } = await import("./migrations");
+    const d = buildSeed();
+    d.exercises = d.exercises.map((e) => e.id === "db-incline-curl" ? { ...e, jobs: { biceps: "curl" } } : e.id === "db-hammer-curl" ? { ...e, jobs: { biceps: "hammer" } } : e);
+    d.exercises.push({ ...d.exercises[0], id: "my-curl", isCustom: true, jobs: { biceps: "curl", back: "row" } });
+    const out = MIGRATIONS.find((m) => m.id === "2026-11-18-biceps-parts")!.run(d, "2026-11-18")!;
+    expect(out.exercises.find((e) => e.id === "db-incline-curl")!.jobs).toEqual({ biceps: "long head" });
+    expect(out.exercises.find((e) => e.id === "db-hammer-curl")!.jobs).toEqual({ biceps: "brachialis" });
+    expect(out.exercises.find((e) => e.id === "my-curl")!.jobs).toEqual({ back: "row" });
   });
 });
