@@ -43,13 +43,15 @@ export function effortGap(e: SessionEntry, deload = false): EffortGap | null {
   return { sets: bad.map((b) => b.n), min: Math.min(...lefts), max: Math.max(...lefts), weight: f.weight, failReps: f.reps, all: bad.length === before.length };
 }
 
-/** "Regular sets" (all of them) / "Sets 1–2" / "Set 1" / "Sets 1, 3" */
+/** "1 and 2" / "1, 2 and 3": set numbers in words, never "1–2" (reads like a rep range) */
+export const andList = (n: (number | string)[]) => (n.length < 2 ? String(n[0] ?? "") : `${n.slice(0, -1).join(", ")} and ${n[n.length - 1]}`);
+
+/** "Regular sets" (all of them) / "Sets 1 and 2" / "Set 1" */
 export function setsLabel(g: Pick<EffortGap, "sets" | "all">): string {
   const n = g.sets;
   if (g.all && n.length > 1) return "Regular sets";
   if (n.length === 1) return `Set ${n[0]}`;
-  const run = n.every((x, i) => i === 0 || x === n[i - 1] + 1);
-  return `Sets ${run ? `${n[0]}–${n[n.length - 1]}` : n.join(", ")}`;
+  return `Sets ${andList(n)}`;
 }
 
 /** How many reps short of failure regular sets should stop (the failure set shows where failure is) */
@@ -58,12 +60,12 @@ export const REPS_SHORT = 2;
 /**
  * The tip, in plain words: where failure was, and what the regular sets should do.
  * "Failure at 14 reps. Go from 8 to 12 reps to stay a couple short of failure."
- * Only some sets short: "… Go from 8 to 12 reps on set 1 …". Different reps: "from 8–9".
+ * Only some sets short: "… Go from 8 to 12 reps on sets 1 and 2 …". Different reps: "from 8 or 9".
  * If that target is past the top of the rep range, more reps isn't the answer: "The weight was too light: go heavier."
  */
 export function effortLine(g: EffortGap, repMax?: number): string {
   const lo = g.failReps - g.max, hi = g.failReps - g.min;
-  const from = lo === hi ? `${lo}` : `${lo}–${hi}`, to = g.failReps - REPS_SHORT;
+  const from = lo === hi ? `${lo}` : `${lo} or ${hi}`, to = g.failReps - REPS_SHORT;
   const head = `Failure at ${g.failReps} reps.`;
   if (repMax != null && to > repMax) return `${head} The weight was too light: go heavier.`;
   const where = g.all ? "" : ` on ${setsLabel(g).toLowerCase()}`;

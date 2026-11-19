@@ -1,7 +1,7 @@
 // Notes at the end of a workout (summary → Notes): what changed against your past workouts and what to do about it.
 // Pure and framework-free. Numbers marked *judgment* are our own reasoning (coaching practice, not studies).
 import { DELOAD, stallCheck } from "./deload";
-import { effortGap, effortLine, failureSet } from "./effort";
+import { andList, effortGap, effortLine, failureSet } from "./effort";
 import { epley } from "./oneRm";
 import type { Exercise, LoggedSet, Routine, Session, SessionEntry } from "./types";
 import { fmtNum } from "./util";
@@ -46,15 +46,14 @@ function previous(history: Session[], s: Session, exerciseId: string): SessionEn
   return undefined;
 }
 
-/** Which sets at this weight fell short, in plain words: "on every set" / "on sets 1–2" / "on set 1". */
+/** Which sets at this weight fell short, in plain words: "on every set" / "on sets 1 and 2" / "on set 1". */
 function shortSets(sets: LoggedSet[], repMin: number): { reps: string; where: string } {
   const short = sets.map((x, i) => ({ n: i + 1, r: x.reps! })).filter((x) => x.r < repMin);
   const lo = Math.min(...short.map((x) => x.r)), hi = Math.max(...short.map((x) => x.r));
-  const reps = `${lo === hi ? lo : `${lo}–${hi}`} reps`;
+  const reps = `${lo === hi ? lo : `${lo} or ${hi}`} reps`;
   if (short.length === sets.length && sets.length > 1) return { reps, where: "on every set" };
   if (short.length === 1) return { reps, where: `on set ${short[0].n}` };
-  const run = short.every((x, i) => i === 0 || x.n === short[i - 1].n + 1);
-  return { reps, where: `on sets ${run ? `${short[0].n}–${short[short.length - 1].n}` : short.map((x) => x.n).join(", ")}` };
+  return { reps, where: `on sets ${andList(short.map((x) => x.n))}` };
 }
 
 export function workoutNotes(s: Session, history: Session[], exMap: Map<string, Exercise>, routine?: Routine): WorkoutNote[] {
