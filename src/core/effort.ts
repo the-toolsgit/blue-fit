@@ -63,6 +63,9 @@ export const REPS_SHORT = 2;
  * Only some sets short: "… Go from 8 to 12 reps on sets 1 and 2 …". Different reps: "from 8 or 9".
  * If that target is past the top of the rep range, more reps isn't the answer: "The weight was too light: go heavier."
  */
+/** The failure set shows the weight was too light (a couple short of failure is past the top of the range): time to go heavier. */
+export function tooLight(g: EffortGap, repMax: number): boolean { return g.failReps - REPS_SHORT > repMax; }
+
 export function effortLine(g: EffortGap, repMax?: number): string {
   const lo = g.failReps - g.max, hi = g.failReps - g.min;
   const from = lo === hi ? `${lo}` : `${lo} or ${hi}`, to = g.failReps - REPS_SHORT;

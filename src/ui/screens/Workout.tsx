@@ -4,13 +4,13 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode }
 import { DndContext, MeasuringStrategy, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors, type DragEndEvent, type DragStartEvent, type DraggableAttributes, type DraggableSyntheticListeners, type Modifier } from "@dnd-kit/core";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { MANUAL_WHY, TEST_WHY } from "../../core/failure";
+import { MANUAL_WHY } from "../../core/failure";
 import { orderSlotsLike } from "../../core/routineEdit";
 import { useRestRunning, WorkoutRestPanel, WorkoutRestPill } from "../components/RestTimer";
 import { LOADING } from "../../core/figure/poses";
 import { groupPlates, platesFor } from "../../core/plates";
 import { progressionHint } from "../../core/progression";
-import { alignHint, effortGap, effortLine, failureSet } from "../../core/effort";
+import { alignHint, effortGap, effortLine, failureSet, tooLight } from "../../core/effort";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
   addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, prevEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
@@ -389,7 +389,12 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const gap = effortGap(e, s.deload);
   const lastGap = last ? effortGap(last.entry) : null;
   // The blue hint uses the same rep target as the effort tip, so the two never disagree
-  const hint = alignHint(hint0, lastGap, repMax);
+  const hint1 = alignHint(hint0, lastGap, repMax);
+  // Tips stay quiet until the weight should change (Leo, Nov 19 2026): only "go up" shows, and effort notes only
+  // when the failure set says the weight was too light.
+  const hint = hint1.kind === "addWeight" ? hint1 : ({ kind: "none" } as const);
+  const lastLight = !!lastGap && tooLight(lastGap, last?.entry.repMax ?? repMax);
+  const nowLight = !!gap && tooLight(gap, repMax);
   // The "last time" effort tip can be hidden for this exercise in this workout (remembered while the workout runs)
   const tipKey = `bf-tipx-${s.id}-${e.id}`;
   const [tipOff, setTipOff] = useState(() => { try { return sessionStorage.getItem(tipKey) === "1"; } catch { return false; } });
@@ -432,7 +437,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
 
       {e.notes && <div className="row" style={{ gap: 8, alignItems: "center", fontSize: 13, marginTop: 8, padding: "8px 10px", borderRadius: 10, background: "var(--surface-2)" }}><span style={{ display: "inline-flex", flex: "none" }}><Icon name="note" size={15} /></span><span>{e.notes}</span></div>}
 
-      {(last || hint.kind !== "none" || s.deload || (lastGap && !allDone)) && (
+      {(last || hint.kind !== "none" || s.deload || (lastLight && !allDone)) && (
         <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
           {last && <div className="mono muted" style={{ fontSize: 13 }}>Last: {setsLine(last.entry.sets)}</div>}
           {s.deload && !allDone && (
@@ -443,20 +448,16 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           )}
           {hint.kind !== "none" && !allDone && (
             <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
-              <span style={{ color: "var(--neon-ink)" }}><Icon name={hint.kind === "addWeight" ? "up" : hint.kind === "hold" ? "check" : "bolt"} size={18} /></span>
+              <span style={{ color: "var(--neon-ink)" }}><Icon name="up" size={18} /></span>
               <span className="grow" style={{ fontSize: 14 }}>
-                {hint.kind === "addWeight"
-                  ? <>You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>
-                  : hint.kind === "hold"
-                    ? <>You hit {hint.reps} on every set last time. {e.failWhy?.includes(TEST_WHY) ? "Your last set to failure shows if you're ready for more weight." : <>Do it once more at <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b>, then add weight.</>}</>
-                    : <>Beat last time: <b className="mono">{fmtNum(hint.weight)} × {hint.targetReps.join(", ")}</b></>}
+                You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.
               </span>
               <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
-                onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.kind === "beatReps" ? hint.targetReps : hint.reps)); }}>Use</button>
+                onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.reps)); }}>Use</button>
             </div>
           )}
-          {lastGap && !allDone && !gap && !tipOff && (
-            <div className="effort-note"><Icon name="flame" size={18} /><span className="grow"><b>Last time:</b> {effortLine(lastGap, last?.entry.repMax ?? repMax).replace(/^F/, "f")}</span>
+          {lastLight && !allDone && !nowLight && !tipOff && (
+            <div className="effort-note"><Icon name="flame" size={18} /><span className="grow"><b>Last time:</b> {effortLine(lastGap!, last?.entry.repMax ?? repMax).replace(/^F/, "f")}</span>
               <button type="button" className="tip-x" aria-label="Hide this tip" onClick={(ev) => { ev.stopPropagation(); hideTip(); }}><Icon name="close" size={16} /></button></div>
           )}
         </div>
@@ -513,7 +514,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           );
         })}
       </div>
-      {gap && <div className="effort-note" style={{ marginTop: 8 }}><Icon name="flame" size={18} /><span>{effortLine(gap, repMax)}</span></div>}
+      {nowLight && <div className="effort-note" style={{ marginTop: 8 }}><Icon name="flame" size={18} /><span>{effortLine(gap!, repMax)}</span></div>}
       <button className="btn btn-quiet btn-block" style={{ marginTop: 4, minHeight: 40, fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(addSet(s, e.id)); onFocus(); }}>
         <Icon name="plus" size={18} /> Add set
       </button>
