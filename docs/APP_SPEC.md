@@ -56,7 +56,7 @@ Before the app loads, the screen is already the app background (no white flash):
 Shown once each time the app is launched (not when it returns from the background). Full screen in the app background with the haze/grid: the FLEX figure (150 px, no floor line, strong glow) centered, "BLUE FIT" below (display 34 px, letter-spacing .22em, neon). Timing (~2.1 s): figure and wordmark fade/scale in (0.38 s); the figure flexes once over 0.42 s (ease-out) and holds for the rest of 1 s and through the zoom: SPLASH_FLEX pose, upper arms flat (90°), forearms curl in from 180° to 200°, and a bicep bump rises on each upper arm (quadratic arc from 16% to 66% of the upper arm, peak 3.5 units above it at k = 1, filled); then a 0.72 s zoom (cubic ease-in-out, exponential scale) centered on the figure's head while a circular window matching the inside of the head ring reveals the app; the wordmark fades out in the first third of the zoom. Reduced motion: no flex or zoom, it fades out after 0.35 s.
 
 ### 3.1 Loading
-Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose), label "LOADING". Storage error: toast "Storage unavailable. This browser blocked local storage. Private mode can cause this."
+Shown while storage opens. The line figure running to the right (LOADING pose: both legs and arms, each pair half a stride apart, figure prop `run`; one stride each way in 0.34 s, no pauses), label "LOADING". Storage error: toast "Storage unavailable. This browser blocked local storage. Private mode can cause this."
 
 ### 3.2 Today
 - **Deload suggestion** (top, §5.16; not while a workout is running or a deload is active): REST figure, "SUGGESTION", "TIME FOR A DELOAD?", the reason ("It's been 7 weeks since your last deload." or "…since your first logged workout." / "18 of your 30 exercises haven't gone up in 4 weeks."), the rule ("Half the sets, 10% lighter, stop every set with 3–4 reps left. Same days and exercises. Until Friday."), **Deload this week** (starts it; toast "Deload week on · Back to normal after Friday.") and **Not now**. Native app: this becomes a notification.
@@ -89,7 +89,7 @@ Shown while storage opens. The line figure doing a dumbbell curl (LOADING pose),
 - **Marking a set done:** saves immediately; later empty sets of the same type copy its weight/reps; light haptic where supported; PR check (§5.4) shows a pink "NEW PR!" toast with a flexing figure and sparks; the rest timer starts (§5.7) if auto-start is on; focus moves to the next exercise when this one is finished (smooth scroll).
 - **Notes** (exercise and workout): a card floating in the middle of the visible screen (above the keyboard), all corners rounded: title, text box, **Save**. Tap outside to close (a change is saved).
 - **Finish sheet:** "FINISH WORKOUT?" with a **notes** button on the right (neon when notes exist; opens Workout notes, and closing them returns to this sheet), "x of y sets done · n min. k sets not done will be dropped.", **Finish**, Keep going, Discard workout (confirm: "Everything logged in it is deleted. This can't be undone."). Finishing with no done sets goes to the discard confirmation.
-- **Empty states:** no active workout → LOADING figure, "No workout running", button to Today. A workout with no exercises → "Add your first exercise."
+- **Empty states:** no active workout → curl figure (CURL pose), "No workout running", button to Today. A workout with no exercises → "Add your first exercise."
 - Screen stays on while the logger is open (setting, §3.8).
 - **Resume:** the active session lives in storage; closing the app and reopening restores it exactly.
 
@@ -151,7 +151,7 @@ Opened from the picker (new) or the exercise page's **Edit** button, which shows
 One row per muscle group (§4.2), always all of them: name (priority muscles bold), value / target, status (✓, ⚠ above, ⚠ below, or "in progress"), a neon bar with a dashed target band (the weekly goal range), and a detail line (days · angles · gap). In the live "This week" table, a muscle under its target shows "in progress" (muted, normal bar) while a planned day left in this training week (today included until today's day is finished) still works it; only when none is left does it show ⚠ below. Muscles that aren't a focus (no target, or the plan accepts being below it, like hamstrings) are grayed out with a diagonal-striped bar, no target band and no status; detail line "skipped" plus the plan's reason. Footer: "Indirect sets count as half. Warm-ups and drop sets don't count."
 
 ### 3.11 Progress
-Empty (no finished workouts): LOADING figure, "Finish a workout and your charts, muscle map and recovery show up here."
+Empty (no finished workouts): curl figure (CURL pose), "Finish a workout and your charts, muscle map and recovery show up here."
 - **Range:** segmented 4 wk (default) · 12 wk · 6 mo · All (§5.14).
 - **Tiles:** workouts in range, per week, volume lb.
 - **Muscle map** (§8.6) with a toggle:

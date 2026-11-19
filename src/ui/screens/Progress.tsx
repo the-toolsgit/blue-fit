@@ -4,7 +4,7 @@ import { recoveryStatus, type MuscleRecovery, type Recovery } from "../../core/r
 import { MUSCLE_GROUPS, muscleLabel, type MuscleGroup } from "../../core/types";
 import { fmtNum, localDate } from "../../core/util";
 import { formatTarget, groupsLeftThisWeek } from "../../core/volume";
-import { LOADING } from "../../core/figure/poses";
+import { CURL } from "../../core/figure/poses";
 import { BarChart, weekLabel } from "../components/Charts";
 import { Seg } from "../components/Controls";
 import { ExerciseProgress } from "../components/ExerciseProgress";
@@ -65,7 +65,7 @@ export function ProgressScreen() {
       <div className="page">
         <span className="eyebrow">Progress</span>
         <h1 className="title-lg" style={{ marginTop: 6 }}>Progress</h1>
-        <div className="empty" style={{ paddingTop: 40 }}><Figure spec={LOADING} size={120} /><p>Finish a workout and your charts, muscle map and recovery show up here.</p></div>
+        <div className="empty" style={{ paddingTop: 40 }}><Figure spec={CURL} size={120} /><p>Finish a workout and your charts, muscle map and recovery show up here.</p></div>
       </div>
     );
   }

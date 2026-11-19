@@ -7,7 +7,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { MANUAL_WHY } from "../../core/failure";
 import { orderSlotsLike } from "../../core/routineEdit";
 import { useRestRunning, WorkoutRestPanel, WorkoutRestPill } from "../components/RestTimer";
-import { LOADING } from "../../core/figure/poses";
+import { CURL } from "../../core/figure/poses";
 import { groupPlates, platesFor } from "../../core/plates";
 import { progressionHint } from "../../core/progression";
 import { alignHint, effortGap, effortLine, failureSet, tooLight } from "../../core/effort";
@@ -105,7 +105,7 @@ export function WorkoutScreen() {
   if (!active) {
     return (
       <div className="page"><div className="empty" style={{ paddingTop: 80 }}>
-        <Figure spec={LOADING} size={130} />
+        <Figure spec={CURL} size={130} />
         <h2 className="title-lg">No workout running</h2>
         <p>Start one from Today.</p>
         <button className="btn btn-primary" onClick={() => go("today")}>Go to Today</button>
@@ -252,7 +252,7 @@ export function WorkoutScreen() {
       </header>
 
       {s.entries.length === 0 && (
-        <div className="empty"><Figure spec={LOADING} size={110} /><p>Add your first exercise.</p></div>
+        <div className="empty"><Figure spec={CURL} size={110} /><p>Add your first exercise.</p></div>
       )}
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} modifiers={[verticalOnly]} measuring={{ droppable: { strategy: MeasuringStrategy.Always } }}

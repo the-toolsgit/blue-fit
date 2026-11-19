@@ -92,12 +92,17 @@ export function frontPose(p: P): Joints {
 }
 
 /** Interpolate a spec at progress k (0 = pose A, 1 = pose B) into a frame of plain shapes. */
-export function poseFrame(f: FigureSpec, k: number): FigureFrame {
+const interp = (f: FigureSpec, k: number): P => {
   const p: P = Object.assign({ hx: 60, hy: 57, t: 0, ua: 0, fa: 0, th: 0, sh: 0 }, f.base);
   for (const key of new Set([...Object.keys(f.A), ...Object.keys(f.B)])) {
     const a = f.A[key] ?? p[key], b = f.B[key] ?? p[key];
     p[key] = a + (b - a) * k;
   }
+  return p;
+};
+
+export function poseFrame(f: FigureSpec, k: number): FigureFrame {
+  const p = interp(f, k);
   const J = f.v === "f" ? frontPose(p) : sidePose(p);
   const light: LightShape[] = [];
   for (const o of (f.props || []) as any[]) {
@@ -113,6 +118,11 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
     if (o.bar) {
       const a = J.haL, b = J.haR;
       light.push({ kind: "line", x1: (a[0] - 7).toFixed(1), y1: a[1].toFixed(1), x2: (b[0] + 7).toFixed(1), y2: b[1].toFixed(1), width: 2.5 });
+    }
+    // Side view, running: the other leg and arm, half a stride behind (the pose at 1 − k)
+    if (o.run && f.v !== "f") {
+      const J2 = sidePose(interp(f, 1 - k));
+      J.lines.unshift(J2.lines[0], J2.lines[2]);
     }
     // Side view: the other arm, held still (e.g. holding the machine), drawn like the body: [upper arm, forearm] angles
     if (o.arm2 && J.sh) {

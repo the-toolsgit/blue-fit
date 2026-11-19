@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
-import { LOADING } from "../core/figure/poses";
+import { LOADING, LOADING_TIMING } from "../core/figure/poses";
 import { Figure } from "./components/Figure";
 import { Icon } from "./components/Icon";
 import { RestTimerDock } from "./components/RestTimer";
@@ -21,7 +21,7 @@ import { WorkoutScreen } from "./screens/Workout";
 const ProgressScreen = lazy(() => import("./screens/Progress").then((m) => ({ default: m.ProgressScreen })));
 const PlanEditorScreen = lazy(() => import("./screens/PlanEditor").then((m) => ({ default: m.PlanEditorScreen })));
 const EditWorkoutScreen = lazy(() => import("./screens/EditWorkout").then((m) => ({ default: m.EditWorkoutScreen })));
-const Loading = () => <div className="loading"><Figure spec={LOADING} size={120} label="Loading" /><span className="eyebrow">Loading</span></div>;
+const Loading = () => <div className="loading"><Figure spec={LOADING} size={120} label="Loading" timing={LOADING_TIMING} /><span className="eyebrow">Loading</span></div>;
 
 let swReg: ServiceWorkerRegistration | null = null;
 /** Manual check (Settings). Resolves true if a new version was found. */
