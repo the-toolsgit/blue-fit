@@ -525,7 +525,7 @@ export const MIGRATIONS: Migration[] = [
   },
   {
     // Nov 19 2026: standing kickback with the pulley high, holding the frame, leaning back (Leo).
-    id: "2026-11-19-standing-kickback-v5",
+    id: "2026-11-19-standing-kickback-v6",
     run(d) {
       // Researched form, tips and avoids (Nov 19 2026). Updates the built-in copy while it still has any earlier
       // version's setup (never a copy the user edited).
