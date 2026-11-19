@@ -6,7 +6,8 @@ Features worth selling. Add one line each time something stands out. Details liv
 - **Automatic "last set to failure".** The app picks which exercises go to failure in each workout, based on the whole plan and on what you actually did this week (skipped workouts and exercises included). It considers your goal, recovery and weekly targets. Tap the flame to see why. (§5.19)
 - **Personal weekly volume targets.** Sets per muscle come from your goal, age, sleep, diet phase and training years, and you can set each muscle to Priority, Normal or Skip. (§5.17)
 - **Deload suggestions.** The app watches every exercise (weight and reps) and suggests a lighter week when half of them stall. (§5.16)
-- **Progression hints.** Each exercise tells you when to add weight. (§5.5)
+- **Progression hints.** Each exercise tells you when to add weight, and only once you've proven you're ready, not after one lucky day. (§5.5)
+- **Built-in strength test.** When you first reach the top of your reps, the app quietly turns that exercise's last set into a test to failure at the right moment (when it's safe and you're recovered), so it knows whether to add weight next time. (§5.19)
 
 ## Logging
 - **Fast logger.** Weights and reps are pre-filled from last time, the rest timer starts automatically, and supersets are supported. (§3.3, §5.6, §5.7)

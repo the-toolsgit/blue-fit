@@ -4,16 +4,16 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode }
 import { DndContext, MeasuringStrategy, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors, type DragEndEvent, type DragStartEvent, type DraggableAttributes, type DraggableSyntheticListeners, type Modifier } from "@dnd-kit/core";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { MANUAL_WHY } from "../../core/failure";
+import { MANUAL_WHY, TEST_WHY } from "../../core/failure";
 import { orderSlotsLike } from "../../core/routineEdit";
 import { useRestRunning, WorkoutRestPanel, WorkoutRestPill } from "../components/RestTimer";
 import { LOADING } from "../../core/figure/poses";
 import { groupPlates, platesFor } from "../../core/plates";
 import { progressionHint } from "../../core/progression";
-import { alignHint, effortGap, effortLine } from "../../core/effort";
+import { alignHint, effortGap, effortLine, failureSet } from "../../core/effort";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
-  addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
+  addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, prevEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
   setEntry, swapEntry, toggleDone, toggleSupersetWithNext, updateSet,
 } from "../../core/session";
 import type { Exercise, LoggedSet, Session, SessionEntry, SetType } from "../../core/types";
@@ -381,7 +381,9 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const last = useMemo(() => lastEntryFor(finished, ex.id, s.id), [finished, ex.id, s.id]);
   const repMin = e.repMin ?? 8, repMax = e.repMax ?? repMin;
   // Deload: no progression push; a fixed reminder instead.
-  const hint0 = s.deload || !settings.progressionHints ? ({ kind: "none" } as const) : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb);
+  const prev = useMemo(() => prevEntryFor(finished, ex.id, s.id), [finished, ex.id, s.id]);
+  const hint0 = s.deload || !settings.progressionHints ? ({ kind: "none" } as const)
+    : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb, { fail: last ? failureSet(last.entry) : undefined, prev: prev ? { sets: prev.entry.sets, fail: failureSet(prev.entry) } : undefined });
   const allDone = e.sets.length > 0 && e.sets.every((x) => x.done);
   // Effort check: the failure set shows earlier sets at the same weight left too many reps (today, and last time)
   const gap = effortGap(e, s.deload);
@@ -441,14 +443,16 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           )}
           {hint.kind !== "none" && !allDone && (
             <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
-              <span style={{ color: "var(--neon-ink)" }}><Icon name={hint.kind === "addWeight" ? "up" : "bolt"} size={18} /></span>
+              <span style={{ color: "var(--neon-ink)" }}><Icon name={hint.kind === "addWeight" ? "up" : hint.kind === "hold" ? "check" : "bolt"} size={18} /></span>
               <span className="grow" style={{ fontSize: 14 }}>
                 {hint.kind === "addWeight"
                   ? <>You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>
-                  : <>Beat last time: <b className="mono">{fmtNum(hint.weight)} × {hint.targetReps.join(", ")}</b></>}
+                  : hint.kind === "hold"
+                    ? <>Stay at <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps} once more{e.failWhy?.includes(TEST_WHY) ? "; your last set tests if you're ready for more" : ""}.</>
+                    : <>Beat last time: <b className="mono">{fmtNum(hint.weight)} × {hint.targetReps.join(", ")}</b></>}
               </span>
               <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
-                onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.kind === "addWeight" ? hint.reps : hint.targetReps)); }}>Use</button>
+                onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.kind === "beatReps" ? hint.targetReps : hint.reps)); }}>Use</button>
             </div>
           )}
           {lastGap && !allDone && !gap && !tipOff && (

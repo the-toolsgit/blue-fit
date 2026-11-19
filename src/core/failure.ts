@@ -9,6 +9,8 @@ import { HARD_SETS, MAX_SESSION_SETS } from "./workoutCheck";
 import { priorityOf } from "./volumeModel";
 import { addDays, parseLocalDate, weekStart } from "./util";
 import { deloadActive } from "./deload";
+import { failureSet } from "./effort";
+import { needsTest, type PastSets } from "./progression";
 
 /** Mass gain and endurance use it. Strength and maintain don't. No profile yet counts as mass gain. */
 export const failureApplies = (goal: Goal | undefined) => { const g = goal ?? "growth"; return g === "growth" || g === "endurance"; };
@@ -62,6 +64,17 @@ export const FAILURE_BEFORE_DAYS = 1;
 export const MANUAL_WHY = "You turned this on in Edit plan";
 
 export interface FailurePick { slotId: string; why: string[]; manual?: boolean }
+
+/** The reason shown for a failure set that tests whether you're ready for more weight */
+export const TEST_WHY = "Testing if you're ready for more weight";
+
+/** The last two finished, non-deload workouts of an exercise before `date` (newest first), as sets + failure set. */
+function pastOf(c: FailureContext, exerciseId: string, date: string): PastSets[] {
+  return c.finished.filter((s) => s.status === "finished" && !s.deload && s.date < date)
+    .sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1))
+    .flatMap((s) => s.entries.filter((e) => e.exerciseId === exerciseId && e.sets.some((x) => x.done)).map((e) => ({ sets: e.sets, fail: failureSet(e) })))
+    .slice(0, 2);
+}
 
 export interface FailureContext {
   routine: Routine;
@@ -143,8 +156,25 @@ export function planFailure(day: RoutineDay, date: string, c: FailureContext): F
   const tmap = new Map(c.targets.map((t) => [t.group, t]));
   type Cand = { slot: Slot; index: number; prio: number; below: number; why: string[] };
   const cands: Cand[] = [];
+  // Tests first: an exercise that reached the top of its rep range once, with no failure set to prove it, takes its
+  // last set to failure to check if it's ready for more weight. Same safety and recovery rules as any failure set;
+  // tests take priority over the app's other picks (Edit plan choices always stay).
+  const tests: FailurePick[] = [];
+  day.slots.forEach((slot) => {
+    if (slot.toFailure !== undefined || tests.length >= left) return;
+    const ex = c.exMap.get(slot.exerciseId);
+    const g = mainMuscle(ex);
+    if (!g || !failureEligible(ex)) return;
+    const [last, prev] = pastOf(c, slot.exerciseId, date);
+    if (!needsTest(last, prev, slot.repMax ?? slot.repMin)) return;
+    const gap = nextTrained(c.routine, c.exMap, g, date);
+    if (gap != null && gap <= FAILURE_GAP_DAYS) return;
+    if (trainedRecently(c, g, date)) return;
+    tests.push({ slotId: slot.id, why: [TEST_WHY] });
+  });
+  const tested = new Set(tests.map((t) => t.slotId));
   day.slots.forEach((slot, index) => {
-    if (slot.toFailure !== undefined) return;
+    if (slot.toFailure !== undefined || tested.has(slot.id)) return;
     const ex = c.exMap.get(slot.exerciseId);
     const g = mainMuscle(ex);
     if (!g || !failureEligible(ex)) return;
@@ -166,10 +196,10 @@ export function planFailure(day: RoutineDay, date: string, c: FailureContext): F
   });
   cands.sort((a, b) => b.prio - a.prio || b.below - a.below || b.index - a.index);
   const note = budget.why.length ? [`Max ${budget.sets} today (${budget.why.join(", ")})`] : [];
-  const auto = cands.slice(0, left).map((x) => ({ slotId: x.slot.id, why: [...x.why, ...note] }));
+  const auto = cands.slice(0, left - tests.length).map((x) => ({ slotId: x.slot.id, why: [...x.why, ...note] }));
   // Back in workout order
   const order = new Map(day.slots.map((s, i) => [s.id, i]));
-  return [...manual, ...auto].sort((a, b) => order.get(a.slotId)! - order.get(b.slotId)!);
+  return [...manual, ...tests, ...auto].sort((a, b) => order.get(a.slotId)! - order.get(b.slotId)!);
 }
 
 /** Planned date of a routine day in the current training week. */

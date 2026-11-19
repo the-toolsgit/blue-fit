@@ -208,3 +208,19 @@ describe("extra set for skipped work", async () => {
     expect(dl.entries.find((x) => x.slotId === slot.id)!.extraSet).toBeUndefined();
   });
 });
+
+describe("failure set that tests if you're ready for more weight", async () => {
+  const { planFailure, TEST_WHY, failureBudget } = await import("./failure");
+  it("an exercise at the top of its range once (no failure set) gets a test, first, within the daily limit", () => {
+    const d = day("fri");
+    const past: Session = { id: "p", date: "2026-11-11", title: d.title, dayId: d.id, startedAt: "2026-11-11T10:00:00Z", finishedAt: "2026-11-11T11:00:00Z", status: "finished", source: "app",
+      entries: d.slots.map((sl, i) => ({ id: `e${i}`, exerciseId: sl.exerciseId, slotId: sl.id, restSec: 90, repMin: sl.repMin, repMax: sl.repMax,
+        sets: Array.from({ length: sl.sets }, (_, k) => ({ id: `s${i}${k}`, type: "working" as const, weight: 50, reps: sl.repMax ?? sl.repMin, done: true })) })) };
+    const picks = planFailure(d, "2026-11-18", ctx({ finished: [past], today: "2026-11-18" }));
+    const tests = picks.filter((p) => p.why.includes(TEST_WHY));
+    expect(tests.length).toBeGreaterThan(0);
+    expect(picks.length).toBeLessThanOrEqual(failureBudget(prof()).sets);
+    // Without that history: no tests
+    expect(planFailure(d, "2026-11-18", ctx({ today: "2026-11-18" })).some((p) => p.why.includes(TEST_WHY))).toBe(false);
+  });
+});

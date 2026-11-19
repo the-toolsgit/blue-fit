@@ -1,24 +1,61 @@
-// Progression rule (plan page): pick a weight that reaches the bottom of the rep range.
-// When every working set hits the top, add weight (the exercise's increment) and start at the bottom again.
-// Otherwise, beat last time's reps.
+// Progression (double progression): pick a weight that reaches the bottom of the rep range, add reps until every set
+// reaches the top, then add weight (the exercise's increment) and start at the bottom again.
+// Ready for more weight only when the top isn't a one-off (Leo, Nov 18 2026; thresholds are *judgment*):
+//  • every regular set reached the top two workouts in a row (workouts, not weeks), or
+//  • the failure set beat the top by 2+ reps (it shows the reps you really had left), or
+//  • the failure set shows even the bottom-of-the-effort target is past the range (failure reps − 2 > top).
+// Top reached once without that proof → "hold": stay at the same weight once more (the app also tests it with a
+// failure set when it safely can, core/failure.ts).
 import type { LoggedSet } from "./types";
 
 export type Hint =
   | { kind: "none" }
   | { kind: "addWeight"; weight: number; reps: number; from: number }
+  | { kind: "hold"; weight: number; reps: number }
   | { kind: "beatReps"; weight: number; targetReps: number[]; lastReps: number[] };
+
+/** One past workout of the exercise: its sets and its failure set, if one was taken to failure. */
+export interface PastSets { sets: LoggedSet[]; fail?: LoggedSet }
+
+/** Failure set reps above the top that prove you're ready for more weight (*judgment*) */
+export const READY_MARGIN = 2;
 
 const isWork = (x: LoggedSet) => x.done && (x.type === "working" || x.type === "failure") && x.weight != null && x.reps != null;
 
-export function progressionHint(lastSets: LoggedSet[] | undefined, repMin: number, repMax: number, increment: number): Hint {
+/** Whether every regular set (the failure set left out) at the top weight reached the top of the range. */
+export function atTop(p: PastSets | undefined, repMax: number): boolean {
+  const work = (p?.sets ?? []).filter(isWork);
+  if (!work.length) return false;
+  const top = Math.max(...work.map((x) => x.weight!));
+  const regular = work.filter((x) => x !== p!.fail && x.type !== "failure");
+  const judged = (regular.length ? regular : work).filter((x) => x.weight === top);
+  return judged.length > 0 && judged.every((x) => x.reps! >= repMax);
+}
+
+/** Next weight: one step up, as a round number from 40 lb (multiples of 10; Leo, Nov 18 2026) */
+const nextWeight = (w: number, inc: number) => { const n = w + inc; return n >= 40 ? Math.ceil(n / 10) * 10 : n; };
+
+export function progressionHint(lastSets: LoggedSet[] | undefined, repMin: number, repMax: number, increment: number,
+  opts: { fail?: LoggedSet; prev?: PastSets } = {}): Hint {
   const work = (lastSets ?? []).filter(isWork);
   if (!work.length) return { kind: "none" };
   const top = Math.max(...work.map((x) => x.weight!));
-  // Next weight: one step up, as a round number from 40 lb (multiples of 10; Leo, Nov 18 2026)
-  if (work.every((x) => x.reps! >= repMax)) { const w = top + increment; return { kind: "addWeight", weight: w >= 40 ? Math.ceil(w / 10) * 10 : w, reps: repMin, from: top }; }
+  const last: PastSets = { sets: work, fail: opts.fail ?? work.find((x) => x.type === "failure") };
+  const f = last.fail && last.fail.weight === top && last.fail.reps != null ? last.fail.reps : null;
+  const topNow = atTop(last, repMax);
+  const proven = f != null && f >= repMax + READY_MARGIN;
+  const twice = topNow && atTop(opts.prev, repMax) && Math.max(...(opts.prev?.sets ?? []).filter(isWork).map((x) => x.weight!)) >= top;
+  if ((topNow && (proven || twice)) || (f != null && f - READY_MARGIN > repMax))
+    return { kind: "addWeight", weight: nextWeight(top, increment), reps: repMin, from: top };
+  if (topNow) return { kind: "hold", weight: top, reps: repMax };
   const lastReps = work.map((x) => x.reps!);
   const targetReps = [...lastReps];
   const i = targetReps.findIndex((r) => r < repMax);
   if (i >= 0) targetReps[i] += 1;
   return { kind: "beatReps", weight: top, targetReps, lastReps };
+}
+
+/** Whether this exercise should test with a failure set next time: top reached once, no failure set to prove it. */
+export function needsTest(last: PastSets | undefined, prev: PastSets | undefined, repMax: number): boolean {
+  return !!last && !last.fail && !last.sets.some((x) => x.done && x.type === "failure") && atTop(last, repMax) && !atTop(prev, repMax);
 }

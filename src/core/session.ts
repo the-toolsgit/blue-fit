@@ -4,12 +4,18 @@ import { prsForEntry, type PrKind } from "./records";
 import type { Exercise, LoggedSet, MuscleGroup, Routine, RoutineDay, Session, SessionEntry, Slot } from "./types";
 import { localDate, uid } from "./util";
 import { deloadSets, deloadWeight } from "./deload";
-import { failureEligible, mainMuscle, MANUAL_WHY } from "./failure";
+import { failureEligible, mainMuscle, MANUAL_WHY, TEST_WHY } from "./failure";
 import { countsForLoad, countsForVolume, sessionsVolume, tonnage, type GroupTotals } from "./volume";
 
 const byNewest = (a: Session, b: Session) => (b.startedAt > a.startedAt ? 1 : b.startedAt < a.startedAt ? -1 : 0);
 
 /** Most recent finished, non-deload session that has done sets of this exercise (deload weeks are lighter on purpose). */
+/** The workout before the last one for this exercise (same rules as lastEntryFor), for "two in a row" checks. */
+export function prevEntryFor(history: Session[], exerciseId: string, excludeSessionId?: string): { session: Session; entry: SessionEntry } | null {
+  const last = lastEntryFor(history, exerciseId, excludeSessionId);
+  return last ? lastEntryFor(history.filter((s) => s.id !== last.session.id), exerciseId, excludeSessionId) : null;
+}
+
 export function lastEntryFor(history: Session[], exerciseId: string, excludeSessionId?: string): { session: Session; entry: SessionEntry } | null {
   for (const s of [...history].sort(byNewest)) {
     if (s.id === excludeSessionId || s.status !== "finished" || s.deload) continue;
@@ -132,7 +138,7 @@ export function moveEntryTo(s: Session, from: number, to: number): Session {
 export function refitFailure(s: Session, exMap: Map<string, Exercise>, offSlotIds: Set<string> = new Set()): Session {
   let entries = s.entries;
   for (const e of s.entries) {
-    if (!e.toFailure || e.failWhy?.includes(MANUAL_WHY)) continue;
+    if (!e.toFailure || e.failWhy?.includes(MANUAL_WHY) || e.failWhy?.includes(TEST_WHY)) continue; // a test belongs to its exercise
     const cur = entries.find((x) => x.id === e.id)!;
     if (!cur.toFailure) continue;
     const lastWork = [...cur.sets].reverse().find((x) => x.type === "working" || x.type === "failure");

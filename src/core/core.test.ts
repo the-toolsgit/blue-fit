@@ -118,15 +118,29 @@ describe("records and PRs", () => {
 });
 
 describe("progression hint", () => {
-  it("adds the increment when every working set hit the top", () => {
-    expect(progressionHint([set(170, 15), set(170, 15), set(170, 16), set(50, 5, "warmup")], 10, 15, 2.5)).toEqual({ kind: "addWeight", weight: 180, reps: 10, from: 170 }); // 172.5 → round number
+  it("top reached once → hold; twice in a row, or a failure set 2+ above the top → add weight", () => {
+    const top = [set(170, 15), set(170, 15), set(170, 15), set(50, 5, "warmup")];
+    expect(progressionHint(top, 10, 15, 2.5)).toEqual({ kind: "hold", weight: 170, reps: 15 });
+    expect(progressionHint(top, 10, 15, 2.5, { prev: { sets: top } })).toEqual({ kind: "addWeight", weight: 180, reps: 10, from: 170 }); // 172.5 → round number
+    const withFail = [set(170, 15), set(170, 15), set(170, 17, "failure")];
+    expect(progressionHint(withFail, 10, 15, 5).kind).toBe("addWeight");
+    expect(progressionHint([set(170, 15), set(170, 15), set(170, 16, "failure")], 10, 15, 5).kind).toBe("hold"); // only 1 above
+  });
+  it("tests with failure only when the top was reached once with no failure set", async () => {
+    const { needsTest } = await import("./progression");
+    const top = { sets: [set(100, 12), set(100, 12)] };
+    expect(needsTest(top, undefined, 12)).toBe(true);
+    expect(needsTest(top, top, 12)).toBe(false); // already twice: ready
+    expect(needsTest({ sets: [set(100, 12), set(100, 14, "failure")] }, undefined, 12)).toBe(false); // already tested
+    expect(needsTest({ sets: [set(100, 11), set(100, 12)] }, undefined, 12)).toBe(false);
   });
   it("otherwise asks to beat last reps", () => {
     expect(progressionHint([set(170, 10), set(170, 10), set(170, 9)], 10, 15, 5)).toEqual({ kind: "beatReps", weight: 170, targetReps: [11, 10, 9], lastReps: [10, 10, 9] });
     expect(progressionHint([set(170, 10), set(170, 10), set(170, 9)], 10, 10, 5)).toMatchObject({ targetReps: [10, 10, 10] });
   });
   it("drop sets don't block progression", () => {
-    expect(progressionHint([set(50, 12), set(50, 12), set(30, 8, "drop")], 12, 12, 5).kind).toBe("addWeight");
+    expect(progressionHint([set(50, 12), set(50, 12), set(30, 8, "drop")], 12, 12, 5).kind).toBe("hold");
+    expect(progressionHint([set(50, 12), set(50, 12), set(30, 8, "drop")], 12, 12, 5, { prev: { sets: [set(50, 12), set(50, 12)] } }).kind).toBe("addWeight");
   });
   it("no history → none", () => expect(progressionHint([], 8, 10, 5)).toEqual({ kind: "none" }));
 });
