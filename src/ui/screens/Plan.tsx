@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import { deloadActive, deloadWeek, endDeload } from "../../core/deload";
 import { localDate } from "../../core/util";
 import { DELOAD_RULE } from "../components/DeloadBanner";
-import { addSlot, clearDay, copyName, duplicateRoutine, moveSlot, removeSlot, renameDay, routineUsed, setCurrent, swapSlotExercise, toggleSlotSuperset, updateSlot } from "../../core/routineEdit";
+import { addDay, addSlot, clearDay, copyName, duplicateRoutine, moveSlot, removeSlot, renameDay, routineUsed, setCurrent, swapSlotExercise, toggleSlotSuperset, updateSlot } from "../../core/routineEdit";
 import { failureApplies, failureEligible } from "../../core/failure";
 import { tempoTiming } from "../../core/figure/tempo";
 import { Seg, Stepper } from "../components/Controls";
@@ -36,9 +36,16 @@ export function PlanScreen() {
   const [delDay, setDelDay] = useState(false);
   const [del, setDel] = useState<Routine | null>(null);
   const days = (routine?.days ?? []).filter((d) => d.slots.length).sort((a, b) => ((a.weekday ?? 9) + 6) % 7 - ((b.weekday ?? 9) + 6) % 7);
-  const [dayId, setDayId] = useState(days.find((d) => d.weekday === new Date().getDay())?.id ?? days[0]?.id);
+  // Every weekday has a chip (rest days too), plus any day without a weekday
+  const [sel, setSel] = useState(`w${new Date().getDay()}`);
   if (!routine) return <div className="page"><div className="empty">No routine.</div></div>;
-  const day = days.find((d) => d.id === dayId) ?? days[0];
+  const chips = [
+    ...[1, 2, 3, 4, 5, 6, 0].map((w) => ({ key: `w${w}`, label: SHORT[w], weekday: w as number | null, day: routine.days.find((d) => d.weekday === w) })),
+    ...routine.days.filter((d) => d.weekday == null && d.slots.length).map((d) => ({ key: d.id, label: d.title, weekday: null as number | null, day: d as typeof d | undefined })),
+  ];
+  const cur = chips.find((c) => c.key === sel) ?? chips[0];
+  const day = cur.day;
+  const rest = !day || !day.slots.length;
   // Everything is edited in place and saved at once: name and day title are fields that look like text,
   // tap an exercise for its popup, hold to move, swipe left to delete, Add exercise at the bottom.
   const slot = day?.slots.find((x) => x.id === slotId);
@@ -64,9 +71,17 @@ export function PlanScreen() {
       <p className="muted" style={{ marginTop: 4, fontSize: 14 }}>{days.length} days · {routine.days.flatMap((d) => d.slots).length} exercises · {allSets} sets a week</p>
 
       <div className="chips-scroll" style={{ marginTop: 12 }}>
-        {days.map((d) => <button key={d.id} className="chip" aria-pressed={d.id === day?.id} onClick={() => setDayId(d.id)}>{d.weekday != null ? SHORT[d.weekday] : d.title}</button>)}
+        {chips.map((c) => <button key={c.key} className={"chip" + (!c.day?.slots.length ? " chip-rest" : "")} aria-pressed={c.key === cur.key} onClick={() => setSel(c.key)}>{c.label}</button>)}
       </div>
-      {day && (
+      {rest ? (
+        <>
+          <div className="spread" style={{ margin: "14px 4px 8px" }}><h2 className="title-md" style={{ textTransform: "uppercase" }}>Rest day</h2></div>
+          <div className="glass" style={{ padding: 4 }}>
+            <p className="muted" style={{ textAlign: "center", fontSize: 14, padding: "14px 12px 4px" }}>No workout planned.</p>
+            <button className="list-row add-row" onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
+          </div>
+        </>
+      ) : day && (
         <>
           <div className="spread" style={{ margin: "14px 4px 8px" }}>
             <InlineText as="h2" className="title-md" style={{ textTransform: "uppercase", flex: 1, minWidth: 0 }} label="Day name" value={day.title}
@@ -160,9 +175,10 @@ export function PlanScreen() {
         exclude={picker?.mode === "swap" ? day?.slots.find((x) => x.id === picker.slotId)?.exerciseId : undefined}
         onClose={() => setPicker(null)}
         onPick={(ex) => {
-          if (!day) return;
-          if (picker?.mode === "swap") saveRoutine(swapSlotExercise(routine, day.id, picker.slotId, ex));
-          else saveRoutine(addSlot(routine, day.id, ex, settings.restDefaultSec).routine);
+          if (picker?.mode === "swap") { if (day) saveRoutine(swapSlotExercise(routine, day.id, picker.slotId, ex)); return; }
+          // A rest day without a plan day yet gets one on that weekday
+          const made = day ? { routine, dayId: day.id } : addDay(routine, cur.weekday);
+          saveRoutine(addSlot(made.routine, made.dayId, ex, settings.restDefaultSec).routine);
         }} />
       <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} failWhy={day && slot ? weekFail.get(day.id)?.get(slot.id) : undefined} />
       <Confirm open={delDay} title={`Delete ${day?.title ?? "this day"}?`} body="All its exercises are removed and it becomes a rest day. Past workouts stay in history." confirm="Delete" danger

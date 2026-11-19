@@ -53,6 +53,7 @@ ul { margin: 0; padding-left: 18px; }
 .inline-edit input { font: inherit; letter-spacing: inherit; text-transform: inherit; line-height: inherit; background: transparent; border: 0; padding: 0; margin: 0; width: 100%; color: transparent; caret-color: var(--neon-ink); outline: none; }
 .inline-edit input:focus { color: var(--neon-ink); }
 .inline-edit:focus-within { box-shadow: 0 1px 0 var(--neon); }
+.chip.chip-rest:not([aria-pressed="true"]) { opacity: .55; }
 .add-row { color: var(--neon-ink); justify-content: center; }
 .neon { color: var(--neon-ink); text-shadow: 0 0 10px var(--glow), 0 0 28px var(--glow-soft); }
 .brand { color: var(--brand); text-shadow: 0 0 10px var(--fig-glow), 0 0 28px var(--fig-glow-soft); } /* BLUE FIT wordmark: always blue */
