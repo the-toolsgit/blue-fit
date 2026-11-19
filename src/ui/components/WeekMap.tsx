@@ -127,6 +127,8 @@ export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Rou
           </div>
           {/* Always takes its space, so the section doesn't grow when a muscle is picked */}
           <button type="button" className="weekmap-out" onClick={() => setSel(null)} style={{ visibility: sel ? "visible" : "hidden" }} tabIndex={sel ? 0 : -1}>Whole body</button>
+          {/* The picked muscle's details, under the body (the list stays a plain list) */}
+          {sel && <MuscleDetail t={byGroup.get(sel)} />}
         </div>
         <div className="weekmap-list">
           {groups.map((g) => {
@@ -137,7 +139,6 @@ export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Rou
                   <i style={{ background: tileColor(t) }} /><span className="grow">{muscleLabel(g)}</span>
                   <span className="mono muted">{fmtNum(t?.week ?? 0)}/{t?.target?.min ?? "–"}</span>
                 </button>
-                {open && <MuscleDetail t={t} />}
               </div>
             );
           })}
