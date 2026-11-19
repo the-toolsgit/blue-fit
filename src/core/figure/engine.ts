@@ -114,6 +114,11 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
       const a = J.haL, b = J.haR;
       light.push({ kind: "line", x1: (a[0] - 7).toFixed(1), y1: a[1].toFixed(1), x2: (b[0] + 7).toFixed(1), y2: b[1].toFixed(1), width: 2.5 });
     }
+    // Side view: the other arm, held still (e.g. holding the machine), drawn like the body: [upper arm, forearm] angles
+    if (o.arm2 && J.sh) {
+      const el = add(J.sh, V(o.arm2[0], 20)), ha = add(el, V(o.arm2[1], 18));
+      J.lines.push([J.sh, el, ha]);
+    }
     if (o.pad) { const h = J[o.pad]; light.push({ kind: "circle", cx: h[0], cy: h[1], r: o.r || 2.6 }); }
     if (o.trap && J.hip && J.sh) {
       // Side view: the traps as a small pointed arch under the back of the head, from the neck to the top of the back.

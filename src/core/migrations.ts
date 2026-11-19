@@ -526,7 +526,7 @@ export const MIGRATIONS: Migration[] = [
   {
     // Nov 19 2026: standing kickback is done with the pulley high, leaning back a little (Leo). Updates copies stored
     // with the first (chest-height) setup.
-    id: "2026-11-19-standing-kickback-high-v2",
+    id: "2026-11-19-standing-kickback-high-v4",
     run(d) {
       const t = (extraExercises as unknown as Exercise[]).find((x) => x.id === "standing-cable-tricep-kickback")!;
       const e = d.exercises.find((x) => x.id === t.id);
