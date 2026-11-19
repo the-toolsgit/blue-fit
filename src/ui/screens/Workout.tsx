@@ -10,7 +10,7 @@ import { useRestRunning, WorkoutRestPanel, WorkoutRestPill } from "../components
 import { LOADING } from "../../core/figure/poses";
 import { groupPlates, platesFor } from "../../core/plates";
 import { progressionHint } from "../../core/progression";
-import { EFFORT_RULE, effortGap, effortLine } from "../../core/effort";
+import { effortGap, effortLine } from "../../core/effort";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
   addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
@@ -450,7 +450,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
             </div>
           )}
           {lastGap && !allDone && !gap && !tipOff && (
-            <div className="effort-note"><Icon name="flame" size={18} /><span className="grow"><b>Last time: {effortLine(lastGap)}.</b> {EFFORT_RULE}</span>
+            <div className="effort-note"><Icon name="flame" size={18} /><span className="grow"><b>Last time:</b> {effortLine(lastGap, last?.entry.repMax ?? repMax).replace(/^F/, "f")}</span>
               <button type="button" className="tip-x" aria-label="Hide this tip" onClick={(ev) => { ev.stopPropagation(); hideTip(); }}><Icon name="close" size={16} /></button></div>
           )}
         </div>
@@ -507,7 +507,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           );
         })}
       </div>
-      {gap && <div className="effort-note" style={{ marginTop: 8 }}><Icon name="flame" size={18} /><span><b>{effortLine(gap).replace(/^./, (c) => c.toUpperCase())}.</b> {EFFORT_RULE}</span></div>}
+      {gap && <div className="effort-note" style={{ marginTop: 8 }}><Icon name="flame" size={18} /><span>{effortLine(gap, repMax)}</span></div>}
       <button className="btn btn-quiet btn-block" style={{ marginTop: 4, minHeight: 40, fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(addSet(s, e.id)); onFocus(); }}>
         <Icon name="plus" size={18} /> Add set
       </button>

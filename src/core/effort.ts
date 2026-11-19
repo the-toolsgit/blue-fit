@@ -52,12 +52,20 @@ export function setsLabel(g: Pick<EffortGap, "sets" | "all">): string {
   return `Sets ${run ? `${n[0]}–${n[n.length - 1]}` : n.join(", ")}`;
 }
 
-/** Said from the failure set's side, so it's clear why: "your failure set did 3 more reps than your other sets" /
- *  "… 3–4 more reps than sets 1–2" / "… than set 1". */
-export function effortLine(g: EffortGap): string {
-  const n = `${g.min === g.max ? g.min : `${g.min}–${g.max}`} more reps`;
-  return `your failure set did ${n} than ${g.all ? "your other sets" : setsLabel(g).toLowerCase()}`;
-}
+/** How many reps short of failure regular sets should stop (the failure set shows where failure is) */
+export const REPS_SHORT = 2;
 
-/** The rule, shown after the line (regular sets stop 0–2 reps short of failure, so within 2 of the failure set) */
-export const EFFORT_RULE = "Keep the gap to 2 or less.";
+/**
+ * The tip, in plain words: where failure was, and what the regular sets should do.
+ * "Failure at 14 reps. Go from 8 to 12 reps to stay a couple short of failure."
+ * Only some sets short: "… Go from 8 to 12 reps on set 1 …". Different reps: "from 8–9".
+ * If that target is past the top of the rep range, more reps isn't the answer: "The weight was too light: go heavier."
+ */
+export function effortLine(g: EffortGap, repMax?: number): string {
+  const lo = g.failReps - g.max, hi = g.failReps - g.min;
+  const from = lo === hi ? `${lo}` : `${lo}–${hi}`, to = g.failReps - REPS_SHORT;
+  const head = `Failure at ${g.failReps} reps.`;
+  if (repMax != null && to > repMax) return `${head} The weight was too light: go heavier.`;
+  const where = g.all ? "" : ` on ${setsLabel(g).toLowerCase()}`;
+  return `${head} Go from ${from} to ${to} reps${where} to stay a couple short of failure.`;
+}

@@ -9,7 +9,8 @@ describe("effort check", () => {
   it("flags earlier sets that left more than 2 reps", () => {
     const g = effortGap(entry([set("w", 100, 10, "warmup"), set("a", 170, 12), set("b", 170, 12), set("c", 170, 17)]));
     expect(g).toMatchObject({ sets: [1, 2], min: 5, max: 5, failReps: 17 });
-    expect(effortLine(g!)).toBe("your failure set did 5 more reps than your other sets");
+    expect(effortLine(g!)).toBe("Failure at 17 reps. Go from 12 to 15 reps to stay a couple short of failure.");
+    expect(effortLine(g!, 12)).toBe("Failure at 17 reps. The weight was too light: go heavier.");
   });
   it("passes when within 2 reps, at another weight, or not done", () => {
     expect(effortGap(entry([set("a", 170, 12), set("b", 170, 14)]))).toBeNull();
@@ -18,7 +19,7 @@ describe("effort check", () => {
   });
   it("uses a manual failure set, and ignores the pick on a deload", () => {
     expect(effortGap(entry([set("a", 50, 8), set("b", 50, 12, "failure")], false))?.sets).toEqual([1]);
-    expect(effortLine(effortGap(entry([set("a", 50, 8), set("b", 50, 11), set("c", 50, 12)]))!)).toBe("your failure set did 4 more reps than set 1");
+    expect(effortLine(effortGap(entry([set("a", 50, 8), set("b", 50, 11), set("c", 50, 12)]))!)).toBe("Failure at 12 reps. Go from 8 to 10 reps on set 1 to stay a couple short of failure.");
     expect(effortGap(entry([set("a", 50, 8), set("b", 50, 12)]), true)).toBeNull();
   });
 });

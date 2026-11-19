@@ -1,7 +1,7 @@
 // Notes at the end of a workout (summary → Notes): what changed against your past workouts and what to do about it.
 // Pure and framework-free. Numbers marked *judgment* are our own reasoning (coaching practice, not studies).
 import { DELOAD, stallCheck } from "./deload";
-import { effortGap, effortLine, EFFORT_RULE, failureSet } from "./effort";
+import { effortGap, effortLine, failureSet } from "./effort";
 import { epley } from "./oneRm";
 import type { Exercise, LoggedSet, Routine, Session, SessionEntry } from "./types";
 import { fmtNum } from "./util";
@@ -106,7 +106,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
     }
 
     const g = effortGap(e, s.deload);
-    if (g) notes.push({ kind: "effort", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too easy`, text: `${effortLine(g).replace(/^./, (c) => c.toUpperCase())}. ${EFFORT_RULE}` });
+    if (g) notes.push({ kind: "effort", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too easy`, text: effortLine(g, e.repMax ?? e.repMin) });
   }
 
   const skipped = (s.skipped ?? []).filter((k) => k.sets > 0);
