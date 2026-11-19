@@ -80,7 +80,7 @@ export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Pr
   // Profile: recovery capacity scales the ceiling
   let rec = 1;
   if (p.yearsTraining < 1) { rec *= 0.75; min *= 0.75; why.push("New to lifting: less is enough"); }
-  else if (p.yearsTraining >= 3) { rec *= 1.1; why.push("Lifting 3+ years: you can handle more"); }
+  else if (p.yearsTraining >= 3) { rec *= 1.1; }
   if (p.age >= 60) { rec *= 0.85; if (goal === "maintenance") min *= 1.5; why.push("Age 60+: slower recovery"); }
   else if (p.age >= 40) { rec *= 0.92; why.push("Age 40+: slightly slower recovery"); }
   if (p.sleepHours < 6) { rec *= 0.8; why.push("Under 6 h sleep: slower recovery"); }
