@@ -55,6 +55,8 @@ export function TodayScreen() {
     return m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished, routine, sd]);
+  // A planned day earlier this week with no finished workout: grey dot
+  const skipped = (d: number) => !doneDays.get(d) && (d - sd + 7) % 7 < (todayWd - sd + 7) % 7 && !!routine?.days.some((x) => x.weekday === d && x.slots.length);
   const doneToday = finished.some((s) => s.date === localDate(now) && s.dayId === day?.id);
 
   // Hero figure cycles through the day's exercises, one per animation loop
@@ -108,7 +110,7 @@ export function TodayScreen() {
                 background: sel ? "linear-gradient(140deg,var(--neon),var(--neon-2))" : "transparent", color: sel ? "var(--on-neon)" : td ? "var(--neon-ink)" : "var(--muted)",
                 boxShadow: sel ? "0 0 20px -4px var(--glow)" : "none" }}>
               <span style={{ font: "700 14px var(--display)", letterSpacing: ".06em" }}>{LONG[d].slice(0, 3).toUpperCase()}</span>
-              <span style={{ width: 5, height: 5, borderRadius: 5, background: doneDays.get(d) ? (sel ? "var(--on-neon)" : "var(--good)") : "transparent", boxShadow: doneDays.get(d) ? "0 0 6px var(--good)" : "none" }} />
+              <span style={{ width: 5, height: 5, borderRadius: 5, background: doneDays.get(d) ? (sel ? "var(--on-neon)" : "var(--good)") : skipped(d) ? (sel ? "var(--on-neon)" : "var(--faint)") : "transparent", boxShadow: doneDays.get(d) ? "0 0 6px var(--good)" : "none" }} />
             </button>
           );
         })}

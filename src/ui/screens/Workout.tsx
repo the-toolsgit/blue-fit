@@ -456,7 +456,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                 onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.reps)); }}>Use</button>
             </div>
           )}
-          {lastLight && !allDone && !nowLight && !tipOff && (
+          {lastLight && hint.kind === "none" && !allDone && !nowLight && !tipOff && (
             <div className="effort-note"><Icon name="flame" size={18} /><span className="grow"><b>Last time:</b> {effortLine(lastGap!, last?.entry.repMax ?? repMax).replace(/^F/, "f")}</span>
               <button type="button" className="tip-x" aria-label="Hide this tip" onClick={(ev) => { ev.stopPropagation(); hideTip(); }}><Icon name="close" size={16} /></button></div>
           )}
