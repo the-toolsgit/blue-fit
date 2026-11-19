@@ -43,10 +43,8 @@ export function VolumeTable({ totals, targets, days, stillPlanned, onEdit, defau
         const t = tmap.get(m.id), v = totals[m.id], st = targetStatus(v, t, stillPlanned?.has(m.id)), s = STATUS[st];
         const off = st === "off";
         const note = off ? offNote(t?.note) : t?.gap;
-        const edit = t ?? { group: m.id, min: null, max: null };
         const isOpen = onEdit && open === m.id;
-        const set = (p: Partial<VolumeTarget>) => onEdit?.({ ...edit, ...p });
-        const prio = priorityOf(m.id, t), def = defaults?.get(m.id);
+        const def = defaults?.get(m.id);
         return (
           <div key={m.id} className={off ? "vrow off" : "vrow"} style={{ padding: "10px 0", borderBottom: "1px solid var(--line)" }}>
             <div className="spread" style={{ alignItems: "baseline", cursor: onEdit ? "pointer" : undefined }} onClick={onEdit ? () => setOpen(isOpen ? null : m.id) : undefined}
@@ -67,33 +65,44 @@ export function VolumeTable({ totals, targets, days, stillPlanned, onEdit, defau
                 {days && `${days[m.id] ?? 0} day${days[m.id] === 1 ? "" : "s"}`}{days && t?.angles ? ` · ${t.angles}` : ""}{note ? `${days ? " · " : ""}${note}` : ""}
               </div>
             )}
-            {isOpen && (
-              <div className="vedit">
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                  <Stepper label="Min sets" value={edit.min} step={1} decimals={false} empty={edit.max ?? Math.max(1, Math.round(v))}
-                    onChange={(x) => set({ min: x, max: x != null && edit.max != null && edit.max < x ? x : edit.max })} />
-                  <Stepper label="Max sets" value={edit.max} step={1} decimals={false} min={edit.min ?? 0} empty={(edit.min ?? Math.max(1, Math.round(v))) + 4}
-                    onChange={(x) => set({ max: x })} />
-                </div>
-                <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>Weekly sets. Leave max empty for no upper limit.</p>
-                <div style={{ marginTop: 10 }}>
-                  <Seg label={`${m.label}: focus`} value={prio} onChange={(x: Priority) => onEdit?.(withPriority(edit, x, Math.max(1, Math.round(v))))}
-                    options={[{ v: "priority", label: "Priority" }, { v: "normal", label: "Normal" }, { v: "off", label: "Skip" }]} />
-                  <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>{prio === "priority" ? "Aims for the top half of its range." : prio === "off" ? "Skipped: grayed out, no warnings. Your numbers are kept." : "Full range."}</p>
-                </div>
-                {def && (
-                  <div className="vdefault">
-                    <div className="spread"><span className="eyebrow">Suggested for you</span><span className="mono">{def.min}–{def.max}</span></div>
-                    <p className="muted" style={{ fontSize: 12, margin: "4px 0 0" }}>{def.why.join(" · ")}</p>
-                    {(def.min !== edit.min || def.max !== edit.max) && <button className="btn btn-quiet" style={{ minHeight: 40, padding: 0, fontSize: 14 }} onClick={() => set({ min: def.min, max: def.max })}>Use {def.min}–{def.max}</button>}
-                  </div>
-                )}
-              </div>
-            )}
+            {isOpen && <TargetEdit group={m.id} label={m.label} t={t} current={v} def={def} onEdit={onEdit!} />}
           </div>
         );
       })}
       <p className="muted" style={{ fontSize: 12, padding: "10px 0 6px" }}>Indirect sets count as half. Warm-ups and drop sets don't count.</p>
+    </div>
+  );
+}
+
+/** Change one muscle's weekly target: min/max sets, Priority · Normal · Skip, and the suggestion from the training profile.
+ *  current: its sets a week now (seeds empty steppers). Used by the targets table and the week map's muscle card. */
+export function TargetEdit({ group, label, t, current, def, onEdit }: {
+  group: MuscleGroup; label: string; t?: VolumeTarget; current: number; def?: ModelTarget; onEdit: (t: VolumeTarget) => void;
+}) {
+  const edit = t ?? { group, min: null, max: null };
+  const set = (p: Partial<VolumeTarget>) => onEdit({ ...edit, ...p });
+  const prio = priorityOf(group, t), v = current;
+  return (
+    <div className="vedit">
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <Stepper label="Min sets" value={edit.min} step={1} decimals={false} empty={edit.max ?? Math.max(1, Math.round(v))}
+          onChange={(x) => set({ min: x, max: x != null && edit.max != null && edit.max < x ? x : edit.max })} />
+        <Stepper label="Max sets" value={edit.max} step={1} decimals={false} min={edit.min ?? 0} empty={(edit.min ?? Math.max(1, Math.round(v))) + 4}
+          onChange={(x) => set({ max: x })} />
+      </div>
+      <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>Weekly sets. Leave max empty for no upper limit.</p>
+      <div style={{ marginTop: 10 }}>
+        <Seg label={`${label}: focus`} value={prio} onChange={(x: Priority) => onEdit(withPriority(edit, x, Math.max(1, Math.round(v))))}
+          options={[{ v: "priority", label: "Priority" }, { v: "normal", label: "Normal" }, { v: "off", label: "Skip" }]} />
+        <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>{prio === "priority" ? "Aims for the top half of its range." : prio === "off" ? "Skipped: grayed out, no warnings. Your numbers are kept." : "Full range."}</p>
+      </div>
+      {def && (
+        <div className="vdefault">
+          <div className="spread"><span className="eyebrow">Suggested for you</span><span className="mono">{def.min}–{def.max}</span></div>
+          <p className="muted" style={{ fontSize: 12, margin: "4px 0 0" }}>{def.why.join(" · ")}</p>
+          {(def.min !== edit.min || def.max !== edit.max) && <button className="btn btn-quiet" style={{ minHeight: 40, padding: 0, fontSize: 14 }} onClick={() => set({ min: def.min, max: def.max })}>Use {def.min}–{def.max}</button>}
+        </div>
+      )}
     </div>
   );
 }

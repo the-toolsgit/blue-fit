@@ -7,7 +7,9 @@ import { GUIDES, HEAD, MAP_H, MAP_PARTS, MAP_W, OUTLINE, partsKey, regionsFor, v
 import { fmtNum } from "../../core/util";
 import { muscleLabel, type MuscleGroup } from "../../core/types";
 import { exercisesFor, type Tile } from "../../core/workoutCheck";
-import type { Exercise, Routine } from "../../core/types";
+import type { Exercise, Routine, VolumeTarget } from "../../core/types";
+import type { ModelTarget } from "../../core/volumeModel";
+import { TargetEdit } from "./VolumeTable";
 import { reducedMotion } from "../device";
 import { Icon } from "./Icon";
 
@@ -24,7 +26,10 @@ export function tileColor(t: Tile | undefined): string {
 const stateText = (t: Tile | undefined) => !t || !t.week ? "Not trained in this plan" : t.status === "off" ? "Skipped"
   : t.status === "above" ? "Above target" : t.target?.min != null && t.week >= t.target.min ? "In target" : `${fmtNum((t.target?.min ?? 0) - t.week)} sets short`;
 
-export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Routine; exMap: Map<string, Exercise> }) {
+/** Target editing (Plan tab): the muscle card gets a Change target button. */
+export interface TargetEditing { targets: VolumeTarget[]; onEdit: (t: VolumeTarget) => void; defaults?: Map<MuscleGroup, ModelTarget> }
+
+export function WeekMap({ tiles, routine, exMap, edit }: { tiles: Tile[]; routine: Routine; exMap: Map<string, Exercise>; edit?: TargetEditing }) {
   const byGroup = new Map(tiles.map((t) => [t.group, t]));
   const [view, setView] = useState<MapView>("front");
   const [sel, setSel] = useState<MuscleGroup | null>(null);
@@ -142,7 +147,7 @@ export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Rou
         </div>
       </div>
       {/* The picked muscle: details across the full width, then its exercises */}
-      {sel && <MuscleDetail t={byGroup.get(sel)} />}
+      {sel && <MuscleDetail key={sel} g={sel} t={byGroup.get(sel)} edit={edit} />}
       {sel && <MuscleExercises g={sel} routine={routine} exMap={exMap} t={byGroup.get(sel)} />}
       <div className="weekmap-legend">
         {[["var(--good)", "in target"], ["hsl(50 100% 58%)", "a bit short"], ["hsl(0 100% 58%)", "far short"], ["var(--pink-2)", "above"], ["var(--faint)", "skipped"]].map(([c, l]) => <span key={l}><i style={{ background: c }} />{l}</span>)}
@@ -152,7 +157,8 @@ export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Rou
 }
 
 /** The opened muscle: sets a week on a bar with the target band, status and days a week, and each part ✓ / ✕. */
-function MuscleDetail({ t }: { t: Tile | undefined }) {
+function MuscleDetail({ g, t, edit }: { g: MuscleGroup; t: Tile | undefined; edit?: TargetEditing }) {
+  const [editing, setEditing] = useState(false);
   const week = t?.week ?? 0, min = t?.target?.min ?? null, max = t?.target?.max ?? null, c = tileColor(t);
   const focus = !!t && t.status !== "off" && min != null;
   const scale = Math.max(week, max ?? (min ?? 0) * 1.4, 1) * 1.12;
@@ -169,7 +175,15 @@ function MuscleDetail({ t }: { t: Tile | undefined }) {
           <span className="wm-fill" style={{ width: pct(week), background: c }} />
         </div>
       )}
-      <div className="wm-meta mono">{focus ? `target ${min}${max != null ? `–${max}` : "+"}` : "no target"}{t?.days ? ` · ${t.days}×/wk` : ""}</div>
+      <div className="wm-meta-row">
+        <div className="wm-meta mono">{focus ? `target ${min}${max != null ? `–${max}` : "+"}` : "no target"}{t?.days ? ` · ${t.days}×/wk` : ""}</div>
+        {edit && <button type="button" className="wm-edit" aria-expanded={editing} onClick={() => setEditing((v) => !v)}>{editing ? "Done" : "Change target"}</button>}
+      </div>
+      {edit && editing && (
+        <div style={{ width: "100%" }}>
+          <TargetEdit group={g} label={muscleLabel(g)} t={edit.targets.find((x) => x.group === g)} current={week} def={edit.defaults?.get(g)} onEdit={edit.onEdit} />
+        </div>
+      )}
       {!!t && t.jobs.length > 1 && (
         <ul className="wm-parts">
           {t.jobs.map((j) => {

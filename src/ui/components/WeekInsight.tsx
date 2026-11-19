@@ -8,11 +8,13 @@ import type { MuscleGroup } from "../../core/types";
 import { useState } from "react";
 import { useStore } from "../store";
 import { FlexFigure } from "./FlexFigure";
-import { WeekMap } from "./WeekMap";
+import { WeekMap, type TargetEditing } from "./WeekMap";
 import { Icon } from "./Icon";
 import { Ring } from "./RestTimer";
 
-export function WeekInsight({ routine, exMap, targets, weekFail }: {
+export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
+  /** Plan tab: change a muscle's target from its card */
+  edit?: TargetEditing;
   routine: Routine; exMap: Map<string, Exercise>; targets: VolumeTarget[];
   /** This week's failure picks (dayId → slotId → reasons) */
   weekFail: Map<string, Map<string, string[]>>;
@@ -53,7 +55,7 @@ export function WeekInsight({ routine, exMap, targets, weekFail }: {
         </div>
       )}
 
-      <WeekMap tiles={i.tiles} routine={routine} exMap={exMap} />
+      <WeekMap tiles={i.tiles} routine={routine} exMap={exMap} edit={edit} />
       <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Sets a week (indirect = ½) / target. Tap a muscle for its details.</p>
 
       <h2 className="section-title">Week check</h2>

@@ -27,6 +27,7 @@ export function Toasts() {
             <div style={{ font: "700 17px var(--display)", letterSpacing: ".06em", textTransform: "uppercase", color: t.kind === "pr" ? "var(--pink)" : undefined }}>{t.title}</div>
             {t.body && <div className="muted" style={{ fontSize: 13 }}>{t.body}</div>}
           </div>
+          {t.action && <button type="button" className="btn btn-ghost toast-act" onClick={(e) => { e.stopPropagation(); t.action!.run(); dismissToast(t.id); }}>{t.action.label}</button>}
         </Swipeable>
       ))}
     </div>

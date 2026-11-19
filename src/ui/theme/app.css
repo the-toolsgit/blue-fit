@@ -47,6 +47,13 @@ ul { margin: 0; padding-left: 18px; }
 .title-xl { font-size: 46px; line-height: 0.92; text-transform: uppercase; }
 .title-lg { font-size: 32px; line-height: 1; text-transform: uppercase; }
 .title-md { font-size: 22px; line-height: 1.05; }
+/* A heading that is also a field (Plan tab): the text is drawn underneath, a see-through input sits on top */
+.inline-edit { display: grid; }
+.inline-edit > * { grid-area: 1 / 1; min-width: 0; }
+.inline-edit input { font: inherit; letter-spacing: inherit; text-transform: inherit; line-height: inherit; background: transparent; border: 0; padding: 0; margin: 0; width: 100%; color: transparent; caret-color: var(--neon-ink); outline: none; }
+.inline-edit input:focus { color: var(--neon-ink); }
+.inline-edit:focus-within { box-shadow: 0 1px 0 var(--neon); }
+.add-row { color: var(--neon-ink); justify-content: center; border-top: 1px solid var(--line); border-radius: 0 0 14px 14px; }
 .neon { color: var(--neon-ink); text-shadow: 0 0 10px var(--glow), 0 0 28px var(--glow-soft); }
 .brand { color: var(--brand); text-shadow: 0 0 10px var(--fig-glow), 0 0 28px var(--fig-glow-soft); } /* BLUE FIT wordmark: always blue */
 .neon-grad { background: linear-gradient(100deg, var(--neon-ink) 10%, var(--neon-ink-2) 90%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 12px var(--glow-soft)); }
@@ -155,6 +162,7 @@ body:has(.dock > *) .bottom-fade { height: calc(env(safe-area-inset-bottom) + va
 .toast { pointer-events: auto; touch-action: none; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 18px; background: var(--surface-solid); border: 1px solid var(--line-strong); box-shadow: 0 16px 40px -12px rgba(0,0,0,0.5); animation: toastIn 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 .toast.out { animation: toastOut 0.24s cubic-bezier(0.4, 0, 1, 1) both; pointer-events: none; }
 .toast.pr { border-color: color-mix(in srgb, var(--pink) 60%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--pink) 25%, transparent), 0 16px 50px -10px var(--pink-glow); }
+.toast-act { min-height: 40px; padding: 0 14px; flex: none; color: var(--neon-ink); }
 .toast.error { border-color: color-mix(in srgb, var(--bad) 60%, transparent); }
 @keyframes toastIn { from { opacity: 0; transform: translateY(-16px); } }
 @keyframes toastOut { to { transform: translateY(calc(-100% - env(safe-area-inset-top) - 24px)); } }
@@ -312,6 +320,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 
 /* Plan tab: exercise rows can be pressed and held to move */
 .day-row { position: relative; border-radius: 14px; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.day-row.swiping { overflow: hidden; }
+.day-row-del { position: absolute; top: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 14px; background: color-mix(in srgb, var(--bad) 85%, transparent); color: #fff; font-size: 12px; font-weight: 600; box-shadow: 0 0 18px -4px var(--bad); }
 .day-row.dragging { z-index: 5; background: var(--surface-solid); box-shadow: 0 0 0 1px var(--neon), 0 16px 40px -10px var(--glow); }
 
 /* "Last set to failure" (mass gain): a small flame tag on the set and a cue when it's open */
@@ -491,6 +501,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wm-bar { position: relative; width: 100%; height: 6px; border-radius: 3px; background: var(--line); }
 .wm-band { position: absolute; top: -3px; bottom: -3px; border-radius: 4px; border: 1px dashed color-mix(in srgb, var(--good) 60%, transparent); }
 .wm-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; box-shadow: 0 0 8px -1px currentColor; }
+.wm-meta-row { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.wm-edit { min-height: 44px; padding: 0 2px 0 12px; color: var(--neon-ink); font-weight: 600; font-size: 14px; }
 .wm-meta { font-size: 11px; color: var(--muted); white-space: nowrap; }
 .wm-state { font: 600 11px var(--body); padding: 1px 8px; border-radius: 99px; border: 1px solid; }
 .wm-parts { list-style: none; margin: 2px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 4px 12px; width: 100%; }
