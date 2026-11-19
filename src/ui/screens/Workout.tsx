@@ -451,7 +451,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
         </div>
       )}
 
-      <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
+      <div style={{ marginTop: 18, display: "grid", gap: 6 }}>
         {e.sets.map((x, xi) => {
           const isSel = selected?.id === x.id && focused;
           // Sets open in order: a set can't be expanded while an earlier one isn't done
