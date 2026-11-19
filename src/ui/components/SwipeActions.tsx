@@ -1,5 +1,5 @@
-// Swipe a card left to show its actions: a bar slides in from the right and fully covers the card's header (the part
-// marked data-swipe-cover), edge to edge, until it's swiped back right. Replaces the ⋯ menu on workout cards. A thin
+// Swipe a card left to show its actions: the card's header (the part marked data-swipe-cover) slides out to the left
+// while a bar slides in from the right in its place, both inside the card's edges, until it's swiped back right. Replaces the ⋯ menu on workout cards. A thin
 // handle on the header's right edge opens it too (and shows the swipe exists). Touch: a mostly-horizontal move past
 // 10 px locks to the swipe; anything else scrolls as usual. One card open at a time (the parent owns `open`).
 // It stays open (also while an action's sheet is up) until it's swiped back right, the handle is tapped again, or
@@ -79,6 +79,13 @@ export function SwipeActions({ open, onOpen, onClose, actions, label, peek, chil
 
   const shown = drag ?? (open ? width : 0);
   const peeking = !!peek && !open && drag == null;
+  // The header slides out to the left as the bar slides in from the right (the card clips both)
+  useLayoutEffect(() => {
+    const h = wrap.current?.querySelector<HTMLElement>("[data-swipe-cover]");
+    if (!h) return;
+    h.style.transform = shown ? `translateX(${-shown}px)` : "";
+    h.style.transition = drag == null ? "transform .32s var(--ease)" : "none";
+  }, [shown, drag]);
   return (
     <div ref={wrap} className="swipe-wrap" data-noswipe
       onClickCapture={(e) => { if (swallowClick.current) { swallowClick.current = false; e.stopPropagation(); e.preventDefault(); } }}>
