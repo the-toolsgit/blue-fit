@@ -473,8 +473,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .weekmap-map { touch-action: pan-y; -webkit-user-select: none; user-select: none; }
 .weekmap-map svg { display: block; width: 100%; height: auto; overflow: hidden; }
 .weekmap-part text { font-family: var(--body); font-weight: 600; }
-.weekmap-nav { display: flex; align-items: center; justify-content: center; }
-.weekmap-nav .icon-btn { color: var(--neon-ink); font-size: 20px; }
+.weekmap-nav { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; }
+.weekmap-arrow { width: 36px; color: var(--neon-ink); font-size: 20px; text-align: center; }
 .weekmap-nav span { font: 600 11px var(--body); letter-spacing: .18em; color: var(--muted); min-width: 50px; text-align: center; }
 /* The list: every muscle on this side, the picked one opens in place (no inner scroll) */
 .weekmap-list { display: flex; flex-direction: column; gap: 2px; }

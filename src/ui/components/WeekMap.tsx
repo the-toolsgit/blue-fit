@@ -121,11 +121,10 @@ export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Rou
               </g>
             </svg>
           </div>
-          <div className="weekmap-nav">
-            <button type="button" className="icon-btn" onClick={flip} aria-label="Show the other side">‹</button>
-            <span>{view.toUpperCase()}</span>
-            <button type="button" className="icon-btn" onClick={flip} aria-label="Show the other side">›</button>
-          </div>
+          {/* The whole row (‹ FRONT ›) is one button: shows the other side, whole body */}
+          <button type="button" className="weekmap-nav" onClick={flip} aria-label={`Showing the ${view}. Show the ${view === "front" ? "back" : "front"}`}>
+            <span className="weekmap-arrow" aria-hidden="true">‹</span><span>{view.toUpperCase()}</span><span className="weekmap-arrow" aria-hidden="true">›</span>
+          </button>
           {/* The picked muscle's details, under the body (the list stays a plain list) */}
           {sel && <MuscleDetail t={byGroup.get(sel)} />}
         </div>
