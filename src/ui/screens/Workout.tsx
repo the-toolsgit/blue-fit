@@ -528,52 +528,20 @@ function needsValues(x: LoggedSet, ex: Exercise): string | null {
 }
 
 /** Plates to load, drawn as plates (front view, sized by weight) with a count. Standard gym plates, unlimited. */
-/** Look of the plates part, being tried out on the phone (tap it to switch; Nov 18 2026): sleeve → spread → chips */
-type PlatesLook = "sleeve" | "spread" | "chips";
-const LOOKS: PlatesLook[] = ["sleeve", "spread", "chips"];
-const readLook = (): PlatesLook => { try { const v = localStorage.getItem("bf-plates-look"); return LOOKS.includes(v as PlatesLook) ? (v as PlatesLook) : "sleeve"; } catch { return "sleeve"; } };
-
+/** Plates to load, as small pills: "(45) × 3  (35) × 1". Standard gym plates, unlimited. */
 function Plates({ weight, single }: { weight: number; single?: boolean }) {
   const r = platesFor(weight);
   const label = single ? "Plates" : "Plates per side";
   const groups = groupPlates(r.plates);
-  const [look, setLook] = useState<PlatesLook>(readLook);
-  const next = () => { const n = LOOKS[(LOOKS.indexOf(look) + 1) % LOOKS.length]; setLook(n); try { localStorage.setItem("bf-plates-look", n); } catch { /* fine */ } };
-  const warn = r.remainder > 0 && <span className="plates-warn" style={{ color: "var(--warn)", fontSize: 13 }}>+{fmtNum(r.remainder)} lb can't be loaded with standard plates</span>;
   return (
-    <div className={`plates plates-${look}`} role="button" tabIndex={0} onClick={next} onKeyDown={(ev) => { if (ev.key === "Enter") next(); }}
-      aria-label={`${label}: ${groups.map((g) => `${g.count} × ${fmtNum(g.weight)}`).join(", ")}. Tap to change the look.`}>
-      {look === "sleeve" && (<>
-        <div className="sleeve-top"><span className="eyebrow" style={{ fontSize: 10 }}>{label}</span><span className="mono muted" style={{ fontSize: 12 }}>{r.plates.map(fmtNum).join(" · ")}</span></div>
-        <div className="sleeve" aria-hidden="true">
-          <span className="sleeve-bar" /><span className="sleeve-collar" />
-          {r.plates.map((p, k) => <span key={k} className="disc" style={{ left: 16 + k * 16, height: DISC_H[p] ?? 24 }}><span>{fmtNum(p)}</span></span>)}
-        </div>
-      </>)}
-      {look === "spread" && (
-        <div className="plates-spread"><span className="eyebrow" style={{ fontSize: 10 }}>{label}</span>
-          <div className="plates-row" aria-hidden="true">
-            {groups.map((g) => (
-              <span key={g.weight} className="plate-group">
-                <span className="plate" style={{ ["--d" as string]: `${PLATE_SIZE[g.weight] ?? 24}px` }}><b>{fmtNum(g.weight)}</b></span>
-                {g.count > 1 && <span className="plate-count mono">×{g.count}</span>}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-      {look === "chips" && (
-        <div className="plates-chips"><span className="eyebrow" style={{ fontSize: 10 }}>{label}</span>
-          {groups.map((g) => <span key={g.weight} className="plate-chip mono" aria-hidden="true"><span className="plate-dot">{fmtNum(g.weight)}</span>× {g.count}</span>)}
-        </div>
-      )}
-      {warn}
+    <div className="plates" aria-label={`${label}: ${groups.map((g) => `${g.count} × ${fmtNum(g.weight)}`).join(", ")}`}>
+      <div className="plates-chips"><span className="eyebrow" style={{ fontSize: 10 }}>{label}</span>
+        {groups.map((g) => <span key={g.weight} className="plate-chip mono" aria-hidden="true"><span className="plate-dot">{fmtNum(g.weight)}</span>× {g.count}</span>)}
+      </div>
+      {r.remainder > 0 && <span className="plates-warn" style={{ color: "var(--warn)", fontSize: 13 }}>+{fmtNum(r.remainder)} lb can't be loaded with standard plates</span>}
     </div>
   );
 }
-/** Side view: plate height by weight */
-const DISC_H: Record<number, number> = { 45: 54, 35: 46, 25: 40, 10: 32, 5: 26, 2.5: 22 };
-const PLATE_SIZE: Record<number, number> = { 45: 50, 35: 45, 25: 40, 10: 34, 5: 30, 2.5: 28 };
 
 /** The reasons a set goes to failure: hidden behind "Why?", shown as bullets in two columns. */
 function FailWhy({ why }: { why: string[] }) {
