@@ -478,12 +478,13 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .weekmap-nav span { font: 600 11px var(--body); letter-spacing: .18em; color: var(--muted); min-width: 50px; text-align: center; }
 /* The list: every muscle on this side, the picked one opens in place (no inner scroll) */
 .weekmap-list { display: flex; flex-direction: column; gap: 2px; }
-.weekmap-row { width: 100%; display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 8px; border-radius: 10px; font-size: 14px; text-align: left; }
+.weekmap-row { width: 100%; display: flex; align-items: center; gap: 8px; min-height: 30px; padding: 0 8px; border-radius: 9px; font-size: 14px; text-align: left; }
 .weekmap-row.sel { background: var(--surface-2); }
 .weekmap-row i { width: 9px; height: 9px; border-radius: 50%; flex: none; }
 .weekmap-row .mono { font-size: 12px; }
 /* The opened muscle */
-.wm-detail { margin: 10px 0 0; padding: 10px; border-radius: 12px; background: color-mix(in srgb, var(--surface-2) 70%, transparent); border: 1px solid var(--line); display: grid; gap: 6px; justify-items: start; }
+.wm-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; }
+.wm-detail { margin: 12px 0 0; padding: 12px; border-radius: 14px; background: color-mix(in srgb, var(--surface-2) 70%, transparent); border: 1px solid var(--line); display: grid; gap: 6px; justify-items: start; }
 .wm-big { display: flex; align-items: baseline; gap: 6px; }
 .wm-big b { font-size: 26px; line-height: 1; }
 .wm-big span { font-size: 11px; color: var(--muted); letter-spacing: .04em; }
@@ -492,7 +493,7 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wm-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; box-shadow: 0 0 8px -1px currentColor; }
 .wm-meta { font-size: 11px; color: var(--muted); white-space: nowrap; }
 .wm-state { font: 600 11px var(--body); padding: 1px 8px; border-radius: 99px; border: 1px solid; }
-.wm-parts { list-style: none; margin: 2px 0 0; padding: 0; display: grid; gap: 3px; width: 100%; }
+.wm-parts { list-style: none; margin: 2px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 4px 12px; width: 100%; }
 .wm-parts li { display: flex; align-items: center; gap: 6px; font-size: 12px; }
 .wm-parts li svg { flex: none; }
 .wm-parts li.hit { color: var(--ink); } .wm-parts li.hit svg { color: var(--good); }

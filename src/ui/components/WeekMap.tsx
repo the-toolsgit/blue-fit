@@ -125,8 +125,6 @@ export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Rou
           <button type="button" className="weekmap-nav" onClick={flip} aria-label={`Showing the ${view}. Show the ${view === "front" ? "back" : "front"}`}>
             <span className="weekmap-arrow" aria-hidden="true">‹</span><span>{view.toUpperCase()}</span><span className="weekmap-arrow" aria-hidden="true">›</span>
           </button>
-          {/* The picked muscle's details, under the body (the list stays a plain list) */}
-          {sel && <MuscleDetail t={byGroup.get(sel)} />}
         </div>
         <div className="weekmap-list">
           {groups.map((g) => {
@@ -142,6 +140,8 @@ export function WeekMap({ tiles, routine, exMap }: { tiles: Tile[]; routine: Rou
           })}
         </div>
       </div>
+      {/* The picked muscle: details across the full width, then its exercises */}
+      {sel && <MuscleDetail t={byGroup.get(sel)} />}
       {sel && <MuscleExercises g={sel} routine={routine} exMap={exMap} t={byGroup.get(sel)} />}
       <div className="weekmap-legend">
         {[["var(--good)", "in target"], ["hsl(50 100% 58%)", "a bit short"], ["hsl(0 100% 58%)", "far short"], ["var(--pink-2)", "above"], ["var(--faint)", "skipped"]].map(([c, l]) => <span key={l}><i style={{ background: c }} />{l}</span>)}
@@ -158,7 +158,10 @@ function MuscleDetail({ t }: { t: Tile | undefined }) {
   const pct = (v: number) => `${Math.min(100, (v / scale) * 100)}%`;
   return (
     <div className="wm-detail">
-      <div className="wm-big"><b className="mono" style={{ color: c }}>{fmtNum(week)}</b><span>sets a week</span></div>
+      <div className="wm-head">
+        <div className="wm-big"><b className="mono" style={{ color: c }}>{fmtNum(week)}</b><span>sets a week</span></div>
+        <span className="wm-state" style={{ color: c, borderColor: c }}>{stateText(t)}</span>
+      </div>
       {focus && (
         <div className="wm-bar" aria-hidden="true">
           <span className="wm-band" style={{ left: pct(min!), width: max != null ? `calc(${pct(max)} - ${pct(min!)})` : `calc(100% - ${pct(min!)})` }} />
@@ -166,7 +169,6 @@ function MuscleDetail({ t }: { t: Tile | undefined }) {
         </div>
       )}
       <div className="wm-meta mono">{focus ? `target ${min}${max != null ? `–${max}` : "+"}` : "no target"}{t?.days ? ` · ${t.days}×/wk` : ""}</div>
-      <span className="wm-state" style={{ color: c, borderColor: c }}>{stateText(t)}</span>
       {!!t && t.jobs.length > 1 && (
         <ul className="wm-parts">
           {t.jobs.map((j) => {
