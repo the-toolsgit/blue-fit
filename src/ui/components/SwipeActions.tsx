@@ -1,27 +1,41 @@
-// Swipe a card left to show its actions (a 2 × 3 grid beside it), like Mail. Replaces the ⋯ menu on workout cards.
-// A thin handle on the card's right edge opens it too (and shows the swipe exists). Touch only: a mostly-horizontal
-// move past 10 px locks to the swipe; anything else scrolls the page as usual. One card open at a time (the parent
-// owns `open`). Tapping the open card, or anywhere outside it, closes it.
-import { useEffect, useRef, useState, type ReactNode } from "react";
+// Swipe a card left to show its actions: a bar slides in from the right and fully covers the card's header (the part
+// marked data-swipe-cover), edge to edge, until it's swiped back right. Replaces the ⋯ menu on workout cards. A thin
+// handle on the header's right edge opens it too (and shows the swipe exists). Touch: a mostly-horizontal move past
+// 10 px locks to the swipe; anything else scrolls as usual. One card open at a time (the parent owns `open`).
+// Tapping an action, or anywhere outside the card, closes it.
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { Icon } from "./Icon";
 
 export interface SwipeAction { label: string; icon: string; onClick: () => void; danger?: boolean; disabled?: boolean }
 
-const COL = 72, GAP = 8;
-
 export function SwipeActions({ open, onOpen, onClose, actions, label, peek, children }: {
   open: boolean; onOpen: () => void; onClose: () => void; actions: SwipeAction[]; label: string;
-  /** Slide open a little and back once (first time, to show the swipe exists) */
+  /** Slide in a little and back once (first time, to show the swipe exists) */
   peek?: boolean;
   children: ReactNode;
 }) {
-  const width = Math.ceil(actions.length / 2) * COL;
-  const shut = -(width + GAP);
   const wrap = useRef<HTMLDivElement>(null);
-  const [drag, setDrag] = useState<number | null>(null);
+  // How tall the header band is (from the card's top to just under the header) and the card's width
+  const [band, setBand] = useState<{ height: number; width: number } | null>(null);
+  const measure = () => {
+    const w = wrap.current, h = w?.querySelector<HTMLElement>("[data-swipe-cover]");
+    if (!w || !h) return;
+    const wr = w.getBoundingClientRect(), hr = h.getBoundingClientRect();
+    const next = { height: Math.round(hr.bottom - wr.top) + 8, width: Math.round(wr.width) };
+    setBand((b) => (b && b.height === next.height && b.width === next.width ? b : next));
+  };
+  useLayoutEffect(measure);
+  useEffect(() => {
+    const ro = typeof ResizeObserver === "function" ? new ResizeObserver(() => measure()) : null;
+    if (wrap.current) ro?.observe(wrap.current);
+    return () => ro?.disconnect();
+  }, []);
+
+  const width = band?.width ?? 0;
+  const [drag, setDrag] = useState<number | null>(null); // how much of the bar shows, 0 … width
   const live = useRef<number | null>(null);
-  const openRef = useRef(open), cb = useRef({ onOpen, onClose });
-  openRef.current = open; cb.current = { onOpen, onClose };
+  const openRef = useRef(open), cb = useRef({ onOpen, onClose }), widthRef = useRef(width);
+  openRef.current = open; cb.current = { onOpen, onClose }; widthRef.current = width;
   const swallowClick = useRef(false);
 
   useEffect(() => {
@@ -30,7 +44,7 @@ export function SwipeActions({ open, onOpen, onClose, actions, label, peek, chil
     let st: { x: number; y: number; base: number } | null = null, lock: "x" | "y" | null = null;
     const start = (e: TouchEvent) => {
       if (e.touches.length !== 1) { st = null; return; }
-      st = { x: e.touches[0].clientX, y: e.touches[0].clientY, base: openRef.current ? shut : 0 };
+      st = { x: e.touches[0].clientX, y: e.touches[0].clientY, base: openRef.current ? widthRef.current : 0 };
       lock = null;
     };
     const move = (e: TouchEvent) => {
@@ -42,7 +56,7 @@ export function SwipeActions({ open, onOpen, onClose, actions, label, peek, chil
       }
       if (lock !== "x") return;
       e.preventDefault();
-      const v = Math.max(shut - 36, Math.min(0, st.base + dx));
+      const v = Math.max(0, Math.min(widthRef.current, st.base - dx));
       live.current = v; setDrag(v);
     };
     const end = () => {
@@ -51,7 +65,7 @@ export function SwipeActions({ open, onOpen, onClose, actions, label, peek, chil
         swallowClick.current = true;
         setTimeout(() => { swallowClick.current = false; }, 350);
         const v = live.current ?? 0;
-        if (v < shut / 2) cb.current.onOpen(); else cb.current.onClose();
+        if (v > widthRef.current / 2) cb.current.onOpen(); else cb.current.onClose();
       }
       st = null; lock = null; live.current = null; setDrag(null);
     };
@@ -60,9 +74,9 @@ export function SwipeActions({ open, onOpen, onClose, actions, label, peek, chil
     el.addEventListener("touchend", end);
     el.addEventListener("touchcancel", end);
     return () => { el.removeEventListener("touchstart", start); el.removeEventListener("touchmove", move); el.removeEventListener("touchend", end); el.removeEventListener("touchcancel", end); };
-  }, [shut]);
+  }, []);
 
-  // Tap anywhere outside closes it
+  // Tap anywhere outside the card closes it
   useEffect(() => {
     if (!open) return;
     const away = (e: PointerEvent) => { if (!wrap.current?.contains(e.target as Node)) cb.current.onClose(); };
@@ -70,28 +84,29 @@ export function SwipeActions({ open, onOpen, onClose, actions, label, peek, chil
     return () => document.removeEventListener("pointerdown", away, true);
   }, [open]);
 
-  const x = drag ?? (open ? shut : 0);
-  const shown = Math.min(1, -x / (width + GAP));
+  const shown = drag ?? (open ? width : 0);
+  const peeking = !!peek && !open && drag == null;
   return (
-    <div ref={wrap} className="swipe-wrap" data-noswipe>
-      <div className="swipe-actions" style={{ width, opacity: shown, visibility: shown > 0 ? "visible" : "hidden" }} role="group" aria-label={`${label}: actions`}>
-        {actions.map((a) => (
-          <button key={a.label} type="button" className={"swipe-act" + (a.danger ? " danger" : "")} disabled={a.disabled} tabIndex={open ? 0 : -1}
-            onClick={() => { cb.current.onClose(); a.onClick(); }}>
-            <Icon name={a.icon} size={20} /><span>{a.label}</span>
-          </button>
-        ))}
-      </div>
-      <div className={"swipe-card" + (peek && !open && drag == null ? " swipe-peek" : "")}
-        style={{ transform: x ? `translateX(${x}px)` : undefined, transition: drag == null ? "transform .32s var(--ease)" : "none" }}
-        onClickCapture={(e) => {
-          if (swallowClick.current) { swallowClick.current = false; e.stopPropagation(); e.preventDefault(); return; }
-          if (openRef.current) { e.stopPropagation(); e.preventDefault(); cb.current.onClose(); }
-        }}>
-        {children}
-        <button type="button" className="swipe-handle" aria-label={`${label}: show actions`} aria-expanded={open}
-          onClick={(e) => { e.stopPropagation(); if (open) onClose(); else onOpen(); }}><span /></button>
-      </div>
+    <div ref={wrap} className="swipe-wrap" data-noswipe
+      onClickCapture={(e) => { if (swallowClick.current) { swallowClick.current = false; e.stopPropagation(); e.preventDefault(); } }}>
+      {children}
+      {band && (
+        <>
+          <button type="button" className="swipe-handle" style={{ top: band.height / 2 }} aria-label={`${label}: show actions`} aria-expanded={open}
+            onClick={(e) => { e.stopPropagation(); if (open) onClose(); else onOpen(); }}><span /></button>
+          <div className="swipe-clip" style={{ height: band.height, visibility: shown > 0 || peeking ? "visible" : "hidden" }}>
+          <div className={"swipe-cover" + (peeking ? " swipe-peek" : "")} role="group" aria-label={`${label}: actions`} aria-hidden={!open}
+            style={{ height: band.height, transform: peeking ? undefined : `translateX(${width - shown}px)`, transition: drag == null ? "transform .32s var(--ease)" : "none", visibility: shown > 0 || peeking ? "visible" : "hidden" }}>
+            {actions.map((a) => (
+              <button key={a.label} type="button" className={"swipe-act" + (a.danger ? " danger" : "")} disabled={a.disabled} tabIndex={open ? 0 : -1}
+                onClick={(e) => { e.stopPropagation(); cb.current.onClose(); a.onClick(); }}>
+                <Icon name={a.icon} size={20} /><span>{a.label}</span>
+              </button>
+            ))}
+          </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -403,7 +403,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
         borderColor: allDone ? "var(--good)" : focused ? "color-mix(in srgb, var(--neon) 55%, transparent)" : undefined,
         boxShadow: allDone ? "0 0 0 1px var(--good), 0 0 22px -8px var(--good)" : focused ? "0 0 0 1px color-mix(in srgb,var(--neon) 30%,transparent), 0 18px 50px -20px var(--glow)" : undefined,
         opacity: allDone && !focused ? 0.9 : 1 }}>
-      <div className="row" style={{ alignItems: "flex-start", gap: 10 }}>
+      <div className="row" data-swipe-cover style={{ alignItems: "flex-start", gap: 10 }}>
         {/* Number, name and figure: one tap target that opens how to do it */}
         <button className="row grow entry-handle" style={{ textAlign: "left", alignItems: "flex-start", gap: 10, minWidth: 0 }} onClick={(ev) => { ev.stopPropagation(); onDetail(); }} {...drag?.attributes} {...drag?.listeners} aria-label={`${ex.name}: how to do it`} aria-roledescription="Exercise. Press and hold to move it.">
           <span className="mono" style={{ width: 26, height: 26, flex: "none", display: "grid", placeItems: "center", borderRadius: 8, fontSize: 13, marginTop: 2,

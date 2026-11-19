@@ -445,20 +445,23 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .extra-tag { display: inline-flex; align-items: center; margin-right: 6px; padding: 1px 6px; border-radius: 99px; font: 700 11px var(--mono); word-spacing: -0.35em; color: var(--neon-ink); border: 1px solid color-mix(in srgb, var(--neon) 50%, transparent); background: color-mix(in srgb, var(--neon) 10%, transparent); vertical-align: 1px; }
 .extra-why { font-size: 12px; margin-top: 4px; color: var(--muted); }
 
-/* Workout card actions: swipe a card left (or tap the handle on its right edge) to show a 2 × 3 grid of actions, as tall as the card */
+/* Workout card actions: swipe a card left (or tap the handle on the header's right edge); a bar slides in over the
+   card's header, edge to edge, and stays until swiped back right */
 .swipe-wrap { position: relative; }
-.swipe-actions { position: absolute; top: 0; bottom: 0; right: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; gap: 1px;
-  border-radius: 18px; overflow: hidden; background: var(--line); border: 1px solid var(--line-strong); transition: opacity .2s; }
-.swipe-act { display: grid; place-items: center; align-content: center; gap: 3px; min-height: 44px; background: var(--surface-solid); color: var(--neon-ink); font: 600 11px var(--body); }
+.swipe-clip { position: absolute; top: 0; left: 0; right: 0; z-index: 3; overflow: hidden; border-radius: var(--r-lg) var(--r-lg) 0 0; }
+.swipe-cover { position: absolute; top: 0; left: 0; right: 0; display: grid; grid-template-columns: repeat(6, 1fr);
+  background: var(--surface-solid); border-bottom: 1px solid var(--line-strong); border-radius: var(--r-lg) var(--r-lg) 0 0; overflow: hidden;
+  box-shadow: -12px 0 24px -12px rgba(0, 0, 0, .6); }
+.swipe-act { display: grid; place-items: center; align-content: center; gap: 4px; background: var(--surface-solid); color: var(--neon-ink); font: 600 11px var(--body); }
 .swipe-act span { color: var(--ink); }
+.swipe-act + .swipe-act { border-left: 1px solid var(--line); }
 .swipe-act.danger { color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, var(--surface-solid)); }
 .swipe-act.danger span { color: var(--bad); }
 .swipe-act:disabled { opacity: .35; }
 .swipe-act:active { filter: brightness(1.3); }
-.swipe-card { position: relative; will-change: transform; }
-.swipe-handle { position: absolute; top: 50%; right: 0; width: 18px; height: 56px; transform: translateY(-50%); display: grid; place-items: center; z-index: 2; }
+.swipe-handle { position: absolute; right: 0; width: 18px; height: 56px; transform: translateY(-50%); display: grid; place-items: center; z-index: 2; }
 .swipe-handle span { width: 4px; height: 30px; border-radius: 2px; background: var(--line-strong); }
 .swipe-handle:active span { background: var(--neon); }
-@keyframes swipe-peek { 0%, 100% { transform: translateX(0); } 30%, 55% { transform: translateX(-56px); } }
-.swipe-peek { animation: swipe-peek 1.6s var(--ease) .6s 1; }
-@media (prefers-reduced-motion: reduce) { .swipe-peek { animation: none; } .swipe-card { transition: none !important; } }
+@keyframes swipe-peek { 0%, 100% { transform: translateX(100%); } 30%, 55% { transform: translateX(calc(100% - 64px)); } }
+.swipe-peek { animation: swipe-peek 1.6s var(--ease) .6s 1 both; }
+@media (prefers-reduced-motion: reduce) { .swipe-peek { animation: none; } .swipe-cover { transition: none !important; } }
