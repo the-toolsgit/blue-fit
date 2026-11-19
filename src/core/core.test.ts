@@ -119,7 +119,7 @@ describe("records and PRs", () => {
 
 describe("progression hint", () => {
   it("adds the increment when every working set hit the top", () => {
-    expect(progressionHint([set(170, 15), set(170, 15), set(170, 16), set(50, 5, "warmup")], 10, 15, 2.5)).toEqual({ kind: "addWeight", weight: 172.5, reps: 10, from: 170 });
+    expect(progressionHint([set(170, 15), set(170, 15), set(170, 16), set(50, 5, "warmup")], 10, 15, 2.5)).toEqual({ kind: "addWeight", weight: 180, reps: 10, from: 170 }); // 172.5 → round number
   });
   it("otherwise asks to beat last reps", () => {
     expect(progressionHint([set(170, 10), set(170, 10), set(170, 9)], 10, 15, 5)).toEqual({ kind: "beatReps", weight: 170, targetReps: [11, 10, 9], lastReps: [10, 10, 9] });

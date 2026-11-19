@@ -386,6 +386,10 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   // Effort check: the failure set shows earlier sets at the same weight left too many reps (today, and last time)
   const gap = effortGap(e, s.deload);
   const lastGap = last ? effortGap(last.entry) : null;
+  // The "last time" effort tip can be hidden for this exercise in this workout (remembered while the workout runs)
+  const tipKey = `bf-tipx-${s.id}-${e.id}`;
+  const [tipOff, setTipOff] = useState(() => { try { return sessionStorage.getItem(tipKey) === "1"; } catch { return false; } });
+  const hideTip = () => { setTipOff(true); try { sessionStorage.setItem(tipKey, "1"); } catch { /* fine */ } };
   // The first set that isn't done is the open one; a picked set counts only if it's done or that one (sets go in order)
   const firstOpen = e.sets.find((x) => !x.done) ?? null;
   const picked = e.sets.find((x) => x.id === sel);
@@ -433,15 +437,16 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               <span className="grow">Deload: weights are 10% lighter. Stop every set with {DELOAD.repsLeft} reps left.</span>
             </div>
           )}
-          {lastGap && !allDone && !gap && (
-            <div className="effort-note"><Icon name="flame" size={18} /><span><b>Last time: {effortLine(lastGap).replace(/^R/, "r").replace(/^S/, "s")}.</b> {EFFORT_RULE}</span></div>
+          {lastGap && !allDone && !gap && !tipOff && (
+            <div className="effort-note"><Icon name="flame" size={18} /><span className="grow"><b>Last time: {effortLine(lastGap).replace(/^R/, "r").replace(/^S/, "s")}.</b> {EFFORT_RULE}</span>
+              <button type="button" className="tip-x" aria-label="Hide this tip" onClick={(ev) => { ev.stopPropagation(); hideTip(); }}><Icon name="close" size={16} /></button></div>
           )}
           {hint.kind !== "none" && !allDone && (
             <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
               <span style={{ color: "var(--neon-ink)" }}><Icon name={hint.kind === "addWeight" ? "up" : "bolt"} size={18} /></span>
               <span className="grow" style={{ fontSize: 14 }}>
                 {hint.kind === "addWeight"
-                  ? <>Hit the top last time. Try <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>
+                  ? <>You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>
                   : <>Beat last time: <b className="mono">{fmtNum(hint.weight)} × {hint.targetReps.join(", ")}</b></>}
               </span>
               <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
