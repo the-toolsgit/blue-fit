@@ -538,5 +538,21 @@ export const MIGRATIONS: Migration[] = [
       return { ...d, exercises: d.exercises.map((x) => (x.id === t.id ? { ...x, ...structuredClone(Object.fromEntries(keys.map((k) => [k, t[k]]))) } : x)) };
     },
   },
+  {
+    // Nov 20 2026: leg extension with the seat back, leaning back (hips bent ~40° instead of ~90°): same quad growth,
+    // far more rectus femoris growth (Leo, from Jeff Nippard's summary of a 10-week study). New figure and text,
+    // only while the built-in copy still has the earlier setup (never a copy the user edited).
+    id: "2026-11-20-leg-extension-seat-back",
+    run(d) {
+      const id = "leg-extension";
+      const t = (plainText as unknown as Record<string, Partial<Exercise>>)[id];
+      const e = d.exercises.find((x) => x.id === id);
+      if (!e || e.isCustom) return null;
+      const fixed = applyFigureFixes(d, id) ?? d;
+      const oldSetup = ["Knees at the seat edge, lined up with the pivot.", "Back of the knee at the seat edge, knee lined up with the machine's pivot."];
+      if (!oldSetup.includes(e.setup[0])) return fixed === d ? null : fixed;
+      return { ...fixed, exercises: fixed.exercises.map((x) => (x.id === id ? { ...x, why: t.why!, setup: [...t.setup!], form: [...t.form!], tips: [...t.tips!], avoid: [...t.avoid!] } : x)) };
+    },
+  },
 ];
 
