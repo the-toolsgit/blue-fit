@@ -56,6 +56,19 @@ function shortSets(sets: LoggedSet[], repMin: number): { reps: string; where: st
   return { reps, where: `on sets ${andList(short.map((x) => x.n))}` };
 }
 
+/**
+ * Too heavy: the first regular set fell short of the bottom of the rep range. The weight to use next time leaves
+ * AIM_LEFT reps at the bottom of the range (Epley), rounded down. Same rule for the end-of-workout note and the
+ * workout's "go down" tip.
+ */
+export function tooHeavy(e: SessionEntry, ex: Exercise, deload = false): { weight: number; from: number; reps: number } | null {
+  const f = failureSet(e, deload);
+  const first = e.sets.find((x) => isWork(x) && x.type === "working" && x !== f);
+  if (e.repMin == null || !first || first.reps! >= e.repMin) return null;
+  const w = weightFor(epley(first.weight!, first.reps!), e.repMin, ex);
+  return w > 0 && w < first.weight! ? { weight: w, from: first.weight!, reps: first.reps! } : null;
+}
+
 export function workoutNotes(s: Session, history: Session[], exMap: Map<string, Exercise>, routine?: Routine): WorkoutNote[] {
   const notes: WorkoutNote[] = [];
   const all = history.some((h) => h.id === s.id) ? history : [...history, s];
@@ -85,9 +98,9 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
 
       // Below the range: the first regular set fell short of the bottom → too heavy
       const first = regular[0];
-      if (repMin != null && first && first.reps! < repMin) {
-        const w = weightFor(epley(first.weight!, first.reps!), repMin, ex);
-        if (w > 0 && w < first.weight!)
+      const heavy = tooHeavy(e, ex, s.deload);
+      if (repMin != null && first && heavy) {
+        const w = heavy.weight;
           notes.push({ kind: "below", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too heavy`, text: (({ reps, where }) => `You got ${reps} at ${fmtNum(first.weight!)} ${where}, but the plan says ${range}. Try ${fmtNum(w)} next time.`)(shortSets(regular.filter((x) => x.weight === first.weight), repMin)) });
       }
 

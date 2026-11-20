@@ -40,3 +40,18 @@ describe("too light by the failure set", () => {
     expect(progressionHint([set(12), set(12), set(12), set(15, "failure")], 10, 12, 10)).toMatchObject({ kind: "addWeight", weight: 115 });
   });
 });
+
+import { tooHeavy } from "./notes";
+describe("tooHeavy (go-down tip)", () => {
+  const ex = { id: "x", name: "X", incrementLb: 5 } as unknown as import("./types").Exercise;
+  const set = (w: number, r: number) => ({ id: `s${w}${r}${Math.random()}`, type: "working", weight: w, reps: r, done: true }) as import("./types").LoggedSet;
+  it("suggests a lighter weight when the first set falls short of the range", () => {
+    const e = { id: "e", exerciseId: "x", repMin: 12, repMax: 12, sets: [set(210, 10), set(210, 10), set(210, 10)] } as unknown as import("./types").SessionEntry;
+    const h = tooHeavy(e, ex)!;
+    expect(h.from).toBe(210); expect(h.weight).toBeLessThan(210);
+  });
+  it("is quiet when the range was reached", () => {
+    const e = { id: "e", exerciseId: "x", repMin: 10, repMax: 12, sets: [set(210, 10)] } as unknown as import("./types").SessionEntry;
+    expect(tooHeavy(e, ex)).toBeNull();
+  });
+});

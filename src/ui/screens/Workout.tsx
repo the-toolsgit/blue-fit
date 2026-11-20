@@ -5,6 +5,7 @@ import { DndContext, MeasuringStrategy, MouseSensor, TouchSensor, closestCenter,
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MANUAL_WHY } from "../../core/failure";
+import { tooHeavy } from "../../core/notes";
 import { orderSlotsLike } from "../../core/routineEdit";
 import { useRestRunning, WorkoutRestPanel, WorkoutRestPill } from "../components/RestTimer";
 import { CURL } from "../../core/figure/poses";
@@ -392,7 +393,11 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const hint1 = alignHint(hint0, lastGap, repMax);
   // Tips stay quiet until the weight should change (Leo, Nov 19 2026): only "go up" shows, and effort notes only
   // when the failure set says the weight was too light.
-  const hint = hint1.kind === "addWeight" ? hint1 : ({ kind: "none" } as const);
+  // "Go down" when last time's first regular set fell short of today's rep range (same rule as the workout note)
+  const heavy = hint0.kind === "none" || !last ? null : tooHeavy({ ...last.entry, repMin }, ex);
+  const hint = hint1.kind === "addWeight" ? hint1
+    : heavy ? ({ kind: "lowerWeight", weight: heavy.weight, reps: repMin, got: heavy.reps, from: heavy.from } as const)
+    : ({ kind: "none" } as const);
   const lastLight = !!lastGap && tooLight(lastGap, last?.entry.repMax ?? repMax);
   const nowLight = !!gap && tooLight(gap, repMax);
   // The "last time" effort tip can be hidden for this exercise in this workout (remembered while the workout runs)
@@ -452,9 +457,11 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           )}
           {hint.kind !== "none" && !hintUsed && !allDone && (
             <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
-              <span style={{ color: "var(--neon-ink)" }}><Icon name="up" size={18} /></span>
+              <span style={{ color: "var(--neon-ink)" }}><Icon name={hint.kind === "lowerWeight" ? "down" : "up"} size={18} /></span>
               <span className="grow" style={{ fontSize: 14 }}>
-                You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.
+                {hint.kind === "lowerWeight"
+                  ? <>You got {hint.got} reps at {fmtNum(hint.from)} last time, the plan says {repRange(repMin, repMax)}. Go down to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>
+                  : <>You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>}
               </span>
               <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
                 onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.reps)); markUsed(); }}>Use</button>

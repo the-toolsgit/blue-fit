@@ -296,7 +296,8 @@ Uses the last finished session with done sets of the exercise; considers its don
 - **Ready for more weight** (Nov 18 2026; the top alone can be a one-off) when every regular set (the failure set left out) at the top weight reached the top of the range (`reps ≥ repMax`) **and** either the workout before also did (two workouts in a row, not weeks) or the failure set beat the top by 2+ reps (`READY_MARGIN`); also when the failure set shows failure reps − 2 is already past the top. → "You reached {repMax} reps on every set last time. Go up to {next} × {repMin}." Next = heaviest + increment, rounded up to a multiple of 10 from 40 lb (Leo: round numbers). Thresholds are *judgment*.
 - **Top reached once, not proven yet** → no tip (works the same, just quiet).
 - Tapping **Use** fills the sets and hides the hint for the rest of that workout (and keeps the lower "too light" note hidden); the next workout works it out again from what was recorded.
-- Otherwise → no tip. **Only "go up" shows in the logger** (Leo, Nov 19 2026: no tips until the weight should change; the user just keeps training). The "beat last time" target still drives nothing visible.
+- **Too heavy** (Nov 20 2026): last time's first regular set fell short of the bottom of today's rep range → "You got 10 reps at 210 last time, the plan says 12. Go down to 190 × 12." with a down arrow and Use. Same weight as the workout note "too heavy" (`tooHeavy` in `core/notes.ts`: leaves 2 reps at the bottom of the range by Epley, rounded down). "Go up" wins if both apply.
+- Otherwise → no tip. **Only "go up" and "go down" show in the logger** (Leo, Nov 19 2026: no tips until the weight should change; the user just keeps training). The "beat last time" target still drives nothing visible.
 - **Use** applies weight and target reps to the working sets not done yet.
 
 ### 5.6 Pre-fill and carry-forward
