@@ -554,5 +554,23 @@ export const MIGRATIONS: Migration[] = [
       return { ...fixed, exercises: fixed.exercises.map((x) => (x.id === id ? { ...x, why: t.why!, setup: [...t.setup!], form: [...t.form!], tips: [...t.tips!], avoid: [...t.avoid!] } : x)) };
     },
   },
+  {
+    // Nov 20 2026: shorter, plainer leg extension why and tip (Leo: no jargon). Only where the v0.1.56 wording is still there.
+    id: "2026-11-20-leg-extension-plain-tip",
+    run(d) {
+      const t = (plainText as unknown as Record<string, Partial<Exercise>>)["leg-extension"];
+      const was = { why: "Quads only. Seat back grows the rectus femoris more.", tip: "Leaning back stretches the rectus femoris (front of the thigh, crosses the hip): it grew much more than sitting upright." };
+      let changed = false;
+      const exercises = d.exercises.map((x) => {
+        if (x.id !== "leg-extension" || x.isCustom) return x;
+        const why = x.why === was.why ? t.why! : x.why;
+        const tips = x.tips.map((y) => (y === was.tip ? t.tips![0] : y));
+        if (why === x.why && tips.every((y, i) => y === x.tips[i])) return x;
+        changed = true;
+        return { ...x, why, tips };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
 ];
 
