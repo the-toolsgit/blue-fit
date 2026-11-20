@@ -45,6 +45,9 @@ export const STRETCH_MUSCLES = new Set<MuscleGroup>(["biceps", "triceps", "quads
 /** Most sets for one muscle in one workout (indirect count ½) before extra sets add little: growth levels off at
  *  ~11 fractional sets per session (Remmert 2025 meta-regression, preprint; Leo, Nov 20 2026). */
 export const MAX_SESSION_SETS = 11;
+/** Up to this many sets over MAX_SESSION_SETS is only a warning (yellow), not a red miss; it still doesn't pass
+ *  (Leo, Nov 20 2026: "not a huge deal"). */
+export const SESSION_SETS_WARN = 2;
 /** Direct sets that count as hard work for a muscle that day: hard work on back-to-back days leaves under ~48 h to
  *  recover (ACSM 2009: 48 h between sessions for the same muscles). The 4-set line is *judgment*. */
 export const HARD_SETS = 4;
@@ -70,8 +73,10 @@ export type CheckId = "volume" | "jobs" | "stretch" | "frequency" | "dose" | "re
 export interface Check { id: CheckId; label: string; pass: boolean; detail: string;
   /** What's missing, one per line: who (muscle or exercise) and what ("Back", "no lower back"). Empty when passed. */
   issues: { who: string; what: string }[];
-  /** The rule in one line (what passing means), e.g. "10 or fewer sets per muscle per workout" */
-  rule: string }
+  /** The rule in one line (what passing means), e.g. "11 or fewer sets per muscle per workout" */
+  rule: string;
+  /** Not passed, but only by a little: shown as a yellow warning instead of red (still not counted as passed) */
+  warn?: boolean }
 export interface ScorePart { id: "volume" | "parts" | "recovery" | "failure" | "twice" | "dose"; label: string; points: number; max: number; note: string }
 export interface WeekScore { score: number; parts: ScorePart[] }
 export interface WeekInsight { days: number; sets: number; minutes: number; muscles: number; tiles: Tile[]; checks: Check[]; score: WeekScore }
@@ -143,8 +148,9 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     `Every muscle over ${MAX_SESSION_SETS} sets a week on 2+ days`);
 
   const over = main.flatMap((g) => days.filter((d) => daySets(d, g) > MAX_SESSION_SETS).map((d) => ({ g, d, n: daySets(d, g) })));
-  const dose = check("dose", "Sets per workout", uniq(over.map((o) => `${L(o.g)}: ${fmtNum(o.n)} sets on ${o.d.title}`)),
+  const dose0 = check("dose", "Sets per workout", uniq(over.map((o) => `${L(o.g)}: ${fmtNum(o.n)} sets on ${o.d.title}`)),
     `${MAX_SESSION_SETS} or fewer sets per muscle per workout`);
+  const dose: Check = over.length && over.every((o) => o.n <= MAX_SESSION_SETS + SESSION_SETS_WARN) ? { ...dose0, warn: true } : dose0;
 
   const recovery = check("recovery", "Recovery", main.flatMap((g) => {
     const hard = days.filter((d) => d.weekday != null && directSets(d, g) >= HARD_SETS);

@@ -99,6 +99,17 @@ describe("week score", () => {
     const none = weekInsight(r, exMap, seed.targets, "growth", { muscles: new Set(), eligible: () => true, applies: true });
     expect(none.score.parts.find((p) => p.id === "failure")!.points).toBe(0);
   });
+  it("sets per workout: 1–2 over the limit is a warning (still not passed), more is a miss", () => {
+    const back = r.days.find((d) => d.slots.some((s) => s.exerciseId === "t-bar-reverse-row"))!;
+    const withSets = (n: number) => ({ ...r, days: r.days.map((d) => (d.id !== back.id ? d : { ...d, slots: d.slots.map((s) => (s.exerciseId === "t-bar-reverse-row" ? { ...s, sets: s.sets + n } : s)) })) });
+    const dose = (rr: typeof r) => weekInsight(rr, exMap, seed.targets).checks.find((c) => c.id === "dose")!;
+    const base = dose(r);
+    expect(base.pass).toBe(false);
+    expect(base.warn).toBe(true); // back at 12
+    expect(dose(withSets(1)).warn).toBe(true); // 13
+    expect(dose(withSets(2)).warn).toBeFalsy(); // 14
+    expect(dose(withSets(2)).pass).toBe(false);
+  });
   it("twice a week is only asked of muscles over 11 sets a week", () => {
     const w = weekInsight(r, exMap, seed.targets);
     expect(w.checks.find((c) => c.id === "frequency")!.detail).not.toContain("Front delts");

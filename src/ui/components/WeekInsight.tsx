@@ -79,8 +79,8 @@ export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
         )}
         {/* Tiles: what's missing first (full width, with the details), then what's done (two per row) */}
         <div className="check-grid">
-          {[...i.checks].sort((a, b) => Number(a.pass) - Number(b.pass)).map((c) => (
-            <div key={c.id} className={"check-tile" + (c.pass ? " pass" : " fail")}>
+          {[...i.checks].sort((a, b) => rank(a) - rank(b)).map((c) => (
+            <div key={c.id} className={"check-tile" + (c.pass ? " pass" : c.warn ? " fail warn" : " fail")}>
               <span className="check-head">
                 <span className="check-ic"><Icon name={CHECK_ICON[c.id]} size={16} /></span>
                 <span className="check-label">{c.label}</span>
@@ -98,6 +98,9 @@ export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
     </>
   );
 }
+
+/** Tile order: red misses, then yellow warnings, then passed */
+const rank = (c: { pass: boolean; warn?: boolean }) => (c.pass ? 2 : c.warn ? 1 : 0);
 
 /** An icon for each check (Plan check tiles) */
 const CHECK_ICON: Record<CheckId, string> = {

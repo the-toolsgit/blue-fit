@@ -438,6 +438,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 .check-tile { min-width: 0; display: grid; gap: 6px; align-content: start; padding: 10px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); }
 .check-tile.fail { grid-column: 1 / -1; border-color: color-mix(in srgb, var(--bad) 40%, transparent); }
+.check-tile.fail.warn { border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
+.check-tile.fail.warn .check-ic { color: var(--warn); background: color-mix(in srgb, var(--warn) 14%, transparent); }
 .check-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .check-ic { width: 28px; height: 28px; flex: none; display: grid; place-items: center; border-radius: 9px; color: var(--good); background: color-mix(in srgb, var(--good) 14%, transparent); }
 .check-tile.fail .check-ic { color: var(--bad); background: color-mix(in srgb, var(--bad) 13%, transparent); }
