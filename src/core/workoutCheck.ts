@@ -69,7 +69,9 @@ export interface Tile {
 export type CheckId = "volume" | "jobs" | "stretch" | "frequency" | "dose" | "recovery" | "reps" | "mix" | "rest" | "heavy";
 export interface Check { id: CheckId; label: string; pass: boolean; detail: string;
   /** What's missing, one per line: who (muscle or exercise) and what ("Back", "no lower back"). Empty when passed. */
-  issues: { who: string; what: string }[] }
+  issues: { who: string; what: string }[];
+  /** The rule in one line (what passing means), e.g. "10 or fewer sets per muscle per workout" */
+  rule: string }
 export interface ScorePart { id: "volume" | "parts" | "recovery" | "failure" | "twice" | "dose"; label: string; points: number; max: number; note: string }
 export interface WeekScore { score: number; parts: ScorePart[] }
 export interface WeekInsight { days: number; sets: number; minutes: number; muscles: number; tiles: Tile[]; checks: Check[]; score: WeekScore }
@@ -115,7 +117,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const L = (g: MuscleGroup) => muscleLabel(g);
   const list = (xs: string[]) => xs.slice(0, 3).join(" · ") + (xs.length > 3 ? ` · +${xs.length - 3} more` : "");
   const issue = (b: string) => { const i = b.indexOf(": "); return i < 0 ? { who: "", what: b } : { who: b.slice(0, i), what: b.slice(i + 2) }; };
-  const check = (id: CheckId, label: string, bad: string[], ok: string): Check => ({ id, label, pass: bad.length === 0, detail: bad.length ? list(bad) : ok, issues: bad.map(issue) });
+  const check = (id: CheckId, label: string, bad: string[], ok: string): Check => ({ id, label, pass: bad.length === 0, detail: bad.length ? list(bad) : ok, issues: bad.map(issue), rule: ok });
   const uniq = (xs: string[]) => [...new Set(xs)];
 
   const volume = (minOnly: boolean) => check("volume", "Weekly volume", main.flatMap((g) => {
@@ -142,7 +144,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
 
   const over = main.flatMap((g) => days.filter((d) => daySets(d, g) > MAX_SESSION_SETS).map((d) => ({ g, d, n: daySets(d, g) })));
   const dose = check("dose", "Sets per workout", uniq(over.map((o) => `${L(o.g)}: ${fmtNum(o.n)} sets on ${o.d.title}`)),
-    `${MAX_SESSION_SETS} or fewer sets per muscle per workout (indirect count ½)`);
+    `${MAX_SESSION_SETS} or fewer sets per muscle per workout`);
 
   const recovery = check("recovery", "Recovery", main.flatMap((g) => {
     const hard = days.filter((d) => d.weekday != null && directSets(d, g) >= HARD_SETS);

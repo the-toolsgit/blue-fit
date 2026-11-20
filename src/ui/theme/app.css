@@ -448,7 +448,6 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .check-issue:first-child { border-top: 0; padding-top: 0; }
 .check-issue b { font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
 .check-issue span { color: var(--muted); }
-.check-st { width: 18px; height: 18px; flex: none; display: grid; place-items: center; border-radius: 6px; color: var(--bad); border: 1px solid color-mix(in srgb, var(--bad) 50%, transparent); }
 .insight-row { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-top: 1px solid var(--line); }
 .insight-mark { width: 22px; height: 22px; flex: none; display: grid; place-items: center; border-radius: 7px; margin-top: 1px; color: var(--bad); border: 1px solid color-mix(in srgb, var(--bad) 50%, transparent); }
 .insight-row.pass .insight-mark { color: var(--on-neon); background: var(--good); border-color: var(--good); box-shadow: 0 0 10px -2px var(--good); }
