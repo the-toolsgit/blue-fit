@@ -572,5 +572,14 @@ export const MIGRATIONS: Migration[] = [
       return changed ? { ...d, exercises } : null;
     },
   },
+  {
+    // Nov 20 2026: sitting upright isn't wrong, just less stretch (Leo): drop it from the leg extension's Avoid.
+    id: "2026-11-20-leg-extension-upright-ok",
+    run(d) {
+      const e = d.exercises.find((x) => x.id === "leg-extension");
+      if (!e || e.isCustom || !e.avoid.includes("Sitting upright.")) return null;
+      return { ...d, exercises: d.exercises.map((x) => (x === e ? { ...x, avoid: x.avoid.filter((y) => y !== "Sitting upright.") } : x)) };
+    },
+  },
 ];
 
