@@ -142,6 +142,8 @@ export function planFailure(day: RoutineDay, date: string, c: FailureContext): F
   const label = (g: MuscleGroup) => muscleLabel(g).toLowerCase();
   const manual: FailurePick[] = day.slots.filter((s) => s.toFailure === true && c.exMap.has(s.exerciseId))
     .map((s) => ({ slotId: s.id, why: [MANUAL_WHY], manual: true }));
+  // Auto-adjust off (Settings → Workout adjustments): only failure the user turned on
+  if (c.settings.autoAdjust === false) return manual;
   // Beginners (< 1 year): they grow fine without it and are still learning form
   if (p?.yearsTraining != null && p.yearsTraining < 1) return manual;
   const budget = failureBudget(p);
@@ -241,7 +243,7 @@ const directIn = (day: RoutineDay | undefined, g: MuscleGroup, exMap: Map<string
 
 /** Slots of `day` (on `date`) that get one extra set, with the reasons. */
 export function planExtraSets(day: RoutineDay, date: string, c: FailureContext): ExtraPick[] {
-  if (deloadActive(c.settings, date) || date < c.today) return [];
+  if (c.settings.autoAdjust === false || deloadActive(c.settings, date) || date < c.today) return [];
   const ws = weekStart(c.today, c.settings.weekStartDay), we = addDays(ws, 6);
   if (date > we) return [];
   const doneThisWeek = (dayId: string) => c.finished.some((s) => s.status === "finished" && s.date >= ws && s.date <= we && s.dayId === dayId);

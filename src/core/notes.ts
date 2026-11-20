@@ -7,7 +7,7 @@ import type { Exercise, LoggedSet, Routine, Session, SessionEntry } from "./type
 import { fmtNum } from "./util";
 import { tonnage } from "./volume";
 
-export type NoteKind = "deload" | "below" | "drop" | "stuck" | "above" | "effort" | "skipped" | "volume";
+export type NoteKind = "deload" | "below" | "drop" | "stuck" | "above" | "effort" | "suggest" | "skipped" | "volume";
 export type NoteTone = "warn" | "up" | "good" | "info";
 export interface WorkoutNote { kind: NoteKind; tone: NoteTone; exerciseId?: string; title: string; text: string }
 
@@ -18,7 +18,7 @@ export const VOLUME_NOTE = 0.05;
 /** Weight for next time aims at the bottom of the range with 2 reps left (Epley; *judgment*). */
 const AIM_LEFT = 2;
 
-const ORDER: NoteKind[] = ["deload", "below", "drop", "stuck", "above", "effort", "skipped", "volume"];
+const ORDER: NoteKind[] = ["deload", "below", "drop", "stuck", "above", "effort", "suggest", "skipped", "volume"];
 const isWork = (x: LoggedSet) => x.done && (x.type === "working" || x.type === "failure") && x.weight != null && x.reps != null && x.reps > 0;
 const topWeight = (sets: LoggedSet[]) => Math.max(0, ...sets.filter(isWork).map((x) => x.weight!));
 const step = (ex: Exercise) => (ex.incrementLb > 0 ? ex.incrementLb : 5);
@@ -116,6 +116,10 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
       if (!notes.some((n) => n.kind === "deload") && stuck.some((l) => l.exerciseId === e.exerciseId))
         notes.push({ kind: "stuck", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: not improving`, text: `No progress in ${DELOAD.stallWeeks} weeks. Try a different rep range, or swap to another exercise for the same job.` });
     }
+
+    // Auto-adjust off: what the app would have changed, when the user didn't take it
+    if (e.suggestExtra) notes.push({ kind: "suggest", tone: "info", exerciseId: e.exerciseId, title: `${ex.name}: one more set`, text: `${e.suggestExtra.join(" · ")}. An extra set would have caught up.` });
+    if (e.suggestFailure && !failureSet(e, s.deload)) notes.push({ kind: "suggest", tone: "info", exerciseId: e.exerciseId, title: `${ex.name}: last set to failure`, text: "The app would have taken the last set to failure." });
 
     const g = effortGap(e, s.deload);
     if (g) notes.push({ kind: "effort", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too easy`, text: effortLine(g, e.repMax ?? e.repMin) });

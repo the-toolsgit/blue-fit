@@ -187,6 +187,15 @@ describe("extra set for skipped work", async () => {
     late.settings = { ...late.settings, deload: { start: ws, end: addDays(ws, 6) } };
     expect([...weekExtraSets(late).values()].flatMap((m) => [...m.keys()])).toEqual([]);
   });
+  it("Auto-adjust off: no extra sets and no app-picked failure; failure turned On in the plan stays", () => {
+    const on = ctx({ today: addDays(ws, 4) });
+    const off = { ...on, settings: { ...on.settings, autoAdjust: false } };
+    expect([...weekExtraSets(on).values()].flatMap((m) => [...m.keys()]).length).toBeGreaterThan(0);
+    expect([...weekExtraSets(off).values()].flatMap((m) => [...m.keys()])).toEqual([]);
+    expect(planFailure(day("mon"), "2026-11-14", { ...ctx(), settings: { ...ctx().settings, autoAdjust: false } })).toEqual([]);
+    const d = day("mon"), manual = { ...d, slots: d.slots.map((s, i) => (i === 0 ? { ...s, toFailure: true } : s)) };
+    expect(planFailure(manual, "2026-11-14", { ...ctx(), settings: { ...ctx().settings, autoAdjust: false } }).map((x) => x.slotId)).toEqual([d.slots[0].id]);
+  });
   it("after skipped days, +1 set on a later workout: one per muscle, max 4 sets, never on a past day", () => {
     const c = ctx({ today: addDays(ws, 4) });
     const picks = [...weekExtraSets(c)].flatMap(([dayId, m]) => [...m].map(([slotId, why]) => ({ d: day(dayId), slot: day(dayId).slots.find((s) => s.id === slotId)!, why })));

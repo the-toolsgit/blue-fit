@@ -82,6 +82,12 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
         <div className="setting"><span>Keep screen on during a workout</span><Switch label="Keep screen on" checked={settings.keepAwake} onChange={(v) => set("keepAwake", v)} /></div>
       </div>
 
+      <h2 className="section-title">Workout adjustments</h2>
+      <div className="glass" style={{ padding: "4px 14px" }}>
+        <div className="setting"><span>Auto-adjust workouts<span className="muted" style={{ display: "block", fontSize: 12 }}>Extra set for skipped work, failure sets</span></span>
+          <Switch label="Auto-adjust workouts" checked={settings.autoAdjust !== false} onChange={(v) => set("autoAdjust", v)} /></div>
+      </div>
+
       <h2 className="section-title">Reminders & tips</h2>
       <div className="glass" style={{ padding: "4px 14px" }}>
         <div className="setting"><span>Deload suggestions<span className="muted" style={{ display: "block", fontSize: 12 }}>Card on Today when it's time for a lighter week</span></span>

@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { moveSlot } from "../../core/routineEdit";
 import { REST, SPLASH_FLEX } from "../../core/figure/poses";
 import { createSessionFromDay } from "../../core/session";
+import { MANUAL_WHY } from "../../core/failure";
 import { ExtraTag, FailFlame, useWeekExtraSets, useWeekFailure } from "../components/FailFlame";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { localDate, weekOrder, weekStart } from "../../core/util";
@@ -38,6 +39,10 @@ export function TodayScreen() {
   const today = localDate(now);
   const deloading = deloadActive(settings, today);
   const fail = useWeekFailure(routine).get(day?.id ?? "");
+  // Auto-adjust off: what the app would have changed, kept as suggestions on the workout
+  const autoOff = settings.autoAdjust === false;
+  const failSug = useWeekFailure(autoOff ? routine : undefined, undefined, true).get(day?.id ?? "");
+  const extraSug = useWeekExtraSets(autoOff ? routine : undefined, true).get(day?.id ?? "");
   // Extra sets making up work skipped earlier this week (none on a deload)
   const extra = useWeekExtraSets(routine).get(day?.id ?? "");
   const slotSets = (n: number, id?: string) => (deloading ? deloadSets(n) : n + (id && extra?.has(id) ? 1 : 0));
@@ -75,7 +80,8 @@ export function TodayScreen() {
   const start = () => {
     if (active) return go("workout"); // one workout at a time
     if (!routine || !day) return;
-    const s = createSessionFromDay(routine, day, exMap, finished, new Date(), { deload: deloading, failure: [...(fail ?? [])].map(([slotId, why]) => ({ slotId, why })), extra: [...(extra ?? [])].map(([slotId, why]) => ({ slotId, why })) });
+    const s = createSessionFromDay(routine, day, exMap, finished, new Date(), { deload: deloading, failure: [...(fail ?? [])].map(([slotId, why]) => ({ slotId, why })), extra: [...(extra ?? [])].map(([slotId, why]) => ({ slotId, why })),
+      suggest: autoOff ? { failure: [...(failSug ?? [])].filter(([, why]) => !why.includes(MANUAL_WHY)).map(([slotId, why]) => ({ slotId, why })), extra: [...(extraSug ?? [])].map(([slotId, why]) => ({ slotId, why })) } : undefined });
     saveSession(s);
     go("workout");
   };

@@ -49,7 +49,7 @@ const targetSchema = z.object({
   group, min: z.number().nullable(), max: z.number().nullable(), angles: str.optional(), gap: str.optional(), note: str.optional(), off: z.boolean().optional(), priority: z.boolean().optional(), acceptedBelow: z.boolean().optional(),
 });
 const settingsSchema = z.object({
-  units: z.literal("lb"), restDefaultSec: z.number().int().min(0).max(1800), autoStartRest: z.boolean(), sound: z.boolean(), keepAwake: z.boolean(), deloadSuggestions: z.boolean().default(true), progressionHints: z.boolean().default(true),
+  units: z.literal("lb"), restDefaultSec: z.number().int().min(0).max(1800), autoStartRest: z.boolean(), sound: z.boolean(), keepAwake: z.boolean(), deloadSuggestions: z.boolean().default(true), progressionHints: z.boolean().default(true), autoAdjust: z.boolean().default(true),
   theme: z.enum(["system", "light", "dark"]), accent: z.enum(ACCENTS).default("blue"),
   profile: z.object({ goal: z.enum(["growth", "strength", "endurance", "maintenance"]), phase: z.enum(["cutting", "maintaining", "bulking"]),
     age: z.number().min(10).max(100).nullable(), yearsTraining: z.number().min(0).max(80).nullable(), sleepHours: z.number().min(0).max(16).nullable() }).nullable().optional(), weekStartDay: z.number().int().min(0).max(6).default(1),

@@ -163,6 +163,26 @@ describe("session logic", () => {
     const h = applyHint(s, s.entries[0].id, 92.5, 10);
     expect(h.entries[0].sets.every((x) => x.weight === 92.5 && x.reps === 10)).toBe(true);
   });
+  it("auto-adjust off: suggestions are stored, not applied; taking one applies it; the summary notes the rest", async () => {
+    const { takeExtra, takeFailure } = await import("./session");
+    const { workoutNotes } = await import("./notes");
+    const [a, b] = [mon.slots[0], mon.slots[1]];
+    const s = createSessionFromDay(routine, mon, exMap, [], new Date(2026, 10, 16, 10), { suggest: { extra: [{ slotId: a.id, why: ["Lats behind this week"] }], failure: [{ slotId: b.id, why: ["x"] }] } });
+    const [ea, eb] = s.entries;
+    expect(ea.sets.length).toBe(a.sets);
+    expect(ea.extraSet).toBeUndefined();
+    expect(ea.suggestExtra).toEqual(["Lats behind this week"]);
+    expect(eb.toFailure).toBeUndefined();
+    expect(eb.suggestFailure).toEqual(["x"]);
+    expect(workoutNotes(s, [], exMap).filter((n) => n.kind === "suggest")).toHaveLength(2);
+    const t = takeFailure(takeExtra(s, ea.id), eb.id);
+    expect(t.entries[0].sets.length).toBe(a.sets + 1);
+    expect(t.entries[0].extraSet).toEqual(["Lats behind this week"]);
+    expect(t.entries[0].suggestExtra).toBeUndefined();
+    expect(t.entries[1].toFailure).toBe(true);
+    expect(t.entries[1].suggestFailure).toBeUndefined();
+    expect(workoutNotes(t, [], exMap).filter((n) => n.kind === "suggest")).toHaveLength(0);
+  });
   it("supersets alternate and rest after the last one", () => {
     let s = createSessionFromDay(routine, mon, exMap, [], new Date());
     s = toggleSupersetWithNext(s, s.entries[4].id); // curls A

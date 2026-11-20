@@ -53,9 +53,13 @@ export function buildEntry(ex: Exercise, history: Session[], opts: { sets?: numb
 
 /** `failure`: the day's "last set to failure" picks (core/failure.ts planFailure); `extra`: slots that get one more set
  *  (planExtraSets). Both are stored on the entries so they stay fixed. */
-export function createSessionFromDay(routine: Routine, day: RoutineDay, exercises: Map<string, Exercise>, history: Session[], now: Date, opts: { deload?: boolean; failure?: { slotId: string; why: string[] }[]; extra?: { slotId: string; why: string[] }[] } = {}): Session {
+export function createSessionFromDay(routine: Routine, day: RoutineDay, exercises: Map<string, Exercise>, history: Session[], now: Date, opts: { deload?: boolean; failure?: { slotId: string; why: string[] }[]; extra?: { slotId: string; why: string[] }[];
+  /** Auto-adjust off: the picks the app would have made, stored as suggestions (not applied) */
+  suggest?: { failure?: { slotId: string; why: string[] }[]; extra?: { slotId: string; why: string[] }[] } } = {}): Session {
   const fail = new Map((opts.failure ?? []).map((x) => [x.slotId, x.why]));
   const extra = new Map((opts.deload ? [] : opts.extra ?? []).map((x) => [x.slotId, x.why]));
+  const sFail = new Map((opts.deload ? [] : opts.suggest?.failure ?? []).map((x) => [x.slotId, x.why]));
+  const sExtra = new Map((opts.deload ? [] : opts.suggest?.extra ?? []).map((x) => [x.slotId, x.why]));
   const entries = day.slots.flatMap((slot) => {
     const ex = exercises.get(slot.exerciseId);
     if (!ex) return [];
@@ -63,7 +67,9 @@ export function createSessionFromDay(routine: Routine, day: RoutineDay, exercise
     const e0 = buildEntry(ex, history, { slot: more ? { ...slot, sets: slot.sets + 1 } : slot, deload: opts.deload });
     const e = more ? { ...e0, extraSet: more } : e0;
     const why = fail.get(slot.id);
-    return [why ? { ...e, toFailure: true, failWhy: why } : e];
+    const e2 = why ? { ...e, toFailure: true, failWhy: why } : e;
+    const se = sExtra.get(slot.id), sf = why ? undefined : sFail.get(slot.id);
+    return [{ ...e2, ...(se ? { suggestExtra: se } : {}), ...(sf ? { suggestFailure: sf } : {}) }];
   });
   return { id: uid(), date: localDate(now), title: day.title, routineId: routine.id, dayId: day.id, startedAt: now.toISOString(), finishedAt: null, status: "active", source: "app", entries, ...(opts.deload ? { deload: true } : {}) };
 }
@@ -109,6 +115,13 @@ export const addSet = (s: Session, entryId: string, type: LoggedSet["type"] = "w
   });
 
 export const removeSet = (s: Session, entryId: string, setId: string): Session => mapEntry(s, entryId, (e) => ({ ...e, sets: e.sets.filter((x) => x.id !== setId) }));
+/** Take the suggested extra set: one more working set, now an applied extra set. */
+export const takeExtra = (s: Session, entryId: string): Session =>
+  mapEntry(addSet(s, entryId), entryId, ({ suggestExtra, ...e }) => ({ ...e, extraSet: suggestExtra }));
+/** Take the suggested failure set: the last set goes to failure. */
+export const takeFailure = (s: Session, entryId: string): Session =>
+  mapEntry(s, entryId, ({ suggestFailure, ...e }) => ({ ...e, toFailure: true, failWhy: suggestFailure }));
+
 export const setEntry = (s: Session, entryId: string, patch: Partial<SessionEntry>): Session => mapEntry(s, entryId, (e) => ({ ...e, ...patch }));
 export const addEntry = (s: Session, entry: SessionEntry): Session => ({ ...s, entries: [...s.entries, entry] });
 export const removeEntry = (s: Session, entryId: string): Session => ({ ...s, entries: s.entries.filter((e) => e.id !== entryId) });

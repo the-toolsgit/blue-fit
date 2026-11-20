@@ -7,8 +7,9 @@ import { useStore } from "../store";
 import { Icon } from "./Icon";
 
 /** This week's flames for a routine (the saved plan or an Edit plan draft): dayId → slotId → reasons. */
-export function useWeekFailure(routine: Routine | undefined, targetsDraft?: VolumeTarget[]) {
-  const { exMap, targets: saved, settings, finished } = useStore();
+export function useWeekFailure(routine: Routine | undefined, targetsDraft?: VolumeTarget[], asIfAuto = false) {
+  const { exMap, targets: saved, settings: real, finished } = useStore();
+  const settings = useMemo(() => (asIfAuto ? { ...real, autoAdjust: true } : real), [real, asIfAuto]);
   const targets = targetsDraft ?? saved;
   const today = localDate(new Date());
   return useMemo(() => (routine ? weekFailure({ routine, exMap, targets, settings, finished, today }) : new Map<string, Map<string, string[]>>()),
@@ -22,8 +23,9 @@ export function FailFlame({ why, size = 14 }: { why: string[] | undefined; size?
 }
 
 /** This week's extra sets (work skipped earlier this week made up): dayId → slotId → reasons. */
-export function useWeekExtraSets(routine: Routine | undefined) {
-  const { exMap, targets, settings, finished } = useStore();
+export function useWeekExtraSets(routine: Routine | undefined, asIfAuto = false) {
+  const { exMap, targets, settings: real, finished } = useStore();
+  const settings = useMemo(() => (asIfAuto ? { ...real, autoAdjust: true } : real), [real, asIfAuto]);
   const today = localDate(new Date());
   return useMemo(() => (routine ? weekExtraSets({ routine, exMap, targets, settings, finished, today }) : new Map<string, Map<string, string[]>>()),
     [routine, exMap, targets, settings, finished, today]);

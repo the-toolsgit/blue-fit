@@ -14,7 +14,7 @@ import { progressionHint } from "../../core/progression";
 import { alignHint, effortGap, effortLine, failureSet, tooLight } from "../../core/effort";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
-  addEntry, addSet, afterSetDone, applyHint, buildEntry, durationMin, finishSession, lastEntryFor, prevEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
+  addEntry, addSet, afterSetDone, applyHint, takeExtra, takeFailure, buildEntry, durationMin, finishSession, lastEntryFor, prevEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
   setEntry, swapEntry, toggleDone, toggleSupersetWithNext, updateSet,
 } from "../../core/session";
 import type { Exercise, LoggedSet, Session, SessionEntry, SetType } from "../../core/types";
@@ -402,6 +402,9 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const tipsOn = settings.progressionHints;
   const lastLight = tipsOn && !!lastGap && tooLight(lastGap, last?.entry.repMax ?? repMax);
   const nowLight = tipsOn && !!gap && tooLight(gap, repMax);
+  // Auto-adjust off: what the app would have changed, as tips the user can take
+  const sugExtra = tipsOn && !allDone && !s.deload ? e.suggestExtra : undefined;
+  const sugFail = tipsOn && !allDone && !s.deload && !e.toFailure ? e.suggestFailure : undefined;
   // The "last time" effort tip can be hidden for this exercise in this workout (remembered while the workout runs)
   const tipKey = `bf-tipx-${s.id}-${e.id}`;
   const [tipOff, setTipOff] = useState(() => { try { return sessionStorage.getItem(tipKey) === "1"; } catch { return false; } });
@@ -448,7 +451,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
 
       {e.notes && <div className="row" style={{ gap: 8, alignItems: "center", fontSize: 13, marginTop: 8, padding: "8px 10px", borderRadius: 10, background: "var(--surface-2)" }}><span style={{ display: "inline-flex", flex: "none" }}><Icon name="note" size={15} /></span><span>{e.notes}</span></div>}
 
-      {(last || hint.kind !== "none" || s.deload || (lastLight && !allDone)) && (
+      {(last || hint.kind !== "none" || s.deload || (lastLight && !allDone) || sugExtra || sugFail) && (
         <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
           {last && <div className="mono muted" style={{ fontSize: 13 }}>Last: {setsLine(last.entry.sets)}</div>}
           {s.deload && !allDone && (
@@ -467,6 +470,20 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               </span>
               <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
                 onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.reps)); markUsed(); }}>Use</button>
+            </div>
+          )}
+          {sugExtra && (
+            <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
+              <span style={{ color: "var(--neon-ink)" }}><Icon name="plus" size={18} /></span>
+              <span className="grow" style={{ fontSize: 14 }}>{sugExtra.join(" · ")}. Add a set to catch up.</span>
+              <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(takeExtra(s, e.id)); }}>Add</button>
+            </div>
+          )}
+          {sugFail && (
+            <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
+              <span style={{ color: "var(--warn)" }}><Icon name="flame" size={18} /></span>
+              <span className="grow" style={{ fontSize: 14 }}>Take the last set to failure.</span>
+              <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(takeFailure(s, e.id)); }}>Use</button>
             </div>
           )}
           {lastLight && hint.kind === "none" && !allDone && !nowLight && !tipOff && (

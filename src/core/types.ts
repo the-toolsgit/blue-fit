@@ -156,6 +156,10 @@ export interface SessionEntry {
   failWhy?: string[];
   /** One set added to make up work skipped earlier this week (the reasons), fixed when the workout started */
   extraSet?: string[];
+  /** Auto-adjust off: what the app would have changed (an extra set / last set to failure, with the reasons), shown as
+   *  a tip and in the summary instead of applied. Cleared when the user takes it. */
+  suggestExtra?: string[];
+  suggestFailure?: string[];
   sets: LoggedSet[];
 }
 
@@ -205,6 +209,9 @@ export interface Settings {
   deloadSuggestions: boolean;
   /** Settings → "Inline workout tips": every tip in the workout card (go up/down, effort notes) */
   progressionHints: boolean;
+  /** Settings → Workout adjustments: the app adds a set for skipped work and picks failure sets from the week
+   *  (off: neither; failure turned On in the plan still applies). Missing = on. */
+  autoAdjust: boolean;
   theme: "system" | "light" | "dark";
   /** Accent palette; the line man always stays blue */
   accent: Accent;
@@ -230,6 +237,7 @@ export const DEFAULT_SETTINGS: Settings = {
   keepAwake: true,
   deloadSuggestions: true,
   progressionHints: true,
+  autoAdjust: true,
   theme: "system",
   accent: "blue",
   weekStartDay: 6,
