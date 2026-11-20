@@ -86,8 +86,8 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
       <div className="glass" style={{ padding: "4px 14px" }}>
         <div className="setting"><span>Deload suggestions<span className="muted" style={{ display: "block", fontSize: 12 }}>Card on Today when it's time for a lighter week</span></span>
           <Switch label="Deload suggestions" checked={settings.deloadSuggestions} onChange={(v) => set("deloadSuggestions", v)} /></div>
-        <div className="setting"><span>Beat last time<span className="muted" style={{ display: "block", fontSize: 12 }}>Target for each exercise based on your last workout</span></span>
-          <Switch label="Beat last time" checked={settings.progressionHints} onChange={(v) => set("progressionHints", v)} /></div>
+        <div className="setting"><span>Inline workout tips<span className="muted" style={{ display: "block", fontSize: 12 }}>Weight and effort tips on each exercise</span></span>
+          <Switch label="Inline workout tips" checked={settings.progressionHints} onChange={(v) => set("progressionHints", v)} /></div>
       </div>
 
       <h2 className="section-title">Look</h2>

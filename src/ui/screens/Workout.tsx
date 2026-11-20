@@ -398,8 +398,10 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const hint = hint1.kind === "addWeight" ? hint1
     : heavy ? ({ kind: "lowerWeight", weight: heavy.weight, reps: repMin, got: heavy.reps, from: heavy.from } as const)
     : ({ kind: "none" } as const);
-  const lastLight = !!lastGap && tooLight(lastGap, last?.entry.repMax ?? repMax);
-  const nowLight = !!gap && tooLight(gap, repMax);
+  // Settings → Inline workout tips turns off every tip in the card (go up/down and the effort notes)
+  const tipsOn = settings.progressionHints;
+  const lastLight = tipsOn && !!lastGap && tooLight(lastGap, last?.entry.repMax ?? repMax);
+  const nowLight = tipsOn && !!gap && tooLight(gap, repMax);
   // The "last time" effort tip can be hidden for this exercise in this workout (remembered while the workout runs)
   const tipKey = `bf-tipx-${s.id}-${e.id}`;
   const [tipOff, setTipOff] = useState(() => { try { return sessionStorage.getItem(tipKey) === "1"; } catch { return false; } });

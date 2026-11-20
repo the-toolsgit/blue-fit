@@ -203,6 +203,7 @@ export interface Settings {
   keepAwake: boolean;
   /** Reminders and tips that can be turned off (Settings → Reminders & tips) */
   deloadSuggestions: boolean;
+  /** Settings → "Inline workout tips": every tip in the workout card (go up/down, effort notes) */
   progressionHints: boolean;
   theme: "system" | "light" | "dark";
   /** Accent palette; the line man always stays blue */
