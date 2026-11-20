@@ -161,12 +161,15 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const reps = check("reps", "Rep range", uniq(slots.filter((s) => mid(s) < GROWTH_REPS[0] || mid(s) > GROWTH_REPS[1]).map((s) => `${ex(s).name}: ${s.repMin}–${s.repMax}`)),
     `Every exercise ${GROWTH_REPS[0]}–${GROWTH_REPS[1]} reps`);
 
-  const mix = check("mix", "Heavy and light", main.flatMap((g) => {
+  // A nice-to-have, never a red miss: growth is about the same across rep ranges (Schoenfeld 2021); mixing helps joints,
+  // recovery and strength, and is what most coaches do (Leo, Nov 20 2026)
+  const mix0 = check("mix", "Heavy and light", main.flatMap((g) => {
     const own = slots.filter((s) => isDirect(ex(s), g));
     if (new Set(own.map((s) => s.exerciseId)).size < 2) return [];
     const heavy = own.some((s) => mid(s) <= HEAVY_REPS), light = own.some((s) => mid(s) >= LIGHT_REPS);
     return heavy && light ? [] : [`${L(g)}: all ${heavy ? `≤${HEAVY_REPS}` : `${LIGHT_REPS}+`} reps`];
   }), `Heavy (≤${HEAVY_REPS}) and light (${LIGHT_REPS}+) work per muscle`);
+  const mix: Check = mix0.pass ? mix0 : { ...mix0, warn: true };
 
   const rest = (min: number | null, max: number | null, only?: Slot[]) => {
     const pool = only ?? slots;

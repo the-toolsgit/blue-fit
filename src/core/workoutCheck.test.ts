@@ -109,6 +109,9 @@ describe("week score", () => {
     expect(dose(withSets(1)).warn).toBe(true); // 13
     expect(dose(withSets(2)).warn).toBeFalsy(); // 14
     expect(dose(withSets(2)).pass).toBe(false);
+    // Heavy and light is never red: a miss is always a warning
+    const mix = weekInsight(r, exMap, seed.targets).checks.find((c) => c.id === "mix")!;
+    expect(mix.pass || mix.warn).toBe(true);
   });
   it("twice a week is only asked of muscles over 11 sets a week", () => {
     const w = weekInsight(r, exMap, seed.targets);
