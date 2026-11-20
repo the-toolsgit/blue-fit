@@ -443,6 +443,11 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .check-tile.fail .check-ic { color: var(--bad); background: color-mix(in srgb, var(--bad) 13%, transparent); }
 .check-label { flex: 1; min-width: 0; font-weight: 600; font-size: 14px; line-height: 1.15; }
 .check-detail { font-size: 12px; line-height: 1.35; color: var(--muted); }
+.check-issues { display: grid; gap: 4px; margin-top: 2px; }
+.check-issue { display: grid; grid-template-columns: minmax(84px, 34%) 1fr; gap: 10px; font-size: 13px; line-height: 1.3; padding-top: 4px; border-top: 1px solid var(--line); }
+.check-issue:first-child { border-top: 0; padding-top: 0; }
+.check-issue b { font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
+.check-issue span { color: var(--muted); }
 .check-st { width: 18px; height: 18px; flex: none; display: grid; place-items: center; border-radius: 6px; color: var(--bad); border: 1px solid color-mix(in srgb, var(--bad) 50%, transparent); }
 .insight-row { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-top: 1px solid var(--line); }
 .insight-mark { width: 22px; height: 22px; flex: none; display: grid; place-items: center; border-radius: 7px; margin-top: 1px; color: var(--bad); border: 1px solid color-mix(in srgb, var(--bad) 50%, transparent); }

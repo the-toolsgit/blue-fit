@@ -67,7 +67,9 @@ export interface Tile {
   jobs: { name: string; state: JobState }[];
 }
 export type CheckId = "volume" | "jobs" | "stretch" | "frequency" | "dose" | "recovery" | "reps" | "mix" | "rest" | "heavy";
-export interface Check { id: CheckId; label: string; pass: boolean; detail: string }
+export interface Check { id: CheckId; label: string; pass: boolean; detail: string;
+  /** What's missing, one per line: who (muscle or exercise) and what ("Back", "no lower back"). Empty when passed. */
+  issues: { who: string; what: string }[] }
 export interface ScorePart { id: "volume" | "parts" | "recovery" | "failure" | "twice" | "dose"; label: string; points: number; max: number; note: string }
 export interface WeekScore { score: number; parts: ScorePart[] }
 export interface WeekInsight { days: number; sets: number; minutes: number; muscles: number; tiles: Tile[]; checks: Check[]; score: WeekScore }
@@ -112,7 +114,8 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const main = [...new Set(slots.flatMap((s) => ex(s).volume.filter((v) => v.weight === 1).map((v) => v.group)))].filter((g) => isFocus(tmap.get(g)));
   const L = (g: MuscleGroup) => muscleLabel(g);
   const list = (xs: string[]) => xs.slice(0, 3).join(" · ") + (xs.length > 3 ? ` · +${xs.length - 3} more` : "");
-  const check = (id: CheckId, label: string, bad: string[], ok: string): Check => ({ id, label, pass: bad.length === 0, detail: bad.length ? list(bad) : ok });
+  const issue = (b: string) => { const i = b.indexOf(": "); return i < 0 ? { who: "", what: b } : { who: b.slice(0, i), what: b.slice(i + 2) }; };
+  const check = (id: CheckId, label: string, bad: string[], ok: string): Check => ({ id, label, pass: bad.length === 0, detail: bad.length ? list(bad) : ok, issues: bad.map(issue) });
   const uniq = (xs: string[]) => [...new Set(xs)];
 
   const volume = (minOnly: boolean) => check("volume", "Weekly volume", main.flatMap((g) => {

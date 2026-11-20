@@ -86,7 +86,11 @@ export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
                 <span className="check-label">{c.label}</span>
                 {!c.pass && <span className="check-st"><Icon name="close" size={12} stroke={3} /></span>}
               </span>
-              <span className="check-detail">{c.detail}</span>
+              {c.pass ? <span className="check-detail">{c.detail}</span> : (
+                <span className="check-issues">
+                  {c.issues.map((x, k) => <span key={k} className="check-issue">{x.who && <b>{x.who}</b>}<span>{x.what}</span></span>)}
+                </span>
+              )}
             </div>
           ))}
         </div>
