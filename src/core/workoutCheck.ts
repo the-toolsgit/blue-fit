@@ -42,9 +42,9 @@ export const JOBS: Partial<Record<MuscleGroup, string[]>> = {
  *  Chest and lats are added by analogy (*judgment*). Other muscles have no stretch check. */
 export const STRETCH_MUSCLES = new Set<MuscleGroup>(["biceps", "triceps", "quads", "hamstrings", "calves", "chest", "back"]);
 
-/** Most direct sets for one muscle in one workout before extra sets add little (*judgment*: per-session returns
- *  shrink, so 20 weekly sets are better split over 2+ days; Schoenfeld 2016, Pelland 2024). */
-export const MAX_SESSION_SETS = 10;
+/** Most sets for one muscle in one workout (indirect count ½) before extra sets add little: growth levels off at
+ *  ~11 fractional sets per session (Remmert 2025 meta-regression, preprint; Leo, Nov 20 2026). */
+export const MAX_SESSION_SETS = 11;
 /** Direct sets that count as hard work for a muscle that day: hard work on back-to-back days leaves under ~48 h to
  *  recover (ACSM 2009: 48 h between sessions for the same muscles). The 4-set line is *judgment*. */
 export const HARD_SETS = 4;

@@ -99,7 +99,7 @@ describe("week score", () => {
     const none = weekInsight(r, exMap, seed.targets, "growth", { muscles: new Set(), eligible: () => true, applies: true });
     expect(none.score.parts.find((p) => p.id === "failure")!.points).toBe(0);
   });
-  it("twice a week is only asked of muscles over 10 sets a week", () => {
+  it("twice a week is only asked of muscles over 11 sets a week", () => {
     const w = weekInsight(r, exMap, seed.targets);
     expect(w.checks.find((c) => c.id === "frequency")!.detail).not.toContain("Front delts");
   });
