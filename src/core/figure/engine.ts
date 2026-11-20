@@ -180,11 +180,11 @@ export function phase(ms: number, t: Timing = DEFAULT_TIMING): number {
 /** Box (viewBox units: x, y, width, height) around everything a figure draws over its whole movement, plus a
  *  margin; the floor line counts only for its height (it stays under the feet). Used to line figures up at an edge
  *  and drop empty space without changing their scale. */
-export function figureBox(f: FigureSpec, margin = 4): [number, number, number, number] {
+export function figureBox(f: FigureSpec, margin = 4, ks: number[] = [0, 0.25, 0.5, 0.75, 1]): [number, number, number, number] {
   let lo = Infinity, hi = -Infinity, top = Infinity, bot = -Infinity;
   const x = (v: number | string) => { const n = Number(v); if (Number.isFinite(n)) { lo = Math.min(lo, n); hi = Math.max(hi, n); } };
   const y = (v: number | string) => { const n = Number(v); if (Number.isFinite(n)) { top = Math.min(top, n); bot = Math.max(bot, n); } };
-  for (const k of [0, 0.25, 0.5, 0.75, 1]) {
+  for (const k of ks) {
     const fr = poseFrame(f, k);
     fr.main.forEach((l) => l.forEach((q) => { x(q[0]); y(q[1]); }));
     x(fr.head.cx - fr.head.r); x(fr.head.cx + fr.head.r); y(fr.head.cy - fr.head.r);
@@ -197,4 +197,11 @@ export function figureBox(f: FigureSpec, margin = 4): [number, number, number, n
   }
   if (!Number.isFinite(lo)) return [0, -24, 120, 131];
   return [lo - margin, top - margin, hi - lo + 2 * margin, bot - top + 2 * margin];
+}
+
+/** Sideways shift that centers a figure's drawing (body and equipment over the whole movement, or only at progress
+ *  `k` for a still figure) in the 0–120 view. */
+export function figureCenterDx(f: FigureSpec, k?: number): number {
+  const [x0, , w] = figureBox(f, 0, k == null ? undefined : [k]);
+  return w > 0 && w < 120 ? 60 - (x0 + w / 2) : 0;
 }

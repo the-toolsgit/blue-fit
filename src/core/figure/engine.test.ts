@@ -36,3 +36,14 @@ describe("phase", () => {
     expect(phase(0.21 * 3200)).toBeCloseTo(0.5, 5);
   });
 });
+
+import { figureCenterDx as centerDx, poseFrame as frameAt } from "./engine";
+describe("figure centering", () => {
+  it("centers the whole drawing over the movement in the 0–120 view", () => {
+    const f = { base: { hx: 30, hy: 57 }, A: { ua: 0 }, B: { ua: 90 }, props: [] } as unknown as import("../types").FigureSpec;
+    const dx = centerDx(f);
+    let lo = 1e9, hi = -1e9;
+    for (let i = 0; i <= 50; i++) { const fr = frameAt(f, i / 50); fr.main.forEach((l) => l.forEach((q) => { lo = Math.min(lo, q[0]); hi = Math.max(hi, q[0]); })); lo = Math.min(lo, fr.head.cx - fr.head.r); hi = Math.max(hi, fr.head.cx + fr.head.r); }
+    expect((lo + hi) / 2 + dx).toBeCloseTo(60, 0);
+  });
+});

@@ -28,7 +28,7 @@ const Loading = () => (
       <svg className="run-air" viewBox="0 0 60 120" preserveAspectRatio="none" aria-hidden="true">
         <line x1="10" y1="34" x2="58" y2="34" /><line x1="2" y1="52" x2="54" y2="52" /><line x1="14" y1="68" x2="58" y2="68" /><line x1="4" y1="86" x2="50" y2="86" />
       </svg>
-      <Figure spec={LOADING} size={120} label="Loading" timing={LOADING_TIMING} />
+      <Figure spec={LOADING} size={120} label="Loading" timing={LOADING_TIMING} center={false} />
     </div>
     <span className="eyebrow">Loading</span>
   </div>
