@@ -122,7 +122,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     return [];
   }), "Every muscle in its weekly target");
 
-  const jobs = check("jobs", "Every job", main.flatMap((g) => {
+  const jobs = check("jobs", "Every angle", main.flatMap((g) => {
     const miss = (JOBS[g] ?? []).filter((j) => !jobsHit(g).has(j));
     return miss.length ? [`${L(g)}: no ${miss.join(", ")}`] : [];
   }), "Every muscle trained in all its movements");
@@ -185,7 +185,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const W = SCORE_WEIGHTS;
   const parts: ScorePart[] = [
     { id: "volume", label: "Weekly volume", max: W.volume, points: W.volume * share(inTarget, main.length), note: `${inTarget} of ${main.length} muscles in target` },
-    { id: "parts", label: "Every part", max: W.parts, points: W.parts * share(allJobs.filter(Boolean).length, allJobs.length), note: `${allJobs.filter(Boolean).length} of ${allJobs.length} parts trained` },
+    { id: "parts", label: "Every angle", max: W.parts, points: W.parts * share(allJobs.filter(Boolean).length, allJobs.length), note: `${allJobs.filter(Boolean).length} of ${allJobs.length} angles trained` },
     { id: "recovery", label: "Recovery", max: W.recovery, points: W.recovery * share(main.filter((g) => !backToBack(g)).length, main.length), note: `${main.filter((g) => !backToBack(g)).length} of ${main.length} muscles rested` },
     { id: "failure", label: "Failure", max: W.failure, points: !failure || !failure.applies ? W.failure : W.failure * share(failEligible.filter((g) => failure.muscles.has(g)).length, failEligible.length),
       note: !failure || !failure.applies ? "Not used for your goal" : `${failEligible.filter((g) => failure.muscles.has(g)).length} of ${failEligible.length} muscles get a failure set` },
