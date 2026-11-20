@@ -3,7 +3,7 @@
 import { DEFAULT_TIMING, type Timing } from "./engine";
 
 /** Figures whose pose A → B is the tempo's *second* movement (e.g. calf raise: tempo starts "Down", the figure starts at the bottom). */
-const STARTS_AT_SECOND = new Set(["standing-calf-raise", "seated-calf-raise", "leg-press", "ez-bar-incline-tricep-extension", "machine-dip"]);
+const STARTS_AT_SECOND = new Set(["standing-calf-raise", "seated-calf-raise", "ez-bar-incline-tricep-extension", "machine-dip"]);
 /** Short pause at an end of the movement that has no "Hold" in the tempo */
 export const TURN_MS = 250;
 

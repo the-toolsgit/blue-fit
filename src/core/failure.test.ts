@@ -151,6 +151,8 @@ describe("figure tempo", async () => {
     // Calf raise: tempo starts "Down 3 s", the figure starts at the bottom → A→B is the 1 s "Up"
     // …and the 2 s hold after "Down" is at the bottom = pose A
     expect(tempoTiming("Down 3 s · Hold 2 s · Up 1 s", "standing-calf-raise")).toEqual({ ab: 1000, holdB: TURN_MS, ba: 3000, holdA: 2000 });
+    // Leg press: the figure starts with legs straight → A→B is the 3 s "Down" (it played 1 s down, 3 s up before Nov 20 2026)
+    expect(tempoTiming("Down 3 s · Up 1 s", "leg-press")).toEqual({ ab: 3000, holdB: TURN_MS, ba: 1000, holdA: TURN_MS });
     expect(tempoTiming("", "x")).toBe(DEFAULT_TIMING);
     const t = tempoTiming("Up 1 s · Down 3 s");
     expect(phase(500, t)).toBeCloseTo(0.5);
