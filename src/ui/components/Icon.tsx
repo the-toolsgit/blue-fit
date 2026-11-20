@@ -33,6 +33,11 @@ const P: Record<string, string> = {
   range: "M12 4v16M8.5 7.5L12 4l3.5 3.5M8.5 16.5L12 20l3.5-3.5",
   tempo: "M9.5 3.5h5L19 20.5H5zM12 16l4-8M8 16h8",
   body: "M12 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM6 10h12M12 10v5.5M12 15.5l-3 5M12 15.5l3 5",
+  bars: "M4 20h16M6.5 17v-5M10.5 17V7M14.5 17v-7M18.5 17V5",
+  stretch: "M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4",
+  layers: "M12 4l8 4-8 4-8-4zM4 12l8 4 8-4M4 16l8 4 8-4",
+  moon: "M19.5 14.5A8 8 0 1 1 9.5 4.5a6.5 6.5 0 0 0 10 10z",
+  repeat: "M4 11a6 6 0 0 1 10.5-4L17 9.5M17 4.5v5h-5M20 13a6 6 0 0 1-10.5 4L7 14.5M7 19.5v-5h5",
 };
 export function Icon({ name, size = 22, stroke = 1.9 }: { name: keyof typeof P | string; size?: number; stroke?: number }) {
   const d = P[name] ?? "";

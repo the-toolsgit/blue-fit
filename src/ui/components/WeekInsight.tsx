@@ -1,7 +1,7 @@
 // The whole week of a plan at a glance (Plan tab, view and edit mode): quick facts, the muscle map with a list per side
 // (components/WeekMap.tsx), and the Week check (does the routine tick every box for the user's goal).
 import type { Exercise, Routine, VolumeTarget } from "../../core/types";
-import { weekInsight } from "../../core/workoutCheck";
+import { weekInsight, type CheckId } from "../../core/workoutCheck";
 import { failureApplies, failureEligible, mainMuscle } from "../../core/failure";
 import { fmtNum } from "../../core/util";
 import type { MuscleGroup } from "../../core/types";
@@ -77,19 +77,29 @@ export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
             <div className="muted" style={{ fontSize: 13 }}>Tick every box for a complete plan.</div>
           </div>
         )}
-        {i.checks.map((c) => (
-          <div key={c.id} className={"insight-row" + (c.pass ? " pass" : "")}>
-            <span className="insight-mark"><Icon name={c.pass ? "check" : "close"} size={14} stroke={3} /></span>
-            <span className="grow">
-              <span style={{ display: "block", fontWeight: 600, fontSize: 14 }}>{c.label}</span>
-              <span className="muted" style={{ fontSize: 12 }}>{c.detail}</span>
-            </span>
-          </div>
-        ))}
+        {/* Tiles: what's missing first (full width, with the details), then what's done (two per row) */}
+        <div className="check-grid">
+          {[...i.checks].sort((a, b) => Number(a.pass) - Number(b.pass)).map((c) => (
+            <div key={c.id} className={"check-tile" + (c.pass ? " pass" : " fail")}>
+              <span className="check-head">
+                <span className="check-ic"><Icon name={CHECK_ICON[c.id]} size={16} /></span>
+                <span className="check-label">{c.label}</span>
+                {!c.pass && <span className="check-st"><Icon name="close" size={12} stroke={3} /></span>}
+              </span>
+              <span className="check-detail">{c.detail}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );
 }
+
+/** An icon for each check (Plan check tiles) */
+const CHECK_ICON: Record<CheckId, string> = {
+  volume: "bars", jobs: "body", stretch: "stretch", frequency: "history", dose: "layers",
+  recovery: "moon", reps: "repeat", mix: "today", rest: "timer", heavy: "bolt",
+};
 
 /** Score color: red under 50, amber under 75, green from 75 (*judgment*) */
 const scoreColor = (n: number) => (n >= 75 ? "var(--good)" : n >= 50 ? "var(--warn)" : "var(--bad)");

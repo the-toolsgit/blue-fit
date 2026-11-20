@@ -435,6 +435,15 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .insight-chip { font-size: 11px; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); opacity: .55; white-space: nowrap; }
 .insight-check { padding: 14px; }
 .insight-check.complete { border-color: var(--good); box-shadow: 0 0 0 1px var(--good), 0 0 30px -10px var(--good); }
+.check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.check-tile { min-width: 0; display: grid; gap: 6px; align-content: start; padding: 10px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); }
+.check-tile.fail { grid-column: 1 / -1; border-color: color-mix(in srgb, var(--bad) 40%, transparent); }
+.check-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.check-ic { width: 28px; height: 28px; flex: none; display: grid; place-items: center; border-radius: 9px; color: var(--good); background: color-mix(in srgb, var(--good) 14%, transparent); }
+.check-tile.fail .check-ic { color: var(--bad); background: color-mix(in srgb, var(--bad) 13%, transparent); }
+.check-label { flex: 1; min-width: 0; font-weight: 600; font-size: 14px; line-height: 1.15; }
+.check-detail { font-size: 12px; line-height: 1.35; color: var(--muted); }
+.check-st { width: 18px; height: 18px; flex: none; display: grid; place-items: center; border-radius: 6px; color: var(--bad); border: 1px solid color-mix(in srgb, var(--bad) 50%, transparent); }
 .insight-row { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-top: 1px solid var(--line); }
 .insight-mark { width: 22px; height: 22px; flex: none; display: grid; place-items: center; border-radius: 7px; margin-top: 1px; color: var(--bad); border: 1px solid color-mix(in srgb, var(--bad) 50%, transparent); }
 .insight-row.pass .insight-mark { color: var(--on-neon); background: var(--good); border-color: var(--good); box-shadow: 0 0 10px -2px var(--good); }

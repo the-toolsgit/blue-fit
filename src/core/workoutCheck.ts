@@ -160,7 +160,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const rest = (min: number | null, max: number | null, only?: Slot[]) => {
     const pool = only ?? slots;
     const bad = uniq(pool.filter((s) => (min != null && s.restSec < min) || (max != null && s.restSec > max)).map((s) => `${ex(s).name}: ${s.restSec} s`));
-    return check("rest", min != null && max == null ? "Long enough rests" : "Short rests", bad,
+    return check("rest", min != null && max == null ? "Long rests" : "Short rests", bad,
       min != null ? `Rests ${min >= 120 ? `${min / 60} min` : `${min} s`} or more` : `Rests ${max} s or less`);
   };
 
