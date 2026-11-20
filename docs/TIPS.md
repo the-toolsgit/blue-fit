@@ -9,7 +9,7 @@ Written in plain words for lifters. Each tip says how strong the evidence is: **
 ## Every angle
 
 **What it means:** many muscles have more than one part, or do more than one job. To grow the whole muscle, train
-each part or each movement at least once a week.
+each part or each movement at least once a week. It doesn't have to be every workout: across the week is enough.
 
 **Examples:**
 - **Back:** lats (pulldowns, straight-arm pulldowns), upper back (rows), lower back (hip hinges, back extensions).
@@ -17,12 +17,52 @@ each part or each movement at least once a week.
   knee end.
 - **Biceps:** long head (arm behind the body, like an incline curl), short head (arm in front, like a preacher curl),
   and the brachialis under it (hammer curls).
+- **Triceps:** the long head crosses the shoulder too, so it's trained best with the arm overhead; pushdowns hit the
+  other two heads well.
+- **Quads:** the rectus femoris crosses the hip too; squats and leg presses train it little, leg extensions train it
+  well.
 
 **What's a hip hinge?** Bending forward at the hips with a straight back, then standing back up. The Romanian deadlift
 is the classic one. It trains the hamstrings from the hip end and stretches them under load.
 
-**Evidence:** research. Training a muscle with different exercises grows it more evenly than one exercise alone
-(Costa 2021; Kassiano 2022).
+### Why it matters
+
+**1. Muscles don't grow evenly.** A muscle isn't one block that grows the same everywhere. Each exercise loads some
+parts more than others, and those parts grow more. This is called *regional hypertrophy*. One exercise, done forever,
+leaves some parts behind.
+
+**2. Muscles that cross two joints need two kinds of work.** Some muscle parts cross two joints (the hamstrings cross
+the hip and the knee; the rectus femoris crosses the hip and the knee; the triceps long head and biceps long head cross
+the shoulder and the elbow). How stretched they are depends on *both* joints. An exercise that bends only one joint
+often leaves them short and slack, so they work less and grow less.
+
+**3. What the studies show:**
+- **Quads:** in a 12-week study, people who only squatted didn't grow the rectus femoris meaningfully, while people who
+  rotated squats with other leg exercises (including leg extensions) grew all four quad muscles (Fonseca 2014).
+- **Hamstrings:** a hip exercise (45° hip extension) grew the long head of the biceps femoris more than Nordic curls, a
+  knee exercise (Bourne 2017). Leg curls with the hips bent (seated) grew the hamstrings more than lying leg curls
+  (Maeo 2021).
+- **Triceps:** overhead extensions grew the long head clearly more than the same exercise with the arm at the side
+  (Maeo 2023).
+- **Overall:** a 2022 review found that some planned variety in exercises improves regional growth and strength, but
+  random, constant switching can hurt progress (Kassiano 2022).
+
+**4. Benefits beyond size:**
+- **A fuller look:** the whole muscle grows, not one bulge with flat spots.
+- **Stronger in more positions:** strength is partly specific to the movement and angle you train.
+- **Sturdier joints and fewer strains:** for example, hamstrings strong at the hip end matter for sprinting and
+  bending, where most hamstring strains happen.
+- **Less wear:** spreading the work over a few movements is easier on joints than repeating one pattern.
+
+**How to do it well:** pick one or two exercises per angle and keep them for a while (several weeks), so you can
+progress on them. Variety means covering the angles, not changing exercises every workout.
+
+**Evidence:** research (small studies, but they point the same way).
+- [Kassiano et al. 2022: "Does Varying Resistance Exercises Promote Superior Muscle Hypertrophy and Strength Gains? A Systematic Review" (PubMed)](https://pubmed.ncbi.nlm.nih.gov/35438660/)
+- [Fonseca et al. 2014: "Changes in exercises are more effective than in loading schemes to improve muscle strength" (PDF)](https://paulogentil.com/pdf/Changes%20in%20exercises%20are%20more%20effective%20than%20in%20loading%20schemes%20to%20improve%20muscle%20strength.pdf)
+- [Bourne et al. 2017: Nordic hamstring vs hip extension, hamstring size (PubMed)](https://pubmed.ncbi.nlm.nih.gov/27660368/)
+- [Maeo et al. 2023: triceps overhead vs neutral arm position (PubMed)](https://pubmed.ncbi.nlm.nih.gov/35819335/)
+- Maeo et al. 2021: seated vs lying leg curls, hamstring growth (Medicine & Science in Sports & Exercise)
 
 ---
 
