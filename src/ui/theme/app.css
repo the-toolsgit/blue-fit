@@ -96,6 +96,15 @@ ul { margin: 0; padding-left: 18px; }
 .star { color: var(--star); text-shadow: 0 0 10px color-mix(in srgb, var(--star) 60%, transparent); }
 .chips-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 2px 16px 6px; margin: 0 -16px; scrollbar-width: none; }
 .chips-scroll::-webkit-scrollbar { display: none; }
+.filter-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 14px; border: 1px solid var(--line-strong); background: var(--surface-2); color: var(--muted); font: 600 14px var(--body); max-width: 50%; }
+.filter-btn svg { transform: rotate(90deg); }
+.filter-btn[aria-pressed="true"] { color: var(--neon-ink); border-color: var(--neon); box-shadow: 0 0 14px -4px var(--neon); }
+.filter-pic { width: 52px; height: 52px; flex: none; border-radius: 50%; display: grid; place-items: center; overflow: hidden; background: var(--surface-2); border: 1px solid var(--line); color: var(--neon); }
+.filter-pic.map { width: 84px; border-radius: 26px; }
+.filter-pic.map svg { width: 78px !important; }
+.filter-row.on { background: var(--glow-soft); }
+.filter-box { width: 26px; height: 26px; flex: none; border-radius: 7px; border: 1.5px solid var(--line-strong); display: grid; place-items: center; color: #fff; }
+.filter-row.on .filter-box { background: var(--neon); border-color: var(--neon); box-shadow: 0 0 10px var(--neon); }
 .chips-wrap { display: flex; flex-wrap: wrap; gap: 6px; padding: 2px 0 6px; }
 /* Plan tab weekdays: same chips, at least 4 px apart, spread across the row on wider screens (no empty space at the end) */
 .day-chips { gap: 4px; justify-content: space-between; }
