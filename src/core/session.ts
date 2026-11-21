@@ -153,9 +153,9 @@ export function moveEntryTo(s: Session, from: number, to: number): Session {
 /**
  * After a reorder or a done set, keep each app-picked failure set on the last exercise for its muscle (the rule it was
  * picked by). Exercises already started count as done, so starting the flagged one while another for the same muscle
- * is untouched moves the failure there (gym order can differ from the plan). It moves to the exercise that is now last
- * for that muscle, if that one is safe to fail and wasn't turned off in
- * Edit plan (`offSlotIds`); otherwise it's dropped. Failure the user turned on, or one already done, stays put.
+ * is untouched moves the failure to the last untouched one that's safe to fail (gym order can differ from the plan);
+ * with none, it stays. After a reorder (not started) it moves to the exercise that is now last for that muscle, if
+ * that one is safe to fail and wasn't turned off in Edit plan (`offSlotIds`); otherwise it's dropped. Failure the user turned on, or one already done, stays put.
  */
 export function refitFailure(s: Session, exMap: Map<string, Exercise>, offSlotIds: Set<string> = new Set()): Session {
   let entries = s.entries;
@@ -170,9 +170,11 @@ export function refitFailure(s: Session, exMap: Map<string, Exercise>, offSlotId
     // Last among the exercises for this muscle not started yet (the gym order can differ from the plan's)
     const started = (x: SessionEntry) => x.sets.some((y) => y.done && (y.type === "working" || y.type === "failure"));
     const left = entries.filter((x) => mainMuscle(exMap.get(x.exerciseId)) === g && !started(x));
-    const last = left.at(-1);
+    const canFail = (x: SessionEntry) => !x.toFailure && failureEligible(exMap.get(x.exerciseId)) && !(x.slotId && offSlotIds.has(x.slotId));
+    // Already started: move only to an untouched exercise that's safe to fail; with none, it stays here
+    const last = started(cur) ? [...left].reverse().find(canFail) : left.at(-1);
     if (!last || last.id === cur.id) continue;
-    const ok = !last.toFailure && failureEligible(exMap.get(last.exerciseId)) && !(last.slotId && offSlotIds.has(last.slotId));
+    const ok = canFail(last);
     entries = entries.map((x) => x.id === cur.id ? { ...x, toFailure: undefined, failWhy: undefined }
       : x.id === last.id && ok ? { ...x, toFailure: true, failWhy: cur.failWhy } : x);
   }

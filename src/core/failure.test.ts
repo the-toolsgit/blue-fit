@@ -135,6 +135,10 @@ describe("strategic last set to failure", () => {
     // b already started too: nothing left after a, so it stays
     const both = { ...s0, entries: s0.entries.map((e) => e.id === "1" ? { ...e, sets: [set("b1", true), set("b2")] } : e) };
     expect(refitFailure(both, exMap).entries.find((e) => e.id === "2")!.toFailure).toBe(true);
+    // The untouched one isn't safe to fail (dumbbell row): the failure stays where it is, never dropped
+    const row = { ...s0, entries: s0.entries.map((e) => e.id === "1" ? { ...e, exerciseId: "single-arm-db-row" } : e) };
+    expect(mainMuscle(exMap.get("single-arm-db-row"))).toBe(mainMuscle(a));
+    expect(refitFailure(row, exMap).entries.find((e) => e.id === "2")!.toFailure).toBe(true);
   });
   it("migration gives built-in exercises their compound flag once", () => {
     const m = MIGRATIONS.find((x) => x.id === "2026-11-17-compound-flag")!;
