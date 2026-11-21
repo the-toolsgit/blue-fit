@@ -21,27 +21,13 @@ const kAt = (ms: number) => {
   return 0;
 };
 
-/** `once`: the splash's flex (Workout complete): after the fade-in, flex up once and hold, no loop. */
-export function FlexFigure({ size = 130, once = false }: { size?: number; once?: boolean }) {
+export function FlexFigure({ size = 130 }: { size?: number }) {
   const ref = useRef<SVGSVGElement>(null);
   useEffect(() => {
     const svg = ref.current;
     if (!svg) return;
     if (reducedMotion()) { svg.innerHTML = draw(1); return; }
     svg.innerHTML = draw(0);
-    if (once) {
-      let raf = 0;
-      const wait = setTimeout(() => {
-        const t0 = performance.now();
-        const step = (now: number) => {
-          const t = Math.min(1, (now - t0) / UP);
-          svg.innerHTML = draw(easeOut(t));
-          if (t < 1) raf = requestAnimationFrame(step);
-        };
-        raf = requestAnimationFrame(step);
-      }, 380);
-      return () => { clearTimeout(wait); cancelAnimationFrame(raf); };
-    }
     let raf = 0, t0 = 0, last = -1;
     const step = (now: number) => {
       if (!t0) t0 = now;
@@ -56,6 +42,6 @@ export function FlexFigure({ size = 130, once = false }: { size?: number; once?:
       : null;
     if (io) io.observe(svg); else start();
     return () => { io?.disconnect(); stop(); };
-  }, [once]);
+  }, []);
   return <svg ref={ref} className="fig flex-fig" viewBox="0 -24 120 131" width={size} height={(size * 131) / 120} role="img" aria-label="Line man flexing" />;
 }

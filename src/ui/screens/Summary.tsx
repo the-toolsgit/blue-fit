@@ -37,8 +37,8 @@ export function SummaryScreen({ id }: { id?: string }) {
     <div className="page">
       {!fresh && <button className="icon-btn" onClick={() => back("history")} aria-label="Back" style={{ marginLeft: -10 }}><Icon name="back" /></button>}
       <section style={{ display: "grid", justifyItems: "center", textAlign: "center", gap: 6, padding: fresh ? "18px 0 8px" : "0 0 8px" }}>
-        {/* The splash's flex (fade in, flex once and hold), without the zoom */}
-        {fresh && <div className="fig-stage splash-fig"><FlexFigure size={150} once /></div>}
+        {/* The splash's flex, looping, without the zoom */}
+        {fresh && <div className="fig-stage splash-fig"><FlexFigure size={150} /></div>}
         <span className="eyebrow">{fmtDate(s.date, { weekday: "long", month: "long", day: "numeric" })}{s.deload ? <span style={{ color: "var(--neon-2)" }}> · Deload</span> : null}</span>
         <h1 className="title-xl neon-grad">{fresh ? "Workout complete" : s.title}</h1>
         {fresh && <span className="muted">{s.title}</span>}
