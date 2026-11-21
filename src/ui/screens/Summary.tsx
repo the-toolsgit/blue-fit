@@ -1,6 +1,5 @@
 // Finish summary (also the read-only view of a past workout until the History editor lands).
 import { useMemo, useState } from "react";
-import { FLEX } from "../../core/figure/poses";
 import { PR_LABEL } from "../../core/records";
 import { workoutNotes, type NoteTone } from "../../core/notes";
 import { liftedFor } from "../../core/lifted";
@@ -10,6 +9,7 @@ import { MUSCLE_GROUPS } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { CountUp } from "../components/CountUp";
 import { Figure } from "../components/Figure";
+import { FlexFigure } from "../components/FlexFigure";
 import { Icon } from "../components/Icon";
 import { Confirm } from "../components/Sheet";
 import { fmtDate, fmtVolume, loadSuffix, setsLine } from "../format";
@@ -37,7 +37,8 @@ export function SummaryScreen({ id }: { id?: string }) {
     <div className="page">
       {!fresh && <button className="icon-btn" onClick={() => back("history")} aria-label="Back" style={{ marginLeft: -10 }}><Icon name="back" /></button>}
       <section style={{ display: "grid", justifyItems: "center", textAlign: "center", gap: 6, padding: fresh ? "18px 0 8px" : "0 0 8px" }}>
-        {fresh && <div className="fig-stage"><Figure spec={FLEX} size={150} speed={1.4} label="Flexing figure" /></div>}
+        {/* The splash's flex (fade in, flex once and hold), without the zoom */}
+        {fresh && <div className="fig-stage splash-fig"><FlexFigure size={150} once /></div>}
         <span className="eyebrow">{fmtDate(s.date, { weekday: "long", month: "long", day: "numeric" })}{s.deload ? <span style={{ color: "var(--neon-2)" }}> · Deload</span> : null}</span>
         <h1 className="title-xl neon-grad">{fresh ? "Workout complete" : s.title}</h1>
         {fresh && <span className="muted">{s.title}</span>}
