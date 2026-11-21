@@ -41,11 +41,15 @@ export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Pr
   if (goal !== "maintain" && (p.phase === "cutting" || p.phase === "bulking")) { rec *= R.phase[p.phase].max; why.push(R.phase[p.phase].why); }
   max *= rec;
   if (max > 0 && min > max - 2) min = Math.max(0, max - 2);
-  if (priority === "priority" && goal !== "maintain") { min = (min + max) / 2; why.push(R.priority.why); }
+  // Priority on mass gain: more sets (more weekly sets grow more muscle, with smaller gains as you add more;
+  // Schoenfeld 2017, Pelland 2024). Minimum to the middle, ceiling +25% (*judgment*). Other goals: the top half.
+  if (priority === "priority" && goal === "growth") { min = (min + max) / 2; max *= R.priority.maxGrowth; why.push(R.priority.why); }
+  else if (priority === "priority" && goal !== "maintain") { min = (min + max) / 2; why.push("Priority: top half of the range"); }
 
   const lo = Math.max(0, Math.round(min));
   const hi = Math.max(lo + 2, Math.round(max));
-  return { group, min: lo, max: hi, why };
+  // A minimum of 0 means "not tracked": the muscle gets no target (no green "in target" with no work)
+  return { group, min: lo, max: hi, why: lo === 0 ? [...why, "Optional: not tracked unless you set a minimum"] : why };
 }
 
 export function modelTargets(p: TrainingProfile, priorities: Partial<Record<MuscleGroup, Priority>> = {}): ModelTarget[] {

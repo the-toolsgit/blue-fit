@@ -6,6 +6,7 @@
 import { muscleLabel, type Exercise, type Goal, type MuscleGroup, type ProfileDraft, type Routine, type RoutineDay, type Session, type Settings, type Slot, type VolumeTarget } from "./types";
 import { countsForVolume, isFocus, planVolume } from "./volume";
 import { HARD_SETS, MAX_SESSION_SETS } from "./workoutCheck";
+import { restDaysOf } from "./muscles";
 import { priorityOf } from "./volumeModel";
 import { addDays, parseLocalDate, weekStart } from "./util";
 import { deloadActive } from "./deload";
@@ -231,7 +232,7 @@ export function weekFailure(c: FailureContext): Map<string, Map<string, string[]
 // When a muscle is behind this week because sets or a whole day were skipped, the next workout that trains it adds
 // one set to its last exercise for that muscle. More weekly sets grow muscle fairly reliably (Pelland 2024), so this
 // comes before failure. Limits: at most EXTRA_SET_MAX sets on the exercise, +1 only; the muscle stays at
-// MAX_SESSION_SETS or fewer that workout; not if it's trained hard (HARD_SETS+) the next day; never above the weekly
+// MAX_SESSION_SETS or fewer that workout; not if it's trained hard (HARD_SETS+) again within its rest days; never above the weekly
 // target's max; focus muscles only; never on a deload. Picking the last exercise for the muscle is *judgment*.
 
 /** Most sets an exercise can have after the extra set (Leo, Nov 18 2026). */
@@ -269,8 +270,11 @@ export function planExtraSets(day: RoutineDay, date: string, c: FailureContext):
     if (first !== date) continue;
     const direct = mine.reduce((a, s) => a + s.sets, 0);
     if (direct + 1 > MAX_SESSION_SETS) continue;
-    const next = directIn(dayOn(c.routine, addDays(date, 1)), g, c.exMap).reduce((a, s) => a + s.sets, 0);
-    if (next >= HARD_SETS) continue;
+    // Not if the muscle is hard again within its rest days after this workout (database: 2 big muscles, 1 the rest)
+    const rest = restDaysOf(g);
+    let tooSoon = false;
+    for (let k = 1; k <= rest; k++) if (directIn(dayOn(c.routine, addDays(date, k)), g, c.exMap).reduce((a, s) => a + s.sets, 0) >= HARD_SETS) tooSoon = true;
+    if (tooSoon) continue;
     const slot = [...mine].reverse().find((s) => s.sets < EXTRA_SET_MAX);
     if (!slot) continue;
     const why = `${muscleLabel(g)} behind this week`;

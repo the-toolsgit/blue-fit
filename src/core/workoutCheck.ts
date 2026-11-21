@@ -1,7 +1,7 @@
 // The whole week of a plan at a glance: a tile per muscle, and whether the routine "checks all the boxes" for the
 // user's goal (Plan → Week check). The rules are universal (training research), never taken from a plan.
 // Pure and framework-free. Numbers marked *judgment* are our own reasoning; the rest cite their source.
-import { ANGLES, NEEDS_HEAVY_LIGHT, recoveryDaysOf, RULES, STRETCH_CHECKED } from "./muscles";
+import { ANGLES, NEEDS_HEAVY_LIGHT, restDaysOf, RULES, STRETCH_CHECKED } from "./muscles";
 import { muscleLabel, type Exercise, type Goal, type MuscleGroup, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "./types";
 import { formatTarget, isFocus, planVolume } from "./volume";
 import { fmtNum } from "./util";
@@ -140,15 +140,15 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     `${MAX_SESSION_SETS} or fewer sets per muscle per workout`);
   const dose: Check = over.length && over.every((o) => o.n <= MAX_SESSION_SETS + SESSION_SETS_WARN) ? { ...dose0, warn: true } : dose0;
 
-  // Hard work again before the muscle's recovery time (database hours: 48 h, 72 h for big muscles) → the shortest gap in days
+  // Hard work again before the muscle's full rest days are up (database: 2 for big muscles, 1 for the rest) → the shortest gap in days
   const tooSoon = (g: MuscleGroup): number | null => {
     const hard = days.filter((d) => d.weekday != null && directSets(d, g) >= HARD_SETS);
-    const need = recoveryDaysOf(g);
+    const rest = restDaysOf(g);
     let worst: number | null = null;
     for (const a of hard) for (const b of hard) {
       if (a === b) continue;
       const gap = (b.weekday! - a.weekday! + 7) % 7;
-      if (gap > 0 && gap < need && (worst == null || gap < worst)) worst = gap;
+      if (gap > 0 && gap - 1 < rest && (worst == null || gap < worst)) worst = gap;
     }
     return worst;
   };

@@ -10,7 +10,8 @@ export interface MuscleInfo {
   angles: { name: string; what: string; examples: string[] }[];
   stretch: { how: string; evidence: string; note?: string; check?: boolean } | null;
   heavyLight: { needs: boolean; why: string; evidence: string };
-  recoveryHours: { value: number; evidence: string; note?: string };
+  /** Full rest days a muscle needs after a hard day before the next hard day */
+  restDays: { value: number; evidence: string; note?: string };
   failure: { safe: string; avoid: string; evidence: string };
   keyLifts: string;
   weeklySets: Record<GoalKey, [number, number]>;
@@ -20,7 +21,7 @@ type Step = { under?: number; from?: number; min?: number; max?: number; maintai
 export interface ProfileRules {
   yearsTraining: Step[]; age: Step[]; sleepHours: Step[];
   phase: Record<"cutting" | "bulking", { max: number; why: string }>;
-  priority: { why: string };
+  priority: { why: string; minToMiddle: boolean; maxGrowth: number };
 }
 
 export const MUSCLE_DB = db.muscles as unknown as MuscleInfo[];
@@ -36,8 +37,8 @@ export const ANGLES: Partial<Record<MuscleGroup, string[]>> = Object.fromEntries
 export const STRETCH_CHECKED = new Set<MuscleGroup>(MUSCLE_DB.filter((m) => m.stretch && m.stretch.check !== false).map((m) => m.id));
 /** Muscles that should get both heavy and light sets */
 export const NEEDS_HEAVY_LIGHT = new Set<MuscleGroup>(MUSCLE_DB.filter((m) => m.heavyLight.needs).map((m) => m.id));
-/** Days a muscle needs after hard work before it's fresh again */
-export const recoveryDaysOf = (g: MuscleGroup) => (BY_ID.get(g)?.recoveryHours.value ?? 48) / 24;
+/** Full rest days a muscle needs after a hard day (2 big muscles, 1 the rest): hard again on Mon then Thu is fine for 2 */
+export const restDaysOf = (g: MuscleGroup) => BY_ID.get(g)?.restDays.value ?? 1;
 /** First matching step of a profile rule */
 export const profileStep = (steps: Step[], v: number | null | undefined): Step | undefined =>
   v == null ? undefined : steps.find((s) => (s.under != null ? v < s.under : s.from != null ? v >= s.from : false));

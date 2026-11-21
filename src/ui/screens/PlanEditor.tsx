@@ -96,7 +96,8 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   /** Reset: model numbers when the profile is filled in, else the plan's original numbers. Notes are kept; no muscle is skipped; priorities go back to the default. */
   const resetTargets = () => setTdraft((defaultTargets as VolumeTarget[]).map((t) => {
     const s = suggest(t.group);
-    return s ? { group: t.group, min: s.min, max: s.max, ...(t.angles ? { angles: t.angles } : {}), ...(t.gap ? { gap: t.gap } : {}) } : { ...t };
+    // A suggested minimum of 0 is saved as no minimum: the muscle is tracked, not checked (no "in target" with no work)
+    return s ? { group: t.group, min: s.min > 0 ? s.min : null, max: s.max, ...(t.angles ? { angles: t.angles } : {}), ...(t.gap ? { gap: t.gap } : {}) } : { ...t };
   }));
   const editTarget = (t: VolumeTarget) => setTdraft((ts) => (ts.some((x) => x.group === t.group) ? ts.map((x) => (x.group === t.group ? t : x)) : [...ts, t]));
   const issues = validateRoutine(draft);

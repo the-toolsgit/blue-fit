@@ -29,7 +29,11 @@
     "hardSets": {
       "value": 4,
       "evidence": "J",
-      "note": "4+ sets for a muscle in one day counts as hard work for recovery."
+      "note": "4+ sets for a muscle in one day counts as hard work and needs rest days after. Fewer sets need no rest (our call). Sets taken to failure take about a day longer to recover (Morán-Navarro 2017)."
+    },
+    "spreadWorkouts": {
+      "evidence": "J",
+      "note": "Rest days are the minimum. When the app builds a week, it spaces each muscle's workouts as far apart as the week allows, even when the rule would allow closer (Leo, Nov 20 2026)."
     }
   },
   "muscles": [
@@ -78,10 +82,10 @@
         "why": "Big muscle trained with compound lifts: heavy rows also build strength.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 72,
+      "restDays": {
+        "value": 2,
         "evidence": "C",
-        "note": "After heavy rows or deadlifts. Lighter work: about 48 h."
+        "note": "After heavy rows or deadlifts. Lighter work: 1 day."
       },
       "failure": {
         "safe": "Machine and cable pulldowns and rows.",
@@ -157,8 +161,8 @@
         "why": "Big muscle trained with compound presses.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 48,
+      "restDays": {
+        "value": 1,
         "evidence": "C"
       },
       "failure": {
@@ -221,8 +225,8 @@
         "why": "Gets plenty of work from presses; extra direct work is optional.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 48,
+      "restDays": {
+        "value": 1,
         "evidence": "C"
       },
       "failure": {
@@ -288,8 +292,8 @@
         "why": "Small muscle, isolation work; growth is the same at any reps. Moderate to high reps are easier on the shoulder.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 48,
+      "restDays": {
+        "value": 1,
         "evidence": "C"
       },
       "failure": {
@@ -353,8 +357,8 @@
         "why": "Small muscle, isolation work; growth is the same at any reps.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 48,
+      "restDays": {
+        "value": 1,
         "evidence": "C"
       },
       "failure": {
@@ -425,8 +429,8 @@
         "why": "Shrugs can go heavy, but growth is the same at any reps.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 48,
+      "restDays": {
+        "value": 1,
         "evidence": "C"
       },
       "failure": {
@@ -511,8 +515,8 @@
         "why": "Small muscle, isolation work; growth is the same at any reps. Lighter sets are easier on the elbows.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 48,
+      "restDays": {
+        "value": 1,
         "evidence": "C"
       },
       "failure": {
@@ -598,8 +602,8 @@
         "why": "Growth is the same at any reps; heavy extensions are hard on the elbows.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 48,
+      "restDays": {
+        "value": 1,
         "evidence": "C"
       },
       "failure": {
@@ -670,8 +674,8 @@
         "why": "Small muscle; grip from pulling already trains it.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 48,
+      "restDays": {
+        "value": 1,
         "evidence": "C"
       },
       "failure": {
@@ -744,10 +748,10 @@
         "why": "Big muscle: heavy squats or presses plus lighter extensions.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 72,
+      "restDays": {
+        "value": 2,
         "evidence": "C",
-        "note": "After heavy squats. Machines only: about 48 h."
+        "note": "After heavy squats. Machines only: 1 day."
       },
       "failure": {
         "safe": "Leg press, leg extension, Smith squat with safeties.",
@@ -823,10 +827,10 @@
         "why": "Big muscle: heavy hinges plus lighter curls.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 72,
+      "restDays": {
+        "value": 2,
         "evidence": "C",
-        "note": "Hinges make it sore for longer. Curls only: about 48 h."
+        "note": "Hinges make it sore for longer. Curls only: 1 day."
       },
       "failure": {
         "safe": "Leg curls.",
@@ -897,8 +901,8 @@
         "why": "Big muscle trained with compound lifts.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 72,
+      "restDays": {
+        "value": 2,
         "evidence": "C"
       },
       "failure": {
@@ -961,8 +965,8 @@
         "why": "Mostly machine work; growth is the same at any reps.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 48,
+      "restDays": {
+        "value": 1,
         "evidence": "C"
       },
       "failure": {
@@ -1034,8 +1038,8 @@
         "why": "Heavy (6–10) and light (20–30) calf raises grew the same in a direct study (untrained men, Schoenfeld 2020).",
         "evidence": "R"
       },
-      "recoveryHours": {
-        "value": 48,
+      "restDays": {
+        "value": 1,
         "evidence": "C"
       },
       "failure": {
@@ -1106,8 +1110,8 @@
         "why": "Growth is the same at any reps.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 48,
+      "restDays": {
+        "value": 1,
         "evidence": "C"
       },
       "failure": {
@@ -1175,8 +1179,8 @@
         "why": "Train it light and controlled.",
         "evidence": "C"
       },
-      "recoveryHours": {
-        "value": 48,
+      "restDays": {
+        "value": 1,
         "evidence": "C"
       },
       "failure": {
@@ -1277,6 +1281,11 @@
       "id": "Kubo 2019",
       "title": "Squat depth: deep squats grew glutes and adductors more",
       "url": "https://pubmed.ncbi.nlm.nih.gov/31230110/"
+    },
+    {
+      "id": "Morán-Navarro 2017",
+      "title": "Recovery after sets to failure vs stopping short",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28965198/"
     }
   ],
   "profile": {
@@ -1333,7 +1342,9 @@
       }
     },
     "priority": {
-      "why": "Priority: top half of the range"
+      "why": "Priority on mass gain: more sets",
+      "minToMiddle": true,
+      "maxGrowth": 1.25
     }
   }
 }

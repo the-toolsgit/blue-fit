@@ -2,7 +2,8 @@
 // Run: npx tsx scripts/muscle-doc.ts
 import { readFileSync, writeFileSync } from "node:fs";
 import { failureEligible } from "../src/core/failure";
-import type { Exercise } from "../src/core/types";
+import type { Exercise, MuscleGroup, TrainingProfile } from "../src/core/types";
+import { modelTarget, type Priority } from "../src/core/volumeModel";
 
 const root = new URL("..", import.meta.url).pathname;
 const data = JSON.parse(readFileSync(root + "src/core/seed/muscles.json", "utf8"));
@@ -25,7 +26,7 @@ const ANGLE_RULES: Record<string, Rule[]> = {
   back: [{ angle: "lats", move: ["pulldown", "straightArm", "pulloverLats"], name: /pull-?up|\bchin/i }, { angle: "lower back", name: /back ext|hyperext|good morning|superman|deadlift/i }, { angle: "upper back", move: ["row"] }],
   chest: [{ angle: "upper", name: /feet elevated|decline push|low.?to.?high|low cable|reverse.?grip bench/i }, { angle: "mid/lower", name: /incline push/i }, { angle: "upper", name: /incline/i }, { angle: "mid/lower", move: ["press", "fly", "pulloverChest"] }],
   traps: [{ angle: "mid/lower", name: /kelso|face pull|y.?raise|overhead trap|prone|scap|middle back shrug/i }, { angle: "shrug", move: ["shrug", "lateral"] }],
-  biceps: [{ angle: "brachialis", move: ["hammer", "zottman"], name: /hammer|reverse|zottman/i }, { angle: "short head", name: /preacher|spider|concentration|scott|prone|lying high bench/i }, { angle: "long head", name: /incline|bayesian|drag|lying supine|behind/i }],
+  biceps: [{ angle: "brachialis", move: ["hammer", "zottman"], name: /hammer|reverse|zottman/i }, { angle: "short head", name: /preacher|spider|concentration|scott|prone|lying high bench|lying against an incline|over incline bench/i }, { angle: "long head", name: /incline|bayesian|drag|lying supine|behind/i }],
   triceps: [{ angle: "long head", name: /overhead|french|skull|lying|incline|decline|behind|tate|seated triceps press|standing (one-arm )?dumbbell triceps extension|low-pulley one-arm|kneeling cable|low cable triceps|katana/i }, { angle: "medial head", name: /reverse.?grip|underhand|supinated/i }, { angle: "lateral head", move: ["closePress", "triceps"] }],
   forearms: [{ angle: "extensors", move: ["reverseCurl"], name: /reverse|extensor|palms?-down/i }, { angle: "flexors", name: /palms?-up|wrist curl|grip|hang|farmer/i }],
   quads: [{ angle: "extension", move: ["legExt"] }, { angle: "squat", move: ["squat", "lunge"] }],
@@ -59,7 +60,7 @@ function muscle(m: any): string {
   const facts: [string, string, string?][] = [
     ["Stretch", m.stretch ? `${esc(m.stretch.how)}${m.stretch.note ? ` <span class="src">${esc(m.stretch.note)}</span>` : ""}` : "No specific stretch rule", m.stretch?.evidence],
     ["Heavy and light", `<b class="${m.heavyLight.needs ? "yes" : "no"}">${m.heavyLight.needs ? "Yes" : "Not needed"}</b> · ${esc(m.heavyLight.why)}`, m.heavyLight.evidence],
-    ["Recovery", `<b class="mono">${m.recoveryHours.value} h</b> after hard work${m.recoveryHours.note ? ` · ${esc(m.recoveryHours.note)}` : ""}`, m.recoveryHours.evidence],
+    ["Rest days", `<b class="mono">${m.restDays.value} full day${m.restDays.value > 1 ? "s" : ""}</b> before the next hard day (4+ sets)${m.restDays.note ? ` · ${esc(m.restDays.note)}` : ""}`, m.restDays.evidence],
     ["To failure", `${m.failure.safe ? `<span class="ok">Safe:</span> ${esc(m.failure.safe)}` : ""}${m.failure.safe && m.failure.avoid ? "<br>" : ""}${m.failure.avoid ? `<span class="warn">Avoid:</span> ${esc(m.failure.avoid)}` : ""}`, m.failure.evidence],
     ["Key lifts", esc(m.keyLifts)],
   ];
@@ -96,6 +97,9 @@ function muscle(m: any): string {
 </section>`;
 }
 
+const EXAMPLE = { goal: "growth", phase: "cutting", age: 45, yearsTraining: 2, sleepHours: 6.5 } as TrainingProfile;
+const ex = (g: MuscleGroup, p: Priority) => { const base = data.muscles.find((m: any) => m.id === g).weeklySets.growth; const t = modelTarget(g, EXAMPLE, p); return `${base[0]}–${base[1]} becomes <b class="mono">${t.min}–${t.max}</b>`; };
+
 // How the training profile changes each muscle's weekly range (and its recovery), from the database's profile rules
 function profileSection(): string {
   const P = data.profile;
@@ -110,13 +114,14 @@ function profileSection(): string {
     ...P.age.map((s: any) => step("Age", s)),
     ...P.sleepHours.map((s: any) => step("Sleep (h)", s)),
     ...Object.entries(P.phase).map(([k, v]: any) => `<tr><td>${k === "cutting" ? "Cutting" : "Bulking"}</td><td class="mono">max ${pct(v.max)}</td><td>${esc(v.why)} (not for maintain)</td></tr>`),
-    `<tr><td>Priority muscle</td><td class="mono">min → middle</td><td>${esc(P.priority.why)}</td></tr>`,
-    `<tr><td>Key lift to failure</td><td class="mono">+1 recovery day</td><td>That muscle stays partly recovered one more day</td></tr>`,
+    `<tr><td>Priority muscle, mass gain</td><td class="mono">min → middle · max +${Math.round((P.priority.maxGrowth - 1) * 100)}%</td><td>More sets grow more muscle (Schoenfeld 2017, Pelland 2024)</td></tr>`,
+    `<tr><td>Priority muscle, other goals</td><td class="mono">min → middle</td><td>Top half of the range</td></tr>`,
+    `<tr><td>Key lift to failure</td><td class="mono">+1 recovery day</td><td>Not a profile setting: sets to failure take about a day longer to recover (Morán-Navarro 2017)</td></tr>`,
   ].join("");
   return `<section class="profile"><h2>How your profile changes sets goal</h2>
   <p class="lede" style="font-size:13.5px;margin-top:6px">Each muscle's weekly range below is for your goal. Your profile then scales it: the changes multiply together, the range is rounded, and the top always stays at least 2 above the bottom. Your own targets always win. ${ev("J")}</p>
   <div class="tbl"><table><thead><tr><th>When</th><th>Change</th><th>Why</th></tr></thead><tbody>${rows}</tbody></table></div>
-  <p class="lede" style="font-size:13px">Example: a 45-year-old, 2 years training, sleeping 6.5 h, cutting, mass gain, back (12–20): max 20 × 0.92 × 0.92 × 0.85 ≈ 14, so 12–14.</p></section>`;
+  <p class="lede" style="font-size:13px">Example (worked out by the app): a 45-year-old, 2 years training, sleeping 6.5 h, cutting, mass gain. Quads ${ex("quads", "normal")}. Back ${ex("back", "normal")}, or ${ex("back", "priority")} as a priority muscle.</p></section>`;
 }
 
 const r = data.rules;
@@ -213,9 +218,9 @@ td.mono { color: var(--neon-2); white-space: nowrap; font-size: 12.5px; }
   <div class="legend">How sure we are: ${ev("R")} studies ${ev("C")} what coaches do ${ev("J")} the app's own rule</div>
 
   <div class="rules">
-    <div class="rule"><b class="mono">≤ ${r.maxSetsPerWorkout.value}</b><span>sets per muscle in one workout (12–13 is a warning) ${ev("R")}</span></div>
-    <div class="rule"><b class="mono">2 days</b><span>for a muscle over ${r.twoDaysAbove.value} sets a week ${ev("R")}</span></div>
-    <div class="rule"><b class="mono">${r.growthReps.min}–${r.growthReps.max}</b><span>reps all grow muscle, close to failure ${ev("R")}</span></div>
+    <div class="rule"><b class="mono">≤ ${r.maxSetsPerWorkout.value}</b><span>sets per muscle in one workout ${ev(r.maxSetsPerWorkout.evidence)} (12–13 is a warning ${ev("J")})</span></div>
+    <div class="rule"><b class="mono">2 days</b><span>for a muscle over ${r.twoDaysAbove.value} sets a week ${ev(r.twoDaysAbove.evidence)}</span></div>
+    <div class="rule"><b class="mono">${r.growthReps.min}–${r.growthReps.max}</b><span>reps all grow muscle, close to failure ${ev(r.growthReps.evidence)}</span></div>
     <div class="rule"><b class="mono">≤${r.heavyMaxReps} · ${r.lightMinReps}+</b><span>heavy and light sets, for big muscles ${ev("J")}</span></div>
   </div>
   <p class="lede" style="font-size:13.5px">Weekly sets: sets that hit the muscle only partly (like biceps in a row) count as half. Goals: ${GOALS.map(([k, l]) => `<b>${l}</b> ${esc(r.goals[k].split(": ")[1] ?? r.goals[k])}`).join(" ")}</p>

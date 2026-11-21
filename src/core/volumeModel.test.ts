@@ -16,10 +16,12 @@ describe("volume model (draft 2)", () => {
     expect(b.min).toBeLessThan(k.min);
     expect(b.max).toBeLessThan(k.max);
   });
-  it("priority raises the floor, not the ceiling", () => {
+  it("priority on mass gain gives more sets (floor and ceiling up); other goals only the top half", () => {
     const n = modelTarget("biceps", base), p = modelTarget("biceps", base, "priority");
     expect(p.min).toBeGreaterThan(n.min);
-    expect(p.max).toBe(n.max);
+    expect(p.max).toBeGreaterThan(n.max);
+    const sb = { ...base, goal: "strength" as const };
+    expect(modelTarget("biceps", sb, "priority").max).toBe(modelTarget("biceps", sb).max);
   });
   it("a skipped muscle gets no sets", () => {
     const off = modelTarget("chest", base, "off");

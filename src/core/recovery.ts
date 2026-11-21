@@ -1,13 +1,13 @@
 // Recovery status per muscle group, for the muscle map. Display only. Counted in whole days (workout dates),
 // because people train at about the same time each day.
 // A "hard day" for a muscle = ≥ 4 fractional working/failure sets that day (indirect sets count ½).
-//   Recovery days per muscle come from the muscle database (48 h; 72 h for back, quads, hamstrings, glutes):
-//   recovering until its last day, partly recovered on the last day (fine to train), then fresh.
+//   Full rest days per muscle come from the muscle database (2 for back, quads, hamstrings, glutes; 1 for the rest):
+//   recovering on the hard day and its rest days, then fresh. A slower-recovery reason: partly recovered one day more.
 //   Slower recovery (age 40+, sleep under 6 h, or a ★ key lift set to failure for that muscle that day):
 //   partly recovered one day longer. It never blocks training.
 // Basis: 48–72 h for performance to come back (Morán-Navarro 2017; Korak 2015); training a muscle every 48–72 h is
 // common and works (Schoenfeld 2016, 2019). The 4-set line and the +1 day are *judgment*.
-import { PROFILE_RULES, profileStep, recoveryDaysOf, RULES } from "./muscles";
+import { PROFILE_RULES, profileStep, restDaysOf, RULES } from "./muscles";
 import { MUSCLE_GROUPS, type Exercise, type MuscleGroup, type ProfileDraft, type Session } from "./types";
 import { countsForVolume } from "./volume";
 import { daysBetween } from "./util";
@@ -59,15 +59,15 @@ export function recoveryStatus(sessions: Session[], exMap: Map<string, Exercise>
   const rank: Record<Recovery, number> = { fresh: 0, partial: 1, recovering: 2 };
   return Object.fromEntries(MUSCLE_GROUPS.map(({ id }) => {
     let best: MuscleRecovery = { status: "fresh", sets: 0, daysAgo: null, slower: [] };
-    // Recovery days from the muscle database (48 h, 72 h for big muscles): recovering until the last day, partly
-    // recovered on the last day (one more with a slower-recovery reason), then fresh
-    const R = Math.round(recoveryDaysOf(id));
+    // Full rest days from the muscle database (2 big muscles, 1 the rest): recovering on the day itself and the rest
+    // days, then fresh; a slower-recovery reason keeps it partly recovered one more day
+    const R = restDaysOf(id);
     for (let k = 0; k <= 4; k++) {
       const n = sets[k].get(id) ?? 0;
       if (n < HARD_SETS) continue;
       const slower = [...base, ...(keyFail[k].has(id) ? ["★ key lift to failure"] : [])];
-      const status: Recovery = k < R - 1 ? "recovering" : k === R - 1 || (k === R && slower.length) ? "partial" : "fresh";
-      if (rank[status] > rank[best.status]) best = { status, sets: n, daysAgo: k, slower: status === "partial" && k === R ? slower : [] };
+      const status: Recovery = k <= R ? "recovering" : k === R + 1 && slower.length ? "partial" : "fresh";
+      if (rank[status] > rank[best.status]) best = { status, sets: n, daysAgo: k, slower: status === "partial" ? slower : [] };
     }
     return [id, best];
   })) as Record<MuscleGroup, MuscleRecovery>;
