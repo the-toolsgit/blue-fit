@@ -1,27 +1,16 @@
 // Core data types. Framework-free: no DOM, no React. Mirrors docs/APP_SPEC.md §Data model.
 
+import muscleDb from "./seed/muscles.json";
 export type MuscleGroup =
   | "back" | "biceps" | "triceps" | "sideDelts" | "rearDelts" | "traps" | "frontDelts" | "chest"
   | "quads" | "hamstrings" | "adductors" | "calves" | "glutes" | "forearms" | "abs" | "neck";
 
-export const MUSCLE_GROUPS: { id: MuscleGroup; label: string; region: "upper" | "lower"; priority?: boolean }[] = [
-  { id: "back", label: "Back", region: "upper", priority: true },
-  { id: "biceps", label: "Biceps", region: "upper", priority: true },
-  { id: "triceps", label: "Triceps", region: "upper", priority: true },
-  { id: "sideDelts", label: "Side delts", region: "upper", priority: true },
-  { id: "rearDelts", label: "Rear delts", region: "upper", priority: true },
-  { id: "traps", label: "Traps", region: "upper", priority: true },
-  { id: "frontDelts", label: "Front delts", region: "upper" },
-  { id: "chest", label: "Chest", region: "upper" },
-  { id: "quads", label: "Quads", region: "lower" },
-  { id: "hamstrings", label: "Hamstrings", region: "lower" },
-  { id: "adductors", label: "Adductors", region: "lower" },
-  { id: "calves", label: "Calves", region: "lower" },
-  { id: "glutes", label: "Glutes", region: "lower" },
-  { id: "forearms", label: "Forearms", region: "upper" },
-  { id: "abs", label: "Abs", region: "upper" },
-  { id: "neck", label: "Neck", region: "upper" },
-];
+/** Muscle groups in display order; names, body region and default priority come from the muscle database (seed/muscles.json). */
+const MUSCLE_ORDER: MuscleGroup[] = ["back", "biceps", "triceps", "sideDelts", "rearDelts", "traps", "frontDelts", "chest", "quads", "hamstrings", "adductors", "calves", "glutes", "forearms", "abs", "neck"];
+export const MUSCLE_GROUPS: { id: MuscleGroup; label: string; region: "upper" | "lower"; priority?: boolean }[] = MUSCLE_ORDER.map((id) => {
+  const m = muscleDb.muscles.find((x) => x.id === id)!;
+  return { id, label: m.name, region: m.region as "upper" | "lower", ...(m.priority ? { priority: true } : {}) };
+});
 export const muscleLabel = (g: MuscleGroup) => MUSCLE_GROUPS.find((m) => m.id === g)?.label ?? g;
 
 export type Equipment = "barbell" | "smith" | "fixedBar" | "dumbbell" | "cable" | "machine" | "plateMachine" | "bodyweight" | "other";

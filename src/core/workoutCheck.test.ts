@@ -109,9 +109,20 @@ describe("week score", () => {
     expect(dose(withSets(1)).warn).toBe(true); // 13
     expect(dose(withSets(2)).warn).toBeFalsy(); // 14
     expect(dose(withSets(2)).pass).toBe(false);
+    // Heavy and light: only big muscles (database), never red
+    const mixC = weekInsight(r, exMap, seed.targets).checks.find((c) => c.id === "mix")!;
+    for (const x of mixC.issues) expect(["Back", "Chest", "Quads", "Hamstrings", "Glutes"]).toContain(x.who);
     // Heavy and light is never red: a miss is always a warning
     const mix = weekInsight(r, exMap, seed.targets).checks.find((c) => c.id === "mix")!;
     expect(mix.pass || mix.warn).toBe(true);
+  });
+  it("recovery uses the database hours: hard quads 2 days apart fail (72 h), hard biceps 2 days apart pass (48 h)", () => {
+    const quadEx = "leg-extension", bicEx = "db-hammer-curl";
+    const mk = (exId: string, wd: number) => ({ id: `d${exId}${wd}`, title: "T", weekday: wd, slots: [{ id: `s${exId}${wd}`, exerciseId: exId, sets: 5, repMin: 10, repMax: 12, restSec: 120 }] });
+    const rr = { ...r, days: [mk(quadEx, 1), mk(quadEx, 3), mk(bicEx, 2), mk(bicEx, 4)] } as typeof r;
+    const rec = weekInsight(rr, exMap, seed.targets).checks.find((c) => c.id === "recovery")!;
+    expect(rec.issues.map((x) => x.who)).toContain("Quads");
+    expect(rec.issues.map((x) => x.who)).not.toContain("Biceps");
   });
   it("twice a week is only asked of muscles over 11 sets a week", () => {
     const w = weekInsight(r, exMap, seed.targets);

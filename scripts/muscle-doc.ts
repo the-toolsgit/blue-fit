@@ -1,11 +1,11 @@
-// Builds docs/muscles.html (the readable muscle database) from docs/data/muscles.json and the exercise library.
+// Builds docs/muscles.html (the readable muscle database) from src/core/seed/muscles.json and the exercise library.
 // Run: npx tsx scripts/muscle-doc.ts
 import { readFileSync, writeFileSync } from "node:fs";
 import { failureEligible } from "../src/core/failure";
 import type { Exercise } from "../src/core/types";
 
 const root = new URL("..", import.meta.url).pathname;
-const data = JSON.parse(readFileSync(root + "docs/data/muscles.json", "utf8"));
+const data = JSON.parse(readFileSync(root + "src/core/seed/muscles.json", "utf8"));
 const lib = JSON.parse(readFileSync(root + "src/core/seed/library.json", "utf8"));
 // Every exercise the app knows: the plan's built-ins first, then the library (same id once)
 const seedEx = [...JSON.parse(readFileSync(root + "src/core/seed/exercises.json", "utf8")), ...JSON.parse(readFileSync(root + "src/core/seed/extra-exercises.json", "utf8"))] as Exercise[];
@@ -18,32 +18,30 @@ const GOALS: [string, string][] = [["growth", "Mass gain"], ["strength", "Streng
 const MAXSETS = 20;
 
 // Which angle an exercise trains: the plan's own tags first (seed/exercise-jobs.json), then the library's movement type
-// and name. Exercises that fit no single angle go under "Whole muscle".
+// and name (rules checked in order, first match wins). Exercises that fit no single angle go under "Whole muscle".
 const JOBS = JSON.parse(readFileSync(root + "src/core/seed/exercise-jobs.json", "utf8")) as Record<string, { jobs: Record<string, string | string[]> }>;
 type Rule = { angle: string; move?: string[]; name?: RegExp };
 const ANGLE_RULES: Record<string, Rule[]> = {
-  back: [{ angle: "lats", move: ["pulldown", "straightArm", "pulloverLats"], name: /pull-?up|chin/i }, { angle: "lower back", name: /back ext|hyperext|good morning|superman|deadlift/i }, { angle: "upper back", move: ["row"] }],
-  chest: [{ angle: "upper", name: /incline|low.?to.?high|low cable|reverse.?grip bench/i }, { angle: "mid/lower", move: ["press", "fly", "pulloverChest"] }],
-  frontDelts: [{ angle: "press", move: ["ohp", "frontRaise"] }],
-  sideDelts: [{ angle: "raise", move: ["lateral", "upright"] }],
-  rearDelts: [{ angle: "reverse fly", move: ["rear", "facePull"] }],
-  traps: [{ angle: "mid/lower", name: /kelso|face pull|y.?raise|overhead trap|prone|scap/i }, { angle: "shrug", move: ["shrug", "lateral"] }],
-  biceps: [{ angle: "brachialis", move: ["hammer", "zottman"], name: /hammer|reverse|zottman/i }, { angle: "long head", name: /incline|bayesian|drag|lying supine|behind/i }, { angle: "short head", name: /preacher|spider|concentration|scott|prone/i }],
-  triceps: [{ angle: "long head", name: /overhead|french|skull|lying|incline|behind|tate/i }, { angle: "medial head", name: /reverse.?grip|underhand|supinated/i }, { angle: "lateral head", move: ["closePress", "triceps"] }],
-  forearms: [{ angle: "extensors", move: ["reverseCurl"], name: /reverse|extensor/i }, { angle: "flexors", move: ["wrist"] }],
+  back: [{ angle: "lats", move: ["pulldown", "straightArm", "pulloverLats"], name: /pull-?up|\bchin/i }, { angle: "lower back", name: /back ext|hyperext|good morning|superman|deadlift/i }, { angle: "upper back", move: ["row"] }],
+  chest: [{ angle: "upper", name: /feet elevated|decline push|low.?to.?high|low cable|reverse.?grip bench/i }, { angle: "mid/lower", name: /incline push/i }, { angle: "upper", name: /incline/i }, { angle: "mid/lower", move: ["press", "fly", "pulloverChest"] }],
+  traps: [{ angle: "mid/lower", name: /kelso|face pull|y.?raise|overhead trap|prone|scap|middle back shrug/i }, { angle: "shrug", move: ["shrug", "lateral"] }],
+  biceps: [{ angle: "brachialis", move: ["hammer", "zottman"], name: /hammer|reverse|zottman/i }, { angle: "short head", name: /preacher|spider|concentration|scott|prone|lying high bench/i }, { angle: "long head", name: /incline|bayesian|drag|lying supine|behind/i }],
+  triceps: [{ angle: "long head", name: /overhead|french|skull|lying|incline|decline|behind|tate|seated triceps press|standing (one-arm )?dumbbell triceps extension|low-pulley one-arm|kneeling cable|low cable triceps|katana/i }, { angle: "medial head", name: /reverse.?grip|underhand|supinated/i }, { angle: "lateral head", move: ["closePress", "triceps"] }],
+  forearms: [{ angle: "extensors", move: ["reverseCurl"], name: /reverse|extensor|palms?-down/i }, { angle: "flexors", name: /palms?-up|wrist curl|grip|hang|farmer/i }],
   quads: [{ angle: "extension", move: ["legExt"] }, { angle: "squat", move: ["squat", "lunge"] }],
   hamstrings: [{ angle: "knee flexion", move: ["legCurl"], name: /curl|nordic/i }, { angle: "hip hinge", move: ["hinge", "deadlift"] }],
   glutes: [{ angle: "glute medius", move: ["abduction"], name: /abduct/i }, { angle: "glute max", move: ["deadlift", "hipThrust", "glute", "backExt"] }],
-  adductors: [{ angle: "adduction", move: ["adduction"] }],
   calves: [{ angle: "bent-knee", name: /seated/i }, { angle: "straight-knee", move: ["calf"] }],
-  abs: [{ angle: "obliques", name: /oblique|twist|woodchop|wood chop|side|russian|pallof|windmill|rotat/i }, { angle: "rectus abs", move: ["abs"] }],
+  abs: [{ angle: "obliques", name: /oblique|twist|woodchop|wood chop|side|russian|pallof|windmill|rotat|cable lift|cross.?body|elbow to knee|heel touch/i }, { angle: "rectus abs", move: ["abs"] }],
   neck: [{ angle: "flexion", name: /flexion|neck curl|front|lying face up/i }, { angle: "extension", move: ["neck"] }],
 };
-function angleOf(e: Exercise, id: string): string {
+/** Angles an exercise trains for this muscle: its own tags first; one-angle muscles always that angle. */
+function anglesOf(e: Exercise, id: string, angles: string[]): string[] {
   const tag = JOBS[e.id]?.jobs?.[id];
-  if (tag) return Array.isArray(tag) ? tag[0] : tag;
-  for (const r of ANGLE_RULES[id] ?? []) if ((r.name && r.name.test(e.name)) || (r.move && r.move.includes((e as any).movement))) return r.angle;
-  return "Whole muscle";
+  if (tag) return Array.isArray(tag) ? tag : [tag];
+  if (angles.length === 1) return angles;
+  for (const r of ANGLE_RULES[id] ?? []) if ((r.name && r.name.test(e.name)) || (r.move && r.move.includes((e as any).movement))) return [r.angle];
+  return ["Whole muscle"];
 }
 
 function exerciseList(id: string, weight: number) {
@@ -71,7 +69,7 @@ function muscle(m: any): string {
 <section class="muscle" id="${m.id}">
   <header class="m-head">
     <h2>${esc(m.name)}</h2>
-    <div class="pills"><span class="pill">${m.size} muscle</span><span class="pill">${m.side === "both" ? "front + back" : m.side}</span>${m.focus ? `<span class="pill pill-on">tracked</span>` : `<span class="pill">optional</span>`}</div>
+    <div class="pills"><span class="pill">${m.size} muscle</span><span class="pill">${m.side === "both" ? "front + back" : m.side}</span>${m.priority ? `<span class="pill pill-on">priority</span>` : ""}</div>
   </header>
   <p class="does">${esc(m.does)}</p>
 
@@ -91,7 +89,7 @@ function muscle(m: any): string {
 
   <h3>Exercises that train it <span class="count">${direct.length}</span></h3>
   ${[...m.angles.map((a: any) => a.name), "Whole muscle"].map((name: string) => {
-    const xs = direct.filter((e) => angleOf(e, m.id) === name);
+    const xs = direct.filter((e) => anglesOf(e, m.id, m.angles.map((a: any) => a.name)).includes(name));
     return xs.length ? `<details class="exs"><summary><span class="ang">${esc(name)}</span> <span class="count">${xs.length}</span></summary><ul class="ex-list">${xs.map(exRow).join("")}</ul></details>` : "";
   }).join("")}
   <details class="exs"><summary>Exercises that work it indirectly (½ set) <span class="count">${indirect.length}</span></summary><ul class="ex-list">${indirect.map(exRow).join("")}</ul></details>

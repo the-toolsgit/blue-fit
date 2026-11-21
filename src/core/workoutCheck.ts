@@ -1,6 +1,7 @@
 // The whole week of a plan at a glance: a tile per muscle, and whether the routine "checks all the boxes" for the
 // user's goal (Plan → Week check). The rules are universal (training research), never taken from a plan.
 // Pure and framework-free. Numbers marked *judgment* are our own reasoning; the rest cite their source.
+import { ANGLES, NEEDS_HEAVY_LIGHT, recoveryDaysOf, RULES, STRETCH_CHECKED } from "./muscles";
 import { muscleLabel, type Exercise, type Goal, type MuscleGroup, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "./types";
 import { formatTarget, isFocus, planVolume } from "./volume";
 import { fmtNum } from "./util";
@@ -23,38 +24,25 @@ import { estimateMinutes } from "./timeEstimate";
  * abs: rectus abs (crunches, leg raises: "upper/lower abs" is one muscle) + obliques (twists, side bends).
  * A muscle with one job has no job check.
  */
-export const JOBS: Partial<Record<MuscleGroup, string[]>> = {
-  back: ["lats", "upper back", "lower back"],
-  biceps: ["long head", "short head", "brachialis"],
-  triceps: ["long head", "lateral head", "medial head"],
-  traps: ["shrug", "mid/lower"],
-  chest: ["upper", "mid/lower"],
-  quads: ["squat", "extension"],
-  hamstrings: ["knee flexion", "hip hinge"],
-  calves: ["straight-knee", "bent-knee"],
-  glutes: ["glute max", "glute medius"],
-  forearms: ["flexors", "extensors"],
-  abs: ["rectus abs", "obliques"],
-  neck: ["flexion", "extension"],
-};
-/** Muscles with direct studies showing more growth from training at long length (stretched position):
- *  biceps (Pedrosa 2023), triceps (Maeo 2023), quads (Pedrosa 2022), hamstrings (Maeo 2021), calves (Kassiano 2023).
- *  Chest and lats are added by analogy (*judgment*). Other muscles have no stretch check. */
-export const STRETCH_MUSCLES = new Set<MuscleGroup>(["biceps", "triceps", "quads", "hamstrings", "calves", "chest", "back"]);
+/** Angles per muscle, from the muscle database (seed/muscles.json; was hard-coded here until Nov 20 2026). */
+export const JOBS = ANGLES;
+/** Muscles the Stretch check asks about (database: muscles with a stretch rule that is checked). Studies: biceps
+ *  (Pedrosa 2023), triceps (Maeo 2023), quads (Pedrosa 2022), hamstrings (Maeo 2021), calves (Kassiano 2023); chest
+ *  and lats by analogy (*judgment*). */
+export const STRETCH_MUSCLES = STRETCH_CHECKED;
 
 /** Most sets for one muscle in one workout (indirect count ½) before extra sets add little: growth levels off at
- *  ~11 fractional sets per session (Remmert 2025 meta-regression, preprint; Leo, Nov 20 2026). */
-export const MAX_SESSION_SETS = 11;
+ *  ~11 fractional sets per session (Remmert 2025 meta-regression, preprint). From the muscle database rules. */
+export const MAX_SESSION_SETS = RULES.maxSetsPerWorkout.value;
 /** Up to this many sets over MAX_SESSION_SETS is only a warning (yellow), not a red miss; it still doesn't pass
  *  (Leo, Nov 20 2026: "not a huge deal"). */
-export const SESSION_SETS_WARN = 2;
-/** Direct sets that count as hard work for a muscle that day: hard work on back-to-back days leaves under ~48 h to
- *  recover (ACSM 2009: 48 h between sessions for the same muscles). The 4-set line is *judgment*. */
-export const HARD_SETS = 4;
+export const SESSION_SETS_WARN = RULES.maxSetsPerWorkout.warnUpTo - RULES.maxSetsPerWorkout.value;
+/** Sets for a muscle in one day that count as hard work for recovery (*judgment*, database rules). */
+export const HARD_SETS = RULES.hardSets.value;
 /** Rep ranges (middle of the range). Growth: similar results anywhere from ~6 to ~30 reps taken close to failure
- *  (Schoenfeld 2017, 2021). Heavy ≤ 10 and light ≥ 12 for the mix (*judgment*; Schoenfeld 2021 suggests combining). */
-export const GROWTH_REPS = [6, 30] as const;
-export const HEAVY_REPS = 10, LIGHT_REPS = 12;
+ *  (Schoenfeld 2017, 2021). Heavy ≤ 10 and light ≥ 12 for the mix (*judgment*). From the database rules. */
+export const GROWTH_REPS = [RULES.growthReps.min, RULES.growthReps.max] as const;
+export const HEAVY_REPS = RULES.heavyMaxReps, LIGHT_REPS = RULES.lightMinReps;
 /** Rest: under ~90 s grows a little less (Schoenfeld 2016; Singer 2024). Strength: 3+ min (ACSM 2009). Endurance: ≤ 90 s (ACSM 2009). */
 export const GROWTH_REST = 90, STRENGTH_REST = 180, ENDURANCE_REST = 90;
 
@@ -152,11 +140,22 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     `${MAX_SESSION_SETS} or fewer sets per muscle per workout`);
   const dose: Check = over.length && over.every((o) => o.n <= MAX_SESSION_SETS + SESSION_SETS_WARN) ? { ...dose0, warn: true } : dose0;
 
-  const recovery = check("recovery", "Recovery", main.flatMap((g) => {
+  // Hard work again before the muscle's recovery time (database hours: 48 h, 72 h for big muscles) → the shortest gap in days
+  const tooSoon = (g: MuscleGroup): number | null => {
     const hard = days.filter((d) => d.weekday != null && directSets(d, g) >= HARD_SETS);
-    const pair = hard.find((a) => hard.some((b) => b !== a && (b.weekday! - a.weekday! + 7) % 7 === 1));
-    return pair ? [`${L(g)}: hard on back-to-back days`] : [];
-  }), "No muscle worked hard two days in a row");
+    const need = recoveryDaysOf(g);
+    let worst: number | null = null;
+    for (const a of hard) for (const b of hard) {
+      if (a === b) continue;
+      const gap = (b.weekday! - a.weekday! + 7) % 7;
+      if (gap > 0 && gap < need && (worst == null || gap < worst)) worst = gap;
+    }
+    return worst;
+  };
+  const recovery = check("recovery", "Recovery", main.flatMap((g) => {
+    const gap = tooSoon(g);
+    return gap ? [`${L(g)}: hard ${gap === 1 ? "two days in a row" : `${gap} days apart`}`] : [];
+  }), "Every muscle rests long enough after hard work");
 
   const reps = check("reps", "Rep range", uniq(slots.filter((s) => mid(s) < GROWTH_REPS[0] || mid(s) > GROWTH_REPS[1]).map((s) => `${ex(s).name}: ${s.repMin}–${s.repMax}`)),
     `Every exercise ${GROWTH_REPS[0]}–${GROWTH_REPS[1]} reps`);
@@ -164,11 +163,13 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   // A nice-to-have, never a red miss: growth is about the same across rep ranges (Schoenfeld 2021); mixing helps joints,
   // recovery and strength, and is what most coaches do (Leo, Nov 20 2026)
   const mix0 = check("mix", "Heavy and light", main.flatMap((g) => {
+    // Only muscles the database says need the mix (big muscles trained with compound lifts)
+    if (!NEEDS_HEAVY_LIGHT.has(g)) return [];
     const own = slots.filter((s) => isDirect(ex(s), g));
     if (new Set(own.map((s) => s.exerciseId)).size < 2) return [];
     const heavy = own.some((s) => mid(s) <= HEAVY_REPS), light = own.some((s) => mid(s) >= LIGHT_REPS);
-    return heavy && light ? [] : [`${L(g)}: ${heavy ? "no light sets" : "no heavy sets"}`];
-  }), `Each muscle gets some heavy (max ${HEAVY_REPS} reps) and some light sets (min ${LIGHT_REPS} reps)`);
+    return heavy && light ? [] : [`${L(g)}: ${!heavy && !light ? "no heavy or light sets" : heavy ? "no light sets" : "no heavy sets"}`];
+  }), `Big muscles get some heavy (max ${HEAVY_REPS} reps) and some light sets (min ${LIGHT_REPS} reps)`);
   const mix: Check = mix0.pass ? mix0 : { ...mix0, warn: true };
 
   const rest = (min: number | null, max: number | null, only?: Slot[]) => {
@@ -193,7 +194,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const share = (good: number, all: number) => (all ? good / all : 1);
   const inTarget = main.filter((g) => { const t = tmap.get(g)!, w = week.get(g) ?? 0; return w >= t.min! && (t.max == null || w <= t.max); }).length;
   const allJobs = main.flatMap((g) => (JOBS[g] ?? []).length > 1 ? (JOBS[g] ?? []).map((j) => jobsHit(g).has(j)) : []);
-  const backToBack = (g: MuscleGroup) => { const hard = days.filter((d) => d.weekday != null && directSets(d, g) >= HARD_SETS); return hard.some((a) => hard.some((b) => b !== a && (b.weekday! - a.weekday! + 7) % 7 === 1)); };
+  const backToBack = (g: MuscleGroup) => tooSoon(g) != null;
   const failEligible = failure ? main.filter((g) => slots.some((s) => isDirect(ex(s), g) && failure.eligible(ex(s)))) : [];
   const twoNeeded = main.filter(needsTwo);
   const W = SCORE_WEIGHTS;

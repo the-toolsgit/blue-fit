@@ -38,7 +38,8 @@ often leaves them short and slack, so they work less and grow less.
 
 **3. What the studies show:**
 - **Quads:** in a 12-week study, people who only squatted didn't grow the rectus femoris meaningfully, while people who
-  rotated squats with other leg exercises (including leg extensions) grew all four quad muscles (Fonseca 2014).
+  rotated squats with leg presses, deadlifts and lunges grew all four quad muscles. Total quad growth was about the
+  same in both groups; the difference was which parts grew (Fonseca 2014).
 - **Hamstrings:** a hip exercise (45° hip extension) grew the long head of the biceps femoris more than Nordic curls, a
   knee exercise (Bourne 2017). Leg curls with the hips bent (seated) grew the hamstrings more than lying leg curls
   (Maeo 2021).
@@ -59,7 +60,7 @@ progress on them. Variety means covering the angles, not changing exercises ever
 
 **Evidence:** research (small studies, but they point the same way).
 - [Kassiano et al. 2022: "Does Varying Resistance Exercises Promote Superior Muscle Hypertrophy and Strength Gains? A Systematic Review" (PubMed)](https://pubmed.ncbi.nlm.nih.gov/35438660/)
-- [Fonseca et al. 2014: "Changes in exercises are more effective than in loading schemes to improve muscle strength" (PDF)](https://paulogentil.com/pdf/Changes%20in%20exercises%20are%20more%20effective%20than%20in%20loading%20schemes%20to%20improve%20muscle%20strength.pdf)
+- [Fonseca et al. 2014 (PubMed)](https://pubmed.ncbi.nlm.nih.gov/24832974/); full text: [Fonseca et al. 2014: "Changes in exercises are more effective than in loading schemes to improve muscle strength" (PDF)](https://paulogentil.com/pdf/Changes%20in%20exercises%20are%20more%20effective%20than%20in%20loading%20schemes%20to%20improve%20muscle%20strength.pdf)
 - [Bourne et al. 2017: Nordic hamstring vs hip extension, hamstring size (PubMed)](https://pubmed.ncbi.nlm.nih.gov/27660368/)
 - [Maeo et al. 2023: triceps overhead vs neutral arm position (PubMed)](https://pubmed.ncbi.nlm.nih.gov/35819335/)
 - Maeo et al. 2021: seated vs lying leg curls, hamstring growth (Medicine & Science in Sports & Exercise)
@@ -72,7 +73,7 @@ progress on them. Variety means covering the angles, not changing exercises ever
 (for example, rows count half for the biceps). If a muscle needs more sets than that in a week, split them over two
 days.
 
-**Why:** extra sets in the same workout add less and less. In the largest analysis so far, muscle growth stopped
+**Why:** extra sets in the same workout add less and less. In a 2025 analysis of many studies, muscle growth stopped
 improving in a meaningful way after about 11 such sets per workout.
 
 **In the app:** 12 or 13 sets shows a yellow warning (a little over, not a big deal). 14 or more shows red.
@@ -87,8 +88,10 @@ set counts. The yellow range is our call.
 
 ## Heavy and light
 
-**What it means:** give each muscle some heavy work (10 reps or fewer) and some light work (12 reps or more), not
-only one kind. A common setup: heavier on the big lifts, lighter on isolation exercises.
+**What it means:** give each big muscle (back, chest, quads, hamstrings, glutes) some heavy work (10 reps or fewer)
+and some light work (12 reps or more), not only one kind. Small muscles trained with isolation exercises (arms, delts,
+calves) don't need the mix: for calves, heavy and light raises grew the same in a direct study (untrained men,
+Schoenfeld 2020), and lighter sets are easier on elbows and shoulders. A common setup: heavier on the big lifts, lighter on isolation exercises.
 
 **Is it needed for growth?** Not really. Muscles grow about the same anywhere from roughly 6 to 30 reps, as long as
 each set ends close to failure.
@@ -108,6 +111,7 @@ not proven (Grgic & Schoenfeld 2018). Fibers are a minor reason at best.
 **In the app:** always a yellow warning when missing, never red. The 10 and 12 rep cut-offs are our call.
 
 **Evidence:** research (growth is similar across rep ranges) + coaching practice (mixing).
+- [Schoenfeld et al. 2020: heavy vs light calf training, untrained men (Physiological Reports)](https://pmc.ncbi.nlm.nih.gov/articles/PMC7186566)
 - [Schoenfeld, Grgic, Van Every, Plotkin 2021: "Loading Recommendations for Muscle Strength, Hypertrophy, and Local Endurance: A Re-Examination of the Repetition Continuum" (Sports)](https://www.mdpi.com/2075-4663/9/2/32/xml)
 - [Stronger By Science: the "hypertrophy range"](https://www.strongerbyscience.com/hypertrophy-range/)
 - [Built With Science: high reps vs low reps](https://builtwithscience.com/high-reps-vs-low-reps)
@@ -122,13 +126,14 @@ not proven (Grgic & Schoenfeld 2018). Fibers are a minor reason at best.
 40° instead of about 90° sitting upright).
 
 **Why:** the rectus femoris, the front-of-thigh muscle that also crosses the hip, gets stretched more when you lean
-back. In a 10-week study, overall quad growth was the same either way, but the rectus femoris grew much more with the
-seat back (about 170% more). The actual gain was a few millimeters, but it adds up over years.
+back. In a 10-week study (22 untrained men, one leg each way), the rectus femoris grew clearly more with the seat back,
+while the vastus lateralis (the outer quad) grew the same either way. The study measured only those two muscles.
 
 **Sitting upright isn't wrong:** it still trains the quads well, just with less stretch on that one muscle.
 
-**Evidence:** research (one study, summarized by Jeff Nippard).
-- [Jeff Nippard: "A Better Way To Do Leg Extensions" (YouTube)](https://www.youtube.com/watch?v=ztNBgrGy6FQ)
+**Evidence:** research (one study, in untrained men).
+- [Larsen et al. 2025: leg extension at 40° vs 90° hip flexion (J Sports Sci, PubMed)](https://pubmed.ncbi.nlm.nih.gov/39699974/)
+- [Jeff Nippard: "A Better Way To Do Leg Extensions" (YouTube summary)](https://www.youtube.com/watch?v=ztNBgrGy6FQ)
 
 ---
 

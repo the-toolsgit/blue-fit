@@ -128,26 +128,28 @@ describe("progress series", () => {
 
 describe("recovery", () => {
   const four = (t: LoggedSet["type"] = "working") => [1, 2, 3, 4].map(() => set(1, 1, t));
-  it("hard day today/yesterday → recovering, 2 days ago → partial, 3+ → fresh", () => {
+  it("recovery days come from the muscle database: 72 h big muscles, 48 h the rest", () => {
     const s = [
-      sess("2026-11-15", "leg-extension", four()),
-      sess("2026-11-14", "hip-adduction", four()),
-      sess("2026-11-12", "barbell-shrug", four()),
-      sess("2026-11-15", "hip-adduction", [set(1, 1), set(1, 1, "warmup")]),
+      sess("2026-11-15", "leg-extension", four()), // quads (72 h), 1 day ago
+      sess("2026-11-14", "prone-leg-curl", four()), // hamstrings (72 h), 2 days ago
+      sess("2026-11-15", "hip-adduction", four()), // adductors (48 h), 1 day ago
+      sess("2026-11-14", "barbell-shrug", four()), // traps (48 h), 2 days ago
+      sess("2026-11-16", "standing-calf-raise", [set(1, 1), set(1, 1, "warmup")]), // not hard
     ];
     const r = recoveryStatus(s, exMap, "2026-11-16");
     expect(r.quads).toMatchObject({ status: "recovering", sets: 4, daysAgo: 1 });
-    expect(r.adductors).toMatchObject({ status: "partial", daysAgo: 2 }); // 1 set yesterday doesn't count as hard
-    expect(r.traps.status).toBe("fresh"); // 4 days ago
+    expect(r.hamstrings).toMatchObject({ status: "partial", daysAgo: 2 });
+    expect(r.adductors).toMatchObject({ status: "partial", daysAgo: 1 });
+    expect(r.traps.status).toBe("fresh");
     expect(r.calves.status).toBe("fresh");
   });
   it("age 40+, short sleep or a ★ key lift to failure keep it partly recovered one more day", () => {
-    const s = [sess("2026-11-13", "barbell-shrug", four())];
+    const s = [sess("2026-11-14", "barbell-shrug", four())];
     expect(recoveryStatus(s, exMap, "2026-11-15").traps.status).toBe("partial");
     expect(recoveryStatus(s, exMap, "2026-11-16").traps.status).toBe("fresh");
     expect(recoveryStatus(s, exMap, "2026-11-16", { age: 45 } as never).traps).toMatchObject({ status: "partial", slower: ["age 40+"] });
     expect(recoveryStatus(s, exMap, "2026-11-16", { sleepHours: 5 } as never).traps.status).toBe("partial");
-    const f = [sess("2026-11-13", "barbell-shrug", [...four().slice(0, 3), set(1, 1, "failure")])];
+    const f = [sess("2026-11-14", "barbell-shrug", [...four().slice(0, 3), set(1, 1, "failure")])];
     expect(recoveryStatus(f, exMap, "2026-11-16").traps.slower).toEqual(["★ key lift to failure"]);
     expect(recoveryStatus(f, exMap, "2026-11-17").traps.status).toBe("fresh");
   });

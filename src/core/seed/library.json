@@ -987,11 +987,11 @@
    "id": "bent-over-low-pulley-side-lateral",
    "name": "Bent Over Low-Pulley Side Lateral",
    "equipment": "cable",
-   "movement": "lateral",
+   "movement": "rear",
    "compound": false,
    "volume": [
     {
-     "group": "sideDelts",
+     "group": "rearDelts",
      "weight": 1
     }
    ],
