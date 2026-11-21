@@ -66,7 +66,8 @@ function muscle(m: any): string {
 }
 
 const r = data.rules;
-const html = `<title>Blue Fit Muscles</title>
+const html = `<meta charset="utf-8">
+<title>Blue Fit Muscles</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -87,7 +88,7 @@ h1 { font: 700 44px/1 var(--display); letter-spacing: .02em; text-transform: upp
 .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; font-size: 13px; color: var(--muted); align-items: center; }
 .ev { display: inline-block; font: 500 11px/1 var(--mono); padding: 3px 6px; border-radius: 99px; border: 1px solid; vertical-align: 1px; white-space: nowrap; }
 .ev-r { color: var(--good); border-color: rgba(61,255,176,.4); } .ev-c { color: var(--neon-2); border-color: rgba(35,226,255,.4); } .ev-j { color: var(--j); border-color: rgba(197,139,255,.4); }
-.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin: 22px 0 8px; }
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 22px 0 8px; }
 .rule { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; min-width: 0; }
 .rule b { display: block; font: 700 26px/1 var(--display); color: var(--neon-2); }
 .rule span { display: block; font-size: 13px; color: var(--muted); margin-top: 4px; }
