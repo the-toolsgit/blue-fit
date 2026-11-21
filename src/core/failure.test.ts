@@ -123,6 +123,19 @@ describe("strategic last set to failure", () => {
     const manual = { ...s0, entries: s0.entries.map((e) => e.id === "3" ? { ...e, failWhy: [MANUAL_WHY] } : e) };
     expect(refitFailure(moveEntry(moveEntry(manual, "1", 1), "1", 1), exMap).entries.find((e) => e.id === "3")!.toFailure).toBe(true);
   });
+  it("starting the flagged exercise while another for its muscle is untouched moves the failure there", () => {
+    const elig = seed.exercises.filter((e) => failureEligible(e) && mainMuscle(e));
+    const a = elig[0], b = elig.find((e) => e.id !== a.id && mainMuscle(e) === mainMuscle(a))!;
+    const set = (id: string, done = false) => ({ id, type: "working" as const, weight: 10, reps: 10, done });
+    const en = (id: string, ex: string, sets: ReturnType<typeof set>[], f?: string[]) => ({ id, exerciseId: ex, slotId: "s" + id, restSec: 60, sets, ...(f ? { toFailure: true, failWhy: f } : {}) });
+    // Plan order: b then a (a flagged as last). At the gym a is done first: its first set is done, b untouched
+    const s0 = { id: "x", date: "2026-11-18", title: "t", startedAt: "", entries: [en("1", b.id, [set("b1"), set("b2")]), en("2", a.id, [set("a1", true), set("a2")], ["Last x exercise"])] } as unknown as Session;
+    const r = refitFailure(s0, exMap);
+    expect(r.entries.map((e) => [e.id, !!e.toFailure])).toEqual([["1", true], ["2", false]]);
+    // b already started too: nothing left after a, so it stays
+    const both = { ...s0, entries: s0.entries.map((e) => e.id === "1" ? { ...e, sets: [set("b1", true), set("b2")] } : e) };
+    expect(refitFailure(both, exMap).entries.find((e) => e.id === "2")!.toFailure).toBe(true);
+  });
   it("migration gives built-in exercises their compound flag once", () => {
     const m = MIGRATIONS.find((x) => x.id === "2026-11-17-compound-flag")!;
     const old = { ...seed, exercises: seed.exercises.map(({ compound: _c, ...e }) => e) };

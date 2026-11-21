@@ -151,8 +151,10 @@ export function moveEntryTo(s: Session, from: number, to: number): Session {
 }
 
 /**
- * After a reorder, keep each app-picked failure set on the last exercise for its muscle (the rule it was picked by).
- * It moves to the exercise that is now last for that muscle, if that one is safe to fail and wasn't turned off in
+ * After a reorder or a done set, keep each app-picked failure set on the last exercise for its muscle (the rule it was
+ * picked by). Exercises already started count as done, so starting the flagged one while another for the same muscle
+ * is untouched moves the failure there (gym order can differ from the plan). It moves to the exercise that is now last
+ * for that muscle, if that one is safe to fail and wasn't turned off in
  * Edit plan (`offSlotIds`); otherwise it's dropped. Failure the user turned on, or one already done, stays put.
  */
 export function refitFailure(s: Session, exMap: Map<string, Exercise>, offSlotIds: Set<string> = new Set()): Session {
@@ -165,8 +167,11 @@ export function refitFailure(s: Session, exMap: Map<string, Exercise>, offSlotId
     if (lastWork?.done) continue;
     const g = mainMuscle(exMap.get(cur.exerciseId));
     if (!g) continue;
-    const last = [...entries].reverse().find((x) => mainMuscle(exMap.get(x.exerciseId)) === g)!;
-    if (last.id === cur.id) continue;
+    // Last among the exercises for this muscle not started yet (the gym order can differ from the plan's)
+    const started = (x: SessionEntry) => x.sets.some((y) => y.done && (y.type === "working" || y.type === "failure"));
+    const left = entries.filter((x) => mainMuscle(exMap.get(x.exerciseId)) === g && !started(x));
+    const last = left.at(-1);
+    if (!last || last.id === cur.id) continue;
     const ok = !last.toFailure && failureEligible(exMap.get(last.exerciseId)) && !(last.slotId && offSlotIds.has(last.slotId));
     entries = entries.map((x) => x.id === cur.id ? { ...x, toFailure: undefined, failWhy: undefined }
       : x.id === last.id && ok ? { ...x, toFailure: true, failWhy: cur.failWhy } : x);

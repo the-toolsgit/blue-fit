@@ -178,7 +178,8 @@ export function WorkoutScreen() {
   const onToggle = (e: SessionEntry, x: LoggedSet) => {
     const ex = exMap.get(e.exerciseId)!;
     if (!x.done && needsValues(x, ex)) return; // the card shakes the button and highlights what's missing
-    const next = toggleDone(s, e.id, x.id, new Date());
+    // Gym order can differ from the plan: a failure set follows to the exercise really done last for its muscle
+    const next = refitFailure(toggleDone(s, e.id, x.id, new Date()), exMap, offSlots);
     commit(next);
     if (x.done) return; // undo
     vibrate(12);
