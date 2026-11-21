@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from "react";
+import { useKeptState } from "../keptState";
 import { averageSets, inRange, muscleFrequency, rangeStart, RANGE_LABEL, weeklyTotals, type Range } from "../../core/progress";
 import { recoveryStatus, type MuscleRecovery, type Recovery } from "../../core/recovery";
 import { MUSCLE_GROUPS, muscleLabel, type MuscleGroup } from "../../core/types";
@@ -24,8 +25,8 @@ export function ProgressScreen() {
   const { finished, exMap, targets, exercises, settings, routine } = useStore();
   const sd = settings.weekStartDay;
   const today = localDate(new Date());
-  const [range, setRange] = useState<Range>("4w");
-  const [mapMode, setMapMode] = useState<"volume" | "recovery">("volume");
+  const [range, setRange] = useKeptState<Range>("progress-range", "4w");
+  const [mapMode, setMapMode] = useKeptState<"volume" | "recovery">("progress-map", "volume");
   const [sel, setSel] = useState<MuscleGroup | null>(null);
   const [swipeDir, setSwipeDir] = useState<"next" | "prev" | null>(null);
   const swipe = useRef<{ x: number; y: number } | null>(null);
@@ -34,7 +35,7 @@ export function ProgressScreen() {
     setSel(MAP_ORDER[(i + dir + MAP_ORDER.length) % MAP_ORDER.length]);
     setSwipeDir(dir === 1 ? "next" : "prev");
   };
-  const [muscle, setMuscle] = useState<MuscleGroup>("back");
+  const [muscle, setMuscle] = useKeptState<MuscleGroup>("progress-muscle", "back");
   // "This week" by default; the last choice is remembered on this phone
   const [tableMode, setTableModeState] = useState<"week" | "avg">(() => { try { return localStorage.getItem("bf-volume-table") === "avg" ? "avg" : "week"; } catch { return "week"; } });
   const setTableMode = (v: "week" | "avg") => { setTableModeState(v); try { localStorage.setItem("bf-volume-table", v); } catch { /* ignore */ } };
@@ -52,7 +53,7 @@ export function ProgressScreen() {
     for (const s of finished) for (const e of s.entries) if (e.sets.some((x) => x.done) && !last.has(e.exerciseId)) last.set(e.exerciseId, s.date);
     return exercises.filter((e) => last.has(e.id)).sort((a, b) => (last.get(b.id)! > last.get(a.id)! ? 1 : -1));
   }, [finished, exercises]);
-  const [exId, setExId] = useState<string | null>(null);
+  const [exId, setExId] = useKeptState<string | null>("progress-exercise", null);
   const ex = exMap.get(exId ?? logged[0]?.id ?? "");
 
   const thisWeek = weeks[weeks.length - 1]?.sets ?? ({} as Record<MuscleGroup, number>);

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useKeptState } from "../keptState";
 import { activeFreeze, dailyLoad, plannedDays, skippedDays, streakMarks, toggleFreeze, weeklyStreak } from "../../core/history";
 import { durationMin } from "../../core/session";
 import { tonnage } from "../../core/volume";
@@ -72,7 +73,7 @@ function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => v
     return streakMarks(weeklyStreak(finished, routine, today, settings.weekStartDay, f), routine, f);
   }, [finished, routine, today, settings.weekStartDay, settings.streakFreezes]);
   const skipped = useMemo(() => skippedDays(finished, routine, today, settings.weekStartDay), [finished, routine, today, settings.weekStartDay]);
-  const [month, setMonth] = useState(today.slice(0, 7) + "-01");
+  const [month, setMonth] = useKeptState("history-month", today.slice(0, 7) + "-01");
   // Tapping a skipped day shows a "Skipped" tooltip for 3 s
   const [tip, setTip] = useState<string | null>(null);
   useEffect(() => { if (!tip) return; const t = setTimeout(() => setTip(null), 3000); return () => clearTimeout(t); }, [tip]);

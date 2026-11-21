@@ -27,6 +27,8 @@ Leo's call: **shrugs and calf raises are ★** (isolation, but very heavy loads 
 Also in the rule (from step 3 of the draft): no free weight over the face (JM press, skullcrushers); bodyweight-only
 moves aren't ★ except pull-ups, chin-ups and dips (commonly loaded with a belt); free-weight single-leg/balance-limited
 lifts (lunges, split squats, step-ups) aren't ★ unless on a Smith machine or machine.
+Leo's call (Nov 21 2026): **cable presses and pulls count as stable** (cable shoulder presses and the standing cable
+chest press are ★).
 
 ## Step 2 — master list from a real database
 - Source: free-exercise-db (github.com/yuhonas/free-exercise-db, public domain / Unlicense): 876 exercises with

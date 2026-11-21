@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from "react";
+import { useKeptState } from "../keptState";
 import { deloadActive, deloadWeek, endDeload } from "../../core/deload";
 import { localDate } from "../../core/util";
 import { DELOAD_RULE } from "../components/DeloadBanner";
@@ -38,7 +39,7 @@ export function PlanScreen() {
   const days = (routine?.days ?? []).filter((d) => d.slots.length).sort((a, b) => ((a.weekday ?? 9) + 6) % 7 - ((b.weekday ?? 9) + 6) % 7);
   // Every weekday has a chip (rest days too), plus any day without a weekday
   // Opens on the first day of the training week (Settings → week start)
-  const [sel, setSel] = useState(`w${settings.weekStartDay}`);
+  const [sel, setSel] = useKeptState("plan-day", `w${settings.weekStartDay}`);
   if (!routine) return <div className="page"><div className="empty">No routine.</div></div>;
   const chips = [
     ...[1, 2, 3, 4, 5, 6, 0].map((w) => ({ key: `w${w}`, label: SHORT[w], weekday: w as number | null, day: routine.days.find((d) => d.weekday === w) })),

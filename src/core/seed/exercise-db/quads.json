@@ -1626,8 +1626,7 @@
   "name": "Dumbbell Lunge",
   "aliases": [
    "Dumbbell Lunges",
-   "DB Lunge",
-   "Dumbbell Walking Lunge"
+   "DB Lunge"
   ],
   "equipment": "dumbbell",
   "loadMode": "perHand",
@@ -1678,6 +1677,62 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Dumbbell_Lunges"
+  }
+ },
+ {
+  "id": "dumbbell-walking-lunge",
+  "name": "Dumbbell Walking Lunge",
+  "aliases": [
+   "DB Walking Lunge"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "why": "Lunges walking forward holding dumbbells.",
+  "setup": [
+   "A dumbbell in each hand at your sides, clear path ahead."
+  ],
+  "form": [
+   "Step forward and lower until your back knee nearly touches the floor.",
+   "Stand up into the next step."
+  ],
+  "tips": [
+   "Short step: more quads. Long step: more glutes."
+  ],
+  "avoid": [
+   "Front knee caving in."
+  ],
+  "rangeOfMotion": "Standing → back knee near the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "lunge",
+  "source": {
+   "url": "https://www.strengthlog.com/dumbbell-walking-lunge/"
   }
  },
  {
