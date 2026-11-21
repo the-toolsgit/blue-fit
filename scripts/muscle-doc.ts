@@ -91,8 +91,9 @@ h1 { font: 700 44px/1 var(--display); letter-spacing: .02em; text-transform: upp
 .rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 22px 0 8px; }
 .rule { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; min-width: 0; }
 .rule b { display: block; font: 700 26px/1 var(--display); color: var(--neon-2); }
-.rule span { display: block; font-size: 13px; color: var(--muted); margin-top: 4px; }
-.index { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding: 10px 0; margin: 14px 0 6px; border-bottom: 1px solid var(--line); display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.rule > span { display: block; font-size: 13px; color: var(--muted); margin-top: 4px; }
+.rule .ev { margin-left: 2px; }
+.index { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding: 10px 0; margin: 14px 0 6px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 6px; }
 .index a { flex: none; color: var(--ink); text-decoration: none; font: 500 13px var(--body); padding: 6px 11px; border-radius: 99px; border: 1px solid var(--line); background: var(--card); }
 .index a:hover, .index a:focus-visible { border-color: var(--neon); outline: none; }
 .muscle { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 20px 18px; margin-top: 16px; scroll-margin-top: 64px; }
