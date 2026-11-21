@@ -46,10 +46,10 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
         <span style={{ position: "absolute", left: 12, top: 11, color: "var(--muted)" }}><Icon name="search" size={20} /></span>
         <input className="input" style={{ paddingLeft: 40 }} type="search" placeholder="Search name, alias or muscle" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search exercises" />
       </div>
-      <div className="chips-scroll" style={{ marginTop: 10 }}>
+      <div className="chips-wrap" style={{ marginTop: 10 }}>
         {MUSCLE_GROUPS.map((m) => <button key={m.id} className="chip" aria-pressed={group === m.id} onClick={() => setGroup(group === m.id ? null : m.id)}>{m.label}</button>)}
       </div>
-      <div className="chips-scroll">
+      <div className="chips-wrap">
         {equipments.map((x) => <button key={x} className="chip" aria-pressed={eq === x} onClick={() => setEq(eq === x ? null : x)}>{EQUIPMENT_LABEL[x]}</button>)}
       </div>
       <div style={{ marginTop: 6 }}>
