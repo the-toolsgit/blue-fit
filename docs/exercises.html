@@ -1,0 +1,817 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blue Fit Exercises</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: filter bar, then muscle → angle sections of exercise cards (two columns on wide screens). Single dark neon look (the app's own). */
+:root { --bg: #04060c; --card: #0b1322; --card-2: #111c33; --line: rgba(110,165,255,.16); --ink: #eaf2ff; --muted: #8b9bbb; --neon: #3d9bff; --neon-2: #23e2ff; --good: #3dffb0; --warn: #ffc53d; --bad: #ff5a5a; --fig: #4fa6ff; --fig2: #2b5aa6;
+  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif; --body: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace; color-scheme: dark; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+h1 { font: 700 44px/1 var(--display); letter-spacing: .02em; text-transform: uppercase; margin: 0; color: var(--neon); text-shadow: 0 0 22px rgba(61,155,255,.45); }
+.lede { color: var(--muted); max-width: 66ch; margin: 10px 0 0; }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding: 10px 0; margin-top: 14px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.bar a, .bar button { color: var(--ink); text-decoration: none; font: 500 13px var(--body); padding: 6px 11px; border-radius: 99px; border: 1px solid var(--line); background: var(--card); cursor: pointer; }
+.bar button[aria-pressed="true"] { border-color: var(--neon); color: var(--neon); }
+.bar input { flex: 1 1 180px; min-width: 0; background: var(--card); border: 1px solid var(--line); color: var(--ink); border-radius: 99px; padding: 7px 12px; font: 14px var(--body); }
+.muscle { margin-top: 26px; scroll-margin-top: 120px; }
+h2 { font: 700 34px/1 var(--display); text-transform: uppercase; letter-spacing: .03em; margin: 0; }
+.ang { font: 600 13px var(--body); text-transform: uppercase; letter-spacing: .1em; color: var(--neon-2); margin: 18px 0 8px; }
+.count { font: 500 13px var(--mono); color: var(--neon); letter-spacing: 0; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr)); gap: 12px; }
+.ex { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px; min-width: 0; }
+.ex-top { display: flex; gap: 12px; align-items: flex-start; }
+.fig { width: 92px; height: 100px; flex: none; overflow: visible; filter: drop-shadow(0 0 2px rgba(61,155,255,.55)); }
+.fig .mn polyline, .fig .mn circle { fill: none; stroke: var(--fig); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.fig .lt line, .fig .lt polyline, .fig .lt circle { fill: none; stroke: var(--fig2); stroke-width: 1.6; stroke-linecap: round; }
+.fig .lt polyline[stroke-dasharray] { stroke-dasharray: 2 2; }
+.fig .floor { stroke: var(--fig2); stroke-width: 1; opacity: .7; }
+.fig .muscle { fill: var(--fig); stroke: none; }
+.ex-head { min-width: 0; }
+h3 { font: 600 17px/1.25 var(--body); margin: 0; }
+.star { color: var(--warn); }
+.tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.tag { font: 500 11px var(--mono); padding: 2px 7px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+.tag.key { color: var(--warn); border-color: rgba(255,197,61,.45); } .tag.ok { color: var(--good); border-color: rgba(61,255,176,.35); } .tag.no { color: var(--bad); border-color: rgba(255,90,90,.35); } .tag.ind { color: var(--neon-2); } .tag.ang-t { color: var(--ink); border-color: rgba(61,155,255,.45); }
+.why { margin: 6px 0 0; font-size: 14px; color: var(--ink); }
+.cues { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px 14px; margin-top: 10px; }
+h4 { margin: 0 0 2px; font: 600 11.5px var(--body); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+.h-tip { color: var(--neon-2); } .h-avoid { color: var(--bad); }
+.cues ul { margin: 0; padding-left: 17px; font-size: 13.5px; }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 10px 0 0; padding-top: 8px; border-top: 1px solid var(--line); font: 12.5px var(--mono); color: var(--muted); }
+.meta a { color: var(--neon); }
+.empty { color: var(--muted); margin-top: 20px; }
+@media (max-width: 520px) { h1 { font-size: 36px; } .fig { width: 76px; height: 84px; } }
+</style>
+<div class="wrap">
+  <h1>Blue Fit Exercises</h1>
+  <p class="lede">Every exercise the app knows, by muscle and angle. Each one moves at its own tempo. Muscles marked ½ get half a set. "Failure ok": safe to take the last set to failure. Phase 1: back and biceps. More muscles follow. Exercises from free-exercise-db (public domain) and the app's own plan; less common variations link their source. The muscle page explains each muscle and angle.</p>
+  <nav class="bar" aria-label="Filters">
+    <a href="#back">Back</a><a href="#biceps">Biceps</a>
+    <button type="button" data-eqf="plateMachine" aria-pressed="false">Plate machine</button><button type="button" data-eqf="cable" aria-pressed="false">Cable</button><button type="button" data-eqf="dumbbell" aria-pressed="false">Dumbbell</button><button type="button" data-eqf="barbell" aria-pressed="false">Barbell</button><button type="button" data-eqf="smith" aria-pressed="false">Smith</button><button type="button" data-eqf="machine" aria-pressed="false">Machine</button><button type="button" data-eqf="bodyweight" aria-pressed="false">Bodyweight</button><button type="button" data-eqf="other" aria-pressed="false">Other</button><button type="button" data-eqf="fixedBar" aria-pressed="false">Fixed bar</button>
+    <input id="q" type="search" placeholder="Search exercises" aria-label="Search exercises">
+  </nav>
+  <section class="muscle" id="back"><h2>Back <span class="count">58</span></h2><h3 class="ang">lats <span class="count">21</span></h3><div class="grid"><article class="ex" data-eq="bodyweight" data-name="chin-up weighted chin-up">
+  <div class="ex-top"><svg class="fig" data-i="0" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Chin-Up <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Bodyweight</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Palms-up pull-up: back plus a lot of biceps.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Palms facing you, hands shoulder-width.</li><li>Hang with arms straight.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull up until your chin is over the bar.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Kicking or swinging.</li><li>Half reps at the top.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → chin over the bar</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="close-grip front lat pulldown close-grip pulldown">
+  <div class="ex-top"><svg class="fig" data-i="1" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Close-Grip Front Lat Pulldown <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Pulldown with hands close, palms forward.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Hands about shoulder-width, palms forward.</li><li>Thighs under the pad.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar to your upper chest.</li><li>Go up until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning far back.</li><li>Stopping short at the top.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight up → bar at your upper chest</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="full range-of-motion lat pulldown crossed-cable pulldown">
+  <div class="ex-top"><svg class="fig" data-i="2" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Full Range-Of-Motion Lat Pulldown <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Two high cables, arms crossed: a longer pull than a bar.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Sit or kneel between two high pulleys.</li><li>Take each handle with the opposite hand.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull down in an arc to your shoulders, turning palms to face each other.</li><li>Go up slowly to the full stretch.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning far back.</li><li>Stopping short at the top.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms crossed overhead → hands at your shoulders</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="kneeling lat pulldown kneeling cable pulldown kneeling underhand-grip lat pulldown">
+  <div class="ex-top"><svg class="fig" data-i="3" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Kneeling Lat Pulldown <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Pulldown kneeling at a cable: no seat or knee pad needed.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bar on a high pulley. Kneel facing it.</li><li>Hands about shoulder-width, arms straight up.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar to your upper chest.</li><li>Go up until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning far back.</li><li>Sitting back on your heels to pull.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight up → bar at your upper chest</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src"><a href="https://www.puregym.com/exercises/back/lat-exercises/kneeling-lat-pulldown/" target="_blank" rel="noopener">source</a> · <a href="https://exercise.com/exercises/kneeling-lat-pulldown" target="_blank" rel="noopener">second source</a></span></p>
+</article><article class="ex" data-eq="plateMachine" data-name="machine lat pulldown plate-loaded lat pulldown iso-lateral front lat pulldown">
+  <div class="ex-top"><svg class="fig" data-i="4" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Machine Lat Pulldown <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Plate machine</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Plate-loaded pulldown, each arm on its own path.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Seat so you just reach the handles, thighs under the pad.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the handles down to your shoulders.</li><li>Go up until your arms are straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Can be done one arm at a time.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning far back.</li><li>Stopping short at the top.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight up → hands at your shoulders</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src"><a href="https://planfit.ai/en/exercise/hammer-strength-plate-loaded-iso-front-lat-pulldown" target="_blank" rel="noopener">source</a> · <a href="https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-front-lat-pulldown" target="_blank" rel="noopener">second source</a></span></p>
+</article><article class="ex" data-eq="cable" data-name="neutral-grip lat pulldown v-bar pulldown close neutral-grip pulldown">
+  <div class="ex-top"><svg class="fig" data-i="5" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Neutral-Grip Lat Pulldown <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Palms-in pulldown, elbows close: lats.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>V-handle or neutral bar, palms facing each other.</li><li>Thighs under the pad.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull your hands to your upper chest, elbows down to your sides.</li><li>Go up until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning far back.</li><li>Stopping short at the top.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight up → hands at your upper chest</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db · <a href="https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="bodyweight" data-name="neutral-grip pull-up v-bar pullup parallel-grip pull-up">
+  <div class="ex-top"><svg class="fig" data-i="6" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Neutral-Grip Pull-Up <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Bodyweight</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Palms-in pull-up: easy on the shoulders.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Parallel handles or a V-handle, palms facing each other.</li><li>Hang with arms straight.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull up until your chin is over the bar.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Kicking or swinging.</li><li>Half reps at the top.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → chin over the bar</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db · <a href="https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="bodyweight" data-name="pull-up pullups weighted pull-up wide-grip pull-up">
+  <div class="ex-top"><svg class="fig" data-i="7" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Pull-Up <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Bodyweight</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Bodyweight pull for your back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Hands a bit wider than your shoulders, palms forward.</li><li>Hang with arms straight.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull up until your chin is over the bar.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Add weight with a belt once you get your reps.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Kicking or swinging.</li><li>Half reps at the top.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → chin over the bar</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="single-arm cable lat pulldown cable one-arm lat pulldown one arm lat pulldown kneeling single-arm lat pulldown half-kneeling one-arm lat pulldown half-kneeling single-arm pulldown">
+  <div class="ex-top"><svg class="fig" data-i="8" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Single-arm Cable Lat Pulldown <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Lats stretched, one arm at a time.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Pulley high. Kneel or sit facing it, arm straight up.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull your elbow down to your side.</li><li>Go back up slowly to the full stretch. Hold 1 s.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Pull with the elbow, not the hand.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Twisting your body.</li><li>Stopping short of the stretch.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm straight up → elbow at your side</span><span>Tempo: Down 1 s · Up 3 s · Hold 1 s</span><span>rest 2 min</span><span class="src">Leo's plan · <a href="https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="cable" data-name="underhand cable pulldown underhand cable pulldowns reverse-grip pulldown">
+  <div class="ex-top"><svg class="fig" data-i="9" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Underhand Cable Pulldown <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Palms-up pulldown: lats plus biceps.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Palms facing you, hands shoulder-width.</li><li>Thighs under the pad.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar to your upper chest.</li><li>Go up until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning far back.</li><li>Curling the bar instead of pulling with your back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight up → bar at your upper chest</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="wide-grip lat pulldown cable lat pulldown (wide grip) lat pulldown">
+  <div class="ex-top"><svg class="fig" data-i="10" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Wide-Grip Lat Pulldown <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Heavy pulldown for your back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Hands a bit wider than your shoulders.</li><li>Thighs under the pad, lean back a little.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar to your upper chest.</li><li>Go up until your arms are straight and shoulders rise (stretch).</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning far back.</li><li>Pulling behind your neck.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight up → bar at your upper chest</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src">Leo's plan</span></p>
+</article><article class="ex" data-eq="barbell" data-name="bent-arm barbell pullover barbell pullover ez-bar pullover">
+  <div class="ex-top"><svg class="fig" data-i="11" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Bent-Arm Barbell Pullover</h3>
+      <div class="tags"><span class="tag">Barbell</span><span class="tag no">no failure</span><span class="tag ind">Chest ½</span></div>
+      <p class="why">Lats stretched with the arms overhead.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Lie on a flat bench, head at the end.</li><li>Bar over your chest, elbows bent.</li></ul></div><div><h4 class="">Form</h4><ul><li>Lower the bar behind your head, elbows staying bent.</li><li>Pull it back over your chest.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Go only as far back as your shoulders allow.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Arching your lower back.</li><li>Straightening your elbows as you lower.</li></ul></div></div>
+  <p class="meta"><span>Range: Bar over your chest → bar behind your head</span><span>Tempo: Down 3 s · Up 1 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="bent-arm dumbbell pullover dumbbell pullover">
+  <div class="ex-top"><svg class="fig" data-i="12" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Bent-Arm Dumbbell Pullover</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag no">no failure</span><span class="tag ind">Chest ½</span></div>
+      <p class="why">Lats stretched with the arms overhead, one dumbbell.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Shoulders across a flat bench, hips low, feet flat.</li><li>One dumbbell in both hands over your chest, elbows bent.</li></ul></div><div><h4 class="">Form</h4><ul><li>Lower it in an arc behind your head.</li><li>Pull it back over your chest.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Go only as far back as your shoulders allow.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Hips rising as you lower.</li><li>Straightening your elbows as you lower.</li></ul></div></div>
+  <p class="meta"><span>Range: Dumbbell over your chest → behind your head</span><span>Tempo: Down 3 s · Up 1 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="cable incline pushdown incline bench straight-arm pulldown">
+  <div class="ex-top"><svg class="fig" data-i="13" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Cable Incline Pushdown</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Straight-arm pulldown lying on an incline: lats only.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Incline bench facing away from a high pulley.</li><li>Bar overhead, arms almost straight.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar in an arc down to your thighs.</li><li>Go back overhead slowly.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Bending your elbows.</li><li>Lifting off the bench.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms overhead → bar at your thighs</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="cross-body lat pull-around">
+  <div class="ex-top"><svg class="fig" data-i="14" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Cross-Body Lat Pull-Around</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">One-arm straight-arm pull from across the body: lats stretched.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Pulley high. Kneel or stand side-on, far hand on the handle.</li><li>Arm reaching up and across.</li></ul></div><div><h4 class="">Form</h4><ul><li>Sweep your arm down and around to your hip.</li><li>Return slowly to the stretch.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Bending your elbow a lot.</li><li>Twisting your body.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm up and across → hand at your hip</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src"><a href="https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="cable" data-name="lat prayer kneeling cable pullover cable lat prayer">
+  <div class="ex-top"><svg class="fig" data-i="15" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Lat Prayer</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Straight-arm pull from overhead to your thighs: lats only.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Rope or bar on a high pulley.</li><li>Kneel facing it, arms long overhead, hips back.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull your hands down to your thighs, arms almost straight.</li><li>Return slowly to the stretch.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Bending your elbows.</li><li>Crunching your stomach to pull.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms overhead → hands at your thighs</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src"><a href="https://mennohenselmans.com/lat-prayers/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="cable" data-name="lying cable pullover cable pullover on bench">
+  <div class="ex-top"><svg class="fig" data-i="16" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Lying Cable Pullover</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Pullover on a bench with a cable: lats loaded at full stretch.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bar on a low pulley. Flat bench 2–3 ft away.</li><li>Lie with your head toward the pulley, arms overhead.</li></ul></div><div><h4 class="">Form</h4><ul><li>Arms almost straight, pull the bar over you to your waist.</li><li>Return slowly until your arms are past your head.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Bending your elbows a lot.</li><li>Arching your lower back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms past your head → bar at your waist</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src"><a href="https://exercise.com/exercises/lying-cable-pullover" target="_blank" rel="noopener">source</a> · <a href="https://www.muscleandstrength.com/exercises/lying-cable-pullover.html" target="_blank" rel="noopener">second source</a></span></p>
+</article><article class="ex" data-eq="machine" data-name="machine pullover pullover machine">
+  <div class="ex-top"><svg class="fig" data-i="17" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Machine Pullover</h3>
+      <div class="tags"><span class="tag">Machine</span><span class="tag ok">failure ok</span><span class="tag ind">Chest ½</span></div>
+      <p class="why">Lats only, from a full stretch overhead.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Seat so your shoulders line up with the pivot.</li><li>Elbows on the pads, arms overhead.</li></ul></div><div><h4 class="">Form</h4><ul><li>Push the pads down with your elbows until the bar is at your stomach.</li><li>Go back up slowly to the stretch.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Arching your lower back.</li><li>Cutting the stretch short.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms overhead → bar at your stomach</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src"><a href="https://www.exercise.com/exercises/hammer-strength-pullover/" target="_blank" rel="noopener">source</a> · <a href="https://planfit.ai/en/exercise/pullover-machine-back-target" target="_blank" rel="noopener">second source</a></span></p>
+</article><article class="ex" data-eq="cable" data-name="single-arm straight-arm pulldown one-arm straight-arm pulldown single-arm cable pullover">
+  <div class="ex-top"><svg class="fig" data-i="18" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Single-Arm Straight-Arm Pulldown</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Straight-arm pulldown one side at a time: lats only, more range.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Handle on a high pulley.</li><li>Step back, lean forward a little, arm reaching up.</li></ul></div><div><h4 class="">Form</h4><ul><li>Arm almost straight, pull down in an arc to your thigh.</li><li>Go back up slowly.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Bending your elbow.</li><li>Twisting your body.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm up → hand at your thigh</span><span>Tempo: Down 1 s · Up 3 s</span><span>rest 2 min</span><span class="src"><a href="https://learn.athleanx.com/articles/back-for-men/how-to-do-a-straight-arm-pulldown" target="_blank" rel="noopener">source</a> · <a href="https://fitnessvolt.com/cable-straight-arm-pull-down/" target="_blank" rel="noopener">second source</a></span></p>
+</article><article class="ex" data-eq="cable" data-name="straight-arm cable pulldown cable shoulder extension straight-arm pulldown rope straight-arm pulldown cable pullover">
+  <div class="ex-top"><svg class="fig" data-i="19" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Straight-arm Cable Pulldown</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Lats with no biceps help.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Pulley high, bar or rope.</li><li>Step back, lean forward a little.</li></ul></div><div><h4 class="">Form</h4><ul><li>Arms almost straight, pull down in an arc to your thighs. Squeeze 1 s.</li><li>Go back up slowly.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>A rope lets your hands go past your hips.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Bending your elbows.</li><li>Swinging your body.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms up → hands at your thighs</span><span>Tempo: Down 1 s · Hold 1 s · Up 3 s</span><span>rest 2 min</span><span class="src">Leo's plan</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="straight-arm dumbbell pullover straight-arm pullover">
+  <div class="ex-top"><svg class="fig" data-i="20" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Straight-Arm Dumbbell Pullover</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag no">no failure</span><span class="tag ind">Chest ½</span></div>
+      <p class="why">Lats stretched with the arms overhead, one dumbbell.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Shoulders across a flat bench, hips low, feet flat.</li><li>One dumbbell in both hands over your chest, arms straight.</li></ul></div><div><h4 class="">Form</h4><ul><li>Lower it in an arc behind your head.</li><li>Pull it back over your chest.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Go only as far back as your shoulders allow.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Hips rising as you lower.</li><li>Bending your elbows to cheat it back up.</li></ul></div></div>
+  <p class="meta"><span>Range: Dumbbell over your chest → behind your head</span><span>Tempo: Down 3 s · Up 1 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article></div><h3 class="ang">upper back <span class="count">22</span></h3><div class="grid"><article class="ex" data-eq="barbell" data-name="barbell seal row lying cambered barbell row seal row bench row">
+  <div class="ex-top"><svg class="fig" data-i="21" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Barbell Seal Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Barbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Barbell row lying on a high bench: no lower back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Lie face down on a high bench, bar under it.</li><li>Hands a bit wider than your shoulders.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar up to the bench. Hold 1 s.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>A curved bar lets you pull higher.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Lifting your chest off the bench.</li><li>Swinging your legs.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → bar at the bench</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="barbell" data-name="bent over barbell row barbell row">
+  <div class="ex-top"><svg class="fig" data-i="22" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Bent Over Barbell Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Barbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Heavy free-weight row for the whole back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bar over your mid-foot, hands just outside your knees.</li><li>Hips back, back flat, chest over the bar.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar to your belly button.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Keep your body angle the same every rep.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Standing up as you pull.</li><li>Rounding your back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → bar at your belly</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="bent over two-dumbbell row dumbbell bent-over row">
+  <div class="ex-top"><svg class="fig" data-i="23" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Bent Over Two-Dumbbell Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Both arms at once, free to move.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>A dumbbell in each hand, palms facing back.</li><li>Hips back, back flat, close to level.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull both dumbbells to your sides.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Standing up as you pull.</li><li>Rounding your back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → dumbbells at your sides</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="cable seated row seated cable rows seated cable row v-handle cable row">
+  <div class="ex-top"><svg class="fig" data-i="24" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Cable Seated Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Heavy row for your back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Neutral handle, feet on the plate, knees slightly bent.</li></ul></div><div><h4 class="">Form</h4><ul><li>Row to your lower ribs, squeeze 1 s.</li><li>Let your arms go straight and shoulder blades spread.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>A small forward lean at the stretch is fine.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning back or throwing it with your lower back.</li><li>Shrugging at the end.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → handle at your lower ribs</span><span>Tempo: Pull 1 s · Hold 1 s · Return 3 s</span><span>rest 2 min</span><span class="src">Leo's plan</span></p>
+</article><article class="ex" data-eq="machine" data-name="chest-supported machine row chest-supported row seated machine row">
+  <div class="ex-top"><svg class="fig" data-i="25" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Chest-Supported Machine Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Machine</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Seated machine row, chest on a pad. Easy to push hard.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Seat so the handles are at chest height.</li><li>Chest on the pad, arms straight.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the handles to your ribs. Squeeze.</li><li>Let your arms go straight and shoulder blades spread.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Chest leaving the pad.</li><li>Shrugging at the end.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → handles at your ribs</span><span>Tempo: Pull 1 s · Hold 1 s · Return 3 s</span><span>rest 2 min</span><span class="src"><a href="https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="barbell" data-name="deficit pendlay row modified deficit pendlay row">
+  <div class="ex-top"><svg class="fig" data-i="26" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Deficit Pendlay Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Barbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Pendlay row with a longer pull at the bottom.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Stand on a plate or low box, bar on the floor.</li><li>Back flat, chest over the bar.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar to your lower chest.</li><li>Lower to the floor and let your shoulders reach down.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Use a lighter weight than your normal Pendlay row.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Rounding your back at the bottom.</li><li>Jerking the bar off the floor.</li></ul></div></div>
+  <p class="meta"><span>Range: Bar on the floor, arms long → bar at your lower chest</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="dumbbell incline row chest-supported dumbbell row incline dumbbell row">
+  <div class="ex-top"><svg class="fig" data-i="27" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Dumbbell Incline Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Chest-supported dumbbell row: back works, lower back rests.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bench at 30–45°, chest on it.</li><li>Dumbbells hang straight down.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull both dumbbells to your sides. Squeeze 1 s.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Chest lifting off the bench.</li><li>Shrugging up.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms hanging → dumbbells at your sides</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="helms row standing chest-supported dumbbell row">
+  <div class="ex-top"><svg class="fig" data-i="28" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Helms Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Dumbbell row with only your chest on a bench: strict and supported.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Stand behind an incline bench, chest on its top end.</li><li>Hips back, torso near level, dumbbells hanging.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull both dumbbells up and back. Squeeze.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Lifting your chest off the bench.</li><li>Swinging the weights up.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms hanging → dumbbells at your sides</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://backmusclesolutions.com/blogs/the-ql-blawg/helms-row" target="_blank" rel="noopener">source</a> · <a href="https://www.thisiswhyimfit.com/?p=5062" target="_blank" rel="noopener">second source</a></span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="incline bench pull wide incline row">
+  <div class="ex-top"><svg class="fig" data-i="29" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Incline Bench Pull <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts </span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Chest-supported row with elbows wide: upper back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bench at about 30°, chest on it.</li><li>Dumbbells hang, palms facing back.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull your elbows out and up until level with your back. Squeeze 1 s.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Chest lifting off the bench.</li><li>Shrugging up.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms hanging → elbows level with your back</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="kneeling high pulley row kneeling rope high row">
+  <div class="ex-top"><svg class="fig" data-i="30" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Kneeling High Pulley Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Rope pulled down to your upper chest, elbows out: upper back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Rope on a high pulley.</li><li>Kneel a couple of feet back, arms up in front.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the rope to your upper chest, elbows wide. Squeeze 1 s.</li><li>Return slowly until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning back.</li><li>Shrugging up.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms up in front → rope at your upper chest</span><span>Tempo: Pull 1 s · Hold 1 s · Return 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="plateMachine" data-name="leverage iso row iso-lateral row plate-loaded seated row">
+  <div class="ex-top"><svg class="fig" data-i="31" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Leverage Iso Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Plate machine</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Plate-loaded row, each arm on its own.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Seat so the handles are at chest height.</li><li>Chest on the pad.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the handles to your ribs. Squeeze.</li><li>Return slowly; don't rest the weight between reps.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Can be done one arm at a time.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Chest leaving the pad.</li><li>Jerking the handles.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → handles at your ribs</span><span>Tempo: Pull 1 s · Hold 1 s · Return 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="plateMachine" data-name="lying t-bar row chest-supported t-bar row lying t-bar row machine iso-lateral t-bar row">
+  <div class="ex-top"><svg class="fig" data-i="32" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Lying T-Bar Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Plate machine</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Chest-supported T-bar row: back works, lower back rests.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Chest at the top of the pad, feet set.</li><li>Grip the handles, arms straight.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the handles to your chest. Squeeze.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Wide grip: more upper back. Close grip: more lats.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Chest lifting off the pad.</li><li>Shrugging instead of pulling back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → handles at your chest</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="plateMachine" data-name="meadows row">
+  <div class="ex-top"><svg class="fig" data-i="33" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Meadows Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Plate machine</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">One-arm landmine row with a long stretch.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Stand side-on to the end of the bar, feet split.</li><li>Overhand grip on the fat end, free arm on your knee.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull your elbow up and back.</li><li>Lower until your shoulder reaches down.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Twisting to lift more.</li><li>Cutting the stretch short.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm long → elbow past your body</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="barbell" data-name="pendlay row">
+  <div class="ex-top"><svg class="fig" data-i="34" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Pendlay Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Barbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Strict barbell row from the floor each rep.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bar on the floor over your mid-foot.</li><li>Back flat and close to level with the floor.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar to your lower chest.</li><li>Set it down on the floor, reset, repeat.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Each rep starts from a dead stop, so no bouncing.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Lifting your chest to help the bar up.</li><li>Rounding your back.</li></ul></div></div>
+  <p class="meta"><span>Range: Bar on the floor → bar at your lower chest</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="smith" data-name="smith machine bent over row smith row">
+  <div class="ex-top"><svg class="fig" data-i="35" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Smith Machine Bent Over Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Smith</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Bent-over row on a fixed bar path.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bar at knee height, hands just outside your knees.</li><li>Hips back, back flat.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar to your belly.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Standing up as you pull.</li><li>Rounding your back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → bar at your belly</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="barbell" data-name="straight bar bench mid row straight bar bench mid rows">
+  <div class="ex-top"><svg class="fig" data-i="36" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Straight Bar Bench Mid Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Barbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Barbell row standing on a bench for a longer pull.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bar on the end of a bench, you stand on the bench behind it.</li><li>Hands shoulder-width, palms down, back flat.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar to your belly. Squeeze 1 s.</li><li>Lower all the way down.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Rounding your back at the bottom.</li><li>Jerking the bar.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → bar at your belly</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="plateMachine" data-name="t-bar row t-bar row with handle landmine t-bar row bent over two-arm long bar row">
+  <div class="ex-top"><svg class="fig" data-i="37" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>T-Bar Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Plate machine</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Heavy bent-over row with the bar fixed at one end.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Stand over the bar, V-handle under it by the plates.</li><li>Hips back, back flat.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the plates to your chest.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Standing up as you pull.</li><li>Rounding your back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → plates at your chest</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="other" data-name="two-arm kettlebell row alternating kettlebell row">
+  <div class="ex-top"><svg class="fig" data-i="38" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Two-Arm Kettlebell Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Other</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Bent-over row with two kettlebells.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>A kettlebell in each hand.</li><li>Hips back, back flat, knees soft.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull both kettlebells to your belly.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Can be done one arm at a time, holding the other still.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Rounding your back.</li><li>Standing up as you pull.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms hanging → kettlebells at your belly</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="wide-grip cable row wide-grip seated row">
+  <div class="ex-top"><svg class="fig" data-i="39" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Wide-Grip Cable Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Cable row with hands wide and elbows out: upper back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Long bar, hands wide, feet on the plate.</li><li>Sit tall, arms straight.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar to your upper belly, elbows out. Squeeze 1 s.</li><li>Return until your shoulder blades spread.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning back.</li><li>Shrugging at the end.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → bar at your upper belly</span><span>Tempo: Pull 1 s · Hold 1 s · Return 3 s</span><span>rest 2 min</span><span class="src"><a href="https://www.strengthlog.com/cable-wide-grip-seated-row/" target="_blank" rel="noopener">source</a> · <a href="https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/" target="_blank" rel="noopener">second source</a></span></p>
+</article><article class="ex" data-eq="bodyweight" data-name="inverted row bodyweight row smith machine inverted row">
+  <div class="ex-top"><svg class="fig" data-i="40" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Inverted Row</h3>
+      <div class="tags"><span class="tag">Bodyweight</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Bodyweight row under a bar.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bar in a rack or Smith at waist height.</li><li>Hang under it, body straight, heels down.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull your chest to the bar. Squeeze 1 s.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Lower bar or feet on a bench: harder.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Hips sagging.</li><li>Shrugging up.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → chest at the bar</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="bodyweight" data-name="inverted row with straps suspension row trx row">
+  <div class="ex-top"><svg class="fig" data-i="41" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Inverted Row with Straps</h3>
+      <div class="tags"><span class="tag">Bodyweight</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Bodyweight row on straps.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Hold the straps, lean back, body straight.</li><li>Walk your feet forward to make it harder.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull your chest to your hands. Squeeze 1 s.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Hips sagging.</li><li>Shrugging up.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → hands at your chest</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="renegade row alternating renegade row plank row">
+  <div class="ex-top"><svg class="fig" data-i="42" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Renegade Row</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span><span class="tag ind">Abs ½</span></div>
+      <p class="why">Row from a push-up position: back plus core.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Push-up position, hands on two dumbbells.</li><li>Feet wide for balance.</li></ul></div><div><h4 class="">Form</h4><ul><li>Row one dumbbell to your side, then the other.</li><li>Keep your hips square to the floor.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Balance limits the weight: a supported row builds more back.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Hips twisting up.</li><li>Dropping the dumbbell down.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm straight → dumbbell at your side</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article></div><h3 class="ang">Several angles <span class="count">15</span></h3><div class="grid"><article class="ex" data-eq="dumbbell" data-name="bent over two-dumbbell row (palms in) bent over two-dumbbell row with palms in">
+  <div class="ex-top"><svg class="fig" data-i="43" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Bent Over Two-Dumbbell Row (Palms In) <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Dumbbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Palms in, elbows close: more lats.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>A dumbbell in each hand, palms facing each other.</li><li>Hips back, back flat.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the dumbbells to your hips, elbows close.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Standing up as you pull.</li><li>Elbows flaring out.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → dumbbells at your hips</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="other" data-name="gorilla row kettlebell gorilla row">
+  <div class="ex-top"><svg class="fig" data-i="44" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Gorilla Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Other</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Two kettlebells, rowing one at a time from a deep hinge.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Kettlebells between your feet, wide stance.</li><li>Hips back, back flat, a handle in each hand.</li></ul></div><div><h4 class="">Form</h4><ul><li>Row one kettlebell to your hip while pushing the other into the floor.</li><li>Lower it, then row the other side.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Rounding your back.</li><li>Hips rising as you row.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm hanging → kettlebell at your hip</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://www.strengthlog.com/gorilla-row/" target="_blank" rel="noopener">source</a> · <a href="https://learn.athleanx.com/articles/back-for-men/how-to-do-gorilla-rows" target="_blank" rel="noopener">second source</a></span></p>
+</article><article class="ex" data-eq="plateMachine" data-name="iso-lateral d.y. row dy row machine hammer strength dy row">
+  <div class="ex-top"><svg class="fig" data-i="45" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Iso-Lateral D.Y. Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">lats + upper back</span><span class="tag">Plate machine</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Plate-loaded underhand row that arcs to your hips: lats and mid-back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Chest on the pad, palms up on the handles.</li><li>Arms straight in front.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the handles back in an arc toward your hips. Squeeze 1 s.</li><li>Return slowly until your arms are straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Can be done one arm at a time.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Chest leaving the pad.</li><li>Shrugging at the end.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → handles at your hips</span><span>Tempo: Pull 1 s · Hold 1 s · Return 3 s</span><span>rest 2 min</span><span class="src"><a href="https://lifefitness.com/en-eu/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-d-y-row" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="plateMachine" data-name="iso-lateral low row hammer strength low row plate-loaded low row">
+  <div class="ex-top"><svg class="fig" data-i="46" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Iso-Lateral Low Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Plate machine</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Plate-loaded row from a low angle, each arm on its own.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Chest on the pad, seat so the handles are low, below your chest.</li><li>Arms straight, palms down.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the handles back and low, toward your hips. Squeeze.</li><li>Return slowly until your arms are straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Can be done one arm at a time.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Chest leaving the pad.</li><li>Jerking the handles.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → handles at your sides</span><span>Tempo: Pull 1 s · Hold 1 s · Return 3 s</span><span>rest 2 min</span><span class="src"><a href="https://lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-low-row" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="kroc row heavy one-arm dumbbell row">
+  <div class="ex-top"><svg class="fig" data-i="47" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Kroc Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Dumbbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Very heavy one-arm row for many reps.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Free hand on a bench or rack, feet split.</li><li>Back flat, a little higher than level.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the dumbbell to your hip.</li><li>Lower until your arm is fully straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Straps help when your grip gives out first.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Twisting so far your chest faces the side.</li><li>Cutting the bottom short.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm hanging → dumbbell at your hip</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="plateMachine" data-name="leverage high row plate-loaded high row">
+  <div class="ex-top"><svg class="fig" data-i="48" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Leverage High Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Plate machine</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Pulls down and back from above: lats and upper back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Seat so you just reach the handles above you.</li><li>Knee pad snug.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the handles down to your chest. Squeeze.</li><li>Return slowly until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning back a lot.</li><li>Shrugging up.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms up and forward → hands at your chest</span><span>Tempo: Down 1 s · Hold 1 s · Up 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="other" data-name="one-arm kettlebell row">
+  <div class="ex-top"><svg class="fig" data-i="49" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>One-Arm Kettlebell Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Other</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">One-arm row with a kettlebell.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Kettlebell in front of your feet.</li><li>Hips back, back flat, free hand on your knee.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the kettlebell to your hip.</li><li>Lower until your arm is straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Rounding your back.</li><li>Twisting to lift more.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm hanging → kettlebell at your hip</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="plateMachine" data-name="one-arm long bar row one-arm landmine row bent over one-arm long bar row">
+  <div class="ex-top"><svg class="fig" data-i="50" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>One-Arm Long Bar Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Plate machine</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">One-arm row with the bar fixed at one end.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Stand beside the bar, hand just behind the plates.</li><li>Free hand on your knee, back flat.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the plates to your side.</li><li>Lower until your arm is straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Twisting to lift more.</li><li>Jerking the weight.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm straight → plates at your side</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="barbell" data-name="reverse grip bent-over row reverse grip bent-over rows underhand bent-over row">
+  <div class="ex-top"><svg class="fig" data-i="51" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Reverse Grip Bent-Over Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Barbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Bent-over row with palms up: more lats.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Palms up, hands shoulder-width.</li><li>Hips back, back flat, close to level.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar to your lower belly, elbows close.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Standing up as you pull.</li><li>Rounding your back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → bar at your lower belly</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="seated one-arm cable row seated one-arm cable pulley rows single-arm cable row">
+  <div class="ex-top"><svg class="fig" data-i="52" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Seated One-Arm Cable Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Cable</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">One-arm cable row with room to stretch.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Single handle, feet on the plate.</li><li>Sit tall, arm straight.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull your elbow back to your hip. Squeeze 1 s.</li><li>Let your shoulder reach forward at the end.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Twisting your whole body.</li><li>Leaning back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm straight, shoulder forward → handle at your hip</span><span>Tempo: Pull 1 s · Hold 1 s · Return 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="shotgun row standing one-arm cable row">
+  <div class="ex-top"><svg class="fig" data-i="53" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Shotgun Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Cable</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Standing one-arm cable row, palm turning up.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Single handle, low pulley.</li><li>Step back into a wide split stance, arm straight.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull your elbow back to your side, palm turning up. Squeeze 1 s.</li><li>Let your shoulder reach forward at the end.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Twisting your whole body.</li><li>Leaning back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm straight, shoulder forward → handle at your side</span><span>Tempo: Pull 1 s · Hold 1 s · Return 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="single-arm chest-supported db row one-arm incline dumbbell row chest-supported single-arm row">
+  <div class="ex-top"><svg class="fig" data-i="54" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Single-Arm Chest-Supported DB Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Dumbbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">One-arm row with your chest on a bench: no lower-back strain, no twisting.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bench at 30–45°, chest on it.</li><li>One dumbbell hanging straight down.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the dumbbell to your side. Squeeze.</li><li>Lower until your arm is straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Chest lifting off the bench.</li><li>Turning your body to lift more.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm hanging → dumbbell at your side</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://barbend.com/chest-supported-row/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="single-arm db row dumbbell one-arm row one-arm dumbbell row">
+  <div class="ex-top"><svg class="fig" data-i="55" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Single-arm DB Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">lats + upper back</span><span class="tag">Dumbbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Lower lats.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Hand and knee on a bench, back flat.</li><li>Dumbbell hangs below your shoulder.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull your elbow back to your hip, not your chest.</li><li>Lower until your shoulder blade spreads forward.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Turning your body to lift more.</li><li>Jerking the weight.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm hanging → dumbbell at your hip</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">Leo's plan</span></p>
+</article><article class="ex" data-eq="plateMachine" data-name="t-bar reverse row machine t bar reverse row chest-supported t-bar row (underhand)">
+  <div class="ex-top"><svg class="fig" data-i="56" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>T-Bar Reverse Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Plate machine</span><span class="tag key">key lift</span><span class="tag ok">failure ok</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Heavy row for your lats.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Chest on the pad, feet flat, arms straight.</li></ul></div><div><h4 class="">Form</h4><ul><li>Shoulders back first, then elbows to your hips.</li><li>Hold 1 s at the top.</li><li>Lower until your arms are straight and shoulder blades spread.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Elbows close: more lats. Elbows wide: more upper back.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Chest lifting off the pad.</li><li>Shrugging instead of pulling back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → elbows just past your body</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">Leo's plan</span></p>
+</article><article class="ex" data-eq="barbell" data-name="yates row underhand barbell row">
+  <div class="ex-top"><svg class="fig" data-i="57" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Yates Row <span class="star" title="Key lift">★</span></h3>
+      <div class="tags"><span class="tag ang-t">upper back + lats</span><span class="tag">Barbell</span><span class="tag key">key lift</span><span class="tag no">no failure</span><span class="tag ind">Rear delts ½</span><span class="tag ind">Biceps ½</span></div>
+      <p class="why">Underhand barbell row, more upright, aimed at the lats.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Palms up, hands shoulder-width.</li><li>Lean forward about 45°, knees soft.</li></ul></div><div><h4 class="">Form</h4><ul><li>Pull the bar to your belly, elbows close.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Lets you go heavier than a flat-back row.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning back to lift the bar.</li><li>Curling the bar with your arms.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → bar at your belly</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/" target="_blank" rel="noopener">source</a></span></p>
+</article></div></section><section class="muscle" id="biceps"><h2>Biceps <span class="count">46</span></h2><h3 class="ang">long head <span class="count">9</span></h3><div class="grid"><article class="ex" data-eq="cable" data-name="bayesian cable curl face-away bayesian cable curl face-away cable curl behind-the-back cable curl seated bayesian cable curl double bayesian curl">
+  <div class="ex-top"><svg class="fig" data-i="58" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Bayesian Cable Curl</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Arm behind you on a cable: biceps stretched and loaded the whole way.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Pulley low. Face away, handle in one hand.</li><li>Step forward until your arm is pulled behind you.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up, keeping your elbow back.</li><li>Lower until your arm is straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbow swinging forward.</li><li>Leaning forward to cheat.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm straight behind you → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/" target="_blank" rel="noopener">source</a> · <a href="https://fitnessvolt.com/jeff-nippard-best-exercises-every-muscle-group/" target="_blank" rel="noopener">second source</a></span></p>
+</article><article class="ex" data-eq="cable" data-name="cable drag curl cable drag curls">
+  <div class="ex-top"><svg class="fig" data-i="59" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Cable Drag Curl</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Drag curl on a low cable: steady tension, elbows go back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bar on a low pulley, palms up.</li><li>Stand close, bar against your thighs.</li></ul></div><div><h4 class="">Form</h4><ul><li>Drag the bar up your body, elbows moving back.</li><li>Slide it back down the same way.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Lifting your shoulders.</li><li>Bar leaving your body.</li></ul></div></div>
+  <p class="meta"><span>Range: Bar at your thighs → bar at your chest</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://fitnessvolt.com/cable-drag-curl-guide/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="db incline curl dumbbell incline curl incline dumbbell curl alternate incline dumbbell curl flexor incline dumbbell curls">
+  <div class="ex-top"><svg class="fig" data-i="60" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>DB Incline Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Arms hang behind you: biceps stretched.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bench at 45–60°, head and shoulders on it.</li><li>Arms hanging straight, palms forward.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbows moving forward.</li><li>Stopping short at the bottom.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">Leo's plan</span></p>
+</article><article class="ex" data-eq="barbell" data-name="drag curl">
+  <div class="ex-top"><svg class="fig" data-i="61" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Drag Curl</h3>
+      <div class="tags"><span class="tag">Barbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Bar slides up your body, elbows go back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Hands shoulder-width, palms up, bar against your thighs.</li></ul></div><div><h4 class="">Form</h4><ul><li>Drag the bar up your body, elbows moving back.</li><li>Slide it back down the same way.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Lifting your shoulders.</li><li>Bar leaving your body.</li></ul></div></div>
+  <p class="meta"><span>Range: Bar at your thighs → bar at your chest</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="dumbbell drag curl db drag curl">
+  <div class="ex-top"><svg class="fig" data-i="62" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Dumbbell Drag Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Drag curl with dumbbells: weights slide up your sides, elbows go back.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Dumbbells at your sides, palms forward.</li></ul></div><div><h4 class="">Form</h4><ul><li>Drag the dumbbells up your body, elbows moving back.</li><li>Slide them back down the same way.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Lifting your shoulders.</li><li>Dumbbells swinging forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → dumbbells at your chest</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://generationiron.com/dumbbell-drag-curl-exercise-guide/" target="_blank" rel="noopener">source</a> · <a href="https://planfit.ai/en/exercise/dumbbell-drag-curl" target="_blank" rel="noopener">second source</a></span></p>
+</article><article class="ex" data-eq="barbell" data-name="incline barbell curl barbell curls lying against an incline">
+  <div class="ex-top"><svg class="fig" data-i="63" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Incline Barbell Curl</h3>
+      <div class="tags"><span class="tag">Barbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Barbell curl with your back on an incline: arms behind you.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bench at 45°, back on it.</li><li>Bar hanging at arm's length.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar up as high as you can.</li><li>Lower all the way.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbows moving forward.</li><li>Lifting off the bench.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="incline cable curl two-arm cable curl on incline bench cable incline biceps curl">
+  <div class="ex-top"><svg class="fig" data-i="64" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Incline Cable Curl</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Incline curl on cables: arms behind you, tension the whole way.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Incline bench between two low pulleys.</li><li>Lie back, a handle in each hand, arms hanging behind you.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up, keeping your elbows back.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbows moving forward.</li><li>Rocking off the bench.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://fitnessvolt.com/cable-two-arm-curl-on-incline-bench-guide/" target="_blank" rel="noopener">source</a> · <a href="https://www.muscleandstrength.com/exercises/two-arm-cable-curl-on-incline-bench.html" target="_blank" rel="noopener">second source</a></span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="incline inner biceps curl">
+  <div class="ex-top"><svg class="fig" data-i="65" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Incline Inner Biceps Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Incline curl out to the sides: biceps stretched.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bench at 45°, back on it.</li><li>Arms hanging, palms facing out.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl out and up to beside your shoulders.</li><li>Lower the same way.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbows moving forward.</li><li>Lifting off the bench.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → dumbbells beside your shoulders</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="lying supine dumbbell curl lying dumbbell curl flat bench curl">
+  <div class="ex-top"><svg class="fig" data-i="66" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Lying Supine Dumbbell Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Curl lying on a flat bench, arms hanging below it: big stretch.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Lie face up on a high flat bench.</li><li>Arms hanging down past the bench, palms in.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up, turning palms up.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Go light: the bottom is very stretched.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbows moving forward.</li><li>Dropping fast at the bottom.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms hanging straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article></div><h3 class="ang">short head <span class="count">11</span></h3><div class="grid"><article class="ex" data-eq="fixedBar" data-name="barbell preacher curl preacher curl ez-bar preacher curl">
+  <div class="ex-top"><svg class="fig" data-i="67" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Barbell Preacher Curl</h3>
+      <div class="tags"><span class="tag">Fixed bar</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Biceps work hardest near the bottom.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Armpits at the top of the pad, upper arms flat on it.</li><li>EZ bar if a straight bar hurts your wrists.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up, stop just before your forearms are upright.</li><li>Lower slowly until your arms are almost straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Go slowest near the bottom.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Dropping fast at the bottom (hard on the elbows).</li><li>Elbows lifting off the pad.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms almost straight → forearms almost upright</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">Leo's plan</span></p>
+</article><article class="ex" data-eq="cable" data-name="cable preacher curl single-arm cable preacher curl">
+  <div class="ex-top"><svg class="fig" data-i="68" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Cable Preacher Curl</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Preacher curl on a cable: tension the whole way.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Preacher bench in front of a low pulley.</li><li>Upper arms flat on the pad, bar in hand.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up to your chin.</li><li>Lower until your arms are almost straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbows lifting off the pad.</li><li>Dropping fast at the bottom.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms almost straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="cable spider curl prone incline cable curl">
+  <div class="ex-top"><svg class="fig" data-i="69" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Cable Spider Curl</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Spider curl on a cable: arms in front, tension at the bottom too.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Chest on a 45° bench facing a low pulley.</li><li>Bench far enough back that the cable pulls at the bottom.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up and squeeze 1 s.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging the bar.</li><li>Elbows moving back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms hanging → full curl</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://fitnessvolt.com/spider-curls/" target="_blank" rel="noopener">source</a> · <a href="https://www.setforset.com/blogs/news/spider-curl" target="_blank" rel="noopener">second source</a></span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="concentration curl concentration curls seated concentration curl">
+  <div class="ex-top"><svg class="fig" data-i="70" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Concentration Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">One arm, elbow braced on your thigh: strict.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Sit, elbow against your inner thigh.</li><li>Arm hanging straight.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up and squeeze 1 s.</li><li>Lower until your arm is straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Moving your upper arm.</li><li>Swinging your body.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm straight → full curl</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="dumbbell preacher curl one arm dumbbell preacher curl two-arm dumbbell preacher curl standing one-arm dumbbell curl over incline bench">
+  <div class="ex-top"><svg class="fig" data-i="71" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Dumbbell Preacher Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Preacher curl with dumbbells: biceps work hardest near the bottom.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Upper arm flat on a preacher pad or the back of an incline bench.</li><li>One arm or both.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up, stop just before your forearm is upright.</li><li>Lower slowly until your arm is almost straight.</li></ul></div><div><h4 class="h-tip">Tips</h4><ul><li>Go slowest near the bottom.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Dropping fast at the bottom.</li><li>Elbow lifting off the pad.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm almost straight → forearm almost upright</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="dumbbell prone incline curl dumbbell spider curl prone incline curl">
+  <div class="ex-top"><svg class="fig" data-i="72" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Dumbbell Prone Incline Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Chest on an incline bench, arms hanging: hardest at the top.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Lie face down on an incline bench.</li><li>Arms hanging straight down, palms forward.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up and squeeze 1 s.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging the dumbbells.</li><li>Elbows moving back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms hanging → full curl</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="lying high pulley cable curl lying close-grip bar curl on high pulley">
+  <div class="ex-top"><svg class="fig" data-i="73" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Lying High Pulley Cable Curl</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Lying cable curl with arms pointing up: arms in front of you.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Lie on a bench in front of a high pulley, head toward it.</li><li>Arms straight up over your shoulders, palms up, hands shoulder-width.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar down to your chin. Squeeze 1 s.</li><li>Straighten slowly.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Upper arms moving.</li><li>Letting the bar pull your arms back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight up → bar at your chin</span><span>Tempo: Curl 1 s · Hold 1 s · Straighten 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="machine" data-name="machine bicep curl machine preacher curl machine preacher curls biceps curl machine">
+  <div class="ex-top"><svg class="fig" data-i="74" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Machine Bicep Curl</h3>
+      <div class="tags"><span class="tag">Machine</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Machine curl, arms on a pad: easy to push hard.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Seat so your elbows line up with the pivot.</li><li>Upper arms flat on the pad.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the handles up.</li><li>Lower slowly until your arms are almost straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Lifting your elbows off the pad.</li><li>Resting the weight between reps.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms almost straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="barbell" data-name="seated close-grip concentration barbell curl barbell concentration curl">
+  <div class="ex-top"><svg class="fig" data-i="75" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Seated Close-Grip Concentration Barbell Curl</h3>
+      <div class="tags"><span class="tag">Barbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Concentration curl with a bar, both arms braced.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Sit, upper arms on your inner thighs.</li><li>Hands close, palms up.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar up and squeeze 1 s.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Moving your upper arms.</li><li>Leaning back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="fixedBar" data-name="spider curl lying high bench barbell curl ez-bar spider curl">
+  <div class="ex-top"><svg class="fig" data-i="76" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Spider Curl</h3>
+      <div class="tags"><span class="tag">Fixed bar</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Chest on a bench, arms hanging straight down: hardest at the top.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Chest on an angled or high bench.</li><li>Bar hanging at arm's length, palms up.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up and squeeze 1 s.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging the bar.</li><li>Elbows moving back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms hanging → full curl</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="standing concentration curl">
+  <div class="ex-top"><svg class="fig" data-i="77" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Standing Concentration Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Concentration curl bent over, arm hanging free.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bend forward, free hand on your knee or a bench.</li><li>Working arm hanging straight down.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up to your chest and squeeze 1 s.</li><li>Lower until your arm is straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Moving your upper arm.</li><li>Swinging the dumbbell.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm straight → full curl</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article></div><h3 class="ang">brachialis <span class="count">11</span></h3><div class="grid"><article class="ex" data-eq="cable" data-name="bayesian hammer curl behind-the-back rope hammer curl">
+  <div class="ex-top"><svg class="fig" data-i="78" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Bayesian Hammer Curl</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms </span></div>
+      <p class="why">Bayesian curl with a rope, palm in: arm behind you, thumb up.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Rope on a low pulley. Face away, rope in one hand.</li><li>Step forward until your arm is pulled behind you, palm in.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up, keeping your elbow back and your palm in.</li><li>Lower until your arm is straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbow swinging forward.</li><li>Turning your wrist.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm straight behind you → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://fitnessvolt.com/bayesian-curl/" target="_blank" rel="noopener">source</a></span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="cross body hammer curl cross-body curl pinwheel curl">
+  <div class="ex-top"><svg class="fig" data-i="79" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Cross Body Hammer Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms </span></div>
+      <p class="why">Hammer curl across your body.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Dumbbells at your sides, palms in.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl one dumbbell up across your body toward the other shoulder.</li><li>Lower and switch arms.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm straight → dumbbell at the other shoulder</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="db hammer curl dumbbell alternating hammer curl hammer curls alternate hammer curl">
+  <div class="ex-top"><svg class="fig" data-i="80" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>DB Hammer Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms </span></div>
+      <p class="why">Heavy curl, palms in. Thicker arms.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Palms facing in, elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl one arm at a time to your shoulder.</li><li>Lower all the way.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">Leo's plan</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="dumbbell reverse curl standing dumbbell reverse curl">
+  <div class="ex-top"><svg class="fig" data-i="81" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Dumbbell Reverse Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms </span></div>
+      <p class="why">Curl with palms down: brachialis and forearms.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Dumbbells at your sides, palms facing back.</li><li>Elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the dumbbells to your shoulders, palms staying down.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="incline hammer curl incline hammer curls">
+  <div class="ex-top"><svg class="fig" data-i="82" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Incline Hammer Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms </span></div>
+      <p class="why">Hammer curl on an incline bench, arms behind you.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bench at 45°, back on it.</li><li>Arms hanging, palms in.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up to your shoulders.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbows moving forward.</li><li>Lifting off the bench.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="preacher hammer curl preacher hammer dumbbell curl">
+  <div class="ex-top"><svg class="fig" data-i="83" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Preacher Hammer Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms </span></div>
+      <p class="why">Hammer curl on a preacher pad: strict, hard at the bottom.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Upper arm flat on the preacher pad, palm in.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up, stop just before your forearm is upright.</li><li>Lower slowly until your arm is almost straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbow lifting off the pad.</li><li>Dropping fast at the bottom.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm almost straight → forearm almost upright</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="barbell" data-name="reverse barbell curl reverse-grip barbell curl">
+  <div class="ex-top"><svg class="fig" data-i="84" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Reverse Barbell Curl</h3>
+      <div class="tags"><span class="tag">Barbell</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms </span></div>
+      <p class="why">Curl with palms down: brachialis and forearms.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Palms down, hands shoulder-width.</li><li>Elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar to your shoulders.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="reverse cable curl reverse-grip cable curl">
+  <div class="ex-top"><svg class="fig" data-i="85" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Reverse Cable Curl</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms </span></div>
+      <p class="why">Curl with palms down: brachialis and forearms.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bar on a low pulley, palms down, hands shoulder-width.</li><li>Elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar to your shoulders.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="fixedBar" data-name="reverse ez-bar preacher curl reverse barbell preacher curls reverse preacher curl">
+  <div class="ex-top"><svg class="fig" data-i="86" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Reverse EZ-Bar Preacher Curl</h3>
+      <div class="tags"><span class="tag">Fixed bar</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms </span></div>
+      <p class="why">Curl with palms down: brachialis and forearms.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Upper arms flat on the preacher pad.</li><li>EZ bar, palms down, hands shoulder-width.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar up to your shoulders.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbows lifting off the pad.</li><li>Dropping fast at the bottom.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="rope hammer curl cable hammer curls - rope attachment cable rope hammer curl cable hammer curl">
+  <div class="ex-top"><svg class="fig" data-i="87" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Rope Hammer Curl</h3>
+      <div class="tags"><span class="tag">Cable</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms </span></div>
+      <p class="why">Hammer curl on a cable with a rope.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Rope on a low pulley, palms facing in.</li><li>Elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the rope to your shoulders.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="spider hammer curl dumbbell hammer spider curl">
+  <div class="ex-top"><svg class="fig" data-i="88" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Spider Hammer Curl</h3>
+      <div class="tags"><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms </span></div>
+      <p class="why">Hammer curl with your chest on a bench: arms in front, no swinging.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Chest on a 45° bench.</li><li>Dumbbells hanging straight down, palms facing in.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up, thumbs leading. Squeeze 1 s.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging the weights.</li><li>Elbows moving back.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms hanging → full curl</span><span>Tempo: Up 1 s · Hold 1 s · Down 3 s</span><span>rest 2 min</span><span class="src"><a href="https://fitnessvolt.com/spider-curls/" target="_blank" rel="noopener">source</a></span></p>
+</article></div><h3 class="ang">Several angles <span class="count">15</span></h3><div class="grid"><article class="ex" data-eq="barbell" data-name="barbell curl straight bar curl">
+  <div class="ex-top"><svg class="fig" data-i="89" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Barbell Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Barbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">The basic heavy curl.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Hands shoulder-width, palms up.</li><li>Elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar to your shoulders.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="fixedBar" data-name="close-grip ez bar curl">
+  <div class="ex-top"><svg class="fig" data-i="90" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Close-Grip EZ Bar Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Fixed bar</span><span class="tag ok">failure ok</span></div>
+      <p class="why">EZ-bar curl with hands on the inner grips.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Hands on the inner angled grips.</li><li>Elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar to your chest.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="barbell" data-name="close-grip standing barbell curl">
+  <div class="ex-top"><svg class="fig" data-i="91" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Close-Grip Standing Barbell Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Barbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Straight-bar curl with hands closer than your shoulders.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Hands a bit inside shoulder-width, palms up.</li><li>Elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar to your chest.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="dumbbell bicep curl dumbbell alternate bicep curl standing dumbbell curl">
+  <div class="ex-top"><svg class="fig" data-i="92" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Dumbbell Bicep Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Standing dumbbell curl.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>A dumbbell in each hand, palms forward.</li><li>Elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up to your shoulders, both arms or one at a time.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="fixedBar" data-name="ez-bar curl">
+  <div class="ex-top"><svg class="fig" data-i="93" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>EZ-Bar Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Fixed bar</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Barbell curl on the bent bar: easier on the wrists.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Hands on the angled grips, palms up.</li><li>Elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar to your shoulders.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="high cable curl high cable curls overhead cable curl double-biceps cable curl hercules curl">
+  <div class="ex-top"><svg class="fig" data-i="94" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>High Cable Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Curl from two high pulleys, arms out at shoulder height.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Stand between two high pulleys, a handle in each hand.</li><li>Arms out to the sides, level with the floor.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl your hands to your ears. Squeeze 1 s.</li><li>Straighten slowly.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Dropping your elbows.</li><li>Leaning forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms out straight → hands at your ears</span><span>Tempo: Curl 1 s · Hold 1 s · Straighten 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="lying cable curl supine cable curl">
+  <div class="ex-top"><svg class="fig" data-i="95" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Lying Cable Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Cable curl lying on the floor: no swinging.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Lie on your back, feet toward a low pulley.</li><li>Bar in hand, elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar to your chest.</li><li>Lower until your arms are almost straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbows lifting off the floor.</li><li>Shrugging your shoulders.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms almost straight → bar at your chest</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="seated dumbbell curl">
+  <div class="ex-top"><svg class="fig" data-i="96" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Seated Dumbbell Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Dumbbell curl sitting down: less swinging.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Sit on the end of a bench, back straight.</li><li>Dumbbells hanging, palms forward.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up to your shoulders.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning back.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="seated dumbbell inner biceps curl">
+  <div class="ex-top"><svg class="fig" data-i="97" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Seated Dumbbell Inner Biceps Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Seated dumbbell curl out to the sides.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Sit on the end of a bench.</li><li>Dumbbells at your sides, palms in.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl out and up, turning palms up, to shoulder height.</li><li>Lower the same way.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Leaning back.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → dumbbells beside your shoulders</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="standing biceps cable curl cable curl">
+  <div class="ex-top"><svg class="fig" data-i="98" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Standing Biceps Cable Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Cable curl: tension the whole way.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Bar on a low pulley, palms up.</li><li>Stand close, elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar to your chest.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="standing inner-biceps curl outward dumbbell curl">
+  <div class="ex-top"><svg class="fig" data-i="99" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Standing Inner-Biceps Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Dumbbell curl out to the sides.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Dumbbells at your sides, palms in.</li><li>Elbows close to your body.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl out and up, turning palms up, to shoulder height.</li><li>Lower the same way.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → dumbbells beside your shoulders</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="cable" data-name="standing one-arm cable curl single-arm cable curl">
+  <div class="ex-top"><svg class="fig" data-i="100" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Standing One-Arm Cable Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Cable</span><span class="tag ok">failure ok</span></div>
+      <p class="why">One-arm cable curl.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Handle on a low pulley.</li><li>Stand side-on or facing it, elbow at your side.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up to your shoulder.</li><li>Lower until your arm is straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arm straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="barbell" data-name="wide-grip standing barbell curl">
+  <div class="ex-top"><svg class="fig" data-i="101" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Wide-Grip Standing Barbell Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head</span><span class="tag">Barbell</span><span class="tag ok">failure ok</span></div>
+      <p class="why">Straight-bar curl with hands wider than your shoulders.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Hands a bit outside shoulder-width, palms up.</li><li>Elbows at your sides.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl the bar to your chest.</li><li>Lower until your arms are straight.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="zottman curl">
+  <div class="ex-top"><svg class="fig" data-i="102" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Zottman Curl</h3>
+      <div class="tags"><span class="tag ang-t">long head + short head + brachialis</span><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms ½</span></div>
+      <p class="why">Curl up palms up, lower palms down.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Dumbbells at your sides, palms forward.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up to your shoulders.</li><li>At the top turn your palms down, then lower slowly.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Swinging your body.</li><li>Elbows moving forward.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article><article class="ex" data-eq="dumbbell" data-name="zottman preacher curl">
+  <div class="ex-top"><svg class="fig" data-i="103" viewBox="0 -24 120 131" aria-hidden="true"></svg>
+    <div class="ex-head"><h3>Zottman Preacher Curl</h3>
+      <div class="tags"><span class="tag ang-t">short head + brachialis</span><span class="tag">Dumbbell</span><span class="tag ok">failure ok</span><span class="tag ind">Forearms ½</span></div>
+      <p class="why">Zottman curl on a preacher pad.</p></div></div>
+  <div class="cues"><div><h4 class="">Setup</h4><ul><li>Upper arms flat on the pad, palms up.</li></ul></div><div><h4 class="">Form</h4><ul><li>Curl up.</li><li>At the top turn your palms down, then lower slowly.</li></ul></div><div><h4 class="h-avoid">Avoid</h4><ul><li>Elbows lifting off the pad.</li><li>Dropping fast at the bottom.</li></ul></div></div>
+  <p class="meta"><span>Range: Arms almost straight → full curl</span><span>Tempo: Up 1 s · Down 3 s</span><span>rest 2 min</span><span class="src">free-exercise-db</span></p>
+</article></div></section>
+  <p class="empty" id="none" hidden>No exercise matches.</p>
+</div>
+<script>"use strict";(()=>{var $=e=>e*Math.PI/180,d=(e,n)=>[Math.sin($(e))*n,Math.cos($(e))*n],a=(e,n,h=1)=>[e[0]+n[0]*h,e[1]+n[1]*h];function R(e){let n={};return e.anchor?(n.an=[e.ax,104-(e.ah||0)],n.kn=a(n.an,d(e.sh,23),-1),n.hip=a(n.kn,d(e.th,24),-1),n.toe=[e.ax+8,104]):(n.hip=[e.hx,e.hy],n.kn=a(n.hip,d(e.th,24)),n.an=a(n.kn,d(e.sh,23)),n.toe=e.nofoot?n.an:a(n.an,d(e.sh+90,8))),n.sh=a(a(n.hip,d(180-e.t,34)),[e.sb||0,0]),n.head=a(n.sh,d(180-e.t,11)),n.el=a(n.sh,d(e.ua,20*(e.al??1))),n.ha=a(n.el,d(e.fa,18*(e.fl??1))),n.lines=[[n.hip,n.kn,n.an,n.toe],[n.hip,n.sh],[n.sh,n.el,n.ha]],n}function T(e){let n={},h=e.tl||0,i=d(180-h,1),u=[Math.cos($(h)),Math.sin($(h))],t=[e.cx??60,e.hy],o=a(t,i,34),l=e.lf||1,x=e.la??6,p=e.sa??x;if(n.head=a(o,i,12),[["R",1],["L",-1]].forEach(([r,c])=>{let b=a(t,u,(e.hw??6)*c),F=a(a(o,u,11*c),[0,-(e.shr||0)]),y=r==="L"&&e.L?Object.assign({al:1,fl:1},e.L):e,P=a(b,d(x*c,24*l)),f=a(P,d(p*c,23)),g=a(f,[5*c,0]),m=a(F,d(y.ua*c,20*(y.al??1))),s=a(m,d(y.fa*c,18*(y.fl??1)));Object.assign(n,{["kn"+r]:P,["an"+r]:f,["sh"+r]:F,["el"+r]:m,["ha"+r]:s,["hip"+r]:b}),n.lines=(n.lines||[]).concat([[b,P,f,g],[F,m,s]])}),n.lines.push([n.hipL,n.hipR],[n.shL,n.shR],[a(n.hipL,n.hipR),a(n.shL,n.shR)].map(r=>[r[0]/2,r[1]/2]),[a(n.shL,n.shR).map(r=>r/2),a(n.head,i,-7)]),e.rot){let r=Math.cos($(e.rot)),c=Math.sin($(e.rot)),b=e.cx??60,F=104,y=new Set,P=s=>{if(y.has(s))return;y.add(s);let k=s[0]-b,M=s[1]-F;s[0]=b+k*r-M*c,s[1]=F+k*c+M*r},f=s=>Array.isArray(s)&&typeof s[0]=="number";n.lines.forEach(s=>s.forEach(P)),Object.values(n).forEach(s=>{f(s)&&P(s)});let g=Math.max(n.anR[1],n.anL[1])-104,m=new Set;n.lines.forEach(s=>s.forEach(k=>{m.has(k)||(m.add(k),k[1]-=g)})),Object.values(n).forEach(s=>{f(s)&&!m.has(s)&&(m.add(s),s[1]-=g)}),n.lines[0][3]=[n.anR[0]+5,n.anR[1]],n.lines[2][3]=[n.anL[0]-5,n.anL[1]]}return n.ha=n.haR,n}var S=(e,n)=>{let h=Object.assign({hx:60,hy:57,t:0,ua:0,fa:0,th:0,sh:0},e.base);for(let i of new Set([...Object.keys(e.A),...Object.keys(e.B)])){let u=e.A[i]??h[i],t=e.B[i]??h[i];h[i]=u+(t-u)*n}return h};function L(e,n){let h=S(e,n),i=e.v==="f"?T(h):R(h),u=[];for(let t of e.props||[]){if(t.line&&u.push({kind:"line",x1:t.line[0],y1:t.line[1],x2:t.line[2],y2:t.line[3]}),t.cable){let o=t.to==="barmid"?[(i.haL[0]+i.haR[0])/2,(i.haL[1]+i.haR[1])/2]:i[t.to];u.push({kind:"cable",points:[t.cable,o],anchor:t.cable})}if(t.db){let o=i[t.db];u.push({kind:"line",x1:(o[0]-4).toFixed(1),y1:o[1].toFixed(1),x2:(o[0]+4).toFixed(1),y2:o[1].toFixed(1),width:4})}if(t.bar){let o=i.haL,l=i.haR;u.push({kind:"line",x1:(o[0]-7).toFixed(1),y1:o[1].toFixed(1),x2:(l[0]+7).toFixed(1),y2:l[1].toFixed(1),width:2.5})}if(t.run&&e.v!=="f"){let o=R(S(e,1-n));i.lines.unshift(o.lines[0],o.lines[2])}if(t.arm2&&i.sh){let o=a(i.sh,d(t.arm2[0],20)),l=a(o,d(t.arm2[1],18));i.lines.push([i.sh,o,l])}if(t.pad){let o=i[t.pad];u.push({kind:"circle",cx:o[0],cy:o[1],r:t.r||2.6})}if(t.trap&&i.hip&&i.sh){let o=Math.hypot(i.sh[0]-i.hip[0],i.sh[1]-i.hip[1])||1,l=[(i.sh[0]-i.hip[0])/o,(i.sh[1]-i.hip[1])/o],x=[l[1],-l[0]],p=h.tq??0,r=a(i.sh,x,.6),c=a(a(i.sh,l,-8.5),x,.6),b=a(a(i.sh,l,-4),x,.8+2*p),F=.45+.8*p,y=(f,g)=>{let m=a([(f[0]+g[0])/2,(f[1]+g[1])/2],x,F);return[0,.25,.5,.75,1].map(s=>[(1-s)**2*f[0]+2*(1-s)*s*m[0]+s*s*g[0],(1-s)**2*f[1]+2*(1-s)*s*m[1]+s*s*g[1]])},P=[...y(r,b),...y(b,c).slice(1)];u.push({kind:"curve",points:P})}if(t.perp){let o=i[t.perp],l=d(t.ang,t.len/2);u.push({kind:"line",x1:(o[0]-l[0]).toFixed(1),y1:(o[1]-l[1]).toFixed(1),x2:(o[0]+l[0]).toFixed(1),y2:(o[1]+l[1]).toFixed(1),width:2.5})}}return{floor:{x1:0,y1:105,x2:120,y2:105},light:u,main:i.lines,head:{cx:i.head[0],cy:i.head[1],r:7}}}var A={ab:1344,holdB:256,ba:1344,holdA:256};var I=(e=A)=>e.ab+e.holdB+e.ba+e.holdA,E=400;function B(e,n=A){let h=o=>o<.5?2*o*o:1-Math.pow(-2*o+2,2)/2,i=o=>.6*o+.4*h(o),u=n.holdB>E||n.holdA>E?i:h,t=e%I(n);return t<n.ab?u(t/n.ab):t<n.ab+n.holdB?1:t<n.ab+n.holdB+n.ba?1-u((t-n.ab-n.holdB)/n.ba):0}function J(e,n=4,h=[0,.25,.5,.75,1]){let i=1/0,u=-1/0,t=1/0,o=-1/0,l=p=>{let r=Number(p);Number.isFinite(r)&&(i=Math.min(i,r),u=Math.max(u,r))},x=p=>{let r=Number(p);Number.isFinite(r)&&(t=Math.min(t,r),o=Math.max(o,r))};for(let p of h){let r=L(e,p);r.main.forEach(c=>c.forEach(b=>{l(b[0]),x(b[1])})),l(r.head.cx-r.head.r),l(r.head.cx+r.head.r),x(r.head.cy-r.head.r);for(let c of r.light)c.kind==="line"?(l(c.x1),l(c.x2),x(c.y1),x(c.y2)):c.kind==="circle"?(l(c.cx-c.r),l(c.cx+c.r),x(c.cy-c.r),x(c.cy+c.r)):c.points.forEach(b=>{l(b[0]),x(b[1])});x(r.floor.y1)}return Number.isFinite(i)?[i-n,t-n,u-i+2*n,o-t+2*n]:[0,-24,120,131]}function j(e,n){let[h,,i]=J(e,0,n==null?void 0:[n]);return i>0&&i<120?60-(h+i/2):0}var w=e=>e.map(n=>n[0].toFixed(1)+","+n[1].toFixed(1)).join(" ");function O(e,n=0){let h="";for(let t of e.light)t.kind==="line"?h+=`<line x1="${t.x1}" y1="${t.y1}" x2="${t.x2}" y2="${t.y2}"${t.width?` stroke-width="${t.width}"`:""}/>`:t.kind==="cable"?h+=`<polyline points="${w(t.points)}" stroke-dasharray="2 2"/><circle cx="${t.anchor[0]}" cy="${t.anchor[1]}" r="2.2"/>`:t.kind==="curve"?h+=`<polygon class="muscle" points="${w(t.points)}"/>`:h+=`<circle cx="${t.cx.toFixed(1)}" cy="${t.cy.toFixed(1)}" r="${t.r}"/>`;let i=e.floor,u=`<g class="lt">${h}</g><g class="mn">${e.main.map(t=>`<polyline points="${w(t)}"/>`).join("")}<circle cx="${e.head.cx.toFixed(1)}" cy="${e.head.cy.toFixed(1)}" r="${e.head.r}"/></g>`;return`<line class="floor" x1="${i.x1}" y1="${i.y1}" x2="${i.x2}" y2="${i.y2}"/>${n?`<g transform="translate(${n.toFixed(1)} 0)">${u}</g>`:u}`}window.BF={figureCenterDx:j,phase:B,poseFrame:L,frameToSvg:O};})();
+</script>
+<script>
+const FIGS = [{"spec":{"v":"f","base":{"lf":1,"la":4,"sa":2},"A":{"hy":56,"ua":165,"fa":170},"B":{"hy":28,"ua":60,"fa":175},"props":[{"line":[22,-15,98,-15]}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"v":"f","base":{"hy":70,"lf":0.5},"A":{"ua":130,"fa":165},"B":{"ua":20,"fa":170},"props":[{"line":[44,72,76,72]},{"line":[42,80,78,80]},{"cable":[60,-22],"to":"barmid"},{"bar":1}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"v":"f","base":{"hy":70,"lf":0.5},"A":{"ua":155,"fa":165},"B":{"ua":45,"fa":170},"props":[{"line":[44,72,76,72]},{"line":[42,80,78,80]},{"cable":[60,-22],"to":"barmid"},{"bar":1}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"v":"f","base":{"hy":70,"lf":0.5},"A":{"ua":155,"fa":165},"B":{"ua":45,"fa":170},"props":[{"line":[44,72,76,72]},{"line":[42,80,78,80]},{"cable":[60,-22],"to":"barmid"},{"bar":1}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"v":"f","base":{"hy":70,"lf":0.5},"A":{"ua":155,"fa":165},"B":{"ua":45,"fa":170},"props":[{"line":[44,72,76,72]},{"line":[42,80,78,80]}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"v":"f","base":{"hy":70,"lf":0.5},"A":{"ua":155,"fa":165},"B":{"ua":45,"fa":170},"props":[{"line":[44,72,76,72]},{"line":[42,80,78,80]},{"cable":[60,-22],"to":"barmid"},{"bar":1}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"v":"f","base":{"lf":1,"la":4,"sa":2},"A":{"hy":56,"ua":165,"fa":170},"B":{"hy":28,"ua":60,"fa":175},"props":[{"line":[22,-15,98,-15]}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"v":"f","base":{"lf":1,"la":4,"sa":2},"A":{"hy":56,"ua":165,"fa":170},"B":{"hy":28,"ua":60,"fa":175},"props":[{"line":[22,-15,98,-15]}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":52,"hy":78,"t":5,"th":0,"sh":-90,"nofoot":1},"A":{"ua":170,"fa":172},"B":{"ua":-15,"fa":160},"props":[{"cable":[62,-22],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":1000}},{"spec":{"v":"f","base":{"hy":70,"lf":0.5},"A":{"ua":155,"fa":165},"B":{"ua":45,"fa":170},"props":[{"line":[44,72,76,72]},{"line":[42,80,78,80]},{"cable":[60,-22],"to":"barmid"},{"bar":1}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"v":"f","base":{"hy":70,"lf":0.5},"A":{"ua":155,"fa":165},"B":{"ua":45,"fa":170},"props":[{"bar":1},{"cable":[60,-22],"to":"barmid"},{"line":[44,72,76,72]},{"line":[42,80,78,80]}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":78,"hy":76,"t":-88,"th":100,"sh":0,"ua":-95},"A":{"ua":-180,"fa":-180},"B":{"ua":-95,"fa":-95},"props":[{"line":[36,80,86,80]},{"line":[52,80,52,104]},{"pad":"ha","r":3}]},"timing":{"ab":3000,"holdB":250,"ba":1000,"holdA":250}},{"spec":{"base":{"hx":78,"hy":76,"t":-88,"th":100,"sh":0,"ua":-95},"A":{"ua":-180,"fa":-180},"B":{"ua":-95,"fa":-95},"props":[{"line":[36,80,86,80]},{"line":[52,80,52,104]},{"db":"ha"}]},"timing":{"ab":3000,"holdB":250,"ba":1000,"holdA":250}},{"spec":{"base":{"hx":50,"hy":57,"t":30,"th":5,"sh":-3},"A":{"ua":150,"fa":150},"B":{"ua":5,"fa":5},"props":[{"cable":[112,-20],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":50,"hy":78,"t":30,"th":0,"sh":-90,"nofoot":1},"A":{"ua":150,"fa":150},"B":{"ua":20,"fa":20},"props":[{"cable":[112,-20],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":50,"hy":78,"t":30,"th":0,"sh":-90,"nofoot":1},"A":{"ua":150,"fa":150},"B":{"ua":20,"fa":20},"props":[{"cable":[112,-20],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":78,"hy":76,"t":-88,"th":100,"sh":0,"ua":-95},"A":{"ua":-180,"fa":-180},"B":{"ua":-95,"fa":-95},"props":[{"line":[36,80,86,80]},{"line":[52,80,52,104]}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":50,"hy":80,"t":0,"th":88,"sh":0},"A":{"ua":168,"fa":160},"B":{"ua":15,"fa":40},"props":[{"line":[38,84,62,84]},{"line":[50,84,50,104]},{"line":[44,82,44,40]}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":50,"hy":57,"t":30,"th":5,"sh":-3},"A":{"ua":150,"fa":150},"B":{"ua":5,"fa":5},"props":[{"cable":[112,-20],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":50,"hy":57,"t":30,"th":5,"sh":-3},"A":{"ua":150,"fa":150},"B":{"ua":5,"fa":5},"props":[{"cable":[112,-20],"to":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":78,"hy":76,"t":-88,"th":100,"sh":0,"ua":-95},"A":{"ua":-180,"fa":-180},"B":{"ua":-95,"fa":-95},"props":[{"line":[36,80,86,80]},{"line":[52,80,52,104]},{"db":"ha"}]},"timing":{"ab":3000,"holdB":250,"ba":1000,"holdA":250}},{"spec":{"base":{"hx":68,"hy":62,"t":-90,"th":90,"sh":90,"nofoot":1},"A":{"ua":0,"fa":0},"B":{"ua":-60,"fa":20},"props":[{"line":[20,66,100,66]},{"line":[36,66,36,104]},{"line":[88,66,88,104]},{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":46,"hy":58,"t":62,"th":14,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-65,"fa":-5},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":46,"hy":58,"t":62,"th":14,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-65,"fa":-5},"props":[{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":40,"hy":88,"th":85,"sh":85},"A":{"t":15,"ua":85,"fa":88},"B":{"t":0,"ua":-40,"fa":85},"props":[{"cable":[118,72],"to":"ha"},{"line":[20,92,50,92]},{"line":[93,70,93,95]}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":80,"t":30,"th":88,"sh":0},"A":{"ua":70,"fa":75},"B":{"ua":-45,"fa":70},"props":[{"line":[32,84,56,84]},{"line":[44,84,44,104]},{"line":[70,40,70,78]}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":46,"hy":58,"t":62,"th":14,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-65,"fa":-5},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":57,"t":45,"th":10,"sh":-6},"A":{"ua":5,"fa":5},"B":{"ua":-60,"fa":15},"props":[{"line":[54,61,76,39]},{"line":[58,61,58,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":57,"t":45,"th":10,"sh":-6},"A":{"ua":5,"fa":5},"B":{"ua":-60,"fa":15},"props":[{"line":[54,61,76,39]},{"line":[58,61,58,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":57,"t":45,"th":10,"sh":-6},"A":{"ua":5,"fa":5},"B":{"ua":-60,"fa":15},"props":[{"line":[54,61,76,39]},{"line":[58,61,58,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"v":"f","base":{"hy":70,"lf":0.5},"A":{"ua":155,"fa":165},"B":{"ua":45,"fa":170},"props":[{"line":[44,72,76,72]},{"line":[42,80,78,80]},{"cable":[60,-22],"to":"barmid"},{"bar":1}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":80,"t":30,"th":88,"sh":0},"A":{"ua":70,"fa":75},"B":{"ua":-45,"fa":70},"props":[{"line":[32,84,56,84]},{"line":[44,84,44,104]},{"line":[70,40,70,78]}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":57,"t":45,"th":10,"sh":-6},"A":{"ua":5,"fa":5},"B":{"ua":-60,"fa":15},"props":[{"line":[54,61,76,39]},{"line":[58,61,58,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":48,"hy":58,"t":50,"th":12,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-60,"fa":-5},"props":[{"line":[56,62,80,42]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":46,"hy":58,"t":62,"th":14,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-65,"fa":-5},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":46,"hy":58,"t":62,"th":14,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-65,"fa":-5},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":46,"hy":58,"t":62,"th":14,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-65,"fa":-5},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":48,"hy":58,"t":50,"th":12,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-60,"fa":-5},"props":[{"line":[56,62,80,42]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":46,"hy":58,"t":62,"th":14,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-65,"fa":-5},"props":[{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":40,"hy":88,"th":85,"sh":85},"A":{"t":15,"ua":85,"fa":88},"B":{"t":0,"ua":-40,"fa":85},"props":[{"line":[20,92,50,92]},{"line":[93,70,93,95]},{"cable":[118,72],"to":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"anchor":1,"ax":102},"A":{"th":80,"sh":80,"t":-80,"ua":180,"fa":180},"B":{"th":62,"sh":62,"t":-62,"ua":150,"fa":280},"props":[{"line":[12,51,34,51]}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"anchor":1,"ax":102},"A":{"th":80,"sh":80,"t":-80,"ua":180,"fa":180},"B":{"th":62,"sh":62,"t":-62,"ua":150,"fa":280},"props":[{"line":[12,51,34,51]}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"anchor":1,"ax":100,"th":62,"sh":62,"t":-62},"A":{"ua":0,"fa":0},"B":{"ua":135,"fa":0},"props":[{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":46,"hy":58,"t":62,"th":14,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-65,"fa":-5},"props":[{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":40,"hy":56,"t":80,"th":8,"sh":0},"A":{"ua":0,"fa":0},"B":{"ua":-75,"fa":0},"props":[{"line":[78,92,112,92]},{"line":[108,92,108,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":80,"t":30,"th":88,"sh":0},"A":{"ua":70,"fa":75},"B":{"ua":-45,"fa":70},"props":[{"line":[32,84,56,84]},{"line":[44,84,44,104]},{"line":[70,40,70,78]}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":80,"t":30,"th":88,"sh":0},"A":{"ua":70,"fa":75},"B":{"ua":-45,"fa":70},"props":[{"line":[32,84,56,84]},{"line":[44,84,44,104]},{"line":[70,40,70,78]}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":40,"hy":56,"t":80,"th":8,"sh":0},"A":{"ua":0,"fa":0},"B":{"ua":-75,"fa":0},"props":[{"line":[78,92,112,92]},{"line":[108,92,108,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"v":"f","base":{"hy":70,"lf":0.5},"A":{"ua":155,"fa":165},"B":{"ua":45,"fa":170},"props":[{"line":[44,72,76,72]},{"line":[42,80,78,80]}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":40,"hy":56,"t":80,"th":8,"sh":0},"A":{"ua":0,"fa":0},"B":{"ua":-75,"fa":0},"props":[{"line":[78,92,112,92]},{"line":[108,92,108,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":48,"hy":58,"t":50,"th":12,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-60,"fa":-5},"props":[{"line":[56,62,80,42]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":46,"hy":58,"t":62,"th":14,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-65,"fa":-5},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":40,"hy":88,"th":85,"sh":85},"A":{"t":15,"ua":85,"fa":88},"B":{"t":0,"ua":-40,"fa":85},"props":[{"line":[20,92,50,92]},{"line":[93,70,93,95]},{"cable":[118,72],"to":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"t":8},"A":{"ua":82,"fa":86},"B":{"ua":-40,"fa":86},"props":[{"cable":[116,62],"to":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":57,"t":45,"th":10,"sh":-6},"A":{"ua":5,"fa":5},"B":{"ua":-60,"fa":15},"props":[{"line":[54,61,76,39]},{"line":[58,61,58,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":40,"hy":56,"t":80,"th":8,"sh":0},"A":{"ua":0,"fa":0},"B":{"ua":-75,"fa":0},"props":[{"line":[78,92,112,92]},{"line":[108,92,108,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":48,"hy":58,"t":50,"th":12,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-60,"fa":-5},"props":[{"line":[56,62,80,42]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":46,"hy":58,"t":62,"th":14,"sh":-8},"A":{"ua":0,"fa":0},"B":{"ua":-65,"fa":-5},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"t":6,"ua":-28},"A":{"fa":-28},"B":{"fa":115},"props":[{"cable":[16,84],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{},"A":{"ua":0,"fa":0},"B":{"ua":-48,"fa":120},"props":[]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":52,"hy":80,"t":-35,"th":88,"sh":0,"ua":-5},"A":{"fa":-5},"B":{"fa":140},"props":[{"line":[49,85,28,55]},{"line":[48,84,70,85]},{"line":[58,85,58,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{},"A":{"ua":0,"fa":0},"B":{"ua":-48,"fa":120},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{},"A":{"ua":0,"fa":0},"B":{"ua":-48,"fa":120},"props":[{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":52,"hy":80,"t":-35,"th":88,"sh":0,"ua":-5},"A":{"fa":-5},"B":{"fa":140},"props":[{"line":[49,85,28,55]},{"line":[48,84,70,85]},{"line":[58,85,58,104]},{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":52,"hy":80,"t":-35,"th":88,"sh":0,"ua":-5},"A":{"fa":-5},"B":{"fa":140},"props":[{"line":[49,85,28,55]},{"line":[48,84,70,85]},{"line":[58,85,58,104]}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":52,"hy":80,"t":-35,"th":88,"sh":0,"ua":-5},"A":{"fa":-5},"B":{"fa":140},"props":[{"line":[49,85,28,55]},{"line":[48,84,70,85]},{"line":[58,85,58,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":70,"hy":64,"t":-90,"th":120,"sh":0,"ua":0},"A":{"fa":0},"B":{"fa":-140},"props":[{"line":[28,68,86,68]},{"line":[44,68,44,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":45,"hy":78,"t":12,"th":88,"sh":0,"ua":45},"A":{"fa":60},"B":{"fa":165},"props":[{"line":[54,53,70,68]},{"line":[66,68,66,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":45,"hy":78,"t":12,"th":88,"sh":0,"ua":45},"A":{"fa":60},"B":{"fa":165},"props":[{"line":[54,53,70,68]},{"line":[66,68,66,104]},{"cable":[100,100],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":58,"t":48,"th":20,"sh":-10,"ua":0},"A":{"fa":0},"B":{"fa":140},"props":[{"line":[52,62,74,38]},{"line":[56,62,56,104]}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":78,"t":38,"th":88,"sh":0,"ua":14},"A":{"fa":14},"B":{"fa":150},"props":[{"line":[30,82,52,82]},{"line":[40,82,40,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":45,"hy":78,"t":12,"th":88,"sh":0,"ua":45},"A":{"fa":60},"B":{"fa":165},"props":[{"line":[54,53,70,68]},{"line":[66,68,66,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":58,"t":48,"th":20,"sh":-10,"ua":0},"A":{"fa":0},"B":{"fa":140},"props":[{"line":[52,62,74,38]},{"line":[56,62,56,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":70,"hy":98,"t":-90,"th":90,"sh":90,"nofoot":1,"ua":180},"A":{"fa":200},"B":{"fa":300},"props":[{"cable":[8,-10],"to":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":45,"hy":78,"t":12,"th":88,"sh":0,"ua":45},"A":{"fa":60},"B":{"fa":165},"props":[{"line":[54,53,70,68]},{"line":[66,68,66,104]}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":78,"t":38,"th":88,"sh":0,"ua":14},"A":{"fa":14},"B":{"fa":150},"props":[{"line":[30,82,52,82]},{"line":[40,82,40,104]},{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":58,"t":48,"th":20,"sh":-10,"ua":0},"A":{"fa":0},"B":{"fa":140},"props":[{"line":[52,62,74,38]},{"line":[56,62,56,104]},{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":58,"t":48,"th":20,"sh":-10,"ua":0},"A":{"fa":0},"B":{"fa":140},"props":[{"line":[52,62,74,38]},{"line":[56,62,56,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"t":6,"ua":-28},"A":{"fa":-28},"B":{"fa":115},"props":[{"cable":[16,84],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0},"A":{"fa":0},"B":{"fa":145},"props":[{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0},"A":{"fa":0},"B":{"fa":145},"props":[{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0},"A":{"fa":0},"B":{"fa":145},"props":[{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":52,"hy":80,"t":-35,"th":88,"sh":0,"ua":-5},"A":{"fa":-5},"B":{"fa":140},"props":[{"line":[49,85,28,55]},{"line":[48,84,70,85]},{"line":[58,85,58,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":45,"hy":78,"t":12,"th":88,"sh":0,"ua":45},"A":{"fa":60},"B":{"fa":165},"props":[{"line":[54,53,70,68]},{"line":[66,68,66,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0},"A":{"fa":0},"B":{"fa":145},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0,"t":-4},"A":{"fa":10},"B":{"fa":145},"props":[{"cable":[84,100],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":45,"hy":78,"t":12,"th":88,"sh":0,"ua":45},"A":{"fa":60},"B":{"fa":165},"props":[{"line":[54,53,70,68]},{"line":[66,68,66,104]},{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0,"t":-4},"A":{"fa":10},"B":{"fa":145},"props":[{"cable":[84,100],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":44,"hy":58,"t":48,"th":20,"sh":-10,"ua":0},"A":{"fa":0},"B":{"fa":140},"props":[{"line":[52,62,74,38]},{"line":[56,62,56,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0},"A":{"fa":0},"B":{"fa":145},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0},"A":{"fa":0},"B":{"fa":145},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0},"A":{"fa":0},"B":{"fa":145},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0},"A":{"fa":0},"B":{"fa":145},"props":[{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0},"A":{"fa":0},"B":{"fa":145},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":88},"A":{"fa":88},"B":{"fa":190},"props":[{"cable":[116,20],"to":"ha"}]},"timing":{"ab":1000,"holdB":1000,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":52,"hy":96,"t":90,"th":-90,"sh":-90,"nofoot":1,"ua":180},"A":{"fa":215},"B":{"fa":100},"props":[{"cable":[8,98],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0,"hx":50,"hy":80,"th":88,"sh":0},"A":{"fa":0},"B":{"fa":145},"props":[{"line":[38,84,62,84]},{"line":[50,84,50,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0,"hx":50,"hy":80,"th":88,"sh":0},"A":{"fa":0},"B":{"fa":145},"props":[{"line":[38,84,62,84]},{"line":[50,84,50,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0,"t":-4},"A":{"fa":10},"B":{"fa":145},"props":[{"cable":[84,100],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0},"A":{"fa":0},"B":{"fa":145},"props":[{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0,"t":-4},"A":{"fa":10},"B":{"fa":145},"props":[{"cable":[84,100],"to":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0},"A":{"fa":0},"B":{"fa":145},"props":[{"pad":"ha","r":3}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"ua":0},"A":{"fa":0},"B":{"fa":145},"props":[{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}},{"spec":{"base":{"hx":45,"hy":78,"t":12,"th":88,"sh":0,"ua":45},"A":{"fa":60},"B":{"fa":165},"props":[{"line":[54,53,70,68]},{"line":[66,68,66,104]},{"db":"ha"}]},"timing":{"ab":1000,"holdB":250,"ba":3000,"holdA":250}}];
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const els = [...document.querySelectorAll("svg.fig")];
+const vis = new Set();
+const dx = (i) => (FIGS[i].dx ??= BF.figureCenterDx(FIGS[i].spec));
+const draw = (el, k) => { const i = +el.dataset.i; if (!FIGS[i].spec) return; el.innerHTML = BF.frameToSvg(BF.poseFrame(FIGS[i].spec, k), dx(i)); };
+els.forEach((el) => draw(el, reduce ? 1 : 0));
+if (!reduce) {
+  const io = new IntersectionObserver((es) => es.forEach((e) => (e.isIntersecting ? vis.add(e.target) : vis.delete(e.target))), { rootMargin: "100px" });
+  els.forEach((el) => io.observe(el));
+  const t0 = performance.now(); let last = 0;
+  const loop = (ms) => { if (ms - last > 32) { last = ms; vis.forEach((el) => { const f = FIGS[+el.dataset.i]; if (f.spec) el.innerHTML = BF.frameToSvg(BF.poseFrame(f.spec, BF.phase(ms - t0, f.timing)), dx(+el.dataset.i)); }); } requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+}
+// Filters: equipment buttons (any of the pressed ones) and search
+const q = document.getElementById("q"), btns = [...document.querySelectorAll("[data-eqf]")];
+const apply = () => {
+  const on = btns.filter((b) => b.getAttribute("aria-pressed") === "true").map((b) => b.dataset.eqf), s = q.value.trim().toLowerCase();
+  let n = 0;
+  document.querySelectorAll(".ex").forEach((c) => { const show = (!on.length || on.includes(c.dataset.eq)) && (!s || c.dataset.name.includes(s)); c.hidden = !show; if (show) n++; });
+  document.querySelectorAll(".grid").forEach((g) => { const any = [...g.children].some((c) => !c.hidden); g.hidden = !any; g.previousElementSibling.hidden = !any; });
+  document.querySelectorAll(".muscle").forEach((m) => { m.hidden = ![...m.querySelectorAll(".ex")].some((c) => !c.hidden); });
+  document.getElementById("none").hidden = n > 0;
+};
+btns.forEach((b) => b.addEventListener("click", () => { b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true"); apply(); }));
+q.addEventListener("input", apply);
+</script>

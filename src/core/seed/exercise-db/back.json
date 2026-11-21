@@ -1,0 +1,3367 @@
+[
+ {
+  "id": "t-bar-reverse-row",
+  "name": "T-Bar Reverse Row",
+  "aliases": [
+   "Machine T Bar Reverse Row",
+   "Chest-supported T-bar row (underhand)"
+  ],
+  "equipment": "plateMachine",
+  "singleSleeve": true,
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Heavy row for your lats.",
+  "setup": [
+   "Chest on the pad, feet flat, arms straight."
+  ],
+  "form": [
+   "Shoulders back first, then elbows to your hips.",
+   "Hold 1 s at the top.",
+   "Lower until your arms are straight and shoulder blades spread."
+  ],
+  "tips": [
+   "Elbows close: more lats. Elbows wide: more upper back."
+  ],
+  "avoid": [
+   "Chest lifting off the pad.",
+   "Shrugging instead of pulling back."
+  ],
+  "rangeOfMotion": "Arms straight → elbows just past your body",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-chest-supported",
+  "figureAdjust": {
+   "grip": "underhand"
+  },
+  "source": {
+   "plan": "Leo's plan"
+  },
+  "evidence": {
+   "0": {
+    "evidence": "C",
+    "note": "Elbow path shifts the work between lats and upper back (coaching practice)."
+   }
+  }
+ },
+ {
+  "id": "single-arm-cable-lat-pulldown",
+  "name": "Single-arm Cable Lat Pulldown",
+  "aliases": [
+   "Cable One-Arm Lat Pulldown",
+   "One Arm Lat Pulldown",
+   "Kneeling Single-Arm Lat Pulldown",
+   "Half-Kneeling One-Arm Lat Pulldown",
+   "Half-kneeling single-arm pulldown"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "stretch": [
+   "back"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Lats stretched, one arm at a time.",
+  "setup": [
+   "Pulley high. Kneel or sit facing it, arm straight up."
+  ],
+  "form": [
+   "Pull your elbow down to your side.",
+   "Go back up slowly to the full stretch. Hold 1 s."
+  ],
+  "tips": [
+   "Pull with the elbow, not the hand."
+  ],
+  "avoid": [
+   "Twisting your body.",
+   "Stopping short of the stretch."
+  ],
+  "rangeOfMotion": "Arm straight up → elbow at your side",
+  "tempo": "Down 1 s · Up 3 s · Hold 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pulldown-single",
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "One_Arm_Lat_Pulldown",
+   "url2": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  },
+  "formerIds": [
+   "one-arm-lat-pulldown",
+   "half-kneeling-one-arm-lat-pulldown"
+  ]
+ },
+ {
+  "id": "single-arm-db-row",
+  "name": "Single-arm DB Row",
+  "aliases": [
+   "Dumbbell One-Arm Row",
+   "One-Arm Dumbbell Row"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "lats",
+    "upper back"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Lower lats.",
+  "setup": [
+   "Hand and knee on a bench, back flat.",
+   "Dumbbell hangs below your shoulder."
+  ],
+  "form": [
+   "Pull your elbow back to your hip, not your chest.",
+   "Lower until your shoulder blade spreads forward."
+  ],
+  "tips": [],
+  "avoid": [
+   "Turning your body to lift more.",
+   "Jerking the weight."
+  ],
+  "rangeOfMotion": "Arm hanging → dumbbell at your hip",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-db-one-arm",
+  "figureAdjust": {
+   "oneArm": true,
+   "bench": "flat"
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "One-Arm_Dumbbell_Row"
+  },
+  "formerIds": [
+   "one-arm-dumbbell-row"
+  ]
+ },
+ {
+  "id": "straight-arm-cable-pulldown",
+  "name": "Straight-arm Cable Pulldown",
+  "aliases": [
+   "Cable Shoulder Extension",
+   "Straight-Arm Pulldown",
+   "Rope Straight-Arm Pulldown",
+   "Cable Pullover"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Lats with no biceps help.",
+  "setup": [
+   "Pulley high, bar or rope.",
+   "Step back, lean forward a little."
+  ],
+  "form": [
+   "Arms almost straight, pull down in an arc to your thighs. Squeeze 1 s.",
+   "Go back up slowly."
+  ],
+  "tips": [
+   "A rope lets your hands go past your hips."
+  ],
+  "avoid": [
+   "Bending your elbows.",
+   "Swinging your body."
+  ],
+  "rangeOfMotion": "Arms up → hands at your thighs",
+  "tempo": "Down 1 s · Hold 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "straight-arm-pulldown",
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Straight-Arm_Pulldown"
+  },
+  "formerIds": [
+   "straight-arm-pulldown",
+   "rope-straight-arm-pulldown"
+  ]
+ },
+ {
+  "id": "wide-grip-lat-pulldown",
+  "name": "Wide-Grip Lat Pulldown",
+  "aliases": [
+   "Cable Lat Pulldown (Wide Grip)",
+   "Lat Pulldown"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Heavy pulldown for your back.",
+  "setup": [
+   "Hands a bit wider than your shoulders.",
+   "Thighs under the pad, lean back a little."
+  ],
+  "form": [
+   "Pull the bar to your upper chest.",
+   "Go up until your arms are straight and shoulders rise (stretch)."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning far back.",
+   "Pulling behind your neck."
+  ],
+  "rangeOfMotion": "Arms straight up → bar at your upper chest",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pulldown",
+  "figureAdjust": {
+   "grip": "wide",
+   "seated": true
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Wide-Grip_Lat_Pulldown"
+  }
+ },
+ {
+  "id": "cable-seated-row",
+  "name": "Cable Seated Row",
+  "aliases": [
+   "Seated Cable Rows",
+   "Seated Cable Row",
+   "V-handle cable row"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Heavy row for your back.",
+  "setup": [
+   "Neutral handle, feet on the plate, knees slightly bent."
+  ],
+  "form": [
+   "Row to your lower ribs, squeeze 1 s.",
+   "Let your arms go straight and shoulder blades spread."
+  ],
+  "tips": [
+   "A small forward lean at the stretch is fine."
+  ],
+  "avoid": [
+   "Leaning back or throwing it with your lower back.",
+   "Shrugging at the end."
+  ],
+  "rangeOfMotion": "Arms straight → handle at your lower ribs",
+  "tempo": "Pull 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-cable",
+  "figureAdjust": {
+   "grip": "neutral",
+   "seated": true
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Seated_Cable_Rows"
+  },
+  "formerIds": [
+   "seated-cable-rows"
+  ]
+ },
+ {
+  "id": "bent-over-barbell-row",
+  "name": "Bent Over Barbell Row",
+  "aliases": [
+   "Barbell Row"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Heavy free-weight row for the whole back.",
+  "setup": [
+   "Bar over your mid-foot, hands just outside your knees.",
+   "Hips back, back flat, chest over the bar."
+  ],
+  "form": [
+   "Pull the bar to your belly button.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [
+   "Keep your body angle the same every rep."
+  ],
+  "avoid": [
+   "Standing up as you pull.",
+   "Rounding your back."
+  ],
+  "rangeOfMotion": "Arms straight → bar at your belly",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-bent-barbell",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Bent_Over_Barbell_Row"
+  }
+ },
+ {
+  "id": "pendlay-row",
+  "name": "Pendlay Row",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Strict barbell row from the floor each rep.",
+  "setup": [
+   "Bar on the floor over your mid-foot.",
+   "Back flat and close to level with the floor."
+  ],
+  "form": [
+   "Pull the bar to your lower chest.",
+   "Set it down on the floor, reset, repeat."
+  ],
+  "tips": [
+   "Each rep starts from a dead stop, so no bouncing."
+  ],
+  "avoid": [
+   "Lifting your chest to help the bar up.",
+   "Rounding your back."
+  ],
+  "rangeOfMotion": "Bar on the floor → bar at your lower chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-bent-barbell",
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  }
+ },
+ {
+  "id": "deficit-pendlay-row",
+  "name": "Deficit Pendlay Row",
+  "aliases": [
+   "Modified deficit Pendlay row"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Pendlay row with a longer pull at the bottom.",
+  "setup": [
+   "Stand on a plate or low box, bar on the floor.",
+   "Back flat, chest over the bar."
+  ],
+  "form": [
+   "Pull the bar to your lower chest.",
+   "Lower to the floor and let your shoulders reach down."
+  ],
+  "tips": [
+   "Use a lighter weight than your normal Pendlay row."
+  ],
+  "avoid": [
+   "Rounding your back at the bottom.",
+   "Jerking the bar off the floor."
+  ],
+  "rangeOfMotion": "Bar on the floor, arms long → bar at your lower chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-bent-barbell",
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  }
+ },
+ {
+  "id": "yates-row",
+  "name": "Yates Row",
+  "aliases": [
+   "Underhand barbell row"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Underhand barbell row, more upright, aimed at the lats.",
+  "setup": [
+   "Palms up, hands shoulder-width.",
+   "Lean forward about 45°, knees soft."
+  ],
+  "form": [
+   "Pull the bar to your belly, elbows close.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [
+   "Lets you go heavier than a flat-back row."
+  ],
+  "avoid": [
+   "Leaning back to lift the bar.",
+   "Curling the bar with your arms."
+  ],
+  "rangeOfMotion": "Arms straight → bar at your belly",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-bent-barbell",
+  "figureAdjust": {
+   "grip": "underhand"
+  },
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  },
+  "evidence": {
+   "0": {
+    "evidence": "C",
+    "note": "More upright torso lets you load more (coaching practice)."
+   }
+  }
+ },
+ {
+  "id": "reverse-grip-bent-over-rows",
+  "name": "Reverse Grip Bent-Over Row",
+  "aliases": [
+   "Reverse Grip Bent-Over Rows",
+   "Underhand Bent-Over Row"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Bent-over row with palms up: more lats.",
+  "setup": [
+   "Palms up, hands shoulder-width.",
+   "Hips back, back flat, close to level."
+  ],
+  "form": [
+   "Pull the bar to your lower belly, elbows close.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Standing up as you pull.",
+   "Rounding your back."
+  ],
+  "rangeOfMotion": "Arms straight → bar at your lower belly",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-bent-barbell",
+  "figureAdjust": {
+   "grip": "underhand"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Reverse_Grip_Bent-Over_Rows"
+  }
+ },
+ {
+  "id": "straight-bar-bench-mid-rows",
+  "name": "Straight Bar Bench Mid Row",
+  "aliases": [
+   "Straight Bar Bench Mid Rows"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Barbell row standing on a bench for a longer pull.",
+  "setup": [
+   "Bar on the end of a bench, you stand on the bench behind it.",
+   "Hands shoulder-width, palms down, back flat."
+  ],
+  "form": [
+   "Pull the bar to your belly. Squeeze 1 s.",
+   "Lower all the way down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding your back at the bottom.",
+   "Jerking the bar."
+  ],
+  "rangeOfMotion": "Arms straight → bar at your belly",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-bent-barbell",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Straight_Bar_Bench_Mid_Rows"
+  }
+ },
+ {
+  "id": "smith-machine-bent-over-row",
+  "name": "Smith Machine Bent Over Row",
+  "aliases": [
+   "Smith row"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Bent-over row on a fixed bar path.",
+  "setup": [
+   "Bar at knee height, hands just outside your knees.",
+   "Hips back, back flat."
+  ],
+  "form": [
+   "Pull the bar to your belly.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Standing up as you pull.",
+   "Rounding your back."
+  ],
+  "rangeOfMotion": "Arms straight → bar at your belly",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-bent-barbell",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Machine_Bent_Over_Row"
+  },
+  "unsafeFailure": true
+ },
+ {
+  "id": "bent-over-two-dumbbell-row",
+  "name": "Bent Over Two-Dumbbell Row",
+  "aliases": [
+   "Dumbbell bent-over row"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Both arms at once, free to move.",
+  "setup": [
+   "A dumbbell in each hand, palms facing back.",
+   "Hips back, back flat, close to level."
+  ],
+  "form": [
+   "Pull both dumbbells to your sides.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Standing up as you pull.",
+   "Rounding your back."
+  ],
+  "rangeOfMotion": "Arms straight → dumbbells at your sides",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-bent-barbell",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Bent_Over_Two-Dumbbell_Row"
+  }
+ },
+ {
+  "id": "bent-over-two-dumbbell-row-with-palms-in",
+  "name": "Bent Over Two-Dumbbell Row (Palms In)",
+  "aliases": [
+   "Bent Over Two-Dumbbell Row With Palms In"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Palms in, elbows close: more lats.",
+  "setup": [
+   "A dumbbell in each hand, palms facing each other.",
+   "Hips back, back flat."
+  ],
+  "form": [
+   "Pull the dumbbells to your hips, elbows close.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Standing up as you pull.",
+   "Elbows flaring out."
+  ],
+  "rangeOfMotion": "Arms straight → dumbbells at your hips",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-bent-barbell",
+  "figureAdjust": {
+   "equipmentProp": "db",
+   "grip": "neutral"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Bent_Over_Two-Dumbbell_Row_With_Palms_In"
+  }
+ },
+ {
+  "id": "kroc-row",
+  "name": "Kroc Row",
+  "aliases": [
+   "Heavy one-arm dumbbell row"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Very heavy one-arm row for many reps.",
+  "setup": [
+   "Free hand on a bench or rack, feet split.",
+   "Back flat, a little higher than level."
+  ],
+  "form": [
+   "Pull the dumbbell to your hip.",
+   "Lower until your arm is fully straight."
+  ],
+  "tips": [
+   "Straps help when your grip gives out first."
+  ],
+  "avoid": [
+   "Twisting so far your chest faces the side.",
+   "Cutting the bottom short."
+  ],
+  "rangeOfMotion": "Arm hanging → dumbbell at your hip",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-db-one-arm",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  }
+ },
+ {
+  "id": "t-bar-row-with-handle",
+  "name": "T-Bar Row",
+  "aliases": [
+   "T-Bar Row with Handle",
+   "Landmine T-bar row",
+   "Bent Over Two-Arm Long Bar Row"
+  ],
+  "equipment": "plateMachine",
+  "singleSleeve": true,
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Heavy bent-over row with the bar fixed at one end.",
+  "setup": [
+   "Stand over the bar, V-handle under it by the plates.",
+   "Hips back, back flat."
+  ],
+  "form": [
+   "Pull the plates to your chest.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Standing up as you pull.",
+   "Rounding your back."
+  ],
+  "rangeOfMotion": "Arms straight → plates at your chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-tbar",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "T-Bar_Row_with_Handle"
+  },
+  "formerIds": [
+   "bent-over-two-arm-long-bar-row"
+  ]
+ },
+ {
+  "id": "one-arm-long-bar-row",
+  "name": "One-Arm Long Bar Row",
+  "aliases": [
+   "One-arm landmine row",
+   "Bent Over One-Arm Long Bar Row"
+  ],
+  "equipment": "plateMachine",
+  "singleSleeve": true,
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "One-arm row with the bar fixed at one end.",
+  "setup": [
+   "Stand beside the bar, hand just behind the plates.",
+   "Free hand on your knee, back flat."
+  ],
+  "form": [
+   "Pull the plates to your side.",
+   "Lower until your arm is straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Twisting to lift more.",
+   "Jerking the weight."
+  ],
+  "rangeOfMotion": "Arm straight → plates at your side",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-tbar",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "One-Arm_Long_Bar_Row"
+  },
+  "formerIds": [
+   "bent-over-one-arm-long-bar-row"
+  ]
+ },
+ {
+  "id": "meadows-row",
+  "name": "Meadows Row",
+  "aliases": [],
+  "equipment": "plateMachine",
+  "singleSleeve": true,
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "One-arm landmine row with a long stretch.",
+  "setup": [
+   "Stand side-on to the end of the bar, feet split.",
+   "Overhand grip on the fat end, free arm on your knee."
+  ],
+  "form": [
+   "Pull your elbow up and back.",
+   "Lower until your shoulder reaches down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Twisting to lift more.",
+   "Cutting the stretch short."
+  ],
+  "rangeOfMotion": "Arm long → elbow past your body",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-tbar",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  }
+ },
+ {
+  "id": "lying-t-bar-row",
+  "name": "Lying T-Bar Row",
+  "aliases": [
+   "Chest-supported T-bar row",
+   "Lying T-Bar Row machine",
+   "Iso-lateral T-bar row"
+  ],
+  "equipment": "plateMachine",
+  "singleSleeve": true,
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Chest-supported T-bar row: back works, lower back rests.",
+  "setup": [
+   "Chest at the top of the pad, feet set.",
+   "Grip the handles, arms straight."
+  ],
+  "form": [
+   "Pull the handles to your chest. Squeeze.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [
+   "Wide grip: more upper back. Close grip: more lats."
+  ],
+  "avoid": [
+   "Chest lifting off the pad.",
+   "Shrugging instead of pulling back."
+  ],
+  "rangeOfMotion": "Arms straight → handles at your chest",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-chest-supported",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Lying_T-Bar_Row"
+  },
+  "evidence": {
+   "0": {
+    "evidence": "C",
+    "note": "Grip width shifts the work (coaching practice)."
+   }
+  }
+ },
+ {
+  "id": "chest-supported-machine-row",
+  "name": "Chest-Supported Machine Row",
+  "aliases": [
+   "Chest-supported row",
+   "Seated machine row"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Seated machine row, chest on a pad. Easy to push hard.",
+  "setup": [
+   "Seat so the handles are at chest height.",
+   "Chest on the pad, arms straight."
+  ],
+  "form": [
+   "Pull the handles to your ribs. Squeeze.",
+   "Let your arms go straight and shoulder blades spread."
+  ],
+  "tips": [],
+  "avoid": [
+   "Chest leaving the pad.",
+   "Shrugging at the end."
+  ],
+  "rangeOfMotion": "Arms straight → handles at your ribs",
+  "tempo": "Pull 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-chest-supported",
+  "figureAdjust": {
+   "seated": true,
+   "equipmentProp": "none"
+  },
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  }
+ },
+ {
+  "id": "leverage-iso-row",
+  "name": "Leverage Iso Row",
+  "aliases": [
+   "Iso-lateral row",
+   "Plate-loaded seated row"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Plate-loaded row, each arm on its own.",
+  "setup": [
+   "Seat so the handles are at chest height.",
+   "Chest on the pad."
+  ],
+  "form": [
+   "Pull the handles to your ribs. Squeeze.",
+   "Return slowly; don't rest the weight between reps."
+  ],
+  "tips": [
+   "Can be done one arm at a time."
+  ],
+  "avoid": [
+   "Chest leaving the pad.",
+   "Jerking the handles."
+  ],
+  "rangeOfMotion": "Arms straight → handles at your ribs",
+  "tempo": "Pull 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-chest-supported",
+  "figureAdjust": {
+   "seated": true,
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Leverage_Iso_Row"
+  }
+ },
+ {
+  "id": "leverage-high-row",
+  "name": "Leverage High Row",
+  "aliases": [
+   "Plate-loaded high row"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Pulls down and back from above: lats and upper back.",
+  "setup": [
+   "Seat so you just reach the handles above you.",
+   "Knee pad snug."
+  ],
+  "form": [
+   "Pull the handles down to your chest. Squeeze.",
+   "Return slowly until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back a lot.",
+   "Shrugging up."
+  ],
+  "rangeOfMotion": "Arms up and forward → hands at your chest",
+  "tempo": "Down 1 s · Hold 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pulldown",
+  "figureAdjust": {
+   "seated": true,
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Leverage_High_Row"
+  }
+ },
+ {
+  "id": "dumbbell-incline-row",
+  "name": "Dumbbell Incline Row",
+  "aliases": [
+   "Chest-supported dumbbell row",
+   "Incline dumbbell row"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Chest-supported dumbbell row: back works, lower back rests.",
+  "setup": [
+   "Bench at 30–45°, chest on it.",
+   "Dumbbells hang straight down."
+  ],
+  "form": [
+   "Pull both dumbbells to your sides. Squeeze 1 s.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Chest lifting off the bench.",
+   "Shrugging up."
+  ],
+  "rangeOfMotion": "Arms hanging → dumbbells at your sides",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-chest-supported",
+  "figureAdjust": {
+   "bench": "incline",
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Incline_Row"
+  }
+ },
+ {
+  "id": "incline-bench-pull",
+  "name": "Incline Bench Pull",
+  "aliases": [
+   "Wide incline row"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 1
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Chest-supported row with elbows wide: upper back.",
+  "setup": [
+   "Bench at about 30°, chest on it.",
+   "Dumbbells hang, palms facing back."
+  ],
+  "form": [
+   "Pull your elbows out and up until level with your back. Squeeze 1 s.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Chest lifting off the bench.",
+   "Shrugging up."
+  ],
+  "rangeOfMotion": "Arms hanging → elbows level with your back",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-chest-supported",
+  "figureAdjust": {
+   "bench": "incline",
+   "equipmentProp": "db",
+   "grip": "wide"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Incline_Bench_Pull"
+  }
+ },
+ {
+  "id": "lying-cambered-barbell-row",
+  "name": "Barbell Seal Row",
+  "aliases": [
+   "Lying Cambered Barbell Row",
+   "Seal row",
+   "Bench row"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Barbell row lying on a high bench: no lower back.",
+  "setup": [
+   "Lie face down on a high bench, bar under it.",
+   "Hands a bit wider than your shoulders."
+  ],
+  "form": [
+   "Pull the bar up to the bench. Hold 1 s.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [
+   "A curved bar lets you pull higher."
+  ],
+  "avoid": [
+   "Lifting your chest off the bench.",
+   "Swinging your legs."
+  ],
+  "rangeOfMotion": "Arms straight → bar at the bench",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-chest-supported",
+  "figureAdjust": {
+   "bench": "flat",
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Lying_Cambered_Barbell_Row"
+  }
+ },
+ {
+  "id": "seated-one-arm-cable-pulley-rows",
+  "name": "Seated One-Arm Cable Row",
+  "aliases": [
+   "Seated One-arm Cable Pulley Rows",
+   "Single-arm cable row"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "One-arm cable row with room to stretch.",
+  "setup": [
+   "Single handle, feet on the plate.",
+   "Sit tall, arm straight."
+  ],
+  "form": [
+   "Pull your elbow back to your hip. Squeeze 1 s.",
+   "Let your shoulder reach forward at the end."
+  ],
+  "tips": [],
+  "avoid": [
+   "Twisting your whole body.",
+   "Leaning back."
+  ],
+  "rangeOfMotion": "Arm straight, shoulder forward → handle at your hip",
+  "tempo": "Pull 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-cable",
+  "figureAdjust": {
+   "oneArm": true,
+   "seated": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_One-arm_Cable_Pulley_Rows"
+  }
+ },
+ {
+  "id": "wide-grip-cable-row",
+  "name": "Wide-Grip Cable Row",
+  "aliases": [
+   "Wide-grip seated row"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Cable row with hands wide and elbows out: upper back.",
+  "setup": [
+   "Long bar, hands wide, feet on the plate.",
+   "Sit tall, arms straight."
+  ],
+  "form": [
+   "Pull the bar to your upper belly, elbows out. Squeeze 1 s.",
+   "Return until your shoulder blades spread."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back.",
+   "Shrugging at the end."
+  ],
+  "rangeOfMotion": "Arms straight → bar at your upper belly",
+  "tempo": "Pull 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-cable",
+  "figureAdjust": {
+   "grip": "wide",
+   "seated": true
+  },
+  "source": {
+   "url": "https://www.strengthlog.com/cable-wide-grip-seated-row/",
+   "url2": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  }
+ },
+ {
+  "id": "inverted-row-with-straps",
+  "name": "Inverted Row with Straps",
+  "aliases": [
+   "Suspension row",
+   "TRX row"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Bodyweight row on straps.",
+  "setup": [
+   "Hold the straps, lean back, body straight.",
+   "Walk your feet forward to make it harder."
+  ],
+  "form": [
+   "Pull your chest to your hands. Squeeze 1 s.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Hips sagging.",
+   "Shrugging up."
+  ],
+  "rangeOfMotion": "Arms straight → hands at your chest",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 0,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-inverted",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Inverted_Row_with_Straps"
+  }
+ },
+ {
+  "id": "pullups",
+  "name": "Pull-Up",
+  "aliases": [
+   "Pullups",
+   "Weighted Pull-Up",
+   "Wide-grip pull-up"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Bodyweight pull for your back.",
+  "setup": [
+   "Hands a bit wider than your shoulders, palms forward.",
+   "Hang with arms straight."
+  ],
+  "form": [
+   "Pull up until your chin is over the bar.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [
+   "Add weight with a belt once you get your reps."
+  ],
+  "avoid": [
+   "Kicking or swinging.",
+   "Half reps at the top."
+  ],
+  "rangeOfMotion": "Arms straight → chin over the bar",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pullup",
+  "figureAdjust": {
+   "grip": "wide"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Pullups"
+  },
+  "formerIds": [
+   "weighted-pull-ups"
+  ]
+ },
+ {
+  "id": "chin-up",
+  "name": "Chin-Up",
+  "aliases": [
+   "Weighted Chin-Up"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Palms-up pull-up: back plus a lot of biceps.",
+  "setup": [
+   "Palms facing you, hands shoulder-width.",
+   "Hang with arms straight."
+  ],
+  "form": [
+   "Pull up until your chin is over the bar.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Kicking or swinging.",
+   "Half reps at the top."
+  ],
+  "rangeOfMotion": "Arms straight → chin over the bar",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pullup",
+  "figureAdjust": {
+   "grip": "underhand"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Chin-Up"
+  }
+ },
+ {
+  "id": "neutral-grip-pull-up",
+  "name": "Neutral-Grip Pull-Up",
+  "aliases": [
+   "V-Bar Pullup",
+   "Parallel-grip pull-up"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Palms-in pull-up: easy on the shoulders.",
+  "setup": [
+   "Parallel handles or a V-handle, palms facing each other.",
+   "Hang with arms straight."
+  ],
+  "form": [
+   "Pull up until your chin is over the bar.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Kicking or swinging.",
+   "Half reps at the top."
+  ],
+  "rangeOfMotion": "Arms straight → chin over the bar",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pullup",
+  "figureAdjust": {
+   "grip": "neutral"
+  },
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/",
+   "db": "free-exercise-db",
+   "id": "V-Bar_Pullup"
+  },
+  "formerIds": [
+   "v-bar-pullup"
+  ]
+ },
+ {
+  "id": "close-grip-front-lat-pulldown",
+  "name": "Close-Grip Front Lat Pulldown",
+  "aliases": [
+   "Close-grip pulldown"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Pulldown with hands close, palms forward.",
+  "setup": [
+   "Hands about shoulder-width, palms forward.",
+   "Thighs under the pad."
+  ],
+  "form": [
+   "Pull the bar to your upper chest.",
+   "Go up until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning far back.",
+   "Stopping short at the top."
+  ],
+  "rangeOfMotion": "Arms straight up → bar at your upper chest",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pulldown",
+  "figureAdjust": {
+   "grip": "close",
+   "seated": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Close-Grip_Front_Lat_Pulldown"
+  }
+ },
+ {
+  "id": "neutral-grip-lat-pulldown",
+  "name": "Neutral-Grip Lat Pulldown",
+  "aliases": [
+   "V-Bar Pulldown",
+   "Close neutral-grip pulldown"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Palms-in pulldown, elbows close: lats.",
+  "setup": [
+   "V-handle or neutral bar, palms facing each other.",
+   "Thighs under the pad."
+  ],
+  "form": [
+   "Pull your hands to your upper chest, elbows down to your sides.",
+   "Go up until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning far back.",
+   "Stopping short at the top."
+  ],
+  "rangeOfMotion": "Arms straight up → hands at your upper chest",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pulldown",
+  "figureAdjust": {
+   "grip": "neutral",
+   "seated": true
+  },
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/",
+   "db": "free-exercise-db",
+   "id": "V-Bar_Pulldown"
+  },
+  "formerIds": [
+   "v-bar-pulldown"
+  ]
+ },
+ {
+  "id": "underhand-cable-pulldowns",
+  "name": "Underhand Cable Pulldown",
+  "aliases": [
+   "Underhand Cable Pulldowns",
+   "Reverse-grip pulldown"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Palms-up pulldown: lats plus biceps.",
+  "setup": [
+   "Palms facing you, hands shoulder-width.",
+   "Thighs under the pad."
+  ],
+  "form": [
+   "Pull the bar to your upper chest.",
+   "Go up until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning far back.",
+   "Curling the bar instead of pulling with your back."
+  ],
+  "rangeOfMotion": "Arms straight up → bar at your upper chest",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pulldown",
+  "figureAdjust": {
+   "grip": "underhand",
+   "seated": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Underhand_Cable_Pulldowns"
+  }
+ },
+ {
+  "id": "full-range-of-motion-lat-pulldown",
+  "name": "Full Range-Of-Motion Lat Pulldown",
+  "aliases": [
+   "Crossed-cable pulldown"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "stretch": [
+   "back"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Two high cables, arms crossed: a longer pull than a bar.",
+  "setup": [
+   "Sit or kneel between two high pulleys.",
+   "Take each handle with the opposite hand."
+  ],
+  "form": [
+   "Pull down in an arc to your shoulders, turning palms to face each other.",
+   "Go up slowly to the full stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning far back.",
+   "Stopping short at the top."
+  ],
+  "rangeOfMotion": "Arms crossed overhead → hands at your shoulders",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pulldown",
+  "figureAdjust": {
+   "seated": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Full_Range-Of-Motion_Lat_Pulldown"
+  }
+ },
+ {
+  "id": "cable-incline-pushdown",
+  "name": "Cable Incline Pushdown",
+  "aliases": [
+   "Incline bench straight-arm pulldown"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "stretch": [
+   "back"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Straight-arm pulldown lying on an incline: lats only.",
+  "setup": [
+   "Incline bench facing away from a high pulley.",
+   "Bar overhead, arms almost straight."
+  ],
+  "form": [
+   "Pull the bar in an arc down to your thighs.",
+   "Go back overhead slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your elbows.",
+   "Lifting off the bench."
+  ],
+  "rangeOfMotion": "Arms overhead → bar at your thighs",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "straight-arm-pulldown",
+  "figureAdjust": {
+   "bench": "incline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Incline_Pushdown"
+  }
+ },
+ {
+  "id": "cross-body-lat-pull-around",
+  "name": "Cross-Body Lat Pull-Around",
+  "aliases": [],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "stretch": [
+   "back"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "One-arm straight-arm pull from across the body: lats stretched.",
+  "setup": [
+   "Pulley high. Kneel or stand side-on, far hand on the handle.",
+   "Arm reaching up and across."
+  ],
+  "form": [
+   "Sweep your arm down and around to your hip.",
+   "Return slowly to the stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your elbow a lot.",
+   "Twisting your body."
+  ],
+  "rangeOfMotion": "Arm up and across → hand at your hip",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "straight-arm-pulldown",
+  "figureAdjust": {
+   "oneArm": true,
+   "kneeling": true
+  },
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  }
+ },
+ {
+  "id": "bent-arm-barbell-pullover",
+  "name": "Bent-Arm Barbell Pullover",
+  "aliases": [
+   "Barbell pullover",
+   "EZ-bar pullover"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "chest",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "stretch": [
+   "back"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Lats stretched with the arms overhead.",
+  "setup": [
+   "Lie on a flat bench, head at the end.",
+   "Bar over your chest, elbows bent."
+  ],
+  "form": [
+   "Lower the bar behind your head, elbows staying bent.",
+   "Pull it back over your chest."
+  ],
+  "tips": [
+   "Go only as far back as your shoulders allow."
+  ],
+  "avoid": [
+   "Arching your lower back.",
+   "Straightening your elbows as you lower."
+  ],
+  "rangeOfMotion": "Bar over your chest → bar behind your head",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pullover",
+  "figureAdjust": {
+   "bench": "flat",
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Bent-Arm_Barbell_Pullover"
+  }
+ },
+ {
+  "id": "inverted-row",
+  "name": "Inverted Row",
+  "aliases": [
+   "Bodyweight row",
+   "Smith machine inverted row"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Bodyweight row under a bar.",
+  "setup": [
+   "Bar in a rack or Smith at waist height.",
+   "Hang under it, body straight, heels down."
+  ],
+  "form": [
+   "Pull your chest to the bar. Squeeze 1 s.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [
+   "Lower bar or feet on a bench: harder."
+  ],
+  "avoid": [
+   "Hips sagging.",
+   "Shrugging up."
+  ],
+  "rangeOfMotion": "Arms straight → chest at the bar",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 0,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-inverted",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Inverted_Row"
+  }
+ },
+ {
+  "id": "shotgun-row",
+  "name": "Shotgun Row",
+  "aliases": [
+   "Standing one-arm cable row"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Standing one-arm cable row, palm turning up.",
+  "setup": [
+   "Single handle, low pulley.",
+   "Step back into a wide split stance, arm straight."
+  ],
+  "form": [
+   "Pull your elbow back to your side, palm turning up. Squeeze 1 s.",
+   "Let your shoulder reach forward at the end."
+  ],
+  "tips": [],
+  "avoid": [
+   "Twisting your whole body.",
+   "Leaning back."
+  ],
+  "rangeOfMotion": "Arm straight, shoulder forward → handle at your side",
+  "tempo": "Pull 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-cable-standing",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Shotgun_Row"
+  }
+ },
+ {
+  "id": "kneeling-high-pulley-row",
+  "name": "Kneeling High Pulley Row",
+  "aliases": [
+   "Kneeling rope high row"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Rope pulled down to your upper chest, elbows out: upper back.",
+  "setup": [
+   "Rope on a high pulley.",
+   "Kneel a couple of feet back, arms up in front."
+  ],
+  "form": [
+   "Pull the rope to your upper chest, elbows wide. Squeeze 1 s.",
+   "Return slowly until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back.",
+   "Shrugging up."
+  ],
+  "rangeOfMotion": "Arms up in front → rope at your upper chest",
+  "tempo": "Pull 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pulldown",
+  "figureAdjust": {
+   "kneeling": true,
+   "grip": "neutral"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Kneeling_High_Pulley_Row"
+  }
+ },
+ {
+  "id": "one-arm-kettlebell-row",
+  "name": "One-Arm Kettlebell Row",
+  "aliases": [],
+  "equipment": "other",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "One-arm row with a kettlebell.",
+  "setup": [
+   "Kettlebell in front of your feet.",
+   "Hips back, back flat, free hand on your knee."
+  ],
+  "form": [
+   "Pull the kettlebell to your hip.",
+   "Lower until your arm is straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding your back.",
+   "Twisting to lift more."
+  ],
+  "rangeOfMotion": "Arm hanging → kettlebell at your hip",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-db-one-arm",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "One-Arm_Kettlebell_Row"
+  }
+ },
+ {
+  "id": "two-arm-kettlebell-row",
+  "name": "Two-Arm Kettlebell Row",
+  "aliases": [
+   "Alternating Kettlebell Row"
+  ],
+  "equipment": "other",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Bent-over row with two kettlebells.",
+  "setup": [
+   "A kettlebell in each hand.",
+   "Hips back, back flat, knees soft."
+  ],
+  "form": [
+   "Pull both kettlebells to your belly.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [
+   "Can be done one arm at a time, holding the other still."
+  ],
+  "avoid": [
+   "Rounding your back.",
+   "Standing up as you pull."
+  ],
+  "rangeOfMotion": "Arms hanging → kettlebells at your belly",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-bent-barbell",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Two-Arm_Kettlebell_Row"
+  }
+ },
+ {
+  "id": "renegade-row",
+  "name": "Renegade Row",
+  "aliases": [
+   "Alternating Renegade Row",
+   "Plank row"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   },
+   {
+    "group": "abs",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": false,
+  "heavyWhy": "balance-limited (plank)",
+  "why": "Row from a push-up position: back plus core.",
+  "setup": [
+   "Push-up position, hands on two dumbbells.",
+   "Feet wide for balance."
+  ],
+  "form": [
+   "Row one dumbbell to your side, then the other.",
+   "Keep your hips square to the floor."
+  ],
+  "tips": [
+   "Balance limits the weight: a supported row builds more back."
+  ],
+  "avoid": [
+   "Hips twisting up.",
+   "Dropping the dumbbell down."
+  ],
+  "rangeOfMotion": "Arm straight → dumbbell at your side",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-plank",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Alternating_Renegade_Row"
+  },
+  "evidence": {
+   "0": {
+    "evidence": "C",
+    "note": "Ranked low for back growth by coaches (Nippard back ranking)."
+   }
+  }
+ },
+ {
+  "id": "helms-row",
+  "name": "Helms Row",
+  "aliases": [
+   "Standing chest-supported dumbbell row"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "upper back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Dumbbell row with only your chest on a bench: strict and supported.",
+  "setup": [
+   "Stand behind an incline bench, chest on its top end.",
+   "Hips back, torso near level, dumbbells hanging."
+  ],
+  "form": [
+   "Pull both dumbbells up and back. Squeeze.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lifting your chest off the bench.",
+   "Swinging the weights up."
+  ],
+  "rangeOfMotion": "Arms hanging → dumbbells at your sides",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-chest-supported",
+  "figureAdjust": {
+   "bench": "incline",
+   "equipmentProp": "db"
+  },
+  "source": {
+   "url": "https://backmusclesolutions.com/blogs/the-ql-blawg/helms-row",
+   "url2": "https://www.thisiswhyimfit.com/?p=5062"
+  }
+ },
+ {
+  "id": "lat-prayer",
+  "name": "Lat Prayer",
+  "aliases": [
+   "Kneeling cable pullover",
+   "Cable lat prayer"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "stretch": [
+   "back"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Straight-arm pull from overhead to your thighs: lats only.",
+  "setup": [
+   "Rope or bar on a high pulley.",
+   "Kneel facing it, arms long overhead, hips back."
+  ],
+  "form": [
+   "Pull your hands down to your thighs, arms almost straight.",
+   "Return slowly to the stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your elbows.",
+   "Crunching your stomach to pull."
+  ],
+  "rangeOfMotion": "Arms overhead → hands at your thighs",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "straight-arm-pulldown",
+  "figureAdjust": {
+   "kneeling": true
+  },
+  "source": {
+   "url": "https://mennohenselmans.com/lat-prayers/"
+  }
+ },
+ {
+  "id": "machine-lat-pulldown",
+  "name": "Machine Lat Pulldown",
+  "aliases": [
+   "Plate-loaded lat pulldown",
+   "Iso-lateral front lat pulldown"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Plate-loaded pulldown, each arm on its own path.",
+  "setup": [
+   "Seat so you just reach the handles, thighs under the pad."
+  ],
+  "form": [
+   "Pull the handles down to your shoulders.",
+   "Go up until your arms are straight."
+  ],
+  "tips": [
+   "Can be done one arm at a time."
+  ],
+  "avoid": [
+   "Leaning far back.",
+   "Stopping short at the top."
+  ],
+  "rangeOfMotion": "Arms straight up → hands at your shoulders",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pulldown",
+  "figureAdjust": {
+   "seated": true,
+   "equipmentProp": "none"
+  },
+  "source": {
+   "url": "https://planfit.ai/en/exercise/hammer-strength-plate-loaded-iso-front-lat-pulldown",
+   "url2": "https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-front-lat-pulldown"
+  }
+ },
+ {
+  "id": "machine-pullover",
+  "name": "Machine Pullover",
+  "aliases": [
+   "Pullover machine"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "chest",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "stretch": [
+   "back"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Lats only, from a full stretch overhead.",
+  "setup": [
+   "Seat so your shoulders line up with the pivot.",
+   "Elbows on the pads, arms overhead."
+  ],
+  "form": [
+   "Push the pads down with your elbows until the bar is at your stomach.",
+   "Go back up slowly to the stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching your lower back.",
+   "Cutting the stretch short."
+  ],
+  "rangeOfMotion": "Arms overhead → bar at your stomach",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "pullover-machine",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "url": "https://www.exercise.com/exercises/hammer-strength-pullover/",
+   "url2": "https://planfit.ai/en/exercise/pullover-machine-back-target"
+  }
+ },
+ {
+  "id": "iso-lateral-low-row",
+  "name": "Iso-Lateral Low Row",
+  "aliases": [
+   "Hammer Strength low row",
+   "Plate-loaded low row"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Plate-loaded row from a low angle, each arm on its own.",
+  "setup": [
+   "Chest on the pad, seat so the handles are low, below your chest.",
+   "Arms straight, palms down."
+  ],
+  "form": [
+   "Pull the handles back and low, toward your hips. Squeeze.",
+   "Return slowly until your arms are straight."
+  ],
+  "tips": [
+   "Can be done one arm at a time."
+  ],
+  "avoid": [
+   "Chest leaving the pad.",
+   "Jerking the handles."
+  ],
+  "rangeOfMotion": "Arms straight → handles at your sides",
+  "tempo": "Pull 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-chest-supported",
+  "figureAdjust": {
+   "seated": true,
+   "equipmentProp": "none"
+  },
+  "source": {
+   "url": "https://lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-low-row"
+  }
+ },
+ {
+  "id": "iso-lateral-dy-row",
+  "name": "Iso-Lateral D.Y. Row",
+  "aliases": [
+   "DY row machine",
+   "Hammer Strength DY row"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "lats",
+    "upper back"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Plate-loaded underhand row that arcs to your hips: lats and mid-back.",
+  "setup": [
+   "Chest on the pad, palms up on the handles.",
+   "Arms straight in front."
+  ],
+  "form": [
+   "Pull the handles back in an arc toward your hips. Squeeze 1 s.",
+   "Return slowly until your arms are straight."
+  ],
+  "tips": [
+   "Can be done one arm at a time."
+  ],
+  "avoid": [
+   "Chest leaving the pad.",
+   "Shrugging at the end."
+  ],
+  "rangeOfMotion": "Arms straight → handles at your hips",
+  "tempo": "Pull 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-chest-supported",
+  "figureAdjust": {
+   "seated": true,
+   "grip": "underhand",
+   "equipmentProp": "none"
+  },
+  "source": {
+   "url": "https://lifefitness.com/en-eu/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-d-y-row"
+  }
+ },
+ {
+  "id": "single-arm-chest-supported-db-row",
+  "name": "Single-Arm Chest-Supported DB Row",
+  "aliases": [
+   "One-arm incline dumbbell row",
+   "Chest-supported single-arm row"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "One-arm row with your chest on a bench: no lower-back strain, no twisting.",
+  "setup": [
+   "Bench at 30–45°, chest on it.",
+   "One dumbbell hanging straight down."
+  ],
+  "form": [
+   "Pull the dumbbell to your side. Squeeze.",
+   "Lower until your arm is straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Chest lifting off the bench.",
+   "Turning your body to lift more."
+  ],
+  "rangeOfMotion": "Arm hanging → dumbbell at your side",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-chest-supported",
+  "figureAdjust": {
+   "bench": "incline",
+   "oneArm": true,
+   "equipmentProp": "db"
+  },
+  "source": {
+   "url": "https://barbend.com/chest-supported-row/"
+  }
+ },
+ {
+  "id": "gorilla-row",
+  "name": "Gorilla Row",
+  "aliases": [
+   "Kettlebell gorilla row"
+  ],
+  "equipment": "other",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "rearDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": [
+    "upper back",
+    "lats"
+   ]
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Two kettlebells, rowing one at a time from a deep hinge.",
+  "setup": [
+   "Kettlebells between your feet, wide stance.",
+   "Hips back, back flat, a handle in each hand."
+  ],
+  "form": [
+   "Row one kettlebell to your hip while pushing the other into the floor.",
+   "Lower it, then row the other side."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding your back.",
+   "Hips rising as you row."
+  ],
+  "rangeOfMotion": "Arm hanging → kettlebell at your hip",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-db-one-arm",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "url": "https://www.strengthlog.com/gorilla-row/",
+   "url2": "https://learn.athleanx.com/articles/back-for-men/how-to-do-gorilla-rows"
+  }
+ },
+ {
+  "id": "lying-cable-pullover",
+  "name": "Lying Cable Pullover",
+  "aliases": [
+   "Cable pullover on bench"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "stretch": [
+   "back"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Pullover on a bench with a cable: lats loaded at full stretch.",
+  "setup": [
+   "Bar on a low pulley. Flat bench 2–3 ft away.",
+   "Lie with your head toward the pulley, arms overhead."
+  ],
+  "form": [
+   "Arms almost straight, pull the bar over you to your waist.",
+   "Return slowly until your arms are past your head."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your elbows a lot.",
+   "Arching your lower back."
+  ],
+  "rangeOfMotion": "Arms past your head → bar at your waist",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pullover",
+  "figureAdjust": {
+   "bench": "flat",
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "url": "https://exercise.com/exercises/lying-cable-pullover",
+   "url2": "https://www.muscleandstrength.com/exercises/lying-cable-pullover.html"
+  }
+ },
+ {
+  "id": "single-arm-straight-arm-pulldown",
+  "name": "Single-Arm Straight-Arm Pulldown",
+  "aliases": [
+   "One-arm straight-arm pulldown",
+   "Single-arm cable pullover"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Straight-arm pulldown one side at a time: lats only, more range.",
+  "setup": [
+   "Handle on a high pulley.",
+   "Step back, lean forward a little, arm reaching up."
+  ],
+  "form": [
+   "Arm almost straight, pull down in an arc to your thigh.",
+   "Go back up slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your elbow.",
+   "Twisting your body."
+  ],
+  "rangeOfMotion": "Arm up → hand at your thigh",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "straight-arm-pulldown",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "url": "https://learn.athleanx.com/articles/back-for-men/how-to-do-a-straight-arm-pulldown",
+   "url2": "https://fitnessvolt.com/cable-straight-arm-pull-down/"
+  }
+ },
+ {
+  "id": "kneeling-lat-pulldown",
+  "name": "Kneeling Lat Pulldown",
+  "aliases": [
+   "Kneeling cable pulldown",
+   "Kneeling Underhand-Grip Lat Pulldown"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "biceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Pulldown kneeling at a cable: no seat or knee pad needed.",
+  "setup": [
+   "Bar on a high pulley. Kneel facing it.",
+   "Hands about shoulder-width, arms straight up."
+  ],
+  "form": [
+   "Pull the bar to your upper chest.",
+   "Go up until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning far back.",
+   "Sitting back on your heels to pull."
+  ],
+  "rangeOfMotion": "Arms straight up → bar at your upper chest",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pulldown",
+  "figureAdjust": {
+   "kneeling": true
+  },
+  "source": {
+   "url": "https://www.puregym.com/exercises/back/lat-exercises/kneeling-lat-pulldown/",
+   "url2": "https://exercise.com/exercises/kneeling-lat-pulldown"
+  }
+ },
+ {
+  "id": "bent-arm-dumbbell-pullover",
+  "name": "Bent-Arm Dumbbell Pullover",
+  "aliases": [
+   "Dumbbell pullover"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "chest",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "stretch": [
+   "back"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Lats stretched with the arms overhead, one dumbbell.",
+  "setup": [
+   "Shoulders across a flat bench, hips low, feet flat.",
+   "One dumbbell in both hands over your chest, elbows bent."
+  ],
+  "form": [
+   "Lower it in an arc behind your head.",
+   "Pull it back over your chest."
+  ],
+  "tips": [
+   "Go only as far back as your shoulders allow."
+  ],
+  "avoid": [
+   "Hips rising as you lower.",
+   "Straightening your elbows as you lower."
+  ],
+  "rangeOfMotion": "Dumbbell over your chest → behind your head",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pullover",
+  "figureAdjust": {
+   "bench": "flat",
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Bent-Arm_Dumbbell_Pullover"
+  }
+ },
+ {
+  "id": "straight-arm-dumbbell-pullover",
+  "name": "Straight-Arm Dumbbell Pullover",
+  "aliases": [
+   "Straight-arm pullover"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "back",
+    "weight": 1
+   },
+   {
+    "group": "chest",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "back": "lats"
+  },
+  "stretch": [
+   "back"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Lats stretched with the arms overhead, one dumbbell.",
+  "setup": [
+   "Shoulders across a flat bench, hips low, feet flat.",
+   "One dumbbell in both hands over your chest, arms straight."
+  ],
+  "form": [
+   "Lower it in an arc behind your head.",
+   "Pull it back over your chest."
+  ],
+  "tips": [
+   "Go only as far back as your shoulders allow."
+  ],
+  "avoid": [
+   "Hips rising as you lower.",
+   "Bending your elbows to cheat it back up."
+  ],
+  "rangeOfMotion": "Dumbbell over your chest → behind your head",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pullover",
+  "figureAdjust": {
+   "bench": "flat",
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Straight-Arm_Dumbbell_Pullover"
+  }
+ }
+]

@@ -1,0 +1,2386 @@
+[
+ {
+  "id": "db-incline-curl",
+  "name": "DB Incline Curl",
+  "aliases": [
+   "Dumbbell Incline Curl",
+   "Incline Dumbbell Curl",
+   "Alternate Incline Dumbbell Curl",
+   "Flexor Incline Dumbbell Curls"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "long head"
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Arms hang behind you: biceps stretched.",
+  "setup": [
+   "Bench at 45–60°, head and shoulders on it.",
+   "Arms hanging straight, palms forward."
+  ],
+  "form": [
+   "Curl up.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows moving forward.",
+   "Stopping short at the bottom."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-incline",
+  "figureAdjust": {
+   "bench": "incline"
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Incline_Dumbbell_Curl"
+  },
+  "formerIds": [
+   "incline-dumbbell-curl",
+   "alternate-incline-dumbbell-curl",
+   "flexor-incline-dumbbell-curls"
+  ]
+ },
+ {
+  "id": "barbell-preacher-curl",
+  "name": "Barbell Preacher Curl",
+  "aliases": [
+   "Preacher Curl",
+   "EZ-bar preacher curl"
+  ],
+  "equipment": "fixedBar",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "short head"
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Biceps work hardest near the bottom.",
+  "setup": [
+   "Armpits at the top of the pad, upper arms flat on it.",
+   "EZ bar if a straight bar hurts your wrists."
+  ],
+  "form": [
+   "Curl up, stop just before your forearms are upright.",
+   "Lower slowly until your arms are almost straight."
+  ],
+  "tips": [
+   "Go slowest near the bottom."
+  ],
+  "avoid": [
+   "Dropping fast at the bottom (hard on the elbows).",
+   "Elbows lifting off the pad."
+  ],
+  "rangeOfMotion": "Arms almost straight → forearms almost upright",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-preacher",
+  "figureAdjust": {
+   "equipmentProp": "bar",
+   "seated": true
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Preacher_Curl"
+  },
+  "formerIds": [
+   "preacher-curl"
+  ]
+ },
+ {
+  "id": "db-hammer-curl",
+  "name": "DB Hammer Curl",
+  "aliases": [
+   "Dumbbell Alternating Hammer Curl",
+   "Hammer Curls",
+   "Alternate Hammer Curl"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "brachialis"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Heavy curl, palms in. Thicker arms.",
+  "setup": [
+   "Palms facing in, elbows at your sides."
+  ],
+  "form": [
+   "Curl one arm at a time to your shoulder.",
+   "Lower all the way."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arm straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-hammer",
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Hammer_Curls"
+  },
+  "formerIds": [
+   "hammer-curls",
+   "alternate-hammer-curl"
+  ]
+ },
+ {
+  "id": "barbell-curl",
+  "name": "Barbell Curl",
+  "aliases": [
+   "Straight bar curl"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "The basic heavy curl.",
+  "setup": [
+   "Hands shoulder-width, palms up.",
+   "Elbows at your sides."
+  ],
+  "form": [
+   "Curl the bar to your shoulders.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-standing",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Curl"
+  }
+ },
+ {
+  "id": "ez-bar-curl",
+  "name": "EZ-Bar Curl",
+  "aliases": [],
+  "equipment": "fixedBar",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Barbell curl on the bent bar: easier on the wrists.",
+  "setup": [
+   "Hands on the angled grips, palms up.",
+   "Elbows at your sides."
+  ],
+  "form": [
+   "Curl the bar to your shoulders.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-standing",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "EZ-Bar_Curl"
+  }
+ },
+ {
+  "id": "close-grip-ez-bar-curl",
+  "name": "Close-Grip EZ Bar Curl",
+  "aliases": [],
+  "equipment": "fixedBar",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "EZ-bar curl with hands on the inner grips.",
+  "setup": [
+   "Hands on the inner angled grips.",
+   "Elbows at your sides."
+  ],
+  "form": [
+   "Curl the bar to your chest.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-standing",
+  "figureAdjust": {
+   "equipmentProp": "bar",
+   "grip": "close"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Close-Grip_EZ_Bar_Curl"
+  }
+ },
+ {
+  "id": "close-grip-standing-barbell-curl",
+  "name": "Close-Grip Standing Barbell Curl",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Straight-bar curl with hands closer than your shoulders.",
+  "setup": [
+   "Hands a bit inside shoulder-width, palms up.",
+   "Elbows at your sides."
+  ],
+  "form": [
+   "Curl the bar to your chest.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-standing",
+  "figureAdjust": {
+   "equipmentProp": "bar",
+   "grip": "close"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Close-Grip_Standing_Barbell_Curl"
+  }
+ },
+ {
+  "id": "wide-grip-standing-barbell-curl",
+  "name": "Wide-Grip Standing Barbell Curl",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Straight-bar curl with hands wider than your shoulders.",
+  "setup": [
+   "Hands a bit outside shoulder-width, palms up.",
+   "Elbows at your sides."
+  ],
+  "form": [
+   "Curl the bar to your chest.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-standing",
+  "figureAdjust": {
+   "equipmentProp": "bar",
+   "grip": "wide"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Wide-Grip_Standing_Barbell_Curl"
+  }
+ },
+ {
+  "id": "dumbbell-bicep-curl",
+  "name": "Dumbbell Bicep Curl",
+  "aliases": [
+   "Dumbbell Alternate Bicep Curl",
+   "Standing dumbbell curl"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Standing dumbbell curl.",
+  "setup": [
+   "A dumbbell in each hand, palms forward.",
+   "Elbows at your sides."
+  ],
+  "form": [
+   "Curl up to your shoulders, both arms or one at a time.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-standing",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Bicep_Curl"
+  },
+  "formerIds": [
+   "dumbbell-alternate-bicep-curl"
+  ]
+ },
+ {
+  "id": "seated-dumbbell-curl",
+  "name": "Seated Dumbbell Curl",
+  "aliases": [],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Dumbbell curl sitting down: less swinging.",
+  "setup": [
+   "Sit on the end of a bench, back straight.",
+   "Dumbbells hanging, palms forward."
+  ],
+  "form": [
+   "Curl up to your shoulders.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-standing",
+  "figureAdjust": {
+   "equipmentProp": "db",
+   "seated": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Dumbbell_Curl"
+  }
+ },
+ {
+  "id": "standing-inner-biceps-curl",
+  "name": "Standing Inner-Biceps Curl",
+  "aliases": [
+   "Outward dumbbell curl"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Dumbbell curl out to the sides.",
+  "setup": [
+   "Dumbbells at your sides, palms in.",
+   "Elbows close to your body."
+  ],
+  "form": [
+   "Curl out and up, turning palms up, to shoulder height.",
+   "Lower the same way."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → dumbbells beside your shoulders",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-standing",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Inner-Biceps_Curl"
+  }
+ },
+ {
+  "id": "seated-dumbbell-inner-biceps-curl",
+  "name": "Seated Dumbbell Inner Biceps Curl",
+  "aliases": [],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Seated dumbbell curl out to the sides.",
+  "setup": [
+   "Sit on the end of a bench.",
+   "Dumbbells at your sides, palms in."
+  ],
+  "form": [
+   "Curl out and up, turning palms up, to shoulder height.",
+   "Lower the same way."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → dumbbells beside your shoulders",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-standing",
+  "figureAdjust": {
+   "equipmentProp": "db",
+   "seated": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Dumbbell_Inner_Biceps_Curl"
+  }
+ },
+ {
+  "id": "incline-inner-biceps-curl",
+  "name": "Incline Inner Biceps Curl",
+  "aliases": [],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "long head"
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Incline curl out to the sides: biceps stretched.",
+  "setup": [
+   "Bench at 45°, back on it.",
+   "Arms hanging, palms facing out."
+  ],
+  "form": [
+   "Curl out and up to beside your shoulders.",
+   "Lower the same way."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows moving forward.",
+   "Lifting off the bench."
+  ],
+  "rangeOfMotion": "Arms straight → dumbbells beside your shoulders",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-incline",
+  "figureAdjust": {
+   "bench": "incline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Incline_Inner_Biceps_Curl"
+  }
+ },
+ {
+  "id": "barbell-curls-lying-against-an-incline",
+  "name": "Incline Barbell Curl",
+  "aliases": [
+   "Barbell Curls Lying Against An Incline"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "long head"
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Barbell curl with your back on an incline: arms behind you.",
+  "setup": [
+   "Bench at 45°, back on it.",
+   "Bar hanging at arm's length."
+  ],
+  "form": [
+   "Curl the bar up as high as you can.",
+   "Lower all the way."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows moving forward.",
+   "Lifting off the bench."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-incline",
+  "figureAdjust": {
+   "bench": "incline",
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Curls_Lying_Against_An_Incline"
+  }
+ },
+ {
+  "id": "lying-supine-dumbbell-curl",
+  "name": "Lying Supine Dumbbell Curl",
+  "aliases": [
+   "Lying Dumbbell Curl",
+   "Flat bench curl"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "long head"
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Curl lying on a flat bench, arms hanging below it: big stretch.",
+  "setup": [
+   "Lie face up on a high flat bench.",
+   "Arms hanging down past the bench, palms in."
+  ],
+  "form": [
+   "Curl up, turning palms up.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [
+   "Go light: the bottom is very stretched."
+  ],
+  "avoid": [
+   "Elbows moving forward.",
+   "Dropping fast at the bottom."
+  ],
+  "rangeOfMotion": "Arms hanging straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-incline",
+  "figureAdjust": {
+   "bench": "flat"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Lying_Supine_Dumbbell_Curl"
+  }
+ },
+ {
+  "id": "bayesian-cable-curl",
+  "name": "Bayesian Cable Curl",
+  "aliases": [
+   "Face-away Bayesian cable curl",
+   "Face-away cable curl",
+   "Behind-the-back cable curl",
+   "Seated Bayesian cable curl",
+   "Double Bayesian curl"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "long head"
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Arm behind you on a cable: biceps stretched and loaded the whole way.",
+  "setup": [
+   "Pulley low. Face away, handle in one hand.",
+   "Step forward until your arm is pulled behind you."
+  ],
+  "form": [
+   "Curl up, keeping your elbow back.",
+   "Lower until your arm is straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbow swinging forward.",
+   "Leaning forward to cheat."
+  ],
+  "rangeOfMotion": "Arm straight behind you → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-bayesian",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "url": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/",
+   "url2": "https://fitnessvolt.com/jeff-nippard-best-exercises-every-muscle-group/"
+  }
+ },
+ {
+  "id": "drag-curl",
+  "name": "Drag Curl",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "long head"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Bar slides up your body, elbows go back.",
+  "setup": [
+   "Hands shoulder-width, palms up, bar against your thighs."
+  ],
+  "form": [
+   "Drag the bar up your body, elbows moving back.",
+   "Slide it back down the same way."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lifting your shoulders.",
+   "Bar leaving your body."
+  ],
+  "rangeOfMotion": "Bar at your thighs → bar at your chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-drag",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Drag_Curl"
+  }
+ },
+ {
+  "id": "spider-curl",
+  "name": "Spider Curl",
+  "aliases": [
+   "Lying High Bench Barbell Curl",
+   "EZ-bar spider curl"
+  ],
+  "equipment": "fixedBar",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "short head"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Chest on a bench, arms hanging straight down: hardest at the top.",
+  "setup": [
+   "Chest on an angled or high bench.",
+   "Bar hanging at arm's length, palms up."
+  ],
+  "form": [
+   "Curl up and squeeze 1 s.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging the bar.",
+   "Elbows moving back."
+  ],
+  "rangeOfMotion": "Arms hanging → full curl",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-spider",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Spider_Curl"
+  },
+  "formerIds": [
+   "lying-high-bench-barbell-curl"
+  ]
+ },
+ {
+  "id": "dumbbell-prone-incline-curl",
+  "name": "Dumbbell Prone Incline Curl",
+  "aliases": [
+   "Dumbbell spider curl",
+   "Prone incline curl"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "short head"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Chest on an incline bench, arms hanging: hardest at the top.",
+  "setup": [
+   "Lie face down on an incline bench.",
+   "Arms hanging straight down, palms forward."
+  ],
+  "form": [
+   "Curl up and squeeze 1 s.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging the dumbbells.",
+   "Elbows moving back."
+  ],
+  "rangeOfMotion": "Arms hanging → full curl",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-spider",
+  "figureAdjust": {
+   "bench": "incline",
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Prone_Incline_Curl"
+  }
+ },
+ {
+  "id": "one-arm-dumbbell-preacher-curl",
+  "name": "Dumbbell Preacher Curl",
+  "aliases": [
+   "One Arm Dumbbell Preacher Curl",
+   "Two-Arm Dumbbell Preacher Curl",
+   "Standing One-Arm Dumbbell Curl Over Incline Bench"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "short head"
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Preacher curl with dumbbells: biceps work hardest near the bottom.",
+  "setup": [
+   "Upper arm flat on a preacher pad or the back of an incline bench.",
+   "One arm or both."
+  ],
+  "form": [
+   "Curl up, stop just before your forearm is upright.",
+   "Lower slowly until your arm is almost straight."
+  ],
+  "tips": [
+   "Go slowest near the bottom."
+  ],
+  "avoid": [
+   "Dropping fast at the bottom.",
+   "Elbow lifting off the pad."
+  ],
+  "rangeOfMotion": "Arm almost straight → forearm almost upright",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-preacher",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "One_Arm_Dumbbell_Preacher_Curl"
+  },
+  "formerIds": [
+   "two-arm-dumbbell-preacher-curl",
+   "standing-one-arm-dumbbell-curl-over-incline-bench"
+  ]
+ },
+ {
+  "id": "cable-preacher-curl",
+  "name": "Cable Preacher Curl",
+  "aliases": [
+   "Single-arm cable preacher curl"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "short head"
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Preacher curl on a cable: tension the whole way.",
+  "setup": [
+   "Preacher bench in front of a low pulley.",
+   "Upper arms flat on the pad, bar in hand."
+  ],
+  "form": [
+   "Curl up to your chin.",
+   "Lower until your arms are almost straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows lifting off the pad.",
+   "Dropping fast at the bottom."
+  ],
+  "rangeOfMotion": "Arms almost straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-preacher",
+  "figureAdjust": {
+   "equipmentProp": "cable",
+   "seated": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Preacher_Curl"
+  }
+ },
+ {
+  "id": "machine-bicep-curl",
+  "name": "Machine Bicep Curl",
+  "aliases": [
+   "Machine Preacher Curl",
+   "Machine Preacher Curls",
+   "Biceps curl machine"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "short head"
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Machine curl, arms on a pad: easy to push hard.",
+  "setup": [
+   "Seat so your elbows line up with the pivot.",
+   "Upper arms flat on the pad."
+  ],
+  "form": [
+   "Curl the handles up.",
+   "Lower slowly until your arms are almost straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lifting your elbows off the pad.",
+   "Resting the weight between reps."
+  ],
+  "rangeOfMotion": "Arms almost straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-preacher",
+  "figureAdjust": {
+   "seated": true,
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Machine_Bicep_Curl"
+  },
+  "formerIds": [
+   "machine-preacher-curls"
+  ]
+ },
+ {
+  "id": "concentration-curls",
+  "name": "Concentration Curl",
+  "aliases": [
+   "Concentration Curls",
+   "Seated concentration curl"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "short head"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "One arm, elbow braced on your thigh: strict.",
+  "setup": [
+   "Sit, elbow against your inner thigh.",
+   "Arm hanging straight."
+  ],
+  "form": [
+   "Curl up and squeeze 1 s.",
+   "Lower until your arm is straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Moving your upper arm.",
+   "Swinging your body."
+  ],
+  "rangeOfMotion": "Arm straight → full curl",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-concentration",
+  "figureAdjust": {
+   "seated": true,
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Concentration_Curls"
+  }
+ },
+ {
+  "id": "standing-concentration-curl",
+  "name": "Standing Concentration Curl",
+  "aliases": [],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "short head"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Concentration curl bent over, arm hanging free.",
+  "setup": [
+   "Bend forward, free hand on your knee or a bench.",
+   "Working arm hanging straight down."
+  ],
+  "form": [
+   "Curl up to your chest and squeeze 1 s.",
+   "Lower until your arm is straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Moving your upper arm.",
+   "Swinging the dumbbell."
+  ],
+  "rangeOfMotion": "Arm straight → full curl",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-spider",
+  "figureAdjust": {
+   "oneArm": true,
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Concentration_Curl"
+  }
+ },
+ {
+  "id": "seated-close-grip-concentration-barbell-curl",
+  "name": "Seated Close-Grip Concentration Barbell Curl",
+  "aliases": [
+   "Barbell concentration curl"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "short head"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Concentration curl with a bar, both arms braced.",
+  "setup": [
+   "Sit, upper arms on your inner thighs.",
+   "Hands close, palms up."
+  ],
+  "form": [
+   "Curl the bar up and squeeze 1 s.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Moving your upper arms.",
+   "Leaning back."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-concentration",
+  "figureAdjust": {
+   "seated": true,
+   "equipmentProp": "bar",
+   "grip": "close"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Close-Grip_Concentration_Barbell_Curl"
+  }
+ },
+ {
+  "id": "standing-biceps-cable-curl",
+  "name": "Standing Biceps Cable Curl",
+  "aliases": [
+   "Cable curl"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Cable curl: tension the whole way.",
+  "setup": [
+   "Bar on a low pulley, palms up.",
+   "Stand close, elbows at your sides."
+  ],
+  "form": [
+   "Curl the bar to your chest.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-cable-standing",
+  "figureAdjust": {
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Biceps_Cable_Curl"
+  }
+ },
+ {
+  "id": "standing-one-arm-cable-curl",
+  "name": "Standing One-Arm Cable Curl",
+  "aliases": [
+   "Single-arm cable curl"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "One-arm cable curl.",
+  "setup": [
+   "Handle on a low pulley.",
+   "Stand side-on or facing it, elbow at your side."
+  ],
+  "form": [
+   "Curl up to your shoulder.",
+   "Lower until your arm is straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arm straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-cable-standing",
+  "figureAdjust": {
+   "oneArm": true,
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_One-Arm_Cable_Curl"
+  }
+ },
+ {
+  "id": "high-cable-curls",
+  "name": "High Cable Curl",
+  "aliases": [
+   "High Cable Curls",
+   "Overhead Cable Curl",
+   "Double-biceps cable curl",
+   "Hercules curl"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Curl from two high pulleys, arms out at shoulder height.",
+  "setup": [
+   "Stand between two high pulleys, a handle in each hand.",
+   "Arms out to the sides, level with the floor."
+  ],
+  "form": [
+   "Curl your hands to your ears. Squeeze 1 s.",
+   "Straighten slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Dropping your elbows.",
+   "Leaning forward."
+  ],
+  "rangeOfMotion": "Arms out straight → hands at your ears",
+  "tempo": "Curl 1 s · Hold 1 s · Straighten 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-overhead-cable",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "High_Cable_Curls"
+  },
+  "formerIds": [
+   "overhead-cable-curl"
+  ]
+ },
+ {
+  "id": "lying-cable-curl",
+  "name": "Lying Cable Curl",
+  "aliases": [
+   "Supine cable curl"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Cable curl lying on the floor: no swinging.",
+  "setup": [
+   "Lie on your back, feet toward a low pulley.",
+   "Bar in hand, elbows at your sides."
+  ],
+  "form": [
+   "Curl the bar to your chest.",
+   "Lower until your arms are almost straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows lifting off the floor.",
+   "Shrugging your shoulders."
+  ],
+  "rangeOfMotion": "Arms almost straight → bar at your chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-lying-cable",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Lying_Cable_Curl"
+  }
+ },
+ {
+  "id": "lying-close-grip-bar-curl-on-high-pulley",
+  "name": "Lying High Pulley Cable Curl",
+  "aliases": [
+   "Lying Close-Grip Bar Curl On High Pulley"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "short head"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Lying cable curl with arms pointing up: arms in front of you.",
+  "setup": [
+   "Lie on a bench in front of a high pulley, head toward it.",
+   "Arms straight up over your shoulders, palms up, hands shoulder-width."
+  ],
+  "form": [
+   "Curl the bar down to your chin. Squeeze 1 s.",
+   "Straighten slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Upper arms moving.",
+   "Letting the bar pull your arms back."
+  ],
+  "rangeOfMotion": "Arms straight up → bar at your chin",
+  "tempo": "Curl 1 s · Hold 1 s · Straighten 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-lying-high-pulley",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Lying_Close-Grip_Bar_Curl_On_High_Pulley"
+  }
+ },
+ {
+  "id": "cable-hammer-curls-rope-attachment",
+  "name": "Rope Hammer Curl",
+  "aliases": [
+   "Cable Hammer Curls - Rope Attachment",
+   "Cable rope hammer curl",
+   "Cable hammer curl"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "brachialis"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hammer curl on a cable with a rope.",
+  "setup": [
+   "Rope on a low pulley, palms facing in.",
+   "Elbows at your sides."
+  ],
+  "form": [
+   "Curl the rope to your shoulders.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-cable-standing",
+  "figureAdjust": {
+   "equipmentProp": "cable",
+   "grip": "neutral"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Hammer_Curls_-_Rope_Attachment"
+  }
+ },
+ {
+  "id": "cross-body-hammer-curl",
+  "name": "Cross Body Hammer Curl",
+  "aliases": [
+   "Cross-body curl",
+   "Pinwheel curl"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "brachialis"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hammer curl across your body.",
+  "setup": [
+   "Dumbbells at your sides, palms in."
+  ],
+  "form": [
+   "Curl one dumbbell up across your body toward the other shoulder.",
+   "Lower and switch arms."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arm straight → dumbbell at the other shoulder",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-hammer",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cross_Body_Hammer_Curl"
+  }
+ },
+ {
+  "id": "reverse-barbell-curl",
+  "name": "Reverse Barbell Curl",
+  "aliases": [
+   "Reverse-grip barbell curl"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "brachialis"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Curl with palms down: brachialis and forearms.",
+  "setup": [
+   "Palms down, hands shoulder-width.",
+   "Elbows at your sides."
+  ],
+  "form": [
+   "Curl the bar to your shoulders.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-standing",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Reverse_Barbell_Curl"
+  }
+ },
+ {
+  "id": "reverse-cable-curl",
+  "name": "Reverse Cable Curl",
+  "aliases": [
+   "Reverse-grip cable curl"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "brachialis"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Curl with palms down: brachialis and forearms.",
+  "setup": [
+   "Bar on a low pulley, palms down, hands shoulder-width.",
+   "Elbows at your sides."
+  ],
+  "form": [
+   "Curl the bar to your shoulders.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-cable-standing",
+  "figureAdjust": {
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Reverse_Cable_Curl"
+  }
+ },
+ {
+  "id": "standing-dumbbell-reverse-curl",
+  "name": "Dumbbell Reverse Curl",
+  "aliases": [
+   "Standing Dumbbell Reverse Curl"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "brachialis"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Curl with palms down: brachialis and forearms.",
+  "setup": [
+   "Dumbbells at your sides, palms facing back.",
+   "Elbows at your sides."
+  ],
+  "form": [
+   "Curl the dumbbells to your shoulders, palms staying down.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-standing",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Dumbbell_Reverse_Curl"
+  }
+ },
+ {
+  "id": "reverse-barbell-preacher-curls",
+  "name": "Reverse EZ-Bar Preacher Curl",
+  "aliases": [
+   "Reverse Barbell Preacher Curls",
+   "Reverse preacher curl"
+  ],
+  "equipment": "fixedBar",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "brachialis"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Curl with palms down: brachialis and forearms.",
+  "setup": [
+   "Upper arms flat on the preacher pad.",
+   "EZ bar, palms down, hands shoulder-width."
+  ],
+  "form": [
+   "Curl the bar up to your shoulders.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows lifting off the pad.",
+   "Dropping fast at the bottom."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-preacher",
+  "figureAdjust": {
+   "equipmentProp": "bar",
+   "seated": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Reverse_Barbell_Preacher_Curls"
+  }
+ },
+ {
+  "id": "incline-hammer-curls",
+  "name": "Incline Hammer Curl",
+  "aliases": [
+   "Incline Hammer Curls"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "brachialis"
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hammer curl on an incline bench, arms behind you.",
+  "setup": [
+   "Bench at 45°, back on it.",
+   "Arms hanging, palms in."
+  ],
+  "form": [
+   "Curl up to your shoulders.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows moving forward.",
+   "Lifting off the bench."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-incline",
+  "figureAdjust": {
+   "bench": "incline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Incline_Hammer_Curls"
+  }
+ },
+ {
+  "id": "preacher-hammer-dumbbell-curl",
+  "name": "Preacher Hammer Curl",
+  "aliases": [
+   "Preacher Hammer Dumbbell Curl"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "brachialis"
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hammer curl on a preacher pad: strict, hard at the bottom.",
+  "setup": [
+   "Upper arm flat on the preacher pad, palm in."
+  ],
+  "form": [
+   "Curl up, stop just before your forearm is upright.",
+   "Lower slowly until your arm is almost straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbow lifting off the pad.",
+   "Dropping fast at the bottom."
+  ],
+  "rangeOfMotion": "Arm almost straight → forearm almost upright",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-preacher",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Preacher_Hammer_Dumbbell_Curl"
+  }
+ },
+ {
+  "id": "zottman-curl",
+  "name": "Zottman Curl",
+  "aliases": [],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "long head",
+    "short head",
+    "brachialis"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Curl up palms up, lower palms down.",
+  "setup": [
+   "Dumbbells at your sides, palms forward."
+  ],
+  "form": [
+   "Curl up to your shoulders.",
+   "At the top turn your palms down, then lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Elbows moving forward."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-standing",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Zottman_Curl"
+  }
+ },
+ {
+  "id": "zottman-preacher-curl",
+  "name": "Zottman Preacher Curl",
+  "aliases": [],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "biceps": [
+    "short head",
+    "brachialis"
+   ]
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Zottman curl on a preacher pad.",
+  "setup": [
+   "Upper arms flat on the pad, palms up."
+  ],
+  "form": [
+   "Curl up.",
+   "At the top turn your palms down, then lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows lifting off the pad.",
+   "Dropping fast at the bottom."
+  ],
+  "rangeOfMotion": "Arms almost straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-preacher",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Zottman_Preacher_Curl"
+  }
+ },
+ {
+  "id": "incline-cable-curl",
+  "name": "Incline Cable Curl",
+  "aliases": [
+   "Two-Arm Cable Curl on Incline Bench",
+   "Cable incline biceps curl"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "long head"
+  },
+  "stretch": [
+   "biceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Incline curl on cables: arms behind you, tension the whole way.",
+  "setup": [
+   "Incline bench between two low pulleys.",
+   "Lie back, a handle in each hand, arms hanging behind you."
+  ],
+  "form": [
+   "Curl up, keeping your elbows back.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows moving forward.",
+   "Rocking off the bench."
+  ],
+  "rangeOfMotion": "Arms straight → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-incline",
+  "figureAdjust": {
+   "bench": "incline",
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "url": "https://fitnessvolt.com/cable-two-arm-curl-on-incline-bench-guide/",
+   "url2": "https://www.muscleandstrength.com/exercises/two-arm-cable-curl-on-incline-bench.html"
+  }
+ },
+ {
+  "id": "dumbbell-drag-curl",
+  "name": "Dumbbell Drag Curl",
+  "aliases": [
+   "DB drag curl"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "long head"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Drag curl with dumbbells: weights slide up your sides, elbows go back.",
+  "setup": [
+   "Dumbbells at your sides, palms forward."
+  ],
+  "form": [
+   "Drag the dumbbells up your body, elbows moving back.",
+   "Slide them back down the same way."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lifting your shoulders.",
+   "Dumbbells swinging forward."
+  ],
+  "rangeOfMotion": "Arms straight → dumbbells at your chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-drag",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "url": "https://generationiron.com/dumbbell-drag-curl-exercise-guide/",
+   "url2": "https://planfit.ai/en/exercise/dumbbell-drag-curl"
+  }
+ },
+ {
+  "id": "cable-drag-curl",
+  "name": "Cable Drag Curl",
+  "aliases": [
+   "Cable drag curls"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "long head"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Drag curl on a low cable: steady tension, elbows go back.",
+  "setup": [
+   "Bar on a low pulley, palms up.",
+   "Stand close, bar against your thighs."
+  ],
+  "form": [
+   "Drag the bar up your body, elbows moving back.",
+   "Slide it back down the same way."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lifting your shoulders.",
+   "Bar leaving your body."
+  ],
+  "rangeOfMotion": "Bar at your thighs → bar at your chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-drag",
+  "figureAdjust": {
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "url": "https://fitnessvolt.com/cable-drag-curl-guide/"
+  }
+ },
+ {
+  "id": "cable-spider-curl",
+  "name": "Cable Spider Curl",
+  "aliases": [
+   "Prone incline cable curl"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "short head"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Spider curl on a cable: arms in front, tension at the bottom too.",
+  "setup": [
+   "Chest on a 45° bench facing a low pulley.",
+   "Bench far enough back that the cable pulls at the bottom."
+  ],
+  "form": [
+   "Curl up and squeeze 1 s.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging the bar.",
+   "Elbows moving back."
+  ],
+  "rangeOfMotion": "Arms hanging → full curl",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-spider",
+  "figureAdjust": {
+   "bench": "incline",
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "url": "https://fitnessvolt.com/spider-curls/",
+   "url2": "https://www.setforset.com/blogs/news/spider-curl"
+  }
+ },
+ {
+  "id": "spider-hammer-curl",
+  "name": "Spider Hammer Curl",
+  "aliases": [
+   "Dumbbell hammer spider curl"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "brachialis"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hammer curl with your chest on a bench: arms in front, no swinging.",
+  "setup": [
+   "Chest on a 45° bench.",
+   "Dumbbells hanging straight down, palms facing in."
+  ],
+  "form": [
+   "Curl up, thumbs leading. Squeeze 1 s.",
+   "Lower until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging the weights.",
+   "Elbows moving back."
+  ],
+  "rangeOfMotion": "Arms hanging → full curl",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-spider",
+  "figureAdjust": {
+   "bench": "incline",
+   "grip": "neutral",
+   "equipmentProp": "db"
+  },
+  "source": {
+   "url": "https://fitnessvolt.com/spider-curls/"
+  }
+ },
+ {
+  "id": "bayesian-hammer-curl",
+  "name": "Bayesian Hammer Curl",
+  "aliases": [
+   "Behind-the-back rope hammer curl"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "biceps",
+    "weight": 1
+   },
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "biceps": "brachialis"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Bayesian curl with a rope, palm in: arm behind you, thumb up.",
+  "setup": [
+   "Rope on a low pulley. Face away, rope in one hand.",
+   "Step forward until your arm is pulled behind you, palm in."
+  ],
+  "form": [
+   "Curl up, keeping your elbow back and your palm in.",
+   "Lower until your arm is straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbow swinging forward.",
+   "Turning your wrist."
+  ],
+  "rangeOfMotion": "Arm straight behind you → full curl",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "curl-bayesian",
+  "figureAdjust": {
+   "oneArm": true,
+   "grip": "neutral"
+  },
+  "source": {
+   "url": "https://fitnessvolt.com/bayesian-curl/"
+  }
+ }
+]
