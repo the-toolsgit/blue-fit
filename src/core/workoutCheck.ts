@@ -75,6 +75,18 @@ export const SCORE_WEIGHTS = { volume: 25, parts: 20, recovery: 15, failure: 10,
 /** Points off for each muscle-workout over MAX_SESSION_SETS (*judgment*) */
 export const DOSE_PENALTY = 2;
 
+/** Two exercises that train this angle as direct work: top picks for the goal first, then ★, then by name. */
+export function angleExamples(exMap: Map<string, Exercise>, g: MuscleGroup, job: string, goal: Goal = "growth"): string[] {
+  const pick = (e: Exercise) => (e.preferred?.goals.includes(goal === "strength" ? "strength" : "growth") ? 0 : e.isHeavy ? 1 : 2);
+  const seen = new Set<string>();
+  return [...exMap.values()].filter((e) => {
+    if (seen.has(e.id) || e.archived || !isDirect(e, g)) return false;
+    seen.add(e.id);
+    const j = e.jobs?.[g];
+    return j != null && (Array.isArray(j) ? j.includes(job) : j === job);
+  }).sort((a, b) => pick(a) - pick(b) || a.name.localeCompare(b.name)).slice(0, 2).map((e) => e.name);
+}
+
 const mid = (s: Slot) => (s.repMin + s.repMax) / 2;
 const isDirect = (ex: Exercise | undefined, g: MuscleGroup) => !!ex?.volume.some((v) => v.group === g && v.weight === 1);
 
@@ -90,6 +102,8 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const sets = slots.reduce((a, s) => a + s.sets, 0);
   const tmap = new Map(targets.map((t) => [t.group, t]));
   const week = new Map(planVolume(routine, exMap).map((v) => [v.group, v.sets]));
+  // Holds are logged in seconds: left out of the rep checks
+  const repSlots = slots.filter((s) => ex(s).measure !== "time");
   const jobsHit = (g: MuscleGroup) => new Set(slots.flatMap((s) => { const j = ex(s).jobs?.[g]; return j == null ? [] : Array.isArray(j) ? j : [j]; }));
   const directSets = (d: RoutineDay, g: MuscleGroup) => d.slots.filter((s) => isDirect(ex(s), g)).reduce((a, s) => a + s.sets, 0);
   const daysFor = (g: MuscleGroup) => days.filter((d) => directSets(d, g) > 0);
@@ -122,7 +136,9 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
 
   const jobs = check("jobs", "Every angle", main.flatMap((g) => {
     const miss = (JOBS[g] ?? []).filter((j) => !jobsHit(g).has(j));
-    return miss.length ? [`${L(g)}: no ${miss.join(", ")}`] : [];
+    if (!miss.length) return [];
+    const tries = miss.flatMap((j) => angleExamples(exMap, g, j, goal));
+    return [`${L(g)}: no ${miss.join(", ")}${tries.length ? ` · try ${tries.slice(0, 2).join(" or ")}` : ""}`];
   }), "Every muscle trained in all its movements");
 
   const stretch = check("stretch", "Stretch", main.filter((g) => STRETCH_MUSCLES.has(g) && !slots.some((s) => ex(s).stretch?.includes(g)))
@@ -157,7 +173,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     return gap ? [`${L(g)}: hard ${gap === 1 ? "two days in a row" : `${gap} days apart`}`] : [];
   }), "Every muscle rests long enough after hard work");
 
-  const reps = check("reps", "Rep range", uniq(slots.filter((s) => mid(s) < GROWTH_REPS[0] || mid(s) > GROWTH_REPS[1]).map((s) => `${ex(s).name}: ${s.repMin}–${s.repMax}`)),
+  const reps = check("reps", "Rep range", uniq(repSlots.filter((s) => mid(s) < GROWTH_REPS[0] || mid(s) > GROWTH_REPS[1]).map((s) => `${ex(s).name}: ${s.repMin}–${s.repMax}`)),
     `Every exercise ${GROWTH_REPS[0]}–${GROWTH_REPS[1]} reps`);
 
   // A nice-to-have, never a red miss: growth is about the same across rep ranges (Schoenfeld 2021); mixing helps joints,
@@ -165,7 +181,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const mix0 = check("mix", "Heavy and light", main.flatMap((g) => {
     // Only muscles the database says need the mix (big muscles trained with compound lifts)
     if (!NEEDS_HEAVY_LIGHT.has(g)) return [];
-    const own = slots.filter((s) => isDirect(ex(s), g));
+    const own = repSlots.filter((s) => isDirect(ex(s), g));
     if (new Set(own.map((s) => s.exerciseId)).size < 2) return [];
     const heavy = own.some((s) => mid(s) <= HEAVY_REPS), light = own.some((s) => mid(s) >= LIGHT_REPS);
     return heavy && light ? [] : [`${L(g)}: ${!heavy && !light ? "no heavy or light sets" : heavy ? "no light sets" : "no heavy sets"}`];
@@ -186,7 +202,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
         check("heavy", "Heavy lifts", stars.length && stars.every((s) => s.repMin <= 6) ? [] : stars.length ? uniq(stars.filter((s) => s.repMin > 6).map((s) => `${ex(s).name}: ${s.repMin}+ reps`)) : ["No ★ heavy lift"], "★ lifts at 6 reps or less"),
         rest(STRENGTH_REST, null, stars)]
     : goal === "endurance" ? [volume(false), jobs, frequency, recovery,
-        check("reps", "High reps", slots.filter((s) => mid(s) >= 15).length * 2 >= slots.length ? [] : ["Most exercises under 15 reps"], "Most exercises 15+ reps (ACSM 2009)"),
+        check("reps", "High reps", repSlots.filter((s) => mid(s) >= 15).length * 2 >= repSlots.length ? [] : ["Most exercises under 15 reps"], "Most exercises 15+ reps (ACSM 2009)"),
         rest(null, ENDURANCE_REST)]
     : [volume(false), jobs, stretch, frequency, dose, recovery, reps, mix, rest(GROWTH_REST, null)];
 

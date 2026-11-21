@@ -51,7 +51,7 @@ function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, fail }: {
             <span style={{ display: "block", fontWeight: 600 }}>{ex?.name ?? slot.exerciseId} {ex?.isHeavy && <span className="star">★</span>}<FailFlame why={fail} /></span>
             <span className="muted" style={{ fontSize: 12 }}>{slot.supersetGroup && groupStart ? `Superset ${slot.supersetGroup} · ` : ""}{slot.notes ? `${slot.notes} · ` : ""}rest {fmtRest(slot.restSec)}</span>
           </span>
-          <span className="mono" style={{ whiteSpace: "nowrap" }}>{slot.sets} × {repRange(slot.repMin, slot.repMax)}</span>
+          <span className="mono" style={{ whiteSpace: "nowrap" }}>{slot.sets} × {repRange(slot.repMin, slot.repMax, ex?.measure === "time")}</span>
           <Icon name="chevron" size={16} />
         </button>
       </div>
@@ -196,8 +196,8 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               <Stepper label="Sets" value={slot.sets} step={1} decimals={false} min={1} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { sets: Math.max(1, Math.min(20, v ?? 1)) }))} />
               <Stepper label="Rest" suffix={fmtRest(slot.restSec)} value={slot.restSec} step={15} decimals={false} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { restSec: v ?? settings.restDefaultSec }))} />
-              <Stepper label="Reps min" value={slot.repMin} step={1} decimals={false} min={1} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { repMin: Math.max(1, v ?? 1), repMax: Math.max(slot.repMax, v ?? 1) }))} />
-              <Stepper label="Reps max" value={slot.repMax} step={1} decimals={false} min={1} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { repMax: Math.max(slot.repMin, v ?? slot.repMin) }))} />
+              <Stepper label={exMap.get(slot.exerciseId)?.measure === "time" ? "Seconds min" : "Reps min"} value={slot.repMin} step={exMap.get(slot.exerciseId)?.measure === "time" ? 5 : 1} decimals={false} min={1} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { repMin: Math.max(1, v ?? 1), repMax: Math.max(slot.repMax, v ?? 1) }))} />
+              <Stepper label={exMap.get(slot.exerciseId)?.measure === "time" ? "Seconds max" : "Reps max"} value={slot.repMax} step={exMap.get(slot.exerciseId)?.measure === "time" ? 5 : 1} decimals={false} min={1} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { repMax: Math.max(slot.repMin, v ?? slot.repMin) }))} />
             </div>
             {failureApplies(settings.profile?.goal) && (() => {
               const mode = slot.toFailure === true ? "on" : slot.toFailure === false ? "off" : "auto";

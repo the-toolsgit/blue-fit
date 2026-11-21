@@ -40,7 +40,7 @@ export function isolationMove(ex: Exercise): boolean {
  * failure on machines, cables and isolation work (expert consensus; no injury study compares them).
  */
 export function failureEligible(ex: Exercise | undefined): boolean {
-  if (!ex || UNSAFE_FAILURE.has(ex.id)) return false;
+  if (!ex || ex.unsafeFailure || ex.measure === "time" || UNSAFE_FAILURE.has(ex.id)) return false;
   if (SAFE_TO_FAIL.has(ex.equipment)) return true;
   return isolationMove(ex);
 }

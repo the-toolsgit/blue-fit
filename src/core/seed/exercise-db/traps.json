@@ -566,8 +566,8 @@
   "jobs": {
    "traps": "mid/lower"
   },
-  "isHeavy": true,
-  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "isHeavy": false,
+  "heavyWhy": "light squeeze, not a heavy shrug",
   "why": "Kelso shrug with dumbbells on an incline bench.",
   "setup": [
    "Lie face down on an incline bench.",
@@ -587,10 +587,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "kelso-shrug",
-  "figureAdjust": {
-   "equipmentProp": "db"
-  },
+  "figureTemplate": "kelso-shrug-prone",
   "source": {
    "db": "free-exercise-db",
    "id": "Middle_Back_Shrug"

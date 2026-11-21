@@ -183,14 +183,15 @@ export function WorkoutScreen() {
     if (x.done) return; // undo
     vibrate(12);
     // PR check against history + this entry's earlier sets
-    const prev = computeRecords(finished, ex.id, s.id);
+    const time = ex.measure === "time";
+    const prev = computeRecords(finished, ex.id, s.id, time);
     const running = cloneRecords(prev);
     const ne = next.entries.find((y) => y.id === e.id)!;
-    for (const y of ne.sets) if (y.id !== x.id && y.done) addSetToRecords(running, y, s.date);
+    for (const y of ne.sets) if (y.id !== x.id && y.done) addSetToRecords(running, y, s.date, time);
     const kinds: PrKind[] = prsForSet(running, { ...x, done: true });
-    const before = entryVolume(e.sets), after = entryVolume(ne.sets);
+    const before = entryVolume(e.sets, time), after = entryVolume(ne.sets, time);
     if (prev.bestSessionVolume && after > prev.bestSessionVolume.value && before <= prev.bestSessionVolume.value) kinds.push("volume");
-    if (kinds.length) toast({ kind: "pr", title: "New PR!", body: `${ex.name}: ${kinds.map((k) => PR_LABEL[k]).join(" · ")} (${fmtW(x.weight)}${loadSuffix(ex)} × ${x.reps})` });
+    if (kinds.length && !ex.assisted) toast({ kind: "pr", title: "New PR!", body: `${ex.name}: ${kinds.map((k) => PR_LABEL[k]).join(" · ")} (${fmtW(x.weight)}${loadSuffix(ex)} × ${x.reps})` });
     const r = afterSetDone(next, e.id);
     if (r.rest && settings.autoStartRest && e.restSec > 0) setRestTimer({ endsAt: Date.now() + e.restSec * 1000, durationSec: e.restSec, sessionId: s.id, entryId: e.id });
     if (r.nextEntryId !== e.id) { setFocus(r.nextEntryId); scrollTo(r.nextEntryId); }
@@ -383,8 +384,8 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const repMin = e.repMin ?? 8, repMax = e.repMax ?? repMin;
   // Deload: no progression push; a fixed reminder instead.
   const prev = useMemo(() => prevEntryFor(finished, ex.id, s.id), [finished, ex.id, s.id]);
-  const hint0 = s.deload || !settings.progressionHints ? ({ kind: "none" } as const)
-    : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb, { fail: last ? failureSet(last.entry) : undefined, prev: prev ? { sets: prev.entry.sets, fail: failureSet(prev.entry) } : undefined });
+  const hint0 = s.deload || !settings.progressionHints || ex.assisted ? ({ kind: "none" } as const)
+    : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb, { time: ex.measure === "time", fail: last ? failureSet(last.entry) : undefined, prev: prev ? { sets: prev.entry.sets, fail: failureSet(prev.entry) } : undefined });
   const allDone = e.sets.length > 0 && e.sets.every((x) => x.done);
   // Effort check: the failure set shows earlier sets at the same weight left too many reps (today, and last time)
   const gap = effortGap(e, s.deload);
@@ -440,7 +441,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           <span className="grow" style={{ display: "block" }}>
           <div style={{ font: "700 21px/1.1 var(--display)", letterSpacing: ".01em" }}>{ex.name} {ex.isHeavy && <span className="star">★</span>}</div>
           <div className="muted" style={{ fontSize: 13, marginTop: 3 }}>
-            {e.sets.filter((x) => x.type !== "warmup").length} × {repRange(e.repMin, e.repMax) || "—"} · rest {fmtRest(e.restSec)}
+            {e.sets.filter((x) => x.type !== "warmup").length} × {repRange(e.repMin, e.repMax) || "—"}{ex.measure === "time" && e.repMin != null ? " s" : ""} · rest {fmtRest(e.restSec)}
             {swappedFrom && <> · <span style={{ color: "var(--neon-2)" }}>swapped from {swappedFrom}</span></>}
           </div>
           {e.extraSet && <div className="extra-why"><span className="extra-tag">+1 set</span> {e.extraSet.map((w) => w.replace(/ \(skipped[^)]*\)$/, "")).join(" · ")}</div>}
@@ -466,6 +467,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               <span className="grow" style={{ fontSize: 14 }}>
                 {hint.kind === "lowerWeight"
                   ? <>You got {hint.got} reps at {fmtNum(hint.from)} last time, the plan says {repRange(repMin, repMax)}. Go down to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>
+                  : ex.measure === "time" ? <>You held {repMax} s on every set last time. Add a little weight: <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps} s.</>
                   : <>You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>}
               </span>
               <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
@@ -509,7 +511,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                 </button>
                 <button className="grow mono" style={{ textAlign: "left", fontSize: 18, padding: "8px 6px", color: x.done ? "var(--ink)" : "var(--muted)", opacity: locked ? 0.55 : 1, cursor: locked ? "default" : undefined }}
                   onClick={(ev) => { ev.stopPropagation(); onFocus(); if (!locked) setSel(x.id); }} aria-label={locked ? "Finish the earlier sets first" : "Edit set"} aria-disabled={locked}>
-                  {fmtW(x.weight)}<span style={{ fontSize: 12 }}>{x.weight != null ? loadSuffix(ex) : ""}</span> <span style={{ opacity: 0.6 }}>×</span> {x.reps ?? "—"}
+                  {fmtW(x.weight)}<span style={{ fontSize: 12 }}>{x.weight != null ? loadSuffix(ex) : ""}</span> <span style={{ opacity: 0.6 }}>×</span> {x.reps ?? "—"}{ex.measure === "time" && x.reps != null ? " s" : ""}
                   {x.id === failSetId && <span className="fail-tag" title="Last set: go to failure"><Icon name="flame" size={14} /> failure</span>}
                 </button>
                 <button key={missing?.id === x.id ? "m" + missing.n : "c"} className={missing?.id === x.id && missing.from === "check" && !x.done ? "shake" : undefined} aria-label={x.done ? "Mark not done" : "Mark done"} aria-pressed={x.done}
@@ -530,8 +532,9 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                 <div style={{ padding: "4px 10px 12px", display: "grid", gap: 10, animation: "pageIn .3s var(--ease) both" }} onClick={(ev) => ev.stopPropagation()}>
                   <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 8, alignItems: "end" }}>
                     <Stepper invalid={missing?.id === x.id && ex.equipment !== "bodyweight" && !(x.weight != null && x.weight > 0)} label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />
-                    <Stepper invalid={missing?.id === x.id && !(x.reps != null && x.reps > 0)} label="Reps" value={x.reps} step={1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
+                    <Stepper invalid={missing?.id === x.id && !(x.reps != null && x.reps > 0)} label={ex.measure === "time" ? "Seconds" : "Reps"} value={x.reps} step={ex.measure === "time" ? 5 : 1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
                   </div>
+                  {ex.measure === "time" && <HoldTimer onStop={(sec) => commit(updateSet(s, e.id, x.id, { reps: sec }))} />}
                   {x.id === failSetId && <div className="fail-cue"><Icon name="flame" size={18} /><span><b>Last set: go to failure.</b> Keep going until you can't do another clean rep.{e.failWhy?.some((w) => w !== MANUAL_WHY) ? <FailWhy why={e.failWhy} /> : null}</span></div>}
                   {(ex.loadMode === "perSide" || ex.singleSleeve) && x.weight != null && x.weight > 0 && <Plates weight={x.weight} single={ex.singleSleeve} />}
                   <button key={missing?.id === x.id ? missing.n : 0} className={"btn btn-primary btn-xl" + (missing?.id === x.id && missing.from === "done" ? " shake" : "")} style={{ minHeight: 56 }} onClick={() => { if (needsValues(x, ex)) return refuse(x, "done"); setSel(null); onToggle(x); }}>
@@ -555,7 +558,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
 /** Why a set can't be marked done yet, or null when it can: reps always, weight unless it's a bodyweight exercise. */
 function needsValues(x: LoggedSet, ex: Exercise): string | null {
   const noW = ex.equipment !== "bodyweight" && (x.weight == null || x.weight <= 0), noR = x.reps == null || x.reps <= 0;
-  return noW && noR ? "Enter weight and reps first" : noW ? "Enter the weight first" : noR ? "Enter the reps first" : null;
+  return noW && noR ? "Enter weight and reps first" : noW ? "Enter the weight first" : noR ? (ex.measure === "time" ? "Enter the seconds first" : "Enter the reps first") : null;
 }
 
 /** Plates to load, drawn as plates (front view, sized by weight) with a count. Standard gym plates, unlimited. */
@@ -582,5 +585,23 @@ function FailWhy({ why }: { why: string[] }) {
       <button className="fail-why-btn" aria-expanded={open} onClick={(ev) => { ev.stopPropagation(); setOpen((o) => !o); }}>{open ? "Hide" : "Why?"}</button>
       {open && <ul className="fail-why muted">{why.map((w) => <li key={w}>{w.replace(/ (in this workout|today)$/, "")}</li>)}</ul>}
     </>
+  );
+}
+
+/** Hold timer: counts up while you hold; Stop fills the set's seconds. */
+function HoldTimer({ onStop }: { onStop: (sec: number) => void }) {
+  const [start, setStart] = useState<number | null>(null);
+  const [now, setNow] = useState(0);
+  useEffect(() => {
+    if (start == null) return;
+    const t = setInterval(() => setNow(Date.now()), 250);
+    return () => clearInterval(t);
+  }, [start]);
+  const sec = start == null ? 0 : Math.max(0, Math.floor((now - start) / 1000));
+  return (
+    <button className={"btn btn-block " + (start == null ? "btn-ghost" : "btn-primary")} style={{ minHeight: 48 }}
+      onClick={() => { if (start == null) { setStart(Date.now()); setNow(Date.now()); } else { onStop(Math.max(1, sec)); setStart(null); } }}>
+      <Icon name="timer" size={20} /> {start == null ? "Start hold" : <>Stop · <span className="mono">{sec} s</span></>}
+    </button>
   );
 }

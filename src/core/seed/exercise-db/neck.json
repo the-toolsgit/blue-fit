@@ -152,7 +152,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "neck-extension",
+  "figureTemplate": "neck-harness-seated",
   "preferred": {
    "goals": [
     "growth"
@@ -270,6 +270,105 @@
   "source": {
    "url": "https://biggerfasterstronger.com/blogs/news/are-you-neglecting-neck-training",
    "url2": "https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/4-way-neck"
+  }
+ },
+ {
+  "id": "lying-plate-neck-side-raise",
+  "name": "Lying Plate Neck Side Raise",
+  "aliases": [
+   "Lying lateral neck flexion",
+   "Side-lying neck raise",
+   "Plate neck side bend"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "neck",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "neck": "side bend"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Trains the sides of the neck.",
+  "setup": [
+   "Lie on your side on a bench, head and neck off the end.",
+   "Light plate on the side of your head over a towel, top hand on it."
+  ],
+  "form": [
+   "Lift your ear toward your top shoulder.",
+   "Lower slowly to a light stretch; switch sides."
+  ],
+  "tips": [
+   "Start very light and add weight slowly."
+  ],
+  "avoid": [
+   "Jerking your head.",
+   "Heavy weight or reps to failure."
+  ],
+  "rangeOfMotion": "Head tilted down → ear toward the top shoulder",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "neck-side-raise-lying",
+  "source": {
+   "url": "https://weighttraining.guide/exercises/lying-weighted-lateral-neck-flexion/",
+   "url2": "https://fitnessvolt.com/lying-weighted-lateral-neck-flexion/"
+  }
+ },
+ {
+  "id": "machine-neck-side-bend",
+  "name": "Machine Neck Side Bend",
+  "aliases": [
+   "4-way neck side bend",
+   "Machine lateral neck flexion"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "neck",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "neck": "side bend"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Side-of-neck work on a 4-way neck machine.",
+  "setup": [
+   "Sit side-on, side of your head on the pad, head upright.",
+   "Torso still, hands on the handles."
+  ],
+  "form": [
+   "Bend your ear toward your shoulder.",
+   "Return slowly to upright; switch sides."
+  ],
+  "tips": [
+   "Start very light and add weight slowly."
+  ],
+  "avoid": [
+   "Jerking your head.",
+   "Heavy weight or reps to failure."
+  ],
+  "rangeOfMotion": "Head upright → ear toward the shoulder",
+  "tempo": "Side 1 s · Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "neck-side-bend-seated",
+  "source": {
+   "url": "https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/4-way-neck",
+   "url2": "https://gomarquette.com/news/2006/5/8/Lateral_Neck_Flexion"
   }
  }
 ]

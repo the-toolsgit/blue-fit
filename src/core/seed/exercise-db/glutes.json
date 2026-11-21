@@ -1266,5 +1266,105 @@
    "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
    "url2": "https://fitnessvolt.com/jeff-nippard-rates-glute-exercises/"
   }
+ },
+ {
+  "id": "b-stance-hip-thrust",
+  "name": "B-Stance Hip Thrust",
+  "aliases": [
+   "Kickstand Hip Thrust",
+   "Staggered-Stance Hip Thrust"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max"
+  },
+  "isHeavy": false,
+  "heavyWhy": "one leg does most: balance limits the load",
+  "why": "Hip thrust with one foot forward: one glute does most of the work.",
+  "setup": [
+   "Upper back on a bench, bar over your hips with a pad.",
+   "Working foot flat; other foot forward, heel down, toes up."
+  ],
+  "form": [
+   "Drive up through the working heel until your body is level, squeeze 1 s.",
+   "Lower until your hips nearly touch the floor."
+  ],
+  "tips": [
+   "The front foot only steadies you."
+  ],
+  "avoid": [
+   "Pushing with the front foot.",
+   "Arching your lower back at the top."
+  ],
+  "rangeOfMotion": "Hips low → body level",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hip-thrust",
+  "source": {
+   "url": "https://www.onnit.com/academy/how-to-do-b-stance-hip-thrusts-like-an-expert",
+   "url2": "https://fitnessvolt.com/b-stance-hip-thrusts/"
+  }
+ },
+ {
+  "id": "side-lying-hip-abduction",
+  "name": "Side-Lying Hip Abduction",
+  "aliases": [
+   "Side-Lying Leg Raise",
+   "Lying side leg lift"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "glutes": "glute medius"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Side glutes, lying down, no machine.",
+  "setup": [
+   "Lie on your side, bottom knee bent, hips stacked.",
+   "Top leg straight, toes pointing forward."
+  ],
+  "form": [
+   "Raise the top leg up and slightly back.",
+   "Lower slowly."
+  ],
+  "tips": [
+   "Too easy? Add an ankle weight."
+  ],
+  "avoid": [
+   "Rolling your hips back.",
+   "Swinging the leg high."
+  ],
+  "rangeOfMotion": "Legs together → top leg raised",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hip-abduction-lying",
+  "source": {
+   "url": "https://www.physitrack.com/exercise-library/how-to-perform-the-side-lying-hip-abduction-exercise",
+   "url2": "https://www.ummhealth.org/health-library/side-lying-hip-abduction-strength"
+  }
  }
 ]

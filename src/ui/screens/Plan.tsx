@@ -138,8 +138,8 @@ export function PlanScreen() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               <Stepper label="Sets" value={slot.sets} step={1} decimals={false} min={1} onChange={(v) => setSlot({ sets: Math.max(1, Math.min(20, v ?? 1)) })} />
               <Stepper label="Rest" suffix={fmtRest(slot.restSec)} value={slot.restSec} step={15} decimals={false} onChange={(v) => setSlot({ restSec: v ?? settings.restDefaultSec })} />
-              <Stepper label="Reps min" value={slot.repMin} step={1} decimals={false} min={1} onChange={(v) => setSlot({ repMin: Math.max(1, v ?? 1), repMax: Math.max(slot.repMax, v ?? 1) })} />
-              <Stepper label="Reps max" value={slot.repMax} step={1} decimals={false} min={1} onChange={(v) => setSlot({ repMax: Math.max(slot.repMin, v ?? slot.repMin) })} />
+              <Stepper label={exMap.get(slot.exerciseId)?.measure === "time" ? "Seconds min" : "Reps min"} value={slot.repMin} step={exMap.get(slot.exerciseId)?.measure === "time" ? 5 : 1} decimals={false} min={1} onChange={(v) => setSlot({ repMin: Math.max(1, v ?? 1), repMax: Math.max(slot.repMax, v ?? 1) })} />
+              <Stepper label={exMap.get(slot.exerciseId)?.measure === "time" ? "Seconds max" : "Reps max"} value={slot.repMax} step={exMap.get(slot.exerciseId)?.measure === "time" ? 5 : 1} decimals={false} min={1} onChange={(v) => setSlot({ repMax: Math.max(slot.repMin, v ?? slot.repMin) })} />
             </div>
             {failureApplies(settings.profile?.goal) && (() => {
               const mode = slot.toFailure === true ? "on" : slot.toFailure === false ? "off" : "auto";

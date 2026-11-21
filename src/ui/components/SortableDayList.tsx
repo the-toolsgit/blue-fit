@@ -72,7 +72,7 @@ function Row({ slot, ex, index, onOpen, onDelete, fail, content }: { slot: Slot;
           <span style={{ display: "block", fontWeight: 600 }}>{ex.name} {ex.isHeavy && <span className="star">★</span>}<FailFlame why={fail} /></span>
           <span className="muted" style={{ fontSize: 12 }}>{slot.supersetGroup ? `Superset ${slot.supersetGroup} · ` : ""}{slot.notes ? `${slot.notes} · ` : ""}rest {fmtRest(slot.restSec)}</span>
         </span>
-        <span className="mono" style={{ whiteSpace: "nowrap" }}>{slot.sets} × {repRange(slot.repMin, slot.repMax)}</span>
+        <span className="mono" style={{ whiteSpace: "nowrap" }}>{slot.sets} × {repRange(slot.repMin, slot.repMax, ex?.measure === "time")}</span>
         <Icon name="chevron" size={16} />
         </>}
       </button>

@@ -67,7 +67,7 @@ function repsByWeight(sessions: Session[], exerciseId: string): Map<number, numb
 
 /** Every exercise in the plan: est. 1RM and reps at the same weight, last 4 weeks vs. before (deload sessions ignored). */
 export function stallCheck(sessions: Session[], routine: Routine | undefined, exMap: Map<string, Exercise>, today: string): StallCheck {
-  const ids = [...new Set((routine?.days ?? []).flatMap((d) => d.slots.map((s) => s.exerciseId)))].filter((id) => exMap.has(id));
+  const ids = [...new Set((routine?.days ?? []).flatMap((d) => d.slots.map((s) => s.exerciseId)))].filter((id) => exMap.has(id) && exMap.get(id)!.measure !== "time"); // holds: no 1RM to judge
   const normal = sessions.filter((s) => !s.deload && s.status === "finished");
   const cutoff = addDays(today, -7 * DELOAD.stallWeeks); // window = after cutoff
   const lifts: StallCheck["lifts"] = [];

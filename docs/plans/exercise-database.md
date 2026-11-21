@@ -47,7 +47,7 @@ Field names are the app's own `Exercise` fields (src/core/types.ts), so the app 
 
 Duplicates are merged (same movement + equipment + body position = one exercise; other names become aliases, old ids
 go to `formerIds`). Target: as many as are real and distinct, likely 600–800. An exercise without a clear source, main
-muscle and angle is left out. Text is never copied from a source. Left out on purpose: static holds (plank, side plank, farmer's walk, dead hang), which don't fit the two-move tempo; old ids `plank` and `side-bridge` stay in the old library until holds get their own type.
+muscle and angle is left out. Text is never copied from a source. Holds (Nov 21 2026): plank, side plank, Copenhagen plank and farmer's carry are entries with `measure: "time"` (docs/plans/app-reads-exercise-db.md); dead hang still left out (no checked source).
 
 ## 3. Animations
 

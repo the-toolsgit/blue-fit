@@ -1,12 +1,12 @@
 // History: calendar day totals, weekly plan streak, editing helpers for past workouts.
-import type { Routine, Session, StreakFreeze } from "./types";
+import type { Exercise, Routine, Session, StreakFreeze } from "./types";
 import { addDays, daysBetween, parseLocalDate, weekStart } from "./util";
 import { countsForLoad, countsForVolume } from "./volume";
 
 export interface DayLoad { date: string; sets: number; tonnage: number; sessionIds: string[] }
 
 /** Per calendar day: working/failure sets done, tonnage and the sessions (finished only). */
-export function dailyLoad(sessions: Session[]): Map<string, DayLoad> {
+export function dailyLoad(sessions: Session[], exMap?: Map<string, Exercise>): Map<string, DayLoad> {
   const m = new Map<string, DayLoad>();
   for (const s of sessions) {
     if (s.status !== "finished") continue;
@@ -14,8 +14,9 @@ export function dailyLoad(sessions: Session[]): Map<string, DayLoad> {
     d.sessionIds.push(s.id);
     for (const e of s.entries) for (const x of e.sets) {
       if (!x.done) continue;
+      const time = exMap?.get(e.exerciseId)?.measure === "time";
       if (countsForVolume(x.type)) d.sets++;
-      if (countsForLoad(x.type) && x.weight != null && x.reps != null) d.tonnage += x.weight * x.reps;
+      if (!time && countsForLoad(x.type) && x.weight != null && x.reps != null) d.tonnage += x.weight * x.reps;
     }
     m.set(s.date, d);
   }

@@ -67,6 +67,18 @@ export interface Exercise {
   figure: FigureSpec | null;
   isCustom: boolean;
   archived: boolean;
+  /** Why it is or isn't a ★ key lift (from the exercise database) */
+  heavyWhy?: string;
+  /** A failed rep is dangerous: never a failure set (from the exercise database) */
+  unsafeFailure?: boolean;
+  /** Older ids of this exercise (merged duplicates); they still open it */
+  formerIds?: string[];
+  /** Top pick for these goals (exercise database): "growth", "strength"; maintenance and endurance follow growth */
+  preferred?: { goals: string[]; why: string };
+  /** "time": sets are logged in seconds (holds). Default: reps. */
+  measure?: "reps" | "time";
+  /** The logged weight is help (assisted machine): less is harder. No "add weight" hints or weight PRs. */
+  assisted?: boolean;
 }
 
 export interface Slot {

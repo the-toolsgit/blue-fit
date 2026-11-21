@@ -197,10 +197,7 @@
   "defaultRestSec": 120,
   "incrementLb": 2.5,
   "bodyRegion": "upper",
-  "figureTemplate": "wrist-curl",
-  "figureAdjust": {
-   "equipmentProp": "bar"
-  },
+  "figureTemplate": "wrist-curl-behind",
   "preferred": {
    "goals": [
     "growth"
@@ -303,7 +300,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "wrist-curl",
+  "figureTemplate": "forearm-pronation",
   "source": {
    "url": "https://www.acefitness.org/resources/everyone/exercise-library/31/wrist-supination-and-pronation/"
   }
@@ -350,7 +347,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "wrist-curl",
+  "figureTemplate": "forearm-supination",
   "source": {
    "url": "https://www.acefitness.org/resources/everyone/exercise-library/31/wrist-supination-and-pronation/"
   }
@@ -516,6 +513,157 @@
   },
   "source": {
    "url": "https://weighttraining.guide/exercises/cable-reverse-wrist-curl/"
+  }
+ },
+ {
+  "id": "wrist-roller",
+  "name": "Wrist Roller",
+  "aliases": [
+   "Wrist Roller Roll-Up",
+   "Forearm roller"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "forearms": [
+    "flexors",
+    "extensors"
+   ]
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Roll a weight up on a rope: both sides of the forearm.",
+  "setup": [
+   "Stand, roller in both hands, palms down, arms straight out in front."
+  ],
+  "form": [
+   "Turn one wrist at a time to roll the weight all the way up.",
+   "Unroll it slowly back down."
+  ],
+  "tips": [
+   "One rep = all the way up and back down.",
+   "Palms up works the other side more."
+  ],
+  "avoid": [
+   "Dropping your arms.",
+   "Letting the weight spin down fast."
+  ],
+  "rangeOfMotion": "Weight on the floor → rope rolled up",
+  "tempo": "Up 10 s · Down 15 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "wrist-roller",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Wrist_Roller",
+   "url2": "https://www.strengthlog.com/wrist-roller/"
+  }
+ },
+ {
+  "id": "standing-barbell-reverse-wrist-curl",
+  "name": "Standing Barbell Reverse Wrist Curl",
+  "aliases": [
+   "Reverse Standing Wrist Curl",
+   "Standing barbell wrist extension"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "forearms": "extensors"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Wrist extension standing, bar in front of your thighs.",
+  "setup": [
+   "Stand, bar against your thighs, palms down, arms straight."
+  ],
+  "form": [
+   "Lift the backs of your hands as high as they go.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging or shrugging.",
+   "Bending your elbows."
+  ],
+  "rangeOfMotion": "Wrists bent down → hands lifted",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "wrist-curl-standing",
+  "source": {
+   "url": "https://training.fit/exercise/reverse-standing-wrist-curl/",
+   "url2": "https://fitnessvolt.com/barbell-reverse-wrist-curl-guide/"
+  }
+ },
+ {
+  "loadMode": "perHand",
+  "compound": false,
+  "isHeavy": false,
+  "heavyWhy": "a hold, not a lift",
+  "measure": "time",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "tips": [],
+  "avoid": [
+   "Leaning to one side.",
+   "Dropping the weights: set them down."
+  ],
+  "id": "farmers-walk",
+  "name": "Farmer's Carry",
+  "aliases": [
+   "Farmer's Walk",
+   "Farmers Walk",
+   "Dumbbell Farmer's Carry"
+  ],
+  "equipment": "dumbbell",
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "forearms": "flexors",
+   "traps": "shrug"
+  },
+  "stretch": [],
+  "why": "Walk holding heavy weights: grip and upper traps.",
+  "setup": [
+   "A heavy dumbbell in each hand at your sides, clear path ahead."
+  ],
+  "form": [
+   "Stand tall, shoulders back, and walk with short steps.",
+   "Hold on for the time, then set the weights down."
+  ],
+  "rangeOfMotion": "Standing, weights at your sides, held",
+  "tempo": "Hold 30–60 s",
+  "bodyRegion": "upper",
+  "figureTemplate": "carry",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Farmers_Walk",
+   "url2": "https://www.strengthlog.com/farmers-walk/"
   }
  }
 ]

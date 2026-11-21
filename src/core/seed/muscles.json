@@ -1168,7 +1168,7 @@
       "name": "Neck",
       "side": "both",
       "size": "small",
-      "does": "Bends and straightens the head.",
+      "does": "Bends the head forward, back and to the side.",
       "angles": [
         {
           "name": "flexion",
@@ -1182,6 +1182,14 @@
           "what": "Head back.",
           "examples": [
             "Neck Extension"
+          ]
+        },
+        {
+          "name": "side bend",
+          "what": "Ear toward the shoulder.",
+          "examples": [
+            "Lying Plate Neck Side Raise",
+            "Machine Neck Side Bend"
           ]
         }
       ],

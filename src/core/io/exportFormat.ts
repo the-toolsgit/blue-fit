@@ -19,6 +19,8 @@ export const exerciseSchema = z.object({
   defaultRestSec: z.number().int().min(0).max(1800), incrementLb: z.number().min(0).max(100),
   figure: z.object({ v: z.literal("f").optional(), base: z.record(str, z.unknown()), A: z.record(str, z.number()), B: z.record(str, z.number()), props: z.array(z.record(str, z.unknown())).optional() }).nullable(),
   isCustom: z.boolean(), archived: z.boolean(),
+  heavyWhy: str.optional(), unsafeFailure: z.boolean().optional(), formerIds: strs.optional(),
+  preferred: z.object({ goals: strs, why: str }).optional(), measure: z.enum(["reps", "time"]).optional(), assisted: z.boolean().optional(),
 });
 
 const slotSchema = z.object({

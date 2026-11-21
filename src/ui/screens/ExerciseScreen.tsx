@@ -60,7 +60,7 @@ function Section({ title, items, tone }: { title: string; items: string[]; tone?
 /** `failWhy`: this exercise takes its last set to failure in this workout (with the reasons). */
 export function ExerciseInfo({ ex, whyOverride, tipsOverride, failWhy }: { ex: Exercise; whyOverride?: string; tipsOverride?: string[]; failWhy?: string[] }) {
   const { finished, settings } = useStore();
-  const rec = computeRecords(finished, ex.id);
+  const rec = computeRecords(finished, ex.id, undefined, ex.measure === "time");
   const last = lastEntryFor(finished, ex.id);
   const restSec = ex.defaultRestSec || settings.restDefaultSec;
   return (

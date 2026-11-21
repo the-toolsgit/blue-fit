@@ -45,7 +45,19 @@ export function failureJump(failReps: number, repMax: number): number {
 }
 
 export function progressionHint(lastSets: LoggedSet[] | undefined, repMin: number, repMax: number, increment: number,
-  opts: { fail?: LoggedSet; prev?: PastSets } = {}): Hint {
+  opts: { fail?: LoggedSet; prev?: PastSets; time?: boolean } = {}): Hint {
+  // Holds (seconds; *judgment*, coaching): every set held to the top of the range → add a little weight, back to the
+  // bottom of the range; otherwise add 5 s to the first set that fell short.
+  if (opts.time) {
+    const held = (lastSets ?? []).filter((x) => x.done && (x.type === "working" || x.type === "failure") && x.reps != null);
+    if (!held.length) return { kind: "none" };
+    const top = Math.max(...held.map((x) => x.weight ?? 0));
+    if (held.every((x) => x.reps! >= repMax)) return { kind: "addWeight", weight: nextWeight(top, increment), reps: repMin, from: top };
+    const lastReps = held.map((x) => x.reps!), targetReps = [...lastReps];
+    const i = targetReps.findIndex((r) => r < repMax);
+    if (i >= 0) targetReps[i] = Math.min(repMax, targetReps[i] + 5);
+    return { kind: "beatReps", weight: top, targetReps, lastReps };
+  }
   const work = (lastSets ?? []).filter(isWork);
   if (!work.length) return { kind: "none" };
   const top = Math.max(...work.map((x) => x.weight!));

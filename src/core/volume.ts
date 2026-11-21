@@ -47,7 +47,8 @@ export const loadFactor = (ex: Exercise | undefined) => (ex?.loadMode === "perSi
 export function tonnage(sessions: Session[], exMap?: Map<string, Exercise>): number {
   let t = 0;
   for (const s of sessions) for (const e of s.entries) {
-    const k = loadFactor(exMap?.get(e.exerciseId));
+    const ex = exMap?.get(e.exerciseId);
+    const k = ex?.measure === "time" ? 0 : loadFactor(ex); // holds: seconds aren't reps
     for (const x of e.sets) if (x.done && countsForLoad(x.type) && x.weight != null && x.reps != null) t += x.weight * x.reps * k;
   }
   return t;

@@ -122,7 +122,7 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
               <button className="icon-btn" onClick={() => setMenu(e.id)} aria-label={`Options for ${ex?.name}`}><Icon name="more" /></button>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "40px 1fr 14px 1fr 40px", gap: 6, alignItems: "center", marginTop: 8 }}>
-              <span className="eyebrow" style={{ fontSize: 9 }}>Type</span><span className="eyebrow" style={{ fontSize: 9 }}>lb{ex ? loadSuffix(ex) : ""}</span><span /><span className="eyebrow" style={{ fontSize: 9 }}>Reps</span><span />
+              <span className="eyebrow" style={{ fontSize: 9 }}>Type</span><span className="eyebrow" style={{ fontSize: 9 }}>lb{ex ? loadSuffix(ex) : ""}</span><span /><span className="eyebrow" style={{ fontSize: 9 }}>{ex?.measure === "time" ? "Sec" : "Reps"}</span><span />
               {e.sets.map((x: LoggedSet) => {
                 const t = TYPE_UI[x.type];
                 const wi = e.sets.filter((y, k) => y.type === "working" && k <= e.sets.indexOf(x)).length;
@@ -131,7 +131,7 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
                     style={{ height: 40, borderRadius: 10, font: "700 15px var(--mono)", color: t.color, border: `1px solid color-mix(in srgb, ${t.color} 45%, transparent)` }}>{t.short || wi}</button>,
                   <NumField key={x.id + "w"} label="Weight" decimals value={x.weight} onChange={(v) => editSet(e.id, x.id, { weight: v })} />,
                   <span key={x.id + "x"} className="muted" style={{ textAlign: "center" }}>×</span>,
-                  <NumField key={x.id + "r"} label="Reps" value={x.reps} onChange={(v) => editSet(e.id, x.id, { reps: v })} />,
+                  <NumField key={x.id + "r"} label={ex?.measure === "time" ? "Seconds" : "Reps"} value={x.reps} onChange={(v) => editSet(e.id, x.id, { reps: v })} />,
                   <button key={x.id + "d"} className="icon-btn" aria-label="Delete set" onClick={() => commit(removeSet(s, e.id, x.id))}><Icon name="trash" size={18} /></button>,
                 ];
               })}

@@ -68,7 +68,9 @@
   "id": "cable-seated-crunch",
   "name": "Seated Cable Crunch",
   "aliases": [
-   "Cable Seated Crunch"
+   "Cable Seated Crunch",
+   "Lat Pulldown Cable Crunch",
+   "Face-away lat pulldown crunch"
   ],
   "equipment": "cable",
   "loadMode": "total",
@@ -669,7 +671,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "crunch",
+  "figureTemplate": "v-up",
   "source": {
    "db": "free-exercise-db",
    "id": "Jackknife_Sit-Up"
@@ -820,7 +822,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "leg-raise-lying",
+  "figureTemplate": "leg-pull-in-lying",
   "source": {
    "db": "free-exercise-db",
    "id": "Decline_Reverse_Crunch"
@@ -866,7 +868,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "leg-raise-lying",
+  "figureTemplate": "leg-pull-in-lying",
   "source": {
    "db": "free-exercise-db",
    "id": "Flat_Bench_Leg_Pull-In"
@@ -915,7 +917,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "leg-raise-lying",
+  "figureTemplate": "leg-pull-in-seated",
   "source": {
    "db": "free-exercise-db",
    "id": "Seated_Flat_Bench_Leg_Pull-In"
@@ -1021,7 +1023,8 @@
   "id": "hanging-knee-raise",
   "name": "Hanging Knee Raise",
   "aliases": [
-   "Hanging knee tuck"
+   "Hanging knee tuck",
+   "Garhammer Raise"
   ],
   "equipment": "bodyweight",
   "loadMode": "total",
@@ -1055,7 +1058,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "leg-raise-hanging",
+  "figureTemplate": "knee-raise-hanging",
   "source": {
    "url": "https://www.strengthlog.com/hanging-knee-raise/",
    "url2": "https://barbend.com/hanging-knee-raises/"
@@ -1144,7 +1147,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "leg-raise-hanging",
+  "figureTemplate": "knee-raise-chair",
   "source": {
    "db": "free-exercise-db",
    "id": "Knee_Hip_Raise_On_Parallel_Bars"
@@ -1347,10 +1350,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "ab-wheel",
-  "figureAdjust": {
-   "equipmentProp": "bar"
-  },
+  "figureTemplate": "rollout-toes",
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Ab_Rollout"
@@ -1395,10 +1395,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "ab-wheel",
-  "figureAdjust": {
-   "equipmentProp": "bar"
-  },
+  "figureTemplate": "rollout-bench",
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Rollout_from_Bench"
@@ -1585,10 +1582,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "side-bend",
-  "figureAdjust": {
-   "equipmentProp": "none"
-  },
+  "figureTemplate": "side-bend-high-cable",
   "source": {
    "db": "free-exercise-db",
    "id": "One-Arm_High-Pulley_Cable_Side_Bends"
@@ -1682,7 +1676,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "crunch",
+  "figureTemplate": "bicycle",
   "source": {
    "db": "free-exercise-db",
    "id": "Air_Bike"
@@ -1727,7 +1721,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "crunch",
+  "figureTemplate": "heel-touch",
   "source": {
    "db": "free-exercise-db",
    "id": "Alternate_Heel_Touchers"
@@ -1771,7 +1765,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "crunch",
+  "figureTemplate": "side-crunch",
   "source": {
    "db": "free-exercise-db",
    "id": "Oblique_Crunches_-_On_The_Floor"
@@ -1815,7 +1809,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "crunch",
+  "figureTemplate": "side-jackknife",
   "source": {
    "db": "free-exercise-db",
    "id": "Side_Jackknife"
@@ -2085,7 +2079,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "trunk-rotation",
+  "figureTemplate": "russian-twist-ball",
   "source": {
    "db": "free-exercise-db",
    "id": "Cable_Russian_Twists"
@@ -2324,6 +2318,293 @@
   "source": {
    "url": "https://www.exercise.com/exercises/torso-rotation-machine/",
    "url2": "https://livestrong.com/article/527657-what-muscles-does-the-rotary-torso-exercise-machine-work"
+  }
+ },
+ {
+  "id": "hanging-oblique-knee-raise",
+  "name": "Hanging Oblique Knee Raise",
+  "aliases": [
+   "Hanging knee oblique raise",
+   "Hanging twisting knee raise"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hanging knee raise with a twist for the sides.",
+  "setup": [
+   "Hang from a bar, arms straight, legs together."
+  ],
+  "form": [
+   "Bring your knees up and across toward one side.",
+   "Lower slowly; switch sides."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging.",
+   "Bending your arms."
+  ],
+  "rangeOfMotion": "Hanging straight → knees up to one side",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "knee-raise-hanging",
+  "source": {
+   "url": "https://sweat.com/exercises/hanging-oblique-knee-raise",
+   "url2": "https://www.exercise.com/exercises/hanging-oblique-raise"
+  }
+ },
+ {
+  "id": "exercise-ball-pull-in",
+  "name": "Stability Ball Pull-In",
+  "aliases": [
+   "Exercise Ball Pull-In",
+   "Stability ball knee tuck",
+   "Swiss ball knee tuck"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Plank with shins on a ball: roll your knees in.",
+  "setup": [
+   "Push-up position, hands under your shoulders, shins on the ball."
+  ],
+  "form": [
+   "Pull your knees to your chest, rolling the ball in.",
+   "Roll back out slowly to a straight plank."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lower back sagging.",
+   "Shoulders drifting back."
+  ],
+  "rangeOfMotion": "Straight plank → knees to chest",
+  "tempo": "In 1 s · Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "ball-pull-in",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Exercise_Ball_Pull-In",
+   "url2": "https://www.acefitness.org/resources/everyone/exercise-library/60/stability-ball-knee-tucks/"
+  }
+ },
+ {
+  "id": "low-cable-side-bend",
+  "name": "Low Cable Side Bend",
+  "aliases": [
+   "Cable Side Bend",
+   "Low-pulley side bend"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Side bend against a low cable: tension at the top too.",
+  "setup": [
+   "Handle on a low pulley. Stand side-on, handle in the near hand, arm straight."
+  ],
+  "form": [
+   "Bend sideways toward the pulley.",
+   "Come back up past straight, a little away from it."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling with your arm.",
+   "Leaning forward or back."
+  ],
+  "rangeOfMotion": "Upright → bent toward the pulley",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "side-bend",
+  "figureAdjust": {
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "url": "https://fitnessvolt.com/cable-side-bend/",
+   "url2": "https://www.liftosaur.com/exercises/cable-side-bend"
+  }
+ },
+ {
+  "id": "weighted-decline-sit-up",
+  "name": "Weighted Decline Sit-Up",
+  "aliases": [
+   "Decline Weighted Sit-Up",
+   "Plate decline sit-up"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Harder sit-up: head down on a decline, weight on your chest.",
+  "setup": [
+   "Decline bench, feet locked under the pads.",
+   "Plate across your chest, arms crossed over it."
+  ],
+  "form": [
+   "Curl up until your chest nears your knees.",
+   "Lower slowly, one part of the back at a time."
+  ],
+  "tips": [
+   "Start with a low angle and a light plate."
+  ],
+  "avoid": [
+   "Throwing yourself up.",
+   "Yanking your head forward."
+  ],
+  "rangeOfMotion": "Lying back → chest near knees",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "figureAdjust": {
+   "bench": "decline"
+  },
+  "source": {
+   "url": "https://www.exercise.com/exercises/weighted-decline-sit-up",
+   "url2": "https://fitnessvolt.com/decline-sit-up/"
+  }
+ },
+ {
+  "loadMode": "total",
+  "compound": false,
+  "isHeavy": false,
+  "heavyWhy": "a hold, not a lift",
+  "measure": "time",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "tips": [
+   "Too easy: a plate on your back."
+  ],
+  "avoid": [
+   "Hips sagging or piking up."
+  ],
+  "id": "plank",
+  "name": "Plank",
+  "aliases": [
+   "Front Plank",
+   "Forearm Plank"
+  ],
+  "equipment": "bodyweight",
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "stretch": [],
+  "why": "Hold your body straight to train the abs to brace.",
+  "setup": [
+   "Forearms on the floor under your shoulders, legs straight back, on your toes."
+  ],
+  "form": [
+   "Squeeze your glutes and abs and hold a straight line from head to heels.",
+   "Hold for the time, breathing normally."
+  ],
+  "rangeOfMotion": "Body straight, held",
+  "tempo": "Hold 30–60 s",
+  "bodyRegion": "upper",
+  "figureTemplate": "plank-hold",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Plank"
+  }
+ },
+ {
+  "loadMode": "total",
+  "compound": false,
+  "isHeavy": false,
+  "heavyWhy": "a hold, not a lift",
+  "measure": "time",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "tips": [
+   "Too easy: a plate on your hip."
+  ],
+  "avoid": [
+   "Hips dropping toward the floor."
+  ],
+  "id": "side-bridge",
+  "name": "Side Plank",
+  "aliases": [
+   "Side Bridge"
+  ],
+  "equipment": "bodyweight",
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "stretch": [],
+  "why": "Hold your body straight on one side to train the obliques.",
+  "setup": [
+   "Lie on your side, elbow under your shoulder, legs straight and stacked."
+  ],
+  "form": [
+   "Lift your hips until your body is a straight line and hold.",
+   "Do the same time on the other side."
+  ],
+  "rangeOfMotion": "Body straight on one side, held",
+  "tempo": "Hold 30–60 s",
+  "bodyRegion": "upper",
+  "figureTemplate": "side-plank-hold",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Side_Bridge",
+   "url2": "https://www.strengthlog.com/side-plank/"
   }
  }
 ]

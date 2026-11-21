@@ -48,8 +48,8 @@
    "Hands so close your wrists bend.",
    "Elbows flaring out."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -115,8 +115,8 @@
   "avoid": [
    "Elbows flaring out."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
@@ -170,8 +170,8 @@
   "avoid": [
    "Elbows flaring out."
   ],
-  "rangeOfMotion": "Arms straight \u2192 dumbbell on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → dumbbell on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -231,8 +231,8 @@
   "avoid": [
    "Elbows flaring out."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -294,8 +294,8 @@
    "Wrists bending back.",
    "Going without a spotter or safeties."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -355,8 +355,8 @@
   "avoid": [
    "Bouncing your elbows off the floor."
   ],
-  "rangeOfMotion": "Arms straight \u2192 upper arms on the floor",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → upper arms on the floor",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -395,8 +395,8 @@
     "medial head"
    ]
   },
-  "isHeavy": true,
-  "heavyWhy": "multi-joint, big muscles, stable",
+  "isHeavy": false,
+  "heavyWhy": "one arm, balance limits the load",
   "unsafeFailure": true,
   "why": "Floor press with one hand on the bar's middle.",
   "setup": [
@@ -411,8 +411,8 @@
   "avoid": [
    "Letting the bar tip to one side."
   ],
-  "rangeOfMotion": "Arm straight \u2192 elbow on the floor",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arm straight → elbow on the floor",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -463,8 +463,8 @@
   "avoid": [
    "Bouncing your elbows off the floor."
   ],
-  "rangeOfMotion": "Arms straight \u2192 upper arms on the floor",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → upper arms on the floor",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -523,8 +523,8 @@
    "Elbows flaring out.",
    "Dropping the bar onto your face."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar above your chin",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar above your chin",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -581,8 +581,8 @@
   "avoid": [
    "Elbows flaring out."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar above your chin",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar above your chin",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -644,8 +644,8 @@
    "Short reps that skip the deep part.",
    "Leaning far forward."
   ],
-  "rangeOfMotion": "Handles up \u2192 arms straight",
-  "tempo": "Down 1 s \u00b7 Up 3 s",
+  "rangeOfMotion": "Handles up → arms straight",
+  "tempo": "Down 1 s · Up 3 s",
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
@@ -709,8 +709,8 @@
    "Swinging your legs.",
    "Dropping fast into the bottom."
   ],
-  "rangeOfMotion": "Arms straight \u2192 upper arms level",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → upper arms level",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -781,8 +781,8 @@
    "Going so deep your shoulders hurt.",
    "Hips drifting away from the bench."
   ],
-  "rangeOfMotion": "Arms straight \u2192 upper arms level",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → upper arms level",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -839,8 +839,8 @@
    "Hips sagging.",
    "Elbows flaring out."
   ],
-  "rangeOfMotion": "Arms straight \u2192 chest near your hands",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → chest near your hands",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -898,12 +898,12 @@
    "Hips sagging.",
    "Elbows flaring out."
   ],
-  "rangeOfMotion": "Arms straight \u2192 chest at your hands",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → chest at your hands",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "pushup",
+  "figureTemplate": "pushup-incline",
   "figureAdjust": {
    "grip": "close"
   },
@@ -952,8 +952,8 @@
    "Elbows moving forward.",
    "Leaning over the bar."
   ],
-  "rangeOfMotion": "Forearms level \u2192 arms straight",
-  "tempo": "Down 1 s \u00b7 Hold 1 s \u00b7 Up 3 s",
+  "rangeOfMotion": "Forearms level → arms straight",
+  "tempo": "Down 1 s · Hold 1 s · Up 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1006,8 +1006,8 @@
    "Elbows moving forward.",
    "Leaning over the bar."
   ],
-  "rangeOfMotion": "Forearms level \u2192 arms straight",
-  "tempo": "Down 1 s \u00b7 Up 3 s",
+  "rangeOfMotion": "Forearms level → arms straight",
+  "tempo": "Down 1 s · Up 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1065,8 +1065,8 @@
    "Elbows moving forward.",
    "Leaning over the rope."
   ],
-  "rangeOfMotion": "Forearms level \u2192 arms straight",
-  "tempo": "Down 1 s \u00b7 Up 3 s",
+  "rangeOfMotion": "Forearms level → arms straight",
+  "tempo": "Down 1 s · Up 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1118,8 +1118,8 @@
    "Elbows moving forward.",
    "Wrists bending back."
   ],
-  "rangeOfMotion": "Forearms level \u2192 arms straight",
-  "tempo": "Down 1 s \u00b7 Up 3 s",
+  "rangeOfMotion": "Forearms level → arms straight",
+  "tempo": "Down 1 s · Up 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1170,8 +1170,8 @@
    "Elbow moving forward.",
    "Twisting your body."
   ],
-  "rangeOfMotion": "Forearm up \u2192 arm straight",
-  "tempo": "Down 1 s \u00b7 Hold 1 s \u00b7 Up 3 s",
+  "rangeOfMotion": "Forearm up → arm straight",
+  "tempo": "Down 1 s · Hold 1 s · Up 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1223,12 +1223,12 @@
    "Elbows drifting up.",
    "Swinging the body."
   ],
-  "rangeOfMotion": "Elbows bent \u2192 arms straight",
-  "tempo": "Down 1 s \u00b7 Hold 1 s \u00b7 Up 3 s",
+  "rangeOfMotion": "Elbows bent → arms straight",
+  "tempo": "Down 1 s · Hold 1 s · Up 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "pushdown",
+  "figureTemplate": "cross-body-extension",
   "source": {
    "url": "https://www.strengthlog.com/crossbody-cable-triceps-extension/"
   }
@@ -1273,8 +1273,8 @@
    "Elbows moving or flaring out.",
    "Cutting the stretch short."
   ],
-  "rangeOfMotion": "Hands behind your head \u2192 arms straight",
-  "tempo": "Up 1 s \u00b7 Down 3 s",
+  "rangeOfMotion": "Hands behind your head → arms straight",
+  "tempo": "Up 1 s · Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1336,8 +1336,8 @@
    "Elbows flaring out.",
    "Cutting the stretch short."
   ],
-  "rangeOfMotion": "Hands behind your head \u2192 arms straight",
-  "tempo": "Up 1 s \u00b7 Down 3 s",
+  "rangeOfMotion": "Hands behind your head → arms straight",
+  "tempo": "Up 1 s · Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1384,12 +1384,12 @@
    "Elbow dropping forward.",
    "Twisting your body."
   ],
-  "rangeOfMotion": "Hand behind your head \u2192 arm straight",
-  "tempo": "Up 1 s \u00b7 Down 3 s",
+  "rangeOfMotion": "Hand behind your head → arm straight",
+  "tempo": "Up 1 s · Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "overhead-extension-cable",
+  "figureTemplate": "katana",
   "figureAdjust": {
    "oneArm": true
   },
@@ -1433,8 +1433,8 @@
   "avoid": [
    "Elbow flaring out."
   ],
-  "rangeOfMotion": "Hand behind your head \u2192 arm straight",
-  "tempo": "Up 1 s \u00b7 Down 3 s",
+  "rangeOfMotion": "Hand behind your head → arm straight",
+  "tempo": "Up 1 s · Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1483,8 +1483,8 @@
   "avoid": [
    "Upper arms lifting off the bench."
   ],
-  "rangeOfMotion": "Hands behind your head \u2192 arms straight",
-  "tempo": "Up 1 s \u00b7 Down 3 s",
+  "rangeOfMotion": "Hands behind your head → arms straight",
+  "tempo": "Up 1 s · Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1534,8 +1534,8 @@
    "Elbows flaring out.",
    "Arching your lower back."
   ],
-  "rangeOfMotion": "Dumbbell behind your head \u2192 arms straight",
-  "tempo": "Up 1 s \u00b7 Down 3 s",
+  "rangeOfMotion": "Dumbbell behind your head → arms straight",
+  "tempo": "Up 1 s · Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1581,8 +1581,8 @@
    "Elbows flaring out.",
    "Arching your lower back."
   ],
-  "rangeOfMotion": "Dumbbell behind your head \u2192 arms straight",
-  "tempo": "Up 1 s \u00b7 Down 3 s",
+  "rangeOfMotion": "Dumbbell behind your head → arms straight",
+  "tempo": "Up 1 s · Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1628,8 +1628,8 @@
   "avoid": [
    "Elbow flaring out."
   ],
-  "rangeOfMotion": "Dumbbell behind your head \u2192 arm straight",
-  "tempo": "Up 1 s \u00b7 Down 3 s",
+  "rangeOfMotion": "Dumbbell behind your head → arm straight",
+  "tempo": "Up 1 s · Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1679,8 +1679,8 @@
    "Elbows flaring out.",
    "Arching your lower back."
   ],
-  "rangeOfMotion": "Bar behind your head \u2192 arms straight",
-  "tempo": "Up 1 s \u00b7 Down 3 s",
+  "rangeOfMotion": "Bar behind your head → arms straight",
+  "tempo": "Up 1 s · Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 2.5,
   "bodyRegion": "upper",
@@ -1735,8 +1735,8 @@
    "Elbows flaring out.",
    "Upper arms swinging."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar at your forehead",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar at your forehead",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
@@ -1795,8 +1795,8 @@
   "avoid": [
    "Elbows flaring out."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar behind your head",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar behind your head",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 2.5,
   "bodyRegion": "upper",
@@ -1830,7 +1830,7 @@
   "unsafeFailure": true,
   "why": "Extension on an incline: long head stretched.",
   "setup": [
-   "Incline bench at 45\u201375\u00b0, bar overhead, hands a bit closer than shoulders."
+   "Incline bench at 45–75°, bar overhead, hands a bit closer than shoulders."
   ],
   "form": [
    "Lower the bar behind your head.",
@@ -1841,8 +1841,8 @@
    "Elbows flaring out.",
    "Moving your upper arms."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar behind your head",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar behind your head",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 2.5,
   "bodyRegion": "upper",
@@ -1879,7 +1879,7 @@
   "unsafeFailure": true,
   "why": "Triceps (long head) stretched.",
   "setup": [
-   "Bench at 30\u201345\u00b0.",
+   "Bench at 30–45°.",
    "Arms straight up, tilted slightly back."
   ],
   "form": [
@@ -1891,8 +1891,8 @@
    "Moving your upper arms.",
    "Elbows flaring out."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar behind your head",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar behind your head",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
@@ -1937,8 +1937,8 @@
   "avoid": [
    "Elbows flaring out."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar at your forehead",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar at your forehead",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
@@ -1985,8 +1985,8 @@
   "avoid": [
    "Elbows flaring out."
   ],
-  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your head",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → dumbbells beside your head",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2040,8 +2040,8 @@
    "Elbows flaring out.",
    "Upper arms swinging."
   ],
-  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your head",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → dumbbells beside your head",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2090,8 +2090,8 @@
   "avoid": [
    "Elbows flaring out."
   ],
-  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your head",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → dumbbells beside your head",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2141,8 +2141,8 @@
   "avoid": [
    "Upper arm moving."
   ],
-  "rangeOfMotion": "Arm straight \u2192 dumbbell by the other shoulder",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arm straight → dumbbell by the other shoulder",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2193,8 +2193,8 @@
   "avoid": [
    "Upper arm moving."
   ],
-  "rangeOfMotion": "Arm straight \u2192 dumbbell by your shoulder",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arm straight → dumbbell by your shoulder",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2247,15 +2247,12 @@
    "Resting the dumbbells on your chest.",
    "Upper arms moving."
   ],
-  "rangeOfMotion": "Arms straight \u2192 dumbbells on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → dumbbells on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "skullcrusher",
-  "figureAdjust": {
-   "equipmentProp": "db"
-  },
+  "figureTemplate": "tate-press",
   "source": {
    "db": "free-exercise-db",
    "id": "Tate_Press"
@@ -2298,8 +2295,8 @@
   "avoid": [
    "Upper arms swinging."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar at your forehead",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar at your forehead",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2348,8 +2345,8 @@
   "avoid": [
    "Upper arms moving."
   ],
-  "rangeOfMotion": "Elbows bent \u2192 arms straight",
-  "tempo": "Up 1 s \u00b7 Hold 1 s \u00b7 Down 3 s",
+  "rangeOfMotion": "Elbows bent → arms straight",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2392,8 +2389,8 @@
   "avoid": [
    "Upper arms moving."
   ],
-  "rangeOfMotion": "Elbows bent \u2192 arms straight",
-  "tempo": "Up 1 s \u00b7 Hold 1 s \u00b7 Down 3 s",
+  "rangeOfMotion": "Elbows bent → arms straight",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2442,16 +2439,12 @@
   "avoid": [
    "Upper arms lifting off the pad."
   ],
-  "rangeOfMotion": "Elbows bent \u2192 arms straight",
-  "tempo": "Down 1 s \u00b7 Hold 1 s \u00b7 Up 3 s",
+  "rangeOfMotion": "Elbows bent → arms straight",
+  "tempo": "Down 1 s · Hold 1 s · Up 3 s",
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "pushdown",
-  "figureAdjust": {
-   "seated": true,
-   "equipmentProp": "none"
-  },
+  "figureTemplate": "triceps-extension-machine",
   "source": {
    "db": "free-exercise-db",
    "id": "Machine_Triceps_Extension"
@@ -2488,7 +2481,7 @@
   ],
   "form": [
    "Straighten your arms back, squeeze 1 s.",
-   "Bend back to about 90\u00b0."
+   "Bend back to about 90°."
   ],
   "tips": [
    "Go light. The squeeze is the point."
@@ -2497,8 +2490,8 @@
    "Upper arms dropping.",
    "Swinging the weight."
   ],
-  "rangeOfMotion": "Elbows at 90\u00b0 \u2192 arms straight",
-  "tempo": "Straighten 1 s \u00b7 Hold 1 s \u00b7 Bend 3 s",
+  "rangeOfMotion": "Elbows at 90° → arms straight",
+  "tempo": "Straighten 1 s · Hold 1 s · Bend 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2541,7 +2534,7 @@
   ],
   "form": [
    "Straighten your arm back, squeeze 1 s.",
-   "Bend back to about 90\u00b0."
+   "Bend back to about 90°."
   ],
   "tips": [
    "Go light. The squeeze is the point."
@@ -2550,8 +2543,8 @@
    "Upper arm dropping.",
    "Swinging the weight."
   ],
-  "rangeOfMotion": "Elbow at 90\u00b0 \u2192 arm straight",
-  "tempo": "Straighten 1 s \u00b7 Hold 1 s \u00b7 Bend 3 s",
+  "rangeOfMotion": "Elbow at 90° → arm straight",
+  "tempo": "Straighten 1 s · Hold 1 s · Bend 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2594,15 +2587,15 @@
   ],
   "form": [
    "Straighten your arm back, squeeze 1 s.",
-   "Bend back to about 90\u00b0."
+   "Bend back to about 90°."
   ],
   "tips": [],
   "avoid": [
    "Upper arm dropping.",
    "Swinging the weight."
   ],
-  "rangeOfMotion": "Elbow at 90\u00b0 \u2192 arm straight",
-  "tempo": "Straighten 1 s \u00b7 Hold 1 s \u00b7 Bend 3 s",
+  "rangeOfMotion": "Elbow at 90° → arm straight",
+  "tempo": "Straighten 1 s · Hold 1 s · Bend 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2646,15 +2639,15 @@
   ],
   "form": [
    "Straighten your arms back, squeeze 1 s.",
-   "Bend back to about 90\u00b0."
+   "Bend back to about 90°."
   ],
   "tips": [],
   "avoid": [
    "Upper arms dropping.",
    "Swinging the weight."
   ],
-  "rangeOfMotion": "Elbows at 90\u00b0 \u2192 arms straight",
-  "tempo": "Straighten 1 s \u00b7 Hold 1 s \u00b7 Bend 3 s",
+  "rangeOfMotion": "Elbows at 90° → arms straight",
+  "tempo": "Straighten 1 s · Hold 1 s · Bend 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2698,7 +2691,7 @@
   ],
   "form": [
    "Straighten your arm, squeeze 1 s.",
-   "Bend back to about 90\u00b0."
+   "Bend back to about 90°."
   ],
   "tips": [
    "Go light. The squeeze is the point."
@@ -2707,8 +2700,8 @@
    "Upper arm dropping.",
    "Swinging from the shoulder."
   ],
-  "rangeOfMotion": "Elbow at 90\u00b0 \u2192 arm straight",
-  "tempo": "Straighten 1 s \u00b7 Hold 1 s \u00b7 Bend 3 s",
+  "rangeOfMotion": "Elbow at 90° → arm straight",
+  "tempo": "Straighten 1 s · Hold 1 s · Bend 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2762,8 +2755,8 @@
    "Bending at the hips.",
    "Stopping before your arm is straight."
   ],
-  "rangeOfMotion": "Elbow at 90\u00b0 \u2192 arm straight",
-  "tempo": "Straighten 1 s \u00b7 Hold 1 s \u00b7 Bend 3 s",
+  "rangeOfMotion": "Elbow at 90° → arm straight",
+  "tempo": "Straighten 1 s · Hold 1 s · Bend 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2773,6 +2766,271 @@
   },
   "source": {
    "plan": "Leo's plan"
+  }
+ },
+ {
+  "id": "assisted-dip-machine",
+  "name": "Assisted Dip Machine",
+  "aliases": [
+   "Assisted Dip",
+   "Counterweight Dip",
+   "Machine Assisted Dip"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "triceps",
+    "weight": 1
+   },
+   {
+    "group": "chest",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "triceps": [
+    "lateral head",
+    "medial head"
+   ],
+   "chest": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight with help: can't be loaded heavy",
+  "why": "Dips with a counterweight helping, until you can do them on your own.",
+  "setup": [
+   "Pick the help on the stack: more weight = easier.",
+   "Knees on the pad, hands on the bars, arms straight, body upright."
+  ],
+  "form": [
+   "Lower until your upper arms are about level.",
+   "Push up until your arms are straight."
+  ],
+  "tips": [
+   "Take less help as you get stronger."
+  ],
+  "avoid": [
+   "Dropping fast into the bottom.",
+   "Leaning far forward."
+  ],
+  "rangeOfMotion": "Arms straight → upper arms level",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "dip-assisted",
+  "source": {
+   "url": "https://www.strengthlog.com/assisted-dip/"
+  },
+  "assisted": true
+ },
+ {
+  "id": "seated-ez-bar-overhead-triceps-extension",
+  "name": "Seated EZ-Bar Overhead Extension",
+  "aliases": [
+   "Seated EZ-Bar French Press",
+   "Seated Overhead EZ-Bar Triceps Extension"
+  ],
+  "equipment": "fixedBar",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "triceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "triceps": "long head"
+  },
+  "stretch": [
+   "triceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Overhead extension with the bent bar, back supported.",
+  "setup": [
+   "Sit with your back against an upright bench.",
+   "Bar behind your head on the angled grips, elbows up by your ears."
+  ],
+  "form": [
+   "Straighten your arms overhead.",
+   "Lower the bar slowly behind your head."
+  ],
+  "tips": [
+   "The bent bar is easier on the wrists."
+  ],
+  "avoid": [
+   "Elbows flaring out.",
+   "Arching your lower back."
+  ],
+  "rangeOfMotion": "Bar behind your head → arms straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "overhead-extension-db",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "url": "https://weighttraining.guide/exercises/overhead-ez-bar-triceps-extension/",
+   "url2": "https://fitnessvolt.com/overhead-ez-bar-tricep/"
+  }
+ },
+ {
+  "id": "standing-ez-bar-overhead-triceps-extension",
+  "name": "Standing EZ-Bar Overhead Extension",
+  "aliases": [
+   "Standing Overhead EZ-Bar Triceps Extension",
+   "Standing EZ-Bar French Press"
+  ],
+  "equipment": "fixedBar",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "triceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "triceps": "long head"
+  },
+  "stretch": [
+   "triceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Overhead extension with the bent bar, standing.",
+  "setup": [
+   "Stand, feet hip width, ribs down.",
+   "Bar behind your head on the angled grips, elbows up by your ears."
+  ],
+  "form": [
+   "Straighten your arms overhead.",
+   "Lower the bar slowly behind your head."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows flaring out.",
+   "Arching your lower back."
+  ],
+  "rangeOfMotion": "Bar behind your head → arms straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "overhead-extension-standing",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "url": "https://motra.com/exercises/ezBarOverheadTricepExtension",
+   "url2": "https://www.exercise.com/exercises/ez-bar-overhead-tricep-extension"
+  }
+ },
+ {
+  "id": "machine-overhead-triceps-extension",
+  "name": "Machine Overhead Triceps Extension",
+  "aliases": [
+   "Overhead Triceps Extension Machine",
+   "Seated machine overhead extension"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "triceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "triceps": "long head"
+  },
+  "stretch": [
+   "triceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Overhead extension on a machine: easy to load, nothing to balance.",
+  "setup": [
+   "Sit with your upper arms on the pads, pointing up.",
+   "Handles behind your head, elbows bent."
+  ],
+  "form": [
+   "Straighten your arms overhead.",
+   "Bend back slowly into a deep stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows drifting wide.",
+   "Lifting your back off the pad."
+  ],
+  "rangeOfMotion": "Hands behind your head → arms straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "overhead-extension-machine",
+  "source": {
+   "url": "https://www.strengthlog.com/machine-overhead-triceps-extension/"
+  }
+ },
+ {
+  "id": "kettlebell-overhead-triceps-extension",
+  "name": "Kettlebell Overhead Triceps Extension",
+  "aliases": [
+   "Kettlebell Overhead Extension"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "triceps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "triceps": "long head"
+  },
+  "stretch": [
+   "triceps"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Overhead extension with a kettlebell held by the handle.",
+  "setup": [
+   "Stand, kettlebell by the handle sides in both hands, behind your head.",
+   "Elbows up by your ears."
+  ],
+  "form": [
+   "Straighten your arms overhead.",
+   "Lower the bell slowly behind your head."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows flaring out.",
+   "Arching your lower back."
+  ],
+  "rangeOfMotion": "Bell behind your head → arms straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "overhead-extension-standing",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Kettlebell_Overhead_Triceps_Extension"
   }
  }
 ]

@@ -3,6 +3,8 @@ import type { Exercise, Routine, RoutineDay, Session, Slot } from "./types";
 import { uid } from "./util";
 
 export const NEW_SLOT = { sets: 3, repMin: 10, repMax: 12 };
+/** Holds (sets in seconds): 20–60 s (*judgment*, coaching) */
+export const HOLD_SLOT = { sets: 3, repMin: 20, repMax: 60 };
 const WD = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 const mapDay = (r: Routine, dayId: string, f: (d: RoutineDay) => RoutineDay): Routine => ({ ...r, days: r.days.map((d) => (d.id === dayId ? f(d) : d)) });
@@ -40,7 +42,7 @@ export function setDayWeekday(r: Routine, dayId: string, weekday: number | null)
 
 export function addSlot(r: Routine, dayId: string, ex: Exercise, restSec: number): { routine: Routine; slotId: string } {
   const id = "slot-" + uid().slice(0, 8);
-  const slot: Slot = { id, exerciseId: ex.id, ...NEW_SLOT, restSec: ex.defaultRestSec || restSec };
+  const slot: Slot = { id, exerciseId: ex.id, ...(ex.measure === "time" ? HOLD_SLOT : NEW_SLOT), restSec: ex.defaultRestSec || restSec };
   return { routine: mapDay(r, dayId, (d) => ({ ...d, slots: [...d.slots, slot] })), slotId: id };
 }
 export const removeSlot = (r: Routine, dayId: string, slotId: string): Routine =>
@@ -61,7 +63,7 @@ export function orderSlotsLike(r: Routine, dayId: string, slotIds: string[]): Ro
 }
 /** Swap the exercise in a slot. Day-specific text overrides are dropped (they described the old exercise). */
 export const swapSlotExercise = (r: Routine, dayId: string, slotId: string, ex: Exercise): Routine =>
-  mapDay(r, dayId, (d) => ({ ...d, slots: d.slots.map((s) => (s.id === slotId ? { ...s, exerciseId: ex.id, whyOverride: undefined, tipsOverride: undefined } : s)) }));
+  mapDay(r, dayId, (d) => ({ ...d, slots: d.slots.map((s) => (s.id === slotId ? { ...s, exerciseId: ex.id, whyOverride: undefined, tipsOverride: undefined, ...(ex.measure === "time" ? { repMin: HOLD_SLOT.repMin, repMax: HOLD_SLOT.repMax } : {}) } : s)) }));
 
 /** Link a slot with the next one in a superset, or unlink if they already share a group. */
 export function toggleSlotSuperset(r: Routine, dayId: string, slotId: string): Routine {

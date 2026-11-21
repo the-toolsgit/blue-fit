@@ -13,7 +13,7 @@ type Metric = "e1rm" | "best" | "volume";
 export function ExerciseProgress({ ex, from }: { ex: Exercise; from?: string | null }) {
   const { finished } = useStore();
   const [m, setM] = useState<Metric>("e1rm");
-  const series = useMemo(() => exerciseSeries(finished, ex.id).filter((p) => !from || p.date >= from), [finished, ex.id, from]);
+  const series = useMemo(() => exerciseSeries(finished, ex.id, ex.measure === "time").filter((p) => !from || p.date >= from), [finished, ex.id, from]);
   if (!series.length) return <p className="muted" style={{ fontSize: 14, padding: "8px 0" }}>No sets logged{from ? " in this range" : ""} yet.</p>;
   const suf = loadSuffix(ex).trim();
   return (

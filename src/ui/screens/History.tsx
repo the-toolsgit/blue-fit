@@ -65,7 +65,7 @@ function StreakCard() {
 }
 
 function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => void }) {
-  const { finished, routine, settings } = useStore();
+  const { finished, routine, settings, exMap } = useStore();
   const today = localDate(new Date());
   // Fire on the rest day of each complete week, ice on the day a freeze started
   const marks = useMemo(() => {
@@ -77,7 +77,7 @@ function Calendar({ onPickDay }: { onPickDay: (date: string, ids: string[]) => v
   // Tapping a skipped day shows a "Skipped" tooltip for 3 s
   const [tip, setTip] = useState<string | null>(null);
   useEffect(() => { if (!tip) return; const t = setTimeout(() => setTip(null), 3000); return () => clearTimeout(t); }, [tip]);
-  const load = useMemo(() => dailyLoad(finished), [finished]);
+  const load = useMemo(() => dailyLoad(finished, exMap), [finished, exMap]);
   const max = Math.max(12, ...[...load.values()].map((d) => d.sets));
   const first = weekStart(month); // calendar grid is always Mon → Sun
   const cells = Array.from({ length: 42 }, (_, i) => addDays(first, i));

@@ -47,8 +47,8 @@
    "Bouncing the bar off your chest.",
    "Elbows flared straight out to the sides."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -115,8 +115,8 @@
    "Going so wide that your shoulders hurt.",
    "Bouncing the bar off your chest."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -161,7 +161,7 @@
   "unsafeFailure": true,
   "why": "Heavy press for the upper chest.",
   "setup": [
-   "Bench at 30\u201345\u00b0, eyes under the bar.",
+   "Bench at 30–45°, eyes under the bar.",
    "Hands a bit wider than your shoulders, shoulder blades back."
   ],
   "form": [
@@ -175,8 +175,8 @@
    "Bouncing the bar off your chest.",
    "Lifting your hips off the bench."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -241,8 +241,8 @@
   "avoid": [
    "Bouncing the bar off your chest."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -297,8 +297,8 @@
   "avoid": [
    "Going so wide that your shoulders hurt."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -359,8 +359,8 @@
    "Clanging the dumbbells together at the top.",
    "Stopping short of the stretch."
   ],
-  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → dumbbells beside your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -416,8 +416,8 @@
   "avoid": [
    "Stopping short of the stretch."
   ],
-  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → dumbbells beside your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -475,8 +475,8 @@
   "avoid": [
    "Twisting your body off the bench."
   ],
-  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → dumbbells beside your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -524,7 +524,7 @@
   "heavyWhy": "multi-joint, big muscles, stable",
   "why": "Upper chest press with a deep stretch.",
   "setup": [
-   "Bench at 30\u201345\u00b0, dumbbells over your upper chest.",
+   "Bench at 30–45°, dumbbells over your upper chest.",
    "Shoulder blades back."
   ],
   "form": [
@@ -538,8 +538,8 @@
    "Stopping short of the stretch.",
    "Arching off the bench."
   ],
-  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → dumbbells beside your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -597,7 +597,7 @@
   "heavyWhy": "multi-joint, big muscles, stable",
   "why": "Incline dumbbell press, palms facing in: easier on the shoulders.",
   "setup": [
-   "Bench at 30\u201345\u00b0, palms facing each other."
+   "Bench at 30–45°, palms facing each other."
   ],
   "form": [
    "Lower the dumbbells beside your upper chest, elbows close.",
@@ -607,8 +607,8 @@
   "avoid": [
    "Stopping short of the stretch."
   ],
-  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → dumbbells beside your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -667,8 +667,8 @@
   "avoid": [
    "Sitting up fast at the end: you can get dizzy."
   ],
-  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → dumbbells beside your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -725,8 +725,8 @@
   "avoid": [
    "Bench placed so the bar hits your neck or belly."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -769,7 +769,7 @@
   "heavyWhy": "multi-joint, big muscles, stable",
   "why": "Upper chest press on a fixed track.",
   "setup": [
-   "Bench at 30\u201345\u00b0 so the bar comes down on your upper chest.",
+   "Bench at 30–45° so the bar comes down on your upper chest.",
    "Hands a bit wider than your shoulders."
   ],
   "form": [
@@ -782,8 +782,8 @@
   "avoid": [
    "Bar landing on your neck."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -840,8 +840,8 @@
   "avoid": [
    "Bouncing the bar off your chest."
   ],
-  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → bar on your chest",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -902,8 +902,8 @@
    "Shoulders rolling forward at the end.",
    "Letting the stack slam between reps."
   ],
-  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
-  "tempo": "Push 1 s \u00b7 Back 3 s",
+  "rangeOfMotion": "Hands at your chest → arms straight",
+  "tempo": "Push 1 s · Back 3 s",
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
@@ -967,12 +967,12 @@
   "avoid": [
    "Shoulders rolling forward at the end."
   ],
-  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
-  "tempo": "Push 1 s \u00b7 Back 3 s",
+  "rangeOfMotion": "Hands at your chest → arms straight",
+  "tempo": "Push 1 s · Back 3 s",
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "press-machine-seated",
+  "figureTemplate": "press-incline-machine",
   "source": {
    "url": "https://rpstrength.com/chest-training-tips-hypertrophy"
   },
@@ -1022,8 +1022,8 @@
   "avoid": [
    "Shoulders rolling forward at the end."
   ],
-  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
-  "tempo": "Push 1 s \u00b7 Back 3 s",
+  "rangeOfMotion": "Hands at your chest → arms straight",
+  "tempo": "Push 1 s · Back 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1078,12 +1078,12 @@
   "avoid": [
    "Shoulders rolling forward at the end."
   ],
-  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
-  "tempo": "Push 1 s \u00b7 Back 3 s",
+  "rangeOfMotion": "Hands at your chest → arms straight",
+  "tempo": "Push 1 s · Back 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-machine-seated",
+  "figureTemplate": "press-incline-machine",
   "source": {
    "db": "free-exercise-db",
    "id": "Leverage_Incline_Chest_Press"
@@ -1133,12 +1133,12 @@
   "avoid": [
    "Shoulders rolling forward at the end."
   ],
-  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
-  "tempo": "Push 1 s \u00b7 Back 3 s",
+  "rangeOfMotion": "Hands at your chest → arms straight",
+  "tempo": "Push 1 s · Back 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-machine-seated",
+  "figureTemplate": "press-decline-machine",
   "source": {
    "db": "free-exercise-db",
    "id": "Leverage_Decline_Chest_Press"
@@ -1178,7 +1178,7 @@
   "why": "Chest press with cables: tension the whole way.",
   "setup": [
    "Sit with your back on the pad, handles at chest height.",
-   "Elbows bent about 90\u00b0, shoulder blades back."
+   "Elbows bent about 90°, shoulder blades back."
   ],
   "form": [
    "Press the handles forward and together, then pause.",
@@ -1188,8 +1188,8 @@
   "avoid": [
    "Letting the weights touch down between reps."
   ],
-  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
-  "tempo": "Push 1 s \u00b7 Hold 1 s \u00b7 Back 3 s",
+  "rangeOfMotion": "Hands at your chest → arms straight",
+  "tempo": "Push 1 s · Hold 1 s · Back 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1200,7 +1200,10 @@
   },
   "stretch": [
    "chest"
-  ]
+  ],
+  "figureAdjust": {
+   "equipmentProp": "cable"
+  }
  },
  {
   "id": "incline-cable-chest-press",
@@ -1231,7 +1234,7 @@
   "why": "Cable press angled up, for the upper chest.",
   "setup": [
    "Sit on an incline seat, handles at chest height.",
-   "Elbows bent about 90\u00b0, shoulder blades back."
+   "Elbows bent about 90°, shoulder blades back."
   ],
   "form": [
    "Press up and together, then pause.",
@@ -1241,19 +1244,22 @@
   "avoid": [
    "Letting the weights touch down between reps."
   ],
-  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
-  "tempo": "Push 1 s \u00b7 Hold 1 s \u00b7 Back 3 s",
+  "rangeOfMotion": "Hands at your chest → arms straight",
+  "tempo": "Push 1 s · Hold 1 s · Back 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-machine-seated",
+  "figureTemplate": "press-incline-machine",
   "source": {
    "db": "free-exercise-db",
    "id": "Incline_Cable_Chest_Press"
   },
   "stretch": [
    "chest"
-  ]
+  ],
+  "figureAdjust": {
+   "equipmentProp": "cable"
+  }
  },
  {
   "id": "standing-cable-chest-press",
@@ -1284,7 +1290,7 @@
   "why": "Standing press with cables: tension the whole way.",
   "setup": [
    "Pulleys at chest height, step a foot or two forward.",
-   "Staggered stance, elbows bent about 90\u00b0."
+   "Staggered stance, elbows bent about 90°."
   ],
   "form": [
    "Press the handles forward and together, then pause.",
@@ -1294,12 +1300,12 @@
   "avoid": [
    "Leaning in to push with your body."
   ],
-  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
-  "tempo": "Push 1 s \u00b7 Hold 1 s \u00b7 Back 3 s",
+  "rangeOfMotion": "Hands at your chest → arms straight",
+  "tempo": "Push 1 s · Hold 1 s · Back 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-machine-seated",
+  "figureTemplate": "press-cable-standing",
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Cable_Chest_Press"
@@ -1351,8 +1357,8 @@
    "Hips sagging.",
    "Half reps."
   ],
-  "rangeOfMotion": "Arms straight \u2192 chest near the floor",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → chest near the floor",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1403,8 +1409,8 @@
    "Hips sagging.",
    "Half reps."
   ],
-  "rangeOfMotion": "Arms straight \u2192 chest near the floor",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → chest near the floor",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1460,12 +1466,12 @@
   "avoid": [
    "Hips sagging."
   ],
-  "rangeOfMotion": "Arms straight \u2192 chest at the bar",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → chest at the bar",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "pushup",
+  "figureTemplate": "pushup-incline",
   "source": {
    "db": "free-exercise-db",
    "id": "Incline_Push-Up"
@@ -1514,12 +1520,12 @@
    "Hips sagging.",
    "Half reps."
   ],
-  "rangeOfMotion": "Arms straight \u2192 chest near the floor",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → chest near the floor",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "pushup",
+  "figureTemplate": "pushup-decline",
   "source": {
    "db": "free-exercise-db",
    "id": "Push-Ups_With_Feet_Elevated"
@@ -1572,12 +1578,12 @@
    "Hips sagging.",
    "Going deeper than your shoulders allow."
   ],
-  "rangeOfMotion": "Arms straight \u2192 chest below your hands",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → chest below your hands",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "pushup",
+  "figureTemplate": "pushup-deficit",
   "source": {
    "url": "https://rpstrength.com/chest-training-tips-hypertrophy"
   }
@@ -1629,8 +1635,8 @@
    "Dropping fast into the bottom.",
    "Going deeper than your shoulders allow."
   ],
-  "rangeOfMotion": "Arms straight \u2192 shoulders below elbows",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Arms straight → shoulders below elbows",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1679,8 +1685,8 @@
    "Bending the elbows into a press.",
    "Going so deep your shoulders hurt."
   ],
-  "rangeOfMotion": "Hands over your chest \u2192 arms wide",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Hands over your chest → arms wide",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1716,7 +1722,7 @@
   "heavyWhy": "single-joint",
   "why": "Upper chest stretched wide.",
   "setup": [
-   "Bench at 30\u00b0. Press the dumbbells up over your upper chest, palms facing in, elbows slightly bent."
+   "Bench at 30°. Press the dumbbells up over your upper chest, palms facing in, elbows slightly bent."
   ],
   "form": [
    "Open your arms in a wide arc until you feel a deep stretch.",
@@ -1727,8 +1733,8 @@
    "Bending the elbows into a press.",
    "Going so deep your shoulders hurt."
   ],
-  "rangeOfMotion": "Hands over your chest \u2192 arms wide",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Hands over your chest → arms wide",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1773,8 +1779,8 @@
   "avoid": [
    "Bending the elbows into a press."
   ],
-  "rangeOfMotion": "Hands over your chest \u2192 arms wide",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Hands over your chest → arms wide",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1820,8 +1826,8 @@
   "avoid": [
    "Twisting your body off the bench."
   ],
-  "rangeOfMotion": "Hand over your chest \u2192 arm wide",
-  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "rangeOfMotion": "Hand over your chest → arm wide",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1870,15 +1876,12 @@
    "Shoulders rolling forward.",
    "Letting the stack slam between reps."
   ],
-  "rangeOfMotion": "Arms wide \u2192 hands together",
-  "tempo": "In 1 s \u00b7 Hold 1 s \u00b7 Out 3 s",
+  "rangeOfMotion": "Arms wide → hands together",
+  "tempo": "In 1 s · Hold 1 s · Out 3 s",
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "fly",
-  "figureAdjust": {
-   "equipmentProp": "none"
-  },
+  "figureTemplate": "pec-deck",
   "source": {
    "db": "free-exercise-db",
    "id": "Butterfly"
@@ -1921,8 +1924,8 @@
   "avoid": [
    "Bending the elbows into a press."
   ],
-  "rangeOfMotion": "Arms wide \u2192 hands together",
-  "tempo": "In 1 s \u00b7 Hold 1 s \u00b7 Out 3 s",
+  "rangeOfMotion": "Arms wide → hands together",
+  "tempo": "In 1 s · Hold 1 s · Out 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -1967,8 +1970,8 @@
    "Shrugging your shoulders up.",
    "Bending the elbows into a press."
   ],
-  "rangeOfMotion": "Arms low and wide \u2192 hands together at face height",
-  "tempo": "In 1 s \u00b7 Hold 1 s \u00b7 Out 3 s",
+  "rangeOfMotion": "Arms low and wide → hands together at face height",
+  "tempo": "In 1 s · Hold 1 s · Out 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2014,8 +2017,8 @@
   "avoid": [
    "Twisting your body to move the weight."
   ],
-  "rangeOfMotion": "Arm wide \u2192 hand past the middle",
-  "tempo": "In 1 s \u00b7 Hold 1 s \u00b7 Out 3 s",
+  "rangeOfMotion": "Arm wide → hand past the middle",
+  "tempo": "In 1 s · Hold 1 s · Out 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2065,8 +2068,8 @@
   "avoid": [
    "Bending the elbows into a press."
   ],
-  "rangeOfMotion": "Hands over your chest \u2192 arms wide",
-  "tempo": "Down 3 s \u00b7 Up 1 s \u00b7 Hold 1 s",
+  "rangeOfMotion": "Hands over your chest → arms wide",
+  "tempo": "Down 3 s · Up 1 s · Hold 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2104,7 +2107,7 @@
   "heavyWhy": "single-joint",
   "why": "Upper chest fly with cables.",
   "setup": [
-   "Incline bench at 30\u201345\u00b0 between two low pulleys.",
+   "Incline bench at 30–45° between two low pulleys.",
    "Hands up over your chest, elbows slightly bent."
   ],
   "form": [
@@ -2115,8 +2118,8 @@
   "avoid": [
    "Bending the elbows into a press."
   ],
-  "rangeOfMotion": "Hands over your chest \u2192 arms wide",
-  "tempo": "Down 3 s \u00b7 Up 1 s \u00b7 Hold 1 s",
+  "rangeOfMotion": "Hands over your chest → arms wide",
+  "tempo": "Down 3 s · Up 1 s · Hold 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2166,8 +2169,8 @@
    "Leaning forward off the bench.",
    "Bending the elbows into a press."
   ],
-  "rangeOfMotion": "Arms wide \u2192 hands together",
-  "tempo": "In 1 s \u00b7 Out 3 s",
+  "rangeOfMotion": "Arms wide → hands together",
+  "tempo": "In 1 s · Out 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
@@ -2220,17 +2223,127 @@
   "avoid": [
    "Twisting your body to move the weight."
   ],
-  "rangeOfMotion": "Hand beside your chest \u2192 past the middle",
-  "tempo": "Across 1 s \u00b7 Back 3 s",
+  "rangeOfMotion": "Hand beside your chest → past the middle",
+  "tempo": "Across 1 s · Back 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "fly-cable",
+  "figureTemplate": "press-around",
   "figureAdjust": {
    "oneArm": true
   },
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
+  }
+ },
+ {
+  "id": "svend-press",
+  "name": "Svend Press",
+  "aliases": [
+   "Plate Squeeze Press",
+   "Plate Pinch Press"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "load limited by the squeeze",
+  "why": "Light chest finisher: press a plate out while squeezing it.",
+  "setup": [
+   "Stand. Press a light plate (or two) between your palms at your chest."
+  ],
+  "form": [
+   "Squeeze the plate and push it straight out until your arms are straight. Hold 1 s.",
+   "Bring it back to your chest slowly, still squeezing."
+  ],
+  "tips": [
+   "A small plate keeps your hands close."
+  ],
+  "avoid": [
+   "Letting the squeeze go.",
+   "Shrugging your shoulders."
+  ],
+  "rangeOfMotion": "Plate at your chest → arms straight out",
+  "tempo": "Push 1 s · Hold 1 s · Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "svend-press",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Svend_Press",
+   "url2": "https://www.garagegymreviews.com/svend-press"
+  }
+ },
+ {
+  "id": "dumbbell-squeeze-press",
+  "name": "Dumbbell Squeeze Press",
+  "aliases": [
+   "Squeeze Press",
+   "Crush Press",
+   "Hex Press"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "pressing the dumbbells together limits the load",
+  "why": "Dumbbell press with the bells pressed together: chest works the whole way.",
+  "setup": [
+   "Lie on a flat bench, dumbbells touching over your chest, palms facing each other.",
+   "Arms straight."
+  ],
+  "form": [
+   "Lower the dumbbells to your chest, pressing them together.",
+   "Press up, keeping them touching."
+  ],
+  "tips": [],
+  "avoid": [
+   "Dumbbells drifting apart.",
+   "Bouncing off your chest."
+  ],
+  "rangeOfMotion": "Arms straight → dumbbells on your chest",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-flat",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "url": "https://generationiron.com/dumbbell-squeeze-press-pecs/",
+   "url2": "https://www.exercise.com/exercises/dumbbell-squeeze-press"
   }
  }
 ]

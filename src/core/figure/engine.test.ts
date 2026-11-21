@@ -47,3 +47,40 @@ describe("figure centering", () => {
     expect((lo + hi) / 2 + dx).toBeCloseTo(60, 0);
   });
 });
+
+import { frontPose, sidePose } from "./engine";
+describe("engine additions (phase 3)", () => {
+  const base = { hx: 60, hy: 57, t: 0, ua: 0, fa: 0, th: 0, sh: 0 };
+  it("hn tilts only the head on the neck", () => {
+    const a = sidePose({ ...base }), b = sidePose({ ...base, hn: 40 });
+    expect(b.sh).toEqual(a.sh);
+    expect(b.head[0]).toBeGreaterThan(a.head[0] + 5); // chin forward
+    expect(Math.hypot(b.head[0] - b.sh[0], b.head[1] - b.sh[1])).toBeCloseTo(11, 5);
+  });
+  it("pa / pl put a handle tip on the hand that turns, and the tip prop draws it", () => {
+    const J = sidePose({ ...base, pa: 180, pl: 10 });
+    expect(J.tip[0]).toBeCloseTo(J.ha[0], 5);
+    expect(J.tip[1]).toBeCloseTo(J.ha[1] - 10, 5);
+    const f = frontPose({ ...base, pa: 90, pl: 10 });
+    expect(f.tip[0]).toBeCloseTo(f.haR[0] + 10, 5);
+    const fr = poseFrame({ base: { pl: 10 }, A: { pa: 90 }, B: { pa: 180 }, props: [{ tip: 1 }] } as unknown as FigureSpec, 1);
+    expect(fr.light.some((s) => s.kind === "line" && s.width === 3)).toBe(true);
+  });
+  it("laL / saL / lfL move the left leg on its own", () => {
+    const a = frontPose({ ...base, la: 6 }), b = frontPose({ ...base, la: 6, laL: 40 });
+    expect(b.anR).toEqual(a.anR);
+    expect(b.anL[0]).toBeLessThan(a.anL[0] - 5);
+  });
+  it("lift raises a turned figure; fh raises the toes of an anchored one", () => {
+    const a = frontPose({ ...base, rot: -90, cx: 100 }), b = frontPose({ ...base, rot: -90, cx: 100, lift: 5 });
+    expect(b.head[1]).toBeCloseTo(a.head[1] - 5, 5);
+    expect(sidePose({ ...base, anchor: 1, ax: 100, ah: 20, fh: 18 }).toe[1]).toBe(86);
+  });
+  it("hang draws a weight under a joint; pad dy shifts the pad down", () => {
+    const f = { base: {}, A: {}, B: {}, props: [{ hang: "ha", len: 10 }, { hang: "head", len: 20, plate: 8 }, { pad: "sh", r: 9, dy: 9 }] } as unknown as FigureSpec;
+    const fr = poseFrame(f, 0), J = sidePose({ ...base });
+    expect(fr.light[0]).toMatchObject({ kind: "line", y2: (J.ha[1] + 10).toFixed(1), width: 3.5 });
+    expect(fr.light.filter((s) => s.kind === "line").length).toBe(3);
+    expect(fr.light.find((s) => s.kind === "circle")).toMatchObject({ cy: J.sh[1] + 9, r: 9 });
+  });
+});

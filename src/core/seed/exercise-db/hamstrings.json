@@ -734,5 +734,55 @@
    "url": "https://pubmed.ncbi.nlm.nih.gov/27660368/",
    "url2": "https://builtwithscience.com/best-glutes-exercises/"
   }
+ },
+ {
+  "id": "single-leg-seated-leg-curl",
+  "name": "Single-Leg Seated Leg Curl",
+  "aliases": [
+   "Single-Leg Leg Curl",
+   "One-Leg Seated Leg Curl"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "hamstrings": "knee flexion"
+  },
+  "stretch": [
+   "hamstrings"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Seated leg curl one leg at a time: evens out the sides.",
+  "setup": [
+   "Lap pad tight, knees lined up with the pivot.",
+   "Only the working leg on the lower pad."
+  ],
+  "form": [
+   "Curl all the way, hold 1 s.",
+   "Straighten slowly."
+  ],
+  "tips": [
+   "Lean forward for a bigger stretch."
+  ],
+  "avoid": [
+   "Hips shifting on the seat.",
+   "Letting the weight yank your leg straight."
+  ],
+  "rangeOfMotion": "Leg straight → full curl",
+  "tempo": "Curl 1 s · Hold 1 s · Straighten 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "leg-curl-seated",
+  "source": {
+   "url": "https://www.nasm.org/resource-center/exercise-library/single-leg-seated-leg-curl"
+  }
  }
 ]

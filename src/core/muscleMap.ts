@@ -88,7 +88,7 @@ export const MAP_PARTS: Partial<Record<MuscleGroup, Partial<Record<MapView, MapP
   quads: { front: [{ ref: "job:extension", x: 70.5, y: 114, label: "extension" }, { ref: "job:squat", x: 76, y: 130, label: "squat" }] },
   hamstrings: { back: [{ ref: "job:hip hinge", x: 70, y: 120, label: "hip hinge" }, { ref: "job:knee flexion", x: 72, y: 140, label: "knee flexion" }] },
   forearms: { front: [{ ref: "job:flexors", x: 92, y: 89, label: "flexors" }], back: [{ ref: "job:extensors", x: 92, y: 89, label: "extensors" }] },
-  neck: { front: [{ ref: "job:flexion", x: 62.2, y: 25.5, label: "flexion" }], back: [{ ref: "job:extension", x: 61.5, y: 23.2, label: "extension" }] },
+  neck: { front: [{ ref: "job:flexion", x: 62.2, y: 25.5, label: "flexion" }, { ref: "job:side bend", x: 63.4, y: 23.2, label: "side bend" }], back: [{ ref: "job:extension", x: 61.5, y: 23.2, label: "extension" }] },
 };
 /** The three delts zoom together as "shoulders" */
 export const SHOULDERS: MuscleGroup[] = ["frontDelts", "sideDelts", "rearDelts"];

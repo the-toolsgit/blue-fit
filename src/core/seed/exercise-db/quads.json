@@ -510,10 +510,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "squat-front",
-  "figureAdjust": {
-   "equipmentProp": "db"
-  },
+  "figureTemplate": "squat-db",
   "source": {
    "db": "free-exercise-db",
    "id": "Dumbbell_Squat"
@@ -576,10 +573,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "squat-front",
-  "figureAdjust": {
-   "equipmentProp": "db"
-  },
+  "figureTemplate": "squat-goblet",
   "source": {
    "db": "free-exercise-db",
    "id": "Goblet_Squat"
@@ -885,10 +879,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "squat-front",
-  "figureAdjust": {
-   "equipmentProp": "bar"
-  },
+  "figureTemplate": "hack-squat-barbell",
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Hack_Squat"
@@ -1071,7 +1062,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "hack-squat",
+  "figureTemplate": "leg-press-lying",
   "source": {
    "db": "free-exercise-db",
    "id": "Lying_Machine_Squat"
@@ -1244,7 +1235,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "leg-press",
+  "figureTemplate": "leg-press-lying",
   "source": {
    "db": "free-exercise-db",
    "id": "Smith_Machine_Leg_Press"
@@ -1961,10 +1952,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "lunge",
-  "figureAdjust": {
-   "equipmentProp": "bar"
-  },
+  "figureTemplate": "side-lunge",
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Side_Split_Squat"
@@ -2327,10 +2315,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "squat-front",
-  "figureAdjust": {
-   "equipmentProp": "db"
-  },
+  "figureTemplate": "squat-sumo",
   "source": {
    "db": "free-exercise-db",
    "id": "Plie_Dumbbell_Squat"
@@ -2338,5 +2323,362 @@
   "stretch": [
    "quads"
   ]
+ },
+ {
+  "id": "single-leg-leg-press",
+  "name": "Single-Leg Leg Press",
+  "aliases": [
+   "One-Leg Leg Press",
+   "Single-Leg Press"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Leg press one leg at a time: evens out the sides.",
+  "setup": [
+   "Back flat on the pad.",
+   "One foot in the middle of the platform, the other on the floor or frame."
+  ],
+  "form": [
+   "Lower as deep as you can keep your lower back on the pad.",
+   "Push back up."
+  ],
+  "tips": [
+   "Expect well under half your two-leg weight."
+  ],
+  "avoid": [
+   "Knee caving in.",
+   "Hips twisting."
+  ],
+  "rangeOfMotion": "Leg almost straight → knee bent deep",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "leg-press",
+  "source": {
+   "url": "https://www.nasm.org/resource-center/exercise-library/single-leg-press",
+   "url2": "https://www.puregym.com/exercises/legs/quad-exercises/leg-presses/single-leg-press/"
+  }
+ },
+ {
+  "id": "landmine-squat",
+  "name": "Landmine Squat",
+  "aliases": [
+   "Barbell Landmine Squat"
+  ],
+  "equipment": "plateMachine",
+  "singleSleeve": true,
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "load limited by holding the bar at your chest",
+  "why": "Squat holding the end of a landmine bar: easy on the back.",
+  "setup": [
+   "Bar end in a landmine or corner, other end in both hands at your chest.",
+   "Feet shoulder width, leaning slightly into the bar."
+  ],
+  "form": [
+   "Sit down as deep as you can stay upright.",
+   "Stand up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding your back at the bottom.",
+   "Heels lifting."
+  ],
+  "rangeOfMotion": "Standing → deep squat",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-goblet",
+  "source": {
+   "url": "https://www.strengthlog.com/landmine-squat/"
+  }
+ },
+ {
+  "id": "safety-bar-squat",
+  "name": "Safety Bar Squat",
+  "aliases": [
+   "Safety Squat Bar Squat",
+   "SSB Squat",
+   "Yoke Bar Squat"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Back squat with a padded bar and handles in front: easier on the shoulders.",
+  "setup": [
+   "Bar on your upper back, handles in front in both hands.",
+   "Feet shoulder width, safeties set."
+  ],
+  "form": [
+   "Sit down between your heels until your thighs are at least level.",
+   "Stand up, chest up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding forward as the bar pushes you.",
+   "Knees caving in."
+  ],
+  "rangeOfMotion": "Standing → thighs at least level with the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat",
+  "source": {
+   "url": "https://www.strengthlog.com/safety-bar-squat/"
+  }
+ },
+ {
+  "id": "heels-elevated-goblet-squat",
+  "name": "Heels-Elevated Goblet Squat",
+  "aliases": [
+   "Cyclist Squat",
+   "Cyclist Goblet Squat",
+   "Heel-Raised Goblet Squat"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "load limited by holding one weight",
+  "why": "Narrow squat on raised heels: knees go far forward, more quads.",
+  "setup": [
+   "Heels on a slant board or plates, feet close together.",
+   "One dumbbell upright at your chest."
+  ],
+  "form": [
+   "Sit straight down, knees forward over your toes, as deep as you can.",
+   "Stand up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Knees caving in.",
+   "Leaning forward."
+  ],
+  "rangeOfMotion": "Standing → deep squat",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-front",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "url": "https://www.garagegymreviews.com/heel-elevated-goblet-squat",
+   "url2": "https://fitnessvolt.com/cyclist-squat-guide/"
+  }
+ },
+ {
+  "id": "dumbbell-split-squat",
+  "name": "Dumbbell Split Squat",
+  "aliases": [
+   "DB Split Squat",
+   "Dumbbell Static Lunge"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "why": "Split squat with both feet on the floor: easier to balance than Bulgarian.",
+  "setup": [
+   "A dumbbell in each hand at your sides.",
+   "Long split stance, back heel up."
+  ],
+  "form": [
+   "Lower straight down until your back knee nearly touches the floor.",
+   "Push through your front foot back up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Front heel lifting.",
+   "Feet in one line (wobbly)."
+  ],
+  "rangeOfMotion": "Standing in the split → back knee near the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "lunge",
+  "source": {
+   "url": "https://www.liftosaur.com/exercises/dumbbell-split-squat",
+   "url2": "https://repfitness.com/blogs/training/how-to-do-split-squats"
+  }
+ },
+ {
+  "id": "smith-machine-reverse-lunge",
+  "name": "Smith Reverse Lunge",
+  "aliases": [
+   "Smith Machine Reverse Lunge",
+   "Smith Rear Lunge"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Reverse lunge on the Smith: no balance limit.",
+  "setup": [
+   "Bar on your upper back, feet hip width under it."
+  ],
+  "form": [
+   "Step back and lower until your back knee nearly touches the floor.",
+   "Push through your front foot to stand."
+  ],
+  "tips": [
+   "Longer step: more glutes. Shorter: more quads."
+  ],
+  "avoid": [
+   "Front heel lifting.",
+   "Pushing off the back foot."
+  ],
+  "rangeOfMotion": "Standing → back knee near the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "lunge",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "url": "https://motra.com/exercises/smithMachineReverseLunge",
+   "url2": "https://www.strengthlog.com/smith-machine-lunge/"
+  }
  }
 ]

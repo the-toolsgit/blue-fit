@@ -6,6 +6,7 @@ import { localDate } from "../core/util";
 import type { StorageAdapter, TableName, Tables } from "../core/storage/StorageAdapter";
 import { DEFAULT_SETTINGS, type AppData, type Exercise, type RestTimer, type Routine, type Session, type Settings, type VolumeTarget } from "../core/types";
 import { IdbAdapter } from "../storage/idbAdapter";
+import { mergeCatalog } from "../core/catalog";
 
 export type Toast = { id: number; kind: "info" | "pr" | "error"; title: string; body?: string; leaving?: boolean;
   /** A button on the toast (e.g. Undo); tapping it runs `run` and closes the toast */
@@ -15,7 +16,12 @@ const TOAST_OUT_MS = 240;
 
 interface Store extends AppData {
   ready: boolean;
+  /** Phone exercises + the exercise database (see core/catalog.ts); exMap also opens old ids */
   exMap: Map<string, Exercise>;
+  /** Only the exercises saved on this phone (name checks, figure list) */
+  phoneExercises: Exercise[];
+  /** Saves a database exercise on the phone the first time it is picked (backups stay complete) */
+  ensureSaved(e: Exercise): void;
   routine: Routine | undefined;
   active: Session | undefined;
   finished: Session[];
@@ -52,9 +58,12 @@ const adapter: StorageAdapter = new IdbAdapter();
 const EMPTY: AppData = { exercises: [], routines: [], sessions: [], targets: [], jefitAliases: [], settings: DEFAULT_SETTINGS };
 // The seed (plan + exercise library) is only needed on first launch and reset, so it loads on demand.
 export const loadSeed = async () => (await import("../core/seed")).buildSeed();
+// The exercise database (built-in, ~425 exercises) loads with storage; built once.
+const loadCatalog = async () => (await import("../core/seed/exercise-db")).catalog();
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<AppData>(EMPTY);
+  const [db, setDb] = useState<Exercise[]>([]);
   const [ready, setReady] = useState(false);
   const [restTimer, setTimerState] = useState<RestTimer | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -84,6 +93,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     (async () => {
+      const dbP = loadCatalog().catch((e) => { console.error(e); return [] as Exercise[]; });
       await adapter.init(loadSeed);
       let d = await adapter.exportAll();
       // One-time migrations (each runs once; ids remembered in meta)
@@ -97,6 +107,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       }
       const t = await adapter.getMeta<RestTimer>("restTimer");
       setBackup({ lastAt: (await adapter.getMeta<string>("lastBackupAt")) ?? null, snoozedUntil: (await adapter.getMeta<string>("backupSnoozedUntil")) ?? null });
+      setDb(await dbP);
       setData(d);
       if (t && t.endsAt > Date.now() - 60_000) setTimerState(t);
       setReady(true);
@@ -116,11 +127,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     write(() => adapter.put(table, row));
   }, [write]);
 
+  const cat = useMemo(() => mergeCatalog(data.exercises, db), [data.exercises, db]);
   const store = useMemo<Store>(() => {
-    const exMap = new Map(data.exercises.map((e) => [e.id, e]));
+    const { exMap } = cat;
     const sorted = [...data.sessions].sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1));
     return {
       ...data,
+      exercises: cat.exercises,
+      phoneExercises: data.exercises,
+      ensureSaved: (e) => { if (!cat.phoneIds.has(e.id)) putRow("exercises", e, "id"); },
       ready,
       exMap,
       routine: data.routines.find((r) => r.isCurrent) ?? data.routines[0],
@@ -169,7 +184,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return adapter.exportAll();
       },
     };
-  }, [data, ready, restTimer, toasts, toast, dismissToast, putRow, write, backup]);
+  }, [data, cat, ready, restTimer, toasts, toast, dismissToast, putRow, write, backup]);
 
   return <Ctx.Provider value={store}>{children}</Ctx.Provider>;
 }

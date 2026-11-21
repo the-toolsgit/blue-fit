@@ -33,7 +33,7 @@ export function sidePose(p: P): Joints {
     J.an = [p.ax, 104 - (p.ah || 0)];
     J.kn = add(J.an, V(p.sh, 23), -1);
     J.hip = add(J.kn, V(p.th, 24), -1);
-    J.toe = [p.ax + 8, 104];
+    J.toe = [p.ax + 8, 104 - (p.fh || 0)]; // fh: toes raised off the floor (feet on a bench)
   } else {
     J.hip = [p.hx, p.hy];
     J.kn = add(J.hip, V(p.th, 24));
@@ -41,9 +41,11 @@ export function sidePose(p: P): Joints {
     J.toe = p.nofoot ? J.an : add(J.an, V(p.sh + 90, 8));
   }
   J.sh = add(add(J.hip, V(180 - p.t, 34)), [p.sb || 0, 0]);
-  J.head = add(J.sh, V(180 - p.t, 11));
+  // hn: head tilt on the neck (degrees, + = chin forward/down), for neck work where only the head moves
+  J.head = add(J.sh, V(180 - p.t - (p.hn || 0), 11));
   J.el = add(J.sh, V(p.ua, 20 * (p.al ?? 1)));
   J.ha = add(J.el, V(p.fa, 18 * (p.fl ?? 1)));
+  if (p.pa != null) J.tip = add(J.ha, V(p.pa, p.pl ?? 9));
   J.lines = [[J.hip, J.kn, J.an, J.toe], [J.hip, J.sh], [J.sh, J.el, J.ha]];
   return J;
 }
@@ -52,11 +54,15 @@ export function frontPose(p: P): Joints {
   const J: any = {};
   const tl = p.tl || 0, up = V(180 - tl, 1), perp: Pt = [Math.cos(rad(tl)), Math.sin(rad(tl))];
   const hc: Pt = [p.cx ?? 60, p.hy], shc = add(hc, up, 34), lf = p.lf || 1, la = p.la ?? 6, sa = p.sa ?? la;
-  J.head = add(shc, up, 12);
+  // hn: head tilt sideways on the neck (degrees), e.g. neck side bends
+  const hup = p.hn ? V(180 - tl - p.hn, 1) : up;
+  J.head = add(shc, hup, 12);
   ([["R", 1], ["L", -1]] as const).forEach(([s, m]) => {
     const hp = add(hc, perp, (p.hw ?? 6) * m), sp = add(add(shc, perp, 11 * m), [0, -(p.shr || 0)]);
     const arm = s === "L" && p.L ? Object.assign({ al: 1, fl: 1 }, p.L) : p;
-    const kn = add(hp, V(la * m, 24 * lf)), an = add(kn, V(sa * m, 23)), toe = add(an, [5 * m, 0]);
+    // laL / saL / lfL: the left leg on its own (e.g. a side lunge); the right leg uses la / sa / lf
+    const [la1, sa1, lf1] = s === "L" ? [p.laL ?? la, p.saL ?? sa, p.lfL ?? lf] : [la, sa, lf];
+    const kn = add(hp, V(la1 * m, 24 * lf1)), an = add(kn, V(sa1 * m, 23)), toe = add(an, [5 * m, 0]);
     const el = add(sp, V(arm.ua * m, 20 * (arm.al ?? 1))), ha = add(el, V(arm.fa * m, 18 * (arm.fl ?? 1)));
     Object.assign(J, { ["kn" + s]: kn, ["an" + s]: an, ["sh" + s]: sp, ["el" + s]: el, ["ha" + s]: ha, ["hip" + s]: hp });
     J.lines = (J.lines || []).concat([[hp, kn, an, toe], [sp, el, ha]]);
@@ -65,7 +71,7 @@ export function frontPose(p: P): Joints {
     [J.hipL, J.hipR],
     [J.shL, J.shR],
     [add(J.hipL, J.hipR), add(J.shL, J.shR)].map((q) => [q[0] / 2, q[1] / 2]),
-    [add(J.shL, J.shR).map((q) => q / 2), add(J.head, up, -7)],
+    [add(J.shL, J.shR).map((q) => q / 2), add(J.head, hup, -7)],
   );
   if (p.rot) {
     // Rotate the whole figure about the floor point, then drop it back so the lower foot touches the floor.
@@ -81,13 +87,15 @@ export function frontPose(p: P): Joints {
     const isPt = (v: unknown): v is Pt => Array.isArray(v) && typeof v[0] === "number";
     J.lines.forEach((l: Pt[]) => l.forEach(rotp));
     Object.values(J).forEach((v) => { if (isPt(v)) rotp(v); });
-    const drop = Math.max(J.anR[1], J.anL[1]) - 104, moved = new Set<Pt>();
+    // lift: raise the turned figure off the floor (e.g. lying on its side, so the lower shoulder stays above it)
+    const drop = Math.max(J.anR[1], J.anL[1]) - 104 + (p.lift || 0), moved = new Set<Pt>();
     J.lines.forEach((l: Pt[]) => l.forEach((q) => { if (!moved.has(q)) { moved.add(q); q[1] -= drop; } }));
     Object.values(J).forEach((v) => { if (isPt(v) && !moved.has(v)) { moved.add(v); v[1] -= drop; } });
     J.lines[0][3] = [J.anR[0] + 5, J.anR[1]];
     J.lines[2][3] = [J.anL[0] - 5, J.anL[1]];
   }
   J.ha = J.haR;
+  if (p.pa != null) J.tip = add(J.haR, V(p.pa, p.pl ?? 9));
   return J;
 }
 
@@ -129,7 +137,18 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
       const el = add(J.sh, V(o.arm2[0], 20)), ha = add(el, V(o.arm2[1], 18));
       J.lines.push([J.sh, el, ha]);
     }
-    if (o.pad) { const h = J[o.pad]; light.push({ kind: "circle", cx: h[0], cy: h[1], r: o.r || 2.6 }); }
+    if (o.pad) { const h = J[o.pad]; light.push({ kind: "circle", cx: h[0], cy: h[1] + (o.dy || 0), r: o.r || 2.6 }); }
+    // A handle held at one end (pa / pl: angle and length from the hand), e.g. a forearm rotation dumbbell
+    if (o.tip && J.tip) light.push({ kind: "line", x1: J.ha[0].toFixed(1), y1: J.ha[1].toFixed(1), x2: J.tip[0].toFixed(1), y2: J.tip[1].toFixed(1), width: 3 });
+    // A weight hanging straight down from a joint: a solid bar (dumbbell held by one end), or with `plate`, a chain
+    // and a plate (e.g. a neck harness)
+    if (o.hang) {
+      const h = J[o.hang], y2 = h[1] + o.len;
+      if (o.plate) {
+        light.push({ kind: "line", x1: h[0].toFixed(1), y1: h[1].toFixed(1), x2: h[0].toFixed(1), y2: y2.toFixed(1) });
+        light.push({ kind: "line", x1: (h[0] - o.plate / 2).toFixed(1), y1: y2.toFixed(1), x2: (h[0] + o.plate / 2).toFixed(1), y2: y2.toFixed(1), width: 3 });
+      } else light.push({ kind: "line", x1: h[0].toFixed(1), y1: h[1].toFixed(1), x2: h[0].toFixed(1), y2: y2.toFixed(1), width: 3.5 });
+    }
     if (o.trap && J.hip && J.sh) {
       // Side view: the traps as a small pointed arch under the back of the head, from the neck to the top of the back.
       // It bulges out as `tq` goes 0 → 1 (the squeeze), so the work shows while the chest stays on the pad.

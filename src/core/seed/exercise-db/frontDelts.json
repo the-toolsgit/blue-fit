@@ -1119,7 +1119,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "front-raise",
+  "figureTemplate": "front-raise-incline",
   "source": {
    "db": "free-exercise-db",
    "id": "Front_Incline_Dumbbell_Raise"

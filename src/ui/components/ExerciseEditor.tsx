@@ -13,7 +13,7 @@ type Draft = Exercise & { _setup: string; _form: string; _tips: string; _avoid: 
 const toDraft = (e: Exercise): Draft => ({ ...e, _setup: listToLines(e.setup), _form: listToLines(e.form), _tips: listToLines(e.tips), _avoid: listToLines(e.avoid), _aliases: e.aliases.join(", ") });
 
 export function ExerciseEditor({ open, exercise, onClose, onSaved }: { open: boolean; exercise?: Exercise | null; onClose: () => void; onSaved?: (e: Exercise) => void }) {
-  const { exercises, sessions, routines, saveExercise, deleteExercise, toast } = useStore();
+  const { phoneExercises: exercises, sessions, routines, saveExercise, deleteExercise, toast } = useStore();
   const [d, setD] = useState<Draft>(() => toDraft(exercise ?? newCustomExercise("")));
   const [confirmDel, setConfirmDel] = useState(false);
   useEffect(() => { if (open) setD(toDraft(exercise ?? newCustomExercise(""))); }, [open, exercise]);

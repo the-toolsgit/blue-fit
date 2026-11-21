@@ -21,18 +21,19 @@ export const inRange = (sessions: Session[], from: string | null) => sessions.fi
 export interface ExercisePoint { date: string; sessionId: string; e1rm: number; best: { weight: number; reps: number }; volume: number; sets: number }
 
 /** One point per session that has done non-warm-up sets of the exercise, oldest first. */
-export function exerciseSeries(sessions: Session[], exerciseId: string): ExercisePoint[] {
+/** `time` (holds): no est. 1RM; the point is the longest hold (seconds in `e1rm`, so the chart shows seconds). */
+export function exerciseSeries(sessions: Session[], exerciseId: string, time = false): ExercisePoint[] {
   const out: ExercisePoint[] = [];
   for (const s of [...sessions].filter((x) => x.status === "finished").sort((a, b) => (a.startedAt < b.startedAt ? -1 : 1))) {
     const sets = s.entries.filter((e) => e.exerciseId === exerciseId).flatMap((e) => e.sets)
-      .filter((x) => x.done && countsForLoad(x.type) && x.weight != null && x.reps != null && x.reps > 0);
+      .filter((x) => x.done && countsForLoad(x.type) && (time || x.weight != null) && x.reps != null && x.reps > 0);
     if (!sets.length) continue;
     let e1rm = 0, best = { weight: 0, reps: 0 };
     for (const x of sets) {
-      const v = epley(x.weight!, x.reps!);
-      if (v > e1rm) { e1rm = v; best = { weight: x.weight!, reps: x.reps! }; }
+      const v = time ? x.reps! : epley(x.weight!, x.reps!);
+      if (v > e1rm) { e1rm = v; best = { weight: x.weight ?? 0, reps: x.reps! }; }
     }
-    out.push({ date: s.date, sessionId: s.id, e1rm, best, volume: entryVolume(sets), sets: sets.length });
+    out.push({ date: s.date, sessionId: s.id, e1rm, best, volume: entryVolume(sets, time), sets: sets.length });
   }
   return out;
 }

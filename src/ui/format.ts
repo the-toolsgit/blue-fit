@@ -4,7 +4,8 @@ import { fmtNum } from "../core/util";
 export const fmtW = (w: number | null | undefined) => (w == null ? "—" : fmtNum(w));
 export const fmtClock = (sec: number) => { const s = Math.max(0, Math.round(sec)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
 export const fmtRest = (sec: number) => (sec % 60 === 0 ? `${sec / 60} min` : fmtClock(sec));
-export const repRange = (min?: number, max?: number) => (min == null ? "" : max == null || max === min ? `${min}` : `${min}–${max}`);
+/** "8–12", or "20–60 s" for a hold (`time`) */
+export const repRange = (min?: number, max?: number, time = false) => (min == null ? "" : (max == null || max === min ? `${min}` : `${min}–${max}`) + (time ? " s" : ""));
 export const setsLine = (sets: LoggedSet[]) => {
   const w = sets.filter((x) => x.done && x.type !== "warmup");
   if (!w.length) return "";

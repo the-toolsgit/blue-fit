@@ -151,6 +151,16 @@
   "incrementLb": 5,
   "bodyRegion": "lower",
   "figureTemplate": "copenhagen",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Grew the inner thigh about 18% in 8 weeks in a trial, and cuts groin injuries.",
+   "source": {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9180184/",
+    "url2": "https://doi.org/10.1136/bjsports-2017-098937"
+   }
+  },
   "source": {
    "url": "https://ucalgary.ca/shred-injuries/all-sports/ice-hockey/copenhagen-hip-adduction-foot-supported",
    "url2": "https://doi.org/10.1136/bjsports-2017-098937"
@@ -160,6 +170,57 @@
     "evidence": "R",
     "note": "Harøy 2019: an adductor program built on it lowered groin problems by 41%."
    }
+  }
+ },
+ {
+  "loadMode": "total",
+  "compound": false,
+  "isHeavy": false,
+  "heavyWhy": "a hold, not a lift",
+  "measure": "time",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "tips": [
+   "Too hard: bench under the knee instead of the ankle."
+  ],
+  "avoid": [
+   "Hips dropping."
+  ],
+  "id": "copenhagen-plank",
+  "name": "Copenhagen Plank",
+  "aliases": [
+   "Copenhagen Side Plank"
+  ],
+  "equipment": "bodyweight",
+  "volume": [
+   {
+    "group": "adductors",
+    "weight": 1
+   },
+   {
+    "group": "abs",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "adductors": "adduction",
+   "abs": "obliques"
+  },
+  "stretch": [],
+  "why": "Side plank with the top leg on a bench: inner thighs hold you up.",
+  "setup": [
+   "Lie on your side, top leg on a bench, forearm on the floor under your shoulder."
+  ],
+  "form": [
+   "Lift your hips and bottom leg so your body is straight and hold.",
+   "Do the same time on the other side."
+  ],
+  "rangeOfMotion": "Body straight, top leg on the bench, held",
+  "tempo": "Hold 20–40 s",
+  "bodyRegion": "lower",
+  "figureTemplate": "copenhagen-hold",
+  "source": {
+   "url": "https://www.strengthlog.com/copenhagen-plank/"
   }
  }
 ]

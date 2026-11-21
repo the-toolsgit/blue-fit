@@ -697,10 +697,9 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "lateral-raise",
+  "figureTemplate": "lateral-raise-machine",
   "figureAdjust": {
-   "seated": true,
-   "equipmentProp": "none"
+   "seated": true
   },
   "source": {
    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
@@ -745,10 +744,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "lateral-raise",
-  "figureAdjust": {
-   "equipmentProp": "none"
-  },
+  "figureTemplate": "lateral-raise-machine",
   "preferred": {
    "goals": [
     "growth"

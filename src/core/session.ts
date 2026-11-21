@@ -177,10 +177,11 @@ export function refitFailure(s: Session, exMap: Map<string, Exercise>, offSlotId
 /** Swap an exercise for this session only. Keeps set count, rest and rep range; pre-fills from the new exercise's history. */
 export function swapEntry(s: Session, entryId: string, ex: Exercise, history: Session[]): Session {
   return mapEntry(s, entryId, (e) => {
-    const fresh = buildEntry(ex, history, { sets: e.sets.length, restSec: e.restSec, repMin: e.repMin, repMax: e.repMax });
+    const time = ex.measure === "time"; // a hold gets a seconds range
+    const fresh = buildEntry(ex, history, { sets: e.sets.length, restSec: e.restSec, repMin: time ? 20 : e.repMin, repMax: time ? 60 : e.repMax });
     // A swap to a move that isn't safe to take to failure drops the flame
     const keep = e.toFailure && failureEligible(ex);
-    return { ...e, exerciseId: ex.id, swappedFromId: e.swappedFromId ?? e.exerciseId, sets: fresh.sets, toFailure: keep || undefined, failWhy: keep ? e.failWhy : undefined };
+    return { ...e, ...(time ? { repMin: 20, repMax: 60 } : {}), exerciseId: ex.id, swappedFromId: e.swappedFromId ?? e.exerciseId, sets: fresh.sets, toFailure: keep || undefined, failWhy: keep ? e.failWhy : undefined };
   });
 }
 
@@ -291,7 +292,7 @@ export interface SessionSummary {
 
 export function summarize(s: Session, exercises: Map<string, Exercise>, history: Session[]): SessionSummary {
   const prs = s.entries
-    .map((e) => ({ exerciseId: e.exerciseId, kinds: prsForEntry(history, s.id, e.exerciseId, e.sets, s.date) }))
+    .map((e) => ({ exerciseId: e.exerciseId, kinds: prsForEntry(history, s.id, e.exerciseId, e.sets, s.date, exercises.get(e.exerciseId)?.measure === "time") }))
     .filter((p) => p.kinds.length);
   return {
     durationMin: durationMin(s),
