@@ -68,4 +68,13 @@ describe("exercise database in the app", () => {
     expect(jobs.pass).toBe(false);
     expect(jobs.issues.some((i) => i.what.includes("try"))).toBe(true);
   });
+
+  it("a missing lower back gets exercises to try (they count as half sets for back)", () => {
+    const { exMap } = mergeCatalog(seed.exercises, db);
+    const r = structuredClone(seed.routines[0]);
+    r.days = [{ id: "d", weekday: 1, title: "x", slots: [{ id: "s", exerciseId: "wide-grip-lat-pulldown", sets: 3, repMin: 10, repMax: 12, restSec: 120 }] }];
+    const jobs = weekInsight(r, exMap, seed.targets).checks.find((c) => c.id === "jobs")!;
+    const back = jobs.issues.find((i) => i.what.includes("lower back"))!;
+    expect(back.what).toContain("try");
+  });
 });

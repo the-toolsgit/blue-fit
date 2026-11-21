@@ -77,10 +77,11 @@ export const DOSE_PENALTY = 2;
 
 /** Two exercises that train this angle as direct work: top picks for the goal first, then ★, then by name. */
 export function angleExamples(exMap: Map<string, Exercise>, g: MuscleGroup, job: string, goal: Goal = "growth"): string[] {
-  const pick = (e: Exercise) => (e.preferred?.goals.includes(goal === "strength" ? "strength" : "growth") ? 0 : e.isHeavy ? 1 : 2);
+  // Exercises that train the muscle directly first; half-set ones count too (lower back is never trained directly)
+  const pick = (e: Exercise) => (isDirect(e, g) ? 0 : 3) + (e.preferred?.goals.includes(goal === "strength" ? "strength" : "growth") ? 0 : e.isHeavy ? 1 : 2);
   const seen = new Set<string>();
   return [...exMap.values()].filter((e) => {
-    if (seen.has(e.id) || e.archived || !isDirect(e, g)) return false;
+    if (seen.has(e.id) || e.archived || !e.volume.some((v) => v.group === g)) return false;
     seen.add(e.id);
     const j = e.jobs?.[g];
     return j != null && (Array.isArray(j) ? j.includes(job) : j === job);
