@@ -99,6 +99,7 @@ ul { margin: 0; padding-left: 18px; }
 .filter-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 14px; border: 1px solid var(--line-strong); background: var(--surface-2); color: var(--muted); font: 600 14px var(--body); max-width: 50%; }
 .filter-btn svg { transform: rotate(90deg); }
 .filter-btn[aria-pressed="true"] { color: var(--neon-ink); border-color: var(--neon); box-shadow: 0 0 14px -4px var(--neon); }
+.filter-on { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px 0 14px; border-radius: 99px; border: 1px solid var(--neon); background: var(--glow-soft); color: var(--neon-ink); font: 600 14px var(--body); box-shadow: 0 0 12px -5px var(--neon); animation: fadeIn 0.2s ease both; }
 .filter-pic { width: 52px; height: 52px; flex: none; border-radius: 50%; display: grid; place-items: center; overflow: hidden; background: var(--surface-2); border: 1px solid var(--line); color: var(--neon); }
 .pic-grid { display: grid; grid-template-columns: 19px 19px; gap: 1px; }
 .filter-row.on { background: var(--glow-soft); }

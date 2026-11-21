@@ -56,9 +56,12 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
         <span style={{ position: "absolute", left: 12, top: 11, color: "var(--muted)" }}><Icon name="search" size={20} /></span>
         <input className="input" style={{ paddingLeft: 40 }} type="search" placeholder="Search name, alias or muscle" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search exercises" />
       </div>
-      <div className="row" style={{ gap: 8, marginTop: 10 }}>
-        <button className="filter-btn" aria-pressed={groups.length > 0} onClick={() => setTab("muscle")}>{pickedLabel(groups.map(muscleLabel), "Muscle", "muscles")} <Icon name="chevron" size={14} /></button>
-        <button className="filter-btn" aria-pressed={eqs.length > 0} onClick={() => setTab("equipment")}>{pickedLabel(eqs.map((x) => EQUIPMENT_LABEL[x]), "Equipment", "types")} <Icon name="chevron" size={14} /></button>
+      <div className="row" style={{ gap: 8, marginTop: 10, flexWrap: "wrap" }}>
+        <button className="filter-btn" aria-pressed={groups.length > 0} onClick={() => setTab("muscle")}>Muscle <Icon name="chevron" size={14} /></button>
+        <button className="filter-btn" aria-pressed={eqs.length > 0} onClick={() => setTab("equipment")}>Equipment <Icon name="chevron" size={14} /></button>
+        {/* Each picked filter, with an X to remove it in one tap */}
+        {groups.map((g) => <button key={g} className="filter-on" onClick={() => setGroups(groups.filter((x) => x !== g))} aria-label={`Remove ${muscleLabel(g)} filter`}>{muscleLabel(g)} <Icon name="close" size={14} /></button>)}
+        {eqs.map((x) => <button key={x} className="filter-on" onClick={() => setEqs(eqs.filter((y) => y !== x))} aria-label={`Remove ${EQUIPMENT_LABEL[x]} filter`}>{EQUIPMENT_LABEL[x]} <Icon name="close" size={14} /></button>)}
       </div>
       <div className="muted" style={{ fontSize: 13, margin: "10px 2px 0" }}><b style={{ color: "var(--ink)" }}>{groups.length || eqs.length ? "Filtered" : "All exercises"}</b> · {list.length} found</div>
       <div style={{ marginTop: 6 }}>
@@ -98,7 +101,6 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
 }
 
 const toggle = <T,>(xs: T[], x: T) => (xs.includes(x) ? xs.filter((y) => y !== x) : [...xs, x]);
-const pickedLabel = (names: string[], none: string, many: string) => (names.length === 0 ? none : names.length === 1 ? names[0] : `${names.length} ${many}`);
 
 function FilterRow({ on, label, pic, onClick }: { on: boolean; label: string; pic: React.ReactNode; onClick: () => void }) {
   return (
