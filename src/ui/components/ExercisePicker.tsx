@@ -1,6 +1,6 @@
-// Exercise picker: search + filters by muscle group and equipment. Used for swap and add (and the plan editor later).
+// Exercise picker: search + filter by muscle group. Used for swap and add (and the plan editor later).
 import { useMemo, useState } from "react";
-import { EQUIPMENT_LABEL, MUSCLE_GROUPS, type Equipment, type Exercise, type MuscleGroup } from "../../core/types";
+import { EQUIPMENT_LABEL, MUSCLE_GROUPS, type Exercise, type MuscleGroup } from "../../core/types";
 import { useStore } from "../store";
 import { isTopPick } from "../../core/catalog";
 import { Figure } from "./Figure";
@@ -16,14 +16,11 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
   const [more, setMore] = useState(false);
   const [q, setQ] = useState("");
   const [group, setGroup] = useState<MuscleGroup | null>(null);
-  const [eq, setEq] = useState<Equipment | null>(null);
-  const equipments = useMemo(() => [...new Set(exercises.map((e) => e.equipment))], [exercises]);
   const list = useMemo(() => {
     const term = q.trim().toLowerCase();
     return exercises
       .filter((e) => !e.archived && e.id !== exclude)
       .filter((e) => !group || e.volume.some((v) => v.group === group))
-      .filter((e) => !eq || e.equipment === eq)
       .filter((e) => !term || [e.name, ...e.aliases, ...e.muscles, ...e.secondaryMuscles].join(" ").toLowerCase().includes(term))
       .sort((a, b) => {
         // with a muscle chosen: top picks for the training goal first, then direct work for it; no muscle: A–Z
@@ -34,7 +31,7 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
         }
         return a.name.localeCompare(b.name);
       });
-  }, [exercises, q, group, eq, exclude, goal]);
+  }, [exercises, q, group, exclude, goal]);
 
   return (
     <Sheet open={open} onClose={onClose} label={title} tall>
@@ -48,9 +45,6 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
       </div>
       <div className="chips-wrap" style={{ marginTop: 10 }}>
         {MUSCLE_GROUPS.map((m) => <button key={m.id} className="chip" aria-pressed={group === m.id} onClick={() => setGroup(group === m.id ? null : m.id)}>{m.label}</button>)}
-      </div>
-      <div className="chips-wrap">
-        {equipments.map((x) => <button key={x} className="chip" aria-pressed={eq === x} onClick={() => setEq(eq === x ? null : x)}>{EQUIPMENT_LABEL[x]}</button>)}
       </div>
       <div style={{ marginTop: 6 }}>
         {(more ? list : list.slice(0, 60)).map((e) => (
