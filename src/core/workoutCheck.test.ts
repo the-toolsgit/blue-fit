@@ -13,10 +13,16 @@ describe("workout check", () => {
   });
   it("lists the checks for each goal", () => {
     const w = weekInsight(r, exMap, seed.targets);
-    expect(w.checks.map((c) => c.id)).toEqual(["volume", "jobs", "stretch", "frequency", "dose", "recovery", "reps", "mix", "rest"]);
+    expect(w.checks.map((c) => c.id)).toEqual(["volume", "jobs", "stretch", "frequency", "dose", "recovery", "mix", "rest"]);
     expect(weekInsight(r, exMap, seed.targets, "maintenance").checks.map((c) => c.id)).toEqual(["volume", "recovery"]);
     expect(weekInsight(r, exMap, seed.targets, "strength").checks.map((c) => c.id)).toContain("heavy");
     expect(weekInsight(r, exMap, seed.targets, "endurance").checks.map((c) => c.id)).toContain("reps");
+  });
+  it("rep range shows only when broken, as a Tip; short rests are a Tip at 60 s", () => {
+    const bad = { ...r, days: r.days.map((d, i) => i ? d : { ...d, slots: d.slots.map((s, k) => k ? s : { ...s, repMin: 2, repMax: 4, restSec: 45 }) }) };
+    const w = weekInsight(bad, exMap, seed.targets);
+    expect(w.checks.find((c) => c.id === "reps")).toMatchObject({ pass: false, warn: true });
+    expect(w.checks.find((c) => c.id === "rest")).toMatchObject({ pass: false, warn: true, rule: "Rest at least 60 s (90 s+ is fine too)" });
   });
   it("a missing job fails the job check and fades its chip", () => {
     const noHammer = { ...r, days: r.days.map((d) => ({ ...d, slots: d.slots.filter((s) => s.exerciseId !== "db-hammer-curl") })) };

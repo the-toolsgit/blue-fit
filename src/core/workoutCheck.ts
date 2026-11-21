@@ -43,8 +43,9 @@ export const HARD_SETS = RULES.hardSets.value;
  *  (Schoenfeld 2017, 2021). Heavy ≤ 10 and light ≥ 12 for the mix (*judgment*). From the database rules. */
 export const GROWTH_REPS = [RULES.growthReps.min, RULES.growthReps.max] as const;
 export const HEAVY_REPS = RULES.heavyMaxReps, LIGHT_REPS = RULES.lightMinReps;
-/** Rest: under ~90 s grows a little less (Schoenfeld 2016; Singer 2024). Strength: 3+ min (ACSM 2009). Endurance: ≤ 90 s (ACSM 2009). */
-export const GROWTH_REST = 90, STRENGTH_REST = 180, ENDURANCE_REST = 90;
+/** Rest: over ~60 s grows a little more, past ~90 s adds nothing (Singer 2024; Schoenfeld 2016); a Tip, never red.
+ *  Strength: 3+ min (ACSM 2009). Endurance: ≤ 90 s (ACSM 2009). */
+export const GROWTH_REST = 60, STRENGTH_REST = 180, ENDURANCE_REST = 90;
 
 export type JobState = "hit" | "none";
 export interface Tile {
@@ -130,10 +131,9 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
 
   const volume = (minOnly: boolean) => check("volume", "Weekly volume", main.flatMap((g) => {
     const t = tmap.get(g)!, w = week.get(g) ?? 0;
-    if (w < t.min!) return [`${L(g)} below (${fmtNum(w)} of ${formatTarget(t)})`];
-    if (!minOnly && t.max != null && w > t.max) return [`${L(g)} above (${fmtNum(w)} of ${formatTarget(t)})`];
-    return [];
-  }), "Every muscle in its weekly target");
+    const out = w < t.min! || (!minOnly && t.max != null && w > t.max);
+    return out ? [`${L(g)}: ${fmtNum(w)} sets, target ${formatTarget(t)}`] : [];
+  }), "Each muscle gets enough sets a week, not too many (its target)");
 
   const jobs = check("jobs", "Every angle", main.flatMap((g) => {
     const miss = (JOBS[g] ?? []).filter((j) => !jobsHit(g).has(j));
@@ -143,7 +143,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   }), "Every muscle trained in all its movements");
 
   const stretch = check("stretch", "Stretch", main.filter((g) => STRETCH_MUSCLES.has(g) && !slots.some((s) => ex(s).stretch?.includes(g)))
-    .map((g) => `${L(g)}: nothing at a long length`), "Every muscle loaded in the stretch");
+    .map((g) => `${L(g)}: no stretch exercise`), "Each muscle has an exercise that works it fully stretched (like incline curls for biceps)");
 
   // With the same weekly sets, once or twice a week grow a muscle about the same (Schoenfeld 2019; Pelland 2024); a
   // second day matters when the week's sets would be too many for one workout. So only muscles over MAX_SESSION_SETS a
@@ -174,8 +174,10 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     return gap ? [`${L(g)}: hard ${gap === 1 ? "two days in a row" : `${gap} days apart`}`] : [];
   }), "Every muscle rests long enough after hard work");
 
-  const reps = check("reps", "Rep range", uniq(repSlots.filter((s) => mid(s) < GROWTH_REPS[0] || mid(s) > GROWTH_REPS[1]).map((s) => `${ex(s).name}: ${s.repMin}–${s.repMax}`)),
+  // Growth is about the same from ~6 to ~30 reps, so nearly every plan passes: shown only when broken, as a Tip
+  const reps0 = check("reps", "Rep range", uniq(repSlots.filter((s) => mid(s) < GROWTH_REPS[0] || mid(s) > GROWTH_REPS[1]).map((s) => `${ex(s).name}: ${s.repMin}–${s.repMax}`)),
     `Every exercise ${GROWTH_REPS[0]}–${GROWTH_REPS[1]} reps`);
+  const reps: Check[] = reps0.pass ? [] : [{ ...reps0, warn: true }];
 
   // A nice-to-have, never a red miss: growth is about the same across rep ranges (Schoenfeld 2021); mixing helps joints,
   // recovery and strength, and is what most coaches do (Leo, Nov 20 2026)
@@ -193,9 +195,10 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     const pool = only ?? slots;
     const bad = uniq(pool.filter((s) => (min != null && s.restSec < min) || (max != null && s.restSec > max)).map((s) => `${ex(s).name}: ${s.restSec} s`));
     return check("rest", min != null && max == null ? "Long rests" : "Short rests", bad,
-      min != null ? `Rests ${min >= 120 ? `${min / 60} min` : `${min} s`} or more` : `Rests ${max} s or less`);
+      min === GROWTH_REST && !only ? `Rest at least ${min} s (90 s+ is fine too)` : min != null ? `Rests ${min >= 120 ? `${min / 60} min` : `${min} s`} or more` : `Rests ${max} s or less`);
   };
 
+  const tip = (c: Check): Check => (c.pass ? c : { ...c, warn: true });
   const stars = slots.filter((s) => ex(s).isHeavy);
   const checks: Check[] =
     goal === "maintenance" ? [volume(true), recovery]
@@ -205,7 +208,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     : goal === "endurance" ? [volume(false), jobs, frequency, recovery,
         check("reps", "High reps", repSlots.filter((s) => mid(s) >= 15).length * 2 >= repSlots.length ? [] : ["Most exercises under 15 reps"], "Most exercises 15+ reps (ACSM 2009)"),
         rest(null, ENDURANCE_REST)]
-    : [volume(false), jobs, stretch, frequency, dose, recovery, reps, mix, rest(GROWTH_REST, null)];
+    : [volume(false), jobs, stretch, frequency, dose, recovery, ...reps, mix, tip(rest(GROWTH_REST, null))];
 
   // Score: each part earns its share of points
   const share = (good: number, all: number) => (all ? good / all : 1);
