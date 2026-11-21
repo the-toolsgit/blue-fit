@@ -26,11 +26,12 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
       .filter((e) => !eq || e.equipment === eq)
       .filter((e) => !term || [e.name, ...e.aliases, ...e.muscles, ...e.secondaryMuscles].join(" ").toLowerCase().includes(term))
       .sort((a, b) => {
-        // top picks for the training goal first
-        const ta = isTopPick(a, goal), tb = isTopPick(b, goal);
-        if (ta !== tb) return ta ? -1 : 1;
-        // then direct work for the chosen group
-        if (group) { const da = a.volume.find((v) => v.group === group)!.weight, db = b.volume.find((v) => v.group === group)!.weight; if (da !== db) return db - da; }
+        // with a muscle chosen: top picks for the training goal first, then direct work for it; no muscle: A–Z
+        if (group) {
+          const ta = isTopPick(a, goal), tb = isTopPick(b, goal);
+          if (ta !== tb) return ta ? -1 : 1;
+          const da = a.volume.find((v) => v.group === group)!.weight, db = b.volume.find((v) => v.group === group)!.weight; if (da !== db) return db - da;
+        }
         return a.name.localeCompare(b.name);
       });
   }, [exercises, q, group, eq, exclude, goal]);
