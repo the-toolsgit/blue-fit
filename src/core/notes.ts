@@ -122,7 +122,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
     if (e.suggestFailure && !failureSet(e, s.deload)) notes.push({ kind: "suggest", tone: "info", exerciseId: e.exerciseId, title: `${ex.name}: last set to failure`, text: "The app would have taken the last set to failure." });
 
     const g = effortGap(e, s.deload);
-    if (g) notes.push({ kind: "effort", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too easy`, text: effortLine(g, e.repMax ?? e.repMin) });
+    if (g) notes.push({ kind: "effort", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: too easy`, text: effortLine(g, e.repMax ?? e.repMin, ex.incrementLb) });
   }
 
   const skipped = (s.skipped ?? []).filter((k) => k.sets > 0);

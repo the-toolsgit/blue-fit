@@ -489,7 +489,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
             </div>
           )}
           {lastLight && hint.kind === "none" && !allDone && !nowLight && !tipOff && (
-            <div className="effort-note"><Icon name="flame" size={18} /><span className="grow"><b>Last time:</b> {effortLine(lastGap!, last?.entry.repMax ?? repMax).replace(/^F/, "f")}</span>
+            <div className="effort-note"><Icon name="flame" size={18} /><span className="grow"><b>Last time:</b> {effortLine(lastGap!, last?.entry.repMax ?? repMax, ex.incrementLb).replace(/^F/, "f")}</span>
               <button type="button" className="tip-x" aria-label="Hide this tip" onClick={(ev) => { ev.stopPropagation(); hideTip(); }}><Icon name="close" size={16} /></button></div>
           )}
         </div>
@@ -547,7 +547,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           );
         })}
       </div>
-      {nowLight && <div className="effort-note" style={{ marginTop: 8 }}><Icon name="flame" size={18} /><span>{effortLine(gap!, repMax)}</span></div>}
+      {nowLight && <div className="effort-note" style={{ marginTop: 8 }}><Icon name="flame" size={18} /><span>{effortLine(gap!, repMax, ex.incrementLb)}</span></div>}
       <button className="btn btn-quiet btn-block" style={{ marginTop: 4, minHeight: 40, fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(addSet(s, e.id)); onFocus(); }}>
         <Icon name="plus" size={18} /> Add set
       </button>

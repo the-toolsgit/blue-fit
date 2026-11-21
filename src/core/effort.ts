@@ -5,7 +5,7 @@
 // a set that was too easy, but never flags one that wasn't. Too-hard sets can't be told apart from fatigue, so
 // they're not flagged. Pure and framework-free.
 import type { LoggedSet, SessionEntry } from "./types";
-import { failureJump } from "./progression";
+import { failureWeight } from "./progression";
 
 /** Every set stops with 0–2 good reps left (APP_SPEC §5.19). */
 export const REPS_LEFT_MAX = 2;
@@ -67,11 +67,12 @@ export const REPS_SHORT = 2;
 /** The failure set shows the weight was too light (a couple short of failure is past the top of the range): time to go heavier. */
 export function tooLight(g: EffortGap, repMax: number): boolean { return g.failReps - REPS_SHORT > repMax; }
 
-export function effortLine(g: EffortGap, repMax?: number): string {
+/** `increment`: the exercise's weight step, so "add n lb" matches the next workout's "Go up to" hint. */
+export function effortLine(g: EffortGap, repMax?: number, increment = 5): string {
   const lo = g.failReps - g.max, hi = g.failReps - g.min;
   const from = lo === hi ? `${lo}` : `${lo} or ${hi}`, to = g.failReps - REPS_SHORT;
   const head = `Failure at ${g.failReps} reps.`;
-  if (repMax != null && to > repMax) return `${head} The weight was too light: add ${failureJump(g.failReps, repMax)} lb.`;
+  if (repMax != null && to > repMax) return `${head} The weight was too light: add ${failureWeight(g.weight, g.failReps, repMax, increment) - g.weight} lb.`;
   const where = g.all ? "" : ` on ${setsLabel(g).toLowerCase()}`;
   return `${head} Go from ${from} to ${to} reps${where} to stay a couple short of failure.`;
 }
