@@ -89,19 +89,17 @@ export function ExerciseEditor({ open, exercise, onClose, onSaved }: { open: boo
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        {/* Equipment · Rest · Key lift on one row (weight step isn't asked: it keeps its default) */}
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr) auto", gap: 10, alignItems: "start" }}>
           <div className="field"><label htmlFor="eeeq">Equipment</label>
             <select id="eeeq" className="input" value={d.equipment} onChange={(e) => { const eq = e.target.value as Equipment; setD((x) => ({ ...x, equipment: eq, loadMode: defaultLoadMode(eq) })); }}>
               {(Object.keys(EQUIPMENT_LABEL) as Equipment[]).map((k) => <option key={k} value={k}>{EQUIPMENT_LABEL[k]}</option>)}
             </select></div>
+          <Stepper label="Rest" suffix={fmtRest(d.defaultRestSec)} value={d.defaultRestSec} step={15} decimals={false} onChange={(v) => set("defaultRestSec", v ?? 120)} />
           <div className="field"><span className="label">Key lift ★</span><div style={{ minHeight: 44, display: "flex", alignItems: "center" }}><Switch label="Key lift" checked={d.isHeavy} onChange={(v) => set("isHeavy", v)} /></div></div>
         </div>
         <div className="field"><span className="label">Log weight</span>
           <Seg label="Log weight" value={d.loadMode} onChange={(v: LoadMode) => set("loadMode", v)} options={[{ v: "total", label: "As shown" }, { v: "perSide", label: "Per side" }, { v: "perHand", label: "Per hand" }]} />
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          <Stepper label="Weight step" suffix="lb" value={d.incrementLb} step={2.5} min={0.5} onChange={(v) => set("incrementLb", v ?? 5)} />
-          <Stepper label="Rest" suffix={fmtRest(d.defaultRestSec)} value={d.defaultRestSec} step={15} decimals={false} onChange={(v) => set("defaultRestSec", v ?? 120)} />
         </div>
 
         <div className="field"><label htmlFor="eewhy">Why</label><textarea id="eewhy" className="input" value={d.why} onChange={(e) => set("why", e.target.value)} /></div>
