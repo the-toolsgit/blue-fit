@@ -51,7 +51,7 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
       {/* Compact header: title + New on one line, then search, then filters with the count */}
       <div className="spread" style={{ marginBottom: 8 }}>
         <h3 className="title-md">{title}</h3>
-        <button className="new-btn" onClick={() => setCreating(true)} aria-label="New exercise"><Icon name="plus" size={18} /> New</button>
+        <button className="new-btn" onClick={() => setCreating(true)} aria-label="New exercise"><Icon name="plus" size={15} /> New</button>
       </div>
       <div style={{ position: "relative" }}>
         <span style={{ position: "absolute", left: 12, top: 11, color: "var(--muted)" }}><Icon name="search" size={20} /></span>
