@@ -183,7 +183,7 @@
   ],
   "equipment": "cable",
   "loadMode": "total",
-  "compound": false,
+  "compound": true,
   "volume": [
    {
     "group": "rearDelts",
@@ -296,14 +296,10 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "face-pull",
-  "figureAdjust": {
-   "seated": true
-  },
+  "figureTemplate": "row-rear-delt-seated",
   "source": {
    "db": "free-exercise-db",
-   "id": "Cable_Rope_Rear-Delt_Rows",
-   "url2": "https://builtwithscience.com/fitness-tips/best-shoulder-exercises/"
+   "id": "Cable_Rope_Rear-Delt_Rows"
   },
   "formerIds": [
    "low-pulley-row-to-neck"
@@ -358,7 +354,7 @@
   "rangeOfMotion": "Arms straight → bar at upper chest",
   "tempo": "Up 1 s · Down 3 s",
   "defaultRestSec": 120,
-  "incrementLb": 2.5,
+  "incrementLb": 5,
   "bodyRegion": "upper",
   "figureTemplate": "row-bent-barbell",
   "figureAdjust": {
@@ -411,10 +407,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "reverse-fly-bent",
-  "figureAdjust": {
-   "bench": "incline"
-  },
+  "figureTemplate": "reverse-fly-prone",
   "source": {
    "db": "free-exercise-db",
    "id": "Reverse_Flyes"
@@ -459,7 +452,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "reverse-fly-bent",
+  "figureTemplate": "reverse-fly-prone",
   "figureAdjust": {
    "bench": "flat"
   },
@@ -511,10 +504,9 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "reverse-fly-bent",
+  "figureTemplate": "reverse-fly-prone",
   "figureAdjust": {
-   "bench": "flat",
-   "oneArm": true
+   "bench": "flat"
   },
   "source": {
    "db": "free-exercise-db",
@@ -563,7 +555,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "reverse-fly-bent",
+  "figureTemplate": "reverse-fly-prone",
   "source": {
    "db": "free-exercise-db",
    "id": "Bent_Over_Dumbbell_Rear_Delt_Raise_With_Head_On_Bench"
@@ -756,7 +748,6 @@
   "bodyRegion": "upper",
   "figureTemplate": "reverse-fly-bent",
   "figureAdjust": {
-   "oneArm": true,
    "equipmentProp": "cable"
   },
   "source": {

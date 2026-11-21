@@ -175,7 +175,7 @@
    "4-way neck flexion",
    "Neck machine flexion"
   ],
-  "equipment": "machine",
+  "equipment": "plateMachine",
   "loadMode": "total",
   "compound": false,
   "volume": [
@@ -209,7 +209,7 @@
   "rangeOfMotion": "Looking ahead → chin toward chest",
   "tempo": "Forward 1 s · Back 3 s",
   "defaultRestSec": 120,
-  "incrementLb": 10,
+  "incrementLb": 5,
   "bodyRegion": "upper",
   "figureTemplate": "neck-flexion",
   "figureAdjust": {
@@ -227,7 +227,7 @@
    "4-way neck extension",
    "Neck machine extension"
   ],
-  "equipment": "machine",
+  "equipment": "plateMachine",
   "loadMode": "total",
   "compound": false,
   "volume": [
@@ -261,7 +261,7 @@
   "rangeOfMotion": "Chin slightly down → looking slightly up",
   "tempo": "Back 1 s · Forward 3 s",
   "defaultRestSec": 120,
-  "incrementLb": 10,
+  "incrementLb": 5,
   "bodyRegion": "upper",
   "figureTemplate": "neck-extension",
   "figureAdjust": {

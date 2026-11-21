@@ -107,10 +107,9 @@
    "goals": [
     "growth"
    ],
-   "why": "Covers the bent-knee angle (soleus); pair it with a standing raise.",
+   "why": "Covers the bent-knee angle, which works the soleus more; pair it with a standing raise.",
    "source": {
-    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10753835/",
-    "url2": "https://fitnessvolt.com/best-calf-exercises/"
+    "url": "https://fitnessvolt.com/best-calf-exercises/"
    }
   },
   "source": {
@@ -187,14 +186,14 @@
    "Dumbbell on that knee, held in place."
   ],
   "form": [
-   "Lower your heels all the way, pause 2 s.",
+   "Lower your heel all the way, pause 2 s.",
    "Rise as high as you can."
   ],
   "tips": [],
   "avoid": [
    "Bouncing."
   ],
-  "rangeOfMotion": "Heels all the way down → all the way up",
+  "rangeOfMotion": "Heel all the way down → all the way up",
   "tempo": "Down 3 s · Hold 2 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
@@ -248,7 +247,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "lower",
-  "figureTemplate": "calf-raise-standing",
+  "figureTemplate": "calf-press",
   "source": {
    "db": "free-exercise-db",
    "id": "Calf_Press"
@@ -297,7 +296,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "calf-raise-standing",
+  "figureTemplate": "calf-press",
   "preferred": {
    "goals": [
     "growth"
@@ -407,7 +406,8 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Barbell_Calf_Raise"
-  }
+  },
+  "unsafeFailure": true
  },
  {
   "id": "rocking-standing-calf-raise",
@@ -448,7 +448,8 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Rocking_Standing_Calf_Raise"
-  }
+  },
+  "unsafeFailure": true
  },
  {
   "id": "standing-dumbbell-calf-raise",
@@ -531,7 +532,7 @@
    "Dumbbell in the same-side hand, other hand on a wall."
   ],
   "form": [
-   "Lower your heels all the way, pause 2 s.",
+   "Lower your heel all the way, pause 2 s.",
    "Rise as high as you can."
   ],
   "tips": [],
@@ -539,7 +540,7 @@
    "Bouncing.",
    "Bending your knee."
   ],
-  "rangeOfMotion": "Heels all the way down → all the way up",
+  "rangeOfMotion": "Heel all the way down → all the way up",
   "tempo": "Down 3 s · Hold 2 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
@@ -556,7 +557,7 @@
   "id": "calf-raise-on-a-dumbbell",
   "name": "Calf Raise On A Dumbbell",
   "aliases": [],
-  "equipment": "dumbbell",
+  "equipment": "bodyweight",
   "loadMode": "total",
   "compound": false,
   "volume": [
@@ -583,7 +584,7 @@
   "avoid": [
    "Letting go of the support."
   ],
-  "rangeOfMotion": "Heels all the way down → all the way up",
+  "rangeOfMotion": "Heel all the way down → all the way up",
   "tempo": "Down 3 s · Hold 2 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
@@ -637,7 +638,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "lower",
-  "figureTemplate": "calf-raise-standing",
+  "figureTemplate": "calf-raise-donkey",
   "source": {
    "db": "free-exercise-db",
    "id": "Donkey_Calf_Raises"

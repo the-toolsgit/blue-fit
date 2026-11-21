@@ -45,7 +45,7 @@
    ],
    "why": "Heaviest-loading upper-trap lift; strength is specific to the lift trained.",
    "source": {
-    "url": "https://barbend.com/best-trap-exercises/",
+    "url": "https://www.gymshark.com/blog/article/best-trap-exercises",
     "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11239729/"
    }
   },
@@ -93,7 +93,7 @@
   "rangeOfMotion": "Shoulders down → shoulders up",
   "tempo": "Up 1 s · Hold 1 s · Down 3 s",
   "defaultRestSec": 120,
-  "incrementLb": 5,
+  "incrementLb": 2.5,
   "bodyRegion": "upper",
   "figureTemplate": "shrug",
   "source": {
@@ -649,63 +649,11 @@
    ],
    "why": "Arm overhead in a Y works the lower traps hardest.",
    "source": {
-    "url": "https://barbend.com/best-trap-exercises/",
-    "url2": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+    "url": "https://barbend.com/best-trap-exercises/"
    }
   },
   "source": {
    "plan": "Leo's plan"
-  }
- },
- {
-  "id": "cable-y-raise",
-  "name": "Cable Y-Raise",
-  "aliases": [
-   "Standing Cable Y-Raise",
-   "Cross-body Cable Y-Raise"
-  ],
-  "equipment": "cable",
-  "loadMode": "total",
-  "compound": false,
-  "volume": [
-   {
-    "group": "traps",
-    "weight": 1
-   },
-   {
-    "group": "sideDelts",
-    "weight": 0.5
-   }
-  ],
-  "jobs": {
-   "traps": "mid/lower",
-   "sideDelts": "raise"
-  },
-  "isHeavy": false,
-  "heavyWhy": "single-joint",
-  "why": "Both arms up in a Y: lower traps and side delts.",
-  "setup": [
-   "Two low pulleys, cables crossed: left handle in your right hand.",
-   "Stand in the middle."
-  ],
-  "form": [
-   "Raise both arms up and out into a Y over your head.",
-   "Hold 1 s at the top, lower slowly."
-  ],
-  "tips": [],
-  "avoid": [
-   "Arching your lower back.",
-   "Shrugging up to your ears."
-  ],
-  "rangeOfMotion": "Hands crossed low → arms in a Y overhead",
-  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
-  "defaultRestSec": 120,
-  "incrementLb": 5,
-  "bodyRegion": "upper",
-  "figureTemplate": "y-raise",
-  "source": {
-   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/",
-   "url2": "https://builtwithscience.com/fitness-tips/best-shoulder-exercises/"
   }
  },
  {
@@ -756,14 +704,9 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "y-raise",
-  "figureAdjust": {
-   "equipmentProp": "db",
-   "bench": "incline"
-  },
+  "figureTemplate": "y-raise-incline",
   "source": {
-   "url": "https://barbend.com/best-trap-exercises/",
-   "url2": "https://boxlifemagazine.com/overlooked-exercises-backed-by-science/"
+   "url": "https://barbend.com/best-trap-exercises/"
   }
  },
  {
@@ -809,7 +752,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "pullup",
+  "figureTemplate": "pullup-scapular",
   "source": {
    "db": "free-exercise-db",
    "id": "Scapular_Pull-Up"

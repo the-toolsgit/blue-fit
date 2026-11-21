@@ -281,8 +281,7 @@
   "unsafeFailure": true,
   "why": "Bench press with palms facing you.",
   "setup": [
-   "Lie flat, hands about shoulder-width, palms facing you.",
-   "Use a spotter to unrack."
+   "Lie flat, hands about shoulder-width, palms facing you."
   ],
   "form": [
    "Lower the bar slowly to your lower chest.",
@@ -361,7 +360,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-flat",
+  "figureTemplate": "press-floor",
   "source": {
    "db": "free-exercise-db",
    "id": "Floor_Press"
@@ -417,10 +416,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-flat",
-  "figureAdjust": {
-   "oneArm": true
-  },
+  "figureTemplate": "press-floor",
   "source": {
    "db": "free-exercise-db",
    "id": "One_Arm_Floor_Press"
@@ -472,7 +468,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-flat",
+  "figureTemplate": "press-floor",
   "figureAdjust": {
    "equipmentProp": "db"
   },
@@ -569,7 +565,7 @@
    ]
   },
   "isHeavy": false,
-  "heavyWhy": "bar path near the face",
+  "heavyWhy": "mostly triceps, not a big-muscle lift",
   "why": "JM press on a fixed track: easy to focus on the triceps.",
   "setup": [
    "Bench so the bar is over your upper chest.",
@@ -790,7 +786,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "dip",
+  "figureTemplate": "bench-dip",
   "source": {
    "db": "free-exercise-db",
    "id": "Bench_Dips"
@@ -1590,7 +1586,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "overhead-extension-db",
+  "figureTemplate": "overhead-extension-standing",
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Dumbbell_Triceps_Extension"
@@ -1638,9 +1634,6 @@
   "incrementLb": 5,
   "bodyRegion": "upper",
   "figureTemplate": "overhead-extension-db",
-  "figureAdjust": {
-   "oneArm": true
-  },
   "source": {
    "db": "free-exercise-db",
    "id": "Dumbbell_One-Arm_Triceps_Extension"
@@ -1691,14 +1684,15 @@
   "defaultRestSec": 120,
   "incrementLb": 2.5,
   "bodyRegion": "upper",
-  "figureTemplate": "overhead-extension-db",
+  "figureTemplate": "overhead-extension-standing",
   "figureAdjust": {
    "equipmentProp": "bar"
   },
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Overhead_Barbell_Triceps_Extension"
-  }
+  },
+  "unsafeFailure": true
  },
  {
   "id": "ez-bar-skullcrusher",
@@ -1955,7 +1949,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Decline_EZ_Bar_Triceps_Extension"
-  }
+  },
+  "stretch": [
+   "triceps"
+  ]
  },
  {
   "id": "decline-dumbbell-triceps-extension",
@@ -2001,7 +1998,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Decline_Dumbbell_Triceps_Extension"
-  }
+  },
+  "stretch": [
+   "triceps"
+  ]
  },
  {
   "id": "dumbbell-skullcrusher",
@@ -2059,7 +2059,7 @@
  },
  {
   "id": "dumbbell-tricep-extension-pronated-grip",
-  "name": "Lying Dumbbell Extension (Palms Forward)",
+  "name": "Lying Dumbbell Extension (Palms Down)",
   "aliases": [
    "Dumbbell Tricep Extension -Pronated Grip"
   ],
@@ -2102,7 +2102,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Dumbbell_Tricep_Extension_-Pronated_Grip"
-  }
+  },
+  "stretch": [
+   "triceps"
+  ]
  },
  {
   "id": "one-arm-pronated-dumbbell-triceps-extension",
@@ -2151,7 +2154,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "One_Arm_Pronated_Dumbbell_Triceps_Extension"
-  }
+  },
+  "stretch": [
+   "triceps"
+  ]
  },
  {
   "id": "one-arm-supinated-dumbbell-triceps-extension",
@@ -2201,7 +2207,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "One_Arm_Supinated_Dumbbell_Triceps_Extension"
-  }
+  },
+  "stretch": [
+   "triceps"
+  ]
  },
  {
   "id": "tate-press",
@@ -2296,7 +2305,7 @@
   "bodyRegion": "upper",
   "figureTemplate": "skullcrusher",
   "figureAdjust": {
-   "equipmentProp": "none"
+   "equipmentProp": "cable"
   },
   "source": {
    "db": "free-exercise-db",
@@ -2329,25 +2338,22 @@
   "why": "Lying cable extension with a rope, forearms toward the pulley.",
   "setup": [
    "Lie on a row bench, head toward the pulley, rope in hands.",
-   "Upper arms pointing up."
+   "Upper arms pointing up, elbows bent."
   ],
   "form": [
-   "Bend your elbows, forearms toward the pulley.",
-   "Straighten your arms and squeeze 1 s."
+   "Straighten your arms and squeeze 1 s.",
+   "Bend your elbows slowly, forearms back toward the pulley."
   ],
   "tips": [],
   "avoid": [
    "Upper arms moving."
   ],
-  "rangeOfMotion": "Arms straight \u2192 hands by your head",
-  "tempo": "Down 3 s \u00b7 Up 1 s \u00b7 Hold 1 s",
+  "rangeOfMotion": "Elbows bent \u2192 arms straight",
+  "tempo": "Up 1 s \u00b7 Hold 1 s \u00b7 Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "skullcrusher",
-  "figureAdjust": {
-   "equipmentProp": "none"
-  },
+  "figureTemplate": "lying-cable-extension",
   "source": {
    "db": "free-exercise-db",
    "id": "Low_Cable_Triceps_Extension"
@@ -2379,27 +2385,26 @@
    "Upper arms angled up, elbows in."
   ],
   "form": [
-   "Bend your elbows slowly, bar back toward the pulley.",
-   "Straighten your arms and squeeze 1 s."
+   "Straighten your arms and squeeze 1 s.",
+   "Bend slowly, bar back toward the pulley."
   ],
   "tips": [],
   "avoid": [
    "Upper arms moving."
   ],
-  "rangeOfMotion": "Arms straight \u2192 elbows fully bent",
-  "tempo": "Down 3 s \u00b7 Up 1 s \u00b7 Hold 1 s",
+  "rangeOfMotion": "Elbows bent \u2192 arms straight",
+  "tempo": "Up 1 s \u00b7 Hold 1 s \u00b7 Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "skullcrusher-incline",
-  "figureAdjust": {
-   "bench": "incline",
-   "equipmentProp": "none"
-  },
+  "figureTemplate": "lying-cable-extension-incline",
   "source": {
    "db": "free-exercise-db",
    "id": "Cable_Incline_Triceps_Extension"
-  }
+  },
+  "stretch": [
+   "triceps"
+  ]
  },
  {
   "id": "machine-triceps-extension",
@@ -2709,8 +2714,7 @@
   "bodyRegion": "upper",
   "figureTemplate": "kickback-bent",
   "figureAdjust": {
-   "oneArm": true,
-   "equipmentProp": "none"
+   "equipmentProp": "cable"
   },
   "source": {
    "plan": "Leo's plan"

@@ -85,7 +85,7 @@
   "heavyWhy": "single-joint",
   "why": "Inner thigh, one leg at a time.",
   "setup": [
-   "Ankle cuff on a low pulley, inside leg.",
+   "Ankle cuff on the leg nearest a low pulley.",
    "Stand side-on, hold the frame, leg pulled out to the side."
   ],
   "form": [
@@ -102,7 +102,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "hip-adduction",
+  "figureTemplate": "hip-adduction-standing",
   "source": {
    "db": "free-exercise-db",
    "id": "Cable_Hip_Adduction"
@@ -112,7 +112,6 @@
   "id": "copenhagen-adduction",
   "name": "Copenhagen Adduction",
   "aliases": [
-   "Copenhagen Plank",
    "Copenhagen Hip Adduction",
    "Adductor Side Plank"
   ],
@@ -140,7 +139,7 @@
    "Lower slowly."
   ],
   "tips": [
-   "Cut groin problems in football players (trial)."
+   "Shown to cut groin problems in soccer players."
   ],
   "avoid": [
    "Hips sagging.",
@@ -151,7 +150,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "hip-adduction",
+  "figureTemplate": "copenhagen",
   "source": {
    "url": "https://ucalgary.ca/shred-injuries/all-sports/ice-hockey/copenhagen-hip-adduction-foot-supported",
    "url2": "https://doi.org/10.1136/bjsports-2017-098937"
@@ -161,78 +160,6 @@
     "evidence": "R",
     "note": "Harøy 2019: an adductor program built on it lowered groin problems by 41%."
    }
-  }
- },
- {
-  "id": "plie-dumbbell-squat",
-  "name": "Sumo Dumbbell Squat",
-  "aliases": [
-   "Plie Dumbbell Squat",
-   "Dumbbell Sumo Squat",
-   "Sumo Squat"
-  ],
-  "equipment": "dumbbell",
-  "loadMode": "total",
-  "compound": true,
-  "volume": [
-   {
-    "group": "adductors",
-    "weight": 1
-   },
-   {
-    "group": "quads",
-    "weight": 1
-   },
-   {
-    "group": "glutes",
-    "weight": 0.5
-   }
-  ],
-  "jobs": {
-   "adductors": "adduction",
-   "quads": "squat",
-   "glutes": "glute max"
-  },
-  "isHeavy": false,
-  "heavyWhy": "load limited by holding one weight",
-  "why": "Wide, toes-out squat for the inner thighs.",
-  "setup": [
-   "Feet well wider than shoulders, toes out.",
-   "One dumbbell in both hands by the end, arms hanging."
-  ],
-  "form": [
-   "Sit straight down, knees out over your toes, as deep as you can.",
-   "Stand up."
-  ],
-  "tips": [
-   "Stand on two boxes to go deeper."
-  ],
-  "avoid": [
-   "Knees caving in.",
-   "Leaning forward."
-  ],
-  "rangeOfMotion": "Standing → deep wide squat",
-  "tempo": "Down 3 s · Up 1 s",
-  "defaultRestSec": 120,
-  "incrementLb": 5,
-  "bodyRegion": "lower",
-  "figureTemplate": "squat-front",
-  "figureAdjust": {
-   "equipmentProp": "db"
-  },
-  "preferred": {
-   "goals": [
-    "growth"
-   ],
-   "why": "Deep, wide squat: deep squats grew the inner thighs more than half squats.",
-   "source": {
-    "url": "https://pubmed.ncbi.nlm.nih.gov/31230110/",
-    "url2": "https://www.strengthlog.com/adductor-exercises/"
-   }
-  },
-  "source": {
-   "db": "free-exercise-db",
-   "id": "Plie_Dumbbell_Squat"
   }
  }
 ]

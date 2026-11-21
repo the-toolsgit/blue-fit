@@ -284,27 +284,28 @@
   "heavyWhy": "single-joint",
   "why": "Trains turning the palm down.",
   "setup": [
-   "Elbow bent 90° and braced on a bench, forearm still.",
-   "Light dumbbell in your hand, palm up."
+   "Forearm on a bench, hand past the edge, elbow still.",
+   "Hold a light dumbbell by one end, palm up."
   ],
   "form": [
-   "Turn your palm down, rotating only the forearm.",
-   "Turn back slowly."
+   "Turn your hand until your thumb points up, lifting the weight.",
+   "Turn back slowly to palm up."
   ],
-  "tips": [],
+  "tips": [
+   "Holding the dumbbell by the end makes it harder; in the middle it is almost no load."
+  ],
   "avoid": [
    "Moving the elbow.",
    "Going heavy."
   ],
-  "rangeOfMotion": "Palm up → palm down",
+  "rangeOfMotion": "Palm up → thumb up",
   "tempo": "Turn 1 s · Back 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
   "figureTemplate": "wrist-curl",
   "source": {
-   "db": "free-exercise-db",
-   "id": "Dumbbell_Lying_Pronation"
+   "url": "https://www.acefitness.org/resources/everyone/exercise-library/31/wrist-supination-and-pronation/"
   }
  },
  {
@@ -330,27 +331,28 @@
   "heavyWhy": "single-joint",
   "why": "Trains turning the palm up.",
   "setup": [
-   "Elbow bent 90° and braced on a bench, forearm still.",
-   "Light dumbbell in your hand, palm down."
+   "Forearm on a bench, hand past the edge, elbow still.",
+   "Hold a light dumbbell by one end, palm down."
   ],
   "form": [
-   "Turn your palm up, rotating only the forearm.",
-   "Turn back slowly."
+   "Turn your hand until your thumb points up, lifting the weight.",
+   "Turn back slowly to palm down."
   ],
-  "tips": [],
+  "tips": [
+   "Holding the dumbbell by the end makes it harder; in the middle it is almost no load."
+  ],
   "avoid": [
    "Moving the elbow.",
    "Going heavy."
   ],
-  "rangeOfMotion": "Palm down → palm up",
+  "rangeOfMotion": "Palm down → thumb up",
   "tempo": "Turn 1 s · Back 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
   "figureTemplate": "wrist-curl",
   "source": {
-   "db": "free-exercise-db",
-   "id": "Dumbbell_Lying_Supination"
+   "url": "https://www.acefitness.org/resources/everyone/exercise-library/31/wrist-supination-and-pronation/"
   }
  },
  {
@@ -402,7 +404,7 @@
    "goals": [
     "growth"
    ],
-   "why": "Extensor pick: pair it with wrist curls so both sides of the forearm grow.",
+   "why": "Extensor pick (seated or standing): pair it with wrist curls so both sides of the forearm grow.",
    "source": {
     "url": "https://builtwithscience.com/fitness-tips/forearm-exercises/"
    }

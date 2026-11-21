@@ -665,7 +665,7 @@
   ],
   "tips": [],
   "avoid": [
-   "Sitting up fast at the end (get dizzy)."
+   "Sitting up fast at the end: you can get dizzy."
   ],
   "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
   "tempo": "Down 3 s \u00b7 Up 1 s",
@@ -915,13 +915,16 @@
    "why": "Top-rated chest exercise: deep stretch, steady tension, easy to add weight.",
    "source": {
     "url": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/",
-    "url2": "https://rpstrength.com/chest-training-tips-hypertrophy"
+    "url2": "https://rpstrength.com/blogs/articles/chest-hypertrophy-training-tips"
    }
   },
   "source": {
    "db": "free-exercise-db",
    "id": "Machine_Bench_Press"
-  }
+  },
+  "stretch": [
+   "chest"
+  ]
  },
  {
   "id": "incline-machine-chest-press",
@@ -972,7 +975,10 @@
   "figureTemplate": "press-machine-seated",
   "source": {
    "url": "https://rpstrength.com/chest-training-tips-hypertrophy"
-  }
+  },
+  "stretch": [
+   "chest"
+  ]
  },
  {
   "id": "leverage-chest-press",
@@ -1025,7 +1031,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Leverage_Chest_Press"
-  }
+  },
+  "stretch": [
+   "chest"
+  ]
  },
  {
   "id": "leverage-incline-chest-press",
@@ -1078,7 +1087,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Leverage_Incline_Chest_Press"
-  }
+  },
+  "stretch": [
+   "chest"
+  ]
  },
  {
   "id": "leverage-decline-chest-press",
@@ -1130,7 +1142,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Leverage_Decline_Chest_Press"
-  }
+  },
+  "stretch": [
+   "chest"
+  ]
  },
  {
   "id": "cable-chest-press",
@@ -1182,7 +1197,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Cable_Chest_Press"
-  }
+  },
+  "stretch": [
+   "chest"
+  ]
  },
  {
   "id": "incline-cable-chest-press",
@@ -1232,7 +1250,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Incline_Cable_Chest_Press"
-  }
+  },
+  "stretch": [
+   "chest"
+  ]
  },
  {
   "id": "standing-cable-chest-press",
@@ -1282,7 +1303,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Cable_Chest_Press"
-  }
+  },
+  "stretch": [
+   "chest"
+  ]
  },
  {
   "id": "pushups",
@@ -1642,11 +1666,11 @@
   "heavyWhy": "single-joint",
   "why": "Chest stretched wide, no triceps.",
   "setup": [
-   "Lie flat. Arms open wide, elbows slightly bent, palms facing up."
+   "Lie flat, press the dumbbells up over your chest, palms facing in, elbows slightly bent."
   ],
   "form": [
-   "Bring the dumbbells together over your chest in a wide arc.",
-   "Open slowly until you feel a deep stretch."
+   "Open your arms in a wide arc until you feel a deep stretch.",
+   "Bring the dumbbells back together over your chest."
   ],
   "tips": [
    "Keep the same elbow bend the whole way."
@@ -1655,12 +1679,12 @@
    "Bending the elbows into a press.",
    "Going so deep your shoulders hurt."
   ],
-  "rangeOfMotion": "Arms wide \u2192 hands over your chest",
-  "tempo": "In 1 s \u00b7 Out 3 s",
+  "rangeOfMotion": "Hands over your chest \u2192 arms wide",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "fly",
+  "figureTemplate": "fly-lying",
   "source": {
    "db": "free-exercise-db",
    "id": "Dumbbell_Flyes"
@@ -1692,26 +1716,23 @@
   "heavyWhy": "single-joint",
   "why": "Upper chest stretched wide.",
   "setup": [
-   "Bench at 30\u00b0. Arms open wide, elbows slightly bent."
+   "Bench at 30\u00b0. Press the dumbbells up over your upper chest, palms facing in, elbows slightly bent."
   ],
   "form": [
-   "Bring the dumbbells together over your upper chest in a wide arc.",
-   "Open slowly until you feel a deep stretch."
+   "Open your arms in a wide arc until you feel a deep stretch.",
+   "Bring the dumbbells back together over your upper chest."
   ],
   "tips": [],
   "avoid": [
    "Bending the elbows into a press.",
    "Going so deep your shoulders hurt."
   ],
-  "rangeOfMotion": "Arms wide \u2192 hands over your chest",
-  "tempo": "In 1 s \u00b7 Out 3 s",
+  "rangeOfMotion": "Hands over your chest \u2192 arms wide",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "fly",
-  "figureAdjust": {
-   "bench": "incline"
-  },
+  "figureTemplate": "fly-lying",
   "source": {
    "db": "free-exercise-db",
    "id": "Incline_Dumbbell_Flyes"
@@ -1742,25 +1763,22 @@
   "heavyWhy": "single-joint",
   "why": "Lower chest stretched wide.",
   "setup": [
-   "Decline bench, legs hooked in. Arms open wide, elbows slightly bent."
+   "Decline bench, legs hooked in. Press the dumbbells up over your chest, palms facing in, elbows slightly bent."
   ],
   "form": [
-   "Bring the dumbbells together over your chest in a wide arc.",
-   "Open slowly until you feel a deep stretch."
+   "Open your arms in a wide arc until you feel a deep stretch.",
+   "Bring the dumbbells back together over your chest."
   ],
   "tips": [],
   "avoid": [
    "Bending the elbows into a press."
   ],
-  "rangeOfMotion": "Arms wide \u2192 hands over your chest",
-  "tempo": "In 1 s \u00b7 Out 3 s",
+  "rangeOfMotion": "Hands over your chest \u2192 arms wide",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "fly",
-  "figureAdjust": {
-   "bench": "decline"
-  },
+  "figureTemplate": "fly-lying",
   "source": {
    "db": "free-exercise-db",
    "id": "Decline_Dumbbell_Flyes"
@@ -1792,25 +1810,22 @@
   "why": "Fly one side at a time.",
   "setup": [
    "Lie flat, hold the bench with your free hand.",
-   "Arm open wide, elbow slightly bent."
+   "Press the dumbbell up over your chest, elbow slightly bent."
   ],
   "form": [
-   "Bring the dumbbell up over your chest in a wide arc.",
-   "Open slowly until you feel a deep stretch."
+   "Open your arm in a wide arc until you feel a deep stretch.",
+   "Bring the dumbbell back up over your chest."
   ],
   "tips": [],
   "avoid": [
    "Twisting your body off the bench."
   ],
-  "rangeOfMotion": "Arm wide \u2192 hand over your chest",
-  "tempo": "In 1 s \u00b7 Out 3 s",
+  "rangeOfMotion": "Hand over your chest \u2192 arm wide",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "fly",
-  "figureAdjust": {
-   "oneArm": true
-  },
+  "figureTemplate": "fly-lying",
   "source": {
    "db": "free-exercise-db",
    "id": "One-Arm_Flat_Bench_Dumbbell_Flye"
@@ -1957,7 +1972,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "fly-cable",
+  "figureTemplate": "fly-cable-low",
   "source": {
    "db": "free-exercise-db",
    "id": "Low_Cable_Crossover"
@@ -2040,24 +2055,24 @@
   "why": "Flat fly with cables: tension at the top too.",
   "setup": [
    "Flat bench between two low pulleys, chest in line with them.",
-   "Arms open wide, elbows slightly bent."
+   "Hands up over your chest, elbows slightly bent."
   ],
   "form": [
-   "Bring your hands together over your chest and squeeze 1 s.",
-   "Open slowly until you feel a deep stretch."
+   "Open your arms in a wide arc until you feel a deep stretch.",
+   "Bring your hands back together over your chest and squeeze 1 s."
   ],
   "tips": [],
   "avoid": [
    "Bending the elbows into a press."
   ],
-  "rangeOfMotion": "Arms wide \u2192 hands over your chest",
-  "tempo": "In 1 s \u00b7 Hold 1 s \u00b7 Out 3 s",
+  "rangeOfMotion": "Hands over your chest \u2192 arms wide",
+  "tempo": "Down 3 s \u00b7 Up 1 s \u00b7 Hold 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "fly-cable",
+  "figureTemplate": "fly-lying",
   "figureAdjust": {
-   "bench": "flat"
+   "equipmentProp": "cable"
   },
   "source": {
    "db": "free-exercise-db",
@@ -2090,24 +2105,24 @@
   "why": "Upper chest fly with cables.",
   "setup": [
    "Incline bench at 30\u201345\u00b0 between two low pulleys.",
-   "Arms open wide, elbows slightly bent."
+   "Hands up over your chest, elbows slightly bent."
   ],
   "form": [
-   "Bring your hands together over your upper chest and squeeze 1 s.",
-   "Open slowly until you feel a deep stretch."
+   "Open your arms in a wide arc until you feel a deep stretch.",
+   "Bring your hands back together over your upper chest and squeeze 1 s."
   ],
   "tips": [],
   "avoid": [
    "Bending the elbows into a press."
   ],
-  "rangeOfMotion": "Arms wide \u2192 hands over your chest",
-  "tempo": "In 1 s \u00b7 Hold 1 s \u00b7 Out 3 s",
+  "rangeOfMotion": "Hands over your chest \u2192 arms wide",
+  "tempo": "Down 3 s \u00b7 Up 1 s \u00b7 Hold 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "fly-cable",
+  "figureTemplate": "fly-lying",
   "figureAdjust": {
-   "bench": "incline"
+   "equipmentProp": "cable"
   },
   "source": {
    "db": "free-exercise-db",

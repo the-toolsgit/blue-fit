@@ -157,7 +157,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "lower",
-  "figureTemplate": "leg-curl-lying",
+  "figureTemplate": "leg-curl-standing",
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Leg_Curl"
@@ -171,7 +171,7 @@
    "GHR",
    "GHD Raise"
   ],
-  "equipment": "machine",
+  "equipment": "bodyweight",
   "loadMode": "total",
   "compound": false,
   "volume": [
@@ -204,7 +204,7 @@
   "rangeOfMotion": "Body upright → body level with the floor",
   "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
-  "incrementLb": 10,
+  "incrementLb": 5,
   "bodyRegion": "lower",
   "figureTemplate": "nordic",
   "source": {
@@ -335,7 +335,7 @@
    ],
    "why": "Heavy hip hinge that loads the hamstrings stretched; top-rated by coaches.",
    "source": {
-    "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
+    "url": "https://www.strengthlog.com/hamstring-exercises/",
     "url2": "https://pubmed.ncbi.nlm.nih.gov/19204579/"
    }
   },
@@ -505,7 +505,6 @@
   ],
   "isHeavy": true,
   "heavyWhy": "multi-joint, big muscles, stable",
-  "unsafeFailure": true,
   "why": "Hamstring hinge on a fixed bar path.",
   "setup": [
    "Bar at hip height, stand close to it.",
@@ -701,7 +700,8 @@
   "why": "Hip hinge for the hamstrings, no bar.",
   "setup": [
    "45° bench, pad just below your hip bones.",
-   "Feet straight ahead, legs straight."
+   "Feet straight ahead, legs straight.",
+   "Start with your body straight."
   ],
   "form": [
    "Bend down at the hips, back flat.",
@@ -714,8 +714,8 @@
    "Rounding your back.",
    "Leaning back past straight."
   ],
-  "rangeOfMotion": "Body bent down → body straight",
-  "tempo": "Up 1 s · Down 3 s",
+  "rangeOfMotion": "Body straight → bent down",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",

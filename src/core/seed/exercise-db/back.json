@@ -810,8 +810,7 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Smith_Machine_Bent_Over_Row"
-  },
-  "unsafeFailure": true
+  }
  },
  {
   "id": "bent-over-two-dumbbell-row",

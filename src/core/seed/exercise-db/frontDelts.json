@@ -593,12 +593,12 @@
   "unsafeFailure": true,
   "why": "Overhead press with your back supported.",
   "setup": [
-   "Upright bench in a rack, bar just above your head.",
+   "Upright bench in a rack, bar at collarbone height.",
    "Hands just wider than your shoulders."
   ],
   "form": [
-   "Lower the bar slowly to your collarbone.",
-   "Press back up until your arms are straight."
+   "Press up until your arms are straight.",
+   "Lower slowly back to your collarbone."
   ],
   "tips": [
    "Set the safety bars just below collarbone height."
@@ -656,12 +656,12 @@
   "unsafeFailure": true,
   "why": "Overhead press from behind the head. Only if your shoulders allow it.",
   "setup": [
-   "Bar on your upper back in a rack, hands wide.",
+   "Bar behind your head in a rack at ear height, hands wide.",
    "Stand tall, brace."
   ],
   "form": [
    "Press up until your arms are straight.",
-   "Lower slowly to just below the top of your head."
+   "Lower slowly to about ear level."
   ],
   "tips": [
    "Go light; stop higher if your shoulders pinch."
@@ -670,7 +670,7 @@
    "Lowering all the way to your neck.",
    "Pushing your head forward."
   ],
-  "rangeOfMotion": "Bar behind head → arms straight overhead",
+  "rangeOfMotion": "Bar at ear level behind head → arms straight overhead",
   "tempo": "Up 1 s · Down 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
@@ -876,7 +876,7 @@
    "Half-kneeling Landmine Press",
    "Kneeling Landmine Press"
   ],
-  "equipment": "barbell",
+  "equipment": "plateMachine",
   "singleSleeve": true,
   "loadMode": "total",
   "compound": true,
@@ -920,11 +920,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-overhead-standing",
-  "figureAdjust": {
-   "equipmentProp": "bar",
-   "oneArm": true
-  },
+  "figureTemplate": "landmine-press",
   "source": {
    "url": "https://www.coachweb.com/barbell-exercises/7377/how-to-do-the-landmine-press",
    "url2": "https://builtwithscience.com/fitness-tips/best-shoulder-exercises/"
@@ -980,7 +976,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-overhead-standing",
+  "figureTemplate": "handstand-pushup",
   "source": {
    "db": "free-exercise-db",
    "id": "Handstand_Push-Ups"
@@ -1124,9 +1120,6 @@
   "incrementLb": 5,
   "bodyRegion": "upper",
   "figureTemplate": "front-raise",
-  "figureAdjust": {
-   "bench": "incline"
-  },
   "source": {
    "db": "free-exercise-db",
    "id": "Front_Incline_Dumbbell_Raise"
@@ -1264,7 +1257,7 @@
   "defaultRestSec": 120,
   "incrementLb": 2.5,
   "bodyRegion": "upper",
-  "figureTemplate": "front-raise",
+  "figureTemplate": "front-raise-full",
   "figureAdjust": {
    "equipmentProp": "bar"
   },
@@ -1311,7 +1304,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "front-raise",
+  "figureTemplate": "front-raise-full",
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Dumbbell_Straight-Arm_Front_Delt_Raise_Above_Head"

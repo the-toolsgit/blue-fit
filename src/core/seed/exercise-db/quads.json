@@ -394,7 +394,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Wide_Stance_Barbell_Squat"
-  }
+  },
+  "stretch": [
+   "quads"
+  ]
  },
  {
   "id": "zercher-squats",
@@ -452,7 +455,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Zercher_Squats"
-  }
+  },
+  "stretch": [
+   "quads"
+  ]
  },
  {
   "id": "dumbbell-squat",
@@ -511,7 +517,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Dumbbell_Squat"
-  }
+  },
+  "stretch": [
+   "quads"
+  ]
  },
  {
   "id": "goblet-squat",
@@ -606,7 +615,7 @@
    "adductors": "adduction"
   },
   "isHeavy": false,
-  "heavyWhy": "load limited by holding one weight",
+  "heavyWhy": "load limited by holding the weights at your shoulders",
   "why": "Front squat with two kettlebells at your shoulders.",
   "setup": [
    "A kettlebell in each hand, resting on the front of your shoulders.",
@@ -632,7 +641,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Front_Squats_With_Two_Kettlebells"
-  }
+  },
+  "stretch": [
+   "quads"
+  ]
  },
  {
   "id": "bodyweight-squat",
@@ -688,7 +700,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Bodyweight_Squat"
-  }
+  },
+  "stretch": [
+   "quads"
+  ]
  },
  {
   "id": "belt-squat",
@@ -743,10 +758,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "lower",
-  "figureTemplate": "squat-front",
-  "figureAdjust": {
-   "equipmentProp": "none"
-  },
+  "figureTemplate": "belt-squat",
   "source": {
    "db": "free-exercise-db",
    "id": "Weighted_Squat",
@@ -880,7 +892,11 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Hack_Squat"
-  }
+  },
+  "unsafeFailure": true,
+  "stretch": [
+   "quads"
+  ]
  },
  {
   "id": "narrow-stance-hack-squats",
@@ -936,9 +952,6 @@
   "incrementLb": 5,
   "bodyRegion": "lower",
   "figureTemplate": "hack-squat",
-  "figureAdjust": {
-   "grip": "close"
-  },
   "source": {
    "db": "free-exercise-db",
    "id": "Narrow_Stance_Hack_Squats"
@@ -1062,7 +1075,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Lying_Machine_Squat"
-  }
+  },
+  "stretch": [
+   "quads"
+  ]
  },
  {
   "id": "leg-press",
@@ -1119,7 +1135,10 @@
   "figureTemplate": "leg-press",
   "source": {
    "plan": "Leo's plan"
-  }
+  },
+  "stretch": [
+   "quads"
+  ]
  },
  {
   "id": "narrow-stance-leg-press",
@@ -1173,7 +1192,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Narrow_Stance_Leg_Press"
-  }
+  },
+  "stretch": [
+   "quads"
+  ]
  },
  {
   "id": "smith-machine-leg-press",
@@ -1226,7 +1248,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Smith_Machine_Leg_Press"
-  }
+  },
+  "stretch": [
+   "quads"
+  ]
  },
  {
   "id": "leg-extension",
@@ -1278,7 +1303,7 @@
    "goals": [
     "growth"
    ],
-   "why": "Only knee-straightening move that grows the rectus femoris well; seat back grew it more.",
+   "why": "Best way to grow the rectus femoris; a reclined seat grew it more.",
    "source": {
     "url": "https://pubmed.ncbi.nlm.nih.gov/39699974/",
     "url2": "https://fitnessvolt.com/jeff-nippard-leg-routine-one-year/"
@@ -1379,10 +1404,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "hack-squat",
-  "figureAdjust": {
-   "equipmentProp": "none"
-  },
+  "figureTemplate": "sissy-squat",
   "source": {
    "db": "free-exercise-db",
    "id": "Weighted_Sissy_Squat"
@@ -1429,10 +1451,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "hack-squat",
-  "figureAdjust": {
-   "equipmentProp": "none"
-  },
+  "figureTemplate": "sissy-squat",
   "source": {
    "url": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
   }
@@ -1478,7 +1497,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "nordic",
+  "figureTemplate": "reverse-nordic",
   "source": {
    "url": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
   }
@@ -1812,7 +1831,7 @@
    "Stand on a low step or plate."
   ],
   "form": [
-   "Step back off it and lower until your back knee touches the floor.",
+   "Step back off it and lower until your back knee lightly touches the floor.",
    "Push through your front foot back up."
   ],
   "tips": [],
@@ -2034,8 +2053,7 @@
   "id": "smith-single-leg-split-squat",
   "name": "Smith Bulgarian Split Squat",
   "aliases": [
-   "Smith Single-Leg Split Squat",
-   "Smith Machine Split Squat"
+   "Smith Single-Leg Split Squat"
   ],
   "equipment": "smith",
   "loadMode": "perSide",
@@ -2200,5 +2218,70 @@
    "db": "free-exercise-db",
    "id": "Dumbbell_Step_Ups"
   }
+ },
+ {
+  "id": "plie-dumbbell-squat",
+  "name": "Sumo Dumbbell Squat",
+  "aliases": [
+   "Plie Dumbbell Squat",
+   "Dumbbell Sumo Squat",
+   "Sumo Squat"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "adductors",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "adductors": "adduction",
+   "glutes": "glute max"
+  },
+  "isHeavy": false,
+  "heavyWhy": "load limited by holding one weight",
+  "why": "Wide, toes-out squat for the inner thighs.",
+  "setup": [
+   "Feet well wider than shoulders, toes out.",
+   "One dumbbell in both hands by the end, arms hanging."
+  ],
+  "form": [
+   "Sit straight down, knees out over your toes, as deep as you can.",
+   "Stand up."
+  ],
+  "tips": [
+   "Stand on two boxes to go deeper."
+  ],
+  "avoid": [
+   "Knees caving in.",
+   "Leaning forward."
+  ],
+  "rangeOfMotion": "Standing → deep wide squat",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-front",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Plie_Dumbbell_Squat"
+  },
+  "stretch": [
+   "quads"
+  ]
  }
 ]

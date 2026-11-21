@@ -33,4 +33,12 @@ describe("movement templates", () => {
     expect(buildFigure("curl-standing", { seated: true })!.base.th).toBe(88);
     expect(buildFigure("row-cable")!.props!.some((p: any) => p.cable)).toBe(true);
   });
+  it("new variants are picked by the adjustments", () => {
+    expect(buildFigure("reverse-fly-bent", { seated: true })).toEqual(buildFigure("reverse-fly-bent-seated"));
+    expect(buildFigure("reverse-fly-prone", { bench: "flat" })).toEqual(buildFigure("reverse-fly-prone-flat"));
+    expect(buildFigure("cable-crunch", { seated: true })).toEqual(buildFigure("cable-crunch-seated"));
+    expect(buildFigure("trunk-rotation", { seated: true })).toEqual(buildFigure("trunk-rotation-seated"));
+    expect(buildFigure("neck-flexion", { seated: true })).toEqual(buildFigure("neck-flexion-seated"));
+    expect(buildFigure("fly-lying", { equipmentProp: "cable" })!.props!.some((p: any) => p.cable)).toBe(true);
+  });
 });

@@ -158,7 +158,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "lateral-raise-cable",
+  "figureTemplate": "lateral-raise-lean-in-cable",
   "source": {
    "plan": "Leo's plan"
   }
@@ -451,10 +451,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "lateral-raise",
-  "figureAdjust": {
-   "oneArm": true
-  },
+  "figureTemplate": "lateral-raise-lean-in",
   "source": {
    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
@@ -502,10 +499,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "lateral-raise",
-  "figureAdjust": {
-   "oneArm": true
-  },
+  "figureTemplate": "lateral-raise-lying",
   "preferred": {
    "goals": [
     "growth"
@@ -562,11 +556,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "lateral-raise",
-  "figureAdjust": {
-   "oneArm": true,
-   "bench": "incline"
-  },
+  "figureTemplate": "lateral-raise-lying",
   "source": {
    "db": "free-exercise-db",
    "id": "One-Arm_Incline_Lateral_Raise"
@@ -1225,6 +1215,57 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Smith_Machine_One-Arm_Upright_Row"
+  }
+ },
+ {
+  "id": "cable-y-raise",
+  "name": "Cable Y-Raise",
+  "aliases": [
+   "Standing Cable Y-Raise",
+   "Cross-body Cable Y-Raise"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise",
+   "traps": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Both arms up in a Y: side delts, with the lower traps helping.",
+  "setup": [
+   "Two low pulleys, cables crossed: left handle in your right hand.",
+   "Stand in the middle."
+  ],
+  "form": [
+   "Raise both arms up and out into a Y over your head.",
+   "Hold 1 s at the top, lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching your lower back.",
+   "Shrugging up to your ears."
+  ],
+  "rangeOfMotion": "Hands crossed low → arms in a Y overhead",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "y-raise",
+  "source": {
+   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/",
+   "url2": "https://builtwithscience.com/fitness-tips/best-shoulder-exercises/"
   }
  }
 ]

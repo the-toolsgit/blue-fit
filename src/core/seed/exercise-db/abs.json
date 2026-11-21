@@ -143,22 +143,25 @@
   ],
   "form": [
    "Curl your ribs down toward your hips.",
-   "Uncurl slowly until you stand tall."
+   "Uncurl slowly until your back arches slightly."
   ],
   "tips": [],
   "avoid": [
    "Bending at the hips or knees instead of curling."
   ],
-  "rangeOfMotion": "Standing tall → spine fully curled",
+  "rangeOfMotion": "Back slightly arched → spine fully curled",
   "tempo": "Down 1 s · Up 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "cable-crunch",
+  "figureTemplate": "cable-crunch-standing",
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Rope_Crunch"
-  }
+  },
+  "stretch": [
+   "abs"
+  ]
  },
  {
   "id": "ab-crunch-machine",
@@ -202,6 +205,7 @@
   "bodyRegion": "upper",
   "figureTemplate": "cable-crunch",
   "figureAdjust": {
+   "seated": true,
    "equipmentProp": "none"
   },
   "source": {
@@ -246,7 +250,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "leg-raise-lying",
+  "figureTemplate": "reverse-crunch",
   "source": {
    "db": "free-exercise-db",
    "id": "Cable_Reverse_Crunch"
@@ -677,18 +681,23 @@
   "aliases": [],
   "equipment": "barbell",
   "loadMode": "perSide",
-  "compound": false,
+  "compound": true,
   "volume": [
    {
     "group": "abs",
     "weight": 1
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
    }
   ],
   "jobs": {
-   "abs": "rectus abs"
+   "abs": "rectus abs",
+   "frontDelts": "press"
   },
   "isHeavy": false,
-  "heavyWhy": "single-joint",
+  "heavyWhy": "bodyweight move with a light bar",
   "unsafeFailure": true,
   "why": "Sit-up while pressing a light bar overhead.",
   "setup": [
@@ -756,7 +765,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "leg-raise-lying",
+  "figureTemplate": "reverse-crunch",
   "preferred": {
    "goals": [
     "growth"
@@ -812,9 +821,6 @@
   "incrementLb": 5,
   "bodyRegion": "upper",
   "figureTemplate": "leg-raise-lying",
-  "figureAdjust": {
-   "bench": "decline"
-  },
   "source": {
    "db": "free-exercise-db",
    "id": "Decline_Reverse_Crunch"
@@ -1006,16 +1012,6 @@
   "incrementLb": 5,
   "bodyRegion": "upper",
   "figureTemplate": "leg-raise-hanging",
-  "preferred": {
-   "goals": [
-    "growth"
-   ],
-   "why": "Leg-raise pick to pair with a loaded crunch: the hips curl up against the legs' weight.",
-   "source": {
-    "url": "https://fitnessvolt.com/jeff-nippard-6-pack-abs-tips/",
-    "url2": "https://www.strengthlog.com/hanging-leg-raise/"
-   }
-  },
   "source": {
    "db": "free-exercise-db",
    "id": "Hanging_Leg_Raise"
@@ -1116,7 +1112,7 @@
    "Vertical knee raise",
    "Roman chair knee raise"
   ],
-  "equipment": "other",
+  "equipment": "bodyweight",
   "loadMode": "total",
   "compound": false,
   "volume": [
@@ -1152,6 +1148,16 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Knee_Hip_Raise_On_Parallel_Bars"
+  },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated leg raise: back supported, hips curl up against the legs' weight.",
+   "source": {
+    "url": "https://fitnessvolt.com/jeff-nippard-6-pack-abs-tips/",
+    "url2": "https://builtwithscience.com/fitness-tips/best-ab-exercises/"
+   }
   }
  },
  {
@@ -1191,7 +1197,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "leg-raise-lying",
+  "figureTemplate": "reverse-crunch",
   "source": {
    "db": "free-exercise-db",
    "id": "Smith_Machine_Hip_Raise"
@@ -1244,7 +1250,8 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Ab_Roller"
-  }
+  },
+  "unsafeFailure": true
  },
  {
   "id": "barbell-ab-rollout-on-knees",
@@ -1294,7 +1301,8 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Ab_Rollout_-_On_Knees"
-  }
+  },
+  "unsafeFailure": true
  },
  {
   "id": "barbell-ab-rollout",
@@ -1346,7 +1354,8 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Ab_Rollout"
-  }
+  },
+  "unsafeFailure": true
  },
  {
   "id": "barbell-rollout-from-bench",
@@ -1393,7 +1402,8 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Rollout_from_Bench"
-  }
+  },
+  "unsafeFailure": true
  },
  {
   "id": "dead-bug",
@@ -1432,7 +1442,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "leg-raise-lying",
+  "figureTemplate": "dead-bug",
   "source": {
    "db": "free-exercise-db",
    "id": "Dead_Bug"
@@ -1469,7 +1479,7 @@
    "Leaning forward or back.",
    "Using two dumbbells (they cancel out)."
   ],
-  "rangeOfMotion": "Bent toward the weight → bent slightly away",
+  "rangeOfMotion": "Upright → bent toward the weight",
   "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
@@ -1533,7 +1543,8 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Side_Bend"
-  }
+  },
+  "unsafeFailure": true
  },
  {
   "id": "one-arm-high-pulley-cable-side-bends",
@@ -1940,7 +1951,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "woodchop",
+  "figureTemplate": "woodchop-up",
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Cable_Lift"
@@ -1984,7 +1995,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "woodchop",
+  "figureTemplate": "pallof-press",
   "source": {
    "db": "free-exercise-db",
    "id": "Pallof_Press"
@@ -2028,7 +2039,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "woodchop",
+  "figureTemplate": "trunk-rotation",
   "source": {
    "db": "free-exercise-db",
    "id": "Pallof_Press_With_Rotation"
@@ -2074,7 +2085,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "woodchop",
+  "figureTemplate": "trunk-rotation",
   "source": {
    "db": "free-exercise-db",
    "id": "Cable_Russian_Twists"
@@ -2117,10 +2128,13 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "woodchop",
+  "figureTemplate": "trunk-rotation",
   "source": {
    "db": "free-exercise-db",
    "id": "Russian_Twist"
+  },
+  "figureAdjust": {
+   "seated": true
   }
  },
  {
@@ -2162,10 +2176,13 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "woodchop",
+  "figureTemplate": "trunk-rotation",
   "source": {
    "db": "free-exercise-db",
    "id": "Plate_Twist"
+  },
+  "figureAdjust": {
+   "seated": true
   }
  },
  {
@@ -2204,14 +2221,15 @@
   "defaultRestSec": 120,
   "incrementLb": 2.5,
   "bodyRegion": "upper",
-  "figureTemplate": "woodchop",
+  "figureTemplate": "trunk-rotation",
   "figureAdjust": {
-   "equipmentProp": "bar"
+   "seated": true
   },
   "source": {
    "db": "free-exercise-db",
    "id": "Seated_Barbell_Twist"
-  }
+  },
+  "unsafeFailure": true
  },
  {
   "id": "landmine-180s",
@@ -2253,7 +2271,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "woodchop",
+  "figureTemplate": "trunk-rotation",
   "source": {
    "db": "free-exercise-db",
    "id": "Landmine_180s"
@@ -2299,9 +2317,9 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "woodchop",
+  "figureTemplate": "trunk-rotation",
   "figureAdjust": {
-   "equipmentProp": "none"
+   "seated": true
   },
   "source": {
    "url": "https://www.exercise.com/exercises/torso-rotation-machine/",

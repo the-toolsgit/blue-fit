@@ -811,7 +811,8 @@
   "why": "Glutes worked through the hips, no bar.",
   "setup": [
    "45° bench, pad just below your hip bones.",
-   "Feet turned out a little."
+   "Feet turned out a little.",
+   "Start with your body straight."
   ],
   "form": [
    "Bend down at the hips.",
@@ -825,8 +826,8 @@
    "Leaning back past straight.",
    "Swinging up fast."
   ],
-  "rangeOfMotion": "Body bent down → body straight",
-  "tempo": "Up 1 s · Down 3 s",
+  "rangeOfMotion": "Body straight → bent down",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
@@ -886,7 +887,8 @@
   "why": "Back extension when there is no back extension bench.",
   "setup": [
    "Lie face down on a flat bench, hips at the end.",
-   "A partner pins your legs down."
+   "A partner pins your legs down.",
+   "Start with your body straight."
   ],
   "form": [
    "Bend down at the hips.",
@@ -897,8 +899,8 @@
    "Leaning back past straight.",
    "Swinging up fast."
   ],
-  "rangeOfMotion": "Body bent down → body straight",
-  "tempo": "Up 1 s · Down 3 s",
+  "rangeOfMotion": "Body straight → bent down",
+  "tempo": "Down 3 s · Up 1 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
@@ -938,7 +940,7 @@
   },
   "isHeavy": false,
   "heavyWhy": "single-joint",
-  "why": "Legs swing up behind you: glutes, no load on the spine.",
+  "why": "Legs swing up behind you: glutes, no weight on your back.",
   "setup": [
    "Lie face down on the top pad, hips at the edge.",
    "Feet under the roller, hands on the handles."
@@ -957,7 +959,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "lower",
-  "figureTemplate": "back-extension",
+  "figureTemplate": "reverse-hyper",
   "source": {
    "db": "free-exercise-db",
    "id": "Reverse_Hyperextension"
@@ -1008,10 +1010,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "hinge",
-  "figureAdjust": {
-   "equipmentProp": "none"
-  },
+  "figureTemplate": "pull-through",
   "source": {
    "db": "free-exercise-db",
    "id": "Pull_Through",
@@ -1057,10 +1056,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "kickback-glute",
-  "figureAdjust": {
-   "equipmentProp": "none"
-  },
+  "figureTemplate": "kickback-quadruped",
   "source": {
    "db": "free-exercise-db",
    "id": "Glute_Kickback"
@@ -1265,7 +1261,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "hip-abduction",
+  "figureTemplate": "hip-abduction-standing",
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
    "url2": "https://fitnessvolt.com/jeff-nippard-rates-glute-exercises/"
