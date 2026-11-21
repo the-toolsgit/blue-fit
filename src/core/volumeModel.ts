@@ -15,16 +15,17 @@ export interface ModelTarget { group: MuscleGroup; min: number; max: number; why
 /**
  * Weekly set range for a muscle: the muscle database's range for the goal (seed/muscles.json weeklySets), then the
  * profile rules from the same file (years training, age, sleep, cutting/bulking) scale it. Priority → top half of the
- * range; skipped → the maintain range.
+ * range; skipped → no sets.
  */
 export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Priority = "normal"): ModelTarget {
+  // Skipped muscles aren't trained or checked: no sets
+  if (priority === "off") return { group, min: 0, max: 0, why: ["Skipped: not trained"] };
   const m = muscleInfo(group);
   const R = PROFILE_RULES;
   const why: string[] = [];
-  const goal: GoalKey = priority === "off" ? "maintain" : p.goal === "maintenance" ? "maintain" : p.goal;
+  const goal: GoalKey = p.goal === "maintenance" ? "maintain" : p.goal;
   let [min, max] = m.weeklySets[goal];
-  if (priority === "off") why.push(R.skipped.why);
-  else if (goal === "strength") why.push("Strength goal: fewer, harder sets");
+  if (goal === "strength") why.push("Strength goal: fewer, harder sets");
   else if (goal === "endurance") why.push("Endurance goal: more light sets");
   else if (goal === "maintain") why.push("Maintain goal: a third of the sets keeps your size");
 

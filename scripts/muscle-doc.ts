@@ -111,7 +111,6 @@ function profileSection(): string {
     ...P.sleepHours.map((s: any) => step("Sleep (h)", s)),
     ...Object.entries(P.phase).map(([k, v]: any) => `<tr><td>${k === "cutting" ? "Cutting" : "Bulking"}</td><td class="mono">max ${pct(v.max)}</td><td>${esc(v.why)} (not for maintain)</td></tr>`),
     `<tr><td>Priority muscle</td><td class="mono">min → middle</td><td>${esc(P.priority.why)}</td></tr>`,
-    `<tr><td>Skipped muscle</td><td class="mono">maintain range</td><td>${esc(P.skipped.why)}</td></tr>`,
     `<tr><td>Key lift to failure</td><td class="mono">+1 recovery day</td><td>That muscle stays partly recovered one more day</td></tr>`,
   ].join("");
   return `<section class="profile"><h2>How your profile changes sets goal</h2>

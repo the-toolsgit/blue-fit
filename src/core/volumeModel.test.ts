@@ -21,9 +21,9 @@ describe("volume model (draft 2)", () => {
     expect(p.min).toBeGreaterThan(n.min);
     expect(p.max).toBe(n.max);
   });
-  it("skip gives a maintenance range", () => {
-    const off = modelTarget("chest", base, "off"), m = modelTarget("chest", { ...base, goal: "maintenance" });
-    expect([off.min, off.max]).toEqual([m.min, m.max]);
+  it("a skipped muscle gets no sets", () => {
+    const off = modelTarget("chest", base, "off");
+    expect([off.min, off.max]).toEqual([0, 0]);
   });
   it("strength and maintenance ceilings are below growth", () => {
     const g = modelTarget("back", base).max;

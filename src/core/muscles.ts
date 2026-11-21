@@ -20,7 +20,7 @@ type Step = { under?: number; from?: number; min?: number; max?: number; maintai
 export interface ProfileRules {
   yearsTraining: Step[]; age: Step[]; sleepHours: Step[];
   phase: Record<"cutting" | "bulking", { max: number; why: string }>;
-  priority: { why: string }; skipped: { why: string };
+  priority: { why: string };
 }
 
 export const MUSCLE_DB = db.muscles as unknown as MuscleInfo[];

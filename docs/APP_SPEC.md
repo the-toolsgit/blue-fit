@@ -329,7 +329,7 @@ Finish drops sets not done and exercises left with no done sets, sets `status = 
 ### 5.17 Volume model (muscle database since Nov 20 2026)
 Framework-free `core/volumeModel.ts`, reading the **muscle database** (`core/seed/muscles.json` via `core/muscles.ts`, §5.24). Fractional weekly sets.
 - Each muscle has a weekly set range per goal (Mass gain · Strength · Endurance · Maintain) in the database. Only the mass gain ranges rest on studies (10–20 sets; Schoenfeld 2017, Pelland 2024); the others and the per-muscle tweaks are coaching practice or *judgment*.
-- Priority: min moves to the middle of the range. Skip: the maintain range.
+- Priority: min moves to the middle of the range. Skipped muscles get no sets (not trained or checked).
 - The training profile scales the range with the database's `profile` rules: < 1 year ×0.75 (min too), ≥ 3 years ×1.1, age 40–59 ×0.92, 60+ ×0.85 (maintain min ×1.5), sleep 6–7 h ×0.92, < 6 h ×0.8, cutting ×0.85, bulking ×1.1 (cutting/bulking not applied to maintain).
 - Rounded; max ≥ min + 2. Each result carries "why" lines shown in the editor. These are suggestions only: targets the user set stay saved and are never overwritten.
 
