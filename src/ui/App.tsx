@@ -9,6 +9,7 @@ import { Splash } from "./components/Splash";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { go, useRoute } from "./router";
 import { useStore } from "./store";
+import { localDate } from "../core/util";
 import { ExerciseScreen } from "./screens/ExerciseScreen";
 import { HistoryScreen } from "./screens/History";
 import { PlanScreen } from "./screens/Plan";
@@ -60,8 +61,25 @@ if (typeof window !== "undefined") {
 }
 const TAB_OF: Record<string, string> = { workout: "today", summary: "history", edit: "history", exercise: "plan", "plan-edit": "plan" };
 
+// The app can sit in the background overnight without reloading (iPhone home-screen apps resume as they were), so
+// recheck the date when it comes back and once a minute; tab screens restart on a new day.
+function useToday(): string {
+  const [day, setDay] = useState(() => localDate(new Date()));
+  useEffect(() => {
+    const check = () => setDay(localDate(new Date()));
+    const onVis = () => { if (document.visibilityState === "visible") check(); };
+    document.addEventListener("visibilitychange", onVis);
+    window.addEventListener("focus", check);
+    window.addEventListener("pageshow", check);
+    const t = setInterval(check, 60_000);
+    return () => { document.removeEventListener("visibilitychange", onVis); window.removeEventListener("focus", check); window.removeEventListener("pageshow", check); clearInterval(t); };
+  }, []);
+  return day;
+}
+
 export function App() {
   const route = useRoute();
+  const today = useToday();
   const [splash, setSplash] = useState(true); // once per launch
   const endSplash = useCallback(() => setSplash(false), []);
   const { ready, settings, toast } = useStore();
@@ -156,12 +174,12 @@ export function App() {
   else if (name === "exercise") screen = <ExerciseScreen id={id} slotId={sub} />;
   else if (name === "summary") screen = <SummaryScreen id={id} />;
   else if (name === "edit") screen = <EditWorkoutScreen id={id} />;
-  else if (name === "plan") screen = <PlanScreen />;
+  else if (name === "plan") screen = <PlanScreen key={today} />;
   else if (name === "plan-edit") screen = <PlanEditorScreen id={id} />;
-  else if (name === "history") screen = <HistoryScreen />;
-  else if (name === "progress") screen = <ProgressScreen />;
+  else if (name === "history") screen = <HistoryScreen key={today} />;
+  else if (name === "progress") screen = <ProgressScreen key={today} />;
   else if (name === "settings") screen = <SettingsScreen onUpdate={needRefresh ? () => updateServiceWorker(true) : undefined} onCheck={checkForUpdate} />;
-  else screen = <TodayScreen />;
+  else screen = <TodayScreen key={today} />;
 
   return (
     <div className="app">
