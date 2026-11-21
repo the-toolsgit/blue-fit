@@ -48,6 +48,16 @@
   "figureAdjust": {
    "bench": "incline"
   },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Arm behind the body stretches the long head; grew the upper biceps most in a trial.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/39809454/",
+    "url2": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
+   }
+  },
   "source": {
    "plan": "Leo's plan",
    "db": "free-exercise-db",
@@ -163,6 +173,16 @@
   "incrementLb": 5,
   "bodyRegion": "upper",
   "figureTemplate": "curl-hammer",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Neutral grip adds brachialis and forearm work.",
+   "source": {
+    "url": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/",
+    "url2": "https://rpstrength.com/bicep-training-tips-hypertrophy"
+   }
+  },
   "source": {
    "plan": "Leo's plan",
    "db": "free-exercise-db",
@@ -219,6 +239,16 @@
   "figureAdjust": {
    "equipmentProp": "bar"
   },
+  "preferred": {
+   "goals": [
+    "strength"
+   ],
+   "why": "Heaviest loadable curl; curl strength is specific to the curl trained.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/39809454/",
+    "url2": "https://pubmed.ncbi.nlm.nih.gov/19204579/"
+   }
+  },
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Curl"
@@ -267,6 +297,16 @@
   "figureTemplate": "curl-standing",
   "figureAdjust": {
    "equipmentProp": "bar"
+  },
+  "preferred": {
+   "goals": [
+    "strength"
+   ],
+   "why": "Heavy curl that is easier on the wrists; curl strength is specific to the curl trained.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/39809454/",
+    "url2": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
+   }
   },
   "source": {
    "db": "free-exercise-db",
@@ -834,6 +874,16 @@
   "figureAdjust": {
    "oneArm": true
   },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated curl: loads the biceps long head in its stretch.",
+   "source": {
+    "url": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/",
+    "url2": "https://rpstrength.com/bicep-training-tips-hypertrophy"
+   }
+  },
   "source": {
    "url": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/",
    "url2": "https://fitnessvolt.com/jeff-nippard-best-exercises-every-muscle-group/"
@@ -1035,6 +1085,16 @@
   "figureTemplate": "curl-preacher",
   "figureAdjust": {
    "equipmentProp": "db"
+  },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated curl: hardest at the bottom; grew the lower biceps most in trials.",
+   "source": {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9960616/",
+    "url2": "https://pubmed.ncbi.nlm.nih.gov/39809454/"
+   }
   },
   "source": {
    "db": "free-exercise-db",

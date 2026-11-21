@@ -119,6 +119,16 @@
   "incrementLb": 5,
   "bodyRegion": "upper",
   "figureTemplate": "pulldown-single",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated lat isolation: elbow tight to the body, big stretch.",
+   "source": {
+    "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/",
+    "url2": "https://builtwithscience.com/fitness-tips/the-best-back-exercises/"
+   }
+  },
   "source": {
    "plan": "Leo's plan",
    "db": "free-exercise-db",
@@ -300,6 +310,16 @@
    "grip": "wide",
    "seated": true
   },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated lat exercise: easy to load and progress.",
+   "source": {
+    "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/",
+    "url2": "https://builtwithscience.com/fitness-tips/the-best-back-exercises/"
+   }
+  },
   "source": {
    "plan": "Leo's plan",
    "db": "free-exercise-db",
@@ -361,6 +381,16 @@
    "grip": "neutral",
    "seated": true
   },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated row: steady cable tension and a deep stretch at the front.",
+   "source": {
+    "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/",
+    "url2": "https://builtwithscience.com/fitness-tips/the-best-back-exercises/"
+   }
+  },
   "source": {
    "plan": "Leo's plan",
    "db": "free-exercise-db",
@@ -421,6 +451,16 @@
   "incrementLb": 5,
   "bodyRegion": "upper",
   "figureTemplate": "row-bent-barbell",
+  "preferred": {
+   "goals": [
+    "strength"
+   ],
+   "why": "Heavy multi-joint row you can load the most; strength gains are specific to it.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19204579/",
+    "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11239729/"
+   }
+  },
   "source": {
    "db": "free-exercise-db",
    "id": "Bent_Over_Barbell_Row"
@@ -1249,6 +1289,16 @@
    "seated": true,
    "equipmentProp": "none"
   },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated row: hits lats and upper back with no lower-back strain.",
+   "source": {
+    "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/",
+    "url2": "https://builtwithscience.com/fitness-tips/the-best-back-exercises/"
+   }
+  },
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
@@ -1772,6 +1822,16 @@
   "figureTemplate": "pullup",
   "figureAdjust": {
    "grip": "wide"
+  },
+  "preferred": {
+   "goals": [
+    "strength"
+   ],
+   "why": "Heavy vertical pull, loaded with a belt; strength gains are specific to it.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19204579/",
+    "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11239729/"
+   }
   },
   "source": {
    "db": "free-exercise-db",

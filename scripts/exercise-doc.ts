@@ -24,6 +24,8 @@ const NAME = new Map(muscles.map((m) => [m.id, m.name]));
 const EQUIP: Record<string, string> = { barbell: "Barbell", dumbbell: "Dumbbell", cable: "Cable", machine: "Machine", plateMachine: "Plate machine", smith: "Smith", fixedBar: "Fixed bar", bodyweight: "Bodyweight", other: "Other" };
 const runtime = buildSync({ entryPoints: [root + "scripts/exercise-doc-runtime.ts"], bundle: true, write: false, format: "iife", minify: true }).outputFiles[0].text;
 
+const GOAL: Record<string, string> = { growth: "mass gain", strength: "strength", endurance: "endurance", maintain: "maintain" };
+const goalNames = (g: string[]) => g.map((x) => GOAL[x] ?? x).join(", ");
 const anglesOf = (e: any, g: string): string[] => { const j = e.jobs?.[g]; return Array.isArray(j) ? j : j ? [j] : []; };
 const figs: any[] = [];
 const card = (e: any) => {
@@ -36,11 +38,11 @@ const card = (e: any) => {
   const src = e.source ?? {};
   const links = [src.url, src.url2].filter(Boolean).map((u: string, k: number) => `<a href="${esc(u)}" target="_blank" rel="noopener">${k ? "second source" : "source"}</a>`);
   const srcText = src.plan ? "Leo's plan" : src.db ? `${esc(src.db)}` : "";
-  return `<article class="ex" data-eq="${esc(e.equipment)}" data-name="${esc([e.name, ...(e.aliases ?? [])].join(" ").toLowerCase())}">
+  return `<article class="ex" id="ex-${esc(e.id)}" data-eq="${esc(e.equipment)}" data-name="${esc([e.name, ...(e.aliases ?? [])].join(" ").toLowerCase())}">
   <div class="ex-top"><svg class="fig" data-i="${i}" viewBox="0 -24 120 131" aria-hidden="true"></svg>
     <div class="ex-head"><h3>${esc(e.name)}${e.isHeavy ? ` <span class="star" title="Key lift">★</span>` : ""}</h3>
-      <div class="tags">${anglesOf(e, main).length > 1 ? `<span class="tag ang-t">${esc(anglesOf(e, main).join(" + "))}</span>` : ""}<span class="tag">${esc(EQUIP[e.equipment] ?? e.equipment)}</span>${e.isHeavy ? `<span class="tag key">key lift</span>` : ""}<span class="tag ${failOk ? "ok" : "no"}">${failOk ? "failure ok" : "no failure"}</span>${indirect.map((v: any) => `<span class="tag ind">${esc(NAME.get(v.group) ?? v.group)} ${v.weight === 1 ? "" : "½"}</span>`).join("")}</div>
-      <p class="why">${esc(e.why)}</p></div></div>
+      <div class="tags">${anglesOf(e, main).length > 1 ? `<span class="tag ang-t">${esc(anglesOf(e, main).join(" + "))}</span>` : ""}<span class="tag">${esc(EQUIP[e.equipment] ?? e.equipment)}</span>${e.preferred ? `<span class="tag top">top pick: ${esc(goalNames(e.preferred.goals))}</span>` : ""}${e.isHeavy ? `<span class="tag key">key lift</span>` : ""}<span class="tag ${failOk ? "ok" : "no"}">${failOk ? "failure ok" : "no failure"}</span>${indirect.map((v: any) => `<span class="tag ind">${esc(NAME.get(v.group) ?? v.group)} ${v.weight === 1 ? "" : "½"}</span>`).join("")}</div>
+      <p class="why">${esc(e.why)}</p>${e.preferred ? `<p class="pref">Top pick: ${esc(e.preferred.why)}${[e.preferred.source?.url, e.preferred.source?.url2].filter(Boolean).map((u: string, k: number) => ` <a href="${esc(u)}" target="_blank" rel="noopener">${k ? "source 2" : "source"}</a>`).join("")}</p>` : ""}</div></div>
   <div class="cues">${ul("Setup", "", e.setup)}${ul("Form", "", e.form)}${ul("Tips", "h-tip", e.tips)}${ul("Avoid", "h-avoid", e.avoid)}</div>
   <p class="meta"><span>Range: ${esc(e.rangeOfMotion)}</span><span>Tempo: ${esc(e.tempo)}</span><span>rest ${Math.round((e.defaultRestSec ?? 120) / 60 * 10) / 10} min</span><span class="src">${srcText}${srcText && links.length ? " · " : ""}${links.join(" · ")}</span></p>
 </article>`;
@@ -57,7 +59,10 @@ const sections = muscles.map((m) => {
     const xs = mine.filter((e) => angleOf(e) === a).sort((x, y) => Number(!!y.isHeavy) - Number(!!x.isHeavy) || x.name.localeCompare(y.name));
     return xs.length ? `<h3 class="ang">${esc(a)} <span class="count">${xs.length}</span></h3><div class="grid">${xs.map(card).join("")}</div>` : "";
   }).join("");
-  return `<section class="muscle" id="${m.id}"><h2>${esc(m.name)} <span class="count">${mine.length}</span></h2>${groups}</section>`;
+  // Top picks per goal (endurance and maintain follow mass gain unless an exercise says otherwise)
+  const picks = (goal: string) => mine.filter((e) => e.preferred?.goals?.includes(goal)).map((e) => `<a href="#ex-${e.id}">${esc(e.name)}</a>`);
+  const top = [["growth", "Mass gain, endurance, maintain"], ["strength", "Strength"]].map(([g, l]) => (picks(g).length ? `<p><b>${l}:</b> ${picks(g).join(" · ")}</p>` : "")).join("");
+  return `<section class="muscle" id="${m.id}"><h2>${esc(m.name)} <span class="count">${mine.length}</span></h2>${top ? `<div class="top"><h4>Top picks</h4>${top}</div>` : ""}${groups}</section>`;
 }).join("");
 
 const present = muscles.filter((m) => entries.some((e) => e.volume.find((v: any) => v.weight === 1)?.group === m.id));
@@ -99,8 +104,12 @@ h3 { font: 600 17px/1.25 var(--body); margin: 0; }
 .star { color: var(--warn); }
 .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
 .tag { font: 500 11px var(--mono); padding: 2px 7px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
-.tag.key { color: var(--warn); border-color: rgba(255,197,61,.45); } .tag.ok { color: var(--good); border-color: rgba(61,255,176,.35); } .tag.no { color: var(--bad); border-color: rgba(255,90,90,.35); } .tag.ind { color: var(--neon-2); } .tag.ang-t { color: var(--ink); border-color: rgba(61,155,255,.45); }
+.tag.key { color: var(--warn); border-color: rgba(255,197,61,.45); } .tag.ok { color: var(--good); border-color: rgba(61,255,176,.35); } .tag.no { color: var(--bad); border-color: rgba(255,90,90,.35); } .tag.ind { color: var(--neon-2); } .tag.top { color: var(--on, #02101f); background: var(--neon-2); border-color: var(--neon-2); }
+.top { background: var(--card); border: 1px solid rgba(35,226,255,.35); border-radius: 14px; padding: 10px 14px; margin-top: 10px; font-size: 14px; }
+.top p { margin: 4px 0 0; } .top a { color: var(--neon-2); } .top b { font-weight: 600; }
+.ex { scroll-margin-top: 130px; } .tag.ang-t { color: var(--ink); border-color: rgba(61,155,255,.45); }
 .why { margin: 6px 0 0; font-size: 14px; color: var(--ink); }
+.pref { margin: 4px 0 0; font-size: 13px; color: var(--neon-2); } .pref a { color: var(--neon); }
 .cues { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px 14px; margin-top: 10px; }
 h4 { margin: 0 0 2px; font: 600 11.5px var(--body); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
 .h-tip { color: var(--neon-2); } .h-avoid { color: var(--bad); }

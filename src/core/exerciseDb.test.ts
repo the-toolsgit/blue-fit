@@ -50,6 +50,12 @@ describe("exercise database", () => {
       expect(buildFigure(e.figureTemplate, e.figureAdjust ?? {}), "figure builds").not.toBeNull();
       expect(e.source && (e.source.db || e.source.url || e.source.plan), "source").toBeTruthy();
       expect(JSON.stringify(e.source)).not.toContain("docs/source");
+      if (e.preferred) {
+        expect(e.preferred.goals.length).toBeGreaterThan(0);
+        for (const g of e.preferred.goals) expect(["growth", "strength", "endurance", "maintain"]).toContain(g);
+        expect(e.preferred.why).toBeTruthy();
+        expect(e.preferred.source?.url, "preferred source").toBeTruthy();
+      }
     });
   }
 });
