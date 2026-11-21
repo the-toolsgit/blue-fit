@@ -4,7 +4,7 @@ import { EQUIPMENT_LABEL, MUSCLE_GROUPS, muscleLabel, type Equipment, type Exerc
 import { useStore } from "../store";
 import { isTopPick } from "../../core/catalog";
 import { Figure } from "./Figure";
-import { MuscleMap } from "./MuscleMap";
+import { EquipmentIcon, MuscleIcon } from "./FilterIcons";
 import { Seg } from "./Controls";
 import { Icon } from "./Icon";
 import { Sheet } from "./Sheet";
@@ -20,10 +20,10 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
   const [groups, setGroups] = useState<MuscleGroup[]>([]);
   const [eqs, setEqs] = useState<Equipment[]>([]);
   const [tab, setTab] = useState<"muscle" | "equipment" | null>(null);
-  // Equipment present in the list, each with one exercise's figure as its picture
+  // Equipment present in the list; bodyweight shows a pull-up line man, the rest a drawn icon
   const equipments = useMemo(() => {
     const m = new Map<Equipment, Exercise>();
-    for (const e of exercises) if (!e.archived && !m.has(e.equipment)) m.set(e.equipment, e);
+    for (const e of exercises) if (!e.archived && (!m.has(e.equipment) || /^pull-?up$/i.test(e.name))) m.set(e.equipment, e);
     return [...m].sort((a, b) => EQUIPMENT_LABEL[a[0]].localeCompare(EQUIPMENT_LABEL[b[0]]));
   }, [exercises]);
   // A top pick belongs to the muscle it trains fully: with a muscle filter on, only that muscle's top picks count (and show the tag)
@@ -80,13 +80,13 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
         <div style={{ marginTop: 10 }}>
           {tab === "equipment" ? (
             <>
-              <FilterRow on={!eqs.length} label="All equipment" pic={<Icon name="check" size={22} />} onClick={() => setEqs([])} />
-              {equipments.map(([x, e]) => <FilterRow key={x} on={eqs.includes(x)} label={EQUIPMENT_LABEL[x]} pic={<Figure spec={e.figure} size={44} still className="thin" />} onClick={() => setEqs(toggle(eqs, x))} />)}
+              <FilterRow on={!eqs.length} label="All equipment" pic={<span className="pic-grid">{(["barbell", "dumbbell", "cable", "machine"] as const).map((x) => <EquipmentIcon key={x} eq={x} size={19} />)}</span>} onClick={() => setEqs([])} />
+              {equipments.map(([x, e]) => <FilterRow key={x} on={eqs.includes(x)} label={EQUIPMENT_LABEL[x]} pic={x === "bodyweight" ? <Figure spec={e.figure} size={44} still className="thin" /> : <EquipmentIcon eq={x} />} onClick={() => setEqs(toggle(eqs, x))} />)}
             </>
           ) : (
             <>
-              <FilterRow on={!groups.length} label="All muscles" pic={<MuscleMap intensity={Object.fromEntries(MUSCLE_GROUPS.map((m) => [m.id, 0.6]))} />} map onClick={() => setGroups([])} />
-              {MUSCLE_GROUPS.map((m) => <FilterRow key={m.id} on={groups.includes(m.id)} label={m.label} pic={<MuscleMap intensity={{ [m.id]: 1 }} />} map onClick={() => setGroups(toggle(groups, m.id))} />)}
+              <FilterRow on={!groups.length} label="All muscles" pic={<MuscleIcon group={null} />} onClick={() => setGroups([])} />
+              {MUSCLE_GROUPS.map((m) => <FilterRow key={m.id} on={groups.includes(m.id)} label={m.label} pic={<MuscleIcon group={m.id} />} onClick={() => setGroups(toggle(groups, m.id))} />)}
             </>
           )}
         </div>
@@ -100,10 +100,10 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
 const toggle = <T,>(xs: T[], x: T) => (xs.includes(x) ? xs.filter((y) => y !== x) : [...xs, x]);
 const pickedLabel = (names: string[], none: string, many: string) => (names.length === 0 ? none : names.length === 1 ? names[0] : `${names.length} ${many}`);
 
-function FilterRow({ on, label, pic, onClick, map }: { on: boolean; label: string; pic: React.ReactNode; onClick: () => void; map?: boolean }) {
+function FilterRow({ on, label, pic, onClick }: { on: boolean; label: string; pic: React.ReactNode; onClick: () => void }) {
   return (
     <button className={"list-row filter-row" + (on ? " on" : "")} aria-pressed={on} onClick={onClick}>
-      <span className={"filter-pic" + (map ? " map" : "")}>{pic}</span>
+      <span className="filter-pic">{pic}</span>
       <span className="grow" style={{ fontWeight: 600 }}>{label}</span>
       <span className="filter-box">{on && <Icon name="check" size={18} />}</span>
     </button>
