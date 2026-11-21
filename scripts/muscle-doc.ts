@@ -17,6 +17,35 @@ const ev = (k?: string) => (k && EV[k] ? `<span class="ev ${EV[k][1]}" title="${
 const GOALS: [string, string][] = [["growth", "Mass gain"], ["strength", "Strength"], ["endurance", "Endurance"], ["maintain", "Maintain"]];
 const MAXSETS = 20;
 
+// Which angle an exercise trains: the plan's own tags first (seed/exercise-jobs.json), then the library's movement type
+// and name. Exercises that fit no single angle go under "Whole muscle".
+const JOBS = JSON.parse(readFileSync(root + "src/core/seed/exercise-jobs.json", "utf8")) as Record<string, { jobs: Record<string, string | string[]> }>;
+type Rule = { angle: string; move?: string[]; name?: RegExp };
+const ANGLE_RULES: Record<string, Rule[]> = {
+  back: [{ angle: "lats", move: ["pulldown", "straightArm", "pulloverLats"], name: /pull-?up|chin/i }, { angle: "lower back", name: /back ext|hyperext|good morning|superman|deadlift/i }, { angle: "upper back", move: ["row"] }],
+  chest: [{ angle: "upper", name: /incline|low.?to.?high|low cable|reverse.?grip bench/i }, { angle: "mid/lower", move: ["press", "fly", "pulloverChest"] }],
+  frontDelts: [{ angle: "press", move: ["ohp", "frontRaise"] }],
+  sideDelts: [{ angle: "raise", move: ["lateral", "upright"] }],
+  rearDelts: [{ angle: "reverse fly", move: ["rear", "facePull"] }],
+  traps: [{ angle: "mid/lower", name: /kelso|face pull|y.?raise|overhead trap|prone|scap/i }, { angle: "shrug", move: ["shrug", "lateral"] }],
+  biceps: [{ angle: "brachialis", move: ["hammer", "zottman"], name: /hammer|reverse|zottman/i }, { angle: "long head", name: /incline|bayesian|drag|lying supine|behind/i }, { angle: "short head", name: /preacher|spider|concentration|scott|prone/i }],
+  triceps: [{ angle: "long head", name: /overhead|french|skull|lying|incline|behind|tate/i }, { angle: "medial head", name: /reverse.?grip|underhand|supinated/i }, { angle: "lateral head", move: ["closePress", "triceps"] }],
+  forearms: [{ angle: "extensors", move: ["reverseCurl"], name: /reverse|extensor/i }, { angle: "flexors", move: ["wrist"] }],
+  quads: [{ angle: "extension", move: ["legExt"] }, { angle: "squat", move: ["squat", "lunge"] }],
+  hamstrings: [{ angle: "knee flexion", move: ["legCurl"], name: /curl|nordic/i }, { angle: "hip hinge", move: ["hinge", "deadlift"] }],
+  glutes: [{ angle: "glute medius", move: ["abduction"], name: /abduct/i }, { angle: "glute max", move: ["deadlift", "hipThrust", "glute", "backExt"] }],
+  adductors: [{ angle: "adduction", move: ["adduction"] }],
+  calves: [{ angle: "bent-knee", name: /seated/i }, { angle: "straight-knee", move: ["calf"] }],
+  abs: [{ angle: "obliques", name: /oblique|twist|woodchop|wood chop|side|russian|pallof|windmill|rotat/i }, { angle: "rectus abs", move: ["abs"] }],
+  neck: [{ angle: "flexion", name: /flexion|neck curl|front|lying face up/i }, { angle: "extension", move: ["neck"] }],
+};
+function angleOf(e: Exercise, id: string): string {
+  const tag = JOBS[e.id]?.jobs?.[id];
+  if (tag) return Array.isArray(tag) ? tag[0] : tag;
+  for (const r of ANGLE_RULES[id] ?? []) if ((r.name && r.name.test(e.name)) || (r.move && r.move.includes((e as any).movement))) return r.angle;
+  return "Whole muscle";
+}
+
 function exerciseList(id: string, weight: number) {
   const xs = library.filter((e) => e.volume?.some((v) => v.group === id && v.weight === weight)).sort((a, b) => Number(!!b.isHeavy) - Number(!!a.isHeavy) || a.name.localeCompare(b.name));
   return xs;
@@ -60,7 +89,11 @@ function muscle(m: any): string {
     <div><h4 class="h-avoid">Avoid</h4>${ul(m.avoid)}</div>
   </div>
 
-  <details class="exs"><summary>Exercises that train it <span class="count">${direct.length}</span></summary><ul class="ex-list">${direct.map(exRow).join("")}</ul></details>
+  <h3>Exercises that train it <span class="count">${direct.length}</span></h3>
+  ${[...m.angles.map((a: any) => a.name), "Whole muscle"].map((name: string) => {
+    const xs = direct.filter((e) => angleOf(e, m.id) === name);
+    return xs.length ? `<details class="exs"><summary><span class="ang">${esc(name)}</span> <span class="count">${xs.length}</span></summary><ul class="ex-list">${xs.map(exRow).join("")}</ul></details>` : "";
+  }).join("")}
   <details class="exs"><summary>Exercises that work it indirectly (½ set) <span class="count">${indirect.length}</span></summary><ul class="ex-list">${indirect.map(exRow).join("")}</ul></details>
 </section>`;
 }
@@ -127,7 +160,8 @@ h4 { margin: 0 0 4px; font: 600 12px var(--body); text-transform: uppercase; let
 .h-tip { color: var(--neon-2); } .h-avoid { color: var(--bad); }
 .cues ul { margin: 0; padding-left: 18px; font-size: 14px; }
 .cues li + li { margin-top: 3px; }
-.exs { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+.exs { border-top: 1px solid var(--line); padding-top: 4px; margin-top: 4px; }
+.ang { text-transform: capitalize; }
 summary { cursor: pointer; font-weight: 500; list-style: none; display: flex; align-items: center; gap: 4px; min-height: 32px; }
 summary::-webkit-details-marker { display: none; }
 summary::before { content: "›"; color: var(--neon); font-size: 20px; width: 14px; transition: transform .2s; }
