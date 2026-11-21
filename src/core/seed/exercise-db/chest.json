@@ -1,0 +1,2221 @@
+[
+ {
+  "id": "barbell-bench-press-medium-grip",
+  "name": "Barbell Bench Press",
+  "aliases": [
+   "Bench Press",
+   "Flat Barbell Bench Press",
+   "Barbell Bench Press - Medium Grip",
+   "Bench Press - Powerlifting"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "The classic heavy chest press.",
+  "setup": [
+   "Eyes under the bar, feet flat, shoulder blades pinched back.",
+   "Hands a bit wider than your shoulders."
+  ],
+  "form": [
+   "Lower the bar to your mid chest.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [
+   "Set the safety bars or use a spotter."
+  ],
+  "avoid": [
+   "Bouncing the bar off your chest.",
+   "Elbows flared straight out to the sides."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-flat",
+  "preferred": {
+   "goals": [
+    "growth",
+    "strength"
+   ],
+   "why": "Main loadable chest press; bench strength is specific to the bench.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19204579/",
+    "url2": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Bench_Press_-_Medium_Grip"
+  },
+  "formerIds": [
+   "bench-press-powerlifting"
+  ]
+ },
+ {
+  "id": "wide-grip-barbell-bench-press",
+  "name": "Wide-Grip Barbell Bench Press",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Bench press with a wider grip: more chest, shorter path.",
+  "setup": [
+   "Eyes under the bar, shoulder blades pinched back.",
+   "Hands well wider than your shoulders."
+  ],
+  "form": [
+   "Lower the bar to your mid chest.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [
+   "Set the safety bars or use a spotter."
+  ],
+  "avoid": [
+   "Going so wide that your shoulders hurt.",
+   "Bouncing the bar off your chest."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-flat",
+  "figureAdjust": {
+   "grip": "wide"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Wide-Grip_Barbell_Bench_Press"
+  }
+ },
+ {
+  "id": "barbell-incline-bench-press-medium-grip",
+  "name": "Incline Barbell Bench Press",
+  "aliases": [
+   "Incline Bench Press",
+   "Barbell Incline Bench Press - Medium Grip"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "upper"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Heavy press for the upper chest.",
+  "setup": [
+   "Bench at 30\u201345\u00b0, eyes under the bar.",
+   "Hands a bit wider than your shoulders, shoulder blades back."
+  ],
+  "form": [
+   "Lower the bar to your upper chest.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [
+   "A lower incline keeps more of the work on the chest."
+  ],
+  "avoid": [
+   "Bouncing the bar off your chest.",
+   "Lifting your hips off the bench."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-incline",
+  "figureAdjust": {
+   "bench": "incline"
+  },
+  "preferred": {
+   "goals": [
+    "strength"
+   ],
+   "why": "Heavy multi-joint press for the upper chest; strength is specific to the lift.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19204579/",
+    "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11239729/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Incline_Bench_Press_-_Medium_Grip"
+  }
+ },
+ {
+  "id": "decline-barbell-bench-press",
+  "name": "Decline Barbell Bench Press",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Bench press head-down: lower chest, shorter path.",
+  "setup": [
+   "Decline bench, legs hooked in.",
+   "Hands a bit wider than your shoulders."
+  ],
+  "form": [
+   "Lower the bar to your lower chest.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [
+   "Have a spotter hand you the bar."
+  ],
+  "avoid": [
+   "Bouncing the bar off your chest."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-decline",
+  "figureAdjust": {
+   "bench": "decline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Decline_Barbell_Bench_Press"
+  }
+ },
+ {
+  "id": "wide-grip-decline-barbell-bench-press",
+  "name": "Wide-Grip Decline Barbell Bench Press",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Decline press with a wide grip.",
+  "setup": [
+   "Decline bench, legs hooked in.",
+   "Hands well wider than your shoulders."
+  ],
+  "form": [
+   "Lower the bar to your lower chest.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [
+   "Have a spotter hand you the bar."
+  ],
+  "avoid": [
+   "Going so wide that your shoulders hurt."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-decline",
+  "figureAdjust": {
+   "bench": "decline",
+   "grip": "wide"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Wide-Grip_Decline_Barbell_Bench_Press"
+  }
+ },
+ {
+  "id": "dumbbell-bench-press",
+  "name": "Dumbbell Bench Press",
+  "aliases": [
+   "Flat Dumbbell Bench Press",
+   "DB Bench Press"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Flat press with a deeper stretch than the barbell.",
+  "setup": [
+   "Lie flat, dumbbells over your chest, shoulder blades back."
+  ],
+  "form": [
+   "Lower the dumbbells beside your chest, elbows angled in a little.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [
+   "Go as deep as your shoulders allow."
+  ],
+  "avoid": [
+   "Clanging the dumbbells together at the top.",
+   "Stopping short of the stretch."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-flat",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Bench_Press"
+  }
+ },
+ {
+  "id": "dumbbell-bench-press-with-neutral-grip",
+  "name": "Neutral-Grip Dumbbell Bench Press",
+  "aliases": [
+   "Dumbbell Bench Press with Neutral Grip"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Flat dumbbell press, palms facing in: easier on the shoulders.",
+  "setup": [
+   "Lie flat, palms facing each other, shoulder blades back."
+  ],
+  "form": [
+   "Lower the dumbbells beside your chest, elbows close.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Stopping short of the stretch."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-flat",
+  "figureAdjust": {
+   "equipmentProp": "db",
+   "grip": "neutral"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Bench_Press_with_Neutral_Grip"
+  }
+ },
+ {
+  "id": "one-arm-dumbbell-bench-press",
+  "name": "One-arm Dumbbell Bench Press",
+  "aliases": [
+   "One Arm Dumbbell Bench Press"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Flat press one side at a time.",
+  "setup": [
+   "Lie flat, one dumbbell over your chest.",
+   "Hold the bench with your free hand."
+  ],
+  "form": [
+   "Lower the dumbbell beside your chest.",
+   "Press up until your arm is straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Twisting your body off the bench."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-flat",
+  "figureAdjust": {
+   "equipmentProp": "db",
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "One_Arm_Dumbbell_Bench_Press"
+  }
+ },
+ {
+  "id": "incline-dumbbell-press",
+  "name": "Incline Dumbbell Press",
+  "aliases": [
+   "Incline DB Press",
+   "Incline Dumbbell Bench Press"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "upper"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Upper chest press with a deep stretch.",
+  "setup": [
+   "Bench at 30\u201345\u00b0, dumbbells over your upper chest.",
+   "Shoulder blades back."
+  ],
+  "form": [
+   "Lower the dumbbells beside your upper chest.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [
+   "A lower incline keeps more of the work on the chest."
+  ],
+  "avoid": [
+   "Stopping short of the stretch.",
+   "Arching off the bench."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-incline",
+  "figureAdjust": {
+   "bench": "incline",
+   "equipmentProp": "db"
+  },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Incline pressing grew the upper chest most in a trial; dumbbells add stretch.",
+   "source": {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7449336/",
+    "url2": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Incline_Dumbbell_Press"
+  }
+ },
+ {
+  "id": "incline-dumbbell-bench-with-palms-facing-in",
+  "name": "Neutral-Grip Incline Dumbbell Press",
+  "aliases": [
+   "Incline Dumbbell Bench With Palms Facing In",
+   "Hammer Grip Incline DB Bench Press"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "upper"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Incline dumbbell press, palms facing in: easier on the shoulders.",
+  "setup": [
+   "Bench at 30\u201345\u00b0, palms facing each other."
+  ],
+  "form": [
+   "Lower the dumbbells beside your upper chest, elbows close.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Stopping short of the stretch."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-incline",
+  "figureAdjust": {
+   "bench": "incline",
+   "equipmentProp": "db",
+   "grip": "neutral"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Incline_Dumbbell_Bench_With_Palms_Facing_In"
+  },
+  "formerIds": [
+   "hammer-grip-incline-db-bench-press"
+  ]
+ },
+ {
+  "id": "decline-dumbbell-bench-press",
+  "name": "Decline Dumbbell Bench Press",
+  "aliases": [],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Dumbbell press head-down, for the lower chest.",
+  "setup": [
+   "Decline bench, legs hooked in, dumbbells over your chest."
+  ],
+  "form": [
+   "Lower the dumbbells beside your lower chest.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Sitting up fast at the end (get dizzy)."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 dumbbells beside your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-decline",
+  "figureAdjust": {
+   "bench": "decline",
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Decline_Dumbbell_Bench_Press"
+  }
+ },
+ {
+  "id": "smith-machine-bench-press",
+  "name": "Smith Machine Bench Press",
+  "aliases": [
+   "Smith Bench Press"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Flat press on a fixed track: safe to push hard.",
+  "setup": [
+   "Bench so the bar comes down on your mid chest.",
+   "Hands a bit wider than your shoulders."
+  ],
+  "form": [
+   "Lower the bar to your mid chest.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [
+   "Set the safety stops just below your chest."
+  ],
+  "avoid": [
+   "Bench placed so the bar hits your neck or belly."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-flat",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Machine_Bench_Press"
+  }
+ },
+ {
+  "id": "smith-machine-incline-bench-press",
+  "name": "Smith Machine Incline Bench Press",
+  "aliases": [
+   "Incline Smith Press"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "upper"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Upper chest press on a fixed track.",
+  "setup": [
+   "Bench at 30\u201345\u00b0 so the bar comes down on your upper chest.",
+   "Hands a bit wider than your shoulders."
+  ],
+  "form": [
+   "Lower the bar to your upper chest.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [
+   "Set the safety stops just below your chest."
+  ],
+  "avoid": [
+   "Bar landing on your neck."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-incline",
+  "figureAdjust": {
+   "bench": "incline",
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Machine_Incline_Bench_Press"
+  }
+ },
+ {
+  "id": "smith-machine-decline-press",
+  "name": "Smith Machine Decline Press",
+  "aliases": [
+   "Decline Smith Press"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Decline press on a fixed track.",
+  "setup": [
+   "Decline bench under the bar, legs hooked in.",
+   "Hands a bit wider than your shoulders."
+  ],
+  "form": [
+   "Lower the bar to your lower chest.",
+   "Press up until your arms are straight."
+  ],
+  "tips": [
+   "Set the safety stops just below your chest."
+  ],
+  "avoid": [
+   "Bouncing the bar off your chest."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 bar on your chest",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-decline",
+  "figureAdjust": {
+   "bench": "decline",
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Machine_Decline_Press"
+  },
+  "formerIds": [
+   "decline-smith-press"
+  ]
+ },
+ {
+  "id": "machine-bench-press",
+  "name": "Machine Chest Press",
+  "aliases": [
+   "Machine Bench Press",
+   "Seated Chest Press",
+   "Chest Press Machine"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Stable chest press with steady tension: easy to push hard.",
+  "setup": [
+   "Seat so the handles line up with your mid chest.",
+   "Back on the pad, shoulder blades back."
+  ],
+  "form": [
+   "Push the handles out until your arms are straight.",
+   "Bring them back slowly until you feel a stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Shoulders rolling forward at the end.",
+   "Letting the stack slam between reps."
+  ],
+  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
+  "tempo": "Push 1 s \u00b7 Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-machine-seated",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated chest exercise: deep stretch, steady tension, easy to add weight.",
+   "source": {
+    "url": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/",
+    "url2": "https://rpstrength.com/chest-training-tips-hypertrophy"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Machine_Bench_Press"
+  }
+ },
+ {
+  "id": "incline-machine-chest-press",
+  "name": "Incline Machine Chest Press",
+  "aliases": [
+   "Incline Chest Press Machine"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "upper"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Upper chest press on a machine.",
+  "setup": [
+   "Seat so the handles line up with your upper chest.",
+   "Back on the pad, shoulder blades back."
+  ],
+  "form": [
+   "Push the handles up and out until your arms are straight.",
+   "Bring them back slowly until you feel a stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Shoulders rolling forward at the end."
+  ],
+  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
+  "tempo": "Push 1 s \u00b7 Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-machine-seated",
+  "source": {
+   "url": "https://rpstrength.com/chest-training-tips-hypertrophy"
+  }
+ },
+ {
+  "id": "leverage-chest-press",
+  "name": "Plate-loaded Chest Press",
+  "aliases": [
+   "Leverage Chest Press",
+   "Hammer Strength Chest Press"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Plate-loaded chest press: heavy and stable.",
+  "setup": [
+   "Seat so the handles line up with your mid chest.",
+   "Back on the pad, shoulder blades back."
+  ],
+  "form": [
+   "Push the handles out until your arms are straight.",
+   "Bring them back slowly until you feel a stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Shoulders rolling forward at the end."
+  ],
+  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
+  "tempo": "Push 1 s \u00b7 Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-machine-seated",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Leverage_Chest_Press"
+  }
+ },
+ {
+  "id": "leverage-incline-chest-press",
+  "name": "Plate-loaded Incline Chest Press",
+  "aliases": [
+   "Leverage Incline Chest Press",
+   "Hammer Strength Incline Press"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "upper"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Plate-loaded press for the upper chest.",
+  "setup": [
+   "Seat so the handles line up with your upper chest.",
+   "Back on the pad."
+  ],
+  "form": [
+   "Push the handles up until your arms are straight.",
+   "Bring them back slowly until you feel a stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Shoulders rolling forward at the end."
+  ],
+  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
+  "tempo": "Push 1 s \u00b7 Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-machine-seated",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Leverage_Incline_Chest_Press"
+  }
+ },
+ {
+  "id": "leverage-decline-chest-press",
+  "name": "Plate-loaded Decline Chest Press",
+  "aliases": [
+   "Leverage Decline Chest Press"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Plate-loaded press angled down, for the lower chest.",
+  "setup": [
+   "Seat so the handles line up with your lower chest.",
+   "Back on the pad."
+  ],
+  "form": [
+   "Push the handles down and out until your arms are straight.",
+   "Bring them back slowly until you feel a stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Shoulders rolling forward at the end."
+  ],
+  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
+  "tempo": "Push 1 s \u00b7 Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-machine-seated",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Leverage_Decline_Chest_Press"
+  }
+ },
+ {
+  "id": "cable-chest-press",
+  "name": "Seated Cable Chest Press",
+  "aliases": [
+   "Cable Chest Press"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Chest press with cables: tension the whole way.",
+  "setup": [
+   "Sit with your back on the pad, handles at chest height.",
+   "Elbows bent about 90\u00b0, shoulder blades back."
+  ],
+  "form": [
+   "Press the handles forward and together, then pause.",
+   "Bring them back slowly until you feel a stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Letting the weights touch down between reps."
+  ],
+  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
+  "tempo": "Push 1 s \u00b7 Hold 1 s \u00b7 Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-machine-seated",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Chest_Press"
+  }
+ },
+ {
+  "id": "incline-cable-chest-press",
+  "name": "Incline Cable Chest Press",
+  "aliases": [],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "upper"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Cable press angled up, for the upper chest.",
+  "setup": [
+   "Sit on an incline seat, handles at chest height.",
+   "Elbows bent about 90\u00b0, shoulder blades back."
+  ],
+  "form": [
+   "Press up and together, then pause.",
+   "Bring the handles back slowly until you feel a stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Letting the weights touch down between reps."
+  ],
+  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
+  "tempo": "Push 1 s \u00b7 Hold 1 s \u00b7 Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-machine-seated",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Incline_Cable_Chest_Press"
+  }
+ },
+ {
+  "id": "standing-cable-chest-press",
+  "name": "Standing Cable Chest Press",
+  "aliases": [],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Standing press with cables: tension the whole way.",
+  "setup": [
+   "Pulleys at chest height, step a foot or two forward.",
+   "Staggered stance, elbows bent about 90\u00b0."
+  ],
+  "form": [
+   "Press the handles forward and together, then pause.",
+   "Bring them back slowly until you feel a stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning in to push with your body."
+  ],
+  "rangeOfMotion": "Hands at your chest \u2192 arms straight",
+  "tempo": "Push 1 s \u00b7 Hold 1 s \u00b7 Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-machine-seated",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Cable_Chest_Press"
+  }
+ },
+ {
+  "id": "pushups",
+  "name": "Push-Up",
+  "aliases": [
+   "Pushups"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Bodyweight chest press, anywhere.",
+  "setup": [
+   "Hands a bit wider than your shoulders, body straight."
+  ],
+  "form": [
+   "Lower until your chest nearly touches the floor.",
+   "Push up until your arms are straight."
+  ],
+  "tips": [
+   "Too easy? Add a plate on your back."
+  ],
+  "avoid": [
+   "Hips sagging.",
+   "Half reps."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 chest near the floor",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pushup",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Pushups"
+  }
+ },
+ {
+  "id": "push-up-wide",
+  "name": "Wide Push-Up",
+  "aliases": [
+   "Push-Up Wide"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Push-up with wide hands: more chest.",
+  "setup": [
+   "Hands well wider than your shoulders, body straight."
+  ],
+  "form": [
+   "Lower until your chest nearly touches the floor.",
+   "Push up until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Hips sagging.",
+   "Half reps."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 chest near the floor",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pushup",
+  "figureAdjust": {
+   "grip": "wide"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Push-Up_Wide"
+  }
+ },
+ {
+  "id": "incline-push-up",
+  "name": "Incline Push-Up",
+  "aliases": [
+   "Incline Push-Up Medium"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Easier push-up with hands up on a bench or bar.",
+  "setup": [
+   "Hands on a bench or Smith bar, a bit wider than your shoulders.",
+   "Feet back, body straight."
+  ],
+  "form": [
+   "Lower your chest to the bar.",
+   "Push up until your arms are straight."
+  ],
+  "tips": [
+   "Lower the bar to make it harder."
+  ],
+  "avoid": [
+   "Hips sagging."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 chest at the bar",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pushup",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Incline_Push-Up"
+  }
+ },
+ {
+  "id": "push-ups-with-feet-elevated",
+  "name": "Feet-Elevated Push-Up",
+  "aliases": [
+   "Push-Ups With Feet Elevated",
+   "Decline Push-Up"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "upper"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Harder push-up with feet up: more upper chest.",
+  "setup": [
+   "Feet on a bench, hands on the floor a bit wider than your shoulders.",
+   "Body straight."
+  ],
+  "form": [
+   "Lower until your chest nearly touches the floor.",
+   "Push up until your arms are straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Hips sagging.",
+   "Half reps."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 chest near the floor",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pushup",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Push-Ups_With_Feet_Elevated"
+  }
+ },
+ {
+  "id": "deficit-push-up",
+  "name": "Deficit Push-Up",
+  "aliases": [
+   "Deficit Pushup"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Push-up with hands raised so the chest goes deeper.",
+  "setup": [
+   "Hands on plates or push-up handles, a bit wider than your shoulders.",
+   "Body straight."
+  ],
+  "form": [
+   "Lower until your chest is below your hands.",
+   "Push up until your arms are straight."
+  ],
+  "tips": [
+   "Too easy? Add a plate on your back."
+  ],
+  "avoid": [
+   "Hips sagging.",
+   "Going deeper than your shoulders allow."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 chest below your hands",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pushup",
+  "source": {
+   "url": "https://rpstrength.com/chest-training-tips-hypertrophy"
+  }
+ },
+ {
+  "id": "dips-chest-version",
+  "name": "Chest Dip",
+  "aliases": [
+   "Dips - Chest Version",
+   "Forward-Lean Dip"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Dip leaning forward: lower chest, deep stretch.",
+  "setup": [
+   "Arms straight on the bars, lean forward, elbows out a little."
+  ],
+  "form": [
+   "Lower until your shoulders are a bit below your elbows.",
+   "Push up until your arms are straight."
+  ],
+  "tips": [
+   "Too easy? Add weight with a dip belt."
+  ],
+  "avoid": [
+   "Dropping fast into the bottom.",
+   "Going deeper than your shoulders allow."
+  ],
+  "rangeOfMotion": "Arms straight \u2192 shoulders below elbows",
+  "tempo": "Down 3 s \u00b7 Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "dip",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dips_-_Chest_Version"
+  }
+ },
+ {
+  "id": "dumbbell-flyes",
+  "name": "Dumbbell Fly",
+  "aliases": [
+   "Dumbbell Flyes",
+   "Flat Dumbbell Fly"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Chest stretched wide, no triceps.",
+  "setup": [
+   "Lie flat. Arms open wide, elbows slightly bent, palms facing up."
+  ],
+  "form": [
+   "Bring the dumbbells together over your chest in a wide arc.",
+   "Open slowly until you feel a deep stretch."
+  ],
+  "tips": [
+   "Keep the same elbow bend the whole way."
+  ],
+  "avoid": [
+   "Bending the elbows into a press.",
+   "Going so deep your shoulders hurt."
+  ],
+  "rangeOfMotion": "Arms wide \u2192 hands over your chest",
+  "tempo": "In 1 s \u00b7 Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "fly",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Flyes"
+  }
+ },
+ {
+  "id": "incline-dumbbell-flyes",
+  "name": "Incline Dumbbell Fly",
+  "aliases": [
+   "Incline Dumbbell Flyes",
+   "Incline Dumbbell Flyes - With A Twist"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "chest": "upper"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Upper chest stretched wide.",
+  "setup": [
+   "Bench at 30\u00b0. Arms open wide, elbows slightly bent."
+  ],
+  "form": [
+   "Bring the dumbbells together over your upper chest in a wide arc.",
+   "Open slowly until you feel a deep stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending the elbows into a press.",
+   "Going so deep your shoulders hurt."
+  ],
+  "rangeOfMotion": "Arms wide \u2192 hands over your chest",
+  "tempo": "In 1 s \u00b7 Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "fly",
+  "figureAdjust": {
+   "bench": "incline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Incline_Dumbbell_Flyes"
+  }
+ },
+ {
+  "id": "decline-dumbbell-flyes",
+  "name": "Decline Dumbbell Fly",
+  "aliases": [
+   "Decline Dumbbell Flyes"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Lower chest stretched wide.",
+  "setup": [
+   "Decline bench, legs hooked in. Arms open wide, elbows slightly bent."
+  ],
+  "form": [
+   "Bring the dumbbells together over your chest in a wide arc.",
+   "Open slowly until you feel a deep stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending the elbows into a press."
+  ],
+  "rangeOfMotion": "Arms wide \u2192 hands over your chest",
+  "tempo": "In 1 s \u00b7 Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "fly",
+  "figureAdjust": {
+   "bench": "decline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Decline_Dumbbell_Flyes"
+  }
+ },
+ {
+  "id": "one-arm-flat-bench-dumbbell-flye",
+  "name": "One-arm Dumbbell Fly",
+  "aliases": [
+   "One-Arm Flat Bench Dumbbell Flye"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Fly one side at a time.",
+  "setup": [
+   "Lie flat, hold the bench with your free hand.",
+   "Arm open wide, elbow slightly bent."
+  ],
+  "form": [
+   "Bring the dumbbell up over your chest in a wide arc.",
+   "Open slowly until you feel a deep stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Twisting your body off the bench."
+  ],
+  "rangeOfMotion": "Arm wide \u2192 hand over your chest",
+  "tempo": "In 1 s \u00b7 Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "fly",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "One-Arm_Flat_Bench_Dumbbell_Flye"
+  }
+ },
+ {
+  "id": "butterfly",
+  "name": "Pec Deck",
+  "aliases": [
+   "Butterfly",
+   "Pec Deck Fly",
+   "Machine Fly"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Machine fly: steady tension, easy to push hard.",
+  "setup": [
+   "Seat so your arms are level with your shoulders.",
+   "Back flat on the pad."
+  ],
+  "form": [
+   "Bring the handles together and squeeze 1 s.",
+   "Open slowly until you feel a stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Shoulders rolling forward.",
+   "Letting the stack slam between reps."
+  ],
+  "rangeOfMotion": "Arms wide \u2192 hands together",
+  "tempo": "In 1 s \u00b7 Hold 1 s \u00b7 Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "fly",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Butterfly"
+  }
+ },
+ {
+  "id": "cable-crossover",
+  "name": "Cable Crossover",
+  "aliases": [
+   "High-to-Low Cable Fly",
+   "Standing Cable Fly"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Standing cable fly from high pulleys, for the lower chest.",
+  "setup": [
+   "Pulleys high, a handle in each hand, step forward.",
+   "Lean forward a little, elbows slightly bent."
+  ],
+  "form": [
+   "Bring your hands together down in front of you and squeeze 1 s.",
+   "Open slowly until you feel a stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending the elbows into a press."
+  ],
+  "rangeOfMotion": "Arms wide \u2192 hands together",
+  "tempo": "In 1 s \u00b7 Hold 1 s \u00b7 Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "fly-cable",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Crossover"
+  }
+ },
+ {
+  "id": "low-cable-crossover",
+  "name": "Low-to-High Cable Fly",
+  "aliases": [
+   "Low Cable Crossover",
+   "Low Cable Fly"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "chest": "upper"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Cable fly from low pulleys, for the upper chest.",
+  "setup": [
+   "Pulleys low, a handle in each hand, step forward.",
+   "Arms down and out, palms forward."
+  ],
+  "form": [
+   "Bring your hands up and together in front of your face and squeeze 1 s.",
+   "Lower slowly back out and down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Shrugging your shoulders up.",
+   "Bending the elbows into a press."
+  ],
+  "rangeOfMotion": "Arms low and wide \u2192 hands together at face height",
+  "tempo": "In 1 s \u00b7 Hold 1 s \u00b7 Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "fly-cable",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Low_Cable_Crossover"
+  }
+ },
+ {
+  "id": "single-arm-cable-crossover",
+  "name": "Single-arm Cable Crossover",
+  "aliases": [
+   "One-arm Cable Fly"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Cable fly one arm at a time, across the body.",
+  "setup": [
+   "Pulley high, handle in one hand, step forward.",
+   "Elbow slightly bent."
+  ],
+  "form": [
+   "Bring your hand down and across your body and squeeze 1 s.",
+   "Open slowly until you feel a stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Twisting your body to move the weight."
+  ],
+  "rangeOfMotion": "Arm wide \u2192 hand past the middle",
+  "tempo": "In 1 s \u00b7 Hold 1 s \u00b7 Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "fly-cable",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Single-Arm_Cable_Crossover"
+  }
+ },
+ {
+  "id": "flat-bench-cable-flyes",
+  "name": "Lying Cable Fly",
+  "aliases": [
+   "Flat Bench Cable Flyes",
+   "Flat Cable Fly"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Flat fly with cables: tension at the top too.",
+  "setup": [
+   "Flat bench between two low pulleys, chest in line with them.",
+   "Arms open wide, elbows slightly bent."
+  ],
+  "form": [
+   "Bring your hands together over your chest and squeeze 1 s.",
+   "Open slowly until you feel a deep stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending the elbows into a press."
+  ],
+  "rangeOfMotion": "Arms wide \u2192 hands over your chest",
+  "tempo": "In 1 s \u00b7 Hold 1 s \u00b7 Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "fly-cable",
+  "figureAdjust": {
+   "bench": "flat"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Flat_Bench_Cable_Flyes"
+  }
+ },
+ {
+  "id": "incline-cable-flye",
+  "name": "Incline Cable Fly",
+  "aliases": [
+   "Incline Cable Flye"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "chest": "upper"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Upper chest fly with cables.",
+  "setup": [
+   "Incline bench at 30\u201345\u00b0 between two low pulleys.",
+   "Arms open wide, elbows slightly bent."
+  ],
+  "form": [
+   "Bring your hands together over your upper chest and squeeze 1 s.",
+   "Open slowly until you feel a deep stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending the elbows into a press."
+  ],
+  "rangeOfMotion": "Arms wide \u2192 hands over your chest",
+  "tempo": "In 1 s \u00b7 Hold 1 s \u00b7 Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "fly-cable",
+  "figureAdjust": {
+   "bench": "incline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Incline_Cable_Flye"
+  }
+ },
+ {
+  "id": "seated-cable-fly",
+  "name": "Seated Cable Fly",
+  "aliases": [
+   "Seated super-stretch cable fly"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "stretch": [
+   "chest"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Cable fly sitting tall: big stretch, steady tension.",
+  "setup": [
+   "Bench upright between two pulleys at shoulder height.",
+   "Sit tall, arms open wide, elbows slightly bent."
+  ],
+  "form": [
+   "Bring your hands together in front of your chest.",
+   "Open slowly until you feel a deep stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning forward off the bench.",
+   "Bending the elbows into a press."
+  ],
+  "rangeOfMotion": "Arms wide \u2192 hands together",
+  "tempo": "In 1 s \u00b7 Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "fly-cable",
+  "figureAdjust": {
+   "seated": true
+  },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated chest exercise: loaded in the deep stretch, steady tension.",
+   "source": {
+    "url": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/",
+    "url2": "https://rpstrength.com/chest-training-tips-hypertrophy"
+   }
+  },
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
+  }
+ },
+ {
+  "id": "cable-press-around",
+  "name": "Cable Press-Around",
+  "aliases": [],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "chest",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "chest": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "One-arm cable move across the body: chest fully squeezed.",
+  "setup": [
+   "Back to a high-ish pulley, handle in one hand.",
+   "Elbow bent, hand beside your chest."
+  ],
+  "form": [
+   "Push your hand forward and across past the middle.",
+   "Return slowly until you feel a stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Twisting your body to move the weight."
+  ],
+  "rangeOfMotion": "Hand beside your chest \u2192 past the middle",
+  "tempo": "Across 1 s \u00b7 Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "fly-cable",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
+  }
+ }
+]

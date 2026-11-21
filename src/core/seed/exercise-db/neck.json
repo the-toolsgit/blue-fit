@@ -1,0 +1,275 @@
+[
+ {
+  "id": "lying-face-up-plate-neck-resistance",
+  "name": "Lying Plate Neck Curl",
+  "aliases": [
+   "Lying Face Up Plate Neck Resistance",
+   "Lying neck curl",
+   "Plate neck flexion"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "neck",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "neck": "flexion"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Trains the front of the neck.",
+  "setup": [
+   "Lie face up on a bench, head and neck off the end.",
+   "Light plate on your forehead over a towel, both hands on it."
+  ],
+  "form": [
+   "Bring your chin to your chest.",
+   "Lower your head slowly back to level."
+  ],
+  "tips": [
+   "Start very light and add weight slowly."
+  ],
+  "avoid": [
+   "Jerking your head.",
+   "Heavy weight or reps to failure."
+  ],
+  "rangeOfMotion": "Head level → chin to chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "neck-flexion",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Direct front-of-neck work: the neck grows only when trained directly.",
+   "source": {
+    "url": "https://www.strengthlog.com/lying-neck-curl/",
+    "url2": "https://pubmed.ncbi.nlm.nih.gov/9189733/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Lying_Face_Up_Plate_Neck_Resistance"
+  }
+ },
+ {
+  "id": "lying-face-down-plate-neck-resistance",
+  "name": "Lying Plate Neck Extension",
+  "aliases": [
+   "Lying Face Down Plate Neck Resistance",
+   "Lying neck extension",
+   "Plate neck extension"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "neck",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "neck": "extension"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Trains the back of the neck.",
+  "setup": [
+   "Lie face down on a bench, head and neck off the end.",
+   "Light plate on the back of your head over a towel, hands on it. Chin toward your chest."
+  ],
+  "form": [
+   "Lift your head until you look straight ahead.",
+   "Lower slowly until your chin nears your chest."
+  ],
+  "tips": [
+   "Start very light and add weight slowly."
+  ],
+  "avoid": [
+   "Jerking your head.",
+   "Heavy weight or reps to failure."
+  ],
+  "rangeOfMotion": "Chin toward chest → looking ahead",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "neck-extension",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Lying_Face_Down_Plate_Neck_Resistance"
+  }
+ },
+ {
+  "id": "seated-head-harness-neck-resistance",
+  "name": "Neck Harness Extension",
+  "aliases": [
+   "Seated Head Harness Neck Resistance",
+   "Head harness neck extension"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "neck",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "neck": "extension"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Back-of-neck work that is easy to load.",
+  "setup": [
+   "Sit on a bench edge, lean forward, hands on your knees.",
+   "Harness on your head, weight hanging, chin toward your chest."
+  ],
+  "form": [
+   "Lift your head until you look forward.",
+   "Lower slowly until your chin nears your chest."
+  ],
+  "tips": [
+   "Start very light and add weight slowly."
+  ],
+  "avoid": [
+   "Jerking your head.",
+   "Leaning your body back to lift."
+  ],
+  "rangeOfMotion": "Chin toward chest → looking ahead",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "neck-extension",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Easiest way to load the back of the neck; head extension training grew those muscles in a 12-week trial.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/9189733/",
+    "url2": "https://www.strengthlog.com/neck-muscles-exercises-workout/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Head_Harness_Neck_Resistance"
+  }
+ },
+ {
+  "id": "machine-neck-flexion",
+  "name": "Machine Neck Flexion",
+  "aliases": [
+   "4-way neck flexion",
+   "Neck machine flexion"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "neck",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "neck": "flexion"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Front-of-neck work on a 4-way neck machine.",
+  "setup": [
+   "Sit facing the pad, forehead against it.",
+   "Torso still, hands on the handles."
+  ],
+  "form": [
+   "Bring your chin toward your chest.",
+   "Return slowly to looking ahead."
+  ],
+  "tips": [
+   "Start very light and add weight slowly."
+  ],
+  "avoid": [
+   "Jerking your head.",
+   "Heavy weight or reps to failure."
+  ],
+  "rangeOfMotion": "Looking ahead → chin toward chest",
+  "tempo": "Forward 1 s · Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "neck-flexion",
+  "figureAdjust": {
+   "seated": true
+  },
+  "source": {
+   "url": "https://biggerfasterstronger.com/blogs/news/are-you-neglecting-neck-training",
+   "url2": "https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/4-way-neck"
+  }
+ },
+ {
+  "id": "machine-neck-extension",
+  "name": "Machine Neck Extension",
+  "aliases": [
+   "4-way neck extension",
+   "Neck machine extension"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "neck",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "neck": "extension"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Back-of-neck work on a 4-way neck machine.",
+  "setup": [
+   "Sit facing away, back of your head on the pad, chin slightly down.",
+   "Torso still, hands on the handles."
+  ],
+  "form": [
+   "Push your head back until you look slightly up.",
+   "Return slowly to chin slightly down."
+  ],
+  "tips": [
+   "Start very light and add weight slowly."
+  ],
+  "avoid": [
+   "Jerking your head.",
+   "Heavy weight or reps to failure."
+  ],
+  "rangeOfMotion": "Chin slightly down → looking slightly up",
+  "tempo": "Back 1 s · Forward 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "neck-extension",
+  "figureAdjust": {
+   "seated": true
+  },
+  "source": {
+   "url": "https://biggerfasterstronger.com/blogs/news/are-you-neglecting-neck-training",
+   "url2": "https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/4-way-neck"
+  }
+ }
+]

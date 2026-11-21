@@ -1,0 +1,818 @@
+[
+ {
+  "id": "barbell-shrug",
+  "name": "Barbell Shrug",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "traps": "shrug"
+  },
+  "isHeavy": true,
+  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Heavy upper traps.",
+  "setup": [
+   "Bar in front, hands just outside your thighs. Stand tall.",
+   "Straps so your grip doesn't fail first."
+  ],
+  "form": [
+   "Shrug straight up, hold 1 s.",
+   "Lower all the way down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rolling your shoulders.",
+   "Bending your elbows.",
+   "Short, bouncy reps."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders up",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "shrug",
+  "preferred": {
+   "goals": [
+    "growth",
+    "strength"
+   ],
+   "why": "Heaviest-loading upper-trap lift; strength is specific to the lift trained.",
+   "source": {
+    "url": "https://barbend.com/best-trap-exercises/",
+    "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11239729/"
+   }
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Barbell_Shrug"
+  }
+ },
+ {
+  "id": "barbell-shrug-behind-the-back",
+  "name": "Behind-the-Back Barbell Shrug",
+  "aliases": [
+   "Barbell Shrug Behind The Back"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "traps": "shrug"
+  },
+  "isHeavy": true,
+  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Bar behind you: shoulders pull up and slightly back.",
+  "setup": [
+   "Bar behind your legs, hands shoulder width.",
+   "Straps if your grip fails first."
+  ],
+  "form": [
+   "Shrug straight up to your ears, hold 1 s.",
+   "Lower all the way down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rolling your shoulders.",
+   "Bending your elbows.",
+   "Short, bouncy reps."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders up",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "shrug",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Shrug_Behind_The_Back"
+  }
+ },
+ {
+  "id": "smith-machine-shrug",
+  "name": "Smith Machine Shrug",
+  "aliases": [],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "traps": "shrug"
+  },
+  "isHeavy": true,
+  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Heavy shrug without balancing the bar.",
+  "setup": [
+   "Bar at mid-thigh, hands just outside your thighs.",
+   "Set the stops just above your knees."
+  ],
+  "form": [
+   "Shrug straight up to your ears, hold 1 s.",
+   "Lower all the way down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rolling your shoulders.",
+   "Bending your elbows.",
+   "Short, bouncy reps."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders up",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "shrug",
+  "source": {
+   "url": "https://generationiron.com/smith-machine-shrug-exercise-guide/"
+  }
+ },
+ {
+  "id": "smith-machine-behind-the-back-shrug",
+  "name": "Smith Machine Behind-the-Back Shrug",
+  "aliases": [
+   "Smith Machine Behind the Back Shrug"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "traps": "shrug"
+  },
+  "isHeavy": true,
+  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Smith bar behind you.",
+  "setup": [
+   "Bar behind your legs at mid-thigh, hands shoulder width."
+  ],
+  "form": [
+   "Shrug straight up to your ears, hold 1 s.",
+   "Lower all the way down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rolling your shoulders.",
+   "Bending your elbows.",
+   "Short, bouncy reps."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders up",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "shrug",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Machine_Behind_the_Back_Shrug"
+  }
+ },
+ {
+  "id": "trap-bar-shrug",
+  "name": "Trap Bar Shrug",
+  "aliases": [
+   "Hex Bar Shrug"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "traps": "shrug"
+  },
+  "isHeavy": true,
+  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Heavy shrug, palms in, weight at your sides.",
+  "setup": [
+   "Stand inside the trap bar, grab the handles, stand up tall.",
+   "Straps if your grip fails first."
+  ],
+  "form": [
+   "Shrug straight up to your ears, hold 1 s.",
+   "Lower all the way down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rolling your shoulders.",
+   "Bending your elbows.",
+   "Short, bouncy reps."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders up",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "shrug-db",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "preferred": {
+   "goals": [
+    "growth",
+    "strength"
+   ],
+   "why": "Weight at your sides lets you load heavy and shrug straight up.",
+   "source": {
+    "url": "https://barbend.com/best-trap-exercises/",
+    "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11239729/"
+   }
+  },
+  "source": {
+   "url": "https://barbend.com/best-trap-exercises/"
+  }
+ },
+ {
+  "id": "dumbbell-shrug",
+  "name": "Dumbbell Shrug",
+  "aliases": [
+   "DB Shrug"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "traps": "shrug"
+  },
+  "isHeavy": true,
+  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Shrug with the weight at your sides.",
+  "setup": [
+   "Dumbbells at your sides, palms in. Stand tall."
+  ],
+  "form": [
+   "Shrug straight up to your ears, hold 1 s.",
+   "Lower all the way down."
+  ],
+  "tips": [
+   "Straps help once the dumbbells get heavy."
+  ],
+  "avoid": [
+   "Rolling your shoulders.",
+   "Bending your elbows.",
+   "Short, bouncy reps."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders up",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "shrug-db",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Shrug"
+  }
+ },
+ {
+  "id": "cable-shrugs",
+  "name": "Cable Shrug",
+  "aliases": [
+   "Cable Shrugs"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "traps": "shrug"
+  },
+  "isHeavy": true,
+  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Shrug with tension at the bottom.",
+  "setup": [
+   "Bar on a low pulley, stand close, arms straight."
+  ],
+  "form": [
+   "Shrug straight up to your ears, hold 1 s.",
+   "Lower all the way down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rolling your shoulders.",
+   "Bending your elbows.",
+   "Short, bouncy reps."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders up",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "shrug",
+  "figureAdjust": {
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Shrugs"
+  }
+ },
+ {
+  "id": "calf-machine-shoulder-shrug",
+  "name": "Machine Shrug",
+  "aliases": [
+   "Calf-Machine Shoulder Shrug",
+   "Standing Calf Machine Shrug"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "traps": "shrug"
+  },
+  "isHeavy": true,
+  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Heavy shrug, load on your shoulders, no grip needed.",
+  "setup": [
+   "Stand in a standing calf machine, pads on your shoulders.",
+   "Arms relaxed at your sides."
+  ],
+  "form": [
+   "Shrug straight up, hold 1 s.",
+   "Lower all the way down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rolling your shoulders.",
+   "Bending your knees to help."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders up",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "shrug",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Calf-Machine_Shoulder_Shrug"
+  }
+ },
+ {
+  "id": "leverage-shrug",
+  "name": "Plate-loaded Shrug",
+  "aliases": [
+   "Leverage Shrug",
+   "Lever Shrug Machine"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "traps": "shrug"
+  },
+  "isHeavy": true,
+  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Heavy shrug with handles at your sides.",
+  "setup": [
+   "Stand between the handles, grab them, stand up tall.",
+   "Straps if your grip fails first."
+  ],
+  "form": [
+   "Shrug straight up to your ears, hold 1 s.",
+   "Lower all the way down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rolling your shoulders.",
+   "Bending your elbows.",
+   "Short, bouncy reps."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders up",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "shrug-db",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Leverage_Shrug"
+  }
+ },
+ {
+  "id": "lateral-shrug-hybrid",
+  "name": "Lateral/Shrug Hybrid",
+  "aliases": [
+   "Dumbbell Lateral Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "traps": "shrug"
+  },
+  "isHeavy": true,
+  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Heavy traps: small side raise plus a shrug.",
+  "setup": [
+   "Heavy dumbbells at your sides. Straps if your grip fails first."
+  ],
+  "form": [
+   "Raise your arms out a little while shrugging up to your ears.",
+   "Hold 1 s, lower slowly."
+  ],
+  "tips": [
+   "Shoulders to ears matters, not arm height."
+  ],
+  "avoid": [
+   "Turning it into a light side raise.",
+   "Dropping the weight fast."
+  ],
+  "rangeOfMotion": "Arms at your sides → small raise with a full shrug",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "shrug-db",
+  "source": {
+   "plan": "Leo's plan"
+  }
+ },
+ {
+  "id": "kelso-shrug",
+  "name": "Kelso Shrug",
+  "aliases": [
+   "Machine Seated Row",
+   "Chest-supported Kelso Shrug"
+  ],
+  "equipment": "plateMachine",
+  "singleSleeve": true,
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "traps": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Middle traps.",
+  "setup": [
+   "Chest on the T-bar row pad, arms straight."
+  ],
+  "form": [
+   "Squeeze your shoulder blades together, hold 1 s.",
+   "Let them go forward."
+  ],
+  "tips": [
+   "Short move. Make the squeeze count."
+  ],
+  "avoid": [
+   "Bending your elbows."
+  ],
+  "rangeOfMotion": "Shoulder blades apart → together",
+  "tempo": "Back 1 s · Hold 1 s · Forward 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "kelso-shrug",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Locked elbows take the arms out and leave the middle traps.",
+   "source": {
+    "url": "https://boxlifemagazine.com/overlooked-exercises-backed-by-science/"
+   }
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "url": "https://boxlifemagazine.com/overlooked-exercises-backed-by-science/"
+  }
+ },
+ {
+  "id": "middle-back-shrug",
+  "name": "Prone Dumbbell Kelso Shrug",
+  "aliases": [
+   "Middle Back Shrug",
+   "Incline Dumbbell Scapular Retraction"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "traps": "mid/lower"
+  },
+  "isHeavy": true,
+  "heavyWhy": "shrug: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Kelso shrug with dumbbells on an incline bench.",
+  "setup": [
+   "Lie face down on an incline bench.",
+   "Arms hanging straight, palms facing each other."
+  ],
+  "form": [
+   "Squeeze your shoulder blades together, hold 1 s.",
+   "Let them go forward."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your elbows.",
+   "Lifting your chest off the bench."
+  ],
+  "rangeOfMotion": "Shoulder blades apart → together",
+  "tempo": "Back 1 s · Hold 1 s · Forward 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "kelso-shrug",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Middle_Back_Shrug"
+  }
+ },
+ {
+  "id": "overhead-trap",
+  "name": "Overhead Trap",
+  "aliases": [
+   "Overheaed trap",
+   "Single-arm Cable Y-Raise"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "traps": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Lower traps, which work hardest overhead.",
+  "setup": [
+   "Cable on the lowest setting.",
+   "Stand 3–4 feet away."
+  ],
+  "form": [
+   "Raise your arm in a big arc over your head.",
+   "Finish in a Y, slightly in front of your head, thumb up.",
+   "Hold 1 s, reach up high, lower slowly."
+  ],
+  "tips": [
+   "Go light enough to reach the top every rep."
+  ],
+  "avoid": [
+   "Arching your lower back.",
+   "Stopping at shoulder height."
+  ],
+  "rangeOfMotion": "Hand by your side → arm straight overhead",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "y-raise",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Arm overhead in a Y works the lower traps hardest.",
+   "source": {
+    "url": "https://barbend.com/best-trap-exercises/",
+    "url2": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  "source": {
+   "plan": "Leo's plan"
+  }
+ },
+ {
+  "id": "cable-y-raise",
+  "name": "Cable Y-Raise",
+  "aliases": [
+   "Standing Cable Y-Raise",
+   "Cross-body Cable Y-Raise"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "traps": "mid/lower",
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Both arms up in a Y: lower traps and side delts.",
+  "setup": [
+   "Two low pulleys, cables crossed: left handle in your right hand.",
+   "Stand in the middle."
+  ],
+  "form": [
+   "Raise both arms up and out into a Y over your head.",
+   "Hold 1 s at the top, lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching your lower back.",
+   "Shrugging up to your ears."
+  ],
+  "rangeOfMotion": "Hands crossed low → arms in a Y overhead",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "y-raise",
+  "source": {
+   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/",
+   "url2": "https://builtwithscience.com/fitness-tips/best-shoulder-exercises/"
+  }
+ },
+ {
+  "id": "incline-dumbbell-y-raise",
+  "name": "Incline Dumbbell Y-Raise",
+  "aliases": [
+   "Prone Y-Raise",
+   "Chest-supported Y-Raise",
+   "Dumbbell Prone Y-Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "traps": "mid/lower",
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Chest on a bench, arms up in a Y: lower traps.",
+  "setup": [
+   "Lie face down on a low incline bench.",
+   "Light dumbbells, arms hanging, thumbs up."
+  ],
+  "form": [
+   "Raise your arms up and forward into a Y, in line with your body.",
+   "Hold 1 s, lower slowly."
+  ],
+  "tips": [
+   "Very light weights are enough."
+  ],
+  "avoid": [
+   "Shrugging up to your ears.",
+   "Lifting your chest off the bench."
+  ],
+  "rangeOfMotion": "Arms hanging → arms in a Y",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "y-raise",
+  "figureAdjust": {
+   "equipmentProp": "db",
+   "bench": "incline"
+  },
+  "source": {
+   "url": "https://barbend.com/best-trap-exercises/",
+   "url2": "https://boxlifemagazine.com/overlooked-exercises-backed-by-science/"
+  }
+ },
+ {
+  "id": "scapular-pull-up",
+  "name": "Scapular Pull-up",
+  "aliases": [
+   "Scap Pull-up",
+   "Hanging Scapular Depression"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "traps",
+    "weight": 1
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "traps": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Pull your shoulders down while hanging: lower traps.",
+  "setup": [
+   "Hang from a pull-up bar, arms straight."
+  ],
+  "form": [
+   "Pull your shoulders down away from your ears, lifting your body a little. Hold 1 s.",
+   "Lower slowly back to a full hang."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your elbows.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Full hang → shoulders pulled down",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "pullup",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Scapular_Pull-Up"
+  }
+ }
+]

@@ -1,0 +1,519 @@
+[
+ {
+  "id": "seated-palm-up-barbell-wrist-curl",
+  "name": "Barbell Wrist Curl",
+  "aliases": [
+   "Seated Palm-Up Barbell Wrist Curl",
+   "Palms-Up Barbell Wrist Curl Over A Bench",
+   "Barbell wrist flexion"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "forearms": "flexors"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Builds the forearm flexors (palm side).",
+  "setup": [
+   "Sit, forearms on your thighs or a bench, palms up.",
+   "Wrists just past the edge."
+  ],
+  "form": [
+   "Curl your wrists up as far as they go.",
+   "Lower until your wrists bend all the way back."
+  ],
+  "tips": [],
+  "avoid": [
+   "Forearms lifting off.",
+   "Bouncing at the bottom."
+  ],
+  "rangeOfMotion": "Wrists bent back → wrists curled up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "wrist-curl",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Palm-Up_Barbell_Wrist_Curl"
+  },
+  "formerIds": [
+   "palms-up-barbell-wrist-curl-over-a-bench"
+  ]
+ },
+ {
+  "id": "seated-dumbbell-palms-up-wrist-curl",
+  "name": "Dumbbell Wrist Curl",
+  "aliases": [
+   "Seated Dumbbell Palms-Up Wrist Curl",
+   "Palms-Up Dumbbell Wrist Curl Over A Bench",
+   "Seated One-Arm Dumbbell Palms-Up Wrist Curl",
+   "One-arm dumbbell wrist curl"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "forearms": "flexors"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Builds the forearm flexors (palm side).",
+  "setup": [
+   "Sit, forearms on your thighs or a bench, palms up.",
+   "Wrists just past the edge."
+  ],
+  "form": [
+   "Curl your wrists up as far as they go.",
+   "Lower until your wrists bend all the way back."
+  ],
+  "tips": [
+   "One arm at a time works too."
+  ],
+  "avoid": [
+   "Forearms lifting off.",
+   "Bouncing at the bottom."
+  ],
+  "rangeOfMotion": "Wrists bent back → wrists curled up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "wrist-curl",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Dumbbell_Palms-Up_Wrist_Curl"
+  },
+  "formerIds": [
+   "palms-up-dumbbell-wrist-curl-over-a-bench",
+   "seated-one-arm-dumbbell-palms-up-wrist-curl"
+  ]
+ },
+ {
+  "id": "cable-wrist-curl",
+  "name": "Cable Wrist Curl",
+  "aliases": [
+   "Seated Two-Arm Palms-Up Low-Pulley Wrist Curl",
+   "Low-pulley wrist curl"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "forearms": "flexors"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Builds the forearm flexors (palm side).",
+  "setup": [
+   "Bar on a low pulley. Sit facing it, forearms on your thighs, palms up.",
+   "Wrists just past your knees."
+  ],
+  "form": [
+   "Curl your wrists up as far as they go.",
+   "Lower until your wrists bend all the way back."
+  ],
+  "tips": [],
+  "avoid": [
+   "Forearms lifting off.",
+   "Bouncing at the bottom."
+  ],
+  "rangeOfMotion": "Wrists bent back → wrists curled up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "wrist-curl",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Wrist_Curl"
+  },
+  "formerIds": [
+   "seated-two-arm-palms-up-low-pulley-wrist-curl"
+  ]
+ },
+ {
+  "id": "standing-palms-up-barbell-behind-the-back-wrist-curl",
+  "name": "Behind-the-Back Wrist Curl",
+  "aliases": [
+   "Standing Palms-Up Barbell Behind The Back Wrist Curl",
+   "Behind-the-back barbell wrist curl"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "forearms": "flexors"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Builds the forearm flexors (palm side).",
+  "setup": [
+   "Stand, bar behind your hips, arms straight, palms facing back."
+  ],
+  "form": [
+   "Curl your wrists, bringing the bar up behind you.",
+   "Lower slowly, letting the bar roll toward your fingers."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your elbows.",
+   "Shrugging."
+  ],
+  "rangeOfMotion": "Wrists open → wrists curled",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "wrist-curl",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Flexor pick: less strain on the wrists than wrist curls over a bench.",
+   "source": {
+    "url": "https://builtwithscience.com/fitness-tips/forearm-exercises/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Palms-Up_Barbell_Behind_The_Back_Wrist_Curl"
+  }
+ },
+ {
+  "id": "finger-curls",
+  "name": "Barbell Finger Curl",
+  "aliases": [
+   "Finger Curls"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "forearms": "flexors"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Wrist curl that also works the fingers.",
+  "setup": [
+   "Sit, forearms on your thighs, palms up, light bar in your hands."
+  ],
+  "form": [
+   "Curl your fingers closed, then your wrists up.",
+   "Lower, letting the bar roll to your fingertips."
+  ],
+  "tips": [],
+  "avoid": [
+   "Going heavy: the bar can roll off your fingers."
+  ],
+  "rangeOfMotion": "Bar at the fingertips → wrists curled up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "wrist-curl",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Finger_Curls"
+  }
+ },
+ {
+  "id": "dumbbell-lying-pronation",
+  "name": "Dumbbell Pronation",
+  "aliases": [
+   "Dumbbell Lying Pronation",
+   "Lying dumbbell pronation"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "forearms": "flexors"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Trains turning the palm down.",
+  "setup": [
+   "Elbow bent 90° and braced on a bench, forearm still.",
+   "Light dumbbell in your hand, palm up."
+  ],
+  "form": [
+   "Turn your palm down, rotating only the forearm.",
+   "Turn back slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Moving the elbow.",
+   "Going heavy."
+  ],
+  "rangeOfMotion": "Palm up → palm down",
+  "tempo": "Turn 1 s · Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "wrist-curl",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Lying_Pronation"
+  }
+ },
+ {
+  "id": "dumbbell-lying-supination",
+  "name": "Dumbbell Supination",
+  "aliases": [
+   "Dumbbell Lying Supination",
+   "Lying dumbbell supination"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "forearms": "extensors"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Trains turning the palm up.",
+  "setup": [
+   "Elbow bent 90° and braced on a bench, forearm still.",
+   "Light dumbbell in your hand, palm down."
+  ],
+  "form": [
+   "Turn your palm up, rotating only the forearm.",
+   "Turn back slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Moving the elbow.",
+   "Going heavy."
+  ],
+  "rangeOfMotion": "Palm down → palm up",
+  "tempo": "Turn 1 s · Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "wrist-curl",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Lying_Supination"
+  }
+ },
+ {
+  "id": "seated-palms-down-barbell-wrist-curl",
+  "name": "Barbell Reverse Wrist Curl",
+  "aliases": [
+   "Seated Palms-Down Barbell Wrist Curl",
+   "Palms-Down Wrist Curl Over A Bench",
+   "Barbell wrist extension"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "forearms": "extensors"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Builds the forearm extensors (back of the forearm).",
+  "setup": [
+   "Sit, forearms on your thighs or a bench, palms down.",
+   "Wrists just past the edge."
+  ],
+  "form": [
+   "Lift the backs of your hands as high as they go.",
+   "Lower slowly until your wrists bend down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Forearms lifting off.",
+   "Bouncing at the bottom."
+  ],
+  "rangeOfMotion": "Wrists bent down → hands lifted",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "wrist-curl",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Extensor pick: pair it with wrist curls so both sides of the forearm grow.",
+   "source": {
+    "url": "https://builtwithscience.com/fitness-tips/forearm-exercises/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Palms-Down_Barbell_Wrist_Curl"
+  },
+  "formerIds": [
+   "palms-down-wrist-curl-over-a-bench"
+  ]
+ },
+ {
+  "id": "seated-dumbbell-palms-down-wrist-curl",
+  "name": "Dumbbell Reverse Wrist Curl",
+  "aliases": [
+   "Seated Dumbbell Palms-Down Wrist Curl",
+   "Palms-Down Dumbbell Wrist Curl Over A Bench",
+   "Seated One-Arm Dumbbell Palms-Down Wrist Curl",
+   "Dumbbell wrist extension"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "forearms": "extensors"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Builds the forearm extensors (back of the forearm).",
+  "setup": [
+   "Sit, forearms on your thighs or a bench, palms down.",
+   "Wrists just past the edge."
+  ],
+  "form": [
+   "Lift the backs of your hands as high as they go.",
+   "Lower slowly until your wrists bend down."
+  ],
+  "tips": [
+   "One arm at a time works too."
+  ],
+  "avoid": [
+   "Forearms lifting off.",
+   "Bouncing at the bottom."
+  ],
+  "rangeOfMotion": "Wrists bent down → hands lifted",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "wrist-curl",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Dumbbell_Palms-Down_Wrist_Curl"
+  },
+  "formerIds": [
+   "palms-down-dumbbell-wrist-curl-over-a-bench",
+   "seated-one-arm-dumbbell-palms-down-wrist-curl"
+  ]
+ },
+ {
+  "id": "cable-reverse-wrist-curl",
+  "name": "Cable Reverse Wrist Curl",
+  "aliases": [
+   "Cable wrist extension"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "forearms",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "forearms": "extensors"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Builds the forearm extensors (back of the forearm).",
+  "setup": [
+   "Bar on a low pulley. Sit facing it, forearms on your thighs, palms down.",
+   "Wrists just past your knees."
+  ],
+  "form": [
+   "Lift the backs of your hands as high as they go.",
+   "Lower slowly until your wrists bend down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Forearms lifting off.",
+   "Bouncing at the bottom."
+  ],
+  "rangeOfMotion": "Wrists bent down → hands lifted",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "wrist-curl",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "url": "https://weighttraining.guide/exercises/cable-reverse-wrist-curl/"
+  }
+ }
+]

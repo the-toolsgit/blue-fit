@@ -1,0 +1,646 @@
+[
+ {
+  "id": "standing-calf-raise",
+  "name": "Standing Calf Raise",
+  "aliases": [
+   "Machine Calf Raise",
+   "Standing Calf Raises",
+   "Standing Machine Calf Raise"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "straight-knee"
+  },
+  "stretch": [
+   "calves"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Upper calves (knees straight).",
+  "setup": [
+   "Shoulders under the pads, balls of your feet on the edge, knees straight."
+  ],
+  "form": [
+   "Lower your heels all the way, pause 2 s.",
+   "Rise as high as you can."
+  ],
+  "tips": [
+   "The pause at the bottom matters most."
+  ],
+  "avoid": [
+   "Bouncing.",
+   "Bending your knees."
+  ],
+  "rangeOfMotion": "Heels all the way down → all the way up",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-standing",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Straight knees stretch the upper calf: grew it far more than seated raises.",
+   "source": {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10753835/",
+    "url2": "https://pubmed.ncbi.nlm.nih.gov/37015016/"
+   }
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Standing_Calf_Raises"
+  },
+  "formerIds": [
+   "standing-calf-raises"
+  ]
+ },
+ {
+  "id": "seated-calf-raise",
+  "name": "Seated Calf Raise",
+  "aliases": [
+   "Machine Seated Calf Raise"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "bent-knee"
+  },
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Lower calves (knees bent).",
+  "setup": [
+   "Knees bent, pad on your thighs.",
+   "Balls of your feet on the edge."
+  ],
+  "form": [
+   "Lower your heels all the way, pause 2 s.",
+   "Rise as high as you can."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bouncing."
+  ],
+  "rangeOfMotion": "Heels all the way down → all the way up",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-seated",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Covers the bent-knee angle (soleus); pair it with a standing raise.",
+   "source": {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10753835/",
+    "url2": "https://fitnessvolt.com/best-calf-exercises/"
+   }
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Seated_Calf_Raise"
+  }
+ },
+ {
+  "id": "barbell-seated-calf-raise",
+  "name": "Barbell Seated Calf Raise",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "bent-knee"
+  },
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Seated calf raise with a bar on your knees.",
+  "setup": [
+   "Sit, balls of your feet on a plate or block.",
+   "Padded bar across your lower thighs."
+  ],
+  "form": [
+   "Lower your heels all the way, pause 2 s.",
+   "Rise as high as you can."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bouncing."
+  ],
+  "rangeOfMotion": "Heels all the way down → all the way up",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-seated",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Seated_Calf_Raise"
+  }
+ },
+ {
+  "id": "dumbbell-seated-one-leg-calf-raise",
+  "name": "Dumbbell Seated One-Leg Calf Raise",
+  "aliases": [
+   "Seated Single-Leg Dumbbell Calf Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "bent-knee"
+  },
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Seated raise, one leg, dumbbell on the knee.",
+  "setup": [
+   "Sit, ball of one foot on a block.",
+   "Dumbbell on that knee, held in place."
+  ],
+  "form": [
+   "Lower your heels all the way, pause 2 s.",
+   "Rise as high as you can."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bouncing."
+  ],
+  "rangeOfMotion": "Heels all the way down → all the way up",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-seated",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Seated_One-Leg_Calf_Raise"
+  }
+ },
+ {
+  "id": "calf-press",
+  "name": "Calf Press Machine",
+  "aliases": [
+   "Calf Press",
+   "Seated Calf Press"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "straight-knee"
+  },
+  "stretch": [
+   "calves"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Seated calf press, legs almost straight.",
+  "setup": [
+   "Seat set so your legs are almost straight.",
+   "Balls of your feet on the platform edge."
+  ],
+  "form": [
+   "Let your toes come back all the way, pause 2 s.",
+   "Press through the balls of your feet as far as you can."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your knees to help.",
+   "Bouncing."
+  ],
+  "rangeOfMotion": "Toes back → toes pressed away",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-standing",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Calf_Press"
+  }
+ },
+ {
+  "id": "calf-press-on-the-leg-press-machine",
+  "name": "Leg Press Calf Raise",
+  "aliases": [
+   "Calf Press On The Leg Press Machine",
+   "Leg Press Calf Press"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "straight-knee"
+  },
+  "stretch": [
+   "calves"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Calf raise on the leg press: easy to load heavy.",
+  "setup": [
+   "Sit in the leg press, balls of your feet on the low edge.",
+   "Legs straight, safeties set."
+  ],
+  "form": [
+   "Let your toes come back all the way, pause 2 s.",
+   "Press through the balls of your feet as far as you can."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your knees.",
+   "Feet slipping off the edge."
+  ],
+  "rangeOfMotion": "Toes back → toes pressed away",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-standing",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Straight knees and a deep stretch, like the standing raise, without a spine load.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/37015016/",
+    "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10753835/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Calf_Press_On_The_Leg_Press_Machine"
+  }
+ },
+ {
+  "id": "smith-machine-calf-raise",
+  "name": "Smith Machine Calf Raise",
+  "aliases": [
+   "Smith Calf Raise"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "straight-knee"
+  },
+  "stretch": [
+   "calves"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Standing calf raise with the Smith bar.",
+  "setup": [
+   "Bar on your upper back.",
+   "Balls of your feet on a block, knees straight."
+  ],
+  "form": [
+   "Lower your heels all the way, pause 2 s.",
+   "Rise as high as you can."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bouncing.",
+   "Bending your knees."
+  ],
+  "rangeOfMotion": "Heels all the way down → all the way up",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-standing",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Machine_Calf_Raise"
+  }
+ },
+ {
+  "id": "standing-barbell-calf-raise",
+  "name": "Standing Barbell Calf Raise",
+  "aliases": [
+   "Barbell Calf Raise"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "straight-knee"
+  },
+  "stretch": [
+   "calves"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Standing calf raise with a bar on your back.",
+  "setup": [
+   "Bar on your upper back, in a rack.",
+   "Balls of your feet on a plate, knees straight."
+  ],
+  "form": [
+   "Lower your heels all the way, pause 2 s.",
+   "Rise as high as you can."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bouncing.",
+   "Losing balance."
+  ],
+  "rangeOfMotion": "Heels all the way down → all the way up",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-standing",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Barbell_Calf_Raise"
+  }
+ },
+ {
+  "id": "rocking-standing-calf-raise",
+  "name": "Rocking Standing Calf Raise",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "straight-knee"
+  },
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Calf raise that rocks back onto your heels between reps.",
+  "setup": [
+   "Bar on your upper back, feet flat on the floor."
+  ],
+  "form": [
+   "Rock back onto your heels, toes up, pause 2 s.",
+   "Rise as high as you can on your toes."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your knees."
+  ],
+  "rangeOfMotion": "Toes up → all the way up",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-standing",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Rocking_Standing_Calf_Raise"
+  }
+ },
+ {
+  "id": "standing-dumbbell-calf-raise",
+  "name": "Standing Dumbbell Calf Raise",
+  "aliases": [
+   "Dumbbell Calf Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "straight-knee"
+  },
+  "stretch": [
+   "calves"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Calf raise holding dumbbells.",
+  "setup": [
+   "A dumbbell in each hand.",
+   "Balls of your feet on a step, knees straight."
+  ],
+  "form": [
+   "Lower your heels all the way, pause 2 s.",
+   "Rise as high as you can."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bouncing.",
+   "Bending your knees."
+  ],
+  "rangeOfMotion": "Heels all the way down → all the way up",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-standing",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Dumbbell_Calf_Raise"
+  }
+ },
+ {
+  "id": "single-leg-standing-calf-raise",
+  "name": "Single-Leg Standing Calf Raise",
+  "aliases": [
+   "One-Leg Calf Raise",
+   "Single-Leg Dumbbell Calf Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "straight-knee"
+  },
+  "stretch": [
+   "calves"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "One leg at a time on a step.",
+  "setup": [
+   "Ball of one foot on a step, knee straight.",
+   "Dumbbell in the same-side hand, other hand on a wall."
+  ],
+  "form": [
+   "Lower your heels all the way, pause 2 s.",
+   "Rise as high as you can."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bouncing.",
+   "Bending your knee."
+  ],
+  "rangeOfMotion": "Heels all the way down → all the way up",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-standing",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "url": "https://fitnessvolt.com/best-calf-exercises/"
+  }
+ },
+ {
+  "id": "calf-raise-on-a-dumbbell",
+  "name": "Calf Raise On A Dumbbell",
+  "aliases": [],
+  "equipment": "dumbbell",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "straight-knee"
+  },
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Calf raise standing on a dumbbell handle (hard balance).",
+  "setup": [
+   "One hand on something sturdy.",
+   "Ball of one foot on a dumbbell handle."
+  ],
+  "form": [
+   "Roll your heel down for a stretch, pause 2 s.",
+   "Rise as high as you can."
+  ],
+  "tips": [],
+  "avoid": [
+   "Letting go of the support."
+  ],
+  "rangeOfMotion": "Heels all the way down → all the way up",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-standing",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Calf_Raise_On_A_Dumbbell"
+  }
+ },
+ {
+  "id": "donkey-calf-raises",
+  "name": "Donkey Calf Raise",
+  "aliases": [
+   "Donkey Calf Raises",
+   "Donkey Calf Raise Machine"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "calves",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "calves": "straight-knee"
+  },
+  "stretch": [
+   "calves"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "calf raise: very heavy loads in a short range (Leo's call: ★)",
+  "why": "Bent over at the hips: big stretch on the upper calf.",
+  "setup": [
+   "Hips under the pad, bent forward, hands on the handles.",
+   "Balls of your feet on the block, knees straight."
+  ],
+  "form": [
+   "Lower your heels all the way, pause 2 s.",
+   "Rise as high as you can."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bouncing.",
+   "Bending your knees."
+  ],
+  "rangeOfMotion": "Heels all the way down → all the way up",
+  "tempo": "Down 3 s · Hold 2 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "calf-raise-standing",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Donkey_Calf_Raises"
+  }
+ }
+]

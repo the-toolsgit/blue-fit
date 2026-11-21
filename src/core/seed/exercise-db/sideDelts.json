@@ -1,0 +1,1230 @@
+[
+ {
+  "id": "cable-lateral-raise",
+  "name": "Cable Lateral Raise",
+  "aliases": [
+   "Single-arm Cable Lateral Raise",
+   "Standing Low-Pulley Deltoid Raise",
+   "One-arm Cable Lateral Raise"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "stretch": [
+   "sideDelts"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Side delts, loaded the whole way.",
+  "setup": [
+   "Pulley low, cable in front of you.",
+   "Hold the machine with your free hand, lean away."
+  ],
+  "form": [
+   "Start with your hand across your body (stretch).",
+   "Raise out to shoulder height, elbow leading.",
+   "Lower slowly, all the way back across."
+  ],
+  "tips": [
+   "Push your hand out wide, not up."
+  ],
+  "avoid": [
+   "Shrugging.",
+   "Swinging your body."
+  ],
+  "rangeOfMotion": "Hand across your body → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise-cable",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated side-delt exercise: tension even at the bottom.",
+   "source": {
+    "url": "https://barbend.com/news/best-worst-shoulder-exercises-tier-list/",
+    "url2": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  },
+  "formerIds": [
+   "standing-low-pulley-deltoid-raise"
+  ]
+ },
+ {
+  "id": "lean-away-lateral-raise",
+  "name": "Lean-away Cable Lateral Raise",
+  "aliases": [
+   "Dumbbell One-Arm Lateral Raise",
+   "Egyptian Lateral Raise",
+   "Lean-away Lateral Raise"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "stretch": [
+   "sideDelts"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Leaning away gives a longer range of motion.",
+  "setup": [
+   "Pulley low. Hold the machine, lean away 15–30°.",
+   "Handle in the other hand."
+  ],
+  "form": [
+   "Start with your hand across your body.",
+   "Raise to shoulder height, lower slowly."
+  ],
+  "tips": [
+   "Start each rep from a full stop."
+  ],
+  "avoid": [
+   "Swinging.",
+   "Changing how far you lean."
+  ],
+  "rangeOfMotion": "Hand across your body → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise-lean-away",
+  "source": {
+   "plan": "Leo's plan",
+   "url": "https://builtwithscience.com/fitness-tips/best-shoulder-exercises/"
+  }
+ },
+ {
+  "id": "lean-in-lateral-raise",
+  "name": "Lean-in Cable Lateral Raise",
+  "aliases": [
+   "Lean-in Lateral Raise"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Leaning in makes the top of the raise hardest.",
+  "setup": [
+   "Pulley low. Hold the machine, lean in toward it 15–30°.",
+   "Handle in the other hand."
+  ],
+  "form": [
+   "Start with your hand across your body.",
+   "Raise to shoulder height, lower slowly."
+  ],
+  "tips": [
+   "Start each rep from a full stop."
+  ],
+  "avoid": [
+   "Swinging.",
+   "Changing how far you lean."
+  ],
+  "rangeOfMotion": "Hand across your body → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise-cable",
+  "source": {
+   "plan": "Leo's plan"
+  }
+ },
+ {
+  "id": "behind-the-back-cuffed-cable-lateral-raise",
+  "name": "Behind-the-Back Cuffed Cable Lateral Raise",
+  "aliases": [
+   "Cuffed Cable Lateral Raise",
+   "Behind-the-back Cable Lateral Raise"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "stretch": [
+   "sideDelts"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Cable behind you: side delts work stretched.",
+  "setup": [
+   "Pulley low, ankle cuff on your wrist.",
+   "Stand side-on, cable running behind your back."
+  ],
+  "form": [
+   "Raise your arm out to shoulder height, elbow leading.",
+   "Lower slowly until your hand is behind your hip."
+  ],
+  "tips": [],
+  "avoid": [
+   "Shrugging.",
+   "Leaning far away."
+  ],
+  "rangeOfMotion": "Hand behind your hip → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise-cable",
+  "source": {
+   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
+ },
+ {
+  "id": "side-lateral-raise",
+  "name": "DB Lateral Raise",
+  "aliases": [
+   "Side Lateral Raise",
+   "Standing Dumbbell Lateral Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "The basic side-delt builder.",
+  "setup": [
+   "Stand tall, dumbbells at your sides, elbows slightly bent."
+  ],
+  "form": [
+   "Raise out to the sides until your arms are level with your shoulders.",
+   "Lower slowly."
+  ],
+  "tips": [
+   "Lead with your elbows."
+  ],
+  "avoid": [
+   "Swinging your body.",
+   "Shrugging."
+  ],
+  "rangeOfMotion": "Arms at your sides → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Grew the side delts as well as cable raises in a trial.",
+   "source": {
+    "url": "https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2025.1611468/full",
+    "url2": "https://barbend.com/news/best-worst-shoulder-exercises-tier-list/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Side_Lateral_Raise"
+  }
+ },
+ {
+  "id": "seated-side-lateral-raise",
+  "name": "Seated Dumbbell Lateral Raise",
+  "aliases": [
+   "Seated Side Lateral Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Sitting stops you from swinging.",
+  "setup": [
+   "Sit at the end of a bench, dumbbells at your sides."
+  ],
+  "form": [
+   "Raise out to the sides to shoulder height.",
+   "Lower slowly."
+  ],
+  "tips": [
+   "Lead with your elbows."
+  ],
+  "avoid": [
+   "Leaning back.",
+   "Shrugging."
+  ],
+  "rangeOfMotion": "Arms at your sides → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise",
+  "figureAdjust": {
+   "seated": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Side_Lateral_Raise"
+  }
+ },
+ {
+  "id": "one-arm-side-laterals",
+  "name": "One-arm Dumbbell Lateral Raise",
+  "aliases": [
+   "One-Arm Side Laterals"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "One arm, free hand holding on for balance.",
+  "setup": [
+   "Hold a bench or rack with your free hand.",
+   "Dumbbell at your side."
+  ],
+  "form": [
+   "Raise out to the side to shoulder height.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging.",
+   "Shrugging."
+  ],
+  "rangeOfMotion": "Arm at your side → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "One-Arm_Side_Laterals"
+  }
+ },
+ {
+  "id": "lean-away-dumbbell-lateral-raise",
+  "name": "Lean-away Dumbbell Lateral Raise",
+  "aliases": [
+   "Lean-away DB Lateral Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Lean away so the dumbbell is harder at the bottom.",
+  "setup": [
+   "Hold a post with one hand, lean away 15–30°.",
+   "Dumbbell in the free hand."
+  ],
+  "form": [
+   "Raise out to shoulder height.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging.",
+   "Changing how far you lean."
+  ],
+  "rangeOfMotion": "Arm at your side → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise-lean-away",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
+ },
+ {
+  "id": "lean-in-dumbbell-lateral-raise",
+  "name": "Lean-in Dumbbell Lateral Raise",
+  "aliases": [
+   "Lean-in DB Lateral Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Lean in toward a post: the top stays hard.",
+  "setup": [
+   "Hold a post, feet close to it, lean your body in.",
+   "Dumbbell in the outside hand."
+  ],
+  "form": [
+   "Raise out to shoulder height.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging.",
+   "Shrugging."
+  ],
+  "rangeOfMotion": "Arm at your side → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
+ },
+ {
+  "id": "side-lying-dumbbell-lateral-raise",
+  "name": "Side-lying Dumbbell Lateral Raise",
+  "aliases": [
+   "Arnold-style side-lying dumbbell raise",
+   "Side-Lying Lateral Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "stretch": [
+   "sideDelts"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Lying on your side makes the start of the raise hard.",
+  "setup": [
+   "Lie on your side on a flat bench.",
+   "Top arm across your body, dumbbell near your belly."
+  ],
+  "form": [
+   "Raise the arm up until it points at the ceiling.",
+   "Lower slowly back across your body."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rolling your body.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Arm across your body → pointing up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Hardest where the side delt is stretched; rated A-tier.",
+   "source": {
+    "url": "https://barbend.com/news/best-worst-shoulder-exercises-tier-list/",
+    "url2": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  "source": {
+   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
+ },
+ {
+  "id": "one-arm-incline-lateral-raise",
+  "name": "Incline Side-lying Lateral Raise",
+  "aliases": [
+   "One-Arm Incline Lateral Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "stretch": [
+   "sideDelts"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Side-lying on an incline bench.",
+  "setup": [
+   "Lie on your side on an incline bench.",
+   "Top arm across your body, dumbbell near your belly."
+  ],
+  "form": [
+   "Raise your arm out and up to about shoulder height.",
+   "Lower slowly back across your body."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rolling your body.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Arm across your body → raised to the side",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise",
+  "figureAdjust": {
+   "oneArm": true,
+   "bench": "incline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "One-Arm_Incline_Lateral_Raise"
+  }
+ },
+ {
+  "id": "super-rom-lateral-raise",
+  "name": "Super ROM Lateral Raise",
+  "aliases": [
+   "Super Range of Motion Lateral Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise",
+   "traps": "shrug"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Side raise from the front of the hips to overhead.",
+  "setup": [
+   "Light dumbbells in front of your hips."
+  ],
+  "form": [
+   "Raise out to the sides and keep going until your hands meet overhead.",
+   "Lower slowly the same way."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging.",
+   "Going too heavy to reach the top."
+  ],
+  "rangeOfMotion": "Hands in front of hips → overhead",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise-full",
+  "source": {
+   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
+ },
+ {
+  "id": "all-the-way-up-lateral-raise",
+  "name": "All-the-way-up Lateral Raise",
+  "aliases": [
+   "All the way up lateral raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise",
+   "traps": "shrug"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Side delts to shoulder height, then traps above.",
+  "setup": [
+   "Lighter dumbbells than a normal side raise."
+  ],
+  "form": [
+   "Raise out to the sides, past shoulder height, almost overhead.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging the weight up."
+  ],
+  "rangeOfMotion": "Arms at your sides → almost overhead",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise-full",
+  "source": {
+   "plan": "Leo's plan"
+  }
+ },
+ {
+  "id": "seated-machine-lateral-raise",
+  "name": "Seated Machine Lateral Raise",
+  "aliases": [
+   "Machine Lateral Raise",
+   "Lateral Raise Machine"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Side raise in a fixed path, easy to push hard.",
+  "setup": [
+   "Seat so your shoulders line up with the machine's pivot.",
+   "Pads on the outside of your arms."
+  ],
+  "form": [
+   "Raise your arms out to shoulder height.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Shrugging.",
+   "Leaning to one side."
+  ],
+  "rangeOfMotion": "Arms at your sides → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise",
+  "figureAdjust": {
+   "seated": true,
+   "equipmentProp": "none"
+  },
+  "source": {
+   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
+ },
+ {
+  "id": "standing-machine-lateral-raise",
+  "name": "Standing Machine Lateral Raise",
+  "aliases": [
+   "Atlantis standing lateral raise"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Standing machine raise: tension from the bottom up.",
+  "setup": [
+   "Stand in the machine, shoulders in line with its pivot.",
+   "Chest on the pad if it has one."
+  ],
+  "form": [
+   "Raise your arms out to shoulder height.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Shrugging.",
+   "Leaning back."
+  ],
+  "rangeOfMotion": "Arms at your sides → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Steady tension through the range; rated A+ for side delts.",
+   "source": {
+    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  "source": {
+   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
+ },
+ {
+  "id": "dumbbell-scaption",
+  "name": "Dumbbell Scaption",
+  "aliases": [
+   "Scaption Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Raise between front and side; easy on the shoulders.",
+  "setup": [
+   "Light dumbbells at your sides, thumbs up."
+  ],
+  "form": [
+   "Raise your arms about 30° in front of your sides to shoulder height.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging.",
+   "Shrugging."
+  ],
+  "rangeOfMotion": "Arms at your sides → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Scaption"
+  }
+ },
+ {
+  "id": "side-laterals-to-front-raise",
+  "name": "Lateral to Front Raise",
+  "aliases": [
+   "Side Laterals to Front Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Side raise and front raise in one rep.",
+  "setup": [
+   "Stand tall, dumbbells at your sides."
+  ],
+  "form": [
+   "Raise out to the sides to shoulder height, then sweep them to the front.",
+   "Lower slowly from the front."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging.",
+   "Going too heavy."
+  ],
+  "rangeOfMotion": "Arms at your sides → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Side_Laterals_to_Front_Raise"
+  }
+ },
+ {
+  "id": "alternating-deltoid-raise",
+  "name": "Alternating Front and Side Raise",
+  "aliases": [
+   "Alternating Deltoid Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   },
+   {
+    "group": "frontDelts",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "One rep to the front, the next to the side.",
+  "setup": [
+   "Stand tall, dumbbells at your sides."
+  ],
+  "form": [
+   "Raise to the front to shoulder height, lower slowly.",
+   "Next rep, raise out to the sides."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging.",
+   "Rushing the reps."
+  ],
+  "rangeOfMotion": "Arms at your sides → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "lateral-raise",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Alternating_Deltoid_Raise"
+  }
+ },
+ {
+  "id": "upright-barbell-row",
+  "name": "Barbell Upright Row",
+  "aliases": [
+   "Upright Barbell Row",
+   "EZ-bar Upright Row"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise",
+   "traps": "shrug"
+  },
+  "isHeavy": false,
+  "heavyWhy": "small muscles drive it",
+  "why": "Side delts and traps in one pull.",
+  "setup": [
+   "Bar in front of your thighs, hands about shoulder width or wider."
+  ],
+  "form": [
+   "Pull up along your body, elbows leading, until your upper arms are level with your shoulders.",
+   "Lower slowly."
+  ],
+  "tips": [
+   "A wider grip is easier on the shoulders."
+  ],
+  "avoid": [
+   "Pulling higher than your shoulders.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Bar at thighs → upper arms level with shoulders",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "upright-row",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Upright_Barbell_Row"
+  }
+ },
+ {
+  "id": "upright-cable-row",
+  "name": "Cable Upright Row",
+  "aliases": [
+   "Upright Cable Row",
+   "Rope Upright Row"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise",
+   "traps": "shrug"
+  },
+  "isHeavy": false,
+  "heavyWhy": "small muscles drive it",
+  "why": "Upright row with steady cable tension.",
+  "setup": [
+   "Pulley low, bar or rope, stand close."
+  ],
+  "form": [
+   "Pull up along your body, elbows leading, until your upper arms are level with your shoulders.",
+   "Lower slowly."
+  ],
+  "tips": [
+   "A rope lets your hands move apart at the top."
+  ],
+  "avoid": [
+   "Pulling higher than your shoulders.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Hands at thighs → upper arms level with shoulders",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "upright-row",
+  "figureAdjust": {
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Upright_Cable_Row"
+  }
+ },
+ {
+  "id": "standing-dumbbell-upright-row",
+  "name": "Dumbbell Upright Row",
+  "aliases": [
+   "Standing Dumbbell Upright Row"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise",
+   "traps": "shrug"
+  },
+  "isHeavy": false,
+  "heavyWhy": "small muscles drive it",
+  "why": "Upright row; hands free to find a comfy path.",
+  "setup": [
+   "Dumbbells in front of your thighs, palms facing you."
+  ],
+  "form": [
+   "Pull up along your body, elbows leading, until your upper arms are level with your shoulders.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling higher than your shoulders.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Dumbbells at thighs → upper arms level with shoulders",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "upright-row",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Dumbbell_Upright_Row"
+  }
+ },
+ {
+  "id": "dumbbell-one-arm-upright-row",
+  "name": "One-arm Dumbbell Upright Row",
+  "aliases": [
+   "Dumbbell One-Arm Upright Row"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise",
+   "traps": "shrug"
+  },
+  "isHeavy": false,
+  "heavyWhy": "small muscles drive it",
+  "why": "Upright row, one arm at a time.",
+  "setup": [
+   "Dumbbell in front of your thigh, free hand on your hip or a rack."
+  ],
+  "form": [
+   "Pull up along your body, elbows leading, until your upper arms are level with your shoulders.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling higher than your shoulders.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Dumbbell at thigh → upper arm level with shoulder",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "upright-row",
+  "figureAdjust": {
+   "equipmentProp": "db",
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_One-Arm_Upright_Row"
+  }
+ },
+ {
+  "id": "smith-machine-upright-row",
+  "name": "Smith Machine Upright Row",
+  "aliases": [],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise",
+   "traps": "shrug"
+  },
+  "isHeavy": false,
+  "heavyWhy": "small muscles drive it",
+  "why": "Upright row in a fixed bar path.",
+  "setup": [
+   "Bar in front of your thighs, hands shoulder width or wider."
+  ],
+  "form": [
+   "Pull up along your body, elbows leading, until your upper arms are level with your shoulders.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling higher than your shoulders.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Bar at thighs → upper arms level with shoulders",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "upright-row",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Machine_Upright_Row"
+  }
+ },
+ {
+  "id": "smith-machine-one-arm-upright-row",
+  "name": "One-arm Smith Machine Upright Row",
+  "aliases": [
+   "Smith Machine One-Arm Upright Row"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "sideDelts",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "sideDelts": "raise",
+   "traps": "shrug"
+  },
+  "isHeavy": false,
+  "heavyWhy": "small muscles drive it",
+  "why": "One-arm upright row on the Smith bar.",
+  "setup": [
+   "Stand side-on to the bar, one hand in the middle of it."
+  ],
+  "form": [
+   "Pull up along your body, elbows leading, until your upper arms are level with your shoulders.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling higher than your shoulders.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Hand at thigh → upper arm level with shoulder",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "upright-row",
+  "figureAdjust": {
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Machine_One-Arm_Upright_Row"
+  }
+ }
+]

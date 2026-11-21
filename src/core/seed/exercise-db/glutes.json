@@ -1,0 +1,1274 @@
+[
+ {
+  "id": "barbell-deadlift",
+  "name": "Barbell Deadlift",
+  "aliases": [
+   "Deadlift",
+   "Conventional Deadlift"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   },
+   {
+    "group": "quads",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max",
+   "hamstrings": "hip hinge",
+   "back": "lower back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "The heaviest full-body pull: hips, hamstrings, back.",
+  "setup": [
+   "Bar over the middle of your feet, hip-width stance.",
+   "Grip just outside your legs, back flat, chest up."
+  ],
+  "form": [
+   "Push the floor away, bar close to your legs.",
+   "Stand tall, hips fully forward.",
+   "Lower it the same way to the floor."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding your back.",
+   "Hips shooting up first."
+  ],
+  "rangeOfMotion": "Bar on the floor → standing tall",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "deadlift",
+  "preferred": {
+   "goals": [
+    "strength"
+   ],
+   "why": "Heaviest loadable hip lift; strength carries over best from the lifts you train.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19204579/",
+    "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11239729/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Deadlift"
+  }
+ },
+ {
+  "id": "deficit-deadlift",
+  "name": "Deficit Deadlift",
+  "aliases": [
+   "Deadlift from a Deficit"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   },
+   {
+    "group": "quads",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max",
+   "hamstrings": "hip hinge",
+   "back": "lower back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Deadlift with a longer pull from the floor.",
+  "setup": [
+   "Stand on a 1–3 in plate or platform, bar over mid-foot.",
+   "Grip just outside your legs, back flat."
+  ],
+  "form": [
+   "Push the floor away, bar close to your legs.",
+   "Stand tall, then lower to the floor."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding your back at the bottom.",
+   "Too high a platform."
+  ],
+  "rangeOfMotion": "Bar on the floor → standing tall",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "deadlift",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Deficit_Deadlift"
+  }
+ },
+ {
+  "id": "rack-pulls",
+  "name": "Rack Pull",
+  "aliases": [
+   "Rack Pulls",
+   "Block Pull"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   },
+   {
+    "group": "quads",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max",
+   "hamstrings": "hip hinge",
+   "back": "lower back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Top half of a deadlift: very heavy.",
+  "setup": [
+   "Bar on the rack pins at or just below the knees.",
+   "Grip just outside your legs, back flat."
+  ],
+  "form": [
+   "Drive your hips forward to stand tall.",
+   "Lower back to the pins."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back at the top.",
+   "Bouncing off the pins."
+  ],
+  "rangeOfMotion": "Bar at the knees → standing tall",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "deadlift",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Rack_Pulls"
+  }
+ },
+ {
+  "id": "sumo-deadlift",
+  "name": "Sumo Deadlift",
+  "aliases": [
+   "Sumo Deadlifts"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   },
+   {
+    "group": "quads",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max",
+   "hamstrings": "hip hinge",
+   "back": "lower back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Wide-stance deadlift: more hips and inner thighs.",
+  "setup": [
+   "Feet wide, toes out, bar over mid-foot.",
+   "Hands inside your knees, back flat."
+  ],
+  "form": [
+   "Push your knees out and the floor away.",
+   "Stand tall, then lower to the floor."
+  ],
+  "tips": [],
+  "avoid": [
+   "Knees caving in.",
+   "Rounding your back."
+  ],
+  "rangeOfMotion": "Bar on the floor → standing tall",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "deadlift",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Sumo_Deadlift"
+  }
+ },
+ {
+  "id": "trap-bar-deadlift",
+  "name": "Trap Bar Deadlift",
+  "aliases": [
+   "Hex Bar Deadlift"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   },
+   {
+    "group": "quads",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max",
+   "hamstrings": "hip hinge",
+   "back": "lower back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Deadlift with the weight at your sides: easier on the back.",
+  "setup": [
+   "Stand in the middle of the bar, grab both handles.",
+   "Hips down, chest up, back flat."
+  ],
+  "form": [
+   "Push the floor away until you stand tall.",
+   "Lower it back to the floor."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding your back.",
+   "Hips shooting up first."
+  ],
+  "rangeOfMotion": "Bar on the floor → standing tall",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "deadlift",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Trap_Bar_Deadlift"
+  }
+ },
+ {
+  "id": "leverage-deadlift",
+  "name": "Machine Deadlift",
+  "aliases": [
+   "Leverage Deadlift",
+   "Lever Deadlift"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   },
+   {
+    "group": "quads",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max",
+   "hamstrings": "hip hinge",
+   "back": "lower back"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Deadlift on a machine: fixed path, easy to set down.",
+  "setup": [
+   "Stand between the handles, feet hip-width.",
+   "Hips down, chest up, back flat."
+  ],
+  "form": [
+   "Push the floor away until you stand tall.",
+   "Lower until the weight just touches down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding your back.",
+   "Leaning back at the top."
+  ],
+  "rangeOfMotion": "Handles low → standing tall",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "deadlift",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Leverage_Deadlift"
+  }
+ },
+ {
+  "id": "barbell-hip-thrust",
+  "name": "Barbell Hip Thrust",
+  "aliases": [
+   "Hip Thrust",
+   "Barbell Hip Thrusts"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Heaviest direct glute lift.",
+  "setup": [
+   "Upper back on a bench, bar over your hips with a pad.",
+   "Feet flat, shins upright at the top."
+  ],
+  "form": [
+   "Drive your hips up until your body is level, squeeze 1 s.",
+   "Lower until your hips nearly touch the floor."
+  ],
+  "tips": [
+   "Chin tucked, ribs down."
+  ],
+  "avoid": [
+   "Arching your lower back at the top.",
+   "Pushing through your toes."
+  ],
+  "rangeOfMotion": "Hips low → body level",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hip-thrust",
+  "preferred": {
+   "goals": [
+    "strength"
+   ],
+   "why": "Heavy, loadable glute lift; strength carries over best from the lifts you train.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19204579/",
+    "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11239729/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Hip_Thrust",
+   "url2": "https://builtwithscience.com/best-glutes-exercises/"
+  }
+ },
+ {
+  "id": "machine-hip-thrust",
+  "name": "Machine Hip Thrust",
+  "aliases": [
+   "Hip Thrust Machine",
+   "Glute Drive"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Hip thrust without the bar setup.",
+  "setup": [
+   "Back on the pad, belt or pad across your hips.",
+   "Feet flat, shins upright at the top."
+  ],
+  "form": [
+   "Drive your hips up until your body is level, squeeze 1 s.",
+   "Lower under control."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching your lower back at the top.",
+   "Pushing through your toes."
+  ],
+  "rangeOfMotion": "Hips low → body level",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "hip-thrust",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Rated highly by coaches: easy to load and keep tension on the glutes.",
+   "source": {
+    "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
+    "url2": "https://fitnessvolt.com/jeff-nippard-rates-glute-exercises/"
+   }
+  },
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
+   "url2": "https://fitnessvolt.com/jeff-nippard-rates-glute-exercises/"
+  }
+ },
+ {
+  "id": "smith-machine-hip-thrust",
+  "name": "Smith Machine Hip Thrust",
+  "aliases": [
+   "Smith Hip Thrust"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Hip thrust on a fixed bar path.",
+  "setup": [
+   "Bench behind you, bar over your hips with a pad.",
+   "Feet flat, shins upright at the top."
+  ],
+  "form": [
+   "Drive your hips up until your body is level, squeeze 1 s.",
+   "Lower under control."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching your lower back at the top.",
+   "Feet too close or too far."
+  ],
+  "rangeOfMotion": "Hips low → body level",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hip-thrust",
+  "source": {
+   "url": "https://www.strengthlog.com/smith-machine-hip-thrust/",
+   "url2": "https://barbend.com/hip-thrust/"
+  }
+ },
+ {
+  "id": "single-leg-db-hip-thrust",
+  "name": "Single-leg DB Hip Thrust",
+  "aliases": [
+   "Single-Leg Hip Thrust",
+   "Single-Leg Dumbbell Hip Thrust"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max"
+  },
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "why": "One glute at a time.",
+  "setup": [
+   "Upper back on a bench, one foot flat, other leg up.",
+   "Dumbbell on the working hip."
+  ],
+  "form": [
+   "Drive your hip up until your body is level, squeeze 1 s.",
+   "Lower until your hip nearly touches the floor."
+  ],
+  "tips": [],
+  "avoid": [
+   "Hips tilting to one side.",
+   "Arching your lower back."
+  ],
+  "rangeOfMotion": "Hip low → body level",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hip-thrust",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
+   "url2": "https://builtwithscience.com/best-glutes-exercises/"
+  }
+ },
+ {
+  "id": "barbell-glute-bridge",
+  "name": "Barbell Glute Bridge",
+  "aliases": [
+   "Glute Bridge with Barbell"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Hip thrust from the floor: shorter range.",
+  "setup": [
+   "Lie on your back, bar over your hips with a pad.",
+   "Knees bent, feet flat."
+  ],
+  "form": [
+   "Drive your hips up, squeeze 1 s.",
+   "Lower until your hips touch the floor."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching your lower back.",
+   "Pushing through your toes."
+  ],
+  "rangeOfMotion": "Hips on the floor → hips up",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "glute-bridge",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Glute_Bridge"
+  }
+ },
+ {
+  "id": "butt-lift-bridge",
+  "name": "Glute Bridge",
+  "aliases": [
+   "Butt Lift (Bridge)",
+   "Bodyweight Glute Bridge"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Easy glute warm-up or home move.",
+  "setup": [
+   "Lie on your back, knees bent, feet flat."
+  ],
+  "form": [
+   "Push through your heels to lift your hips, hold 1 s.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching your lower back."
+  ],
+  "rangeOfMotion": "Hips on the floor → hips up",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "glute-bridge",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Butt_Lift_Bridge"
+  }
+ },
+ {
+  "id": "single-leg-glute-bridge",
+  "name": "Single Leg Glute Bridge",
+  "aliases": [
+   "Single-Leg Bridge"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Glute bridge, one side at a time.",
+  "setup": [
+   "Lie on your back, one foot flat, other leg straight up."
+  ],
+  "form": [
+   "Push through the heel to lift your hips, hold 1 s.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Hips tilting to one side."
+  ],
+  "rangeOfMotion": "Hips on the floor → hips up",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "glute-bridge",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Single_Leg_Glute_Bridge"
+  }
+ },
+ {
+  "id": "hyperextensions-back-extensions",
+  "name": "45° Back Extension (Glutes)",
+  "aliases": [
+   "Hyperextensions (Back Extensions)",
+   "Back Extension",
+   "45° Back Extension",
+   "Hyperextension"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max",
+   "hamstrings": "hip hinge",
+   "back": "lower back"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Glutes worked through the hips, no bar.",
+  "setup": [
+   "45° bench, pad just below your hip bones.",
+   "Feet turned out a little."
+  ],
+  "form": [
+   "Bend down at the hips.",
+   "Rise until your body is straight, glutes tight."
+  ],
+  "tips": [
+   "Round your upper back a little: more glutes.",
+   "For more, a plate at your chest."
+  ],
+  "avoid": [
+   "Leaning back past straight.",
+   "Swinging up fast."
+  ],
+  "rangeOfMotion": "Body bent down → body straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "back-extension",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated glute exercise by coaches: hard work with the hips bent.",
+   "source": {
+    "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
+    "url2": "https://builtwithscience.com/best-glutes-exercises/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Hyperextensions_Back_Extensions",
+   "url2": "https://builtwithscience.com/best-glutes-exercises/"
+  },
+  "evidence": {
+   "0": {
+    "evidence": "C",
+    "note": "Feet out and a slightly rounded upper back shift work to the glutes (coaching practice)."
+   }
+  }
+ },
+ {
+  "id": "hyperextensions-with-no-hyperextension-bench",
+  "name": "Bench Back Extension",
+  "aliases": [
+   "Hyperextensions With No Hyperextension Bench"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max",
+   "hamstrings": "hip hinge",
+   "back": "lower back"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Back extension when there is no back extension bench.",
+  "setup": [
+   "Lie face down on a flat bench, hips at the end.",
+   "A partner pins your legs down."
+  ],
+  "form": [
+   "Bend down at the hips.",
+   "Rise until your body is straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back past straight.",
+   "Swinging up fast."
+  ],
+  "rangeOfMotion": "Body bent down → body straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "back-extension",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Hyperextensions_With_No_Hyperextension_Bench"
+  }
+ },
+ {
+  "id": "reverse-hyperextension",
+  "name": "Reverse Hyperextension",
+  "aliases": [
+   "Reverse Hyper"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max",
+   "hamstrings": "hip hinge",
+   "back": "lower back"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Legs swing up behind you: glutes, no load on the spine.",
+  "setup": [
+   "Lie face down on the top pad, hips at the edge.",
+   "Feet under the roller, hands on the handles."
+  ],
+  "form": [
+   "Swing your legs up until they line up with your body.",
+   "Lower under control."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging past straight.",
+   "Using momentum."
+  ],
+  "rangeOfMotion": "Legs hanging → legs in line with your body",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "back-extension",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Reverse_Hyperextension"
+  }
+ },
+ {
+  "id": "pull-through",
+  "name": "Cable Pull-Through",
+  "aliases": [
+   "Pull Through",
+   "Cable Pull Through"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   },
+   {
+    "group": "hamstrings",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max",
+   "hamstrings": "hip hinge"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hip hinge with a cable: easy on the back.",
+  "setup": [
+   "Low pulley, rope between your legs, face away.",
+   "Feet wide, knees slightly bent."
+  ],
+  "form": [
+   "Push your hips back, rope going through your legs.",
+   "Drive your hips forward to stand tall."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling with your arms.",
+   "Leaning back at the top."
+  ],
+  "rangeOfMotion": "Standing tall → hips back, rope behind you",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hinge",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Pull_Through",
+   "url2": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
+  }
+ },
+ {
+  "id": "glute-kickback",
+  "name": "Glute Kickback",
+  "aliases": [
+   "Donkey Kick",
+   "Quadruped Kickback"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Bodyweight glute move on hands and knees.",
+  "setup": [
+   "On hands and knees, back flat."
+  ],
+  "form": [
+   "Push one foot up behind you, knee bent, squeeze 1 s.",
+   "Lower without touching down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching your lower back.",
+   "Twisting your hips open."
+  ],
+  "rangeOfMotion": "Knee under hip → thigh in line with your back",
+  "tempo": "Kick 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "kickback-glute",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Glute_Kickback"
+  }
+ },
+ {
+  "id": "one-legged-cable-kickback",
+  "name": "Cable Glute Kickback",
+  "aliases": [
+   "One-Legged Cable Kickback",
+   "Cable Kickback"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Glute isolation with steady cable tension.",
+  "setup": [
+   "Low pulley, ankle strap on, face the machine.",
+   "Hands on the frame, lean forward a little."
+  ],
+  "form": [
+   "Push your leg back until your hip is straight, squeeze 1 s.",
+   "Bring it forward slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching your lower back.",
+   "Swinging the leg."
+  ],
+  "rangeOfMotion": "Leg under you → hip straight",
+  "tempo": "Kick 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "kickback-glute",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "One-Legged_Cable_Kickback",
+   "url2": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
+  }
+ },
+ {
+  "id": "machine-glute-kickback",
+  "name": "Machine Glute Kickback",
+  "aliases": [
+   "Glute Kickback Machine"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "glutes": "glute max"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Loadable glute kickback.",
+  "setup": [
+   "Set the machine to your size, foot flat on the footpad.",
+   "Brace on the pads or handles."
+  ],
+  "form": [
+   "Press your leg back until the glute is tight, squeeze 1 s.",
+   "Bring it forward slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching your lower back.",
+   "Hips swaying."
+  ],
+  "rangeOfMotion": "Knee forward → hip straight",
+  "tempo": "Kick 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "kickback-glute",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "url": "https://barbend.com/glute-kickbacks/",
+   "url2": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
+  }
+ },
+ {
+  "id": "thigh-abductor",
+  "name": "Hip Abduction Machine",
+  "aliases": [
+   "Thigh Abductor",
+   "Machine Hip Abduction",
+   "Seated Hip Abduction"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "glutes": "glute medius"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Side glutes: legs pushed out.",
+  "setup": [
+   "Sit with pads on the outside of your knees."
+  ],
+  "form": [
+   "Push your knees out as wide as you can, hold 1 s.",
+   "Bring them back slowly."
+  ],
+  "tips": [
+   "Lean forward a little: more glute max too."
+  ],
+  "avoid": [
+   "Letting the weight slam back.",
+   "Rocking your body."
+  ],
+  "rangeOfMotion": "Knees together → knees wide",
+  "tempo": "Out 1 s · Hold 1 s · In 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "hip-abduction",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated by coaches for the side glutes: direct, easy to load.",
+   "source": {
+    "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
+    "url2": "https://fitnessvolt.com/jeff-nippard-rates-glute-exercises/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Thigh_Abductor",
+   "url2": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
+  },
+  "evidence": {
+   "0": {
+    "evidence": "C",
+    "note": "Bending forward at the hips brings in more of the big glute (coaching practice)."
+   }
+  }
+ },
+ {
+  "id": "cable-hip-abduction",
+  "name": "Cable Hip Abduction",
+  "aliases": [
+   "Standing Cable Hip Abduction"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "glutes",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "glutes": "glute medius"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Side glutes, one leg at a time.",
+  "setup": [
+   "Low pulley, strap on the far ankle.",
+   "Stand side-on, one hand on the frame."
+  ],
+  "form": [
+   "Raise the leg out to the side.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning your body away.",
+   "Turning your toes up."
+  ],
+  "rangeOfMotion": "Leg crossed in front → leg out to the side",
+  "tempo": "Out 1 s · In 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hip-abduction",
+  "source": {
+   "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
+   "url2": "https://fitnessvolt.com/jeff-nippard-rates-glute-exercises/"
+  }
+ }
+]

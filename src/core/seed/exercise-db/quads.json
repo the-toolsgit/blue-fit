@@ -1,0 +1,2204 @@
+[
+ {
+  "id": "smith-squat",
+  "name": "Smith Squat",
+  "aliases": [
+   "Smith Machine Squat"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Heavy quads with the bar on a track.",
+  "setup": [
+   "Bar on your upper back.",
+   "Feet shoulder width, under or a little in front of the bar."
+  ],
+  "form": [
+   "Sit down until your thighs are at least level.",
+   "Stand up through the middle of your feet."
+  ],
+  "tips": [
+   "Feet more under the bar: more quads.",
+   "Going deeper also grows the glutes and inner thighs more."
+  ],
+  "avoid": [
+   "Knees caving in.",
+   "Heels lifting."
+  ],
+  "rangeOfMotion": "Standing → thighs at least level with the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-smith",
+  "source": {
+   "plan": "Leo's plan"
+  },
+  "evidence": {
+   "1": {
+    "evidence": "R",
+    "note": "Kubo 2019: full squats grew the adductors and glutes more than half squats; quads grew the same."
+   }
+  },
+  "formerIds": [
+   "smith-machine-squat"
+  ]
+ },
+ {
+  "id": "barbell-squat",
+  "name": "Barbell Squat",
+  "aliases": [
+   "Back Squat",
+   "Barbell Back Squat",
+   "High-Bar Squat",
+   "Barbell Full Squat"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "The classic heavy squat for the whole leg.",
+  "setup": [
+   "Bar on your upper back, in a rack with safeties.",
+   "Feet shoulder width, toes a little out."
+  ],
+  "form": [
+   "Sit down between your heels until your thighs are at least level.",
+   "Stand up, chest up."
+  ],
+  "tips": [
+   "Going deeper also grows the glutes and inner thighs more."
+  ],
+  "avoid": [
+   "Knees caving in.",
+   "Rounding your lower back at the bottom."
+  ],
+  "rangeOfMotion": "Standing → thighs at least level with the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat",
+  "preferred": {
+   "goals": [
+    "growth",
+    "strength"
+   ],
+   "why": "Top-rated quad builder and the main heavy leg lift; strength gains are specific to it.",
+   "source": {
+    "url": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/",
+    "url2": "https://pubmed.ncbi.nlm.nih.gov/19204579/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Squat"
+  },
+  "evidence": {
+   "0": {
+    "evidence": "R",
+    "note": "Kubo 2019: full squats grew the adductors and glutes more than half squats; quads grew the same."
+   }
+  }
+ },
+ {
+  "id": "front-barbell-squat",
+  "name": "Front Squat",
+  "aliases": [
+   "Front Barbell Squat",
+   "Barbell Front Squat",
+   "Front Squat (Clean Grip)",
+   "Front Barbell Squat To A Bench"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Bar in front keeps you upright: more quads, less back.",
+  "setup": [
+   "Bar on the front of your shoulders, elbows high.",
+   "Feet shoulder width."
+  ],
+  "form": [
+   "Sit straight down until your thighs are at least level.",
+   "Stand up, elbows high."
+  ],
+  "tips": [],
+  "avoid": [
+   "Elbows dropping.",
+   "Leaning forward."
+  ],
+  "rangeOfMotion": "Standing → thighs at least level with the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-front",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "preferred": {
+   "goals": [
+    "strength"
+   ],
+   "why": "Heavy squat you can load and progress; strength is specific to the lifts you train.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19204579/",
+    "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11239729/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Front_Barbell_Squat"
+  }
+ },
+ {
+  "id": "box-squat",
+  "name": "Box Squat",
+  "aliases": [
+   "Barbell Box Squat",
+   "Barbell Squat To A Bench"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "A box sets the same depth every rep.",
+  "setup": [
+   "Box behind you at the depth you want.",
+   "Bar on your upper back, feet a bit wider than shoulders."
+  ],
+  "form": [
+   "Sit back until you touch the box, without relaxing.",
+   "Stand up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Dropping onto the box.",
+   "Rocking back on the box."
+  ],
+  "rangeOfMotion": "Standing → seated on the box",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Box_Squat"
+  }
+ },
+ {
+  "id": "narrow-stance-squats",
+  "name": "Narrow Stance Squat",
+  "aliases": [
+   "Narrow Stance Barbell Squat"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Feet close: more knee bend, more quads.",
+  "setup": [
+   "Bar on your upper back.",
+   "Feet hip width or closer, toes forward."
+  ],
+  "form": [
+   "Sit down until your thighs are at least level.",
+   "Stand up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Heels lifting.",
+   "Knees caving in."
+  ],
+  "rangeOfMotion": "Standing → thighs at least level with the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Narrow_Stance_Squats"
+  }
+ },
+ {
+  "id": "wide-stance-barbell-squat",
+  "name": "Wide Stance Squat",
+  "aliases": [
+   "Wide Stance Barbell Squat",
+   "Barbell Sumo Squat"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "adductors",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "adductors": "adduction",
+   "glutes": "glute max"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Wide feet: inner thighs work as hard as the quads.",
+  "setup": [
+   "Bar on your upper back.",
+   "Feet well wider than shoulders, toes out."
+  ],
+  "form": [
+   "Sit down, knees out over your toes, until your thighs are level.",
+   "Stand up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Knees caving in."
+  ],
+  "rangeOfMotion": "Standing → thighs at least level with the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Wide_Stance_Barbell_Squat"
+  }
+ },
+ {
+  "id": "zercher-squats",
+  "name": "Zercher Squat",
+  "aliases": [
+   "Zercher Squats"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Bar in your elbows: upright squat, hard on the upper back too.",
+  "setup": [
+   "Bar in the bend of your elbows, hands together.",
+   "Feet shoulder width."
+  ],
+  "form": [
+   "Sit down until your thighs are at least level.",
+   "Stand up, chest up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding your back."
+  ],
+  "rangeOfMotion": "Standing → thighs at least level with the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-front",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Zercher_Squats"
+  }
+ },
+ {
+  "id": "dumbbell-squat",
+  "name": "Dumbbell Squat",
+  "aliases": [
+   "DB Squat",
+   "Dumbbell Squat To A Bench"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Squat with dumbbells at your sides.",
+  "setup": [
+   "A dumbbell in each hand at your sides.",
+   "Feet shoulder width."
+  ],
+  "form": [
+   "Sit down until your thighs are at least level.",
+   "Stand up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning forward.",
+   "Heels lifting."
+  ],
+  "rangeOfMotion": "Standing → thighs at least level with the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-front",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Squat"
+  }
+ },
+ {
+  "id": "goblet-squat",
+  "name": "Goblet Squat",
+  "aliases": [
+   "Dumbbell Goblet Squat",
+   "Kettlebell Goblet Squat"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "load limited by holding one weight",
+  "why": "Easy-to-learn squat with one weight at your chest.",
+  "setup": [
+   "One dumbbell upright at your chest, in both hands.",
+   "Feet a bit wider than shoulders, toes out."
+  ],
+  "form": [
+   "Sit down between your heels as deep as you can stay upright.",
+   "Stand up."
+  ],
+  "tips": [
+   "Heels on a small plate: more quads."
+  ],
+  "avoid": [
+   "Rounding your back at the bottom."
+  ],
+  "rangeOfMotion": "Standing → deep squat",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-front",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Goblet_Squat"
+  }
+ },
+ {
+  "id": "front-squats-with-two-kettlebells",
+  "name": "Double Kettlebell Front Squat",
+  "aliases": [
+   "Front Squats With Two Kettlebells",
+   "Kettlebell Front Squat"
+  ],
+  "equipment": "other",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "isHeavy": false,
+  "heavyWhy": "load limited by holding one weight",
+  "why": "Front squat with two kettlebells at your shoulders.",
+  "setup": [
+   "A kettlebell in each hand, resting on the front of your shoulders.",
+   "Feet shoulder width."
+  ],
+  "form": [
+   "Sit down until your thighs are at least level.",
+   "Stand up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning forward."
+  ],
+  "rangeOfMotion": "Standing → thighs at least level with the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-front",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Front_Squats_With_Two_Kettlebells"
+  }
+ },
+ {
+  "id": "bodyweight-squat",
+  "name": "Bodyweight Squat",
+  "aliases": [
+   "Air Squat"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "No-equipment squat: warm-up or high reps.",
+  "setup": [
+   "Feet shoulder width, arms forward."
+  ],
+  "form": [
+   "Sit down as deep as you can stay upright.",
+   "Stand up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Heels lifting."
+  ],
+  "rangeOfMotion": "Standing → deep squat",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-front",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Bodyweight_Squat"
+  }
+ },
+ {
+  "id": "belt-squat",
+  "name": "Belt Squat",
+  "aliases": [
+   "Hip Belt Squat",
+   "Weighted Squat (belt)"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Heavy squat with the weight on your hips, not your back.",
+  "setup": [
+   "Belt around your hips, chain to the machine.",
+   "Feet shoulder width on the platform."
+  ],
+  "form": [
+   "Sit down until your thighs are at least level.",
+   "Stand up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning far forward.",
+   "Knees caving in."
+  ],
+  "rangeOfMotion": "Standing → thighs at least level with the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-front",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Weighted_Squat",
+   "url": "https://www.gymshark.com/blog/article/how-to-use-the-belt-squat-machine"
+  }
+ },
+ {
+  "id": "hack-squat",
+  "name": "Hack Squat",
+  "aliases": [
+   "Machine Hack Squat",
+   "Hack Squat Machine"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Heavy, stable squat machine for the quads.",
+  "setup": [
+   "Back flat on the pad, shoulders under the pads.",
+   "Feet shoulder width, middle of the platform."
+  ],
+  "form": [
+   "Lower as deep as you can keep your back on the pad.",
+   "Push back up."
+  ],
+  "tips": [
+   "Feet lower on the platform: more quads."
+  ],
+  "avoid": [
+   "Locking your knees hard.",
+   "Hips lifting off the pad."
+  ],
+  "rangeOfMotion": "Legs almost straight → deep squat",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hack-squat",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Rated the single best quad builder: stable, deep and easy to load.",
+   "source": {
+    "url": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/",
+    "url2": "https://fitnessvolt.com/jeff-nippard-leg-routine-one-year/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Hack_Squat"
+  }
+ },
+ {
+  "id": "barbell-hack-squat",
+  "name": "Barbell Hack Squat",
+  "aliases": [
+   "Behind-the-Back Barbell Squat"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Squat with the bar held behind your legs.",
+  "setup": [
+   "Stand with the bar behind your legs, arms straight.",
+   "Hands shoulder width, palms back."
+  ],
+  "form": [
+   "Squat down until the bar nears the floor, chest up.",
+   "Stand back up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding your back.",
+   "Bar dragging on your legs."
+  ],
+  "rangeOfMotion": "Standing → bar near the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-front",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Hack_Squat"
+  }
+ },
+ {
+  "id": "narrow-stance-hack-squats",
+  "name": "Narrow Stance Hack Squat",
+  "aliases": [
+   "Narrow Stance Hack Squats",
+   "Close-Stance Hack Squat"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Hack squat with feet close: more quads.",
+  "setup": [
+   "Back flat on the pad.",
+   "Feet close together, low on the platform."
+  ],
+  "form": [
+   "Lower as deep as you can keep your back on the pad.",
+   "Push back up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Heels lifting.",
+   "Locking your knees hard."
+  ],
+  "rangeOfMotion": "Legs almost straight → deep squat",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hack-squat",
+  "figureAdjust": {
+   "grip": "close"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Narrow_Stance_Hack_Squats"
+  }
+ },
+ {
+  "id": "pendulum-squat",
+  "name": "Pendulum Squat",
+  "aliases": [
+   "Pendulum Squat Machine"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Machine squat on an arc: very deep, very stable.",
+  "setup": [
+   "Back on the pad, shoulders under the pads.",
+   "Feet middle of the platform, shoulder width."
+  ],
+  "form": [
+   "Lower as deep as you can.",
+   "Push back up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Locking your knees hard."
+  ],
+  "rangeOfMotion": "Legs almost straight → deep squat",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hack-squat",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Same strengths as the hack squat; a top quad builder in a year-long training log.",
+   "source": {
+    "url": "https://fitnessvolt.com/jeff-nippard-leg-routine-one-year/",
+    "url2": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
+   }
+  },
+  "source": {
+   "url": "https://fitnessvolt.com/jeff-nippard-leg-routine-one-year/"
+  }
+ },
+ {
+  "id": "lying-machine-squat",
+  "name": "Lying Machine Squat",
+  "aliases": [
+   "Lever Lying Squat"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Squat machine lying on your back.",
+  "setup": [
+   "Lie face up, shoulders under the pads.",
+   "Feet shoulder width on the platform."
+  ],
+  "form": [
+   "Lower until your thighs are past level.",
+   "Push back up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lower back lifting off the pad."
+  ],
+  "rangeOfMotion": "Legs almost straight → deep squat",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hack-squat",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Lying_Machine_Squat"
+  }
+ },
+ {
+  "id": "leg-press",
+  "name": "Leg Press",
+  "aliases": [
+   "Machine Leg Press",
+   "45° Leg Press"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Heavy press for your quads.",
+  "setup": [
+   "Back flat on the pad.",
+   "Feet shoulder width, low on the platform (more quads)."
+  ],
+  "form": [
+   "Lower as deep as you can keep your lower back on the pad.",
+   "Push back up."
+  ],
+  "tips": [
+   "Feet higher on the platform: more glutes."
+  ],
+  "avoid": [
+   "Lower back rounding off the pad.",
+   "Locking your knees hard."
+  ],
+  "rangeOfMotion": "Legs almost straight → knees bent deep",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "leg-press",
+  "source": {
+   "plan": "Leo's plan"
+  }
+ },
+ {
+  "id": "narrow-stance-leg-press",
+  "name": "Narrow Stance Leg Press",
+  "aliases": [
+   "Close-Stance Leg Press"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Leg press with feet close: more quads.",
+  "setup": [
+   "Feet close together, middle of the platform."
+  ],
+  "form": [
+   "Lower as deep as you can keep your lower back on the pad.",
+   "Push back up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Knees caving in.",
+   "Locking your knees hard."
+  ],
+  "rangeOfMotion": "Legs almost straight → knees bent deep",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "leg-press",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Narrow_Stance_Leg_Press"
+  }
+ },
+ {
+  "id": "smith-machine-leg-press",
+  "name": "Smith Machine Leg Press",
+  "aliases": [],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max",
+   "adductors": "adduction"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Leg press using a Smith bar, lying under it.",
+  "setup": [
+   "Bar low, on the safeties. Lie under it.",
+   "Middle of your feet on the bar."
+  ],
+  "form": [
+   "Unlock and lower the bar until your knees near your chest.",
+   "Push back up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Locking your knees hard.",
+   "Feet slipping on the bar."
+  ],
+  "rangeOfMotion": "Legs almost straight → knees to chest",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "leg-press",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Machine_Leg_Press"
+  }
+ },
+ {
+  "id": "leg-extension",
+  "name": "Leg Extension",
+  "aliases": [
+   "Machine Leg Extension",
+   "Leg Extensions",
+   "Seat-Back Leg Extension"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "quads": "extension"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Quads only. Seat back stretches the front of the thigh.",
+  "setup": [
+   "Backrest all the way back, lean back against it.",
+   "Knees at the seat edge, lined up with the pivot.",
+   "Pad just above your ankles."
+  ],
+  "form": [
+   "Straighten your legs, squeeze 1 s.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Kicking up and letting it drop.",
+   "Hips lifting off the seat."
+  ],
+  "rangeOfMotion": "Knees bent → legs straight",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "leg-extension",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Only knee-straightening move that grows the rectus femoris well; seat back grew it more.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/39699974/",
+    "url2": "https://fitnessvolt.com/jeff-nippard-leg-routine-one-year/"
+   }
+  },
+  "source": {
+   "plan": "Leo's plan"
+  },
+  "formerIds": [
+   "leg-extensions"
+  ]
+ },
+ {
+  "id": "single-leg-leg-extension",
+  "name": "Single-Leg Leg Extension",
+  "aliases": [
+   "One-Leg Leg Extension"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "quads": "extension"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Leg extension one leg at a time.",
+  "setup": [
+   "Backrest back, knee at the seat edge, lined up with the pivot.",
+   "Pad just above one ankle."
+  ],
+  "form": [
+   "Straighten your leg, squeeze 1 s.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Twisting your hips.",
+   "Kicking up."
+  ],
+  "rangeOfMotion": "Knee bent → leg straight",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "leg-extension",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Single-Leg_Leg_Extension"
+  }
+ },
+ {
+  "id": "weighted-sissy-squat",
+  "name": "Weighted Sissy Squat",
+  "aliases": [],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "quads": "extension"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Knees forward, body leaning back: big quad stretch.",
+  "setup": [
+   "A plate on your chest in one hand, other hand on a rack.",
+   "Feet hip width, up on your toes."
+  ],
+  "form": [
+   "Push your knees forward and lean back, hips straight.",
+   "Come back up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending at the hips.",
+   "Dropping fast into the bottom."
+  ],
+  "rangeOfMotion": "Standing → knees far forward",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hack-squat",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Weighted_Sissy_Squat"
+  }
+ },
+ {
+  "id": "sissy-squat",
+  "name": "Sissy Squat",
+  "aliases": [
+   "Bodyweight Sissy Squat"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "quads": "extension"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Bodyweight quad stretch: knees forward, hips straight.",
+  "setup": [
+   "One hand on a rack or post for balance.",
+   "Feet hip width, up on your toes."
+  ],
+  "form": [
+   "Push your knees forward and lean back, hips straight.",
+   "Come back up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending at the hips."
+  ],
+  "rangeOfMotion": "Standing → knees far forward",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hack-squat",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "url": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
+  }
+ },
+ {
+  "id": "reverse-nordic",
+  "name": "Reverse Nordic",
+  "aliases": [
+   "Reverse Nordic Curl"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "quads": "extension"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Kneeling lean-back: stretches the front of the thigh.",
+  "setup": [
+   "Kneel on a pad, body straight from knees to head."
+  ],
+  "form": [
+   "Lean back slowly, hips straight.",
+   "Pull yourself back up with your thighs."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending at the hips.",
+   "Arching your lower back."
+  ],
+  "rangeOfMotion": "Upright → leaning back",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "nordic",
+  "source": {
+   "url": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
+  }
+ },
+ {
+  "id": "barbell-lunge",
+  "name": "Barbell Lunge",
+  "aliases": [
+   "Barbell Forward Lunge"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "unsafeFailure": true,
+  "why": "Forward lunge with a bar on your back.",
+  "setup": [
+   "Bar on your upper back, feet hip width."
+  ],
+  "form": [
+   "Step forward and lower until your back knee nearly touches the floor.",
+   "Push back to standing."
+  ],
+  "tips": [
+   "Short step: more quads. Long step: more glutes."
+  ],
+  "avoid": [
+   "Front knee caving in.",
+   "Front heel lifting."
+  ],
+  "rangeOfMotion": "Standing → back knee near the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "lunge",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Lunge"
+  }
+ },
+ {
+  "id": "barbell-walking-lunge",
+  "name": "Barbell Walking Lunge",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "unsafeFailure": true,
+  "why": "Lunges walking forward with a bar.",
+  "setup": [
+   "Bar on your upper back, clear path ahead."
+  ],
+  "form": [
+   "Step forward and lower until your back knee nearly touches the floor.",
+   "Stand up into the next step."
+  ],
+  "tips": [],
+  "avoid": [
+   "Front knee caving in."
+  ],
+  "rangeOfMotion": "Standing → back knee near the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "lunge",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Walking_Lunge"
+  }
+ },
+ {
+  "id": "dumbbell-lunges",
+  "name": "Dumbbell Lunge",
+  "aliases": [
+   "Dumbbell Lunges",
+   "DB Lunge",
+   "Dumbbell Walking Lunge"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "why": "Forward lunge holding dumbbells.",
+  "setup": [
+   "A dumbbell in each hand at your sides."
+  ],
+  "form": [
+   "Step forward and lower until your back knee nearly touches the floor.",
+   "Push back to standing."
+  ],
+  "tips": [
+   "Short step: more quads. Long step: more glutes."
+  ],
+  "avoid": [
+   "Front knee caving in."
+  ],
+  "rangeOfMotion": "Standing → back knee near the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "lunge",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Lunges"
+  }
+ },
+ {
+  "id": "dumbbell-rear-lunge",
+  "name": "Dumbbell Reverse Lunge",
+  "aliases": [
+   "Dumbbell Rear Lunge",
+   "DB Reverse Lunge"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "why": "Step back instead of forward: easier on the knees.",
+  "setup": [
+   "A dumbbell in each hand at your sides."
+  ],
+  "form": [
+   "Step back and lower until your back knee nearly touches the floor.",
+   "Push through your front foot to stand."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pushing off the back foot."
+  ],
+  "rangeOfMotion": "Standing → back knee near the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "lunge",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Rear_Lunge"
+  }
+ },
+ {
+  "id": "bodyweight-walking-lunge",
+  "name": "Bodyweight Walking Lunge",
+  "aliases": [
+   "Walking Lunge"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Walking lunges, no weight.",
+  "setup": [
+   "Hands on hips, clear path ahead."
+  ],
+  "form": [
+   "Step forward and lower until your back knee nearly touches the floor.",
+   "Stand up into the next step."
+  ],
+  "tips": [],
+  "avoid": [
+   "Front knee caving in."
+  ],
+  "rangeOfMotion": "Standing → back knee near the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "lunge",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Bodyweight_Walking_Lunge"
+  }
+ },
+ {
+  "id": "elevated-back-lunge",
+  "name": "Deficit Reverse Lunge",
+  "aliases": [
+   "Elevated Back Lunge",
+   "Barbell Deficit Reverse Lunge"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "unsafeFailure": true,
+  "why": "Reverse lunge from a low step: deeper bottom.",
+  "setup": [
+   "Bar on your upper back.",
+   "Stand on a low step or plate."
+  ],
+  "form": [
+   "Step back off it and lower until your back knee touches the floor.",
+   "Push through your front foot back up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Front heel lifting."
+  ],
+  "rangeOfMotion": "Standing on the step → back knee on the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "lunge",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Elevated_Back_Lunge"
+  }
+ },
+ {
+  "id": "barbell-side-split-squat",
+  "name": "Barbell Side Lunge",
+  "aliases": [
+   "Barbell Side Split Squat",
+   "Barbell Lateral Lunge"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "adductors": "adduction",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "adductors"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "unsafeFailure": true,
+  "why": "Side-to-side lunge: quads plus inner-thigh stretch.",
+  "setup": [
+   "Bar on your upper back.",
+   "Feet very wide, one foot turned out."
+  ],
+  "form": [
+   "Bend that knee and sit to that side, other leg straight.",
+   "Push back to the middle."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bent knee caving in.",
+   "Rounding your back."
+  ],
+  "rangeOfMotion": "Standing wide → sitting to one side",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "lunge",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Side_Split_Squat"
+  }
+ },
+ {
+  "id": "split-squat-with-dumbbells",
+  "name": "DB Bulgarian Split Squat",
+  "aliases": [
+   "Split Squat with Dumbbells",
+   "Bulgarian Split Squat",
+   "Rear-Foot-Elevated Split Squat",
+   "Dumbbell Bulgarian Split Squat"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "why": "Rear foot on a bench: one leg works through a deep range.",
+  "setup": [
+   "Rear foot on a bench behind you.",
+   "A dumbbell in each hand at your sides."
+  ],
+  "form": [
+   "Lower until your front thigh is level or lower.",
+   "Push through your front foot back up."
+  ],
+  "tips": [
+   "Upright body: more quads. Lean forward: more glutes."
+  ],
+  "avoid": [
+   "Front heel lifting.",
+   "Pushing off the back foot."
+  ],
+  "rangeOfMotion": "Standing → front thigh level or lower",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "split-squat",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated one-leg quad builder: deep range, little back load.",
+   "source": {
+    "url": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/",
+    "url2": "https://www.strengthlog.com/adductor-exercises/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Split_Squat_with_Dumbbells"
+  }
+ },
+ {
+  "id": "one-leg-barbell-squat",
+  "name": "Barbell Bulgarian Split Squat",
+  "aliases": [
+   "One Leg Barbell Squat",
+   "Barbell Rear-Foot-Elevated Split Squat"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "unsafeFailure": true,
+  "why": "Bulgarian split squat with a bar on your back.",
+  "setup": [
+   "Bar on your upper back.",
+   "Rear foot on a bench behind you."
+  ],
+  "form": [
+   "Lower until your front thigh is level or lower.",
+   "Push through your front foot back up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Front heel lifting.",
+   "Losing balance sideways."
+  ],
+  "rangeOfMotion": "Standing → front thigh level or lower",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "split-squat",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "One_Leg_Barbell_Squat"
+  }
+ },
+ {
+  "id": "smith-single-leg-split-squat",
+  "name": "Smith Bulgarian Split Squat",
+  "aliases": [
+   "Smith Single-Leg Split Squat",
+   "Smith Machine Split Squat"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "stretch": [
+   "quads"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Bulgarian split squat on the Smith: no balance limit.",
+  "setup": [
+   "Bar on your upper back.",
+   "Rear foot on a bench behind you."
+  ],
+  "form": [
+   "Lower until your front thigh is level or lower.",
+   "Push through your front foot back up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Front heel lifting."
+  ],
+  "rangeOfMotion": "Standing → front thigh level or lower",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "split-squat",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Single-Leg_Split_Squat"
+  }
+ },
+ {
+  "id": "barbell-step-ups",
+  "name": "Barbell Step-Up",
+  "aliases": [
+   "Barbell Step Ups"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "unsafeFailure": true,
+  "why": "Step up onto a box with a bar on your back.",
+  "setup": [
+   "Bar on your upper back.",
+   "Box about knee height, one foot on it."
+  ],
+  "form": [
+   "Stand up on the box with the top leg.",
+   "Step back down slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pushing off the bottom foot."
+  ],
+  "rangeOfMotion": "Foot on the box → standing on it",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "step-up",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Step_Ups"
+  }
+ },
+ {
+  "id": "dumbbell-step-ups",
+  "name": "Dumbbell Step-Up",
+  "aliases": [
+   "Dumbbell Step Ups",
+   "DB Step-Up"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "adductors",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "why": "Step up onto a box holding dumbbells.",
+  "setup": [
+   "A dumbbell in each hand.",
+   "Box about knee height, one foot on it."
+  ],
+  "form": [
+   "Stand up on the box with the top leg.",
+   "Step back down slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pushing off the bottom foot."
+  ],
+  "rangeOfMotion": "Foot on the box → standing on it",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "step-up",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Step_Ups"
+  }
+ }
+]

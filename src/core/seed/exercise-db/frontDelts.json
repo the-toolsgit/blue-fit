@@ -1,0 +1,1320 @@
+[
+ {
+  "id": "machine-shoulder-press",
+  "name": "Machine Shoulder Press",
+  "aliases": [
+   "Machine Shoulder (Military) Press",
+   "Shoulder Press Machine"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Front delts and triceps.",
+  "setup": [
+   "Seat so the handles start at chin height.",
+   "Back flat on the pad."
+  ],
+  "form": [
+   "Push up until your arms are almost straight.",
+   "Lower slowly to chin height."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching off the pad.",
+   "Bouncing at the bottom.",
+   "Only doing the top half."
+  ],
+  "rangeOfMotion": "Chin height → arms almost straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead",
+  "preferred": {
+   "goals": [
+    "growth",
+    "strength"
+   ],
+   "why": "Stable and easy to load: top-rated press for the front delts.",
+   "source": {
+    "url": "https://barbend.com/news/best-worst-shoulder-exercises-tier-list/",
+    "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11239729/"
+   }
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Machine_Shoulder_Military_Press"
+  },
+  "formerIds": [
+   "machine-shoulder-military-press"
+  ]
+ },
+ {
+  "id": "leverage-shoulder-press",
+  "name": "Plate-loaded Shoulder Press",
+  "aliases": [
+   "Leverage Shoulder Press",
+   "Hammer Strength Shoulder Press"
+  ],
+  "equipment": "plateMachine",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Heavy press in a fixed path.",
+  "setup": [
+   "Seat so the handles start at the top of your shoulders.",
+   "Back flat on the pad."
+  ],
+  "form": [
+   "Press up until your arms are almost straight.",
+   "Lower slowly back to shoulder height."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching off the pad.",
+   "Bouncing at the bottom."
+  ],
+  "rangeOfMotion": "Shoulder height → arms almost straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Leverage_Shoulder_Press"
+  }
+ },
+ {
+  "id": "seated-dumbbell-press",
+  "name": "Seated Dumbbell Shoulder Press",
+  "aliases": [
+   "Seated Dumbbell Press",
+   "Dumbbell Shoulder Press",
+   "Seated DB Shoulder Press"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Free-weight press, each arm on its own.",
+  "setup": [
+   "Bench upright with back support.",
+   "Kick the dumbbells up to your shoulders, palms forward."
+  ],
+  "form": [
+   "Press up until your arms are almost straight.",
+   "Lower slowly until the dumbbells reach your shoulders."
+  ],
+  "tips": [
+   "Elbows a little in front of your body, not flared straight out."
+  ],
+  "avoid": [
+   "Arching your lower back.",
+   "Clanking the dumbbells at the top."
+  ],
+  "rangeOfMotion": "Dumbbells at shoulders → arms almost straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated free-weight press for the front delts.",
+   "source": {
+    "url": "https://barbend.com/news/best-worst-shoulder-exercises-tier-list/",
+    "url2": "https://builtwithscience.com/fitness-tips/best-shoulder-exercises/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Dumbbell_Press"
+  },
+  "formerIds": [
+   "dumbbell-shoulder-press"
+  ]
+ },
+ {
+  "id": "standing-dumbbell-press",
+  "name": "Standing Dumbbell Shoulder Press",
+  "aliases": [
+   "Standing Dumbbell Press",
+   "Standing Alternating Dumbbell Press",
+   "Standing DB Overhead Press"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Overhead press standing, both arms or one at a time.",
+  "setup": [
+   "Stand tall, dumbbells at head height, palms forward.",
+   "Squeeze your glutes and brace."
+  ],
+  "form": [
+   "Press up until your arms are almost straight.",
+   "Lower slowly to head height."
+  ],
+  "tips": [
+   "Pressing one arm at a time is fine."
+  ],
+  "avoid": [
+   "Leaning back.",
+   "Using your legs to push the weight up."
+  ],
+  "rangeOfMotion": "Dumbbells at head height → arms almost straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead-standing",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Dumbbell_Press"
+  },
+  "formerIds": [
+   "standing-alternating-dumbbell-press"
+  ]
+ },
+ {
+  "id": "standing-palms-in-dumbbell-press",
+  "name": "Standing Palms-In Dumbbell Press",
+  "aliases": [
+   "Neutral-grip Dumbbell Shoulder Press"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Palms-in press: easier on sore shoulders.",
+  "setup": [
+   "Stand tall, dumbbells at your shoulders, palms facing each other.",
+   "Elbows in front of your body."
+  ],
+  "form": [
+   "Press straight up until your arms are almost straight.",
+   "Lower slowly to your shoulders."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back.",
+   "Flaring your elbows out."
+  ],
+  "rangeOfMotion": "Dumbbells at shoulders → arms almost straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead-standing",
+  "figureAdjust": {
+   "equipmentProp": "db",
+   "grip": "neutral"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Palms-In_Dumbbell_Press"
+  }
+ },
+ {
+  "id": "standing-palm-in-one-arm-dumbbell-press",
+  "name": "One-arm Palm-In Dumbbell Press",
+  "aliases": [
+   "Standing Palm-In One-Arm Dumbbell Press"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "One arm, palm in. Hold something with the free hand.",
+  "setup": [
+   "Stand tall, free hand on a bench or rack.",
+   "Dumbbell at your shoulder, palm facing in."
+  ],
+  "form": [
+   "Press straight up until your arm is almost straight.",
+   "Lower slowly to your shoulder."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning to the side.",
+   "Flaring your elbow out."
+  ],
+  "rangeOfMotion": "Dumbbell at shoulder → arm almost straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead-standing",
+  "figureAdjust": {
+   "equipmentProp": "db",
+   "grip": "neutral",
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Palm-In_One-Arm_Dumbbell_Press"
+  }
+ },
+ {
+  "id": "dumbbell-one-arm-shoulder-press",
+  "name": "One-arm Dumbbell Shoulder Press",
+  "aliases": [
+   "Dumbbell One-Arm Shoulder Press",
+   "Single-arm DB Overhead Press"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "One arm at a time; your core keeps you straight.",
+  "setup": [
+   "Stand tall, dumbbell at your shoulder, palm forward.",
+   "Free hand on your hip."
+  ],
+  "form": [
+   "Press up until your arm is almost straight.",
+   "Lower slowly to your shoulder."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning away from the weight.",
+   "Arching your lower back."
+  ],
+  "rangeOfMotion": "Dumbbell at shoulder → arm almost straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead-standing",
+  "figureAdjust": {
+   "equipmentProp": "db",
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_One-Arm_Shoulder_Press"
+  }
+ },
+ {
+  "id": "arnold-dumbbell-press",
+  "name": "Arnold Press",
+  "aliases": [
+   "Arnold Dumbbell Press"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Press with a twist: more front delt at the bottom.",
+  "setup": [
+   "Sit tall with back support.",
+   "Dumbbells in front of your chin, palms facing you."
+  ],
+  "form": [
+   "Press up, turning your palms forward as you go.",
+   "Lower slowly, turning them back to face you."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rushing the turn.",
+   "Arching your lower back."
+  ],
+  "rangeOfMotion": "Dumbbells at chin, palms in → arms almost straight, palms forward",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Arnold_Dumbbell_Press"
+  }
+ },
+ {
+  "id": "standing-military-press",
+  "name": "Standing Barbell Overhead Press",
+  "aliases": [
+   "Standing Military Press",
+   "Overhead Press",
+   "OHP",
+   "Barbell Military Press"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "The classic heavy overhead lift.",
+  "setup": [
+   "Bar on your upper chest, hands just wider than your shoulders.",
+   "Squeeze your glutes and brace."
+  ],
+  "form": [
+   "Press straight up, moving your head back to clear the bar.",
+   "Finish with the bar over your head, then lower to your chest."
+  ],
+  "tips": [
+   "Start it from a rack at chest height."
+  ],
+  "avoid": [
+   "Leaning far back.",
+   "Pushing with your legs."
+  ],
+  "rangeOfMotion": "Bar on upper chest → arms straight overhead",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead-standing",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "preferred": {
+   "goals": [
+    "strength"
+   ],
+   "why": "The main overhead strength lift; strength is specific to the lift trained.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19204579/",
+    "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11239729/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Military_Press"
+  }
+ },
+ {
+  "id": "seated-barbell-military-press",
+  "name": "Seated Barbell Shoulder Press",
+  "aliases": [
+   "Seated Barbell Military Press",
+   "Barbell Shoulder Press",
+   "Seated Overhead Press"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Overhead press with your back supported.",
+  "setup": [
+   "Upright bench in a rack, bar just above your head.",
+   "Hands just wider than your shoulders."
+  ],
+  "form": [
+   "Lower the bar slowly to your collarbone.",
+   "Press back up until your arms are straight."
+  ],
+  "tips": [
+   "Set the safety bars just below collarbone height."
+  ],
+  "avoid": [
+   "Arching off the bench.",
+   "Bouncing the bar off your chest."
+  ],
+  "rangeOfMotion": "Bar at collarbone → arms straight overhead",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Barbell_Military_Press"
+  },
+  "formerIds": [
+   "barbell-shoulder-press"
+  ]
+ },
+ {
+  "id": "standing-barbell-press-behind-neck",
+  "name": "Behind-the-Neck Press",
+  "aliases": [
+   "Standing Barbell Press Behind Neck",
+   "Behind the Neck Shoulder Press"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Overhead press from behind the head. Only if your shoulders allow it.",
+  "setup": [
+   "Bar on your upper back in a rack, hands wide.",
+   "Stand tall, brace."
+  ],
+  "form": [
+   "Press up until your arms are straight.",
+   "Lower slowly to just below the top of your head."
+  ],
+  "tips": [
+   "Go light; stop higher if your shoulders pinch."
+  ],
+  "avoid": [
+   "Lowering all the way to your neck.",
+   "Pushing your head forward."
+  ],
+  "rangeOfMotion": "Bar behind head → arms straight overhead",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead-standing",
+  "figureAdjust": {
+   "equipmentProp": "bar",
+   "grip": "wide"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Barbell_Press_Behind_Neck"
+  }
+ },
+ {
+  "id": "smith-machine-overhead-shoulder-press",
+  "name": "Smith Machine Shoulder Press",
+  "aliases": [
+   "Smith Machine Overhead Shoulder Press",
+   "Smith Machine Overhead Press"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Heavy press in a fixed bar path.",
+  "setup": [
+   "Bench upright under the bar, bar in front of your face.",
+   "Hands just wider than your shoulders. Set the stops."
+  ],
+  "form": [
+   "Press up until your arms are almost straight.",
+   "Lower slowly to chin height."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching off the bench.",
+   "Bouncing at the bottom."
+  ],
+  "rangeOfMotion": "Bar at chin → arms almost straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "preferred": {
+   "goals": [
+    "strength"
+   ],
+   "why": "Heavy, stable overhead press that is easy to load in small steps.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19204579/",
+    "url2": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11239729/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Machine_Overhead_Shoulder_Press"
+  }
+ },
+ {
+  "id": "cable-shoulder-press",
+  "name": "Standing Cable Shoulder Press",
+  "aliases": [
+   "Cable Shoulder Press",
+   "Alternating Cable Shoulder Press"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Overhead press with steady cable tension.",
+  "setup": [
+   "Pulleys low, stand between them.",
+   "Handles at your shoulders, palms forward."
+  ],
+  "form": [
+   "Press up until your arms are almost straight.",
+   "Lower slowly to your shoulders."
+  ],
+  "tips": [
+   "Pressing one arm at a time is fine."
+  ],
+  "avoid": [
+   "Leaning back.",
+   "Using your legs."
+  ],
+  "rangeOfMotion": "Handles at shoulders → arms almost straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead-standing",
+  "figureAdjust": {
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Shoulder_Press"
+  },
+  "formerIds": [
+   "alternating-cable-shoulder-press"
+  ]
+ },
+ {
+  "id": "seated-cable-shoulder-press",
+  "name": "Seated Cable Shoulder Press",
+  "aliases": [],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Seated press with cables.",
+  "setup": [
+   "Sit tall, back supported.",
+   "Handles at your shoulders, elbows bent at 90°."
+  ],
+  "form": [
+   "Press up, bringing the handles together over your head.",
+   "Lower slowly to your shoulders."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching off the seat.",
+   "Half reps."
+  ],
+  "rangeOfMotion": "Handles at shoulders → arms almost straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead",
+  "figureAdjust": {
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Cable_Shoulder_Press"
+  }
+ },
+ {
+  "id": "landmine-press",
+  "name": "Landmine Press",
+  "aliases": [
+   "Single-arm Landmine Press",
+   "Half-kneeling Landmine Press",
+   "Kneeling Landmine Press"
+  ],
+  "equipment": "barbell",
+  "singleSleeve": true,
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "why": "Angled press: easy on the shoulders.",
+  "setup": [
+   "Bar end in a landmine or corner, other end at your shoulder.",
+   "Stand or half-kneel, brace."
+  ],
+  "form": [
+   "Press up and forward until your arm is straight.",
+   "Lower slowly back to your shoulder."
+  ],
+  "tips": [
+   "One arm works the shoulder more; two hands shift work to the chest."
+  ],
+  "avoid": [
+   "Leaning back.",
+   "Letting the bar drift to your middle."
+  ],
+  "rangeOfMotion": "Bar at shoulder → arm straight up and forward",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead-standing",
+  "figureAdjust": {
+   "equipmentProp": "bar",
+   "oneArm": true
+  },
+  "source": {
+   "url": "https://www.coachweb.com/barbell-exercises/7377/how-to-do-the-landmine-press",
+   "url2": "https://builtwithscience.com/fitness-tips/best-shoulder-exercises/"
+  }
+ },
+ {
+  "id": "handstand-push-ups",
+  "name": "Handstand Push-up",
+  "aliases": [
+   "Handstand Push-Ups",
+   "Wall Handstand Push-up"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   },
+   {
+    "group": "sideDelts",
+    "weight": 0.5
+   },
+   {
+    "group": "triceps",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Bodyweight overhead press.",
+  "setup": [
+   "Kick up into a handstand, heels against a wall.",
+   "Hands just wider than your shoulders."
+  ],
+  "form": [
+   "Lower slowly until your head nearly touches the floor.",
+   "Push back up until your arms are straight."
+  ],
+  "tips": [
+   "Put a folded mat under your head."
+  ],
+  "avoid": [
+   "Dropping fast onto your head.",
+   "Arching your back hard."
+  ],
+  "rangeOfMotion": "Arms straight → head near the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "press-overhead-standing",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Handstand_Push-Ups"
+  }
+ },
+ {
+  "id": "front-dumbbell-raise",
+  "name": "Dumbbell Front Raise",
+  "aliases": [
+   "Front Dumbbell Raise",
+   "Front Two-Dumbbell Raise",
+   "Alternating Dumbbell Front Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Front delts on their own.",
+  "setup": [
+   "Stand tall, dumbbells in front of your thighs."
+  ],
+  "form": [
+   "Raise your arms in front to shoulder height, elbows slightly bent.",
+   "Lower slowly."
+  ],
+  "tips": [
+   "Both arms together or one at a time."
+  ],
+  "avoid": [
+   "Swinging your body.",
+   "Going far above your head."
+  ],
+  "rangeOfMotion": "Arms down → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "front-raise",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Front_Dumbbell_Raise"
+  },
+  "formerIds": [
+   "front-two-dumbbell-raise"
+  ]
+ },
+ {
+  "id": "front-cable-raise",
+  "name": "Cable Front Raise",
+  "aliases": [
+   "Front Cable Raise"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Front raise with tension at the bottom.",
+  "setup": [
+   "Pulley low, stand facing away, handle in front of your thighs."
+  ],
+  "form": [
+   "Raise your arm in front to shoulder height.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Shrugging."
+  ],
+  "rangeOfMotion": "Arm down → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "front-raise",
+  "figureAdjust": {
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Front_Cable_Raise"
+  }
+ },
+ {
+  "id": "front-incline-dumbbell-raise",
+  "name": "Incline Dumbbell Front Raise",
+  "aliases": [
+   "Front Incline Dumbbell Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Back on an incline: front delts work from a longer start.",
+  "setup": [
+   "Sit back on a 30–60° bench.",
+   "Dumbbells just above your thighs, palms down."
+  ],
+  "form": [
+   "Raise your arms in front to shoulder height.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lifting your back off the bench.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Arms by your thighs → shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "front-raise",
+  "figureAdjust": {
+   "bench": "incline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Front_Incline_Dumbbell_Raise"
+  }
+ },
+ {
+  "id": "front-plate-raise",
+  "name": "Plate Front Raise",
+  "aliases": [
+   "Front Plate Raise"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Front raise holding one plate.",
+  "setup": [
+   "Hold a plate at 3 and 9 o'clock, arms straight down."
+  ],
+  "form": [
+   "Raise the plate to eye height, arms almost straight.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back.",
+   "Bending the elbows a lot."
+  ],
+  "rangeOfMotion": "Plate at your waist → eye height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "front-raise",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Front_Plate_Raise"
+  }
+ },
+ {
+  "id": "single-dumbbell-raise",
+  "name": "Single Dumbbell Front Raise",
+  "aliases": [
+   "Single Dumbbell Raise",
+   "Two-hand Dumbbell Front Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Front raise holding one dumbbell in both hands.",
+  "setup": [
+   "Wide stance, both hands on one dumbbell head, arms down."
+  ],
+  "form": [
+   "Raise it to just above shoulder height, arms straight.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Dumbbell at your waist → above shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "front-raise",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Single_Dumbbell_Raise"
+  }
+ },
+ {
+  "id": "standing-front-barbell-raise-over-head",
+  "name": "Barbell Front Raise to Overhead",
+  "aliases": [
+   "Standing Front Barbell Raise Over Head",
+   "Barbell Front Raise"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Front raise with a bar, all the way up.",
+  "setup": [
+   "Light bar, hands a bit closer than shoulder width.",
+   "Bar in front of your thighs, elbows slightly bent."
+  ],
+  "form": [
+   "Raise the bar in front of you until it is over your head.",
+   "Lower slowly the same way."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back.",
+   "Bending the elbows to help."
+  ],
+  "rangeOfMotion": "Bar at thighs → over your head",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "front-raise",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Front_Barbell_Raise_Over_Head"
+  }
+ },
+ {
+  "id": "dumbbell-front-raise-above-head",
+  "name": "Dumbbell Front Raise to Overhead",
+  "aliases": [
+   "Standing Dumbbell Straight-Arm Front Delt Raise Above Head"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "frontDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "frontDelts": "press"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Front raise past shoulder height, all the way up.",
+  "setup": [
+   "Light dumbbells in front of your thighs, palms in."
+  ],
+  "form": [
+   "Raise in a big arc until your arms are straight overhead.",
+   "Lower slowly the same way."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Arms down → straight overhead",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "front-raise",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Dumbbell_Straight-Arm_Front_Delt_Raise_Above_Head"
+  }
+ }
+]

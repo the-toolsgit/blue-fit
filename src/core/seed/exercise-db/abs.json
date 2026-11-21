@@ -1,0 +1,2311 @@
+[
+ {
+  "id": "cable-crunch",
+  "name": "Cable Crunch",
+  "aliases": [
+   "Kneeling Cable Crunch",
+   "Rope Crunch",
+   "Rope cable crunch"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "stretch": [
+   "abs"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Crunch you can load and add weight to easily.",
+  "setup": [
+   "Rope on a high pulley. Kneel facing it, hands by your face.",
+   "Let the weight pull your back into a slight arch."
+  ],
+  "form": [
+   "Curl your ribs toward your hips, elbows to mid-thighs. Squeeze 1 s.",
+   "Uncurl slowly until your back arches again."
+  ],
+  "tips": [
+   "Keep your hips still: the spine does the work."
+  ],
+  "avoid": [
+   "Sitting back on your heels to move the weight.",
+   "Pulling with your arms."
+  ],
+  "rangeOfMotion": "Back slightly arched → spine fully curled",
+  "tempo": "Down 1 s · Hold 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "cable-crunch",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Easy to load and progress, with a stretch at the top; rated the best ab exercise.",
+   "source": {
+    "url": "https://builtwithscience.com/fitness-tips/best-ab-exercises/",
+    "url2": "https://www.t3.com/active/an-exercise-scientist-ranks-every-ab-exercise-and-the-worst-one-may-surprise-you"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Crunch"
+  },
+  "formerIds": [
+   "rope-crunch"
+  ]
+ },
+ {
+  "id": "cable-seated-crunch",
+  "name": "Seated Cable Crunch",
+  "aliases": [
+   "Cable Seated Crunch"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "stretch": [
+   "abs"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Cable crunch done sitting on a bench.",
+  "setup": [
+   "Sit on a bench, back to a high pulley.",
+   "Rope over your shoulders, hands by your chest."
+  ],
+  "form": [
+   "Curl your ribs down toward your hips.",
+   "Uncurl slowly until your back arches slightly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending at the hips instead of curling.",
+   "Pulling with your arms."
+  ],
+  "rangeOfMotion": "Back slightly arched → spine fully curled",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "cable-crunch",
+  "figureAdjust": {
+   "seated": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Seated_Crunch"
+  }
+ },
+ {
+  "id": "standing-rope-crunch",
+  "name": "Standing Cable Crunch",
+  "aliases": [
+   "Standing Rope Crunch",
+   "Face-away standing cable crunch"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Cable crunch done standing, back to the pulley.",
+  "setup": [
+   "Rope on a high pulley. Stand with your back to it.",
+   "Rope over your shoulders, hands at your upper chest."
+  ],
+  "form": [
+   "Curl your ribs down toward your hips.",
+   "Uncurl slowly until you stand tall."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending at the hips or knees instead of curling."
+  ],
+  "rangeOfMotion": "Standing tall → spine fully curled",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "cable-crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Rope_Crunch"
+  }
+ },
+ {
+  "id": "ab-crunch-machine",
+  "name": "Machine Crunch",
+  "aliases": [
+   "Ab Crunch Machine",
+   "Ab machine"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Loaded crunch on a machine: simple to push hard.",
+  "setup": [
+   "Set the seat so the pads sit on your chest or upper arms.",
+   "Feet under the foot pads."
+  ],
+  "form": [
+   "Curl your chest down toward your knees.",
+   "Come back up slowly until the weight almost touches."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling with your arms.",
+   "Letting the weight stack slam."
+  ],
+  "rangeOfMotion": "Upright → spine fully curled",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "cable-crunch",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Ab_Crunch_Machine"
+  }
+ },
+ {
+  "id": "cable-reverse-crunch",
+  "name": "Cable Reverse Crunch",
+  "aliases": [],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Reverse crunch with cable weight on the ankles.",
+  "setup": [
+   "Ankle straps on a low pulley. Lie on your back, feet toward it.",
+   "Knees bent 90°, thighs straight up."
+  ],
+  "form": [
+   "Curl your hips off the floor, knees toward your chest.",
+   "Lower your hips slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your legs.",
+   "Letting the cable pull your legs straight."
+  ],
+  "rangeOfMotion": "Hips on the floor → hips curled up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "leg-raise-lying",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Reverse_Crunch"
+  }
+ },
+ {
+  "id": "kneeling-cable-crunch-with-alternating-oblique-twists",
+  "name": "Cable Oblique Crunch",
+  "aliases": [
+   "Kneeling Cable Crunch With Alternating Oblique Twists",
+   "Kneeling cable twist crunch"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Cable crunch with a twist: obliques.",
+  "setup": [
+   "Rope on a high pulley. Kneel facing it, hands by your ears."
+  ],
+  "form": [
+   "Curl down and turn, elbow toward the opposite knee.",
+   "Come up slowly; switch sides each rep."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling with your arms.",
+   "Sitting back on your heels."
+  ],
+  "rangeOfMotion": "Upright → spine curled and turned",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "cable-crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Kneeling_Cable_Crunch_With_Alternating_Oblique_Twists"
+  }
+ },
+ {
+  "id": "crunches",
+  "name": "Crunch",
+  "aliases": [
+   "Crunches",
+   "Crunch - Hands Overhead",
+   "Crunch - Legs On Exercise Ball",
+   "Floor crunch"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Basic crunch: short curl of the upper spine.",
+  "setup": [
+   "Lie on your back, knees bent, feet flat or on a bench or ball.",
+   "Fingertips by your head, or arms overhead (harder)."
+  ],
+  "form": [
+   "Curl your shoulders off the floor, ribs toward hips.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling on your neck.",
+   "Lifting your lower back off the floor."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders curled up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Crunches"
+  },
+  "formerIds": [
+   "crunch-hands-overhead",
+   "crunch-legs-on-exercise-ball"
+  ]
+ },
+ {
+  "id": "weighted-crunch",
+  "name": "Weighted Crunch",
+  "aliases": [
+   "Weighted Crunches",
+   "Plate crunch",
+   "Medicine ball crunch"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Crunch with a plate or ball for added weight.",
+  "setup": [
+   "Lie on your back, knees bent.",
+   "Plate or ball on your chest, or arms straight up with it."
+  ],
+  "form": [
+   "Curl your shoulders off the floor.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling with your arms.",
+   "Lifting your lower back off the floor."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders curled up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Weighted_Crunches"
+  }
+ },
+ {
+  "id": "exercise-ball-crunch",
+  "name": "Stability Ball Crunch",
+  "aliases": [
+   "Exercise Ball Crunch",
+   "Swiss ball crunch"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "stretch": [
+   "abs"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Crunch over a ball: abs work from a stretch.",
+  "setup": [
+   "Lower back on the ball, feet flat, knees bent.",
+   "Let your upper back drape back over the ball."
+  ],
+  "form": [
+   "Curl your ribs up toward your hips.",
+   "Lower back over the ball to the stretch."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rolling the ball instead of curling.",
+   "Pulling on your neck."
+  ],
+  "rangeOfMotion": "Back arched over the ball → spine curled",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Exercise_Ball_Crunch"
+  }
+ },
+ {
+  "id": "decline-crunch",
+  "name": "Decline Crunch",
+  "aliases": [],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Crunch on a decline bench: harder than the floor.",
+  "setup": [
+   "Feet locked in on a decline bench, lie back.",
+   "Fingertips by your head."
+  ],
+  "form": [
+   "Curl your shoulders up, lower back stays down.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Sitting all the way up (the hips take over).",
+   "Pulling on your neck."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders curled up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "figureAdjust": {
+   "bench": "decline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Decline_Crunch"
+  }
+ },
+ {
+  "id": "tuck-crunch",
+  "name": "Tuck Crunch",
+  "aliases": [],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Crunch with the legs held up.",
+  "setup": [
+   "Lie on your back, thighs straight up, ankles crossed.",
+   "Hands by your sides or your head."
+  ],
+  "form": [
+   "Curl your shoulders up toward your knees.",
+   "Lower slowly; legs stay up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your legs.",
+   "Pulling on your neck."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders curled up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Tuck_Crunch"
+  }
+ },
+ {
+  "id": "sit-up",
+  "name": "Sit-Up",
+  "aliases": [
+   "3/4 Sit-Up",
+   "Anchored sit-up"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Full curl from lying to sitting.",
+  "setup": [
+   "Lie on your back, knees bent, feet anchored.",
+   "Hands by your head or crossed on your chest."
+  ],
+  "form": [
+   "Curl up until your chest nears your knees.",
+   "Lower slowly, one part of the back at a time."
+  ],
+  "tips": [],
+  "avoid": [
+   "Yanking on your neck.",
+   "Throwing yourself up."
+  ],
+  "rangeOfMotion": "Lying flat → chest near knees",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Sit-Up"
+  },
+  "formerIds": [
+   "3-4-sit-up"
+  ]
+ },
+ {
+  "id": "janda-sit-up",
+  "name": "Janda Sit-Up",
+  "aliases": [],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Sit-up with the backs of the legs tight: less hip, more abs.",
+  "setup": [
+   "Lie on your back, knees bent 90°, feet flat.",
+   "Arms crossed on your chest."
+  ],
+  "form": [
+   "Press your heels down, tighten your glutes, curl up slowly.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Feet lifting off the floor.",
+   "Jerking up."
+  ],
+  "rangeOfMotion": "Lying flat → sitting up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Janda_Sit-Up"
+  }
+ },
+ {
+  "id": "jackknife-sit-up",
+  "name": "V-Up",
+  "aliases": [
+   "Jackknife Sit-Up",
+   "Jackknife"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Arms and legs meet over the hips.",
+  "setup": [
+   "Lie flat, arms overhead, legs straight."
+  ],
+  "form": [
+   "Lift arms and legs together; reach for your feet.",
+   "Lower both slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your knees a lot.",
+   "Crashing down."
+  ],
+  "rangeOfMotion": "Lying flat → hands near feet",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Jackknife_Sit-Up"
+  }
+ },
+ {
+  "id": "press-sit-up",
+  "name": "Press Sit-Up",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "unsafeFailure": true,
+  "why": "Sit-up while pressing a light bar overhead.",
+  "setup": [
+   "Lie on an ab bench, feet locked, light barbell on your chest."
+  ],
+  "form": [
+   "Sit up and press the bar overhead as you rise.",
+   "Lie back slowly, bringing the bar back to your chest."
+  ],
+  "tips": [],
+  "avoid": [
+   "Heavy weight: the bar passes over your face.",
+   "Arching your back to press."
+  ],
+  "rangeOfMotion": "Lying, bar on chest → sitting, bar overhead",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Press_Sit-Up"
+  }
+ },
+ {
+  "id": "reverse-crunch",
+  "name": "Reverse Crunch",
+  "aliases": [
+   "Bent-Knee Hip Raise",
+   "Lying knee tuck"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hips curl up toward the ribs.",
+  "setup": [
+   "Lie on your back, hands by your sides.",
+   "Thighs straight up, knees bent."
+  ],
+  "form": [
+   "Curl your hips off the floor, knees toward your chest.",
+   "Lower your hips slowly."
+  ],
+  "tips": [
+   "Straighten your legs more to make it harder."
+  ],
+  "avoid": [
+   "Swinging your legs for momentum.",
+   "Dropping your hips fast."
+  ],
+  "rangeOfMotion": "Hips on the floor → hips curled up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "leg-raise-lying",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Lower-ab pick: the hips curl up, and it is easy to make harder.",
+   "source": {
+    "url": "https://builtwithscience.com/fitness-tips/best-ab-exercises/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Reverse_Crunch"
+  },
+  "formerIds": [
+   "bent-knee-hip-raise"
+  ]
+ },
+ {
+  "id": "decline-reverse-crunch",
+  "name": "Decline Reverse Crunch",
+  "aliases": [],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Reverse crunch on a decline bench: harder.",
+  "setup": [
+   "Lie on a decline bench, head at the top, grip the bench behind your head.",
+   "Legs out, knees slightly bent."
+  ],
+  "form": [
+   "Bring your knees to your chest and curl your hips up.",
+   "Lower slowly until your legs are almost straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your legs.",
+   "Dropping your hips fast."
+  ],
+  "rangeOfMotion": "Legs out → hips curled up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "leg-raise-lying",
+  "figureAdjust": {
+   "bench": "decline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Decline_Reverse_Crunch"
+  }
+ },
+ {
+  "id": "flat-bench-leg-pull-in",
+  "name": "Lying Leg Pull-In",
+  "aliases": [
+   "Flat Bench Leg Pull-In",
+   "Leg Pull-In",
+   "Lying knee raise"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Knees pulled in from straight legs, lying down.",
+  "setup": [
+   "Lie on a bench or mat, legs straight, hands under your hips or gripping the bench."
+  ],
+  "form": [
+   "Pull your knees to your chest.",
+   "Straighten your legs slowly without touching down."
+  ],
+  "tips": [],
+  "avoid": [
+   "Arching your lower back.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Legs straight → knees to chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "leg-raise-lying",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Flat_Bench_Leg_Pull-In"
+  },
+  "formerIds": [
+   "leg-pull-in"
+  ]
+ },
+ {
+  "id": "seated-flat-bench-leg-pull-in",
+  "name": "Seated Knee Tuck",
+  "aliases": [
+   "Seated Flat Bench Leg Pull-In",
+   "Seated Leg Tucks",
+   "Bench knee tuck"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Knees and chest come together, sitting on a bench.",
+  "setup": [
+   "Sit on the bench edge, grip the sides, lean back about 45°.",
+   "Legs straight out, feet off the floor."
+  ],
+  "form": [
+   "Pull your knees in as you bring your chest toward them.",
+   "Straighten out slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rocking for momentum."
+  ],
+  "rangeOfMotion": "Legs straight → knees to chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "leg-raise-lying",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Flat_Bench_Leg_Pull-In"
+  },
+  "formerIds": [
+   "seated-leg-tucks"
+  ]
+ },
+ {
+  "id": "flat-bench-lying-leg-raise",
+  "name": "Lying Leg Raise",
+  "aliases": [
+   "Flat Bench Lying Leg Raise",
+   "Bench leg raise"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Straight-leg raise lying on a bench.",
+  "setup": [
+   "Lie on a bench, legs off the end, hands gripping the bench."
+  ],
+  "form": [
+   "Raise straight legs until they point up.",
+   "Lower slowly to just above level."
+  ],
+  "tips": [
+   "Curl your hips up a little at the top for more abs."
+  ],
+  "avoid": [
+   "Arching your lower back.",
+   "Dropping your legs."
+  ],
+  "rangeOfMotion": "Legs level → legs pointing up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "leg-raise-lying",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Flat_Bench_Lying_Leg_Raise"
+  }
+ },
+ {
+  "id": "hanging-leg-raise",
+  "name": "Hanging Leg Raise",
+  "aliases": [
+   "Hanging straight leg raise"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hard leg raise from a bar.",
+  "setup": [
+   "Hang from a bar, arms straight, legs together."
+  ],
+  "form": [
+   "Raise your legs until your hips curl up.",
+   "Lower slowly without swinging."
+  ],
+  "tips": [
+   "Bend your knees to make it easier."
+  ],
+  "avoid": [
+   "Swinging.",
+   "Only lifting the legs, without curling the hips."
+  ],
+  "rangeOfMotion": "Hanging straight → hips curled, legs up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "leg-raise-hanging",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Leg-raise pick to pair with a loaded crunch: the hips curl up against the legs' weight.",
+   "source": {
+    "url": "https://fitnessvolt.com/jeff-nippard-6-pack-abs-tips/",
+    "url2": "https://www.strengthlog.com/hanging-leg-raise/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Hanging_Leg_Raise"
+  }
+ },
+ {
+  "id": "hanging-knee-raise",
+  "name": "Hanging Knee Raise",
+  "aliases": [
+   "Hanging knee tuck"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Easier hanging raise with bent knees.",
+  "setup": [
+   "Hang from a bar, arms straight."
+  ],
+  "form": [
+   "Bring your knees up to your chest, curling your hips.",
+   "Lower slowly until your legs hang straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging.",
+   "Leaning far back."
+  ],
+  "rangeOfMotion": "Hanging straight → knees to chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "leg-raise-hanging",
+  "source": {
+   "url": "https://www.strengthlog.com/hanging-knee-raise/",
+   "url2": "https://barbend.com/hanging-knee-raises/"
+  }
+ },
+ {
+  "id": "hanging-pike",
+  "name": "Hanging Pike",
+  "aliases": [
+   "Toes-to-bar"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hanging raise all the way to the bar.",
+  "setup": [
+   "Hang from a bar, overhand grip, legs together."
+  ],
+  "form": [
+   "Raise your legs until your feet near the bar.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Kipping or swinging."
+  ],
+  "rangeOfMotion": "Hanging straight → feet near the bar",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "leg-raise-hanging",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Hanging_Pike"
+  }
+ },
+ {
+  "id": "knee-hip-raise-on-parallel-bars",
+  "name": "Captain's Chair Knee Raise",
+  "aliases": [
+   "Knee/Hip Raise On Parallel Bars",
+   "Vertical knee raise",
+   "Roman chair knee raise"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Knee raise with your forearms on pads.",
+  "setup": [
+   "Forearms on the pads, back against the back pad, legs hanging."
+  ],
+  "form": [
+   "Bring your knees up and curl your hips off the pad.",
+   "Lower slowly until your legs hang."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging.",
+   "Stopping with the knees at hip height."
+  ],
+  "rangeOfMotion": "Legs hanging → knees to chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "leg-raise-hanging",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Knee_Hip_Raise_On_Parallel_Bars"
+  }
+ },
+ {
+  "id": "smith-machine-hip-raise",
+  "name": "Smith Machine Hip Raise",
+  "aliases": [],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Reverse crunch with a Smith bar on your feet.",
+  "setup": [
+   "Bench under a Smith bar. Lie back, soles of your feet against the bar.",
+   "Unrack and straighten your legs."
+  ],
+  "form": [
+   "Push the bar up by curling your hips off the bench.",
+   "Lower your hips slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your knees to push.",
+   "Too much weight."
+  ],
+  "rangeOfMotion": "Hips on the bench → hips curled up",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "leg-raise-lying",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Machine_Hip_Raise"
+  }
+ },
+ {
+  "id": "ab-roller",
+  "name": "Ab Wheel Rollout",
+  "aliases": [
+   "Ab Roller",
+   "Ab wheel",
+   "Kneeling ab wheel rollout"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "stretch": [
+   "abs"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Abs stop your back from sagging as you stretch out.",
+  "setup": [
+   "Kneel, hands on the wheel under your shoulders."
+  ],
+  "form": [
+   "Roll forward slowly as far as you can without your back sagging.",
+   "Pull back with your abs to the start."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lower back sagging.",
+   "Rolling with the arms while the hips stay high."
+  ],
+  "rangeOfMotion": "Kneeling, wheel under shoulders → body stretched out",
+  "tempo": "Out 3 s · In 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "ab-wheel",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Ab_Roller"
+  }
+ },
+ {
+  "id": "barbell-ab-rollout-on-knees",
+  "name": "Barbell Rollout",
+  "aliases": [
+   "Barbell Ab Rollout - On Knees",
+   "Kneeling barbell rollout"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "stretch": [
+   "abs"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Ab wheel rollout with a lightly loaded barbell.",
+  "setup": [
+   "Small plates on a barbell. Kneel, hands on the bar under your shoulders."
+  ],
+  "form": [
+   "Roll forward slowly as far as you can without your back sagging.",
+   "Pull back with your abs to the start."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lower back sagging."
+  ],
+  "rangeOfMotion": "Kneeling, bar under shoulders → body stretched out",
+  "tempo": "Out 3 s · In 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "ab-wheel",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Ab_Rollout_-_On_Knees"
+  }
+ },
+ {
+  "id": "barbell-ab-rollout",
+  "name": "Barbell Rollout on Toes",
+  "aliases": [
+   "Barbell Ab Rollout",
+   "Standing ab rollout"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "stretch": [
+   "abs"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hardest rollout: from your toes.",
+  "setup": [
+   "Small plates on a barbell. Push-up position on your toes, hands on the bar."
+  ],
+  "form": [
+   "Roll the bar forward as far as you can, back flat.",
+   "Pull back with your abs, hips rising."
+  ],
+  "tips": [
+   "Master the kneeling rollout first."
+  ],
+  "avoid": [
+   "Lower back sagging."
+  ],
+  "rangeOfMotion": "Hips high → body stretched out",
+  "tempo": "Out 3 s · In 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "ab-wheel",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Ab_Rollout"
+  }
+ },
+ {
+  "id": "barbell-rollout-from-bench",
+  "name": "Barbell Rollout from Bench",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "stretch": [
+   "abs"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Rollout kneeling on a bench, bar on the floor.",
+  "setup": [
+   "Kneel on the end of a bench, hands on a loaded bar on the floor."
+  ],
+  "form": [
+   "Roll the bar forward, reaching your arms out overhead.",
+   "Pull back to the start with your abs."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lower back sagging."
+  ],
+  "rangeOfMotion": "Bar under shoulders → arms overhead, body long",
+  "tempo": "Out 3 s · In 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "ab-wheel",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Rollout_from_Bench"
+  }
+ },
+ {
+  "id": "dead-bug",
+  "name": "Dead Bug",
+  "aliases": [],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "rectus abs"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Slow arm and leg reaches with the lower back flat.",
+  "setup": [
+   "Lie on your back, arms straight up, hips and knees bent 90°.",
+   "Press your lower back into the floor."
+  ],
+  "form": [
+   "Lower one arm and the opposite leg slowly toward the floor.",
+   "Bring them back; switch sides."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lower back lifting off the floor.",
+   "Rushing."
+  ],
+  "rangeOfMotion": "Arms and legs up → opposite arm and leg near the floor",
+  "tempo": "Out 3 s · In 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "leg-raise-lying",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dead_Bug"
+  }
+ },
+ {
+  "id": "dumbbell-side-bend",
+  "name": "Dumbbell Side Bend",
+  "aliases": [],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Bending sideways against a dumbbell: obliques.",
+  "setup": [
+   "Stand tall, dumbbell in one hand, other hand on your hip."
+  ],
+  "form": [
+   "Bend sideways toward the dumbbell.",
+   "Come back up past straight, a little toward the other side."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning forward or back.",
+   "Using two dumbbells (they cancel out)."
+  ],
+  "rangeOfMotion": "Bent toward the weight → bent slightly away",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "side-bend",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated oblique pick: easy to load through a full range.",
+   "source": {
+    "url": "https://www.t3.com/active/an-exercise-scientist-ranks-every-ab-exercise-and-the-worst-one-may-surprise-you",
+    "url2": "https://www.strengthlog.com/dumbbell-side-bend/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Side_Bend"
+  }
+ },
+ {
+  "id": "barbell-side-bend",
+  "name": "Barbell Side Bend",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Side bend with a bar on your back.",
+  "setup": [
+   "Bar on your upper back like a squat, feet hip-width."
+  ],
+  "form": [
+   "Bend sideways slowly.",
+   "Come back up; alternate sides."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning forward.",
+   "Heavy weight: the bar shifts on your back."
+  ],
+  "rangeOfMotion": "Upright → bent to the side",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "side-bend",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Side_Bend"
+  }
+ },
+ {
+  "id": "one-arm-high-pulley-cable-side-bends",
+  "name": "High Cable Side Bend",
+  "aliases": [
+   "One-Arm High-Pulley Cable Side Bends",
+   "Cable side crunch"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Side crunch against a high cable.",
+  "setup": [
+   "Handle on a high pulley. Stand side-on, handle by your shoulder, elbow down."
+  ],
+  "form": [
+   "Bend sideways, ribs toward your hip on the handle side.",
+   "Come back up slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling with your arm.",
+   "Leaning forward."
+  ],
+  "rangeOfMotion": "Upright → bent toward the handle side",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "side-bend",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "One-Arm_High-Pulley_Cable_Side_Bends"
+  }
+ },
+ {
+  "id": "cross-body-crunch",
+  "name": "Cross-Body Crunch",
+  "aliases": [
+   "Elbow to Knee",
+   "Oblique Crunches",
+   "Twisting crunch"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Crunch with a twist toward the opposite knee.",
+  "setup": [
+   "Lie on your back, knees bent, hands by your head."
+  ],
+  "form": [
+   "Curl up and turn, elbow toward the opposite knee.",
+   "Lower slowly; switch sides."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling your head with your hands.",
+   "Only moving the elbow."
+  ],
+  "rangeOfMotion": "Shoulders down → shoulders up and turned",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cross-Body_Crunch"
+  },
+  "formerIds": [
+   "elbow-to-knee",
+   "oblique-crunches"
+  ]
+ },
+ {
+  "id": "bicycle-crunch",
+  "name": "Bicycle Crunch",
+  "aliases": [
+   "Air Bike"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Twisting crunch with a pedaling leg motion.",
+  "setup": [
+   "Lie on your back, hands by your head, shoulders and knees up."
+  ],
+  "form": [
+   "Bring one elbow to the opposite knee as the other leg straightens.",
+   "Switch sides slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling on your neck.",
+   "Rushing."
+  ],
+  "rangeOfMotion": "Elbow to one knee → elbow to the other knee",
+  "tempo": "Left 1 s · Right 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Air_Bike"
+  }
+ },
+ {
+  "id": "alternate-heel-touchers",
+  "name": "Heel Touch",
+  "aliases": [
+   "Alternate Heel Touchers",
+   "Heel taps"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Small side bends lying down.",
+  "setup": [
+   "Lie on your back, knees bent, feet flat and apart.",
+   "Shoulders slightly off the floor, arms by your sides."
+  ],
+  "form": [
+   "Bend sideways to touch one heel.",
+   "Bend to the other heel."
+  ],
+  "tips": [],
+  "avoid": [
+   "Lowering your shoulders between reps."
+  ],
+  "rangeOfMotion": "One heel → the other heel",
+  "tempo": "Left 1 s · Right 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Alternate_Heel_Touchers"
+  }
+ },
+ {
+  "id": "oblique-crunches-on-the-floor",
+  "name": "Side-Lying Oblique Crunch",
+  "aliases": [
+   "Oblique Crunches - On The Floor"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Crunch lying on your side.",
+  "setup": [
+   "Lie on your side, knees slightly bent, top hand behind your head."
+  ],
+  "form": [
+   "Lift your top shoulder toward your hip.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling on your neck.",
+   "Rolling onto your back."
+  ],
+  "rangeOfMotion": "Lying on your side → shoulder lifted to the side",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Oblique_Crunches_-_On_The_Floor"
+  }
+ },
+ {
+  "id": "side-jackknife",
+  "name": "Side Jackknife",
+  "aliases": [
+   "Side V-up"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Side crunch with the top leg lifting too.",
+  "setup": [
+   "Lie on your side, legs straight and stacked, top hand behind your head."
+  ],
+  "form": [
+   "Raise your top leg and upper body toward each other.",
+   "Lower both slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rolling onto your back.",
+   "Swinging the leg."
+  ],
+  "rangeOfMotion": "Lying on your side → leg and shoulder raised",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Side_Jackknife"
+  }
+ },
+ {
+  "id": "decline-oblique-crunch",
+  "name": "Decline Oblique Crunch",
+  "aliases": [],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Twisting crunch on a decline bench.",
+  "setup": [
+   "Feet locked on a decline bench, upper body raised partway.",
+   "One hand by your head, the other on your thigh."
+  ],
+  "form": [
+   "Curl up and turn, elbow toward the opposite knee.",
+   "Lower slowly to the start."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling on your neck.",
+   "Dropping fast."
+  ],
+  "rangeOfMotion": "Partway up → curled and turned",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "crunch",
+  "figureAdjust": {
+   "bench": "decline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Decline_Oblique_Crunch"
+  }
+ },
+ {
+  "id": "standing-cable-wood-chop",
+  "name": "Cable Woodchop",
+  "aliases": [
+   "Standing Cable Wood Chop",
+   "High-to-low woodchop"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Turning the trunk against a cable, high to low.",
+  "setup": [
+   "Handle on a high pulley. Stand side-on, both hands on it, arms straight."
+  ],
+  "form": [
+   "Turn your chest and pull the handle down across your body to the far hip.",
+   "Return slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling with your arms.",
+   "Moving fast."
+  ],
+  "rangeOfMotion": "Hands up by the pulley → hands past the far hip",
+  "tempo": "Down 1 s · Up 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "woodchop",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Cable_Wood_Chop"
+  }
+ },
+ {
+  "id": "standing-cable-lift",
+  "name": "Cable Low-to-High Woodchop",
+  "aliases": [
+   "Standing Cable Lift",
+   "Cable lift"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Turning the trunk against a cable, low to high.",
+  "setup": [
+   "Handle on a low pulley. Stand side-on, both hands on it, arms straight."
+  ],
+  "form": [
+   "Turn your chest and lift the handle up across your body.",
+   "Return slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Pulling with your arms.",
+   "Moving fast."
+  ],
+  "rangeOfMotion": "Hands low by the pulley → hands above the far shoulder",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "woodchop",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Cable_Lift"
+  }
+ },
+ {
+  "id": "pallof-press",
+  "name": "Pallof Press",
+  "aliases": [
+   "Anti-rotation press"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Abs keep the cable from turning you.",
+  "setup": [
+   "Handle on a cable at chest height. Stand side-on, handle at your chest."
+  ],
+  "form": [
+   "Press straight out and hold 2 s; don't let it turn you.",
+   "Bring it back to your chest."
+  ],
+  "tips": [],
+  "avoid": [
+   "Turning toward the cable.",
+   "Standing too close (no tension)."
+  ],
+  "rangeOfMotion": "Handle at chest → arms straight out",
+  "tempo": "Out 1 s · Hold 2 s · In 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "woodchop",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Pallof_Press"
+  }
+ },
+ {
+  "id": "pallof-press-with-rotation",
+  "name": "Pallof Press with Rotation",
+  "aliases": [
+   "Horizontal cable woodchop"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Trunk turns away from a side cable, arms straight.",
+  "setup": [
+   "Handle on a cable at shoulder height. Stand side-on, arms straight out toward it."
+  ],
+  "form": [
+   "Turn your chest away from the cable, arms straight.",
+   "Turn back slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your arms.",
+   "Moving fast."
+  ],
+  "rangeOfMotion": "Facing the cable → turned away",
+  "tempo": "Turn 1 s · Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "woodchop",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Pallof_Press_With_Rotation"
+  }
+ },
+ {
+  "id": "cable-russian-twists",
+  "name": "Cable Russian Twist",
+  "aliases": [
+   "Cable Russian Twists",
+   "Stability ball cable twist"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Twist on a ball against a side cable.",
+  "setup": [
+   "Cable at mid height. Shoulders on a ball, side-on to the cable.",
+   "Arms straight up, both hands on the handle."
+  ],
+  "form": [
+   "Turn your shoulders away from the cable.",
+   "Turn back slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your arms.",
+   "Hips dropping."
+  ],
+  "rangeOfMotion": "Facing up → turned away from the cable",
+  "tempo": "Turn 1 s · Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "woodchop",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Russian_Twists"
+  }
+ },
+ {
+  "id": "russian-twist",
+  "name": "Russian Twist",
+  "aliases": [],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Seated side-to-side twist.",
+  "setup": [
+   "Sit leaning back, knees bent, feet anchored or up.",
+   "Arms out in front."
+  ],
+  "form": [
+   "Turn your shoulders to one side.",
+   "Turn to the other side."
+  ],
+  "tips": [],
+  "avoid": [
+   "Only moving the arms.",
+   "Rushing."
+  ],
+  "rangeOfMotion": "Turned to one side → turned to the other",
+  "tempo": "Left 1 s · Right 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "woodchop",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Russian_Twist"
+  }
+ },
+ {
+  "id": "plate-twist",
+  "name": "Plate Twist",
+  "aliases": [
+   "Plate Russian twist",
+   "Weighted Russian twist"
+  ],
+  "equipment": "other",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Russian twist with a plate.",
+  "setup": [
+   "Sit leaning back, feet off the floor, plate in front of your stomach."
+  ],
+  "form": [
+   "Turn your shoulders and bring the plate to one side.",
+   "Turn to the other side."
+  ],
+  "tips": [],
+  "avoid": [
+   "Only moving the arms.",
+   "Rushing."
+  ],
+  "rangeOfMotion": "Turned to one side → turned to the other",
+  "tempo": "Left 1 s · Right 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "woodchop",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Plate_Twist"
+  }
+ },
+ {
+  "id": "seated-barbell-twist",
+  "name": "Seated Barbell Twist",
+  "aliases": [],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Seated twist with a light bar on your back.",
+  "setup": [
+   "Sit at the end of a bench, light bar on your upper back."
+  ],
+  "form": [
+   "Turn your shoulders to one side, hips still.",
+   "Turn to the other side."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging fast.",
+   "Heavy weight."
+  ],
+  "rangeOfMotion": "Turned to one side → turned to the other",
+  "tempo": "Left 1 s · Right 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "woodchop",
+  "figureAdjust": {
+   "equipmentProp": "bar"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Barbell_Twist"
+  }
+ },
+ {
+  "id": "landmine-180s",
+  "name": "Landmine Rotation",
+  "aliases": [
+   "Landmine 180s",
+   "Landmine twist"
+  ],
+  "equipment": "plateMachine",
+  "singleSleeve": true,
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Bar swings side to side as the trunk turns.",
+  "setup": [
+   "Bar in a landmine. Stand wide, end of the bar at shoulder height, arms straight."
+  ],
+  "form": [
+   "Turn your trunk and hips to bring the bar down to one hip.",
+   "Turn through to the other side."
+  ],
+  "tips": [],
+  "avoid": [
+   "Bending your arms.",
+   "Moving fast."
+  ],
+  "rangeOfMotion": "Bar by one hip → bar by the other hip",
+  "tempo": "Left 2 s · Right 2 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "woodchop",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Landmine_180s"
+  }
+ },
+ {
+  "id": "rotary-torso-machine",
+  "name": "Rotary Torso Machine",
+  "aliases": [
+   "Torso rotation machine",
+   "Machine twist"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "abs",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "abs": "obliques"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Seated twist on a machine.",
+  "setup": [
+   "Sit with your chest against the pad, legs locked in.",
+   "Set the range to a comfortable twist."
+  ],
+  "form": [
+   "Turn your shoulders to one side, hips still.",
+   "Turn back slowly; train the other side next set."
+  ],
+  "tips": [],
+  "avoid": [
+   "Throwing the weight.",
+   "Forcing past a comfortable twist."
+  ],
+  "rangeOfMotion": "Facing forward → turned to the side",
+  "tempo": "Turn 1 s · Back 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "upper",
+  "figureTemplate": "woodchop",
+  "figureAdjust": {
+   "equipmentProp": "none"
+  },
+  "source": {
+   "url": "https://www.exercise.com/exercises/torso-rotation-machine/",
+   "url2": "https://livestrong.com/article/527657-what-muscles-does-the-rotary-torso-exercise-machine-work"
+  }
+ }
+]

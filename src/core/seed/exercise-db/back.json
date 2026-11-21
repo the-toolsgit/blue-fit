@@ -2275,7 +2275,8 @@
   "name": "Bent-Arm Barbell Pullover",
   "aliases": [
    "Barbell pullover",
-   "EZ-bar pullover"
+   "EZ-bar pullover",
+   "Wide-Grip Decline Barbell Pullover"
   ],
   "equipment": "barbell",
   "loadMode": "perSide",
@@ -2328,7 +2329,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Bent-Arm_Barbell_Pullover"
-  }
+  },
+  "formerIds": [
+   "wide-grip-decline-barbell-pullover"
+  ]
  },
  {
   "id": "inverted-row",

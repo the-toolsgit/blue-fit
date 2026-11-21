@@ -27,7 +27,9 @@ describe("exercise database", () => {
     const known = new Set(all.flatMap((e) => [e.id, ...(e.formerIds ?? [])]));
     const old = [...library, ...plan].filter((e) => covered.has(e.volume?.find((v: any) => v.weight === 1)?.group));
     // Reverse curls moved to biceps from forearms; pullovers to back from chest: those are checked in their own phase
-    for (const e of old) if (covered.has(e.volume.find((v: any) => v.weight === 1).group)) expect(known, e.id).toContain(e.id);
+    // Left out on purpose: static holds don't fit the two-move tempo (docs/plans/exercise-database.md)
+    const LEFT_OUT = new Set(["plank", "side-bridge"]);
+    for (const e of old) if (!LEFT_OUT.has(e.id) && covered.has(e.volume.find((v: any) => v.weight === 1).group)) expect(known, e.id).toContain(e.id);
   });
   for (const e of all) {
     it(`${e.id}: complete and valid`, () => {

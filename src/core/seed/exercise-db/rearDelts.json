@@ -1,0 +1,767 @@
+[
+ {
+  "id": "machine-reverse-fly",
+  "name": "Machine Reverse Fly",
+  "aliases": [
+   "Reverse Machine Flyes",
+   "Reverse Pec Deck",
+   "Rear Delt Machine"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Rear delts.",
+  "setup": [
+   "Chest on the pad, handles at shoulder height.",
+   "Elbows slightly bent."
+  ],
+  "form": [
+   "Open your arms back until in line with your body.",
+   "Return slowly."
+  ],
+  "tips": [
+   "Don't squeeze your shoulder blades hard together."
+  ],
+  "avoid": [
+   "Swinging your body.",
+   "Going past your body."
+  ],
+  "rangeOfMotion": "Arms in front → arms in line with your body",
+  "tempo": "Back 1 s · Forward 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "reverse-fly-machine",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Top-rated rear-delt exercise: stable and easy to push hard.",
+   "source": {
+    "url": "https://barbend.com/news/best-worst-shoulder-exercises-tier-list/",
+    "url2": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Reverse_Machine_Flyes"
+  },
+  "formerIds": [
+   "reverse-machine-flyes"
+  ]
+ },
+ {
+  "id": "single-arm-cable-reverse-fly",
+  "name": "Single-arm Cable Reverse Fly",
+  "aliases": [
+   "Single arm cable reverse fly",
+   "One-arm Cable Rear Delt Fly"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly"
+  },
+  "stretch": [
+   "rearDelts"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Rear delt, one arm.",
+  "setup": [
+   "Pulley at shoulder height.",
+   "Far hand on the handle, across your body."
+  ],
+  "form": [
+   "Swing out and back at shoulder height, elbow slightly bent.",
+   "Return across slowly."
+  ],
+  "tips": [
+   "Shoulder down, body still."
+  ],
+  "avoid": [
+   "Turning your body."
+  ],
+  "rangeOfMotion": "Arm across your body → in line with your body",
+  "tempo": "Out 1 s · In 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "reverse-fly-cable",
+  "source": {
+   "plan": "Leo's plan"
+  }
+ },
+ {
+  "id": "reverse-cable-crossover",
+  "name": "Reverse Cable Crossover",
+  "aliases": [
+   "Cable Rear Delt Fly",
+   "Cable Reverse Fly",
+   "Standing Cable Reverse Fly"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly"
+  },
+  "stretch": [
+   "rearDelts"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Both arms, cables crossed: rear delts stretched at the start.",
+  "setup": [
+   "Pulleys at or above shoulder height.",
+   "Left handle in your right hand, right in your left, arms crossed."
+  ],
+  "form": [
+   "Pull your arms out and back, almost straight, until in line with your body.",
+   "Return slowly until your arms cross again."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning back.",
+   "Bending your elbows a lot."
+  ],
+  "rangeOfMotion": "Arms crossed in front → arms in line with your body",
+  "tempo": "Out 1 s · In 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "reverse-fly-cable",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "S-tier rear-delt pick: big stretch with constant tension.",
+   "source": {
+    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  "source": {
+   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/",
+   "db": "free-exercise-db",
+   "id": "Cable_Rear_Delt_Fly"
+  },
+  "formerIds": [
+   "cable-rear-delt-fly"
+  ]
+ },
+ {
+  "id": "rope-face-pull",
+  "name": "Rope Face Pull",
+  "aliases": [
+   "Cable Rope Face Pull",
+   "Face Pull"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly",
+   "traps": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Rear delts and upper back. Good for shoulder health.",
+  "setup": [
+   "Rope at face height."
+  ],
+  "form": [
+   "Pull to your forehead, pulling the rope apart.",
+   "Finish with hands beside your ears, elbows high. Hold 1 s."
+  ],
+  "tips": [
+   "Light and controlled."
+  ],
+  "avoid": [
+   "Leaning back.",
+   "Elbows dropping below your hands."
+  ],
+  "rangeOfMotion": "Arms straight → hands beside your ears",
+  "tempo": "Pull 1 s · Hold 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "face-pull",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Rear delts plus mid traps; rated A-tier.",
+   "source": {
+    "url": "https://barbend.com/news/best-worst-shoulder-exercises-tier-list/",
+    "url2": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+   }
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Face_Pull"
+  },
+  "formerIds": [
+   "face-pull"
+  ]
+ },
+ {
+  "id": "cable-rope-rear-delt-rows",
+  "name": "Seated Cable Rear Delt Row",
+  "aliases": [
+   "Cable Rope Rear-Delt Rows",
+   "Low Pulley Row To Neck",
+   "Rear Delt Cable Row"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly",
+   "traps": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "small muscles drive it",
+  "why": "A row aimed at the rear delts.",
+  "setup": [
+   "Sit at a low cable row with a rope, back upright.",
+   "Arms straight, elbows out to the sides."
+  ],
+  "form": [
+   "Pull the rope to your neck, elbows high and wide.",
+   "Return slowly until your arms are straight."
+  ],
+  "tips": [
+   "Keep your upper arms level with the floor."
+  ],
+  "avoid": [
+   "Leaning back.",
+   "Dropping your elbows to your sides."
+  ],
+  "rangeOfMotion": "Arms straight → hands at your neck",
+  "tempo": "Pull 1 s · Return 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "face-pull",
+  "figureAdjust": {
+   "seated": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Rope_Rear-Delt_Rows",
+   "url2": "https://builtwithscience.com/fitness-tips/best-shoulder-exercises/"
+  },
+  "formerIds": [
+   "low-pulley-row-to-neck"
+  ]
+ },
+ {
+  "id": "barbell-rear-delt-row",
+  "name": "Barbell Rear Delt Row",
+  "aliases": [
+   "Bent-over Rear Delt Row"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   },
+   {
+    "group": "traps",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly",
+   "traps": "mid/lower"
+  },
+  "isHeavy": false,
+  "heavyWhy": "small muscles drive it",
+  "unsafeFailure": true,
+  "why": "Bent-over row with elbows wide, for the rear delts.",
+  "setup": [
+   "Bend forward until your back is near flat, knees soft.",
+   "Wide overhand grip."
+  ],
+  "form": [
+   "Pull the bar to your upper chest, elbows out wide.",
+   "Lower slowly until your arms are straight."
+  ],
+  "tips": [
+   "Your arms are hooks; pull with your shoulders."
+  ],
+  "avoid": [
+   "Rounding your back.",
+   "Standing up as you pull."
+  ],
+  "rangeOfMotion": "Arms straight → bar at upper chest",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 2.5,
+  "bodyRegion": "upper",
+  "figureTemplate": "row-bent-barbell",
+  "figureAdjust": {
+   "grip": "wide"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Barbell_Rear_Delt_Row",
+   "url2": "https://builtwithscience.com/fitness-tips/best-shoulder-exercises/"
+  }
+ },
+ {
+  "id": "reverse-flyes",
+  "name": "Incline Dumbbell Reverse Fly",
+  "aliases": [
+   "Reverse Flyes",
+   "Chest-supported Reverse Fly",
+   "Incline Rear Delt Fly"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Chest on the bench: no swinging.",
+  "setup": [
+   "Lie face down on an incline bench.",
+   "Arms hanging, palms facing each other."
+  ],
+  "form": [
+   "Raise your arms out to the sides until level with your body.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Squeezing your shoulder blades instead of moving your arms."
+  ],
+  "rangeOfMotion": "Arms hanging → level with your body",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "reverse-fly-bent",
+  "figureAdjust": {
+   "bench": "incline"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Reverse_Flyes"
+  }
+ },
+ {
+  "id": "lying-rear-delt-raise",
+  "name": "Lying Rear Delt Raise",
+  "aliases": [
+   "Dumbbell Lying Rear Lateral Raise",
+   "Prone Rear Delt Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Lying face down on a flat or slightly raised bench.",
+  "setup": [
+   "Lie face down, arms hanging, palms facing each other."
+  ],
+  "form": [
+   "Raise your arms out to the sides until your elbows reach shoulder height.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Squeezing your shoulder blades instead of moving your arms."
+  ],
+  "rangeOfMotion": "Arms hanging → elbows at shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "reverse-fly-bent",
+  "figureAdjust": {
+   "bench": "flat"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Lying_Rear_Delt_Raise"
+  },
+  "formerIds": [
+   "dumbbell-lying-rear-lateral-raise"
+  ]
+ },
+ {
+  "id": "dumbbell-lying-one-arm-rear-lateral-raise",
+  "name": "One-arm Lying Rear Delt Raise",
+  "aliases": [
+   "Dumbbell Lying One-Arm Rear Lateral Raise",
+   "Lying One-Arm Lateral Raise"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "One arm, face down; hold the bench with the other.",
+  "setup": [
+   "Lie face down on a flat or slightly raised bench.",
+   "Free hand holds the bench leg."
+  ],
+  "form": [
+   "Raise your arm out to the side until your elbow reaches shoulder height.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Twisting your body.",
+   "Swinging."
+  ],
+  "rangeOfMotion": "Arm hanging → elbow at shoulder height",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "reverse-fly-bent",
+  "figureAdjust": {
+   "bench": "flat",
+   "oneArm": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Dumbbell_Lying_One-Arm_Rear_Lateral_Raise"
+  },
+  "formerIds": [
+   "lying-one-arm-lateral-raise"
+  ]
+ },
+ {
+  "id": "bent-over-dumbbell-rear-delt-raise-with-head-on-bench",
+  "name": "Head-supported Rear Delt Raise",
+  "aliases": [
+   "Bent Over Dumbbell Rear Delt Raise With Head On Bench"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Forehead on a bench keeps your body still.",
+  "setup": [
+   "Bend forward, forehead on an incline bench.",
+   "Arms hanging, palms facing each other."
+  ],
+  "form": [
+   "Raise your arms out to the sides until level with your body.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Squeezing your shoulder blades instead of moving your arms."
+  ],
+  "rangeOfMotion": "Arms hanging → level with your body",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "reverse-fly-bent",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Bent_Over_Dumbbell_Rear_Delt_Raise_With_Head_On_Bench"
+  }
+ },
+ {
+  "id": "bent-over-reverse-dumbbell-fly",
+  "name": "Bent-over Dumbbell Reverse Fly",
+  "aliases": [
+   "Bent-over Rear Delt Fly",
+   "Standing Bent-over Reverse Fly"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "The basic free-weight rear-delt move.",
+  "setup": [
+   "Bend forward, back flat, knees soft.",
+   "Arms hanging, elbows slightly bent."
+  ],
+  "form": [
+   "Raise your arms out to the sides until level with your body.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Squeezing your shoulder blades instead of moving your arms."
+  ],
+  "rangeOfMotion": "Arms hanging → level with your body",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "reverse-fly-bent",
+  "source": {
+   "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
+ },
+ {
+  "id": "seated-bent-over-rear-delt-raise",
+  "name": "Seated Bent-over Rear Delt Raise",
+  "aliases": [],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Seated and bent forward, chest near your knees.",
+  "setup": [
+   "Sit at the end of a bench, lean forward, back flat.",
+   "Dumbbells behind your calves."
+  ],
+  "form": [
+   "Raise your arms out to the sides until level with your body.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Squeezing your shoulder blades instead of moving your arms."
+  ],
+  "rangeOfMotion": "Arms hanging → level with your body",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "reverse-fly-bent",
+  "figureAdjust": {
+   "seated": true
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Seated_Bent-Over_Rear_Delt_Raise"
+  }
+ },
+ {
+  "id": "cable-seated-lateral-raise",
+  "name": "Seated Bent-over Cable Reverse Fly",
+  "aliases": [
+   "Cable Seated Lateral Raise"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly"
+  },
+  "stretch": [
+   "rearDelts"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Bent-over rear-delt raise with crossed low cables.",
+  "setup": [
+   "Sit on a bench end, chest on your thighs.",
+   "Low pulleys, cables crossed under your knees."
+  ],
+  "form": [
+   "Raise your arms out to the sides until level with your body.",
+   "Lower slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging your body.",
+   "Squeezing your shoulder blades instead of moving your arms."
+  ],
+  "rangeOfMotion": "Arms crossed under knees → level with your body",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "reverse-fly-bent",
+  "figureAdjust": {
+   "seated": true,
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Seated_Lateral_Raise"
+  }
+ },
+ {
+  "id": "bent-over-low-pulley-side-lateral",
+  "name": "Bent-over One-arm Cable Reverse Fly",
+  "aliases": [
+   "Bent Over Low-Pulley Side Lateral"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly"
+  },
+  "stretch": [
+   "rearDelts"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "One arm, bent over, cable from low.",
+  "setup": [
+   "Low pulley, handle in your far hand.",
+   "Bend forward, free hand on your thigh."
+  ],
+  "form": [
+   "Raise your arm out to the side until level with your body.",
+   "Lower slowly across your body."
+  ],
+  "tips": [],
+  "avoid": [
+   "Twisting your body.",
+   "Standing up as you pull."
+  ],
+  "rangeOfMotion": "Arm across your body → level with your body",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "reverse-fly-bent",
+  "figureAdjust": {
+   "oneArm": true,
+   "equipmentProp": "cable"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Bent_Over_Low-Pulley_Side_Lateral"
+  }
+ }
+]

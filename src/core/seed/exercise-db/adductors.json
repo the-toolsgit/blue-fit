@@ -1,0 +1,238 @@
+[
+ {
+  "id": "hip-adduction",
+  "name": "Hip Adduction",
+  "aliases": [
+   "Machine Hip Adduction",
+   "Hip Adduction Machine",
+   "Thigh Adductor",
+   "Adductor Machine"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "adductors",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "adductors": "adduction"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Inner thighs.",
+  "setup": [
+   "Sit tall, pads inside your knees.",
+   "Start as wide as you can control."
+  ],
+  "form": [
+   "Squeeze your legs together, hold 1 s.",
+   "Open slowly back to the stretch."
+  ],
+  "tips": [
+   "The wide part does the most. Don't cut it short."
+  ],
+  "avoid": [
+   "Letting the weights slam.",
+   "Rocking your body."
+  ],
+  "rangeOfMotion": "Legs wide → legs together",
+  "tempo": "In 1 s · Hold 1 s · Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "hip-adduction",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Easiest way to load the inner thighs hard through a full range.",
+   "source": {
+    "url": "https://fitnessvolt.com/jeff-nippard-leg-routine-one-year/",
+    "url2": "https://www.strengthlog.com/adductor-exercises/"
+   }
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Thigh_Adductor"
+  },
+  "formerIds": [
+   "thigh-adductor"
+  ]
+ },
+ {
+  "id": "cable-hip-adduction",
+  "name": "Cable Hip Adduction",
+  "aliases": [
+   "Standing Cable Adduction"
+  ],
+  "equipment": "cable",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "adductors",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "adductors": "adduction"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Inner thigh, one leg at a time.",
+  "setup": [
+   "Ankle cuff on a low pulley, inside leg.",
+   "Stand side-on, hold the frame, leg pulled out to the side."
+  ],
+  "form": [
+   "Pull your leg in across your body, hold 1 s.",
+   "Let it go back out slowly."
+  ],
+  "tips": [],
+  "avoid": [
+   "Leaning your body.",
+   "Swinging the leg."
+  ],
+  "rangeOfMotion": "Leg out to the side → across your body",
+  "tempo": "In 1 s · Hold 1 s · Out 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hip-adduction",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Cable_Hip_Adduction"
+  }
+ },
+ {
+  "id": "copenhagen-adduction",
+  "name": "Copenhagen Adduction",
+  "aliases": [
+   "Copenhagen Plank",
+   "Copenhagen Hip Adduction",
+   "Adductor Side Plank"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "adductors",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "adductors": "adduction"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Side plank with your top leg on a bench: inner-thigh strength.",
+  "setup": [
+   "Side plank on your forearm.",
+   "Top leg on a bench (knee easier, ankle harder), bottom leg under it."
+  ],
+  "form": [
+   "Lift your hips by pressing the top leg into the bench.",
+   "Lower slowly."
+  ],
+  "tips": [
+   "Cut groin problems in football players (trial)."
+  ],
+  "avoid": [
+   "Hips sagging.",
+   "Twisting forward."
+  ],
+  "rangeOfMotion": "Hips down → body straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hip-adduction",
+  "source": {
+   "url": "https://ucalgary.ca/shred-injuries/all-sports/ice-hockey/copenhagen-hip-adduction-foot-supported",
+   "url2": "https://doi.org/10.1136/bjsports-2017-098937"
+  },
+  "evidence": {
+   "0": {
+    "evidence": "R",
+    "note": "Harøy 2019: an adductor program built on it lowered groin problems by 41%."
+   }
+  }
+ },
+ {
+  "id": "plie-dumbbell-squat",
+  "name": "Sumo Dumbbell Squat",
+  "aliases": [
+   "Plie Dumbbell Squat",
+   "Dumbbell Sumo Squat",
+   "Sumo Squat"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "total",
+  "compound": true,
+  "volume": [
+   {
+    "group": "adductors",
+    "weight": 1
+   },
+   {
+    "group": "quads",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "adductors": "adduction",
+   "quads": "squat",
+   "glutes": "glute max"
+  },
+  "isHeavy": false,
+  "heavyWhy": "load limited by holding one weight",
+  "why": "Wide, toes-out squat for the inner thighs.",
+  "setup": [
+   "Feet well wider than shoulders, toes out.",
+   "One dumbbell in both hands by the end, arms hanging."
+  ],
+  "form": [
+   "Sit straight down, knees out over your toes, as deep as you can.",
+   "Stand up."
+  ],
+  "tips": [
+   "Stand on two boxes to go deeper."
+  ],
+  "avoid": [
+   "Knees caving in.",
+   "Leaning forward."
+  ],
+  "rangeOfMotion": "Standing → deep wide squat",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "squat-front",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Deep, wide squat: deep squats grew the inner thighs more than half squats.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/31230110/",
+    "url2": "https://www.strengthlog.com/adductor-exercises/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Plie_Dumbbell_Squat"
+  }
+ }
+]

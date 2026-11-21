@@ -1,0 +1,738 @@
+[
+ {
+  "id": "seated-leg-curl",
+  "name": "Seated Leg Curl",
+  "aliases": [
+   "Machine Seated Leg Curl",
+   "Seated Hamstring Curl"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "hamstrings": "knee flexion"
+  },
+  "stretch": [
+   "hamstrings"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hamstrings with a big stretch.",
+  "setup": [
+   "Lap pad tight, knees lined up with the pivot."
+  ],
+  "form": [
+   "Curl all the way, hold 1 s.",
+   "Straighten slowly."
+  ],
+  "tips": [
+   "Lean forward for a bigger stretch."
+  ],
+  "avoid": [
+   "Letting the weight yank your legs straight."
+  ],
+  "rangeOfMotion": "Legs straight → full curl",
+  "tempo": "Curl 1 s · Hold 1 s · Straighten 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "leg-curl-seated",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Hips bent stretch the hamstrings; grew them more than lying curls in a trial.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/33009197/",
+    "url2": "https://barbend.com/news/will-tennyson-jeff-nippard-top-exercise-choices-for-every-muscle-group/"
+   }
+  },
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Seated_Leg_Curl",
+   "url2": "https://pubmed.ncbi.nlm.nih.gov/33009197/"
+  },
+  "evidence": {
+   "0": {
+    "evidence": "C",
+    "note": "Leaning forward bends the hips more, so the hamstrings work longer (coaching practice)."
+   }
+  }
+ },
+ {
+  "id": "prone-leg-curl",
+  "name": "Prone Leg Curl",
+  "aliases": [
+   "Lying Leg Curls",
+   "Lying Leg Curl",
+   "Machine Lying Leg Curl"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "hamstrings": "knee flexion"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hamstrings with knees fully bent.",
+  "setup": [
+   "Face down, knees just past the pad edge.",
+   "Pad just above your heels."
+  ],
+  "form": [
+   "Curl your heels to your butt, hold 1 s.",
+   "Lower slowly until almost straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Hips lifting off the pad.",
+   "Dropping the weight."
+  ],
+  "rangeOfMotion": "Legs almost straight → full curl",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "leg-curl-lying",
+  "source": {
+   "plan": "Leo's plan",
+   "db": "free-exercise-db",
+   "id": "Lying_Leg_Curls"
+  },
+  "formerIds": [
+   "lying-leg-curls"
+  ]
+ },
+ {
+  "id": "standing-leg-curl",
+  "name": "Standing Leg Curl",
+  "aliases": [
+   "Machine Standing Leg Curl",
+   "Single-leg Standing Leg Curl"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "hamstrings": "knee flexion"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "One leg at a time, hips slightly bent.",
+  "setup": [
+   "Pad just above your heel, thigh against the front pad.",
+   "Hold the handles, lean forward a little."
+  ],
+  "form": [
+   "Curl your heel up to your butt, hold 1 s.",
+   "Lower slowly until the leg is straight."
+  ],
+  "tips": [],
+  "avoid": [
+   "Swinging the hips back.",
+   "Dropping the weight."
+  ],
+  "rangeOfMotion": "Leg straight → full curl",
+  "tempo": "Up 1 s · Hold 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "leg-curl-lying",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Standing_Leg_Curl"
+  }
+ },
+ {
+  "id": "glute-ham-raise",
+  "name": "Glute-Ham Raise",
+  "aliases": [
+   "Glute Ham Raise",
+   "GHR",
+   "GHD Raise"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "hamstrings": "knee flexion"
+  },
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hard knee bend with your body weight.",
+  "setup": [
+   "Feet against the footplate, knees just behind the pad.",
+   "Body straight from knees to head."
+  ],
+  "form": [
+   "Lower your body forward until it is level with the floor.",
+   "Pull yourself back up with your hamstrings."
+  ],
+  "tips": [
+   "For more, a plate at your chest."
+  ],
+  "avoid": [
+   "Bending at the hips.",
+   "Dropping fast at the bottom."
+  ],
+  "rangeOfMotion": "Body upright → body level with the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 10,
+  "bodyRegion": "lower",
+  "figureTemplate": "nordic",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Glute_Ham_Raise"
+  }
+ },
+ {
+  "id": "nordic-hamstring-curl",
+  "name": "Nordic Hamstring Curl",
+  "aliases": [
+   "Nordic Curl",
+   "Natural Glute Ham Raise",
+   "Floor Glute-Ham Raise",
+   "Nordic"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "hamstrings": "knee flexion"
+  },
+  "isHeavy": false,
+  "heavyWhy": "bodyweight only",
+  "why": "Hamstrings working hard while lowering.",
+  "setup": [
+   "Kneel on a pad, ankles locked under a bar or held by a partner.",
+   "Body straight from knees to head."
+  ],
+  "form": [
+   "Lower your body forward as slowly as you can.",
+   "Catch yourself with your hands, push back up lightly."
+  ],
+  "tips": [
+   "Hard: start with only the lowering part."
+  ],
+  "avoid": [
+   "Bending at the hips.",
+   "Dropping fast once it gets hard."
+  ],
+  "rangeOfMotion": "Body upright → chest near the floor",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "nordic",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Natural_Glute_Ham_Raise",
+   "url2": "https://pubmed.ncbi.nlm.nih.gov/27660368/"
+  },
+  "evidence": {
+   "0": {
+    "evidence": "C",
+    "note": "Doing only the lowering part is the usual way to build up to full reps (coaching practice)."
+   }
+  }
+ },
+ {
+  "id": "romanian-deadlift",
+  "name": "Romanian Deadlift",
+  "aliases": [
+   "RDL",
+   "Barbell RDL",
+   "Barbell Romanian Deadlift"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "hamstrings": "hip hinge",
+   "glutes": "glute max",
+   "back": "lower back"
+  },
+  "stretch": [
+   "hamstrings"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Heavy hamstring stretch through the hips.",
+  "setup": [
+   "Stand tall with the bar, hands just outside your legs.",
+   "Knees slightly bent and kept there."
+  ],
+  "form": [
+   "Push your hips back, bar sliding down your thighs.",
+   "Stop when you feel a big stretch, about mid-shin.",
+   "Drive your hips forward to stand up."
+  ],
+  "tips": [
+   "Bar stays touching your legs."
+  ],
+  "avoid": [
+   "Rounding your back.",
+   "Bending the knees more as you go down."
+  ],
+  "rangeOfMotion": "Standing tall → bar at mid-shin",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hinge",
+  "preferred": {
+   "goals": [
+    "growth",
+    "strength"
+   ],
+   "why": "Heavy hip hinge that loads the hamstrings stretched; top-rated by coaches.",
+   "source": {
+    "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
+    "url2": "https://pubmed.ncbi.nlm.nih.gov/19204579/"
+   }
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Romanian_Deadlift"
+  }
+ },
+ {
+  "id": "stiff-legged-barbell-deadlift",
+  "name": "Stiff-legged Deadlift",
+  "aliases": [
+   "Stiff-Legged Barbell Deadlift",
+   "SLDL",
+   "Straight-leg Deadlift"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "hamstrings": "hip hinge",
+   "glutes": "glute max",
+   "back": "lower back"
+  },
+  "stretch": [
+   "hamstrings"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Hinge with nearly straight legs: more stretch.",
+  "setup": [
+   "Stand tall with the bar, feet hip-width.",
+   "Knees only just unlocked."
+  ],
+  "form": [
+   "Bend at the hips, bar close to your legs.",
+   "Go as low as your back stays flat.",
+   "Push your hips forward to stand up."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding your back to reach lower.",
+   "Bar drifting away from your legs."
+  ],
+  "rangeOfMotion": "Standing tall → bar below the knees",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hinge",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Stiff-Legged_Barbell_Deadlift"
+  }
+ },
+ {
+  "id": "stiff-legged-dumbbell-deadlift",
+  "name": "DB Romanian Deadlift",
+  "aliases": [
+   "Stiff-Legged Dumbbell Deadlift",
+   "Dumbbell Romanian Deadlift",
+   "DB RDL",
+   "Dumbbell RDL"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "hamstrings": "hip hinge",
+   "glutes": "glute max",
+   "back": "lower back"
+  },
+  "stretch": [
+   "hamstrings"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Hamstring hinge with dumbbells.",
+  "setup": [
+   "Stand tall, a dumbbell in each hand in front of your thighs.",
+   "Knees slightly bent."
+  ],
+  "form": [
+   "Push your hips back, dumbbells close to your legs.",
+   "Stop at a big stretch, then drive your hips forward."
+  ],
+  "tips": [],
+  "avoid": [
+   "Rounding your back.",
+   "Letting the dumbbells swing forward."
+  ],
+  "rangeOfMotion": "Standing tall → dumbbells at mid-shin",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hinge",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Stiff-Legged_Dumbbell_Deadlift"
+  }
+ },
+ {
+  "id": "smith-machine-stiff-legged-deadlift",
+  "name": "Smith Machine Stiff-legged Deadlift",
+  "aliases": [
+   "Smith Machine RDL",
+   "Smith Machine Romanian Deadlift"
+  ],
+  "equipment": "smith",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "hamstrings": "hip hinge",
+   "glutes": "glute max",
+   "back": "lower back"
+  },
+  "stretch": [
+   "hamstrings"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Hamstring hinge on a fixed bar path.",
+  "setup": [
+   "Bar at hip height, stand close to it.",
+   "Knees slightly bent."
+  ],
+  "form": [
+   "Push your hips back, bar sliding down your thighs.",
+   "Stop at a big stretch, then drive your hips forward."
+  ],
+  "tips": [
+   "Set the safety stops just below your lowest point."
+  ],
+  "avoid": [
+   "Rounding your back.",
+   "Standing too far from the bar."
+  ],
+  "rangeOfMotion": "Standing tall → bar at mid-shin",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hinge",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Smith_Machine_Stiff-Legged_Deadlift"
+  }
+ },
+ {
+  "id": "single-leg-db-romanian-deadlift",
+  "name": "Single-leg DB Romanian Deadlift",
+  "aliases": [
+   "Single-Leg RDL",
+   "Dumbbell Single-Leg Romanian Deadlift",
+   "Single-Leg Dumbbell RDL"
+  ],
+  "equipment": "dumbbell",
+  "loadMode": "perHand",
+  "compound": true,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "hamstrings": "hip hinge",
+   "glutes": "glute max",
+   "back": "lower back"
+  },
+  "stretch": [
+   "hamstrings"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "balance limits the load",
+  "unsafeFailure": true,
+  "why": "One leg at a time: hamstring stretch, balance.",
+  "setup": [
+   "Stand on one leg, knee slightly bent.",
+   "Dumbbell in the other hand."
+  ],
+  "form": [
+   "Push your hips back, free leg going back in line with your body.",
+   "Stop at a big stretch, then stand up."
+  ],
+  "tips": [
+   "Use the free hand on a rack for balance."
+  ],
+  "avoid": [
+   "Hips twisting open.",
+   "Rounding your back."
+  ],
+  "rangeOfMotion": "Standing tall → body near level",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "hinge",
+  "figureAdjust": {
+   "equipmentProp": "db"
+  },
+  "source": {
+   "url": "https://barbend.com/single-leg-romanian-deadlift/"
+  }
+ },
+ {
+  "id": "good-morning",
+  "name": "Good Morning",
+  "aliases": [
+   "Barbell Good Morning",
+   "Stiff Leg Barbell Good Morning"
+  ],
+  "equipment": "barbell",
+  "loadMode": "perSide",
+  "compound": true,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "hamstrings": "hip hinge",
+   "glutes": "glute max",
+   "back": "lower back"
+  },
+  "stretch": [
+   "hamstrings"
+  ],
+  "isHeavy": true,
+  "heavyWhy": "multi-joint, big muscles, stable",
+  "unsafeFailure": true,
+  "why": "Hinge with the bar on your back.",
+  "setup": [
+   "Bar on your upper back, as for a squat. Use a rack.",
+   "Knees slightly bent."
+  ],
+  "form": [
+   "Push your hips back, chest going forward.",
+   "Stop when your back is nearly level or you feel a big stretch.",
+   "Drive your hips forward to stand up."
+  ],
+  "tips": [
+   "Start light: the bar is far from your hips."
+  ],
+  "avoid": [
+   "Rounding your back.",
+   "Bending the knees into a squat."
+  ],
+  "rangeOfMotion": "Standing tall → back nearly level",
+  "tempo": "Down 3 s · Up 1 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "good-morning",
+  "source": {
+   "db": "free-exercise-db",
+   "id": "Good_Morning"
+  },
+  "formerIds": [
+   "stiff-leg-barbell-good-morning"
+  ]
+ },
+ {
+  "id": "back-extension-hamstrings",
+  "name": "45° Back Extension (Hamstrings)",
+  "aliases": [
+   "Hamstring Back Extension",
+   "Hamstring-focused Hyperextension"
+  ],
+  "equipment": "bodyweight",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "hamstrings",
+    "weight": 1
+   },
+   {
+    "group": "glutes",
+    "weight": 0.5
+   },
+   {
+    "group": "back",
+    "weight": 0.5
+   }
+  ],
+  "jobs": {
+   "hamstrings": "hip hinge",
+   "glutes": "glute max",
+   "back": "lower back"
+  },
+  "stretch": [
+   "hamstrings"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Hip hinge for the hamstrings, no bar.",
+  "setup": [
+   "45° bench, pad just below your hip bones.",
+   "Feet straight ahead, legs straight."
+  ],
+  "form": [
+   "Bend down at the hips, back flat.",
+   "Rise until your body is in a straight line."
+  ],
+  "tips": [
+   "For more, a plate or dumbbell at your chest."
+  ],
+  "avoid": [
+   "Rounding your back.",
+   "Leaning back past straight."
+  ],
+  "rangeOfMotion": "Body bent down → body straight",
+  "tempo": "Up 1 s · Down 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "lower",
+  "figureTemplate": "back-extension",
+  "preferred": {
+   "goals": [
+    "growth"
+   ],
+   "why": "Hip-hinge training grew the long hamstring more than Nordic curls in a trial.",
+   "source": {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/27660368/",
+    "url2": "https://builtwithscience.com/best-glutes-exercises/"
+   }
+  },
+  "source": {
+   "url": "https://pubmed.ncbi.nlm.nih.gov/27660368/",
+   "url2": "https://builtwithscience.com/best-glutes-exercises/"
+  }
+ }
+]
