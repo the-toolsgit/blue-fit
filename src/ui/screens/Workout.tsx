@@ -286,7 +286,12 @@ export function WorkoutScreen() {
       </SortableContext>
       </DndContext>
 
-      <button className="btn btn-ghost btn-block" style={{ marginTop: 16, minHeight: 54 }} onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
+      {/* Workout notes (¼ width) beside Add exercise */}
+      <div className="row" style={{ gap: 10, marginTop: 16 }}>
+        <button className="btn btn-ghost" style={{ flex: "0 0 25%", minHeight: 54, padding: 0, color: s.notes ? "var(--neon-ink)" : undefined }}
+          aria-label={s.notes ? "Edit workout notes" : "Add workout notes"} onClick={() => setNoteFor("workout")}><Icon name="note" /></button>
+        <button className="btn btn-ghost" style={{ flex: 1, minHeight: 54 }} onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
+      </div>
 
       {/* Exercise detail without losing your place */}
       {(() => {
