@@ -96,6 +96,30 @@ function muscle(m: any): string {
 </section>`;
 }
 
+// How the training profile changes each muscle's weekly range (and its recovery), from the database's profile rules
+function profileSection(): string {
+  const P = data.profile;
+  const pct = (x?: number) => (x == null ? "" : `${x > 1 ? "+" : "−"}${Math.round(Math.abs(x - 1) * 100)}%`);
+  const step = (label: string, s: any) => {
+    const when = s.under != null ? `under ${s.under}` : `${s.from}+`;
+    const parts = [s.max != null ? `max ${pct(s.max)}` : "", s.min != null ? `min ${pct(s.min)}` : "", s.maintainMin ? `maintain min ${pct(s.maintainMin)}` : "", s.extraDay ? "+1 recovery day" : ""].filter(Boolean);
+    return `<tr><td>${label} ${when}</td><td class="mono">${parts.join(" · ")}</td><td>${esc(s.why || "More recovery from experience")}</td></tr>`;
+  };
+  const rows = [
+    ...P.yearsTraining.map((s: any) => step("Years training", s)),
+    ...P.age.map((s: any) => step("Age", s)),
+    ...P.sleepHours.map((s: any) => step("Sleep (h)", s)),
+    ...Object.entries(P.phase).map(([k, v]: any) => `<tr><td>${k === "cutting" ? "Cutting" : "Bulking"}</td><td class="mono">max ${pct(v.max)}</td><td>${esc(v.why)} (not for maintain)</td></tr>`),
+    `<tr><td>Priority muscle</td><td class="mono">min → middle</td><td>${esc(P.priority.why)}</td></tr>`,
+    `<tr><td>Skipped muscle</td><td class="mono">maintain range</td><td>${esc(P.skipped.why)}</td></tr>`,
+    `<tr><td>Key lift to failure</td><td class="mono">+1 recovery day</td><td>That muscle stays partly recovered one more day</td></tr>`,
+  ].join("");
+  return `<section class="profile"><h2>How your profile changes it</h2>
+  <p class="lede" style="font-size:13.5px;margin-top:6px">Each muscle's weekly range below is for your goal. Your profile then scales it: the changes multiply together, the range is rounded, and the top always stays at least 2 above the bottom. Your own targets always win. ${ev("J")}</p>
+  <div class="tbl"><table><thead><tr><th>When</th><th>Change</th><th>Why</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <p class="lede" style="font-size:13px">Example: a 45-year-old, 2 years training, sleeping 6.5 h, cutting, mass gain, back (12–20): max 20 × 0.92 × 0.92 × 0.85 ≈ 14, so 12–14.</p></section>`;
+}
+
 const r = data.rules;
 const html = `<meta charset="utf-8">
 <title>Blue Fit Muscles</title>
@@ -170,6 +194,13 @@ summary:focus-visible { outline: 1px solid var(--neon); border-radius: 6px; }
 .tag { font: 500 10.5px var(--mono); padding: 1px 6px; border-radius: 99px; }
 .tag.key { color: var(--warn); border: 1px solid rgba(255,197,61,.45); }
 .tag.fail { color: var(--good); border: 1px solid rgba(61,255,176,.35); }
+.profile { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 18px; margin-top: 18px; }
+.profile h2 { font-size: 26px; }
+.tbl { overflow-x: auto; margin: 10px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th { text-align: left; font: 600 12px var(--body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: 6px 10px 6px 0; }
+td { padding: 7px 10px 7px 0; border-top: 1px solid var(--line); vertical-align: top; }
+td.mono { color: var(--neon-2); white-space: nowrap; font-size: 12.5px; }
 .sources { margin-top: 28px; font-size: 13.5px; }
 .sources h2 { font-size: 24px; }
 .sources ul { padding-left: 18px; }
@@ -189,6 +220,8 @@ summary:focus-visible { outline: 1px solid var(--neon); border-radius: 6px; }
     <div class="rule"><b class="mono">≤${r.heavyMaxReps} · ${r.lightMinReps}+</b><span>heavy and light sets, for big muscles ${ev("J")}</span></div>
   </div>
   <p class="lede" style="font-size:13.5px">Weekly sets: sets that hit the muscle only partly (like biceps in a row) count as half. Goals: ${GOALS.map(([k, l]) => `<b>${l}</b> ${esc(r.goals[k].split(": ")[1] ?? r.goals[k])}`).join(" ")}</p>
+
+  ${profileSection()}
 
   <nav class="index" aria-label="Muscles">${data.muscles.map((m: any) => `<a href="#${m.id}">${esc(m.name)}</a>`).join("")}</nav>
 
