@@ -114,7 +114,7 @@ function profileSection(): string {
     `<tr><td>Skipped muscle</td><td class="mono">maintain range</td><td>${esc(P.skipped.why)}</td></tr>`,
     `<tr><td>Key lift to failure</td><td class="mono">+1 recovery day</td><td>That muscle stays partly recovered one more day</td></tr>`,
   ].join("");
-  return `<section class="profile"><h2>How your profile changes it</h2>
+  return `<section class="profile"><h2>How your profile changes sets goal</h2>
   <p class="lede" style="font-size:13.5px;margin-top:6px">Each muscle's weekly range below is for your goal. Your profile then scales it: the changes multiply together, the range is rounded, and the top always stays at least 2 above the bottom. Your own targets always win. ${ev("J")}</p>
   <div class="tbl"><table><thead><tr><th>When</th><th>Change</th><th>Why</th></tr></thead><tbody>${rows}</tbody></table></div>
   <p class="lede" style="font-size:13px">Example: a 45-year-old, 2 years training, sleeping 6.5 h, cutting, mass gain, back (12–20): max 20 × 0.92 × 0.92 × 0.85 ≈ 14, so 12–14.</p></section>`;
