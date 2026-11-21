@@ -29,6 +29,7 @@ Field names are the app's own `Exercise` fields (src/core/types.ts), so the app 
 | `incrementLb` | weight step | from equipment |
 | `bodyRegion` | upper / lower | |
 | `figure` | animation, built from a template (see 3) | |
+| `preferred` | goals this exercise is a top pick for, with reason + source: `{ goals: ["growth", "strength", …], why, source }` | the best-known exercises for the muscle (e.g. machine shoulder press, squat, rope overhead extension). Separate lists per goal only where the research or expert consensus really differs (strength is specific to the lifts trained; endurance and maintain likely follow growth). Each muscle's preferred list is built from these marks; 2–5 per muscle and goal |
 | `source` | where it comes from: database + id, or article/video URL (+ a second source when possible); plan exercises: "Leo's plan" | never a path into docs/source/ |
 | `evidence` | research / coaching / our call for any claim in tips | same tags as the muscle database |
 
