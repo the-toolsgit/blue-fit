@@ -75,7 +75,7 @@ export function ExerciseEditor({ open, exercise, onClose, onSaved }: { open: boo
           </div>
         </div>
 
-        <div className="field"><span className="label">Muscles · tap to cycle: off → direct (1 set) → indirect (½)</span>
+        <div className="field"><span className="label">Tap once for main muscle - tap twice for indirectly worked muscles</span>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
             {MUSCLE_GROUPS.map((m) => {
               const w = weightOf(m.id);
