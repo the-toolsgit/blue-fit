@@ -182,6 +182,13 @@ describe("session logic", () => {
     expect(t.entries[1].toFailure).toBe(true);
     expect(t.entries[1].suggestFailure).toBeUndefined();
     expect(workoutNotes(t, [], exMap).filter((n) => n.kind === "suggest")).toHaveLength(0);
+    // The extra set copies the last working set and goes before a drop set
+    const withDrop = addSet(s, ea.id, "drop");
+    const t2 = takeExtra(withDrop, ea.id).entries[0].sets;
+    expect(t2.map((x) => x.type)).toEqual([...Array(a.sets + 1).fill("working"), "drop"]);
+    // A set added by hand: no "one more set" note
+    const byHand = addSet(s, ea.id);
+    expect(workoutNotes(byHand, [], exMap).some((n) => n.title.endsWith("one more set"))).toBe(false);
   });
   it("supersets alternate and rest after the last one", () => {
     let s = createSessionFromDay(routine, mon, exMap, [], new Date());

@@ -1,7 +1,7 @@
 // Weekly set targets: the muscle database (seed/muscles.json) gives each muscle a range per goal and the rules for how
 // the training profile changes it. Units: fractional weekly sets (direct 1, indirect ½). Pure and framework-free.
 import { MUSCLE_GROUPS, type MuscleGroup, type TrainingProfile, type VolumeTarget } from "./types";
-import { muscleInfo, PROFILE_RULES, profileStep, type GoalKey } from "./muscles";
+import { muscleInfo, PROFILE_RULES, profileStep, RULES, type GoalKey } from "./muscles";
 export type { Goal, Phase, TrainingProfile } from "./types";
 
 export type Priority = "priority" | "normal" | "off";
@@ -25,9 +25,7 @@ export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Pr
   const why: string[] = [];
   const goal: GoalKey = p.goal === "maintenance" ? "maintain" : p.goal;
   let [min, max] = m.weeklySets[goal];
-  if (goal === "strength") why.push("Strength goal: fewer, harder sets");
-  else if (goal === "endurance") why.push("Endurance goal: more light sets");
-  else if (goal === "maintain") why.push("Maintain goal: a third of the sets keeps your size");
+  if (goal !== "growth") why.push(RULES.goalWhy[goal]);
 
   // Profile: the ceiling follows recovery; beginners need less
   let rec = 1;

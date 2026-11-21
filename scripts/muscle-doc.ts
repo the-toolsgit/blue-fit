@@ -27,7 +27,7 @@ const ANGLE_RULES: Record<string, Rule[]> = {
   chest: [{ angle: "upper", name: /feet elevated|decline push|low.?to.?high|low cable|reverse.?grip bench/i }, { angle: "mid/lower", name: /incline push/i }, { angle: "upper", name: /incline/i }, { angle: "mid/lower", move: ["press", "fly", "pulloverChest"] }],
   traps: [{ angle: "mid/lower", name: /kelso|face pull|y.?raise|overhead trap|prone|scap|middle back shrug/i }, { angle: "shrug", move: ["shrug", "lateral"] }],
   biceps: [{ angle: "brachialis", move: ["hammer", "zottman"], name: /hammer|reverse|zottman/i }, { angle: "short head", name: /preacher|spider|concentration|scott|prone|lying high bench|lying against an incline|over incline bench/i }, { angle: "long head", name: /incline|bayesian|drag|lying supine|behind/i }],
-  triceps: [{ angle: "long head", name: /overhead|french|skull|lying|incline|decline|behind|tate|seated triceps press|standing (one-arm )?dumbbell triceps extension|low-pulley one-arm|kneeling cable|low cable triceps|katana/i }, { angle: "medial head", name: /reverse.?grip|underhand|supinated/i }, { angle: "lateral head", move: ["closePress", "triceps"] }],
+  triceps: [{ angle: "long head", name: /overhead|french|skull|lying|incline|decline|behind|tate|seated triceps press|standing (one-arm )?dumbbell triceps extension|low-pulley one-arm|kneeling cable|low cable triceps|katana|pronated/i }, { angle: "medial head", name: /reverse.?grip|underhand|supinated/i }, { angle: "lateral head", move: ["closePress", "triceps"] }],
   forearms: [{ angle: "extensors", move: ["reverseCurl"], name: /reverse|extensor|palms?-down/i }, { angle: "flexors", name: /palms?-up|wrist curl|grip|hang|farmer/i }],
   quads: [{ angle: "extension", move: ["legExt"] }, { angle: "squat", move: ["squat", "lunge"] }],
   hamstrings: [{ angle: "knee flexion", move: ["legCurl"], name: /curl|nordic/i }, { angle: "hip hinge", move: ["hinge", "deadlift"] }],
@@ -77,7 +77,7 @@ function muscle(m: any): string {
   <h3>Angles <span class="count">${m.angles.length}</span></h3>
   <div class="angles">${m.angles.map((a: any) => `<div class="angle"><b>${esc(a.name)}</b><p>${esc(a.what)}</p><p class="eg">${a.examples.map(esc).join(" · ")}</p></div>`).join("")}</div>
 
-  <h3>Weekly sets by goal</h3>
+  <h3>Weekly sets by goal ${ev("R")} mass gain, maintain · ${ev("J")} strength, endurance</h3>
   <div class="goals">${goals}<div class="scale mono"><span>0</span><span>10</span><span>20</span></div></div>
 
   <dl class="facts">${facts.map(([k, v, e]) => `<div><dt>${k}</dt><dd>${v} ${ev(e)}</dd></div>`).join("")}</dl>

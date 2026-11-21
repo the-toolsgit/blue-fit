@@ -69,7 +69,8 @@ export function createSessionFromDay(routine: Routine, day: RoutineDay, exercise
     const why = fail.get(slot.id);
     const e2 = why ? { ...e, toFailure: true, failWhy: why } : e;
     const se = sExtra.get(slot.id), sf = why ? undefined : sFail.get(slot.id);
-    return [{ ...e2, ...(se ? { suggestExtra: se } : {}), ...(sf ? { suggestFailure: sf } : {}) }];
+    // plannedSets: working sets at the start, so the summary can tell if a set was added by hand
+    return [{ ...e2, ...(se ? { suggestExtra: se, plannedSets: e2.sets.filter((x) => x.type === "working").length } : {}), ...(sf ? { suggestFailure: sf } : {}) }];
   });
   return { id: uid(), date: localDate(now), title: day.title, routineId: routine.id, dayId: day.id, startedAt: now.toISOString(), finishedAt: null, status: "active", source: "app", entries, ...(opts.deload ? { deload: true } : {}) };
 }
@@ -117,7 +118,13 @@ export const addSet = (s: Session, entryId: string, type: LoggedSet["type"] = "w
 export const removeSet = (s: Session, entryId: string, setId: string): Session => mapEntry(s, entryId, (e) => ({ ...e, sets: e.sets.filter((x) => x.id !== setId) }));
 /** Take the suggested extra set: one more working set, now an applied extra set. */
 export const takeExtra = (s: Session, entryId: string): Session =>
-  mapEntry(addSet(s, entryId), entryId, ({ suggestExtra, ...e }) => ({ ...e, extraSet: suggestExtra }));
+  mapEntry(s, entryId, ({ suggestExtra, ...e }) => {
+    // One more working set, copied from the last working set and placed after it (before any drop sets)
+    const i = e.sets.map((x) => x.type).lastIndexOf("working");
+    const src = e.sets[i];
+    const at = i < 0 ? e.sets.length : i + 1;
+    return { ...e, extraSet: suggestExtra, sets: [...e.sets.slice(0, at), newSet(src?.weight ?? null, src?.reps ?? null, "working"), ...e.sets.slice(at)] };
+  });
 /** Take the suggested failure set: the last set goes to failure. */
 export const takeFailure = (s: Session, entryId: string): Session =>
   mapEntry(s, entryId, ({ suggestFailure, ...e }) => ({ ...e, toFailure: true, failWhy: suggestFailure }));

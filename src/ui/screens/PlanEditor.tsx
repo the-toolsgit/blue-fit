@@ -97,7 +97,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const resetTargets = () => setTdraft((defaultTargets as VolumeTarget[]).map((t) => {
     const s = suggest(t.group);
     // A suggested minimum of 0 is saved as no minimum: the muscle is tracked, not checked (no "in target" with no work)
-    return s ? { group: t.group, min: s.min > 0 ? s.min : null, max: s.max, ...(t.angles ? { angles: t.angles } : {}), ...(t.gap ? { gap: t.gap } : {}) } : { ...t };
+    return s ? { group: t.group, min: s.min > 0 ? s.min : null, max: s.max, ...(t.angles ? { angles: t.angles } : {}), ...(t.gap ? { gap: t.gap } : {}), ...(t.note ? { note: t.note } : {}) } : { ...t };
   }));
   const editTarget = (t: VolumeTarget) => setTdraft((ts) => (ts.some((x) => x.group === t.group) ? ts.map((x) => (x.group === t.group ? t : x)) : [...ts, t]));
   const issues = validateRoutine(draft);

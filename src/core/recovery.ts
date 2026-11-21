@@ -7,13 +7,15 @@
 //   partly recovered one day longer. It never blocks training.
 // Basis: 48–72 h for performance to come back (Morán-Navarro 2017; Korak 2015); training a muscle every 48–72 h is
 // common and works (Schoenfeld 2016, 2019). The 4-set line and the +1 day are *judgment*.
-import { PROFILE_RULES, profileStep, restDaysOf, RULES } from "./muscles";
+import { MUSCLE_DB, PROFILE_RULES, profileStep, restDaysOf, RULES } from "./muscles";
 import { MUSCLE_GROUPS, type Exercise, type MuscleGroup, type ProfileDraft, type Session } from "./types";
 import { countsForVolume } from "./volume";
 import { daysBetween } from "./util";
 
 export type Recovery = "recovering" | "partial" | "fresh";
 export const HARD_SETS = RULES.hardSets.value;
+/** Days to look back: the longest rest in the database, the hard day itself and one slower-recovery day */
+const WINDOW = Math.max(...MUSCLE_DB.map((m) => m.restDays.value)) + 2;
 
 export interface MuscleRecovery {
   status: Recovery;
@@ -30,19 +32,20 @@ export function slowRecovery(p: ProfileDraft | null | undefined): string[] {
   // Profile steps marked extraDay in the muscle database (age 40+, sleep under 6 h)
   const why: string[] = [];
   const age = profileStep(PROFILE_RULES.age, p?.age), sleep = profileStep(PROFILE_RULES.sleepHours, p?.sleepHours);
-  if (age?.extraDay) why.push("age 40+");
-  if (sleep?.extraDay) why.push("sleep under 6 h");
+  // Labels from the database steps ("age 40+", "sleep under 6 h")
+  if (age?.extraDay) why.push(`age ${age.from}+`);
+  if (sleep?.extraDay) why.push(`sleep under ${sleep.under} h`);
   return why;
 }
 
 export function recoveryStatus(sessions: Session[], exMap: Map<string, Exercise>, today: string, profile?: ProfileDraft | null): Record<MuscleGroup, MuscleRecovery> {
   // sets[k][group], keyFail[k] = groups hit directly by a ★ key lift failure set, k = days ago (0–3)
-  const sets = [0, 1, 2, 3, 4].map(() => new Map<MuscleGroup, number>());
-  const keyFail = [0, 1, 2, 3, 4].map(() => new Set<MuscleGroup>());
+  const sets = Array.from({ length: WINDOW + 1 }, () => new Map<MuscleGroup, number>());
+  const keyFail = Array.from({ length: WINDOW + 1 }, () => new Set<MuscleGroup>());
   for (const s of sessions) {
     if (s.status !== "finished") continue;
     const k = daysBetween(s.date, today);
-    if (k < 0 || k > 4) continue;
+    if (k < 0 || k > WINDOW) continue;
     for (const e of s.entries) {
       const ex = exMap.get(e.exerciseId);
       if (!ex) continue;
@@ -62,7 +65,7 @@ export function recoveryStatus(sessions: Session[], exMap: Map<string, Exercise>
     // Full rest days from the muscle database (2 big muscles, 1 the rest): recovering on the day itself and the rest
     // days, then fresh; a slower-recovery reason keeps it partly recovered one more day
     const R = restDaysOf(id);
-    for (let k = 0; k <= 4; k++) {
+    for (let k = 0; k <= WINDOW; k++) {
       const n = sets[k].get(id) ?? 0;
       if (n < HARD_SETS) continue;
       const slower = [...base, ...(keyFail[k].has(id) ? ["★ key lift to failure"] : [])];

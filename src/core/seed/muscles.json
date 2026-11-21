@@ -34,6 +34,18 @@
     "spreadWorkouts": {
       "evidence": "J",
       "note": "Rest days are the minimum. When the app builds a week, it spaces each muscle's workouts as far apart as the week allows, even when the rule would allow closer (Leo, Nov 20 2026)."
+    },
+    "goalWhy": {
+      "strength": "Strength goal: fewer, harder sets",
+      "endurance": "Endurance goal: light sets, a few less",
+      "maintain": "Maintain goal: a third of the sets keeps your size"
+    },
+    "weeklySetsEvidence": {
+      "growth": "R",
+      "strength": "J",
+      "endurance": "J",
+      "maintain": "R",
+      "note": "Mass gain ranges: about 10–20 sets a week (Schoenfeld 2017; Pelland 2024). Maintain: about a third (Bickel 2011). Strength and endurance ranges and the per-muscle tweaks are coaching practice and our call."
     }
   },
   "muscles": [

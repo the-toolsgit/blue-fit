@@ -16,7 +16,7 @@ import { estimateMinutes } from "./timeEstimate";
  * triceps: long head (arm overhead: overhead extensions grow it most, Maeo 2023) + lateral head + medial head (arm at the
  *   side: pushdown, kickback, dip; the medial head works in every extension, so it's tagged with the arm-down moves);
  * quads: squat/press + knee extension (only extensions grow the rectus femoris well, Ema 2016; Zabaleta-Korta 2021);
- * hamstrings: knee flexion + hip hinge (curls and hinges grow different parts, Maeo 2021; Bourne 2017);
+ * hamstrings: knee flexion + hip hinge (a hip exercise grew a part a knee exercise grew less, Bourne 2017);
  * calves: straight-knee (gastrocnemius) + bent-knee (soleus);
  * back (Nov 18 2026, by region): lats (pulldowns, straight-arm pulldowns, rows with the elbow tucked) + upper back
  *   (rows: rhomboids, mid traps, teres) + lower back (spinal erectors: hip hinges, back extensions);
@@ -183,7 +183,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const checks: Check[] =
     goal === "maintenance" ? [volume(true), recovery]
     : goal === "strength" ? [volume(false), jobs, frequency, recovery,
-        check("heavy", "Heavy lifts", stars.length && stars.every((s) => s.repMin <= 6) ? [] : stars.length ? uniq(stars.filter((s) => s.repMin > 6).map((s) => `${ex(s).name}: ${s.repMin}+ reps`)) : ["No ★ heavy lift"], "★ lifts at 6 reps or less (Schoenfeld 2017)"),
+        check("heavy", "Heavy lifts", stars.length && stars.every((s) => s.repMin <= 6) ? [] : stars.length ? uniq(stars.filter((s) => s.repMin > 6).map((s) => `${ex(s).name}: ${s.repMin}+ reps`)) : ["No ★ heavy lift"], "★ lifts at 6 reps or less"),
         rest(STRENGTH_REST, null, stars)]
     : goal === "endurance" ? [volume(false), jobs, frequency, recovery,
         check("reps", "High reps", slots.filter((s) => mid(s) >= 15).length * 2 >= slots.length ? [] : ["Most exercises under 15 reps"], "Most exercises 15+ reps (ACSM 2009)"),

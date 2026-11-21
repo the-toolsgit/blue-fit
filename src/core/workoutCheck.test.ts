@@ -144,3 +144,14 @@ describe("exercises per muscle", () => {
     expect(exercisesFor(r, exMap, "adductors").other.length).toBeGreaterThan(0);
   });
 });
+
+describe("muscle database and the muscle map", () => {
+  it("every angle of a multi-angle muscle has a labeled part on the map", async () => {
+    const { MAP_PARTS } = await import("./muscleMap");
+    const { ANGLES } = await import("./muscles");
+    for (const [g, angles] of Object.entries(ANGLES)) {
+      const refs = Object.values(MAP_PARTS[g as keyof typeof MAP_PARTS] ?? {}).flat().map((p) => p!.ref);
+      for (const a of angles!) expect(refs, `${g}: ${a}`).toContain(`job:${a}`);
+    }
+  });
+});

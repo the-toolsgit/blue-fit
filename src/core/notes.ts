@@ -118,7 +118,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
     }
 
     // Auto-adjust off: what the app would have changed, when the user didn't take it
-    if (e.suggestExtra) notes.push({ kind: "suggest", tone: "info", exerciseId: e.exerciseId, title: `${ex.name}: one more set`, text: `${e.suggestExtra.join(" · ")}. An extra set would have caught up.` });
+    if (e.suggestExtra && !(e.plannedSets != null && e.sets.filter((x) => x.type === "working").length > e.plannedSets)) notes.push({ kind: "suggest", tone: "info", exerciseId: e.exerciseId, title: `${ex.name}: one more set`, text: `${e.suggestExtra.join(" · ")}. An extra set would have caught up.` });
     if (e.suggestFailure && !failureSet(e, s.deload)) notes.push({ kind: "suggest", tone: "info", exerciseId: e.exerciseId, title: `${ex.name}: last set to failure`, text: "The app would have taken the last set to failure." });
 
     const g = effortGap(e, s.deload);

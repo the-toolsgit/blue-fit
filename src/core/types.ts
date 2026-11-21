@@ -149,6 +149,8 @@ export interface SessionEntry {
    *  a tip and in the summary instead of applied. Cleared when the user takes it. */
   suggestExtra?: string[];
   suggestFailure?: string[];
+  /** Working sets when the workout started (only with suggestExtra) */
+  plannedSets?: number;
   sets: LoggedSet[];
 }
 
