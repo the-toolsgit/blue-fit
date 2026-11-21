@@ -57,13 +57,13 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
         <span style={{ position: "absolute", left: 12, top: 11, color: "var(--muted)" }}><Icon name="search" size={20} /></span>
         <input className="input" style={{ paddingLeft: 40 }} type="search" placeholder="Search name, alias or muscle" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search exercises" />
       </div>
-      <div className="row" style={{ gap: 8, marginTop: 8, flexWrap: "wrap" }}>
+      <div className="row" style={{ gap: 6, marginTop: 8, flexWrap: "wrap" }}>
         <button className="filter-btn" aria-pressed={groups.length > 0} onClick={() => setTab("muscle")}>Muscle <Icon name="chevron" size={14} /></button>
         <button className="filter-btn" aria-pressed={eqs.length > 0} onClick={() => setTab("equipment")}>Equipment <Icon name="chevron" size={14} /></button>
         {/* Each picked filter, with an X to remove it in one tap */}
-        {groups.map((g) => <button key={g} className="filter-on" onClick={() => setGroups(groups.filter((x) => x !== g))} aria-label={`Remove ${muscleLabel(g)} filter`}>{muscleLabel(g)} <Icon name="close" size={14} /></button>)}
-        {eqs.map((x) => <button key={x} className="filter-on" onClick={() => setEqs(eqs.filter((y) => y !== x))} aria-label={`Remove ${EQUIPMENT_LABEL[x]} filter`}>{EQUIPMENT_LABEL[x]} <Icon name="close" size={14} /></button>)}
-        <span className="muted mono" style={{ marginLeft: "auto", fontSize: 13 }}>{list.length} found</span>
+        {groups.map((g) => <button key={g} className="filter-on" onClick={() => setGroups(groups.filter((x) => x !== g))} aria-label={`Remove ${muscleLabel(g)} filter`}>{muscleLabel(g)} <Icon name="close" size={12} /></button>)}
+        {eqs.map((x) => <button key={x} className="filter-on" onClick={() => setEqs(eqs.filter((y) => y !== x))} aria-label={`Remove ${EQUIPMENT_LABEL[x]} filter`}>{EQUIPMENT_LABEL[x]} <Icon name="close" size={12} /></button>)}
+        <span className="muted mono" style={{ marginLeft: "auto", fontSize: 12 }}>{list.length} found</span>
       </div>
       <div style={{ marginTop: 6 }}>
         {(more ? list : list.slice(0, 60)).map((e) => (

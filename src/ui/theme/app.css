@@ -96,13 +96,14 @@ ul { margin: 0; padding-left: 18px; }
 .star { color: var(--star); text-shadow: 0 0 10px color-mix(in srgb, var(--star) 60%, transparent); }
 .chips-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 2px 16px 6px; margin: 0 -16px; scrollbar-width: none; }
 .chips-scroll::-webkit-scrollbar { display: none; }
-.filter-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 14px; border: 1px solid var(--line-strong); background: var(--surface-2); color: var(--muted); font: 600 14px var(--body); max-width: 50%; }
+.filter-btn { position: relative; display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--line-strong); background: var(--surface-2); color: var(--muted); font: 600 13px var(--body); max-width: 50%; }
 .filter-btn svg { transform: rotate(90deg); }
 .filter-btn[aria-pressed="true"] { color: var(--neon-ink); border-color: var(--neon); box-shadow: 0 0 14px -4px var(--neon); }
 .new-btn { position: relative; display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 0 12px 0 8px; border-radius: 99px; border: 1px solid var(--neon); color: var(--neon-ink); font: 700 13px var(--body); background: var(--glow-soft); box-shadow: 0 0 14px -5px var(--neon); }
 .new-btn::before { content: ""; position: absolute; inset: -6px; } /* keeps a 44px tap area */
 .new-btn:active { transform: scale(0.95); }
-.filter-on { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px 0 14px; border-radius: 99px; border: 1px solid var(--neon); background: var(--glow-soft); color: var(--neon-ink); font: 600 14px var(--body); box-shadow: 0 0 12px -5px var(--neon); animation: fadeIn 0.2s ease both; }
+.filter-on { position: relative; display: inline-flex; align-items: center; gap: 3px; min-height: 28px; padding: 0 7px 0 10px; border-radius: 99px; border: 1px solid var(--neon); background: var(--glow-soft); color: var(--neon-ink); font: 600 12px var(--body); box-shadow: 0 0 12px -5px var(--neon); animation: fadeIn 0.2s ease both; }
+.filter-btn::before, .filter-on::before { content: ""; position: absolute; inset: -4px -3px; } /* bigger tap area */
 .filter-pic { width: 52px; height: 52px; flex: none; border-radius: 50%; display: grid; place-items: center; overflow: hidden; background: var(--surface-2); border: 1px solid var(--line); color: var(--neon); }
 .pic-grid { display: grid; grid-template-columns: 19px 19px; gap: 1px; }
 .filter-row.on { background: var(--glow-soft); }
