@@ -3,7 +3,7 @@ import { buildSeed } from "./seed";
 import { failureApplies, failureBudget, failureEligible, mainMuscle, MANUAL_WHY, planFailure, weekFailure, type FailureContext } from "./failure";
 import { createSessionFromDay, finishSession, moveEntry, refitFailure, swapEntry } from "./session";
 import { MIGRATIONS } from "./migrations";
-import type { ProfileDraft, Session } from "./types";
+import { muscleLabel, type ProfileDraft, type Session } from "./types";
 
 const seed = buildSeed();
 const exMap = new Map(seed.exercises.map((e) => [e.id, e]));
@@ -106,39 +106,28 @@ describe("strategic last set to failure", () => {
     expect(calf.toFailure).toBe(true);
     expect(swapEntry(s, calf.id, exMap.get("single-arm-db-row")!, []).entries.find((e) => e.id === calf.id)!.toFailure).toBeUndefined();
   });
-  it("reorder keeps an app-picked failure on the last exercise for its muscle", () => {
+  it("the failure set never moves with the gym order; only the \"Last … exercise\" reason adapts", () => {
     const elig = seed.exercises.filter((e) => failureEligible(e) && mainMuscle(e));
     const a = elig[0], b = elig.find((e) => e.id !== a.id && mainMuscle(e) === mainMuscle(a))!;
     const other = seed.exercises.find((e) => mainMuscle(e) && mainMuscle(e) !== mainMuscle(a))!;
-    const set = (id: string) => ({ id, type: "working" as const, weight: 10, reps: 10, done: false });
-    const en = (id: string, ex: string, f?: string[]) => ({ id, exerciseId: ex, slotId: "s" + id, restSec: 60, sets: [set(id + "1")], ...(f ? { toFailure: true, failWhy: f } : {}) });
-    const s0 = { id: "x", date: "2026-11-18", title: "t", startedAt: "", entries: [en("1", b.id), en("2", other.id), en("3", a.id, ["Last x exercise"])] } as unknown as Session;
-    // Move b below a: failure follows to b
-    const moved = refitFailure(moveEntry(moveEntry(s0, "1", 1), "1", 1), exMap);
-    expect(moved.entries.map((e) => [e.id, !!e.toFailure])).toEqual([["2", false], ["3", false], ["1", true]]);
-    expect(moved.entries[2].failWhy).toEqual(["Last x exercise"]);
-    // Turned off in Edit plan: dropped instead
-    expect(refitFailure(moveEntry(moveEntry(s0, "1", 1), "1", 1), exMap, new Set(["s1"])).entries.some((e) => e.toFailure)).toBe(false);
-    // Turned on by the user: stays put
-    const manual = { ...s0, entries: s0.entries.map((e) => e.id === "3" ? { ...e, failWhy: [MANUAL_WHY] } : e) };
-    expect(refitFailure(moveEntry(moveEntry(manual, "1", 1), "1", 1), exMap).entries.find((e) => e.id === "3")!.toFailure).toBe(true);
-  });
-  it("starting the flagged exercise while another for its muscle is untouched moves the failure there", () => {
-    const elig = seed.exercises.filter((e) => failureEligible(e) && mainMuscle(e));
-    const a = elig[0], b = elig.find((e) => e.id !== a.id && mainMuscle(e) === mainMuscle(a))!;
+    const tag = `Last ${muscleLabel(mainMuscle(a)!).toLowerCase()} exercise`;
     const set = (id: string, done = false) => ({ id, type: "working" as const, weight: 10, reps: 10, done });
     const en = (id: string, ex: string, sets: ReturnType<typeof set>[], f?: string[]) => ({ id, exerciseId: ex, slotId: "s" + id, restSec: 60, sets, ...(f ? { toFailure: true, failWhy: f } : {}) });
-    // Plan order: b then a (a flagged as last). At the gym a is done first: its first set is done, b untouched
-    const s0 = { id: "x", date: "2026-11-18", title: "t", startedAt: "", entries: [en("1", b.id, [set("b1"), set("b2")]), en("2", a.id, [set("a1", true), set("a2")], ["Last x exercise"])] } as unknown as Session;
-    const r = refitFailure(s0, exMap);
-    expect(r.entries.map((e) => [e.id, !!e.toFailure])).toEqual([["1", true], ["2", false]]);
-    // b already started too: nothing left after a, so it stays
-    const both = { ...s0, entries: s0.entries.map((e) => e.id === "1" ? { ...e, sets: [set("b1", true), set("b2")] } : e) };
-    expect(refitFailure(both, exMap).entries.find((e) => e.id === "2")!.toFailure).toBe(true);
-    // The untouched one isn't safe to fail (dumbbell row): the failure stays where it is, never dropped
-    const row = { ...s0, entries: s0.entries.map((e) => e.id === "1" ? { ...e, exerciseId: "single-arm-db-row" } : e) };
-    expect(mainMuscle(exMap.get("single-arm-db-row"))).toBe(mainMuscle(a));
-    expect(refitFailure(row, exMap).entries.find((e) => e.id === "2")!.toFailure).toBe(true);
+    const s0 = { id: "x", date: "2026-11-18", title: "t", startedAt: "", entries: [en("1", b.id, [set("b1")]), en("2", other.id, [set("o1")]), en("3", a.id, [set("a1"), set("a2")], [tag, "Priority muscle"])] } as unknown as Session;
+    // Drag b below a: failure stays on a, "Last" reason goes
+    const moved = refitFailure(moveEntry(moveEntry(s0, "1", 1), "1", 1), exMap);
+    expect(moved.entries.map((e) => [e.id, !!e.toFailure])).toEqual([["2", false], ["3", true], ["1", false]]);
+    expect(moved.entries[1].failWhy).toEqual(["Priority muscle"]);
+    // a started first at the gym while b is untouched: same
+    const early = { ...s0, entries: s0.entries.map((e) => e.id === "3" ? { ...e, sets: [set("a1", true), set("a2")] } : e) };
+    expect(refitFailure(early, exMap).entries.find((e) => e.id === "3")).toMatchObject({ toFailure: true, failWhy: ["Priority muscle"] });
+    // b done too: a is the last one again
+    const after = { ...early, entries: early.entries.map((e) => e.id === "1" ? { ...e, sets: [set("b1", true)] } : e) };
+    expect(refitFailure(refitFailure(early, exMap), exMap).entries.find((e) => e.id === "3")!.failWhy).toEqual(["Priority muscle"]);
+    expect(refitFailure({ ...after, entries: after.entries.map((e) => e.id === "3" ? { ...e, failWhy: ["Priority muscle"] } : e) }, exMap).entries.find((e) => e.id === "3")!.failWhy).toEqual([tag, "Priority muscle"]);
+    // Turned on by the user: untouched
+    const manual = { ...s0, entries: s0.entries.map((e) => e.id === "3" ? { ...e, failWhy: [MANUAL_WHY] } : e) };
+    expect(refitFailure(moveEntry(moveEntry(manual, "1", 1), "1", 1), exMap).entries.find((e) => e.id === "3")!.failWhy).toEqual([MANUAL_WHY]);
   });
   it("migration gives built-in exercises their compound flag once", () => {
     const m = MIGRATIONS.find((x) => x.id === "2026-11-17-compound-flag")!;

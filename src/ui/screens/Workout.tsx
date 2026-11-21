@@ -118,7 +118,6 @@ export function WorkoutScreen() {
   const total = s.entries.reduce((a, e) => a + e.sets.length, 0);
   const done = s.entries.reduce((a, e) => a + e.sets.filter((x) => x.done).length, 0);
   const day = routine?.days.find((d) => d.id === s.dayId);
-  const offSlots = new Set(day?.slots.filter((x) => x.toFailure === false).map((x) => x.id) ?? []);
 
   /** Target button: scroll to the current card, or flash its border when it's already in view. */
   const goToCurrent = () => {
@@ -161,7 +160,7 @@ export function WorkoutScreen() {
     setSorting(false);
     if (!ev.over || ev.active.id === ev.over.id) return;
     const from = s.entries.findIndex((x) => x.id === ev.active.id), to = s.entries.findIndex((x) => x.id === ev.over!.id);
-    const next = refitFailure(moveEntryTo(s, from, to), exMap, offSlots);
+    const next = refitFailure(moveEntryTo(s, from, to), exMap);
     commit(next);
     // The plan day takes the new order too
     if (routine && day) {
@@ -178,8 +177,8 @@ export function WorkoutScreen() {
   const onToggle = (e: SessionEntry, x: LoggedSet) => {
     const ex = exMap.get(e.exerciseId)!;
     if (!x.done && needsValues(x, ex)) return; // the card shakes the button and highlights what's missing
-    // Gym order can differ from the plan: a failure set follows to the exercise really done last for its muscle
-    const next = refitFailure(toggleDone(s, e.id, x.id, new Date()), exMap, offSlots);
+    // Gym order can differ from the plan: the failure set stays, its "Last … exercise" reason adapts
+    const next = refitFailure(toggleDone(s, e.id, x.id, new Date()), exMap);
     commit(next);
     if (x.done) return; // undo
     vibrate(12);

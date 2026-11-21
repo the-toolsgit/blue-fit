@@ -1,7 +1,7 @@
 // Session (logged workout) logic. Pure functions: every operation returns a new Session.
 import { progressionHint } from "./progression";
 import { prsForEntry, type PrKind } from "./records";
-import type { Exercise, LoggedSet, MuscleGroup, Routine, RoutineDay, Session, SessionEntry, Slot } from "./types";
+import { muscleLabel, type Exercise, type LoggedSet, type MuscleGroup, type Routine, type RoutineDay, type Session, type SessionEntry, type Slot } from "./types";
 import { localDate, uid } from "./util";
 import { deloadSets, deloadWeight } from "./deload";
 import { failureEligible, mainMuscle, MANUAL_WHY, TEST_WHY } from "./failure";
@@ -151,34 +151,27 @@ export function moveEntryTo(s: Session, from: number, to: number): Session {
 }
 
 /**
- * After a reorder or a done set, keep each app-picked failure set on the last exercise for its muscle (the rule it was
- * picked by). Exercises already started count as done, so starting the flagged one while another for the same muscle
- * is untouched moves the failure to the last untouched one that's safe to fail (gym order can differ from the plan);
- * with none, it stays. After a reorder (not started) it moves to the exercise that is now last for that muscle, if
- * that one is safe to fail and wasn't turned off in Edit plan (`offSlotIds`); otherwise it's dropped. Failure the user turned on, or one already done, stays put.
+ * After a reorder or a done set: an app-picked failure set stays on its exercise whatever order the gym allows (Leo,
+ * Nov 21 2026); only its reasons adapt. "Last <muscle> exercise" shows only while no other exercise for that muscle is
+ * still to come (exercises already started count as done; not started ones count in list order).
+ * Failure the user turned on, a test for more weight, or one already done are left alone.
  */
-export function refitFailure(s: Session, exMap: Map<string, Exercise>, offSlotIds: Set<string> = new Set()): Session {
-  let entries = s.entries;
-  for (const e of s.entries) {
-    if (!e.toFailure || e.failWhy?.includes(MANUAL_WHY) || e.failWhy?.includes(TEST_WHY)) continue; // a test belongs to its exercise
-    const cur = entries.find((x) => x.id === e.id)!;
-    if (!cur.toFailure) continue;
+export function refitFailure(s: Session, exMap: Map<string, Exercise>): Session {
+  const started = (x: SessionEntry) => x.sets.some((y) => y.done && (y.type === "working" || y.type === "failure"));
+  const entries = s.entries.map((cur, i) => {
+    if (!cur.toFailure || !cur.failWhy || cur.failWhy.includes(MANUAL_WHY) || cur.failWhy.includes(TEST_WHY)) return cur;
     const lastWork = [...cur.sets].reverse().find((x) => x.type === "working" || x.type === "failure");
-    if (lastWork?.done) continue;
+    if (lastWork?.done) return cur;
     const g = mainMuscle(exMap.get(cur.exerciseId));
-    if (!g) continue;
-    // Last among the exercises for this muscle not started yet (the gym order can differ from the plan's)
-    const started = (x: SessionEntry) => x.sets.some((y) => y.done && (y.type === "working" || y.type === "failure"));
-    const left = entries.filter((x) => mainMuscle(exMap.get(x.exerciseId)) === g && !started(x));
-    const canFail = (x: SessionEntry) => !x.toFailure && failureEligible(exMap.get(x.exerciseId)) && !(x.slotId && offSlotIds.has(x.slotId));
-    // Already started: move only to an untouched exercise that's safe to fail; with none, it stays here
-    const last = started(cur) ? [...left].reverse().find(canFail) : left.at(-1);
-    if (!last || last.id === cur.id) continue;
-    const ok = canFail(last);
-    entries = entries.map((x) => x.id === cur.id ? { ...x, toFailure: undefined, failWhy: undefined }
-      : x.id === last.id && ok ? { ...x, toFailure: true, failWhy: cur.failWhy } : x);
-  }
-  return entries === s.entries ? s : { ...s, entries };
+    if (!g) return cur;
+    const same = (x: SessionEntry) => x.id !== cur.id && mainMuscle(exMap.get(x.exerciseId)) === g && !started(x);
+    const isLast = started(cur) ? !s.entries.some(same) : !s.entries.slice(i + 1).some(same);
+    const tag = `Last ${muscleLabel(g).toLowerCase()} exercise`;
+    const rest = cur.failWhy.filter((w) => !/^Last .+ exercise$/.test(w));
+    const why = isLast ? [tag, ...rest] : rest;
+    return why.length === cur.failWhy.length && why.every((w, k) => w === cur.failWhy![k]) ? cur : { ...cur, failWhy: why };
+  });
+  return entries.every((e, k) => e === s.entries[k]) ? s : { ...s, entries };
 }
 
 /** Swap an exercise for this session only. Keeps set count, rest and rep range; pre-fills from the new exercise's history. */
