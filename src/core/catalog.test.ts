@@ -76,5 +76,7 @@ describe("exercise database in the app", () => {
     const jobs = weekInsight(r, exMap, seed.targets).checks.find((c) => c.id === "jobs")!;
     const back = jobs.issues.find((i) => i.what.includes("lower back"))!;
     expect(back.what).toContain("try");
+    const tries = back.what.split("try ")[1].split(" or ");
+    expect(new Set(tries.map((n) => n.replace(/\s*\(.*\)$/, ""))).size).toBe(tries.length);
   });
 });

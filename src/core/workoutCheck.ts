@@ -86,8 +86,13 @@ export function angleExamples(exMap: Map<string, Exercise>, g: MuscleGroup, job:
     seen.add(e.id);
     const j = e.jobs?.[g];
     return j != null && (Array.isArray(j) ? j.includes(job) : j === job);
-  }).sort((a, b) => pick(a) - pick(b) || a.name.localeCompare(b.name)).slice(0, 2).map((e) => e.name);
+  }).sort((a, b) => pick(a) - pick(b) || a.name.localeCompare(b.name))
+    // Two versions of one exercise ("45° Back Extension (Glutes)" / "(Hamstrings)") read the same: keep the first
+    .filter((e, _, all) => all.find((x) => base(x.name) === base(e.name)) === e).slice(0, 2).map((e) => e.name);
 }
+
+/** Exercise name without its "(…)" variant */
+const base = (name: string) => name.replace(/\s*\(.*\)\s*$/, "").trim().toLowerCase();
 
 const mid = (s: Slot) => (s.repMin + s.repMax) / 2;
 const isDirect = (ex: Exercise | undefined, g: MuscleGroup) => !!ex?.volume.some((v) => v.group === g && v.weight === 1);
