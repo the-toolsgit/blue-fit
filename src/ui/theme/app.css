@@ -380,6 +380,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 @keyframes flake-c { 0% { opacity: 0; transform: translate(0, -3px) rotate(0); } 25% { opacity: .9; } 100% { opacity: 0; transform: translate(-.5px, 5px) rotate(45deg); } }
 @media (prefers-reduced-motion: reduce) { .streak-flame .spark, .streak-flame .flake { animation: none; opacity: 1; } }
 .cal-d.mark { color: #fff; font-weight: 700; text-shadow: 0 1px 3px rgba(0, 0, 0, .85); }
+/* A flame day shows only the flame: no box, fill or today ring */
+.cal-d.mark { border-color: transparent !important; box-shadow: none !important; background: none !important; }
 .cal-d .cal-flame { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
 /* The flame body sits 1.75 of 27 units below the svg's middle (room for sparks above): lift it so the flame itself is dead center */
 .cal-d .cal-flame svg { transform: translateY(-6.48%); }
