@@ -96,10 +96,10 @@ export const TEMPLATES: Record<string, Template> = {
   pushdown: T({ base: { hx: 55, hy: 57, t: 12, th: 4, sh: -2, ua: -5 }, A: { fa: 115 }, B: { fa: 2 }, props: [] }, { joint: "ha", dir: "down" }, "cable", [84, -22]),
   "overhead-extension-cable": T({ base: { hx: 52, hy: 57, t: 22, th: 8, sh: -4, ua: 155 }, A: { fa: 305 }, B: { fa: 155 }, props: [] }, { joint: "ha", dir: "up" }, "cable", [4, 100]),
   "overhead-extension-db": T({ base: { hx: 50, hy: 80, t: 0, th: 88, sh: 0, ua: 172 }, A: { fa: 330 }, B: { fa: 172 }, props: [{ line: [38, 84, 62, 84] }, { line: [50, 84, 50, 104] }] }, { joint: "ha", dir: "up" }, "db"),
-  skullcrusher: T({ base: { hx: 70, hy: 76, t: -90, th: 100, sh: 0, ua: 195 }, A: { fa: 195 }, B: { fa: 320 }, props: [{ line: [28, 80, 82, 80] }, { line: [44, 80, 44, 104] }] }, { joint: "ha", dir: "down" }, "bar"),
+  skullcrusher: T({ base: { hx: 70, hy: 76, t: -90, th: 100, sh: 0, ua: 195 }, A: { fa: 195 }, B: { fa: 320 }, props: [{ line: [28, 80, 82, 80] }, { line: [44, 80, 44, 104] }] }, { joint: "ha", dir: "down" }, "bar", [6, 96]),
   "skullcrusher-incline": T({ base: { hx: 58, hy: 78, t: -55, th: 80, sh: 0, ua: 200 }, A: { fa: 200 }, B: { fa: 350 }, props: [{ line: [56, 84, 26, 64] }, { line: [52, 82, 72, 82] }] }, { joint: "ha", dir: "down" }, "bar"),
   "kickback-standing": T({ base: { hx: 66, hy: 58, t: -12, th: 12, sh: 12, ua: -15 }, A: { fa: 80 }, B: { fa: -15 }, props: [{ line: [94, -14, 94, 104] }, { arm2: [106, 106] }] }, { joint: "ha", dir: "toward" }, "cable", [92, -8]),
-  "kickback-bent": T({ base: { hx: 46, hy: 58, t: 70, th: 14, sh: -8, ua: -80 }, A: { fa: 0 }, B: { fa: -80 }, props: [] }, { joint: "ha", dir: "toward" }, "db"),
+  "kickback-bent": T({ base: { hx: 46, hy: 58, t: 70, th: 14, sh: -8, ua: -80 }, A: { fa: 0 }, B: { fa: -80 }, props: [] }, { joint: "ha", dir: "toward" }, "db", [100, 100]),
   // ── Quads ──
   squat: T({ base: { anchor: 1, ax: 60, ua: -25, fa: 150 }, A: { th: 0, sh: 0, t: 8 }, B: { th: 82, sh: -32, t: 38 }, props: [{ pad: "sh", r: 3 }] }, { joint: "hip", dir: "down" }, "none"),
   "squat-smith": T({ base: { anchor: 1, ax: 60, ua: -25, fa: 150 }, A: { th: 0, sh: 0, t: 8 }, B: { th: 82, sh: -32, t: 38 }, props: [{ line: [67, -18, 67, 104] }, { pad: "sh", r: 3 }] }, { joint: "hip", dir: "down" }, "none"),
@@ -136,6 +136,27 @@ export const TEMPLATES: Record<string, Template> = {
   "wrist-curl": T({ base: { hx: 50, hy: 80, t: 20, th: 88, sh: 0, ua: 30 }, A: { fa: 70 }, B: { fa: 100 }, props: [{ line: [38, 84, 62, 84] }, { line: [50, 84, 50, 104] }] }, { joint: "ha", dir: "up" }, "db"),
   "neck-flexion": T({ base: { hx: 74, hy: 84, th: 100, sh: 0, ua: 80, fa: 260 }, A: { t: -96 }, B: { t: -74 }, props: [{ line: [40, 88, 86, 88] }, { line: [56, 88, 56, 104] }] }, { joint: "sh", dir: "up" }, "none"),
   "neck-extension": T({ base: { hx: 44, hy: 84, th: -100, sh: 0, ua: -80, fa: -260 }, A: { t: 96 }, B: { t: 74 }, props: [{ line: [30, 88, 78, 88] }, { line: [62, 88, 62, 104] }] }, { joint: "sh", dir: "up" }, "none"),
+
+  // ── Added for the writers' poor fits (phase 2) ──
+  "lateral-raise-lean-in": T({ v: "f", base: { cx: 70, la: 0, sa: 0, hw: 1.5, rot: -14, L: { ua: -60, fa: -60 } }, A: { ua: 8, fa: 8 }, B: { ua: 92, fa: 92 }, props: [{ line: [98, -14, 98, 104] }, { line: [92, 104, 104, 104] }] }, { joint: "haR", dir: "up" }, "db"),
+  "lateral-raise-lying": T({ base: { hx: 70, hy: 76, t: -90, th: 90, sh: 90, nofoot: 1 }, A: { ua: 90, fa: 90 }, B: { ua: 180, fa: 180 }, props: [{ line: [20, 80, 100, 80] }, { line: [36, 80, 36, 104] }, { line: [86, 80, 86, 104] }] }, { joint: "ha", dir: "up" }, "db"),
+  "landmine-press": T({ base: { t: 10 }, A: { ua: -20, fa: 160 }, B: { ua: 130, fa: 130 }, props: [] }, { joint: "ha", dir: "up" }, "cable", [104, 104]),
+  "y-raise-incline": T({ base: { hx: 44, hy: 58, t: 48, th: 20, sh: -10 }, A: { ua: 0, fa: 0 }, B: { ua: 140, fa: 140 }, props: [{ line: [52, 62, 74, 38] }, { line: [56, 62, 56, 104] }] }, { joint: "ha", dir: "up" }, "db"),
+  "pullup-scapular": T({ v: "f", base: { lf: 1, la: 4, sa: 2 }, A: { hy: 58, ua: 172, fa: 172 }, B: { hy: 51, ua: 160, fa: 172 }, props: [{ line: [22, -18, 98, -18] }] }, { joint: "sh", dir: "up" }, "none"),
+  "handstand-pushup": T({ base: { hx: 60, t: 180, th: 170, sh: 170, nofoot: 1 }, A: { hy: 32, ua: 12, fa: -12 }, B: { hy: 46, ua: 50, fa: 306 }, props: [{ line: [40, -20, 40, 104] }] }, { joint: "sh", dir: "down" }, "none"),
+  "overhead-extension-standing": T({ base: { ua: 172 }, A: { fa: 330 }, B: { fa: 172 }, props: [] }, { joint: "ha", dir: "up" }, "db", [16, 100]),
+  "fly-cable-low": T({ v: "f", base: {}, A: { ua: 40, fa: 30 }, B: { ua: 130, fa: 190 }, props: [{ cable: [112, 100], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
+  "press-floor": T({ base: { hx: 70, hy: 98, t: -90, th: 135, sh: 0 }, A: { ua: 180, fa: 180 }, B: { ua: 110, fa: 175 }, props: [] }, { joint: "ha", dir: "down" }, "bar"),
+  "pallof-press": T({ base: { t: 0 }, A: { ua: -40, fa: 90 }, B: { ua: 90, fa: 90 }, props: [] }, { joint: "ha", dir: "away" }, "cable", [116, 62]),
+  "woodchop-up": T({ v: "f", base: { L: { ua: 20, fa: 10 } }, A: { ua: 20, fa: 10 }, B: { ua: 140, fa: 140 }, props: [{ cable: [112, 100], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
+  "leg-lower-lying": T({ base: { hx: 70, hy: 98, t: -90, ua: 180, fa: 180 }, A: { th: 175, sh: 175 }, B: { th: 100, sh: 100 }, props: [] }, { joint: "an", dir: "down" }, "none"),
+  "reverse-nordic": T({ base: { sh: -90, nofoot: 1, ua: 20, fa: 120 }, A: { hx: 52, hy: 78, th: 0, t: 0 }, B: { hx: 41.9, hy: 80.2, th: 25, t: -25 }, props: [] }, { joint: "sh", dir: "down" }, "none"),
+  "sissy-squat": T({ base: { anchor: 1, ax: 56, ah: 6, ua: 60, fa: 120 }, A: { th: 0, sh: 0, t: 0 }, B: { th: 60, sh: -40, t: -30 }, props: [{ line: [70, 30, 70, 104] }] }, { joint: "hip", dir: "down" }, "none"),
+  "calf-press": T({ base: { hx: 40, hy: 80, t: -45, ua: 20, fa: 40 }, A: { th: 127, sh: 120 }, B: { th: 120, sh: 138 }, props: [{ line: [44, 85, 18, 59] }, { perp: "an", ang: 40, len: 20 }] }, { joint: "an", dir: "toward" }, "none"),
+  "calf-raise-donkey": T({ base: { anchor: 1, ax: 46, t: 80, th: 0, sh: 0, ua: 10, fa: 10 }, A: { ah: 7 }, B: { ah: 0 }, props: [{ line: [84, 70, 104, 70] }, { line: [96, 70, 96, 104] }] }, { joint: "hip", dir: "down" }, "none"),
+  "kickback-quadruped": T({ base: { hx: 50, hy: 80, t: 65, ua: 0, fa: 0, nofoot: 1 }, A: { th: 0, sh: -90 }, B: { th: -100, sh: -100 }, props: [] }, { joint: "an", dir: "up" }, "none", [4, 100]),
+  "hip-abduction-standing": T({ v: "f", base: {}, A: { la: 4, sa: 2 }, B: { la: 26, sa: 6 }, props: [{ line: [100, -14, 100, 104] }] }, { joint: "knR", dir: "away" }, "none"),
+  "pull-through": T({ base: { anchor: 1, ax: 60 }, A: { th: 0, sh: 0, t: 0, ua: 0, fa: 0 }, B: { th: 20, sh: -8, t: 75, ua: 0, fa: 0 }, props: [{ cable: [8, 100], to: "ha" }] }, { joint: "ha", dir: "down" }, "none"),
 };
 
 export interface FigureAdjust {
