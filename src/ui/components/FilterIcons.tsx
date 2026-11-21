@@ -24,9 +24,9 @@ const DRAW: Partial<Record<Equipment, ReactElement>> = {
     <path d="M16 24h16" {...line} strokeWidth={3} />
     <path d="M20 22v4M24 22v4M28 22v4" {...soft} />
   </>,
-  // EZ bar with welded plate ends
+  // EZ bar (gentle wave grips) with welded plate ends
   fixedBar: <>
-    <path d="M8 24h7l3-4 4 8 4-8 4 8 3-4h7" {...line} />
+    <path d="M8 24h4c3 0 3 3 6 3s3-5.5 6-5.5 3 5.5 6 5.5 3-3 6-3h4" {...line} />
     <rect x="2" y="14" width="6" height="20" rx="1.5" {...line} />
     <rect x="40" y="14" width="6" height="20" rx="1.5" {...line} />
   </>,
