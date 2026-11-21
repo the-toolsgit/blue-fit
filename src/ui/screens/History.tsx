@@ -163,8 +163,8 @@ export function HistoryScreen() {
       {[...groups].map(([w, list]) => (
         <section key={w}>
           <h2 className="section-title">{w === thisWeek ? "This week" : `Week of ${fmtDate(w, { month: "short", day: "numeric" })}`} · {list.length}</h2>
-          {/* Within a week: oldest at the top, most recent at the bottom */}
-          <div className="glass" style={{ padding: 4 }}>{[...list].reverse().map((s) => <Row key={s.id} s={s} />)}</div>
+          {/* Within a week: most recent at the top */}
+          <div className="glass" style={{ padding: 4 }}>{list.map((s) => <Row key={s.id} s={s} />)}</div>
         </section>
       ))}
     </div>
