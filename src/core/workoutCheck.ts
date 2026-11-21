@@ -167,8 +167,8 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     const own = slots.filter((s) => isDirect(ex(s), g));
     if (new Set(own.map((s) => s.exerciseId)).size < 2) return [];
     const heavy = own.some((s) => mid(s) <= HEAVY_REPS), light = own.some((s) => mid(s) >= LIGHT_REPS);
-    return heavy && light ? [] : [`${L(g)}: ${heavy ? `no light sets (${LIGHT_REPS}+ reps)` : `no heavy sets (${HEAVY_REPS} reps or less)`}`];
-  }), "Each muscle gets some heavy and some light sets");
+    return heavy && light ? [] : [`${L(g)}: ${heavy ? "no light sets" : "no heavy sets"}`];
+  }), `Each muscle gets some heavy (max ${HEAVY_REPS} reps) and some light sets (min ${LIGHT_REPS} reps)`);
   const mix: Check = mix0.pass ? mix0 : { ...mix0, warn: true };
 
   const rest = (min: number | null, max: number | null, only?: Slot[]) => {
