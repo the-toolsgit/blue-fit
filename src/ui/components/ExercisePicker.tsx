@@ -37,7 +37,7 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
   }, [exercises, q, group, eq, exclude, goal]);
 
   return (
-    <Sheet open={open} onClose={onClose} label={title}>
+    <Sheet open={open} onClose={onClose} label={title} tall>
       <div className="spread" style={{ marginBottom: 10 }}>
         <h3 className="title-md">{title}</h3>
       </div>

@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
  * Bottom sheet. Closes with a swipe down like iOS (and Escape on a keyboard): drag down from the grip, or anywhere
  * while the sheet is scrolled to the top; let go past ~110 px (or with a quick flick) to close, else it springs back.
  */
-export function Sheet({ open, onClose, children, label, floating }: { open: boolean; onClose: () => void; children: ReactNode; label: string; floating?: boolean }) {
+export function Sheet({ open, onClose, children, label, floating, tall }: { open: boolean; onClose: () => void; children: ReactNode; label: string; floating?: boolean; /** fixed full height: the top never moves while the content shrinks (search) */ tall?: boolean }) {
   const sheet = useRef<HTMLDivElement>(null);
   const backdrop = useRef<HTMLDivElement>(null);
   // Parents often pass a new onClose on every render (e.g. the workout screen re-renders with the rest timer each
@@ -82,7 +82,7 @@ export function Sheet({ open, onClose, children, label, floating }: { open: bool
   return createPortal(
     <>
       <div ref={backdrop} className="sheet-backdrop" onClick={floating ? () => closeRef.current() : undefined} />
-      <div ref={sheet} className={"sheet" + (floating ? " sheet-float" : "")} role="dialog" aria-modal="true" aria-label={label}>
+      <div ref={sheet} className={"sheet" + (floating ? " sheet-float" : "") + (tall ? " sheet-tall" : "")} role="dialog" aria-modal="true" aria-label={label}>
         {!floating && <div className="sheet-grip-area" aria-hidden="true"><div className="sheet-grip" /></div>}
         {children}
       </div>
