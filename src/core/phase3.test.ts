@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
-import { addDay, addSlot, clearDay, copyName, duplicateRoutine, moveSlot, orderSlotsLike, removeDay, removeSlot, setCurrent, setDayWeekday, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine } from "./routineEdit";
+import { addDay, addSlot, clearDay, copyName, duplicateRoutine, moveSlot, newRoutine, orderSlotsLike, removeDay, removeSlot, setCurrent, setDayWeekday, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine } from "./routineEdit";
 import { exerciseInUse, newCustomExercise, withDerivedMuscles, defaultLoadMode } from "./customExercise";
 import { planVolume } from "./volume";
 
@@ -95,5 +95,16 @@ describe("custom exercises", () => {
   it("in use → archive instead of delete", () => {
     expect(exerciseInUse("leg-press", [], seed.routines)).toBe(true);
     expect(exerciseInUse("custom-x", [], seed.routines)).toBe(false);
+  });
+});
+
+describe("new plan", () => {
+  it("has an empty day per weekday, is not current, gets a free name and is valid", () => {
+    const r = newRoutine(["Leo v3.1", "New plan"], new Date("2026-11-21T10:00:00Z"));
+    expect(r).toMatchObject({ name: "New plan 2", isCurrent: false });
+    expect(r.days.map((d) => d.weekday)).toEqual([1, 2, 3, 4, 5, 6, 0]);
+    expect(r.days.every((d) => d.slots.length === 0)).toBe(true);
+    expect(validateRoutine(r)).toEqual([]);
+    expect(newRoutine([], new Date()).name).toBe("New plan");
   });
 });

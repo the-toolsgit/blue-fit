@@ -3,7 +3,7 @@ import { useKeptState } from "../keptState";
 import { deloadActive, deloadWeek, endDeload } from "../../core/deload";
 import { localDate } from "../../core/util";
 import { DELOAD_RULE } from "../components/DeloadBanner";
-import { addDay, addSlot, clearDay, copyName, duplicateRoutine, moveSlot, removeSlot, renameDay, routineUsed, setCurrent, swapSlotExercise, toggleSlotSuperset, updateSlot } from "../../core/routineEdit";
+import { addDay, addSlot, clearDay, copyName, duplicateRoutine, moveSlot, newRoutine, removeSlot, renameDay, routineUsed, setCurrent, swapSlotExercise, toggleSlotSuperset, updateSlot } from "../../core/routineEdit";
 import { failureApplies, failureEligible } from "../../core/failure";
 import { tempoTiming } from "../../core/figure/tempo";
 import { Seg, Stepper } from "../components/Controls";
@@ -91,6 +91,7 @@ export function PlanScreen() {
                   </div>
                 ))}
               </div>
+              <button className="btn btn-ghost btn-block plans-new" onClick={() => { const r = newRoutine(routines.map((x) => x.name), new Date()); saveRoutine(r); setManage(false); go(`plan-edit/${r.id}`); }}><Icon name="plus" size={18} /> New plan</button>
             </div>
           </>
         )}

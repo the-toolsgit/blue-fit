@@ -597,5 +597,6 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 /* plans inside the menu: rows with a line between, no box in a box */
 .plans-menu .glass { background: none; border: 0 !important; border-radius: 0; backdrop-filter: none; -webkit-backdrop-filter: none; padding: 12px 0 !important; }
 .plans-menu .stack > .glass + .glass { border-top: 1px solid var(--line) !important; }
+.plans-new { margin: 6px 0 10px; }
 @keyframes plansDrop { from { opacity: 0; transform: translateY(-8px) scale(0.97); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .plans-menu, .plans-backdrop { animation: none; } }
