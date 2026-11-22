@@ -93,7 +93,7 @@ export function ExerciseEditor({ open, exercise, onClose, onSaved }: { open: boo
         <div className="ee-row">
           <div className="field"><label htmlFor="eeeq">Equipment</label>
             <select id="eeeq" className="input" value={d.equipment} onChange={(e) => { const eq = e.target.value as Equipment; setD((x) => ({ ...x, equipment: eq, loadMode: defaultLoadMode(eq) })); }}>
-              {(Object.keys(EQUIPMENT_LABEL) as Equipment[]).map((k) => <option key={k} value={k}>{EQUIPMENT_LABEL[k]}</option>)}
+              {(Object.keys(EQUIPMENT_LABEL) as Equipment[]).map((k) => <option key={k} value={k}>{SHORT_EQ[k] ?? EQUIPMENT_LABEL[k]}</option>)}
             </select></div>
           <Stepper label="Rest" suffix={fmtRest(d.defaultRestSec)} value={d.defaultRestSec} step={15} decimals={false} onChange={(v) => set("defaultRestSec", v ?? 120)} />
           <div className="field ee-key"><span className="label">Key lift ★</span><div className="ee-key-box"><Switch label="Key lift" checked={d.isHeavy} onChange={(v) => set("isHeavy", v)} /></div></div>
@@ -124,3 +124,6 @@ export function ExerciseEditor({ open, exercise, onClose, onSaved }: { open: boo
     </Sheet>
   );
 }
+
+/** Shorter names so every choice fits the half-width Equipment box */
+const SHORT_EQ: Partial<Record<Equipment, string>> = { plateMachine: "Plate-loaded", smith: "Smith" };
