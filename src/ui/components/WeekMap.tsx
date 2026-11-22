@@ -8,7 +8,7 @@ import { fmtNum } from "../../core/util";
 import { completeProfile, muscleLabel, type MuscleGroup } from "../../core/types";
 import { exercisesFor, type Tile } from "../../core/workoutCheck";
 import type { Exercise, Routine, VolumeTarget } from "../../core/types";
-import { DELTS, TargetEdit, toggleSkip } from "./TargetEdit";
+import { TargetEdit, toggleSkip } from "./TargetEdit";
 import { useLongPress } from "./longPress";
 import { useStore } from "../store";
 import { reducedMotion } from "../device";
@@ -155,16 +155,10 @@ export function WeekMap({ tiles, routine, exMap, edit }: { tiles: Tile[]; routin
 }
 
 /** A muscle in the list. With editing on, press and hold to Skip it (or bring a skipped one back as Normal; a delt head
- *  turns all three Shoulders heads); a toast says so, with Undo (Nov 22 2026). */
+ *  turns all three Shoulders heads). No toast: the row's color shows it (Leo, Nov 22 2026). */
 function ListRow({ g, open, color, count, onTap, edit }: { g: MuscleGroup; open: boolean; color: string; count: string; onTap: () => void; edit?: TargetEditing }) {
-  const { settings, toast } = useStore();
-  const long = useLongPress(edit ? () => {
-    const ch = toggleSkip(edit.targets, g, completeProfile(settings.profile), settings.profile?.goal);
-    const before = ch.map((c) => edit.targets.find((x) => x.group === c.group) ?? { group: c.group, min: null, max: null });
-    edit.onEditAll(ch);
-    const name = DELTS.includes(g) ? "Shoulders" : muscleLabel(g), skipped = !!ch[0].off;
-    toast({ kind: "info", title: `${name} ${skipped ? "skipped" : "back to Normal"}`, action: { label: "Undo", run: () => edit.onEditAll(before) } });
-  } : undefined);
+  const { settings } = useStore();
+  const long = useLongPress(edit ? () => edit.onEditAll(toggleSkip(edit.targets, g, completeProfile(settings.profile), settings.profile?.goal)) : undefined);
   return (
     <button type="button" className={"weekmap-row" + (open ? " sel" : "")} onClick={onTap} aria-expanded={open} {...long}>
       <i style={{ background: color }} /><span className="grow">{muscleLabel(g)}</span>
