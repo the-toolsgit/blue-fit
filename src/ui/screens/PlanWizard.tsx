@@ -1,5 +1,6 @@
 // Build a plan for me: a full-screen, one-question-per-screen flow (goal → eating → days → workout length → rest →
 // targets → conflicts → build). On the plan, each exercise can be swapped or removed and exercises added. The plan itself comes from core/generator.ts; this file is only the steps.
+import { reducedMotion } from "../device";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { generatePlanAsync } from "../generate";
@@ -65,6 +66,15 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const [touched, setTouched] = useState(false);
   const [sel, setSel] = useState<MuscleGroup | null>(null);
   const [head, setHead] = useState<MuscleGroup | null>(null);
+  // An opened target (or a delt head inside Shoulders) low on the screen scrolls up so all of it shows above Continue
+  useEffect(() => {
+    if (!sel && !head) return;
+    const id = requestAnimationFrame(() => {
+      const el = document.querySelector(".wz-body .wz-trow.open .wz-trow.open") ?? document.querySelector(".wz-body .wz-cedit") ?? document.querySelector(".wz-body .wz-trow.open");
+      el?.scrollIntoView({ block: "nearest", behavior: reducedMotion() ? "auto" : "smooth" });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [sel, head]);
   const [seed, setSeed] = useState(1);
   const [building, setBuilding] = useState(false);
   const built = useCallback(() => setBuilding(false), []);
