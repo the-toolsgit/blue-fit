@@ -64,9 +64,36 @@ export function PlanScreen() {
 
   return (
     <div className="page">
-      <div className="spread">
+      {/* Plans menu: drops down right under the header row (not a bottom sheet) */}
+      <div className="spread plans-anchor">
         <span className="eyebrow">Current plan</span>
-        <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px" }} onClick={() => setManage(true)}>Plans</button>
+        <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px" }} aria-expanded={manage} onClick={() => setManage((v) => !v)}>Plans <span style={{ display: "inline-flex", transform: `rotate(${manage ? -90 : 90}deg)`, transition: "transform .2s" }}><Icon name="chevron" size={14} /></span></button>
+        {manage && (
+          <>
+            <div className="plans-backdrop" onClick={() => setManage(false)} />
+            <div className="plans-menu glass" role="dialog" aria-label="Plans">
+              <div className="stack">
+                {[...routines].sort((a, b) => Number(b.isCurrent) - Number(a.isCurrent) || (a.createdAt < b.createdAt ? 1 : -1)).map((r) => (
+                  <div key={r.id} className="glass" style={{ padding: 12, borderColor: r.isCurrent ? "color-mix(in srgb, var(--neon) 50%, transparent)" : undefined }}>
+                    <div className="spread">
+                      <div>
+                        <b style={{ font: "700 19px var(--display)", textTransform: "uppercase" }}>{r.name}</b>
+                        <div className="muted" style={{ fontSize: 12 }}>{r.days.filter((d) => d.slots.length).length} days · {r.days.reduce((a, d) => a + d.slots.reduce((b, x) => b + x.sets, 0), 0)} sets/week</div>
+                      </div>
+                      {r.isCurrent && <span className="badge p">Current</span>}
+                    </div>
+                    <div className="row" style={{ flexWrap: "wrap", gap: 6, marginTop: 10 }}>
+                      {!r.isCurrent && <button className="chip" onClick={() => { saveRoutines(setCurrent(routines, r.id)); toast({ kind: "info", title: `${r.name} is now current` }); }}>Make current</button>}
+                      {!r.isCurrent && <button className="chip" onClick={() => { setManage(false); go(`plan-edit/${r.id}`); }}>Edit</button>}
+                      <button className="chip" onClick={() => { const c = duplicateRoutine(r, copyName(r.name, routines.map((x) => x.name)), new Date()); saveRoutine(c); toast({ kind: "info", title: `Copied as ${c.name}` }); }}>Duplicate</button>
+                      {!r.isCurrent && <button className="chip" style={{ color: "var(--bad)" }} onClick={() => setDel(r)}>Delete</button>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </div>
       <InlineText as="h1" className="title-lg" textClass="neon-grad" style={{ marginTop: 6 }} label="Plan name" value={routine.name}
         onSave={(name) => saveRoutine({ ...routine, name })} />
@@ -188,30 +215,6 @@ export function PlanScreen() {
       <Confirm open={confirmDeload} title="Start a deload week?" confirm="Start deload"
         body={<>{DELOAD_RULE} It lasts until {fmtDate(deloadWeek(today, settings.weekStartDay).end, { weekday: "long" })}, then your normal plan comes back.</>}
         onClose={() => setConfirmDeload(false)} onConfirm={() => saveSettings({ ...settings, deload: deloadWeek(today, settings.weekStartDay), deloadDismissedAt: null })} />
-      <Sheet open={manage} onClose={() => setManage(false)} label="Plans">
-        <div className="spread" style={{ marginBottom: 8 }}>
-          <h3 className="title-md" style={{ textTransform: "uppercase" }}>Plans</h3>
-        </div>
-        <div className="stack">
-          {[...routines].sort((a, b) => Number(b.isCurrent) - Number(a.isCurrent) || (a.createdAt < b.createdAt ? 1 : -1)).map((r) => (
-            <div key={r.id} className="glass" style={{ padding: 12, borderColor: r.isCurrent ? "color-mix(in srgb, var(--neon) 50%, transparent)" : undefined }}>
-              <div className="spread">
-                <div>
-                  <b style={{ font: "700 19px var(--display)", textTransform: "uppercase" }}>{r.name}</b>
-                  <div className="muted" style={{ fontSize: 12 }}>{r.days.filter((d) => d.slots.length).length} days · {r.days.reduce((a, d) => a + d.slots.reduce((b, x) => b + x.sets, 0), 0)} sets/week</div>
-                </div>
-                {r.isCurrent && <span className="badge p">Current</span>}
-              </div>
-              <div className="row" style={{ flexWrap: "wrap", gap: 6, marginTop: 10 }}>
-                {!r.isCurrent && <button className="chip" onClick={() => { saveRoutines(setCurrent(routines, r.id)); toast({ kind: "info", title: `${r.name} is now current` }); }}>Make current</button>}
-                {!r.isCurrent && <button className="chip" onClick={() => { setManage(false); go(`plan-edit/${r.id}`); }}>Edit</button>}
-                <button className="chip" onClick={() => { const c = duplicateRoutine(r, copyName(r.name, routines.map((x) => x.name)), new Date()); saveRoutine(c); toast({ kind: "info", title: `Copied as ${c.name}` }); }}>Duplicate</button>
-                {!r.isCurrent && <button className="chip" style={{ color: "var(--bad)" }} onClick={() => setDel(r)}>Delete</button>}
-              </div>
-            </div>
-          ))}
-        </div>
-      </Sheet>
       <Confirm open={!!del} title={`Delete ${del?.name ?? "plan"}?`} danger confirm="Delete"
         body={del && routineUsed(del.id, sessions) ? "Workouts you did with it stay in history." : "This can't be undone."}
         onClose={() => setDel(null)} onConfirm={() => del && deleteRoutine(del.id)} />
