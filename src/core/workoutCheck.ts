@@ -65,7 +65,9 @@ export interface Check { id: CheckId; label: string; pass: boolean; detail: stri
   /** The rule in one line (what passing means), e.g. "11 or fewer sets per muscle per workout" */
   rule: string;
   /** Not passed, but only by a little: shown as a yellow warning instead of red (still not counted as passed) */
-  warn?: boolean }
+  warn?: boolean;
+  /** Nothing to judge yet (the plan has no exercises): shown gray, not passed (Nov 21 2026) */
+  pending?: boolean }
 export interface ScorePart { id: "volume" | "parts" | "recovery" | "failure" | "twice" | "dose"; label: string; points: number; max: number; note: string }
 export interface WeekScore { score: number; parts: ScorePart[] }
 export interface WeekInsight { days: number; sets: number; minutes: number; muscles: number; tiles: Tile[]; checks: Check[]; score: WeekScore }
@@ -144,14 +146,15 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     return out ? [`${L(g)}: ${fmtNum(w)} sets, target ${formatTarget(t)}`] : [];
   }), "Each muscle gets enough sets a week, not too many (its target)");
 
-  const jobs = check("jobs", "Every angle", main.flatMap((g) => {
+  // Every angle and Stretch look at every focus muscle too: one the plan doesn't train has none of its angles or stretch
+  const jobs = check("jobs", "Every angle", focusAll.flatMap((g) => {
     const miss = (JOBS[g] ?? []).filter((j) => !jobsHit(g).has(j));
     if (!miss.length) return [];
     const tries = miss.flatMap((j) => angleExamples(exMap, g, j, goal));
     return [`${L(g)}: no ${miss.join(", ")}${tries.length ? ` · try ${tries.slice(0, 2).join(" or ")}` : ""}`];
   }), "Every muscle trained in all its movements");
 
-  const stretch = check("stretch", "Stretch", main.filter((g) => STRETCH_MUSCLES.has(g) && !slots.some((s) => ex(s).stretch?.includes(g)))
+  const stretch = check("stretch", "Stretch", focusAll.filter((g) => STRETCH_MUSCLES.has(g) && !slots.some((s) => ex(s).stretch?.includes(g)))
     .map((g) => `${L(g)}: no stretch exercise`), "Each muscle has an exercise that works it fully stretched (like incline curls for biceps)");
 
   // With the same weekly sets, once or twice a week grow a muscle about the same (Schoenfeld 2019; Pelland 2024); a
@@ -209,7 +212,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
 
   const tip = (c: Check): Check => (c.pass ? c : { ...c, warn: true });
   const stars = slots.filter((s) => ex(s).isHeavy);
-  const checks: Check[] =
+  const checks0: Check[] =
     goal === "maintenance" ? [volume(true), recovery]
     : goal === "strength" ? [volume(false), jobs, frequency, recovery,
         check("heavy", "Heavy lifts", stars.length && stars.every((s) => s.repMin <= 6) ? [] : stars.length ? uniq(stars.filter((s) => s.repMin > 6).map((s) => `${ex(s).name}: ${s.repMin}+ reps`)) : ["No ★ heavy lift"], "★ lifts at 6 reps or less"),
@@ -218,6 +221,8 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
         check("reps", "High reps", repSlots.filter((s) => mid(s) >= 15).length * 2 >= repSlots.length ? [] : ["Most exercises under 15 reps"], "Most exercises 15+ reps (ACSM 2009)"),
         rest(null, ENDURANCE_REST)]
     : [volume(false), jobs, stretch, frequency, dose, recovery, ...reps, mix, tip(rest(GROWTH_REST, null))];
+  // No exercises yet: every check but Weekly volume has nothing to judge, so it waits (gray), never passes
+  const checks = slots.length ? checks0 : checks0.map((c) => (c.id === "volume" ? c : { ...c, pass: false, warn: undefined, pending: true, issues: [] }));
 
   // Score: each part earns its share of points
   const share = (good: number, all: number) => (all ? good / all : 1);

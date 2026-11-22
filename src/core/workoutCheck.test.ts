@@ -25,8 +25,13 @@ describe("workout check", () => {
     expect(w.tiles.length).toBe(focus.length);
     expect(w.tiles.every((t) => t.week === 0 && t.status === "below")).toBe(true);
     expect(w.checks.find((c) => c.id === "volume")!.pass).toBe(false);
+    // Nothing else can pass with no exercises: the other checks wait (gray)
+    expect(w.checks.filter((c) => c.id !== "volume").every((c) => !c.pass && c.pending)).toBe(true);
     const absOnly = { ...r, days: r.days.map((d, i) => ({ ...d, slots: i ? [] : d.slots.slice(0, 1) })) };
     expect(weekInsight(absOnly, exMap, seed.targets).checks.every((c) => c.pass)).toBe(false);
+    // A muscle the plan doesn't train misses its angles and stretch
+    const thin = weekInsight(absOnly, exMap, seed.targets);
+    expect(thin.checks.find((c) => c.id === "jobs")!.pass).toBe(false);
   });
   it("rep range shows only when broken, as a Tip; short rests are a Tip at 60 s", () => {
     const bad = { ...r, days: r.days.map((d, i) => i ? d : { ...d, slots: d.slots.map((s, k) => k ? s : { ...s, repMin: 2, repMax: 4, restSec: 45 }) }) };

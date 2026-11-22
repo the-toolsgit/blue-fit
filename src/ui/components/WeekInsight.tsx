@@ -61,12 +61,12 @@ export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
         {/* Tiles: what's missing first (full width, with the details), then what's done (two per row) */}
         <div className="check-grid">
           {[...i.checks].sort((a, b) => rank(a) - rank(b)).map((c) => (
-            <div key={c.id} className={"check-tile" + (c.pass ? " pass" : c.warn ? " fail warn" : " fail")}>
+            <div key={c.id} className={"check-tile" + (c.pass ? " pass" : c.pending ? " pending" : c.warn ? " fail warn" : " fail")}>
               <span className="check-head">
                 <span className="check-ic"><Icon name={CHECK_ICON[c.id]} size={16} /></span>
                 <span className="check-label">{c.label}</span>
               </span>
-              {c.pass ? <span className="check-detail">{c.detail}</span> : (
+              {c.pass ? <span className="check-detail">{c.detail}</span> : c.pending ? <span className="check-detail">{c.rule}. Add exercises to check this.</span> : (
                 <span className="check-issues">
                   <span className="check-detail"><b>{c.warn ? "Tip:" : "Rule:"}</b> {c.rule}</span>
                   {c.issues.map((x, k) => <span key={k} className="check-issue">{x.who && <b>{x.who}</b>}<span>{x.what}</span></span>)}
@@ -80,8 +80,8 @@ export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
   );
 }
 
-/** Tile order: red misses, then yellow warnings, then passed */
-const rank = (c: { pass: boolean; warn?: boolean }) => (c.pass ? 2 : c.warn ? 1 : 0);
+/** Tile order: red misses, then yellow warnings, then waiting (gray), then passed */
+const rank = (c: { pass: boolean; warn?: boolean; pending?: boolean }) => (c.pass ? 3 : c.pending ? 2 : c.warn ? 1 : 0);
 
 /** An icon for each check (Plan check tiles) */
 const CHECK_ICON: Record<CheckId, string> = {
