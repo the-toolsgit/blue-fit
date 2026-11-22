@@ -307,6 +307,7 @@ export function WorkoutScreen() {
         open={!!picker}
         title={picker?.mode === "swap" ? "Swap exercise" : "Add exercise"}
         exclude={picker?.mode === "swap" ? s.entries.find((x) => x.id === picker.entryId)?.exerciseId : undefined}
+        swapFor={picker?.mode === "swap" ? exMap.get(s.entries.find((x) => x.id === picker.entryId)?.exerciseId ?? "") : undefined}
         onClose={() => setPicker(null)}
         onPick={picker?.mode === "swap" ? (ex) => commit(swapEntry(s, picker.entryId, ex, finished)) : undefined}
         onPickMany={picker?.mode === "swap" ? undefined : (exs) => {

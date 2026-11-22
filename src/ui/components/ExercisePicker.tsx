@@ -1,9 +1,11 @@
 // Exercise picker: search + Muscle and Equipment filters (each opens a sheet with checkbox rows, multi-select). Used for swap and add.
+// Swap (swapFor) opens on the exercise's main muscle and a "Same angle" filter (core swapOptions); both removable with their X.
 // Tap a row's line man for the exercise's how-to. Swap: one tap picks and closes. Add (onPickMany): tap rows to tick several, then "Add N exercises" adds them in tap order.
 import { useEffect, useMemo, useState } from "react";
 import { EQUIPMENT_LABEL, MUSCLE_GROUPS, muscleLabel, type Equipment, type Exercise, type MuscleGroup } from "../../core/types";
 import { useStore } from "../store";
 import { isTopPick } from "../../core/catalog";
+import { swapOptions } from "../../core/generator";
 import { Figure } from "./Figure";
 import { EquipmentIcon, MuscleIcon } from "./FilterIcons";
 import { Seg } from "./Controls";
@@ -13,16 +15,22 @@ import { ExerciseEditor } from "./ExerciseEditor";
 import { FigureTap } from "./swipeDelete";
 import { ExerciseSheet } from "../screens/ExerciseScreen";
 
-export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclude }: {
+export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclude, swapFor }: {
   open: boolean; title: string; onClose: () => void; onPick?: (e: Exercise) => void;
   /** Add mode: pick several before closing; called once with them in tap order */
   onPickMany?: (es: Exercise[]) => void; exclude?: string;
+  /** Swap: opens filtered to real swaps for this exercise (its main muscle and the same angle); each filter has an X */
+  swapFor?: Exercise;
 }) {
   const [creating, setCreating] = useState(false);
   const [howTo, setHowTo] = useState<string | null>(null);
   const [picked, setPicked] = useState<Exercise[]>([]);
   // Each opening starts fresh: nothing ticked, no search or filters left from last time
-  useEffect(() => { if (open) { setPicked([]); setQ(""); setGroups([]); setEqs([]); setMore(false); } }, [open]);
+  // A swap starts on its main muscle and the same angle (Leo: the list should already be real swaps)
+  const main = swapFor?.volume.find((v) => v.weight === 1)?.group;
+  const angle = main ? [swapFor?.jobs?.[main]].flat().find(Boolean) : undefined;
+  const [same, setSame] = useState(false);
+  useEffect(() => { if (open) { setPicked([]); setQ(""); setGroups(main ? [main] : []); setEqs([]); setMore(false); setSame(!!main); } }, [open]);
   const isOn = (e: Exercise) => picked.some((x) => x.id === e.id);
   const tap = (e: Exercise) => {
     if (onPickMany) return setPicked(isOn(e) ? picked.filter((x) => x.id !== e.id) : [...picked, e]);
@@ -45,10 +53,12 @@ export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclu
   }, [exercises]);
   // A top pick belongs to the muscle it trains fully: with a muscle filter on, only that muscle's top picks count (and show the tag)
   const top = (e: Exercise) => isTopPick(e, goal) && (!groups.length || e.volume.some((v) => v.weight === 1 && groups.includes(v.group)));
+  const swaps = useMemo(() => (same && swapFor ? new Set(swapOptions(swapFor, exercises, goal ?? "growth", new Set()).map((e) => e.id)) : null), [same, swapFor, exercises, goal]);
   const list = useMemo(() => {
     const term = q.trim().toLowerCase();
     return exercises
       .filter((e) => !e.archived && e.id !== exclude)
+      .filter((e) => !swaps || swaps.has(e.id))
       .filter((e) => !groups.length || e.volume.some((v) => groups.includes(v.group)))
       .filter((e) => !eqs.length || eqs.includes(e.equipment))
       .filter((e) => !term || [e.name, ...e.aliases, ...e.muscles, ...e.secondaryMuscles].join(" ").toLowerCase().includes(term))
@@ -61,7 +71,7 @@ export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclu
         }
         return a.name.localeCompare(b.name);
       });
-  }, [exercises, q, groups, eqs, exclude, goal]);
+  }, [exercises, q, groups, eqs, exclude, goal, swaps]);
 
   return (
     <Sheet open={open} onClose={onClose} label={title} tall>
@@ -78,7 +88,8 @@ export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclu
         <button className="filter-btn" aria-pressed={groups.length > 0} onClick={() => setTab("muscle")}>Muscle <Icon name="chevron" size={14} /></button>
         <button className="filter-btn" aria-pressed={eqs.length > 0} onClick={() => setTab("equipment")}>Equipment <Icon name="chevron" size={14} /></button>
         {/* Each picked filter, with an X to remove it in one tap */}
-        {groups.map((g) => <button key={g} className="filter-on" onClick={() => setGroups(groups.filter((x) => x !== g))} aria-label={`Remove ${muscleLabel(g)} filter`}>{muscleLabel(g)} <Icon name="close" size={12} /></button>)}
+        {groups.map((g) => <button key={g} className="filter-on" onClick={() => { setGroups(groups.filter((x) => x !== g)); if (g === main) setSame(false); }} aria-label={`Remove ${muscleLabel(g)} filter`}>{muscleLabel(g)} <Icon name="close" size={12} /></button>)}
+        {same && <button className="filter-on" onClick={() => setSame(false)} aria-label="Remove same angle filter">{angle ? `Same angle: ${angle}` : "Same angle"} <Icon name="close" size={12} /></button>}
         {eqs.map((x) => <button key={x} className="filter-on" onClick={() => setEqs(eqs.filter((y) => y !== x))} aria-label={`Remove ${EQUIPMENT_LABEL[x]} filter`}>{EQUIPMENT_LABEL[x]} <Icon name="close" size={12} /></button>)}
         <span className="muted mono" style={{ marginLeft: "auto", fontSize: 12 }}>{list.length} found</span>
       </div>

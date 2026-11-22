@@ -176,6 +176,7 @@ export function PlanScreen() {
         onSwap={() => slot && setPicker({ mode: "swap", slotId: slot.id })} onHowTo={() => slot && setHowTo(slot.id)} onRemove={() => slot && removeWithUndo(slot)} />
       <ExercisePicker open={!!picker} title={picker?.mode === "swap" ? "Swap exercise" : "Add exercise"}
         exclude={picker?.mode === "swap" ? day?.slots.find((x) => x.id === picker.slotId)?.exerciseId : undefined}
+        swapFor={picker?.mode === "swap" ? exMap.get(day?.slots.find((x) => x.id === picker.slotId)?.exerciseId ?? "") : undefined}
         onClose={() => setPicker(null)}
         onPick={picker?.mode === "swap" ? (ex) => { if (day) saveRoutine(swapSlotExercise(routine, day.id, picker.slotId, ex)); } : undefined}
         onPickMany={picker?.mode === "swap" ? undefined : (exs) => {
