@@ -21,7 +21,8 @@ export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclu
   const [creating, setCreating] = useState(false);
   const [howTo, setHowTo] = useState<string | null>(null);
   const [picked, setPicked] = useState<Exercise[]>([]);
-  useEffect(() => { if (open) setPicked([]); }, [open]);
+  // Each opening starts fresh: nothing ticked, no search or filters left from last time
+  useEffect(() => { if (open) { setPicked([]); setQ(""); setGroups([]); setEqs([]); setMore(false); } }, [open]);
   const isOn = (e: Exercise) => picked.some((x) => x.id === e.id);
   const tap = (e: Exercise) => {
     if (onPickMany) return setPicked(isOn(e) ? picked.filter((x) => x.id !== e.id) : [...picked, e]);
@@ -93,7 +94,7 @@ export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclu
           </button>
         ))}
         {!more && list.length > 60 && <button className="btn btn-ghost btn-block" style={{ marginTop: 8 }} onClick={() => setMore(true)}>Show all {list.length}</button>}
-        {!list.length && <div className="empty">No exercise matches. Tap "New exercise" to add your own.</div>}
+        {!list.length && <div className="empty">No exercise matches. Tap "+ New" to add your own.</div>}
       </div>
       {onPickMany && picked.length > 0 && <button className="btn btn-primary btn-block picker-add" onClick={addPicked}><Icon name="plus" size={18} /> Add {picked.length} exercise{picked.length === 1 ? "" : "s"}</button>}
       <Sheet open={tab !== null} onClose={() => setTab(null)} label="Filter exercises" tall>

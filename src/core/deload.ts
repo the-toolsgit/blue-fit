@@ -24,6 +24,14 @@ export function deloadWeight(w: number, step: number): number {
   return Math.round(Math.max(w > 0 ? Math.min(s, w) : 0, v) * 100) / 100;
 }
 
+/** Assisted machines (weight = help): a deload week adds help by the same share instead, rounded to the step
+ *  (Nov 22 2026; before, it cut the help, which made the deload harder). */
+export function deloadAssist(w: number, step: number): number {
+  const s = step > 0 ? step : 0.5;
+  if (w <= 0) return w;
+  return Math.round(Math.max(w + s, Math.round(w / DELOAD.weightFactor / s) * s) * 100) / 100;
+}
+
 /** The current training week as a deload window (inclusive dates). */
 export function deloadWeek(today: string, weekStartDay: number): { start: string; end: string } {
   const start = weekStart(today, weekStartDay);

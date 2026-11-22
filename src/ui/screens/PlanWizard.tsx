@@ -144,7 +144,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   // Not from the screen edges (the phone's own back gesture), not on rows that scroll sideways or on fields.
   const onTouchStart = (e: React.TouchEvent) => {
     const t = e.touches[0], el = e.target as HTMLElement;
-    swipe.current = e.touches.length === 1 && t.clientX > 24 && t.clientX < window.innerWidth - 24 && !el.closest("input, textarea, .wz-cmin, .chips-scroll, .stepper") ? { x: t.clientX, y: t.clientY } : null;
+    swipe.current = e.touches.length === 1 && t.clientX > 24 && t.clientX < window.innerWidth - 24 && !el.closest("input, textarea, .wz-cmin, .chips-scroll, .stepper, .sheet") ? { x: t.clientX, y: t.clientY } : null;
   };
   const onTouchEnd = (e: React.TouchEvent) => {
     const s0 = swipe.current; swipe.current = null;
@@ -416,7 +416,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
       <div className="wz-top">
         <button type="button" className="icon-btn" onClick={back} aria-label="Back" style={{ visibility: i ? "visible" : "hidden" }}><Icon name="back" /></button>
         <div className="wz-progress" aria-hidden>{STEPS.map((s, k) => <span key={s} className={k <= i ? "on" : ""} />)}</div>
-        <button type="button" className="icon-btn" onClick={onClose} aria-label="Close"><Icon name="close" /></button>
+        <button type="button" className="icon-btn" onClick={() => leavePlan(onClose)} aria-label="Close"><Icon name="close" /></button>
       </div>
       <div className={"wz-body" + (dir === "back" ? " back" : "")} key={step + seed} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>{body}</div>
       <div className="wz-bottom">{cta}</div>

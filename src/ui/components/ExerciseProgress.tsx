@@ -1,6 +1,7 @@
 // Per-exercise progress: est. 1RM, best set and volume over time, plus the session list.
 import { useMemo, useState } from "react";
 import { exerciseSeries } from "../../core/progress";
+import { loadFactor } from "../../core/volume";
 import type { Exercise } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { dayLabel, BarChart, LineChart } from "./Charts";
@@ -13,9 +14,13 @@ type Metric = "e1rm" | "best" | "volume";
 export function ExerciseProgress({ ex, from }: { ex: Exercise; from?: string | null }) {
   const { finished } = useStore();
   const [m, setM] = useState<Metric>("e1rm");
-  const series = useMemo(() => exerciseSeries(finished, ex.id, ex.measure === "time").filter((p) => !from || p.date >= from), [finished, ex.id, from]);
+  const series = useMemo(() => exerciseSeries(finished, ex.id, ex.measure === "time", loadFactor(ex)).filter((p) => !from || p.date >= from), [finished, ex, from]);
   if (!series.length) return <p className="muted" style={{ fontSize: 14, padding: "8px 0" }}>No sets logged{from ? " in this range" : ""} yet.</p>;
   const suf = loadSuffix(ex).trim();
+  // Holds, and bodyweight work logged without a weight: one chart, longest hold / most reps
+  const time = ex.measure === "time";
+  if (time || series.every((p) => p.best.weight === 0))
+    return <LineChart key="r" points={series.map((p) => ({ label: dayLabel(p.date), value: p.e1rm, sub: `${p.sets} sets` }))} unit={time ? "s" : "reps"} />;
   return (
     <div className="stack" style={{ gap: 10 }}>
       <Seg label="Metric" value={m} onChange={setM} options={[{ v: "e1rm", label: "Est. 1RM" }, { v: "best", label: "Best set" }, { v: "volume", label: "Volume" }]} />

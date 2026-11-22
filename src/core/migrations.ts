@@ -618,3 +618,21 @@ export const figureHash = (f: unknown): string => {
   return h.toString(36);
 };
 
+
+/** Never re-run on an imported backup: moving the plan's weekdays only made sense for the phone's data on Nov 16
+ *  (the seed already has it); a backup's plan may have been moved back to Monday on purpose. */
+export const IMPORT_SKIP = ["2026-11-16-week-starts-saturday"];
+
+/** Run every migration not in `done` on `d`, in order. Returns the data (unchanged object when nothing applied) and
+ *  all ids now done. Used at launch, and on import/reset so a backup from an older version is brought up to date too. */
+export function applyMigrations(d: AppData, today: string, done: string[] = []): { data: AppData; done: string[]; changed: boolean } {
+  let data = d, changed = false;
+  const ids = [...done];
+  for (const m of MIGRATIONS) {
+    if (ids.includes(m.id)) continue;
+    const next = m.run(data, today);
+    if (next) { data = next; changed = true; }
+    ids.push(m.id);
+  }
+  return { data, done: ids, changed };
+}

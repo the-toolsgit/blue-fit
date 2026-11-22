@@ -9,7 +9,8 @@ import { Figure } from "../components/Figure";
 import { Icon } from "../components/Icon";
 import { Confirm, Sheet } from "../components/Sheet";
 import { loadSuffix } from "../format";
-import { go, replace } from "../router";
+import { replace } from "../router";
+import { ExerciseSheet } from "./ExerciseScreen";
 import { NoteSheet } from "./Workout";
 import { localDate } from "../../core/util";
 import { useStore } from "../store";
@@ -39,6 +40,8 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
   const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; entryId: string } | null>(null);
   const [remove, setRemove] = useState<string | null>(null);
   const [noteFor, setNoteFor] = useState<string | null>(null);
+  /** Exercise details as a sheet over this screen (like Today and the logger), so leaving runs no cleanup early */
+  const [howTo, setHowTo] = useState<string | null>(null);
   if (!s) return <div className="page"><div className="empty">Workout not found.</div></div>;
   // The day's full plan: exercises that weren't recorded show (dimmed) in plan order so a forgotten one can be added.
   const planDay = routines.find((r) => r.id === s.routineId)?.days.find((d) => d.id === s.dayId);
@@ -154,7 +157,7 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
             <div className="eyebrow" style={{ padding: "0 8px 8px" }}>{exMap.get(menuEntry.exerciseId)?.name}</div>
             <button className="menu-item" onClick={() => { setPicker({ mode: "swap", entryId: menuEntry.id }); setMenu(null); }}><Icon name="swap" /> Change exercise</button>
             <button className="menu-item" onClick={() => { setNoteFor(menuEntry.id); setMenu(null); }}><Icon name="note" /> {menuEntry.notes ? "Edit note" : "Add note"}</button>
-            <button className="menu-item" onClick={() => { go(`exercise/${menuEntry.exerciseId}`); }}><Icon name="info" /> Exercise details</button>
+            <button className="menu-item" onClick={() => { setHowTo(menuEntry.exerciseId); setMenu(null); }}><Icon name="info" /> Exercise details</button>
             <button className="menu-item danger" onClick={() => { setRemove(menuEntry.id); setMenu(null); }}><Icon name="trash" /> Remove exercise</button>
           </div>
         )}
@@ -170,6 +173,7 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
           const ne = buildEntry(ex, history, { restSec: ex.defaultRestSec || settings.restDefaultSec, sets: 1 });
           return addEntry(n, { ...ne, sets: ne.sets.map((x) => ({ ...x, done: true, completedAt: s.finishedAt ?? s.startedAt })) });
         }, s))} />
+      <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} />
       <NoteSheet open={!!noteFor} title="Note" value={s.entries.find((x) => x.id === noteFor)?.notes ?? ""}
         onSave={(v) => noteFor && commit(setEntry(s, noteFor, { notes: v || undefined }))} onClose={() => setNoteFor(null)} />
       <Confirm open={!!remove} title="Remove this exercise?" body="Its sets in this workout are deleted." confirm="Remove" danger onClose={() => setRemove(null)} onConfirm={() => remove && commit(removeEntry(s, remove))} />

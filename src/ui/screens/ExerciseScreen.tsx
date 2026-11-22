@@ -1,5 +1,5 @@
 // Exercise detail: the full card from the plan page + records. Used as a page and as a sheet (logger, Today).
-import { computeRecords } from "../../core/records";
+import { computeRecords, entryVolume } from "../../core/records";
 import { loadFactor } from "../../core/volume";
 import { lastEntryFor } from "../../core/session";
 import { EQUIPMENT_LABEL, muscleLabel, type Exercise } from "../../core/types";
@@ -98,8 +98,8 @@ export function ExerciseInfo({ ex, whyOverride, tipsOverride, failWhy }: { ex: E
         {rec.heaviest ? (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             {[
-              ["Heaviest", `${fmtNum(rec.heaviest.weight)}${loadSuffix(ex)}`, `× ${rec.heaviest.reps} · ${fmtDate(rec.heaviest.date)}`],
-              ["Best est. 1RM", fmtNum(Math.round(rec.bestE1rm!.value)), `${fmtNum(rec.bestE1rm!.weight)} × ${rec.bestE1rm!.reps}`],
+              ["Heaviest", rec.heaviest.weight ? `${fmtNum(rec.heaviest.weight)}${loadSuffix(ex)}` : "Bodyweight", `× ${rec.heaviest.reps} · ${fmtDate(rec.heaviest.date)}`],
+              ["Best est. 1RM", rec.bestE1rm ? fmtNum(Math.round(rec.bestE1rm.value)) : "—", rec.bestE1rm ? `${fmtNum(rec.bestE1rm.weight)} × ${rec.bestE1rm.reps}` : ""],
               ["Best volume", fmtVolume((rec.bestSessionVolume?.value ?? 0) * loadFactor(ex)), rec.bestSessionVolume ? fmtDate(rec.bestSessionVolume.date) : ""],
               ["Last time", last ? setsLine(last.entry.sets) : "—", last ? fmtDate(last.session.date) : ""],
             ].map(([l, v, s]) => (
@@ -132,7 +132,7 @@ function ExerciseHistory({ ex }: { ex: Exercise }) {
               <span style={{ display: "block", fontSize: 13 }} className="muted">{fmtDate(s.date, { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span>
               <span className="mono" style={{ fontSize: 15 }}>{setsLine(e.sets)}<span className="muted" style={{ fontSize: 12 }}>{loadSuffix(ex)}</span></span>
             </span>
-            <span className="mono muted" style={{ fontSize: 12 }}>{fmtVolume(e.sets.filter((x) => x.done && x.type !== "warmup").reduce((a, x) => a + (x.weight ?? 0) * (x.reps ?? 0), 0))} lb</span>
+            <span className="mono muted" style={{ fontSize: 12 }}>{ex.measure === "time" ? `${e.sets.filter((x) => x.done && x.type !== "warmup").length} sets` : `${fmtVolume(entryVolume(e.sets) * loadFactor(ex))} lb`}</span>
           </button>
         ))}
       </div>

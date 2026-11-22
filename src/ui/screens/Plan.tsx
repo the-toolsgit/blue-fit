@@ -1,9 +1,9 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useKeptState } from "../keptState";
 import { deloadActive, deloadWeek, endDeload } from "../../core/deload";
 import { localDate } from "../../core/util";
 import { DELOAD_RULE } from "../components/DeloadBanner";
-import { addDay, addSlot, clearDay, copyName, duplicateRoutine, moveSlot, newRoutine, removeSlot, renameDay, routineUsed, setCurrent, swapSlotExercise, toggleSlotSuperset, updateSlot } from "../../core/routineEdit";
+import { addDay, addSlot, clearDay, copyName, duplicateRoutine, moveSlot, newRoutine, insertSlot, removeSlot, renameDay, routineUsed, setCurrent, swapSlotExercise, toggleSlotSuperset, updateSlot } from "../../core/routineEdit";
 import { failureApplies, failureEligible } from "../../core/failure";
 import { tempoTiming } from "../../core/figure/tempo";
 import { Seg, Stepper } from "../components/Controls";
@@ -13,7 +13,7 @@ import { fmtRest } from "../format";
 import { Confirm, Sheet } from "../components/Sheet";
 import { completeProfile, type Routine, type Slot } from "../../core/types";
 import { freshTargets } from "../../core/volumeModel";
-import { estimateMinutes } from "../../core/timeEstimate";
+import { slotsMinutes } from "../../core/timeEstimate";
 import { useWeekFailure } from "../components/FailFlame";
 import { Icon } from "../components/Icon";
 import { fmtDate } from "../format";
@@ -41,6 +41,8 @@ export function PlanScreen() {
   // Every weekday has a chip (rest days too), plus any day without a weekday
   // Opens on the first day of the training week (Settings → week start)
   const [sel, setSel] = useKeptState("plan-day", `w${settings.weekStartDay}`);
+  // For Undo after a remove: the plans as they are when Undo is tapped
+  const latest = useRef(routines); latest.current = routines;
   if (!routine) return <div className="page"><div className="empty">No routine.</div></div>;
   const chips = [
     ...[1, 2, 3, 4, 5, 6, 0].map((w) => ({ key: `w${w}`, label: SHORT[w], weekday: w as number | null, day: routine.days.find((d) => d.weekday === w) })),
@@ -54,11 +56,15 @@ export function PlanScreen() {
   const slot = day?.slots.find((x) => x.id === slotId);
   const slotIdx = day && slot ? day.slots.indexOf(slot) : -1;
   const setSlot = (p: Partial<Slot>) => day && slot && saveRoutine(updateSlot(routine, day.id, slot.id, p));
+  // Undo puts back only this exercise, into the plan as it is then (other changes made meanwhile stay)
   const removeWithUndo = (s: Slot) => {
     if (!day) return;
-    const before = routine;
+    const at = day.slots.findIndex((x) => x.id === s.id), dayId = day.id, rid = routine.id;
     saveRoutine(removeSlot(routine, day.id, s.id));
-    toast({ kind: "info", title: "Exercise removed", body: exMap.get(s.exerciseId)?.name, action: { label: "Undo", run: () => saveRoutine(before) } });
+    toast({ kind: "info", title: "Exercise removed", body: exMap.get(s.exerciseId)?.name, action: { label: "Undo", run: () => {
+      const r = latest.current.find((x) => x.id === rid);
+      if (r) saveRoutine(insertSlot(r, dayId, s, at));
+    } } });
   };
   const allSets = routine.days.reduce((a, d) => a + d.slots.reduce((b, s) => b + s.sets, 0), 0);
   const sets = day?.slots.reduce((a, s) => a + s.sets, 0) ?? 0;
@@ -128,11 +134,11 @@ export function PlanScreen() {
           <div className="spread" style={{ margin: "14px 4px 8px" }}>
             <InlineText as="h2" className="title-md" style={{ textTransform: "uppercase", flex: 1, minWidth: 0 }} label="Day name" value={day.title}
               onSave={(t) => saveRoutine(renameDay(routine, day.id, t))} />
-            <span className="mono muted" style={{ fontSize: 13, whiteSpace: "nowrap" }}>{sets} sets · ~{estimateMinutes(sets, day.slots.length)} min</span>
+            <span className="mono muted" style={{ fontSize: 13, whiteSpace: "nowrap" }}>{sets} sets · ~{slotsMinutes(day.slots)} min</span>
           </div>
           <div className="glass" style={{ padding: 4 }}>
             <Suspense fallback={<div style={{ minHeight: day.slots.length * 64 }} />}>
-              <SortableDayList slots={day.slots} exMap={exMap} onOpen={(s) => setSlotId(s.id)} onDelete={removeWithUndo} onFigure={(s) => setHowTo(s.exerciseId)}
+              <SortableDayList slots={day.slots} exMap={exMap} onOpen={(s) => setSlotId(s.id)} onDelete={removeWithUndo} onFigure={(s) => setHowTo(s.id)}
                 onMove={(from, to) => saveRoutine(moveSlot(routine, day.id, from, to))} fail={weekFail.get(day.id)} />
             </Suspense>
             <button className="list-row add-row" onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
@@ -206,7 +212,7 @@ export function PlanScreen() {
                 </button>
               )}
               <button className="menu-item" onClick={() => setPicker({ mode: "swap", slotId: slot.id })}><Icon name="swap" /> Swap exercise</button>
-              <button className="menu-item" onClick={() => setHowTo(slot.exerciseId)}><Icon name="info" /> How to do it</button>
+              <button className="menu-item" onClick={() => setHowTo(slot.id)}><Icon name="info" /> How to do it</button>
               <button className="menu-item danger" onClick={() => { setSlotId(null); removeWithUndo(slot); }}><Icon name="trash" /> Remove from day</button>
             </div>
             <button className="btn btn-primary btn-block" onClick={() => setSlotId(null)}>Done</button>
@@ -222,7 +228,11 @@ export function PlanScreen() {
           const made = day ? { routine, dayId: day.id } : addDay(routine, cur.weekday);
           saveRoutine(exs.reduce((r, ex) => addSlot(r, made.dayId, ex, settings.restDefaultSec).routine, made.routine));
         }} />
-      <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} failWhy={day && slot ? weekFail.get(day.id)?.get(slot.id) : undefined} />
+      {(() => {
+        // howTo is a slot id: the sheet shows its exercise with the slot's own why/tips and this week's failure reasons
+        const hs = day?.slots.find((x) => x.id === howTo);
+        return <ExerciseSheet id={hs?.exerciseId ?? null} onClose={() => setHowTo(null)} failWhy={day && hs ? weekFail.get(day.id)?.get(hs.id) : undefined} whyOverride={hs?.whyOverride} tipsOverride={hs?.tipsOverride} />;
+      })()}
       <Confirm open={delDay} title={`Delete ${day?.title ?? "this day"}?`} body="All its exercises are removed and it becomes a rest day. Past workouts stay in history." confirm="Delete" danger
         onClose={() => setDelDay(false)} onConfirm={() => { if (day) saveRoutine(clearDay(routine, day.id)); }} />
       <Confirm open={confirmDeload} title="Start a deload week?" confirm="Start deload"

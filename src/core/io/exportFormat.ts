@@ -27,9 +27,13 @@ const slotSchema = z.object({
   id: str.min(1), exerciseId: str.min(1), sets: z.number().int().min(1).max(20), repMin: z.number().int().min(1), repMax: z.number().int().min(1),
   restSec: z.number().int().min(0).max(1800), supersetGroup: str.optional(), notes: str.optional(), whyOverride: str.optional(), tipsOverride: strs.optional(), toFailure: z.boolean().optional(),
 });
+const targetSchema = z.object({
+  group, min: z.number().nullable(), max: z.number().nullable(), angles: str.optional(), gap: str.optional(), note: str.optional(), off: z.boolean().optional(), priority: z.boolean().optional(), acceptedBelow: z.boolean().optional(),
+});
 export const routineSchema = z.object({
   id: str.min(1), name: str.min(1), isCurrent: z.boolean(), createdAt: str, rules: z.array(z.object({ title: str, text: str })).optional(),
   days: z.array(z.object({ id: str.min(1), weekday: z.number().int().min(0).max(6).nullable(), title: str, slots: z.array(slotSchema) })),
+  targets: z.array(targetSchema).optional(),
 });
 const setSchema = z.object({
   id: str.min(1), type: z.enum(["warmup", "working", "drop", "failure"]),
@@ -44,17 +48,15 @@ export const sessionSchema = z.object({
   entries: z.array(z.object({
     id: str.min(1), exerciseId: str.min(1), swappedFromId: str.optional(), slotId: str.optional(), supersetGroup: str.optional(),
     restSec: z.number().int().min(0).max(1800), repMin: z.number().int().optional(), repMax: z.number().int().optional(), notes: str.optional(), toFailure: z.boolean().optional(), failWhy: strs.optional(), extraSet: strs.optional(),
+    suggestExtra: strs.optional(), suggestFailure: strs.optional(), plannedSets: z.number().int().min(0).optional(),
     sets: z.array(setSchema),
   })),
-});
-const targetSchema = z.object({
-  group, min: z.number().nullable(), max: z.number().nullable(), angles: str.optional(), gap: str.optional(), note: str.optional(), off: z.boolean().optional(), priority: z.boolean().optional(), acceptedBelow: z.boolean().optional(),
 });
 const settingsSchema = z.object({
   units: z.literal("lb"), restDefaultSec: z.number().int().min(0).max(1800), autoStartRest: z.boolean(), sound: z.boolean(), keepAwake: z.boolean(), deloadSuggestions: z.boolean().default(true), progressionHints: z.boolean().default(true), autoAdjust: z.boolean().default(true),
   theme: z.enum(["system", "light", "dark"]), accent: z.enum(ACCENTS).default("blue"),
   profile: z.object({ goal: z.enum(["growth", "strength", "endurance", "maintenance"]), phase: z.enum(["cutting", "maintaining", "bulking"]),
-    age: z.number().min(10).max(100).nullable(), yearsTraining: z.number().min(0).max(80).nullable(), sleepHours: z.number().min(0).max(16).nullable() }).nullable().optional(), weekStartDay: z.number().int().min(0).max(6).default(1),
+    age: z.number().min(10).max(100).nullable(), yearsTraining: z.number().min(0).max(80).nullable(), sleepHours: z.number().min(0).max(16).nullable() }).nullable().optional(), weekStartDay: z.number().int().min(0).max(6).default(6),
   deload: z.object({ start: str, end: str }).nullable().optional(), deloadDismissedAt: str.nullable().optional(), streakFreezes: z.array(z.object({ start: str, end: str.nullable() })).optional(), plates: z.array(z.object({ weight: z.number().positive(), pairs: z.number().int().min(0).max(50) })),
 });
 

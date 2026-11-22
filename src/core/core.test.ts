@@ -1,5 +1,5 @@
 import { deriveSkipped, reconcileSkipped, skippedVolume } from "./session";
-import { MIGRATIONS } from "./migrations";
+import { MIGRATIONS, applyMigrations } from "./migrations";
 import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
 import { groupsLeftThisWeek, planVolume, sessionsVolume, targetStatus, tonnage } from "./volume";
@@ -286,6 +286,22 @@ describe("backup export / import", () => {
     const db2 = new MemoryAdapter();
     await db2.replaceAll(r.backup.data);
     expect(await db2.all("sessions")).toHaveLength(1);
+  });
+  it("importing a backup from this version re-runs every migration without changing anything", () => {
+    const first = applyMigrations(buildSeed(), "2026-11-22");
+    const again = applyMigrations(structuredClone(first.data), "2026-11-22");
+    expect(again.data).toEqual(first.data);
+    expect(again.done).toEqual(MIGRATIONS.map((m) => m.id));
+  });
+  it("a backup comes back exactly as saved (per-plan targets, auto-adjust suggestions)", () => {
+    const d = buildSeed();
+    d.routines = d.routines.map((r) => ({ ...r, targets: [{ group: "chest", min: 10, max: 14, priority: true }] }));
+    d.sessions = [{ id: "s1", date: "2026-11-20", title: "A", startedAt: "2026-11-20T10:00:00Z", finishedAt: "2026-11-20T11:00:00Z", status: "finished", source: "app",
+      entries: [{ id: "e1", exerciseId: d.exercises[0].id, restSec: 120, suggestExtra: ["Chest behind"], suggestFailure: ["why"], plannedSets: 3,
+        sets: [{ id: "x", type: "working", weight: 50, reps: 10, done: true }] }] }];
+    const r = parseBackup(JSON.stringify(buildBackup(d, new Date())));
+    expect(r.ok && r.backup.data.routines).toEqual(d.routines);
+    expect(r.ok && r.backup.data.sessions).toEqual(d.sessions);
   });
   it("keeps the training profile and target priorities; older backups without them still import", () => {
     const d = buildSeed();

@@ -3,7 +3,7 @@ import { progressionHint } from "./progression";
 import { prsForEntry, type PrKind } from "./records";
 import { muscleLabel, type Exercise, type LoggedSet, type MuscleGroup, type Routine, type RoutineDay, type Session, type SessionEntry, type Slot } from "./types";
 import { localDate, uid } from "./util";
-import { deloadSets, deloadWeight } from "./deload";
+import { deloadAssist, deloadSets, deloadWeight } from "./deload";
 import { failureEligible, mainMuscle, MANUAL_WHY, TEST_WHY } from "./failure";
 import { countsForLoad, countsForVolume, sessionsVolume, tonnage, type GroupTotals } from "./volume";
 
@@ -37,7 +37,7 @@ export function buildEntry(ex: Exercise, history: Session[], opts: { sets?: numb
   const planned = opts.slot?.sets ?? opts.sets ?? (lastWork.length || 3);
   const n = opts.deload ? deloadSets(planned) : planned;
   const top = lastWork.length ? lastWork[lastWork.length - 1] : undefined;
-  const w = (v: number | null | undefined) => (v == null ? null : opts.deload ? deloadWeight(v, ex.incrementLb) : v);
+  const w = (v: number | null | undefined) => (v == null ? null : opts.deload ? (ex.assisted ? deloadAssist(v, ex.incrementLb) : deloadWeight(v, ex.incrementLb)) : v);
   const sets = Array.from({ length: n }, (_, i) => newSet(w(lastWork[i]?.weight ?? top?.weight), lastWork[i]?.reps ?? top?.reps ?? opts.slot?.repMin ?? opts.repMin ?? null)); // no history: reps start at the low end of the plan's range
   return {
     id: uid(),
@@ -292,6 +292,8 @@ export interface SessionSummary {
 
 export function summarize(s: Session, exercises: Map<string, Exercise>, history: Session[]): SessionSummary {
   const prs = s.entries
+    // Assisted machines: more weight = more help, so no PRs (spec §5.4)
+    .filter((e) => !exercises.get(e.exerciseId)?.assisted)
     .map((e) => ({ exerciseId: e.exerciseId, kinds: prsForEntry(history, s.id, e.exerciseId, e.sets, s.date, exercises.get(e.exerciseId)?.measure === "time") }))
     .filter((p) => p.kinds.length);
   return {

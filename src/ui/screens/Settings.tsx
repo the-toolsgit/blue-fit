@@ -146,9 +146,9 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
       <Confirm open={!!pending} title="Replace all data with this backup?"
         body={pending && <>Backup from {new Date(pending.exportedAt).toLocaleString()}: {pending.data.sessions.length} workouts, {pending.data.exercises.length} exercises, {pending.data.routines.length} routine(s). Everything on this phone is replaced.</>}
         confirm="Replace" danger onClose={() => setPending(null)}
-        onConfirm={async () => { if (pending) { await replaceAll(pending.data); toast({ kind: "info", title: "Backup imported" }); } }} />
+        onConfirm={async () => { if (!pending) return; try { await replaceAll(pending.data); toast({ kind: "info", title: "Backup imported" }); } catch (e) { console.error(e); toast({ kind: "error", title: "Import failed", body: "Nothing was changed. Try again." }); } }} />
       <Confirm open={reset} title="Reset everything?" body="Deletes all workouts, edits and settings, and reloads the original plan. Export a backup first. This can't be undone." confirm="Reset" danger
-        onClose={() => setReset(false)} onConfirm={async () => { await replaceAll(await loadSeed()); toast({ kind: "info", title: "Reset done" }); }} />
+        onClose={() => setReset(false)} onConfirm={async () => { try { await replaceAll(await loadSeed()); toast({ kind: "info", title: "Reset done" }); } catch (e) { console.error(e); toast({ kind: "error", title: "Reset failed", body: "Nothing was changed. Try again." }); } }} />
       <Confirm open={applyRest} title={`Set rest to ${fmtRest(settings.restDefaultSec)} everywhere?`} body={`Every exercise in ${routine?.name ?? "the plan"} gets this rest time.`} confirm="Apply"
         onClose={() => setApplyRest(false)} onConfirm={() => routine && saveRoutine({ ...routine, days: routine.days.map((d) => ({ ...d, slots: d.slots.map((s) => ({ ...s, restSec: settings.restDefaultSec })) })) })} />
     </div>

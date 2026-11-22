@@ -11,7 +11,8 @@ export interface ExerciseRecords {
   bestSessionVolume: { value: number; date: string } | null;
 }
 
-const valid = (x: LoggedSet) => x.done && countsForLoad(x.type) && x.weight != null && x.reps != null && x.reps > 0;
+/** A done set that counts. No weight = bodyweight only (0 added load): it still counts for reps records (Nov 22 2026). */
+const valid = (x: LoggedSet) => x.done && countsForLoad(x.type) && x.reps != null && x.reps > 0;
 
 export function emptyRecords(): ExerciseRecords {
   return { heaviest: null, bestE1rm: null, repsAtWeight: new Map(), bestSessionVolume: null };
@@ -20,14 +21,14 @@ export function emptyRecords(): ExerciseRecords {
 /** `time`: a hold (reps are seconds): no est. 1RM or volume, the "reps" record is the longest hold at a weight. */
 export function addSetToRecords(r: ExerciseRecords, x: LoggedSet, date: string, time = false) {
   if (!valid(x)) return;
-  const w = x.weight!, reps = x.reps!;
+  const w = x.weight ?? 0, reps = x.reps!;
   if (!r.heaviest || w > r.heaviest.weight || (w === r.heaviest.weight && reps > r.heaviest.reps)) r.heaviest = { weight: w, reps, date };
   const e = epley(w, reps);
-  if (!time && (!r.bestE1rm || e > r.bestE1rm.value)) r.bestE1rm = { value: e, weight: w, reps, date };
+  if (!time && w > 0 && (!r.bestE1rm || e > r.bestE1rm.value)) r.bestE1rm = { value: e, weight: w, reps, date };
   if (reps > (r.repsAtWeight.get(w) ?? 0)) r.repsAtWeight.set(w, reps);
 }
 
-export const entryVolume = (sets: LoggedSet[], time = false) => time ? 0 : sets.filter(valid).reduce((a, x) => a + x.weight! * x.reps!, 0);
+export const entryVolume = (sets: LoggedSet[], time = false) => time ? 0 : sets.filter(valid).reduce((a, x) => a + (x.weight ?? 0) * x.reps!, 0);
 
 /** Records for one exercise across sessions (optionally excluding one session, e.g. the active one). */
 export function computeRecords(sessions: Session[], exerciseId: string, excludeSessionId?: string, time = false): ExerciseRecords {
@@ -51,9 +52,9 @@ export const PR_LABEL: Record<PrKind, string> = { weight: "Heaviest weight", e1r
 export function prsForSet(prev: ExerciseRecords, x: LoggedSet): PrKind[] {
   if (!valid(x) || !prev.heaviest) return [];
   const out: PrKind[] = [];
-  const w = x.weight!, reps = x.reps!;
+  const w = x.weight ?? 0, reps = x.reps!;
   if (w > prev.heaviest.weight) out.push("weight");
-  if (prev.bestE1rm && epley(w, reps) > prev.bestE1rm.value + 1e-9) out.push("e1rm");
+  if (prev.bestE1rm && w > 0 && epley(w, reps) > prev.bestE1rm.value + 1e-9) out.push("e1rm");
   const at = prev.repsAtWeight.get(w);
   if (at != null && reps > at) out.push("reps");
   return out;

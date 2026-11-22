@@ -5,9 +5,9 @@ import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalList
 import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useState } from "react";
 import {
-  addSlot, clearDay, moveSlot, removeSlot, renameDay, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine,
+  addSlot, clearDay, insertSlot, moveSlot, removeSlot, renameDay, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine,
 } from "../../core/routineEdit";
-import { estimateMinutes } from "../../core/timeEstimate";
+import { slotsMinutes } from "../../core/timeEstimate";
 import { type Exercise, type Goal, type Phase, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
 import { targetsOf } from "../../core/volumeModel";
 import { failureApplies, failureEligible } from "../../core/failure";
@@ -126,9 +126,10 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   /** Swipe left on a row: remove it from the draft, with Undo (5 s) */
   const removeWithUndo = (s: Slot) => {
     if (!day) return;
-    const before = draft;
+    const at = day.slots.findIndex((x) => x.id === s.id), dayId = day.id;
     setDraft(removeSlot(draft, day.id, s.id));
-    toast({ kind: "info", title: "Exercise removed", body: exMap.get(s.exerciseId)?.name, action: { label: "Undo", run: () => setDraft(before) } });
+    // Undo puts back only this exercise (later edits stay)
+    toast({ kind: "info", title: "Exercise removed", body: exMap.get(s.exerciseId)?.name, action: { label: "Undo", run: () => setDraft((d) => d && insertSlot(d, dayId, s, at)) } });
   };
 
   const allSets = draft.days.reduce((a, d) => a + d.slots.reduce((b, s) => b + s.sets, 0), 0);
@@ -169,7 +170,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
           <div className="spread" style={{ margin: "14px 4px 8px", alignItems: "flex-end" }}>
             <input className="title-md" aria-label="Day name" value={day.title} onChange={(e) => setDraft(renameDay(draft, day.id, e.target.value))}
               style={{ ...field, font: "700 22px/1.05 var(--display)", textTransform: "uppercase", letterSpacing: ".02em", flex: 1, minWidth: 0 }} />
-            <span className="mono muted" style={{ fontSize: 13, whiteSpace: "nowrap" }}>{daySets} sets · ~{estimateMinutes(daySets, day.slots.length)} min</span>
+            <span className="mono muted" style={{ fontSize: 13, whiteSpace: "nowrap" }}>{daySets} sets · ~{slotsMinutes(day.slots)} min</span>
           </div>
           <div className="glass" style={{ padding: 4, marginTop: 8 }}>
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
@@ -177,7 +178,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
                 {day.slots.map((s, i) => (
                   <SlotRow key={s.id} slot={s} ex={exMap.get(s.exerciseId)} index={i}
                     groupStart={s.supersetGroup !== day.slots[i - 1]?.supersetGroup} groupEnd={s.supersetGroup !== day.slots[i + 1]?.supersetGroup}
-                    onOpen={() => setSlotOpen(s.id)} onDelete={() => removeWithUndo(s)} onFigure={() => setHowTo(s.exerciseId)} fail={weekFail.get(day.id)?.get(s.id)} />
+                    onOpen={() => setSlotOpen(s.id)} onDelete={() => removeWithUndo(s)} onFigure={() => setHowTo(s.id)} fail={weekFail.get(day.id)?.get(s.id)} />
                 ))}
               </SortableContext>
             </DndContext>
@@ -238,8 +239,8 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
                 </button>
               )}
               <button className="menu-item" onClick={() => { setPicker({ mode: "swap", slotId: slot.id }); }}><Icon name="swap" /> Swap exercise</button>
-              <button className="menu-item" onClick={() => setHowTo(slot.exerciseId)}><Icon name="info" /> How to do it</button>
-              <button className="menu-item danger" onClick={() => { setDraft(removeSlot(draft, day.id, slot.id)); setSlotOpen(null); }}><Icon name="trash" /> Remove from day</button>
+              <button className="menu-item" onClick={() => setHowTo(slot.id)}><Icon name="info" /> How to do it</button>
+              <button className="menu-item danger" onClick={() => { setSlotOpen(null); removeWithUndo(slot); }}><Icon name="trash" /> Remove from day</button>
             </div>
             <button className="btn btn-primary btn-block" onClick={() => setSlotOpen(null)}>Done</button>
           </div>
@@ -259,7 +260,11 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
         setWizard(false);
         toast({ kind: "info", title: "Plan built", body: "Check it, change anything, then Save plan." });
       }} />
-      <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} failWhy={day && slot ? weekFail.get(day.id)?.get(slot.id) : undefined} />
+      {(() => {
+        // howTo is a slot id: the sheet shows its exercise with the slot's own why/tips and this week's failure reasons
+        const hs = day?.slots.find((x) => x.id === howTo);
+        return <ExerciseSheet id={hs?.exerciseId ?? null} onClose={() => setHowTo(null)} failWhy={day && hs ? weekFail.get(day.id)?.get(hs.id) : undefined} whyOverride={hs?.whyOverride} tipsOverride={hs?.tipsOverride} />;
+      })()}
       <Confirm open={confirm === "cancel"} title="Discard changes?" body="Your edits to this plan are thrown away." confirm="Discard" danger onClose={() => setConfirm(null)} onConfirm={leave} />
       <Confirm open={confirm === "deleteDay"} title={`Delete ${day?.title ?? "this day"}?`} body="All its exercises are removed and it becomes a rest day. Past workouts stay in history." confirm="Delete" danger
         onClose={() => setConfirm(null)} onConfirm={() => { if (day) setDraft(clearDay(draft, day.id)); }} />

@@ -5,7 +5,7 @@ import { ANGLES, NEEDS_HEAVY_LIGHT, restDaysOf, RULES, STRETCH_CHECKED } from ".
 import { muscleLabel, MUSCLE_GROUPS, type Exercise, type Goal, type MuscleGroup, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "./types";
 import { formatTarget, isFocus, planVolume } from "./volume";
 import { fmtNum } from "./util";
-import { estimateMinutes } from "./timeEstimate";
+import { slotsMinutes } from "./timeEstimate";
 
 /**
  * The jobs (movement patterns / regions) each muscle needs to be fully trained, from anatomy. Varying exercises across
@@ -230,14 +230,15 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
 
   // Score: each part earns its share of points
   const share = (good: number, all: number) => (all ? good / all : 1);
-  const inTarget = main.filter((g) => { const t = tmap.get(g)!, w = week.get(g) ?? 0; return w >= t.min! && (t.max == null || w <= t.max); }).length;
+  // Like the Weekly volume check: every focus muscle, trained or not (Nov 22 2026; was trained ones only)
+  const inTarget = focusAll.filter((g) => { const t = tmap.get(g)!, w = week.get(g) ?? 0; return w >= t.min! && (t.max == null || w <= t.max); }).length;
   const allJobs = main.flatMap((g) => (JOBS[g] ?? []).length > 1 ? (JOBS[g] ?? []).map((j) => jobsHit(g).has(j)) : []);
   const backToBack = (g: MuscleGroup) => tooSoon(g) != null;
   const failEligible = failure ? main.filter((g) => slots.some((s) => isDirect(ex(s), g) && failure.eligible(ex(s)))) : [];
   const twoNeeded = main.filter(needsTwo);
   const W = SCORE_WEIGHTS;
   const parts: ScorePart[] = [
-    { id: "volume", label: "Weekly volume", max: W.volume, points: W.volume * share(inTarget, main.length), note: `${inTarget} of ${main.length} muscles in target` },
+    { id: "volume", label: "Weekly volume", max: W.volume, points: W.volume * share(inTarget, focusAll.length), note: `${inTarget} of ${focusAll.length} muscles in target` },
     { id: "parts", label: "Every angle", max: W.parts, points: W.parts * share(allJobs.filter(Boolean).length, allJobs.length), note: `${allJobs.filter(Boolean).length} of ${allJobs.length} angles trained` },
     { id: "recovery", label: "Recovery", max: W.recovery, points: W.recovery * share(main.filter((g) => !backToBack(g)).length, main.length), note: `${main.filter((g) => !backToBack(g)).length} of ${main.length} muscles rested` },
     { id: "failure", label: "Failure", max: W.failure, points: !failure || !failure.applies ? W.failure : W.failure * share(failEligible.filter((g) => failure.muscles.has(g)).length, failEligible.length),
@@ -249,7 +250,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const earned = main.length ? parts.reduce((a, p) => a + p.points, 0) : 0;
   const score = { score: Math.max(SCORE_BASE, Math.min(100, Math.round(SCORE_BASE + earned))), parts: parts.map((p) => ({ ...p, points: Math.round(p.points * 10) / 10 })) };
 
-  const mins = days.map((d) => estimateMinutes(d.slots.reduce((a, s) => a + s.sets, 0), d.slots.length));
+  const mins = days.map((d) => slotsMinutes(d.slots));
   return { days: days.length, sets, minutes: mins.length ? Math.round(mins.reduce((a, b) => a + b, 0) / mins.length / 5) * 5 : 0, muscles: main.length, tiles, checks, score };
 }
 

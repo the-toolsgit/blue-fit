@@ -102,7 +102,8 @@ export function projectedWeek(c: FailureContext): Map<MuscleGroup, number> {
   }
   for (let d = c.today; d <= we; d = addDays(d, 1)) {
     const day = dayOn(c.routine, d);
-    if (!day || week.some((s) => s.date === d && s.dayId === day.id)) continue;
+    // A plan day already done this week (on any date, e.g. moved earlier) isn't still to come
+    if (!day || week.some((s) => s.dayId === day.id)) continue;
     for (const slot of day.slots) for (const v of c.exMap.get(slot.exerciseId)?.volume ?? []) add(v.group, slot.sets * v.weight);
   }
   return out;
@@ -268,8 +269,9 @@ export function planExtraSets(day: RoutineDay, date: string, c: FailureContext):
       if (dd && !doneThisWeek(dd.id) && directIn(dd, g, c.exMap).length) { first = d; break; }
     }
     if (first !== date) continue;
-    const direct = mine.reduce((a, s) => a + s.sets, 0);
-    if (direct + 1 > MAX_SESSION_SETS) continue;
+    // The workout's dose for the muscle counts indirect sets as half, like the Sets per workout check
+    const dose = day.slots.reduce((a, s) => a + s.sets * (c.exMap.get(s.exerciseId)?.volume.find((v) => v.group === g)?.weight ?? 0), 0);
+    if (dose + 1 > MAX_SESSION_SETS) continue;
     // Not if the muscle is hard again within its rest days after this workout (database: 2 big muscles, 1 the rest)
     const rest = restDaysOf(g);
     let tooSoon = false;

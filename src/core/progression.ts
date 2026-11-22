@@ -20,15 +20,17 @@ export interface PastSets { sets: LoggedSet[]; fail?: LoggedSet }
 /** Failure set reps above the top that prove you're ready for more weight (*judgment*) */
 export const READY_MARGIN = 2;
 
-const isWork = (x: LoggedSet) => x.done && (x.type === "working" || x.type === "failure") && x.weight != null && x.reps != null;
+/** No weight = bodyweight only, counted as 0 added load (Nov 22 2026) */
+const isWork = (x: LoggedSet) => x.done && (x.type === "working" || x.type === "failure") && x.reps != null;
+const load = (x: LoggedSet) => x.weight ?? 0;
 
 /** Whether every regular set (the failure set left out) at the top weight reached the top of the range. */
 export function atTop(p: PastSets | undefined, repMax: number): boolean {
   const work = (p?.sets ?? []).filter(isWork);
   if (!work.length) return false;
-  const top = Math.max(...work.map((x) => x.weight!));
+  const top = Math.max(...work.map(load));
   const regular = work.filter((x) => x !== p!.fail && x.type !== "failure");
-  const judged = (regular.length ? regular : work).filter((x) => x.weight === top);
+  const judged = (regular.length ? regular : work).filter((x) => load(x) === top);
   return judged.length > 0 && judged.every((x) => x.reps! >= repMax);
 }
 
@@ -66,12 +68,12 @@ export function progressionHint(lastSets: LoggedSet[] | undefined, repMin: numbe
   }
   const work = (lastSets ?? []).filter(isWork);
   if (!work.length) return { kind: "none" };
-  const top = Math.max(...work.map((x) => x.weight!));
+  const top = Math.max(...work.map(load));
   const last: PastSets = { sets: work, fail: opts.fail ?? work.find((x) => x.type === "failure") };
-  const f = last.fail && last.fail.weight === top && last.fail.reps != null ? last.fail.reps : null;
+  const f = last.fail && load(last.fail) === top && last.fail.reps != null ? last.fail.reps : null;
   const topNow = atTop(last, repMax);
   const proven = f != null && f >= repMax + READY_MARGIN;
-  const twice = topNow && atTop(opts.prev, repMax) && Math.max(...(opts.prev?.sets ?? []).filter(isWork).map((x) => x.weight!)) >= top;
+  const twice = topNow && atTop(opts.prev, repMax) && Math.max(...(opts.prev?.sets ?? []).filter(isWork).map(load)) >= top;
   // The failure set says too light: add by how far past (5 or 10 lb), never less than the normal step
   if (f != null && f - READY_MARGIN > repMax) return { kind: "addWeight", weight: failureWeight(top, f, repMax, increment), reps: repMin, from: top };
   if (topNow && (proven || twice)) return { kind: "addWeight", weight: nextWeight(top, increment), reps: repMin, from: top };

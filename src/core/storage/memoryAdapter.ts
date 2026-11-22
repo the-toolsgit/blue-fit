@@ -26,5 +26,6 @@ export class MemoryAdapter implements StorageAdapter {
     (Object.keys(this.t) as TableName[]).forEach((k) => this.t[k].clear());
     await this.putMany("exercises", d.exercises); await this.putMany("routines", d.routines); await this.putMany("sessions", d.sessions);
     await this.putMany("targets", d.targets); await this.putMany("jefitAliases", d.jefitAliases); await this.saveSettings(d.settings);
+    this.meta.delete("restTimer");
   }
 }

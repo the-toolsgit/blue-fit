@@ -4,7 +4,7 @@ import { REST, SPLASH_FLEX } from "../../core/figure/poses";
 import { createSessionFromDay } from "../../core/session";
 import { MANUAL_WHY } from "../../core/failure";
 import { ExtraTag, FailFlame, useWeekExtraSets, useWeekFailure } from "../components/FailFlame";
-import { estimateMinutes } from "../../core/timeEstimate";
+import { slotsMinutes } from "../../core/timeEstimate";
 import { localDate, weekOrder, weekStart } from "../../core/util";
 import { reducedMotion } from "../device";
 import { Figure } from "../components/Figure";
@@ -146,7 +146,7 @@ export function TodayScreen() {
             </div>
             <div className="muted" style={{ fontSize: 12, textAlign: "right", minHeight: 18, transition: "opacity .3s" }} key={heroEx?.id}>{heroEx?.name}</div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginTop: 10 }}>
-              {[[slots.length, "exercises"], [sets, "sets"], [`~${estimateMinutes(sets, slots.length)}`, "min"]].map(([v, l]) => (
+              {[[slots.length, "exercises"], [sets, "sets"], [`~${slotsMinutes(slots)}`, "min"]].map(([v, l]) => (
                 <div key={l} style={{ padding: "10px 12px", borderRadius: 14, background: "var(--surface-2)", border: "1px solid var(--line)" }}>
                   <div className="mono" style={{ fontSize: 24, lineHeight: 1.1 }}>{v}</div>
                   <div className="eyebrow" style={{ fontSize: 10, marginTop: 2 }}>{l}</div>
@@ -182,7 +182,8 @@ export function TodayScreen() {
           </button>
         </Dock>
       )}
-      <ExerciseSheet id={open} onClose={() => setOpen(null)} failWhy={fail?.get(slots.find((s) => s.exerciseId === open)?.id ?? "")} />
+      {(() => { const os = slots.find((s) => s.exerciseId === open);
+        return <ExerciseSheet id={open} onClose={() => setOpen(null)} failWhy={fail?.get(os?.id ?? "")} whyOverride={os?.whyOverride} tipsOverride={os?.tipsOverride} />; })()}
     </div>
   );
 }

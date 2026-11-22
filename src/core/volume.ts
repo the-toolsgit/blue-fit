@@ -71,10 +71,10 @@ export function targetStatus(sets: number, t: VolumeTarget | undefined, stillPla
 export function groupsLeftThisWeek(routine: Routine | undefined, exercises: Map<string, Exercise>, finished: Session[], today: string, weekStartDay: number): Set<MuscleGroup> {
   const left = new Set<MuscleGroup>();
   if (!routine) return left;
-  const end = addDays(weekStart(today, weekStartDay), 6);
+  const ws = weekStart(today, weekStartDay), end = addDays(ws, 6);
   for (let d = today; d <= end; d = addDays(d, 1)) {
     const day = routine.days.find((x) => x.weekday === parseLocalDate(d).getDay());
-    if (!day || (d === today && finished.some((s) => s.date === d && s.dayId === day.id))) continue;
+    if (!day || finished.some((s) => s.date >= ws && s.date <= end && s.dayId === day.id)) continue;
     for (const slot of day.slots) for (const v of exercises.get(slot.exerciseId)?.volume ?? []) left.add(v.group);
   }
   return left;

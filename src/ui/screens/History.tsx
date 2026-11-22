@@ -10,6 +10,7 @@ import { FillFlame } from "../components/FillFlame";
 import { StreakFlame } from "../components/StreakFlames";
 import { fmtDate, fmtVolume } from "../format";
 import { go } from "../router";
+import { reducedMotion } from "../device";
 import { useStore } from "../store";
 import type { Session } from "../../core/types";
 
@@ -152,7 +153,7 @@ export function HistoryScreen() {
   const pg = Math.min(page, pages - 1);
   const shown = allWeeks.slice(pg * WEEKS_PER_PAGE, (pg + 1) * WEEKS_PER_PAGE);
   const listTop = useRef<HTMLDivElement>(null);
-  const turn = (p: number) => { setPage(p); requestAnimationFrame(() => listTop.current?.scrollIntoView({ behavior: "smooth", block: "start" })); };
+  const turn = (p: number) => { setPage(p); requestAnimationFrame(() => listTop.current?.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" })); };
   return (
     <div className="page">
       <span className="eyebrow">History</span>

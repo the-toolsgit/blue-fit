@@ -103,6 +103,35 @@ export function WorkoutScreen() {
     requestAnimationFrame(() => scrollBelowHeader(refs.current.get(current), "auto"));
   }, [current, active]);
 
+  // Every hook runs before the "no workout" return below (Finish and Discard clear the workout before the route changes)
+  // Press and hold an exercise's name to drag it (a mouse drags at once)
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 280, tolerance: 8 } }),
+  );
+  // While dragging, every card shrinks to its name row so the whole list fits; the grabbed card stays under the finger
+  const [sorting, setSorting] = useState(false);
+  const keepTop = useRef<{ id: string; top: number } | null>(null);
+  const onDragStart = (ev: DragStartEvent) => {
+    vibrate(10);
+    const el = refs.current.get(String(ev.active.id));
+    keepTop.current = el ? { id: String(ev.active.id), top: el.getBoundingClientRect().top } : null;
+    setSorting(true);
+  };
+  useLayoutEffect(() => {
+    const k = keepTop.current;
+    if (!sorting || !k) return;
+    keepTop.current = null;
+    const el = refs.current.get(k.id);
+    if (el) window.scrollBy(0, el.getBoundingClientRect().top - k.top);
+  }, [sorting]);
+  // First workout after this change: the current card slides open a little and back once, to show the swipe
+  useEffect(() => {
+    if (!current) return;
+    try { if (localStorage.getItem("bf-swipe-hint")) return; localStorage.setItem("bf-swipe-hint", "1"); } catch { return; }
+    setPeekId(current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current != null]);
   if (!active) {
     return (
       <div className="page"><div className="empty" style={{ paddingTop: 80 }}>
@@ -135,27 +164,6 @@ export function WorkoutScreen() {
     card.addEventListener("animationend", () => card.classList.remove("card-flash"), { once: true });
   };
 
-  // Press and hold an exercise's name to drag it (a mouse drags at once)
-  const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 280, tolerance: 8 } }),
-  );
-  // While dragging, every card shrinks to its name row so the whole list fits; the grabbed card stays under the finger
-  const [sorting, setSorting] = useState(false);
-  const keepTop = useRef<{ id: string; top: number } | null>(null);
-  const onDragStart = (ev: DragStartEvent) => {
-    vibrate(10);
-    const el = refs.current.get(String(ev.active.id));
-    keepTop.current = el ? { id: String(ev.active.id), top: el.getBoundingClientRect().top } : null;
-    setSorting(true);
-  };
-  useLayoutEffect(() => {
-    const k = keepTop.current;
-    if (!sorting || !k) return;
-    keepTop.current = null;
-    const el = refs.current.get(k.id);
-    if (el) window.scrollBy(0, el.getBoundingClientRect().top - k.top);
-  }, [sorting]);
   const onDragEnd = (ev: DragEndEvent) => {
     setSorting(false);
     if (!ev.over || ev.active.id === ev.over.id) return;
@@ -217,13 +225,6 @@ export function WorkoutScreen() {
       { label: "Remove", icon: "trash", onClick: () => setConfirmRemove(e.id), danger: true },
     ];
   };
-  // First workout after this change: the current card slides open a little and back once, to show the swipe
-  useEffect(() => {
-    if (!current) return;
-    try { if (localStorage.getItem("bf-swipe-hint")) return; localStorage.setItem("bf-swipe-hint", "1"); } catch { return; }
-    setPeekId(current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [current != null]);
 
   // Group consecutive superset entries for the bracket
   const groupInfo = (i: number) => {

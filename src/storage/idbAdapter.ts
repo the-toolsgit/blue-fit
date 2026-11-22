@@ -27,13 +27,31 @@ export class IdbAdapter implements StorageAdapter {
           for (const i of INDEXES[t as TableName] ?? []) os.createIndex(i, i);
         }
       };
-      r.onsuccess = () => { r.result.onversionchange = () => r.result.close(); ok(r.result); };
+      // iOS drops the connection after a while in the background: forget it so the next write opens a new one
+      r.onsuccess = () => {
+        const db = r.result;
+        db.onversionchange = () => { db.close(); this.dbp = null; };
+        db.onclose = () => { this.dbp = null; };
+        ok(db);
+      };
       r.onerror = () => fail(r.error);
       r.onblocked = () => fail(new Error("Storage is blocked by another open copy of the app. Close other tabs and try again."));
     });
     return this.dbp;
   }
-  private async store(t: TableName | "kv", mode: IDBTransactionMode) { return (await this.db()).transaction(t, mode).objectStore(t); }
+  private async tx(names: string[]) {
+    try { return (await this.db()).transaction(names, "readwrite"); }
+    catch { this.dbp = null; return (await this.db()).transaction(names, "readwrite"); }
+  }
+  private async store(t: TableName | "kv", mode: IDBTransactionMode) {
+    try { return (await this.db()).transaction(t, mode).objectStore(t); }
+    catch (e) {
+      // A closed or lost connection ("InvalidStateError"): open again once
+      if (!(e instanceof DOMException) || (e.name !== "InvalidStateError" && e.name !== "UnknownError")) throw e;
+      this.dbp = null;
+      return (await this.db()).transaction(t, mode).objectStore(t);
+    }
+  }
 
   async init(seed: () => AppData | Promise<AppData>) {
     await this.db();
@@ -59,7 +77,7 @@ export class IdbAdapter implements StorageAdapter {
   }
   /** Replace everything in one transaction: all or nothing. */
   async replaceAll(d: AppData) {
-    const tx = (await this.db()).transaction([...TABLES, "kv"], "readwrite");
+    const tx = await this.tx([...TABLES, "kv"]);
     for (const t of TABLES) { const s = tx.objectStore(t); s.clear(); for (const row of d[t]) s.put(row); }
     tx.objectStore("kv").put({ key: "settings", value: d.settings });
     tx.objectStore("kv").delete("meta:restTimer");

@@ -1,7 +1,7 @@
 // App state: an in-memory snapshot of storage, updated optimistically and written through
 // after every change (writes are queued so they land in order).
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { MIGRATIONS } from "../core/migrations";
+import { applyMigrations, IMPORT_SKIP } from "../core/migrations";
 import { localDate } from "../core/util";
 import type { StorageAdapter, TableName, Tables } from "../core/storage/StorageAdapter";
 import { DEFAULT_SETTINGS, type AppData, type Exercise, type RestTimer, type Routine, type Session, type Settings, type VolumeTarget } from "../core/types";
@@ -98,14 +98,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       await adapter.init(loadSeed);
       let d = await adapter.exportAll();
       // One-time migrations (each runs once; ids remembered in meta)
-      const doneIds = (await adapter.getMeta<string[]>("migrations")) ?? [];
-      for (const m of MIGRATIONS) {
-        if (doneIds.includes(m.id)) continue;
-        const next = m.run(d, localDate(new Date()));
-        if (next) { await adapter.replaceAll(next); d = await adapter.exportAll(); }
-        doneIds.push(m.id);
-        await adapter.setMeta("migrations", doneIds);
-      }
+      const m = applyMigrations(d, localDate(new Date()), (await adapter.getMeta<string[]>("migrations")) ?? []);
+      if (m.changed) { await adapter.replaceAll(m.data); d = await adapter.exportAll(); }
+      await adapter.setMeta("migrations", m.done);
       const t = await adapter.getMeta<RestTimer>("restTimer");
       setBackup({ lastAt: (await adapter.getMeta<string>("lastBackupAt")) ?? null, snoozedUntil: (await adapter.getMeta<string>("backupSnoozedUntil")) ?? null });
       setDb(await dbP);
@@ -185,7 +180,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       },
       replaceAll: async (d) => {
         await queue.current;
-        await adapter.replaceAll(d);
+        // A backup from an older version (or the raw seed on reset) gets every migration, like a first launch
+        const m = applyMigrations(d, localDate(new Date()), IMPORT_SKIP);
+        await adapter.replaceAll(m.data);
+        await adapter.setMeta("migrations", m.done);
         setData(await adapter.exportAll());
         setTimerState(null);
       },

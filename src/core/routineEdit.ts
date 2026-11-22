@@ -47,6 +47,9 @@ export function addSlot(r: Routine, dayId: string, ex: Exercise, restSec: number
 }
 export const removeSlot = (r: Routine, dayId: string, slotId: string): Routine =>
   mapDay(r, dayId, (d) => ({ ...d, slots: cleanupSolo(d.slots.filter((s) => s.id !== slotId)) }));
+/** Undo of a remove: put the slot back at its old place (later edits stay; a day that's gone gets nothing). */
+export const insertSlot = (r: Routine, dayId: string, slot: Slot, index: number): Routine =>
+  mapDay(r, dayId, (d) => (d.slots.some((s) => s.id === slot.id) ? d : { ...d, slots: cleanupSolo([...d.slots.slice(0, index), slot, ...d.slots.slice(index)]) }));
 export const updateSlot = (r: Routine, dayId: string, slotId: string, patch: Partial<Slot>): Routine =>
   mapDay(r, dayId, (d) => ({ ...d, slots: d.slots.map((s) => (s.id === slotId ? { ...s, ...patch } : s)) }));
 export const moveSlot = (r: Routine, dayId: string, from: number, to: number): Routine =>
