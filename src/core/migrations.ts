@@ -640,6 +640,22 @@ export const MIGRATIONS: Migration[] = [
       return changed ? { ...d, exercises } : null;
     },
   },
+  {
+    // Nov 22 2026: pec deck and reverse fly machine lose the box frame, only the base and pad stay (Leo)
+    id: "2026-11-22-pecdeck-no-frame",
+    run(d) {
+      const frame = ["4,-16,4,104", "116,-16,116,104", "4,-16,116,-16"];
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        if (e.isCustom || (e.id !== "butterfly" && e.id !== "machine-reverse-fly") || !e.figure?.props) return e;
+        const props = e.figure.props.filter((p) => !("line" in p && p.line && frame.includes(String(p.line))));
+        if (props.length === e.figure.props.length) return e;
+        changed = true;
+        return { ...e, figure: { ...e.figure, props } };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
 ];
 
 type FigureUpdates = Record<string, { was: string[]; figure: Exercise["figure"] }>;
