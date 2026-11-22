@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { useKeptState } from "../keptState";
-import { inRange, muscleFrequency, rangeStart, RANGE_LABEL, weeklyTotals, type Range } from "../../core/progress";
+import { inRange, rangeStart, RANGE_LABEL, weeklyTotals, type Range } from "../../core/progress";
 import { recoveryStatus, type MuscleRecovery, type Recovery } from "../../core/recovery";
 import { MUSCLE_GROUPS, muscleLabel, type MuscleGroup } from "../../core/types";
 import { fmtNum, localDate } from "../../core/util";
@@ -38,7 +38,6 @@ export function ProgressScreen() {
   // "This week" by default; the last choice is remembered on this phone
   const from = rangeStart(range, today, sd);
   const weeks = useMemo(() => weeklyTotals(finished, exMap, from, today, sd), [finished, exMap, from, today, sd]);
-  const freq = useMemo(() => muscleFrequency(inRange(finished, from), exMap, weeks.length), [finished, exMap, from, weeks.length]);
   const rec = useMemo(() => recoveryStatus(finished, exMap, today, settings.profile), [finished, exMap, today, settings.profile]);
   const tmap = new Map(targets.map((t) => [t.group, t]));
   const workouts = inRange(finished, from).length;
@@ -122,18 +121,6 @@ export function ProgressScreen() {
       <h2 className="section-title">Weekly volume</h2>
       <section className="glass" style={{ padding: 14 }}>
         <BarChart key={"t" + range} points={weeks.map((w) => ({ label: weekLabel(w.weekStart), value: w.tonnage, sub: `${w.workouts} workouts` }))} unit="lb" highlightLast />
-      </section>
-
-      <h2 className="section-title">Frequency (times a week)</h2>
-      <section className="glass" style={{ padding: 14, display: "grid", gap: 9 }}>
-        {MUSCLE_GROUPS.filter((m) => freq[m.id] > 0).sort((a, b) => freq[b.id] - freq[a.id]).map((m) => (
-          <div key={m.id} style={{ display: "grid", gridTemplateColumns: "96px 1fr 40px", gap: 10, alignItems: "center", fontSize: 14 }}>
-            <span>{m.label}</span>
-            <div className="vbar"><div className="fill" style={{ width: `${Math.min(100, (freq[m.id] / 3) * 100)}%` }} /></div>
-            <span className="mono" style={{ textAlign: "right" }}>{fmtNum(freq[m.id])}×</span>
-          </div>
-        ))}
-        <p className="muted" style={{ fontSize: 12 }}>Workouts per week with direct work for the muscle.</p>
       </section>
 
       <h2 className="section-title">Exercise progress</h2>

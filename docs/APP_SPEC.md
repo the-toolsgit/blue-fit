@@ -161,7 +161,6 @@ Empty (no finished workouts): curl figure (CURL pose), "Finish a workout and you
   - **Swipe** left/right on the caption under the map: selects the next/previous muscle, top to bottom (neck, traps, front delts, side delts, rear delts, chest, back, abs, biceps, triceps, forearms, glutes, quads, hamstrings, adductors, calves; wraps around); the caption slides in. Faint ‹ › on both sides of the caption (vertically centered, also tappable) hint at the swipe. The chart below doesn't change.
 - **Weekly sets vs target:** muscle chips; bar chart of that muscle's sets per week with the target as a green band; "Green band = target n–n sets a week." (The volume table with its "This week | Average" toggle was removed from Progress on Nov 21 2026; it stays in the plan editor.)
 - **Weekly volume:** bar chart of tonnage per week (readout shows workouts that week).
-- **Frequency (times a week):** muscles with direct work, highest first, bar scaled to 3×/week, value "2.3×".
 - **Exercise progress:** exercise dropdown (exercises with logged sets, most recently trained first) + the exercise progress chart (§3.13), limited to the range.
 
 ### 3.13 Exercise progress chart (component)
@@ -401,7 +400,7 @@ Counted in **whole days** (workout dates), since people train at about the same 
 - Weeks begin on the week-start day (§4.6). Range start (first day included): 4 wk = the first day of the week 3 weeks before the current week; 12 wk = 11 weeks before; 6 mo = 25 weeks before; All = first workout's week.
 - Weekly totals: one row per week from the range start to the current week, empty weeks included: tonnage (§5.3), fractional sets per group (§5.2), workouts.
 - Average weekly sets = Σ weekly sets ÷ number of weeks (empty weeks count), rounded to 0.1.
-- Frequency = workouts in the range with ≥ 1 direct (weight 1) working/failure set for the group ÷ number of weeks, rounded to 0.1.
+- Frequency = workouts in the range with ≥ 1 direct (weight 1) working/failure set for the group ÷ number of weeks, rounded to 0.1. (Not shown since Nov 21 2026: the Frequency section was removed from Progress; the plan check "Twice a week" covers spreading sets.)
 - Exercise series: one point per finished session with done non-warm-up sets of the exercise (oldest first): est. 1RM = best Epley of its sets, best set = the set giving it, volume = Σ weight × reps, sets.
 - Calendar day load: per date, working/failure sets done, tonnage, workouts.
 
