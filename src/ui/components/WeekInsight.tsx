@@ -1,6 +1,6 @@
 // The whole week of a plan at a glance (Plan tab, view and edit mode): quick facts, the muscle map with a list per side
 // (components/WeekMap.tsx), and the Week check (does the routine tick every box for the user's goal).
-import type { Exercise, Routine, VolumeTarget } from "../../core/types";
+import type { Exercise, Goal, Routine, VolumeTarget } from "../../core/types";
 import { weekInsight, type CheckId } from "../../core/workoutCheck";
 import { failureApplies, failureEligible, mainMuscle } from "../../core/failure";
 import type { MuscleGroup } from "../../core/types";
@@ -9,6 +9,16 @@ import { FlexFigure } from "./FlexFigure";
 import { WeekMap, type TargetEditing } from "./WeekMap";
 import { Icon } from "./Icon";
 import { Ring } from "./RestTimer";
+
+/** The failure part of the score: muscles that get a failure set this week (from the week's failure picks) */
+export function failureInput(routine: Routine, exMap: Map<string, Exercise>, weekFail: Map<string, Map<string, string[]>>, goal: Goal | undefined) {
+  const muscles = new Set<MuscleGroup>();
+  for (const [dayId, m] of weekFail) for (const slotId of m.keys()) {
+    const g = mainMuscle(exMap.get(routine.days.find((d) => d.id === dayId)?.slots.find((sl) => sl.id === slotId)?.exerciseId ?? ""));
+    if (g) muscles.add(g);
+  }
+  return { muscles, eligible: failureEligible, applies: failureApplies(goal) };
+}
 
 export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
   /** Plan tab: change a muscle's target from its card */
@@ -19,13 +29,7 @@ export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
 }) {
   const { settings } = useStore();
   // Muscles that get a failure set this week, for the score
-  const failMuscles = new Set<MuscleGroup>();
-  for (const [dayId, m] of weekFail) for (const slotId of m.keys()) {
-    const g = mainMuscle(exMap.get(routine.days.find((d) => d.id === dayId)?.slots.find((sl) => sl.id === slotId)?.exerciseId ?? ""));
-    if (g) failMuscles.add(g);
-  }
-  const i = weekInsight(routine, exMap, targets, settings.profile?.goal,
-    { muscles: failMuscles, eligible: failureEligible, applies: failureApplies(settings.profile?.goal) });
+  const i = weekInsight(routine, exMap, targets, settings.profile?.goal, failureInput(routine, exMap, weekFail, settings.profile?.goal));
   const passed = i.checks.filter((c) => c.pass).length, all = passed === i.checks.length;
   return (
     <>

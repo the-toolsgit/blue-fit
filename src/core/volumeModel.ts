@@ -1,6 +1,6 @@
 // Weekly set targets: the muscle database (seed/muscles.json) gives each muscle a range per goal and the rules for how
 // the training profile changes it. Units: fractional weekly sets (direct 1, indirect ½). Pure and framework-free.
-import { MUSCLE_GROUPS, type MuscleGroup, type Routine, type TrainingProfile, type VolumeTarget } from "./types";
+import { MUSCLE_GROUPS, type Goal, type MuscleGroup, type Routine, type TrainingProfile, type VolumeTarget } from "./types";
 import { muscleInfo, PROFILE_RULES, profileStep, RULES, type GoalKey } from "./muscles";
 export type { Goal, Phase, TrainingProfile } from "./types";
 
@@ -58,24 +58,25 @@ export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Pr
  * without one, the muscle database's growth range. (Every muscle has a database minimum since Nov 21 2026; a 0 would give
  * no target: tracked, not checked.)
  */
-export function freshTargets(p: TrainingProfile | null): VolumeTarget[] {
+export function freshTargets(p: TrainingProfile | null, goal?: Goal): VolumeTarget[] {
   // All Normal (Leo, Nov 21 2026): muscles the app would make Priority by default get an explicit Normal
-  return MUSCLE_GROUPS.map(({ id: g }) => ({ group: g, ...defaultRange(g, p, "normal"), ...(priorityOf(g) === "priority" ? { priority: false } : {}) }));
+  return MUSCLE_GROUPS.map(({ id: g }) => ({ group: g, ...defaultRange(g, p, "normal", goal), ...(priorityOf(g) === "priority" ? { priority: false } : {}) }));
 }
 
 /**
  * A muscle's default weekly range for a priority: the model's numbers with a complete profile; without one, the muscle
- * database's Mass gain range, where Priority moves the minimum to the middle and the ceiling up 25% (the model's own
+ * database's range for `goal` (Mass gain when not given; Build my plan passes the goal it asked), where Priority moves the minimum to the middle and the ceiling up 25% (the model's own
  * priority rule). A minimum of 0 gives no target (tracked, not checked).
  */
-export function defaultRange(g: MuscleGroup, p: TrainingProfile | null, priority: Exclude<Priority, "off">): { min: number | null; max: number | null } {
+export function defaultRange(g: MuscleGroup, p: TrainingProfile | null, priority: Exclude<Priority, "off">, goal: Goal = "growth"): { min: number | null; max: number | null } {
   let min: number, max: number;
   if (p) ({ min, max } = modelTarget(g, p, priority));
   else {
-    [min, max] = muscleInfo(g).weeklySets.growth;
-    // Same split as the model: Normal the lower half, Priority the upper half
+    const k: GoalKey = goal === "maintenance" ? "maintain" : goal;
+    [min, max] = muscleInfo(g).weeklySets[k];
+    // Same split as the model: Normal the lower half, Priority the upper half (maintain: one range)
     const mid = (min + max) / 2;
-    if (priority === "priority") min = mid; else max = mid;
+    if (k !== "maintain") { if (priority === "priority") min = mid; else max = mid; }
   }
   const lo = Math.round(min), hi = Math.round(max);
   return lo > 0 ? { min: lo, max: Math.max(lo, hi) } : { min: null, max: null };

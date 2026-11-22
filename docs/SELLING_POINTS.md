@@ -2,6 +2,9 @@
 
 Features worth selling. Add one line each time something stands out. Details live in `APP_SPEC.md`.
 
+## The headline: Build my plan
+- **A complete, research-based plan in under a minute.** Answer a few questions (goal, eating, days, workout length, rest between sets, which muscles to prioritize) and the app builds your whole week. It picks the right split for your days and the top exercises for your goal. It covers every angle of every muscle and includes stretch exercises. It gives each muscle its rest days, keeps every workout within your time, spreads the sets evenly across days and hits every weekly target. Before building, it shows what can't fit and offers one-tap fixes. Then you can swap any exercise for another that works the same muscle and angle, remove exercises, add your own, or build again for a different plan. Every plan is checked against the Plan check and scored. (§5.20b)
+
 ## Smart training
 - **Automatic "last set to failure".** The app picks which exercises go to failure in each workout, based on the whole plan and on what you actually did this week (skipped workouts and exercises included). It considers your goal, recovery and weekly targets. Tap the flame to see why. (§5.19)
 - **Personal weekly volume targets.** Sets per muscle come from your goal, age, sleep, diet phase and training years, and you can set each muscle to Priority, Normal or Skip. (§5.17)

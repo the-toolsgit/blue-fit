@@ -8,7 +8,7 @@ import {
   addSlot, clearDay, moveSlot, removeSlot, renameDay, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine,
 } from "../../core/routineEdit";
 import { estimateMinutes } from "../../core/timeEstimate";
-import { type Exercise, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
+import { type Exercise, type Goal, type Phase, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
 import { targetsOf } from "../../core/volumeModel";
 import { failureApplies, failureEligible } from "../../core/failure";
 import { FailFlame, useWeekFailure } from "../components/FailFlame";
@@ -59,7 +59,9 @@ function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, fail }: {
 
 /** `onExit`: used when the Plan tab edits in place (no route change); `initialDayId`: keep the day the user was looking at. */
 export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; onExit?: () => void; initialDayId?: string }) {
-  const { routines, exMap, targets: currentTargets, settings, saveRoutine, saveSettings, toast } = useStore();
+  const { routines, exMap, targets: currentTargets, settings, saveRoutine, saveSettings, toast, ensureSaved } = useStore();
+  /** Build my plan's goal and eating answers: saved to the training profile with the plan, not before */
+  const [answers, setAnswers] = useState<{ goal: Goal; phase: Phase } | null>(null);
   const original = routines.find((r) => r.id === id);
   // This plan's own weekly targets (older plans without their own fall back to the app-wide list)
   const targets = targetsOf(original, currentTargets);
@@ -98,7 +100,14 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const leave = () => { try { sessionStorage.removeItem(draftKey(id!)); sessionStorage.removeItem(draftKey(id!) + "-targets"); } catch { /* ignore */ } if (onExit) onExit(); else replace("plan"); };
   const save = () => {
     if (issues.length) return toast({ kind: "error", title: "Can't save yet", body: issues[0].message });
+    // Database exercises the plan uses get a full copy on the phone, so backups stay complete (§5.26)
+    for (const ex of new Set(draft.days.flatMap((d) => d.slots.map((s) => s.exerciseId)))) { const e = exMap.get(ex); if (e) ensureSaved(e); }
     saveRoutine({ ...draft, name: draft.name.trim(), days: draft.days.map((d) => ({ ...d, title: d.title.trim() })), targets: tdraft });
+    if (answers) {
+      // The goal and eating answers update the training profile (the other numbers stay as they were)
+      const p = settings.profile;
+      saveSettings({ ...settings, profile: { goal: answers.goal, phase: answers.phase, age: p?.age ?? null, yearsTraining: p?.yearsTraining ?? null, sleepHours: p?.sleepHours ?? null } });
+    }
     toast({ kind: "info", title: "Plan saved" });
     leave();
   };
@@ -235,9 +244,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
         setDraft({ ...draft, days: r.days });
         setTdraft(r.targets);
         setDayId(r.days.find((d) => d.slots.length)?.id ?? null);
-        // The goal and eating answers update the training profile (the other numbers stay as they were)
-        const p = settings.profile;
-        saveSettings({ ...settings, profile: { goal: r.goal, phase: r.phase, age: p?.age ?? null, yearsTraining: p?.yearsTraining ?? null, sleepHours: p?.sleepHours ?? null } });
+        setAnswers({ goal: r.goal, phase: r.phase });
         setWizard(false);
         toast({ kind: "info", title: "Plan built", body: "Check it, change anything, then Save plan." });
       }} />
