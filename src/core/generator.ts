@@ -201,6 +201,7 @@ export function generatePlan(input: GenInput): RoutineDay[] {
     const taken = new Set(d.slots.filter((s) => meta.get(s.id)?.main === g).map((s) => moveKey(exMap.get(s.exerciseId)!, g)));
     const cands = pool.filter((e) => e.volume.some((v) => v.group === g && v.weight === 1) && (e.measure !== "time" || g === "abs") && !taken.has(moveKey(e, g)));
     const needCompound = HEADLINE.has(g) && !d.slots.some((s) => meta.get(s.id)?.main === g && exMap.get(s.exerciseId)?.compound);
+    const bestNewTier = Math.max(-1, ...cands.filter((e) => !input.avoid?.has(e.id) && !used.has(e.id)).map(tierPoints));
     let best: Exercise | undefined, bestScore = -Infinity;
     for (const e of cands) {
       let score = rand() * 2;
@@ -213,7 +214,9 @@ export function generatePlan(input: GenInput): RoutineDay[] {
       if (needCompound && e.compound && FREE_WEIGHT.has(e.equipment)) score += 1;
       // The Stretch check is a rule too: as much as a missing angle
       if (STRETCH_MUSCLES.has(g) && !stretched.has(g) && e.stretch?.includes(g)) score += 10;
-      if (input.avoid?.has(e.id)) score -= 8;
+      // Your current plan's exercises: something new when an equally good one (same or better tier) is there, never at
+      // the cost of quality for the goal (Leo, Nov 22 2026)
+      if (input.avoid?.has(e.id) && tierPoints(e) <= bestNewTier) score -= 8;
       if (used.has(e.id)) score -= 30;
       if (d.slots.some((x) => x.exerciseId === e.id)) score -= 100;
       // Don't push other muscles past their ceiling with half sets
