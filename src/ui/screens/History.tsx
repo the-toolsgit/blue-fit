@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useKeptState } from "../keptState";
 import { activeFreeze, dailyLoad, plannedDays, skippedDays, streakMarks, toggleFreeze, weeklyStreak } from "../../core/history";
 import { durationMin } from "../../core/session";
@@ -145,6 +145,14 @@ export function HistoryScreen() {
   const groups = new Map<string, Session[]>();
   for (const s of finished) { const w = weekStart(s.date, sd); groups.set(w, [...(groups.get(w) ?? []), s]); }
   const pickedList = picked ? finished.filter((s) => s.date === picked) : [];
+  // Weeks list in pages of WEEKS_PER_PAGE, newest first
+  const [page, setPage] = useState(0);
+  const allWeeks = [...groups];
+  const pages = Math.max(1, Math.ceil(allWeeks.length / WEEKS_PER_PAGE));
+  const pg = Math.min(page, pages - 1);
+  const shown = allWeeks.slice(pg * WEEKS_PER_PAGE, (pg + 1) * WEEKS_PER_PAGE);
+  const listTop = useRef<HTMLDivElement>(null);
+  const turn = (p: number) => { setPage(p); requestAnimationFrame(() => listTop.current?.scrollIntoView({ behavior: "smooth", block: "start" })); };
   return (
     <div className="page">
       <span className="eyebrow">History</span>
@@ -160,13 +168,23 @@ export function HistoryScreen() {
       {!finished.length && (
         <div className="empty"><FlexFigure size={130} /><p>No workouts yet. Finish one and it shows up here.</p></div>
       )}
-      {[...groups].map(([w, list]) => (
+      <div ref={listTop} style={{ scrollMarginTop: 12 }} />
+      {shown.map(([w, list]) => (
         <section key={w}>
           <h2 className="section-title">{w === thisWeek ? "This week" : `Week of ${fmtDate(w, { month: "short", day: "numeric" })}`} · {list.length}</h2>
           {/* Within a week: most recent at the top */}
           <div className="glass" style={{ padding: 4 }}>{list.map((s) => <Row key={s.id} s={s} />)}</div>
         </section>
       ))}
+      {pages > 1 && (
+        <div className="pager">
+          <button className="btn btn-ghost" disabled={pg === 0} onClick={() => turn(pg - 1)} aria-label="Newer weeks"><Icon name="back" size={18} /> Newer</button>
+          <span className="mono muted">{pg + 1} / {pages}</span>
+          <button className="btn btn-ghost" disabled={pg === pages - 1} onClick={() => turn(pg + 1)} aria-label="Older weeks">Older <span style={{ display: "inline-flex", transform: "rotate(180deg)" }}><Icon name="back" size={18} /></span></button>
+        </div>
+      )}
     </div>
   );
 }
+
+const WEEKS_PER_PAGE = 3;
