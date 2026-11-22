@@ -484,6 +484,50 @@ export function generatePlan(input: GenInput): RoutineDay[] {
   };
   nameDays();
   polish({ days, train, meta, exMap, pool, input, restSec, limit, themeOf, trainDays, rand });
+  // 8c. Nothing left out: a muscle with a minimum that ended at 0 sets (time cuts can do that) gets 2 sets on the day
+  //     with the most time left, making room by taking sets from the muscles furthest above their minimum (never under 2)
+  for (const g of focus) {
+    const t = tmap.get(g)!;
+    if (!t.min || (volNow().get(g) ?? 0) > 0) continue;
+    const allowed = allowedDaysFor(g, trainDays, themeOf);
+    const cands = (allowed.length ? allowed : trainDays).map(dayOf).sort((a, b) => slotsMinutes(a.slots) - slotsMinutes(b.slots));
+    const vol = volNow();
+    const surplus = (x: Slot) => { const m = meta.get(x.id)?.main; const tt = m && tmap.get(m); return tt && tt.min ? (vol.get(m!) ?? 0) / tt.min : 9; };
+    let d = cands.find((x) => x.slots.length < MAX_EXERCISES);
+    if (!d) {
+      // Every day is full: swap out exercises whose muscles stay at or above their minimum without them, most spare
+      // first (a muscle already under its minimum may only lose half sets, never down to 0)
+      // Try the days with the fewest exercises first; use the first where enough can go
+      for (const day of [...cands].sort((a, b) => a.slots.length - b.slots.length)) {
+        const v2 = new Map(vol), keep = [...day.slots];
+        const stays2 = (x: Slot) => exMap.get(x.exerciseId)!.volume.every((v) => {
+          const tt = tmap.get(v.group), now = v2.get(v.group) ?? 0, after = now - v.weight * x.sets;
+          return !isFocus(tt) || after >= tt.min || (now < tt.min && v.weight < 1 && after > 0);
+        });
+        while (keep.length >= MAX_EXERCISES) {
+          const s = keep.filter(stays2).sort((a, b) => surplus(b) - surplus(a))[0];
+          if (!s) break;
+          keep.splice(keep.indexOf(s), 1);
+          for (const v of exMap.get(s.exerciseId)!.volume) v2.set(v.group, (v2.get(v.group) ?? 0) - v.weight * s.sets);
+        }
+        if (keep.length >= MAX_EXERCISES) continue;
+        day.slots = keep;
+        for (const [k, v] of v2) vol.set(k, v);
+        d = day;
+        break;
+      }
+      if (!d) continue;
+    }
+    const ex = pick(g, d, 2);
+    if (!ex) continue;
+    for (let guard = 0; guard < 12 && !fits(d, [{ sets: 2, restSec: restOf(ex) }]); guard++) {
+      const s = d.slots.filter((x) => x.sets > 2).sort((a, b) => surplus(b) - surplus(a))[0];
+      if (!s) break;
+      s.sets--;
+      for (const v of exMap.get(s.exerciseId)!.volume) vol.set(v.group, (vol.get(v.group) ?? 0) - v.weight);
+    }
+    if (fits(d, [{ sets: 2, restSec: restOf(ex) }])) add(d, ex, 2, g);
+  }
   assignReps();
 
   // 9. Order within each day, then names from the split ("Push A", "Upper B", "Full body C"); a theme used once has no letter

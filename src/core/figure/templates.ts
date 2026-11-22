@@ -133,6 +133,8 @@ export const TEMPLATES: Record<string, Template> = {
   // Smith upright row: the bar runs in the rails
   "upright-row-smith": T({ v: "f", base: {}, A: { ua: 6, fa: 6, al: 1 }, B: { ua: 100, fa: -35, al: 0.8 }, props: [...uprightsF(42, 78)] }, { joint: "haR", dir: "up" }, "bar"),
   "reverse-fly-machine": T({ v: "f", base: { ...SEAT_F, ua: 90, fa: 90 }, A: { al: 0.2, fl: 0.2 }, B: { al: 1, fl: 1 }, props: [...seatF, ...backPadF(10), ...gripsF] }, { joint: "haR", dir: "away" }, "none"),
+  // Sitting sideways on the reverse pec deck, one arm: from across the chest out to the side (machine column on the left)
+  "reverse-fly-machine-single": T({ v: "f", base: { ...SEAT_F, L: { ua: 4, fa: 4 }, ua: 90, fa: 90 }, A: { al: -0.55, fl: -0.55 }, B: { al: 1, fl: 1 }, props: [...seatF, tower(14), { perp: "haR", ang: 0, len: 10 }] }, { joint: "haR", dir: "away" }, "none"),
   "reverse-fly-cable": T({ v: "f", base: { L: { ua: 4, fa: 4 }, ua: 90, fa: 90 }, A: { al: -0.55, fl: -0.55 }, B: { al: 1, fl: 1 }, props: [tower(12), { cable: [12, 24], to: "haR" }] }, { joint: "haR", dir: "away" }, "none"),
   "reverse-fly-bent": { ...T({ base: { hx: 46, hy: 58, t: 70, th: 14, sh: -8 }, A: { ua: 0, fa: 0 }, B: { ua: -80, fa: -80 }, props: [] }, { joint: "ha", dir: "up" }, "db", [80, 104]), post: 112 },
   "face-pull": T({ base: { hx: 48, th: 4, sh: -3 }, A: { t: 0, ua: 95, fa: 95, al: 1, fl: 1 }, B: { t: 0, ua: 92, al: 0.3, fa: 168, fl: 0.75 }, props: [{ line: [110, -16, 110, 104] }, { line: [100, 104, 116, 104] }, { line: [104, -16, 110, -16] }, { cable: [106, 16], to: "ha" }] }, { joint: "ha", dir: "toward" }, "none"),

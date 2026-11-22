@@ -62,6 +62,56 @@
   ]
  },
  {
+  "id": "single-arm-machine-reverse-fly",
+  "name": "Single-arm Machine Reverse Fly",
+  "aliases": [
+   "Sideways Reverse Pec Deck",
+   "One-arm Reverse Pec Deck"
+  ],
+  "equipment": "machine",
+  "loadMode": "total",
+  "compound": false,
+  "volume": [
+   {
+    "group": "rearDelts",
+    "weight": 1
+   }
+  ],
+  "jobs": {
+   "rearDelts": "reverse fly"
+  },
+  "stretch": [
+   "rearDelts"
+  ],
+  "isHeavy": false,
+  "heavyWhy": "single-joint",
+  "why": "Rear delt, one arm, longer range.",
+  "setup": [
+   "Sit sideways, the machine on your other side.",
+   "Reach across your chest to the handle, elbow slightly bent."
+  ],
+  "form": [
+   "Swing your arm out and back at shoulder height.",
+   "Return across your chest to the stretch."
+  ],
+  "tips": [
+   "Free hand holds the machine, body still."
+  ],
+  "avoid": [
+   "Turning your body.",
+   "Going past your body."
+  ],
+  "rangeOfMotion": "Arm across your chest → in line with your body",
+  "tempo": "Back 1 s · Forward 3 s",
+  "defaultRestSec": 120,
+  "incrementLb": 5,
+  "bodyRegion": "upper",
+  "figureTemplate": "reverse-fly-machine-single",
+  "source": {
+   "plan": "Leo's request (Nov 22 2026)"
+  }
+ },
+ {
   "id": "single-arm-cable-reverse-fly",
   "name": "Single-arm Cable Reverse Fly",
   "aliases": [
