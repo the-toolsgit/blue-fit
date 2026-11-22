@@ -17,6 +17,8 @@ import { Seg } from "../components/Controls";
 import { Splash } from "../components/Splash";
 import { ExercisePicker } from "../components/ExercisePicker";
 import { Confirm } from "../components/Sheet";
+import { Figure } from "../components/Figure";
+import { ExerciseSheet } from "./ExerciseScreen";
 import { useWeekFailure } from "../components/FailFlame";
 import { failureInput } from "../components/WeekInsight";
 
@@ -72,6 +74,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const [swaps, setSwaps] = useState<Record<string, { orig: string; k: number }>>({});
   const [openRow, setOpenRow] = useState<string | null>(null);
   const [addTo, setAddTo] = useState<string | null>(null);
+  const [howTo, setHowTo] = useState<string | null>(null);
   const [edited, setEdited] = useState(false);
   /** Leaving the plan would drop the user's edits: what to do once they confirm */
   const [discard, setDiscard] = useState<(() => void) | null>(null);
@@ -376,6 +379,12 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                             <div className="wz-exact">
                               <button type="button" className="btn btn-ghost" disabled={alts.length < 2} onClick={() => swap(d, s.id)}><Icon name="swap" size={16} /> Swap</button>
                               <button type="button" className="btn btn-ghost" onClick={() => remove(d, s.id)}><Icon name="trash" size={16} /> Remove</button>
+                              {/* The exercise's line man, moving; tap for how to do it */}
+                              {exMap.get(s.exerciseId)?.figure && (
+                                <button type="button" className="wz-exfig" aria-label={`How to do ${exMap.get(s.exerciseId)!.name}`} onClick={() => setHowTo(s.exerciseId)}>
+                                  <Figure spec={exMap.get(s.exerciseId)!.figure!} size={64} />
+                                </button>
+                              )}
                               <small className="muted">{alts.length < 2 ? "No other exercise works the same angle" : `Same muscle and angle · ${(swaps[s.id]?.k ?? 0) + 1} of ${alts.length}`}</small>
                             </div>
                           )}
@@ -413,6 +422,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
       <div className="wz-bottom">{cta}</div>
       {/* The plan is ready: the splash flex, then the zoom into his head opens onto the plan underneath */}
       {building && <Splash word="Your plan" onDone={built} />}
+      <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} />
       <Confirm open={!!discard} title="Lose your changes?" body="Your swaps, removals and added exercises are thrown away." confirm="Continue" danger
         onClose={() => setDiscard(null)} onConfirm={() => { const go = discard; setDiscard(null); go?.(); }} />
     </div>,
