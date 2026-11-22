@@ -652,6 +652,7 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wz-body.back { animation-name: wzBack; }
 @keyframes wzBack { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
 .wz-screen { display: grid; gap: 18px; max-width: 520px; margin: 0 auto; padding-top: 10px; }
+.wz-sub { margin-top: -14px; font: 600 12px var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
 .wz-eyebrow { font: 600 12px var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--neon-ink); }
 .wz-title { margin: -8px 0 4px; font: 800 44px/.95 var(--display); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
 .wz-choices { display: grid; gap: 10px; }

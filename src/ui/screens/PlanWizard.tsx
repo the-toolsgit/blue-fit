@@ -232,7 +232,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
           </div>
         </Screen>);
       case "targets": return (
-        <Screen eyebrow="Weekly sets per muscle" title="Your targets">
+        <Screen eyebrow="Weekly sets per muscle" title="Your targets" sub="Tap to adjust">
           <div className="wz-map"><MuscleMap intensity={intensity} selected={sel} onSelect={(g) => setSel(sel === g ? null : g)} /></div>
           <div className="wz-targets">
             {MUSCLE_GROUPS.filter((m) => !DELTS.includes(m.id) || m.id === DELTS[0]).map((m) => {
@@ -420,11 +420,12 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   );
 }
 
-function Screen({ eyebrow, title, children, center }: { eyebrow: string; title: string; children: React.ReactNode; center?: boolean }) {
+function Screen({ eyebrow, title, sub, children, center }: { eyebrow: string; title: string; sub?: string; children: React.ReactNode; center?: boolean }) {
   return (
     <div className={"wz-screen" + (center ? " center" : "")}>
       <span className="wz-eyebrow">{eyebrow}</span>
       <h2 className="wz-title">{title}</h2>
+      {sub && <span className="wz-sub">{sub}</span>}
       {children}
     </div>
   );
