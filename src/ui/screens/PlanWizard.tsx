@@ -146,10 +146,26 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                       <button type="button" className="btn btn-ghost wz-fix" onClick={() => setStep("days")}>Change days</button>
                     </div>}
                     {c.edit.kind === "target" && sel === c.edit.group && <div className="wz-cedit"><TargetEdit group={c.edit.group} label={muscleLabel(c.edit.group)} t={t} current={0} onEdit={editTarget} /></div>}
-                    {c.edit.kind === "time" && c.moreDays && <div className="wz-fixes"><button type="button" className="btn btn-ghost wz-fix" onClick={() => setStep("days")}>Add training days</button></div>}
                     {c.edit.kind === "time" && (
-                      <div className="wz-cedit wz-cmin">
-                        {MINUTES.map((m) => <button key={m} type="button" className={"chip" + (m === minutes ? " on" : "")} aria-pressed={m === minutes} onClick={() => setMinutes(m)}>{m} min</button>)}
+                      <div className="wz-cedit wz-opts">
+                        <div className="wz-opt">
+                          <span className="wz-opt-label">{c.moreDays ? "Option 1 · " : ""}Longer workouts</span>
+                          <div className="wz-cmin">
+                            {MINUTES.map((m) => <button key={m} type="button" className={"chip" + (m === minutes ? " on" : "")} aria-pressed={m === minutes} onClick={() => setMinutes(m)}>{m} min</button>)}
+                          </div>
+                        </div>
+                        {c.moreDays && (
+                          <>
+                            <div className="wz-or" aria-hidden><span>or</span></div>
+                            <div className="wz-opt">
+                              <span className="wz-opt-label">Option 2 · More training days</span>
+                              <button type="button" className="wz-opt-days" onClick={() => setStep("days")}>
+                                <span><b>{c.moreDays.days} days a week</b><small>about {c.moreDays.minutes} min each</small></span>
+                                <span className="wz-opt-go">Pick days <Icon name="chevron" size={16} /></span>
+                              </button>
+                            </div>
+                          </>
+                        )}
                       </div>
                     )}
                   </div>

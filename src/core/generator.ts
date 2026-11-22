@@ -233,8 +233,8 @@ const rank = (e: Exercise, main: MuscleGroup) => (FAMILY[main] === "core" ? 100 
 export interface Conflict { id: string; text: string; fix?: { label: string; targets?: VolumeTarget[]; maxMinutes?: number };
   /** What the user can change to solve it on the check screen: a muscle's target, the workout length or the days */
   edit: { kind: "target"; group: MuscleGroup } | { kind: "time" } | { kind: "days" };
-  /** More than one rest day: training more days is a way to fix it (offers Change days) */
-  moreDays?: boolean }
+  /** More than one rest day: training more days is the other way to fix it (days a week and the minutes each) */
+  moreDays?: { days: number; minutes: number } }
 
 export function planConflicts(input: Pick<GenInput, "trainDays" | "maxMinutes" | "targets">): Conflict[] {
   const out: Conflict[] = [];
@@ -264,9 +264,10 @@ export function planConflicts(input: Pick<GenInput, "trainDays" | "maxMinutes" |
     // More than one rest day: training more days spreads the same sets over shorter workouts (Leo, Nov 21 2026)
     const minsFor = (k: number) => { const p = Math.ceil(weekSets / k); return estimateMinutes(p, Math.ceil(p / 3.5)); };
     const more = 7 - n >= 2 ? [n + 1, n + 2, n + 3, n + 4, n + 5].filter((k) => k <= 6).find((k) => minsFor(k) <= input.maxMinutes + LENGTH_BUFFER) : undefined;
-    const daysTip = more ? ` Or train ${more} days a week: about ${minsFor(more)} min each.` : 7 - n >= 2 ? ` Training more days would shorten them: ${Math.min(6, n + 2)} days is about ${minsFor(Math.min(6, n + 2))} min each.` : "";
-    out.push({ id: "time", text: `About ${minutes} min a workout to hit every target, over your ${input.maxMinutes} min.${daysTip}${!next && !daysTip ? " Lower some targets." : ""}`,
-      fix: next ? { label: `Allow ${next} min`, maxMinutes: next } : undefined, edit: { kind: "time" }, moreDays: 7 - n >= 2 });
+    const k = more ?? Math.min(6, n + 2);
+    out.push({ id: "time", text: `About ${minutes} min a workout to hit every target, over your ${input.maxMinutes} min.${!next && 7 - n < 2 ? " Lower some targets." : ""}`,
+      fix: next ? { label: `Allow ${next} min`, maxMinutes: next } : undefined, edit: { kind: "time" },
+      moreDays: 7 - n >= 2 && k > n ? { days: k, minutes: minsFor(k) } : undefined });
   }
   return out;
 }
