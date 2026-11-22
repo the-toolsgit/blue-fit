@@ -14,7 +14,7 @@ import { progressionHint } from "../../core/progression";
 import { alignHint, effortGap, effortLine, failureSet, tooLight } from "../../core/effort";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
-  addEntry, addSet, afterSetDone, applyHint, takeExtra, takeFailure, buildEntry, durationMin, finishSession, lastEntryFor, prevEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
+  addEntry, addSet, afterSetDone, applyHint, dropTestIfRaised, takeExtra, takeFailure, buildEntry, durationMin, finishSession, lastEntryFor, prevEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
   setEntry, swapEntry, toggleDone, toggleSupersetWithNext, updateSet,
 } from "../../core/session";
 import type { Exercise, LoggedSet, Session, SessionEntry, SetType } from "../../core/types";
@@ -479,7 +479,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   : <>You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>}
               </span>
               <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
-                onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.reps)); markUsed(); }}>Use</button>
+                onClick={(ev) => { ev.stopPropagation(); commit(dropTestIfRaised(applyHint(s, e.id, hint.weight, hint.reps), e.id, last?.entry.sets)); markUsed(); }}>Use</button>
             </div>
           )}
           {sugExtra && (
@@ -539,7 +539,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               {isSel && !x.done && (
                 <div style={{ padding: "4px 10px 12px", display: "grid", gap: 10, animation: "pageIn .3s var(--ease) both" }} onClick={(ev) => ev.stopPropagation()}>
                   <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 8, alignItems: "end" }}>
-                    <Stepper invalid={missing?.id === x.id && ex.equipment !== "bodyweight" && !(x.weight != null && x.weight > 0)} label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />
+                    <Stepper invalid={missing?.id === x.id && ex.equipment !== "bodyweight" && !(x.weight != null && x.weight > 0)} label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(dropTestIfRaised(updateSet(s, e.id, x.id, { weight: v }), e.id, last?.entry.sets))} />
                     <Stepper invalid={missing?.id === x.id && !(x.reps != null && x.reps > 0)} label={ex.measure === "time" ? "Seconds" : "Reps"} value={x.reps} step={ex.measure === "time" ? 5 : 1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
                   </div>
                   {ex.measure === "time" && <HoldTimer onStop={(sec) => commit(updateSet(s, e.id, x.id, { reps: sec }))} />}

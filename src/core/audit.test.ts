@@ -45,3 +45,19 @@ it("volume chart doubles per-side lifts like tonnage", () => {
   const hist = [sess("a", "2026-11-10", "sq", [set(90, 10)])];
   expect(exerciseSeries(hist, "sq", false, 2)[0].volume).toBe(1800);
 });
+
+describe("ready-for-more-weight test drops when the weight goes up", async () => {
+  const { dropTestIfRaised } = await import("./session");
+  const { TEST_WHY, MANUAL_WHY } = await import("./failure");
+  const set = (weight: number, done = false) => ({ id: "s" + weight + done, type: "working" as const, weight, reps: 10, done });
+  const mk = (why: string[], w: number) => ({ id: "x", date: "2026-11-22", entries: [{ id: "e", exerciseId: "a", sets: [set(w), set(w)], toFailure: true, failWhy: why }] }) as never;
+  const last = [set(90, true), set(90, true)];
+  it("drops at a heavier weight", () => {
+    const e = (dropTestIfRaised(mk([TEST_WHY], 100), "e", last) as { entries: { toFailure?: boolean }[] }).entries[0];
+    expect(e.toFailure).toBeUndefined();
+  });
+  it("keeps at the same weight, and keeps other reasons", () => {
+    expect((dropTestIfRaised(mk([TEST_WHY], 90), "e", last) as { entries: { toFailure?: boolean }[] }).entries[0].toFailure).toBe(true);
+    expect((dropTestIfRaised(mk([MANUAL_WHY], 100), "e", last) as { entries: { toFailure?: boolean }[] }).entries[0].toFailure).toBe(true);
+  });
+});
