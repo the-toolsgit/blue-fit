@@ -648,6 +648,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wz-tprio.off { border-style: dashed; color: var(--faint); }
 .wz-trange { text-align: right; color: var(--muted); font-size: 13px; }
 .wz-trow.open > .wz-thead .wz-tname { color: var(--neon-ink); }
+/* Skipped muscle: its name greys out too (Leo) */
+.wz-trow.skipped > .wz-thead .wz-tname { color: var(--muted); }
 .wz-trow .vedit { margin: 0 0 14px; }
 .wz-heads { margin-top: 8px; }
 .wz-heads .wz-trow:last-child { border-bottom: 0; }

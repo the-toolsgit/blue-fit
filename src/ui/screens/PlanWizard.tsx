@@ -266,7 +266,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                 const ps = DELTS.map((g) => priorityOf(g, targets.find((x) => x.group === g)));
                 const p = ps.every((x) => x === ps[0]) ? ps[0] : null, open = !!sel && DELTS.includes(sel);
                 return (
-                  <div key="shoulders" className={"wz-trow" + (open ? " open" : "")}>
+                  <div key="shoulders" className={"wz-trow" + (open ? " open" : "") + (p === "off" ? " skipped" : "")}>
                     <HoldButton className="wz-thead" onClick={() => { setSel(open ? null : "sideDelts"); setHead(null); }} onHold={() => holdSkip("sideDelts")} aria-expanded={open}>
                       <span className="wz-tname">Shoulders</span>
                       <span className={"wz-tprio " + (p ?? "mixed")}>{p ? PRIO_LABEL[p] : "Mixed"}</span>
@@ -281,7 +281,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                           {DELTS.map((g) => {
                             const t = targets.find((x) => x.group === g), hp = priorityOf(g, t);
                             return (
-                              <div key={g} className={"wz-trow" + (head === g ? " open" : "")}>
+                              <div key={g} className={"wz-trow" + (head === g ? " open" : "") + (hp === "off" ? " skipped" : "")}>
                                 <button type="button" className="wz-thead" onClick={() => { setHead(head === g ? null : g); setSel(g); }} aria-expanded={head === g}>
                                   <span className="wz-tname">{muscleLabel(g)}</span>
                                   <span className={"wz-tprio " + hp}>{PRIO_LABEL[hp]}</span>
@@ -299,7 +299,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
               }
               const t = targets.find((x) => x.group === m.id), p = priorityOf(m.id, t), focus = isFocus(t);
               return (
-                <div key={m.id} className={"wz-trow" + (sel === m.id ? " open" : "")}>
+                <div key={m.id} className={"wz-trow" + (sel === m.id ? " open" : "") + (p === "off" ? " skipped" : "")}>
                   <HoldButton className="wz-thead" onClick={() => setSel(sel === m.id ? null : m.id)} onHold={() => holdSkip(m.id)} aria-expanded={sel === m.id}>
                     <span className="wz-tname">{m.label}</span>
                     <span className={"wz-tprio " + p}>{p === "off" ? "Skip" : p === "priority" ? "Priority" : "Normal"}</span>
