@@ -7,12 +7,13 @@ import { slotsMinutes } from "../../core/timeEstimate";
 import { uid } from "../../core/util";
 import { completeProfile, MUSCLE_GROUPS, muscleLabel, type Goal, type MuscleGroup, type Phase, type RoutineDay, type VolumeTarget } from "../../core/types";
 import { formatTarget, isFocus } from "../../core/volume";
-import { freshTargets, priorityOf } from "../../core/volumeModel";
+import { freshTargets, priorityOf, type Priority } from "../../core/volumeModel";
 import { weekInsight } from "../../core/workoutCheck";
 import { useStore } from "../store";
 import { Icon } from "../components/Icon";
 import { MuscleMap } from "../components/MuscleMap";
-import { TargetEdit } from "../components/VolumeTable";
+import { DELTS, shouldersTo, TargetEdit } from "../components/VolumeTable";
+import { Seg } from "../components/Controls";
 import { Splash } from "../components/Splash";
 import { ExercisePicker } from "../components/ExercisePicker";
 
@@ -37,6 +38,7 @@ const RESTS: { sec: number; big: string; goal: Goal }[] = [
   { sec: 60, big: "1", goal: "endurance" }, { sec: 90, big: "1½", goal: "maintenance" },
   { sec: 120, big: "2", goal: "growth" }, { sec: 180, big: "3", goal: "strength" },
 ];
+const PRIO_LABEL: Record<Priority, string> = { priority: "Priority", normal: "Normal", off: "Skip" };
 const GOAL_LABEL: Record<Goal, string> = { growth: "mass gain", strength: "strength", endurance: "endurance", maintenance: "maintaining" };
 const STEPS = ["goal", "eating", "days", "length", "rest", "targets", "check", "build"] as const;
 type Step = (typeof STEPS)[number];
@@ -56,6 +58,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const [targets, setTargets] = useState<VolumeTarget[]>(initialTargets);
   const [touched, setTouched] = useState(false);
   const [sel, setSel] = useState<MuscleGroup | null>(null);
+  const [head, setHead] = useState<MuscleGroup | null>(null);
   const [seed, setSeed] = useState(1);
   const [building, setBuilding] = useState(false);
   const built = useCallback(() => setBuilding(false), []);
@@ -89,6 +92,9 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   };
   const back = () => (i ? setStep(STEPS[i - 1]) : onClose());
   const editTarget = (t: VolumeTarget) => { setTouched(true); setTargets((ts) => ts.map((x) => (x.group === t.group ? t : x))); };
+  /** Priority / Normal / Skip for all three delt heads at once, each to its own default range */
+  const editAll = (ns: VolumeTarget[]) => { setTouched(true); setTargets((ts) => ts.map((x) => ns.find((y) => y.group === x.group) ?? x)); };
+  const setShoulders = (x: Priority) => editAll(shouldersTo(targets, x, profile));
   const applyFix = (c: Conflict) => {
     if (c.fix?.maxMinutes) setMinutes(c.fix.maxMinutes);
     if (c.fix?.targets) { setTouched(true); setTargets((ts) => ts.map((x) => c.fix!.targets!.find((y) => y.group === x.group) ?? x)); }
@@ -161,7 +167,43 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
         <Screen eyebrow="Weekly sets per muscle" title="Your targets">
           <div className="wz-map"><MuscleMap intensity={intensity} selected={sel} onSelect={(g) => setSel(sel === g ? null : g)} /></div>
           <div className="wz-targets">
-            {MUSCLE_GROUPS.map((m) => {
+            {MUSCLE_GROUPS.filter((m) => !DELTS.includes(m.id) || m.id === DELTS[0]).map((m) => {
+              if (DELTS.includes(m.id)) {
+                // One Shoulders row: Priority / Normal / Skip for all three heads; tap a head to fine-tune its range
+                const ps = DELTS.map((g) => priorityOf(g, targets.find((x) => x.group === g)));
+                const p = ps.every((x) => x === ps[0]) ? ps[0] : null, open = !!sel && DELTS.includes(sel);
+                return (
+                  <div key="shoulders" className={"wz-trow" + (open ? " open" : "")}>
+                    <button type="button" className="wz-thead" onClick={() => { setSel(open ? null : "sideDelts"); setHead(null); }} aria-expanded={open}>
+                      <span className="wz-tname">Shoulders</span>
+                      <span className={"wz-tprio " + (p ?? "mixed")}>{p ? PRIO_LABEL[p] : "Mixed"}</span>
+                      <span className="mono wz-trange">3 heads</span>
+                    </button>
+                    {open && (
+                      <div className="vedit">
+                        <Seg label="Shoulders: focus" value={(p ?? "") as Priority} onChange={setShoulders}
+                          options={[{ v: "priority", label: "Priority" }, { v: "normal", label: "Normal" }, { v: "off", label: "Skip" }]} />
+                        <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>Sets all three heads. Each is still tracked on its own: tap one to change its range.</p>
+                        <div className="wz-heads">
+                          {DELTS.map((g) => {
+                            const t = targets.find((x) => x.group === g), hp = priorityOf(g, t);
+                            return (
+                              <div key={g} className={"wz-trow" + (head === g ? " open" : "")}>
+                                <button type="button" className="wz-thead" onClick={() => { setHead(head === g ? null : g); setSel(g); }} aria-expanded={head === g}>
+                                  <span className="wz-tname">{muscleLabel(g)}</span>
+                                  <span className={"wz-tprio " + hp}>{PRIO_LABEL[hp]}</span>
+                                  <span className="mono wz-trange">{isFocus(t) ? formatTarget(t) : "—"}</span>
+                                </button>
+                                {head === g && <TargetEdit group={g} label={muscleLabel(g)} t={t} current={0} onEdit={editTarget} hideFocus />}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
               const t = targets.find((x) => x.group === m.id), p = priorityOf(m.id, t), focus = isFocus(t);
               return (
                 <div key={m.id} className={"wz-trow" + (sel === m.id ? " open" : "")}>
@@ -170,7 +212,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                     <span className={"wz-tprio " + p}>{p === "off" ? "Skip" : p === "priority" ? "Priority" : "Normal"}</span>
                     <span className="mono wz-trange">{focus ? formatTarget(t) : "—"}</span>
                   </button>
-                  {sel === m.id && <TargetEdit group={m.id} label={m.label} t={t} current={0} onEdit={editTarget} />}
+                  {sel === m.id && <TargetEdit group={m.id} label={m.label} t={t} current={0} onEdit={editTarget} all={targets} onEditAll={editAll} />}
                 </div>
               );
             })}
@@ -191,7 +233,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                       {c.edit.kind === "target" && <button type="button" className="btn btn-ghost wz-fix" aria-expanded={sel === c.edit.group} onClick={() => setSel(sel === (c.edit as { group: MuscleGroup }).group ? null : (c.edit as { group: MuscleGroup }).group)}>Edit target</button>}
                       <button type="button" className="btn btn-ghost wz-fix" onClick={() => setStep("days")}>Change days</button>
                     </div>}
-                    {c.edit.kind === "target" && sel === c.edit.group && <div className="wz-cedit"><TargetEdit group={c.edit.group} label={muscleLabel(c.edit.group)} t={t} current={0} onEdit={editTarget} /></div>}
+                    {c.edit.kind === "target" && sel === c.edit.group && <div className="wz-cedit"><TargetEdit group={c.edit.group} label={muscleLabel(c.edit.group)} t={t} current={0} onEdit={editTarget} all={targets} onEditAll={editAll} /></div>}
                     {c.edit.kind === "time" && (
                       <div className="wz-cedit wz-opts">
                         <div className="wz-opt">

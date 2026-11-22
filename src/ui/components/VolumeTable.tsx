@@ -1,7 +1,7 @@
 // Sets per muscle vs weekly target as a grid of tiles (number, target, mini bar with the dashed target band, status mark).
 // Skipped muscles collapse into one line. Tap a tile for days, angles and notes (and the target editor when editing).
 import { formatTarget, targetStatus, type GroupTotals } from "../../core/volume";
-import { completeProfile, MUSCLE_GROUPS, type MuscleGroup, type VolumeTarget } from "../../core/types";
+import { completeProfile, MUSCLE_GROUPS, type MuscleGroup, type TrainingProfile, type VolumeTarget } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { useState } from "react";
 import { Seg, Stepper } from "./Controls";
@@ -95,8 +95,24 @@ const MARK = { ok: "✓", above: "▲", below: "▼", inProgress: "…", off: ""
 
 /** Change one muscle's weekly target: min/max sets and Priority · Normal · Skip.
  *  current: its sets a week now (seeds empty steppers). Used by the targets table and the week map's muscle card. */
-export function TargetEdit({ group, label, t, current, onEdit }: {
+/** The three delt heads: tracked apart, but Priority / Normal / Skip is one Shoulders choice (Leo, Nov 21 2026) */
+export const DELTS: MuscleGroup[] = ["frontDelts", "sideDelts", "rearDelts"];
+
+/** Priority / Normal / Skip for all three delt heads, each to its own default range */
+export function shouldersTo(targets: VolumeTarget[], p: Priority, profile: TrainingProfile | null): VolumeTarget[] {
+  return DELTS.map((g) => {
+    const t = targets.find((x) => x.group === g) ?? { group: g, min: null, max: null };
+    return withPriority(t, p, p === "off" ? t : defaultRange(g, profile, p));
+  });
+}
+
+/** One muscle's target: Min / Max, Priority · Normal · Skip, Reset to default. For a delt head with `all` and
+ *  `onEditAll`, the focus choice is "Shoulders" and sets all three heads. */
+export function TargetEdit({ group, label, t, current, onEdit, all, onEditAll, hideFocus }: {
   group: MuscleGroup; label: string; t?: VolumeTarget; current: number; onEdit: (t: VolumeTarget) => void;
+  all?: VolumeTarget[]; onEditAll?: (ts: VolumeTarget[]) => void;
+  /** The focus choice is shown elsewhere (Build my plan's Shoulders row): only Min / Max and reset */
+  hideFocus?: boolean;
 }) {
   const edit = t ?? { group, min: null, max: null };
   const set = (p: Partial<VolumeTarget>) => onEdit({ ...edit, ...p });
@@ -105,8 +121,19 @@ export function TargetEdit({ group, label, t, current, onEdit }: {
   const { settings } = useStore();
   const profile = completeProfile(settings.profile);
   const def = freshTargets(profile).find((x) => x.group === group)!;
-  const isDefault = edit.min === def.min && edit.max === def.max && priorityOf(group, edit) === "normal";
-  const reset = () => { const { off: _o, acceptedBelow: _a, priority: _p, ...rest } = edit; onEdit({ ...rest, min: def.min, max: def.max, ...(def.priority != null ? { priority: def.priority } : {}) }); };
+  const isDefault0 = edit.min === def.min && edit.max === def.max && priorityOf(group, edit) === "normal";
+  const shoulders = DELTS.includes(group) && !!all && !!onEditAll;
+  const heads = shoulders ? DELTS.map((g) => priorityOf(g, all!.find((x) => x.group === g))) : [];
+  const focusValue = (shoulders ? (heads.every((x) => x === heads[0]) ? heads[0] : "") : prio) as Priority;
+  // A delt head keeps its Shoulders choice: reset only puts its range back to the default for that choice
+  const keepPrio = (hideFocus || shoulders) && prio !== "off";
+  const headDef = keepPrio ? defaultRange(group, profile, prio as Exclude<Priority, "off">) : null;
+  const resetTo = headDef ?? def;
+  const isDefault = headDef ? edit.min === headDef.min && edit.max === headDef.max : isDefault0;
+  const reset = () => {
+    if (headDef) return onEdit({ ...edit, ...headDef });
+    const { off: _o, acceptedBelow: _a, priority: _p, ...rest } = edit; onEdit({ ...rest, min: def.min, max: def.max, ...(def.priority != null ? { priority: def.priority } : {}) });
+  };
   return (
     <div className="vedit">
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
@@ -116,10 +143,14 @@ export function TargetEdit({ group, label, t, current, onEdit }: {
           onChange={(x) => set({ max: x })} />
       </div>
       <div style={{ marginTop: 10 }}>
-        <Seg label={`${label}: focus`} value={prio} onChange={(x: Priority) => onEdit(withPriority(edit, x, x === "off" ? edit : defaultRange(group, profile, x)))}
+        {!hideFocus && <>
+        {shoulders && <span className="vedit-label">Shoulders (all 3 heads)</span>}
+        <Seg label={`${shoulders ? "Shoulders" : label}: focus`} value={focusValue}
+          onChange={(x: Priority) => (shoulders ? onEditAll!(shouldersTo(all!, x, profile)) : onEdit(withPriority(edit, x, x === "off" ? edit : defaultRange(group, profile, x))))}
           options={[{ v: "priority", label: "Priority" }, { v: "normal", label: "Normal" }, { v: "off", label: "Skip" }]} />
-        <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>{prio === "priority" ? "Upper half of the usual range: more sets to grow it faster." : prio === "off" ? "Skipped: grayed out, no warnings. Your numbers are kept." : "Lower half of the usual range: enough to grow."}</p>
-        {!isDefault && <button type="button" className="btn btn-quiet vedit-reset" onClick={reset}><Icon name="undo" size={16} /> Reset to default · {def.min == null ? "no target" : formatTarget(def)}</button>}
+        <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>{shoulders && !focusValue ? "The three heads differ: pick one choice for all of them." : focusValue === "priority" ? "Upper half of the usual range: more sets to grow it faster." : focusValue === "off" ? "Skipped: grayed out, no warnings. Your numbers are kept." : "Lower half of the usual range: enough to grow."}</p>
+        </>}
+        {!isDefault && <button type="button" className="btn btn-quiet vedit-reset" onClick={reset}><Icon name="undo" size={16} /> Reset to default · {resetTo.min == null ? "no target" : formatTarget(resetTo as VolumeTarget)}</button>}
       </div>
     </div>
   );

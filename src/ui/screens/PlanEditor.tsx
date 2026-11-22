@@ -170,7 +170,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
       )}
 
 <h2 className="section-title">Plan overview</h2>
-      <WeekInsight routine={draft} exMap={exMap} targets={tdraft} weekFail={weekFail} edit={{ targets: tdraft, onEdit: editTarget }} />
+      <WeekInsight routine={draft} exMap={exMap} targets={tdraft} weekFail={weekFail} edit={{ targets: tdraft, onEdit: editTarget, onEditAll: (ts) => ts.forEach(editTarget) }} />
 
 
       <Dock>

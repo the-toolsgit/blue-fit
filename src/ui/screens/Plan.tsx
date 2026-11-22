@@ -144,7 +144,7 @@ export function PlanScreen() {
       )}
 
       <h2 className="section-title">Plan overview</h2>
-      <WeekInsight routine={routine} exMap={exMap} targets={targets} weekFail={weekFail} edit={{ targets, onEdit: (t) => saveTargets([t]) }} />
+      <WeekInsight routine={routine} exMap={exMap} targets={targets} weekFail={weekFail} edit={{ targets, onEdit: (t) => saveTargets([t]), onEditAll: saveTargets }} />
 
       {routine.rules?.length ? (
         <div className="chips-scroll" style={{ marginTop: 22, gap: 10 }}>
