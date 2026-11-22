@@ -118,6 +118,9 @@ ul { margin: 0; padding-left: 18px; }
 .fig { display: block; overflow: visible; filter: drop-shadow(0 0 2px var(--fig-glow)) drop-shadow(0 0 7px var(--fig-glow-soft)); }
 /* Trimmed figure: the floor line (drawn full width) stays inside the cropped box */
 .fig.trim { overflow: hidden; }
+/* Still figures (lists): glow drawn in the SVG, no CSS filter (iPhone Safari leaves filtered SVGs blank in long lists) */
+.fig.haloed { filter: none; }
+
 .fig .mn polyline, .fig .mn circle { fill: none; stroke: var(--fig); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 /* Equipment (machine, bench, cable, bar) in a faded lighter blue, so the eye stays on the man's movement (Leo, Nov 22 2026) */
 .fig .lt line, .fig .lt polyline, .fig .lt circle { fill: none; stroke: var(--fig2); stroke-width: 1.6; stroke-linecap: round; stroke-opacity: .55; }
@@ -735,3 +738,6 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .fig-tap { display: inline-flex; flex: none; border-radius: 10px; cursor: pointer; transition: box-shadow .2s, background .2s; }
 .fig-tap:active { background: var(--glow-soft); box-shadow: 0 0 0 1px var(--neon); }
 .fig-tap:focus-visible { outline: 2px solid var(--neon); outline-offset: 2px; }
+/* Still figures' drawn glow (see .fig.haloed): after the .fig line rules so it wins */
+.fig.haloed .halo .mn polyline, .fig.haloed .halo .mn circle { fill: none; stroke: var(--fig-glow); stroke-width: 6.5; opacity: .5; }
+.fig.haloed .halo .lt, .fig.haloed .halo .floor { display: none; }

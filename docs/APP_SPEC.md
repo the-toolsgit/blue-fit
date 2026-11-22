@@ -557,7 +557,7 @@ Joints: hip; knee = hip + V(th, 24); ankle = knee + V(sh, 23); toe = ankle + V(s
 **Props (drawn in fig2):** `line [x1,y1,x2,y2]`; `cable [x,y] → joint` (dashed 2 2, pulley circle r 2.2; `barmid` = midpoint between hands); `db joint` (8-wide bar, stroke 4); `bar` (between hands ±7, stroke 2.5); `pad joint` (circle r 2.6 or r); `perp joint, ang, len` (platform line through a joint).
 
 ### 8.3 Rendering
-Main lines: polylines, stroke fig 2.6, round caps/joins, no fill; head circle r 7. Props: stroke fig2 1.6. Floor: fig2, 1. Neon: a glow drop-shadow under the whole figure.
+Main lines: polylines, stroke fig 2.6, round caps/joins, no fill; head circle r 7. Props: stroke fig2 1.6. Floor: fig2, 1. Neon: a glow drop-shadow under the whole figure. Still figures (list thumbnails) draw the glow inside the SVG instead (a wide soft copy of the man's lines under them, no CSS filter): iPhone Safari left some filtered SVGs blank in long lists (Nov 22 2026).
 
 ### 8.4 Timing
 **Muscle curve** (side view, prop `trap`): the traps drawn as a small, round filled shape in the body color, like the biceps bump (two outward-bowed halves with a soft point in the middle, closed back along the body), starting exactly where the back line starts (the shoulder point, never past it toward the head) and running 8.5 units down the back, peaking in the middle, bulging out and thickening as `tq` goes 0 → 1, so the squeeze shows. Used by the Kelso Shrug: the torso stays still (chest on the pad), the straight arms come up (upper arm 80 % length at the squeeze) and the arch bulges (migrations `2026-11-18-kelso-traps`, `-traps-pad`).

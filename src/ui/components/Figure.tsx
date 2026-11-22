@@ -54,7 +54,11 @@ export function Figure({ spec, size = 112, className = "", still, k = 1, label, 
     if (!el || !spec) return;
     const f0 = poseFrame(spec, still || reducedMotion() ? k : 0);
     const bumpSvg = bumps && still ? bumpsToSvg(bicepBumps(f0, 1, 5)) : "";
-    el.innerHTML = frameToSvg(f0, dx) + (bumpSvg && dx ? `<g transform="translate(${dx.toFixed(1)} 0)">${bumpSvg}</g>` : bumpSvg);
+    const svg0 = frameToSvg(f0, dx);
+    // Still list figures: the glow is drawn in the SVG (a soft, wide copy under the lines) instead of a CSS filter.
+    // iPhone Safari skips painting some filtered SVGs in long scrolling lists, leaving them blank (Leo, Nov 22 2026).
+    const halo = still && !bumps ? `<g class="halo">${svg0}</g>` : "";
+    el.innerHTML = halo + svg0 + (bumpSvg && dx ? `<g transform="translate(${dx.toFixed(1)} 0)">${bumpSvg}</g>` : bumpSvg);
     if (still || reducedMotion()) return;
     registry.set(el, { spec, visible: !io, speed, timing, t0: performance.now(), dx });
     io?.observe(el);
@@ -66,7 +70,7 @@ export function Figure({ spec, size = 112, className = "", still, k = 1, label, 
   if (!spec) return null;
   const [x0, y0, w, h] = box ?? [0, -24, 120, 131];
   return (
-    <svg ref={ref} className={"fig " + (box ? "trim " : "") + className} viewBox={`${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`} width={(size * w) / 120} height={(size * h) / 120}
+    <svg ref={ref} className={"fig " + (box ? "trim " : "") + (still && !bumps ? "haloed " : "") + className} viewBox={`${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`} width={(size * w) / 120} height={(size * h) / 120}
       role={label ? "img" : undefined} aria-label={label} aria-hidden={label ? undefined : true} />
   );
 }
