@@ -2,7 +2,7 @@
 
 Goal: one database of every gym exercise the app knows, each one fully described and linked to the muscle database
 (`src/core/seed/muscles.json`). The app will later read exercises only from here. A readable page is built from it,
-like the muscle page. Status: plan reviewed (Nov 20 2026); phase 1 = back and biceps.
+like the muscle page. Status: built (Nov 21 2026): all 16 muscles are in `src/core/seed/exercise-db/` (spec §5.26).
 
 ## 1. What each exercise has
 

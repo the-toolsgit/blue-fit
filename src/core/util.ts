@@ -17,9 +17,12 @@ export const parseLocalDate = (s: string): Date => { const [y, m, d] = s.split("
 export const weekStart = (s: string, startDay = 1): string => { const d = parseLocalDate(s); d.setDate(d.getDate() - ((d.getDay() - startDay + 7) % 7)); return localDate(d); };
 /** Weekdays in week order starting at startDay, e.g. 6 → [6, 0, 1, 2, 3, 4, 5] */
 export const weekOrder = (startDay = 1): number[] => Array.from({ length: 7 }, (_, i) => (startDay + i) % 7);
-export const round1 = (n: number) => Math.round(n * 10) / 10;
 export const fmtNum = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(1).replace(/\.0$/, ""));
 /** Add days to a local YYYY-MM-DD date */
 export const addDays = (s: string, n: number): string => { const d = parseLocalDate(s); d.setDate(d.getDate() + n); return localDate(d); };
 /** Whole days from a to b (b − a), local calendar dates */
 export const daysBetween = (a: string, b: string): number => Math.round((parseLocalDate(b).getTime() - parseLocalDate(a).getTime()) / 86_400_000);
+
+/** Weekday names, 0 = Sunday (Date.getDay order) */
+export const WEEKDAY_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+export const WEEKDAY_LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];

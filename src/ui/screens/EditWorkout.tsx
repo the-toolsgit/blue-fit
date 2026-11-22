@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { deloadSets } from "../../core/deload";
 import { setSessionDate } from "../../core/history";
-import { addEntry, addSet, buildEntry, reconcileSkipped, removeEntry, removeSet, setEntry, swapEntry, updateSet } from "../../core/session";
+import { addEntry, addSet, buildEntry, reconcileSkipped, removeEntry, removeSet, setEntry, swapEntry, updateSet, isRecorded } from "../../core/session";
 import type { LoggedSet, Session, SetType } from "../../core/types";
 import { ExercisePicker } from "../components/ExercisePicker";
 import { Figure } from "../components/Figure";
@@ -61,7 +61,7 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
   const history = finished.filter((x) => x.id !== s.id);
   const done = () => {
     // Drop sets left empty, then exercises left without sets (they show as "Not recorded" again)
-    const cleaned = { ...s, entries: s.entries.map((e) => ({ ...e, sets: e.sets.filter((x) => x.done && (x.reps ?? 0) > 0) })).filter((e) => e.sets.length > 0) };
+    const cleaned = { ...s, entries: s.entries.map((e) => ({ ...e, sets: e.sets.filter(isRecorded) })).filter((e) => e.sets.length > 0) };
     if (JSON.stringify(cleaned.entries) !== JSON.stringify(s.entries)) commit(cleaned);
     replace(`summary/${s.id}`);
   };

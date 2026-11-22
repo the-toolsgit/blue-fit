@@ -21,7 +21,6 @@ export const EQUIPMENT_LABEL: Record<Equipment, string> = {
 
 /** How the logged number relates to the load. Weights are stored exactly as typed. */
 export type LoadMode = "perSide" | "total" | "perHand";
-export const LOAD_LABEL: Record<LoadMode, string> = { perSide: "per side", total: "", perHand: "per hand" };
 
 export interface VolumeShare { group: MuscleGroup; weight: 1 | 0.5 }
 

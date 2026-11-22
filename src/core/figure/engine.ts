@@ -224,7 +224,6 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
 /** Animation timing (ms): ease A→B, hold at B, ease B→A, hold at A. Default: 3.2 s loop (42 % / 8 % / 42 % / 8 %). */
 export interface Timing { ab: number; holdB: number; ba: number; holdA: number }
 export const DEFAULT_TIMING: Timing = { ab: 1344, holdB: 256, ba: 1344, holdA: 256 };
-export const PHASE_MS = 3200;
 export const loopMs = (t: Timing = DEFAULT_TIMING) => t.ab + t.holdB + t.ba + t.holdA;
 /** Holds longer than this are real "Hold N s" phases (the short turn at an end is 250 ms). */
 const REAL_HOLD_MS = 400;

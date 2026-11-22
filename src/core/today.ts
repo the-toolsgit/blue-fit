@@ -5,4 +5,3 @@ export function dayForDate(routine: Routine | undefined, date: Date): RoutineDay
   const day = routine?.days.find((d) => d.weekday === date.getDay());
   return day && day.slots.length ? day : null;
 }
-export const WEEKDAY_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

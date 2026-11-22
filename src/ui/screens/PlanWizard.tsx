@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { generatePlanAsync } from "../generate";
 import { planConflicts, repsFor, REST_BY_GOAL, swapOptions, type Conflict } from "../../core/generator";
 import { slotsMinutes } from "../../core/timeEstimate";
-import { uid } from "../../core/util";
+import { uid, WEEKDAY_LONG } from "../../core/util";
 import { completeProfile, MUSCLE_GROUPS, muscleLabel, type Goal, type MuscleGroup, type Phase, type RoutineDay, type VolumeTarget } from "../../core/types";
 import { formatTarget, isFocus } from "../../core/volume";
 import { defaultRange, priorityOf, type Priority } from "../../core/volumeModel";
@@ -13,7 +13,7 @@ import { weekInsight } from "../../core/workoutCheck";
 import { useStore } from "../store";
 import { Icon } from "../components/Icon";
 import { MuscleMap } from "../components/MuscleMap";
-import { DELTS, shouldersTo, TargetEdit, withPriority } from "../components/VolumeTable";
+import { DELTS, shouldersTo, TargetEdit, withPriority } from "../components/TargetEdit";
 import { Seg } from "../components/Controls";
 import { Splash } from "../components/Splash";
 import { ExercisePicker } from "../components/ExercisePicker";
@@ -38,7 +38,7 @@ const PHASES: { v: Phase; label: string; sub: string }[] = [
 ];
 const MINUTES = [45, 60, 75, 90];
 const WEEK = [1, 2, 3, 4, 5, 6, 0];
-const DAY_NAME = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const DAY_NAME = WEEKDAY_LONG;
 /** Rest between sets: what each one suits (REST_BY_GOAL) */
 const RESTS: { sec: number; big: string; goal: Goal }[] = [
   { sec: 60, big: "1", goal: "endurance" }, { sec: 90, big: "1½", goal: "maintenance" },

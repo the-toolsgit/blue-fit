@@ -1,16 +1,12 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { SlotSheet } from "../components/SlotSheet";
 import { useKeptState } from "../keptState";
 import { deloadActive, deloadWeek, endDeload } from "../../core/deload";
-import { localDate } from "../../core/util";
+import { localDate, WEEKDAY_SHORT } from "../../core/util";
 import { DELOAD_RULE } from "../components/DeloadBanner";
 import { addDay, addSlot, clearDay, copyName, duplicateRoutine, moveSlot, newRoutine, insertSlot, removeSlot, renameDay, routineUsed, setCurrent, swapSlotExercise, toggleSlotSuperset, updateSlot } from "../../core/routineEdit";
-import { failureApplies, failureEligible } from "../../core/failure";
-import { tempoTiming } from "../../core/figure/tempo";
-import { Seg, Stepper } from "../components/Controls";
 import { ExercisePicker } from "../components/ExercisePicker";
-import { Figure } from "../components/Figure";
-import { fmtRest } from "../format";
-import { Confirm, Sheet } from "../components/Sheet";
+import { Confirm } from "../components/Sheet";
 import { completeProfile, type Routine, type Slot } from "../../core/types";
 import { freshTargets } from "../../core/volumeModel";
 import { slotsMinutes } from "../../core/timeEstimate";
@@ -22,7 +18,7 @@ import { useStore } from "../store";
 import { ExerciseSheet } from "./ExerciseScreen";
 import { WeekInsight } from "../components/WeekInsight";
 
-const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const SHORT = WEEKDAY_SHORT;
 const SortableDayList = lazy(() => import("../components/SortableDayList").then((m) => ({ default: m.SortableDayList })));
 
 export function PlanScreen() {
@@ -54,7 +50,6 @@ export function PlanScreen() {
   // Everything is edited in place and saved at once: name and day title are fields that look like text,
   // tap an exercise for its popup, hold to move, swipe left to delete, Add exercise at the bottom.
   const slot = day?.slots.find((x) => x.id === slotId);
-  const slotIdx = day && slot ? day.slots.indexOf(slot) : -1;
   const setSlot = (p: Partial<Slot>) => day && slot && saveRoutine(updateSlot(routine, day.id, slot.id, p));
   // Undo puts back only this exercise, into the plan as it is then (other changes made meanwhile stay)
   const removeWithUndo = (s: Slot) => {
@@ -174,51 +169,10 @@ export function PlanScreen() {
           ? <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px", fontSize: 14 }} onClick={() => { saveSettings(endDeload(settings, today)); toast({ kind: "info", title: "Deload ended", body: "Back to your normal plan." }); }}>End</button>
           : <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px", fontSize: 14 }} onClick={() => setConfirmDeload(true)}>Start</button>}
       </section>
-      <Sheet open={!!slot} onClose={() => setSlotId(null)} label="Exercise in plan">
-        {slot && day && (
-          <div className="stack" style={{ gap: 12 }}>
-            <div className="row">
-              <Figure spec={exMap.get(slot.exerciseId)?.figure} size={54} timing={tempoTiming(exMap.get(slot.exerciseId)?.tempo, slot.exerciseId)} />
-              <h3 className="title-md grow">{exMap.get(slot.exerciseId)?.name}</h3>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-              <Stepper label="Sets" value={slot.sets} step={1} decimals={false} min={1} onChange={(v) => setSlot({ sets: Math.max(1, Math.min(20, v ?? 1)) })} />
-              <Stepper label="Rest" suffix={fmtRest(slot.restSec)} value={slot.restSec} step={15} decimals={false} onChange={(v) => setSlot({ restSec: v ?? settings.restDefaultSec })} />
-              <Stepper label={exMap.get(slot.exerciseId)?.measure === "time" ? "Seconds min" : "Reps min"} value={slot.repMin} step={exMap.get(slot.exerciseId)?.measure === "time" ? 5 : 1} decimals={false} min={1} onChange={(v) => setSlot({ repMin: Math.max(1, v ?? 1), repMax: Math.max(slot.repMax, v ?? 1) })} />
-              <Stepper label={exMap.get(slot.exerciseId)?.measure === "time" ? "Seconds max" : "Reps max"} value={slot.repMax} step={exMap.get(slot.exerciseId)?.measure === "time" ? 5 : 1} decimals={false} min={1} onChange={(v) => setSlot({ repMax: Math.max(slot.repMin, v ?? slot.repMin) })} />
-            </div>
-            {failureApplies(settings.profile?.goal) && (() => {
-              const mode = slot.toFailure === true ? "on" : slot.toFailure === false ? "off" : "auto";
-              const why = weekFail.get(day.id)?.get(slot.id);
-              const safe = failureEligible(exMap.get(slot.exerciseId));
-              return (
-                <div>
-                  <span className="row" style={{ gap: 6, fontWeight: 600, marginBottom: 6 }}><span style={{ color: "var(--warn)", display: "inline-flex" }}><Icon name="flame" size={16} /></span>Last set to failure</span>
-                  <Seg label="Last set to failure" value={mode} onChange={(v) => setSlot({ toFailure: v === "auto" ? undefined : v === "on" })}
-                    options={[{ v: "auto", label: "Auto" }, { v: "on", label: "On" }, { v: "off", label: "Off" }]} />
-                  <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>
-                    {mode === "auto" ? (why ? `This week: yes. ${why.join(" · ")}.` : safe ? "The app picks it when it fits the workout and your week." : "Auto never picks this one (★ lift or not safe to fail).")
-                      : mode === "on" ? "Always, every week." : "Never."}
-                  </p>
-                </div>
-              );
-            })()}
-            <div className="field"><label htmlFor="snote">Note</label>
-              <input id="snote" className="input" value={slot.notes ?? ""} placeholder="e.g. elbows to hips" onChange={(e) => setSlot({ notes: e.target.value || undefined })} /></div>
-            <div>
-              {slotIdx < day.slots.length - 1 && (
-                <button className="menu-item" onClick={() => saveRoutine(toggleSlotSuperset(routine, day.id, slot.id))}>
-                  <Icon name="link" /> {slot.supersetGroup && slot.supersetGroup === day.slots[slotIdx + 1]?.supersetGroup ? "Unlink from next (end superset)" : "Superset with next exercise"}
-                </button>
-              )}
-              <button className="menu-item" onClick={() => setPicker({ mode: "swap", slotId: slot.id })}><Icon name="swap" /> Swap exercise</button>
-              <button className="menu-item" onClick={() => setHowTo(slot.id)}><Icon name="info" /> How to do it</button>
-              <button className="menu-item danger" onClick={() => { setSlotId(null); removeWithUndo(slot); }}><Icon name="trash" /> Remove from day</button>
-            </div>
-            <button className="btn btn-primary btn-block" onClick={() => setSlotId(null)}>Done</button>
-          </div>
-        )}
-      </Sheet>
+      <SlotSheet slot={slot} day={day} ex={slot ? exMap.get(slot.exerciseId) : undefined} goal={settings.profile?.goal} failWhy={day && slot ? weekFail.get(day.id)?.get(slot.id) : undefined}
+        restDefault={settings.restDefaultSec} onPatch={(p) => setSlot(p)} onClose={() => setSlotId(null)}
+        onToggleSuperset={() => day && slot && saveRoutine(toggleSlotSuperset(routine, day.id, slot.id))}
+        onSwap={() => slot && setPicker({ mode: "swap", slotId: slot.id })} onHowTo={() => slot && setHowTo(slot.id)} onRemove={() => slot && removeWithUndo(slot)} />
       <ExercisePicker open={!!picker} title={picker?.mode === "swap" ? "Swap exercise" : "Add exercise"}
         exclude={picker?.mode === "swap" ? day?.slots.find((x) => x.id === picker.slotId)?.exerciseId : undefined}
         onClose={() => setPicker(null)}

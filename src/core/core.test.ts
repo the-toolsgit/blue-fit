@@ -2,7 +2,7 @@ import { deriveSkipped, reconcileSkipped, skippedVolume } from "./session";
 import { MIGRATIONS, applyMigrations } from "./migrations";
 import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
-import { groupsLeftThisWeek, planVolume, sessionsVolume, targetStatus, tonnage } from "./volume";
+import { planVolume, sessionsVolume, tonnage } from "./volume";
 import { estimateMinutes } from "./timeEstimate";
 import { groupPlates, platesFor } from "./plates";
 import { epley } from "./oneRm";
@@ -17,18 +17,6 @@ import { type LoggedSet, type Session } from "./types";
 const seed = buildSeed();
 const exMap = new Map(seed.exercises.map((e) => [e.id, e]));
 const routine = seed.routines[0];
-
-describe("groups still planned this training week (week starts Saturday)", () => {
-  const legsB = routine.days.find((d) => d.weekday === 4)!;
-  it("Friday (rest, last day of the week): nothing left", () => {
-    expect(groupsLeftThisWeek(routine, exMap, [], "2026-11-20", 6).size).toBe(0);
-  });
-  it("Thursday: Legs B still counts until it's finished", () => {
-    expect(groupsLeftThisWeek(routine, exMap, [], "2026-11-19", 6).has("quads")).toBe(true);
-    const done = { date: "2026-11-19", dayId: legsB.id, status: "finished" } as Session;
-    expect(groupsLeftThisWeek(routine, exMap, [done], "2026-11-19", 6).has("quads")).toBe(false);
-  });
-});
 
 describe("weekly volume (fractional)", () => {
   const rows = new Map(planVolume(routine, exMap).map((r) => [r.group, r]));
@@ -45,17 +33,6 @@ describe("weekly volume (fractional)", () => {
   it("tracks the extra groups", () => {
     expect(rows.get("glutes")!.sets).toBe(3.5);
     expect(rows.get("forearms")!.sets).toBe(3);
-  });
-  it("target status: not-a-focus groups are off; below turns in progress while the week still plans it", () => {
-    const t = new Map(seed.targets.map((x) => [x.group, x]));
-    expect(targetStatus(8, t.get("hamstrings"))).toBe("ok");
-    expect(targetStatus(8, { group: "hamstrings", min: 10, max: null, acceptedBelow: true })).toBe("off");
-    expect(targetStatus(12, t.get("back"), true)).toBe("inProgress");
-    expect(targetStatus(23, t.get("back"), true)).toBe("above");
-    expect(targetStatus(20, t.get("back"))).toBe("ok");
-    expect(targetStatus(12, t.get("back"))).toBe("below");
-    expect(targetStatus(23, t.get("back"))).toBe("above");
-    expect(targetStatus(2, t.get("chest"))).toBe("off");
   });
   it("plan totals 117 sets over 36 slots", () => {
     expect(routine.days.flatMap((d) => d.slots).length).toBe(36);

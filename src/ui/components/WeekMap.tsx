@@ -8,7 +8,7 @@ import { fmtNum } from "../../core/util";
 import { muscleLabel, type MuscleGroup } from "../../core/types";
 import { exercisesFor, type Tile } from "../../core/workoutCheck";
 import type { Exercise, Routine, VolumeTarget } from "../../core/types";
-import { TargetEdit } from "./VolumeTable";
+import { TargetEdit } from "./TargetEdit";
 import { reducedMotion } from "../device";
 import { Icon } from "./Icon";
 

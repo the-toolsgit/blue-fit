@@ -569,7 +569,6 @@ function needsValues(x: LoggedSet, ex: Exercise): string | null {
   return noW && noR ? "Enter weight and reps first" : noW ? "Enter the weight first" : noR ? (ex.measure === "time" ? "Enter the seconds first" : "Enter the reps first") : null;
 }
 
-/** Plates to load, drawn as plates (front view, sized by weight) with a count. Standard gym plates, unlimited. */
 /** Plates to load, as small pills: "(45) × 3  (35) × 1". Standard gym plates, unlimited. */
 function Plates({ weight, single }: { weight: number; single?: boolean }) {
   const r = platesFor(weight);

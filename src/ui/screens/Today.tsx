@@ -5,7 +5,7 @@ import { createSessionFromDay } from "../../core/session";
 import { MANUAL_WHY } from "../../core/failure";
 import { ExtraTag, FailFlame, useWeekExtraSets, useWeekFailure } from "../components/FailFlame";
 import { slotsMinutes } from "../../core/timeEstimate";
-import { localDate, weekOrder, weekStart } from "../../core/util";
+import { localDate, weekOrder, weekStart, WEEKDAY_LONG } from "../../core/util";
 import { reducedMotion } from "../device";
 import { Figure } from "../components/Figure";
 import { tempoTiming } from "../../core/figure/tempo";
@@ -22,7 +22,7 @@ import { useStore } from "../store";
 
 const SortableDayList = lazy(() => import("../components/SortableDayList").then((m) => ({ default: m.SortableDayList })));
 
-const LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const LONG = WEEKDAY_LONG;
 
 export function TodayScreen() {
   const { routine, exMap, finished, active, saveSession, saveRoutine, settings, backup, markBackup, snoozeBackup, exportAll, toast } = useStore();

@@ -2,7 +2,7 @@
 import { epley } from "./oneRm";
 import { entryVolume } from "./records";
 import { MUSCLE_GROUPS, type Exercise, type MuscleGroup, type Session } from "./types";
-import { addDays, localDate, weekStart } from "./util";
+import { addDays, weekStart } from "./util";
 import { countsForLoad, countsForVolume, sessionsVolume, tonnage, type GroupTotals } from "./volume";
 
 export type Range = "4w" | "12w" | "6m" | "all";
@@ -83,4 +83,3 @@ export function muscleFrequency(sessions: Session[], exMap: Map<string, Exercise
   return f;
 }
 
-export const todayStr = (d = new Date()) => localDate(d);

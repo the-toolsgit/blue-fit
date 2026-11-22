@@ -75,10 +75,6 @@ export function createSessionFromDay(routine: Routine, day: RoutineDay, exercise
   return { id: uid(), date: localDate(now), title: day.title, routineId: routine.id, dayId: day.id, startedAt: now.toISOString(), finishedAt: null, status: "active", source: "app", entries, ...(opts.deload ? { deload: true } : {}) };
 }
 
-export function createFreeSession(now: Date, opts: { deload?: boolean } = {}): Session {
-  return { id: uid(), date: localDate(now), title: "Free workout", startedAt: now.toISOString(), finishedAt: null, status: "active", source: "app", entries: [], ...(opts.deload ? { deload: true } : {}) };
-}
-
 const mapEntry = (s: Session, entryId: string, f: (e: SessionEntry) => SessionEntry): Session => ({ ...s, entries: s.entries.map((e) => (e.id === entryId ? f(e) : e)) });
 
 export const updateSet = (s: Session, entryId: string, setId: string, patch: Partial<LoggedSet>): Session =>

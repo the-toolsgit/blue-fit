@@ -1,11 +1,11 @@
 // Plan (routine) editing. Pure functions: every operation returns a new Routine.
 import type { Exercise, Routine, RoutineDay, Session, Slot, VolumeTarget } from "./types";
-import { uid } from "./util";
+import { uid, WEEKDAY_LONG } from "./util";
 
 export const NEW_SLOT = { sets: 3, repMin: 10, repMax: 12 };
 /** Holds (sets in seconds): 20–60 s (*judgment*, coaching) */
 export const HOLD_SLOT = { sets: 3, repMin: 20, repMax: 60 };
-const WD = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const WD = WEEKDAY_LONG;
 
 const mapDay = (r: Routine, dayId: string, f: (d: RoutineDay) => RoutineDay): Routine => ({ ...r, days: r.days.map((d) => (d.id === dayId ? f(d) : d)) });
 const move = <T>(a: T[], from: number, to: number): T[] => {

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import type { Backup } from "../../core/io/exportFormat";
-import { weekOrder } from "../../core/util";
+import { weekOrder, WEEKDAY_SHORT } from "../../core/util";
 import { ACCENTS, type ProfileDraft } from "../../core/types";
 import { Seg, Stepper, Switch } from "../components/Controls";
 import { Icon } from "../components/Icon";
@@ -50,7 +50,7 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
       <div className="glass" style={{ padding: 10, display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4 }} role="group" aria-label="Training week starts on">
         {weekOrder(1).map((d) => (
           <button key={d} className="chip" aria-pressed={settings.weekStartDay === d} style={{ padding: 0, justifyContent: "center", minHeight: 40 }} onClick={() => set("weekStartDay", d)}>
-            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d]}
+            {WEEKDAY_SHORT[d]}
           </button>
         ))}
       </div>

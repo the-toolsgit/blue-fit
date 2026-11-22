@@ -1,5 +1,7 @@
 // Plan editor: edit a draft copy of a routine (days, exercises, sets/reps/rest, supersets),
 // see the weekly volume update live, then Save or Cancel.
+import { SlotSheet } from "../components/SlotSheet";
+import { WEEKDAY_SHORT } from "../../core/util";
 import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent, KeyboardSensor } from "@dnd-kit/core";
 import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -10,16 +12,13 @@ import {
 import { slotsMinutes } from "../../core/timeEstimate";
 import { type Exercise, type Goal, type Phase, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
 import { targetsOf } from "../../core/volumeModel";
-import { failureApplies, failureEligible } from "../../core/failure";
 import { FailFlame, useWeekFailure } from "../components/FailFlame";
-import { Seg, Stepper } from "../components/Controls";
 import { Dock } from "../components/Dock";
 import { ExercisePicker } from "../components/ExercisePicker";
 import { Figure } from "../components/Figure";
 import { FigureTap, useSwipeDelete } from "../components/swipeDelete";
-import { tempoTiming } from "../../core/figure/tempo";
 import { Icon } from "../components/Icon";
-import { Confirm, Sheet } from "../components/Sheet";
+import { Confirm } from "../components/Sheet";
 import { fmtRest, repRange } from "../format";
 import { replace } from "../router";
 import { useStore } from "../store";
@@ -27,7 +26,7 @@ import { WeekInsight } from "../components/WeekInsight";
 import { ExerciseSheet } from "./ExerciseScreen";
 import { PlanWizard, type WizardResult } from "./PlanWizard";
 
-const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const SHORT = WEEKDAY_SHORT;
 const mondayFirst = (w: number | null) => (w == null ? 9 : (w + 6) % 7);
 const draftKey = (id: string) => "bf-plan-draft-" + id;
 
@@ -102,7 +101,6 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const editTarget = (t: VolumeTarget) => setTdraft((ts) => (ts.some((x) => x.group === t.group) ? ts.map((x) => (x.group === t.group ? t : x)) : [...ts, t]));
   const issues = validateRoutine(draft);
   const slot = day?.slots.find((s) => s.id === slotOpen);
-  const slotIdx = day?.slots.findIndex((s) => s.id === slotOpen) ?? -1;
 
   const leave = () => { try { sessionStorage.removeItem(draftKey(id!)); sessionStorage.removeItem(draftKey(id!) + "-targets"); sessionStorage.removeItem(draftKey(id!) + "-answers"); } catch { /* ignore */ } if (onExit) onExit(); else replace("plan"); };
   const save = () => {
@@ -201,51 +199,10 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
         <button className="btn btn-primary btn-xl" onClick={dirty ? save : leave}><Icon name="check" size={20} /> {dirty ? "Save plan" : "Done"}</button>
       </Dock>
 
-      <Sheet open={!!slot} onClose={() => setSlotOpen(null)} label="Exercise in plan">
-        {slot && day && (
-          <div className="stack" style={{ gap: 12 }}>
-            <div className="row">
-              <Figure spec={exMap.get(slot.exerciseId)?.figure} size={54} timing={tempoTiming(exMap.get(slot.exerciseId)?.tempo, slot.exerciseId)} />
-              <h3 className="title-md grow">{exMap.get(slot.exerciseId)?.name}</h3>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-              <Stepper label="Sets" value={slot.sets} step={1} decimals={false} min={1} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { sets: Math.max(1, Math.min(20, v ?? 1)) }))} />
-              <Stepper label="Rest" suffix={fmtRest(slot.restSec)} value={slot.restSec} step={15} decimals={false} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { restSec: v ?? settings.restDefaultSec }))} />
-              <Stepper label={exMap.get(slot.exerciseId)?.measure === "time" ? "Seconds min" : "Reps min"} value={slot.repMin} step={exMap.get(slot.exerciseId)?.measure === "time" ? 5 : 1} decimals={false} min={1} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { repMin: Math.max(1, v ?? 1), repMax: Math.max(slot.repMax, v ?? 1) }))} />
-              <Stepper label={exMap.get(slot.exerciseId)?.measure === "time" ? "Seconds max" : "Reps max"} value={slot.repMax} step={exMap.get(slot.exerciseId)?.measure === "time" ? 5 : 1} decimals={false} min={1} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { repMax: Math.max(slot.repMin, v ?? slot.repMin) }))} />
-            </div>
-            {failureApplies(settings.profile?.goal) && (() => {
-              const mode = slot.toFailure === true ? "on" : slot.toFailure === false ? "off" : "auto";
-              const why = weekFail.get(day.id)?.get(slot.id);
-              const safe = failureEligible(exMap.get(slot.exerciseId));
-              return (
-                <div>
-                  <span className="row" style={{ gap: 6, fontWeight: 600, marginBottom: 6 }}><span style={{ color: "var(--warn)", display: "inline-flex" }}><Icon name="flame" size={16} /></span>Last set to failure</span>
-                  <Seg label="Last set to failure" value={mode} onChange={(v) => setDraft(updateSlot(draft, day.id, slot.id, { toFailure: v === "auto" ? undefined : v === "on" }))}
-                    options={[{ v: "auto", label: "Auto" }, { v: "on", label: "On" }, { v: "off", label: "Off" }]} />
-                  <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>
-                    {mode === "auto" ? (why ? `This week: yes. ${why.join(" · ")}.` : safe ? "The app picks it when it fits the workout and your week." : "Auto never picks this one (★ lift or not safe to fail).")
-                      : mode === "on" ? "Always, every week." : "Never."}
-                  </p>
-                </div>
-              );
-            })()}
-            <div className="field"><label htmlFor="snote">Note</label>
-              <input id="snote" className="input" value={slot.notes ?? ""} placeholder="e.g. elbows to hips" onChange={(e) => setDraft(updateSlot(draft, day.id, slot.id, { notes: e.target.value || undefined }))} /></div>
-            <div>
-              {slotIdx < day.slots.length - 1 && (
-                <button className="menu-item" onClick={() => setDraft(toggleSlotSuperset(draft, day.id, slot.id))}>
-                  <Icon name="link" /> {slot.supersetGroup && slot.supersetGroup === day.slots[slotIdx + 1]?.supersetGroup ? "Unlink from next (end superset)" : "Superset with next exercise"}
-                </button>
-              )}
-              <button className="menu-item" onClick={() => { setPicker({ mode: "swap", slotId: slot.id }); }}><Icon name="swap" /> Swap exercise</button>
-              <button className="menu-item" onClick={() => setHowTo(slot.id)}><Icon name="info" /> How to do it</button>
-              <button className="menu-item danger" onClick={() => { setSlotOpen(null); removeWithUndo(slot); }}><Icon name="trash" /> Remove from day</button>
-            </div>
-            <button className="btn btn-primary btn-block" onClick={() => setSlotOpen(null)}>Done</button>
-          </div>
-        )}
-      </Sheet>
+      <SlotSheet slot={slot} day={day} ex={slot ? exMap.get(slot.exerciseId) : undefined} goal={settings.profile?.goal} failWhy={day && slot ? weekFail.get(day.id)?.get(slot.id) : undefined}
+        restDefault={settings.restDefaultSec} onPatch={(p) => day && slot && setDraft(updateSlot(draft, day.id, slot.id, p))} onClose={() => setSlotOpen(null)}
+        onToggleSuperset={() => day && slot && setDraft(toggleSlotSuperset(draft, day.id, slot.id))}
+        onSwap={() => slot && setPicker({ mode: "swap", slotId: slot.id })} onHowTo={() => slot && setHowTo(slot.id)} onRemove={() => slot && removeWithUndo(slot)} />
 
       <ExercisePicker open={!!picker} title={picker?.mode === "swap" ? "Swap exercise" : "Add exercise"}
         exclude={picker?.mode === "swap" ? day?.slots.find((s) => s.id === picker.slotId)?.exerciseId : undefined}

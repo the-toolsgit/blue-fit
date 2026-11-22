@@ -9,7 +9,6 @@ import exerciseJobs from "./exercise-jobs.json";
 import { RULE_TEXT, RULE_TITLE } from "./rule-text";
 import { DEFAULT_SETTINGS, type AppData, type Exercise, type MuscleGroup, type Routine, type VolumeTarget } from "../types";
 
-export const SEED_VERSION = 1;
 
 /** Each built-in exercise's job per muscle (names from JOBS in workoutCheck.ts) and the muscles it stretches. */
 export const JOB_TAGS = exerciseJobs as unknown as Record<string, { jobs: Partial<Record<MuscleGroup, string | string[]>>; stretch?: MuscleGroup[] }>;

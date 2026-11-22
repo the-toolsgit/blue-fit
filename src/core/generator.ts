@@ -736,5 +736,3 @@ function combos(xs: number[], k: number): number[][] {
   return xs.flatMap((x, i) => combos(xs.slice(i + 1), k - 1).map((c) => [x, ...c]));
 }
 
-/** Muscle groups in display order (for the flow's target list) */
-export const GROUPS = MUSCLE_GROUPS.map((m) => m.id);

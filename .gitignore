@@ -6,3 +6,5 @@ dist
 docs/source/
 *.tsbuildinfo
 .figure-sheet.html
+# Dev preview images written by scripts/preview-*.ts
+/*.png
