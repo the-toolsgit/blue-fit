@@ -5,6 +5,7 @@ import plainText from "./seed/exercise-text.json";
 import figureFixes from "./seed/figure-fixes.json";
 import figureAudit from "./seed/figure-audit.json";
 import figureMachines from "./seed/figure-machines.json";
+import formTempoWas from "./seed/form-tempo-was.json";
 import exerciseJobs from "./seed/exercise-jobs.json";
 import extraExercises from "./seed/extra-exercises.json";
 import textWas from "./seed/text-review-was.json";
@@ -669,6 +670,22 @@ export const MIGRATIONS: Migration[] = [
         if (holds.join() !== "91,29") return e;
         changed = true;
         return { ...e, figure: structuredClone(fig) };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
+  {
+    // Nov 22 2026: Form no longer repeats the Tempo card ("hold 1 s", "lower slowly", "pause 2 s"; Leo). Only where the
+    // tempo already says it; where you move to stays. Phone copies still on the old app text get the new one.
+    id: "2026-11-22-form-no-tempo",
+    run(d) {
+      const pairs = formTempoWas as unknown as Record<string, [string[], string[]][]>;
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        const hit = !e.isCustom ? pairs[e.id]?.find(([was]) => JSON.stringify(was) === JSON.stringify(e.form)) : undefined;
+        if (!hit) return e;
+        changed = true;
+        return { ...e, form: [...hit[1]] };
       });
       return changed ? { ...d, exercises } : null;
     },

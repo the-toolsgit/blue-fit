@@ -3,7 +3,7 @@
   "t-bar-reverse-row": {
     "why": "Heavy row for your lats.",
     "setup": ["Chest on the pad, feet flat, arms straight."],
-    "form": ["Shoulders back first, then elbows to your hips.", "Hold 1 s at the top.", "Lower until your arms are straight and shoulder blades spread."],
+    "form": ["Shoulders back first, then elbows to your hips.", "Hold at the top.", "Lower until your arms are straight and shoulder blades spread."],
     "tips": ["Elbows close: more lats. Elbows wide: more upper back."],
     "avoid": ["Chest lifting off the pad.", "Shrugging instead of pulling back."],
     "rangeOfMotion": "Arms straight → elbows just past your body",
@@ -12,7 +12,7 @@
   "single-arm-cable-lat-pulldown": {
     "why": "Lats stretched, one arm at a time.",
     "setup": ["Pulley high. Kneel or sit facing it, arm straight up."],
-    "form": ["Pull your elbow down to your side.", "Go back up slowly to the full stretch. Hold 1 s."],
+    "form": ["Pull your elbow down to your side.", "Go back up to the full stretch, hold."],
     "tips": ["Pull with the elbow, not the hand."],
     "avoid": ["Twisting your body.", "Stopping short of the stretch."],
     "rangeOfMotion": "Arm straight up → elbow at your side",
@@ -30,7 +30,7 @@
   "straight-arm-cable-pulldown": {
     "why": "Lats with no biceps help.",
     "setup": ["Pulley high, bar or rope.", "Step back, lean forward a little."],
-    "form": ["Arms almost straight, pull down in an arc to your thighs. Squeeze.", "Go back up slowly."],
+    "form": ["Arms almost straight, pull down in an arc to your thighs. Squeeze."],
     "tips": ["A rope lets your hands go past your hips."],
     "avoid": ["Bending your elbows.", "Swinging your body."],
     "rangeOfMotion": "Arms up → hands at your thighs",
@@ -48,7 +48,7 @@
   "barbell-preacher-curl": {
     "why": "Biceps work hardest near the bottom.",
     "setup": ["Armpits at the top of the pad, upper arms flat on it.", "EZ bar if a straight bar hurts your wrists."],
-    "form": ["Curl up, stop just before your forearms are upright.", "Lower slowly until your arms are almost straight."],
+    "form": ["Curl up, stop just before your forearms are upright.", "Lower until your arms are almost straight."],
     "tips": ["Go slowest near the bottom."],
     "avoid": ["Dropping fast at the bottom (hard on the elbows).", "Elbows lifting off the pad."],
     "rangeOfMotion": "Arms almost straight → forearms almost upright",
@@ -57,7 +57,7 @@
   "machine-shoulder-press": {
     "why": "Front delts and triceps.",
     "setup": ["Seat so the handles start at chin height.", "Back flat on the pad."],
-    "form": ["Push up until your arms are almost straight.", "Lower slowly to chin height."],
+    "form": ["Push up until your arms are almost straight.", "Lower to chin height."],
     "tips": [],
     "avoid": ["Arching off the pad.", "Bouncing at the bottom.", "Only doing the top half."],
     "rangeOfMotion": "Chin height → arms almost straight",
@@ -66,7 +66,7 @@
   "cable-lateral-raise": {
     "why": "Side delts, loaded the whole way.",
     "setup": ["Pulley low, cable in front of you.", "Hold the machine with your free hand, lean away."],
-    "form": ["Start with your hand across your body (stretch).", "Raise out to shoulder height, elbow leading.", "Lower slowly, all the way back across."],
+    "form": ["Start with your hand across your body (stretch).", "Raise out to shoulder height, elbow leading.", "Lower all the way back across."],
     "tips": ["Push your hand out wide, not up."],
     "avoid": ["Shrugging.", "Swinging your body."],
     "rangeOfMotion": "Hand across your body → shoulder height",
@@ -75,7 +75,7 @@
   "lateral-shrug-hybrid": {
     "why": "Heavy traps: small side raise plus a shrug.",
     "setup": ["Heavy dumbbells at your sides. Straps if your grip fails first."],
-    "form": ["Raise your arms out a little while shrugging up to your ears.", "Hold 1 s, lower slowly."],
+    "form": ["Raise your arms out a little while shrugging up to your ears.", "Hold at the top."],
     "tips": ["Shoulders to ears matters, not arm height."],
     "avoid": ["Turning it into a light side raise.", "Dropping the weight fast."],
     "rangeOfMotion": "Arms at your sides → small raise with a full shrug",
@@ -84,7 +84,7 @@
   "barbell-shrug": {
     "why": "Heavy upper traps.",
     "setup": ["Bar in front, hands just outside your thighs. Stand tall.", "Straps so your grip doesn't fail first."],
-    "form": ["Shrug straight up, hold 1 s.", "Lower all the way down."],
+    "form": ["Shrug straight up, hold.", "Lower all the way down."],
     "tips": [],
     "avoid": ["Rolling your shoulders.", "Bending your elbows.", "Short, bouncy reps."],
     "rangeOfMotion": "Shoulders down → shoulders up",
@@ -93,7 +93,7 @@
   "overhead-trap": {
     "why": "Lower traps, which work hardest overhead.",
     "setup": ["Cable on the lowest setting.", "Stand 3–4 feet away."],
-    "form": ["Raise your arm in a big arc over your head.", "Finish in a Y, slightly in front of your head, thumb up.", "Hold 1 s, reach up high, lower slowly."],
+    "form": ["Raise your arm in a big arc over your head.", "Finish in a Y, slightly in front of your head, thumb up.", "Reach up high and hold at the top."],
     "tips": ["Go light enough to reach the top every rep."],
     "avoid": ["Arching your lower back.", "Stopping at shoulder height."],
     "rangeOfMotion": "Hand by your side → arm straight overhead",
@@ -102,7 +102,7 @@
   "machine-reverse-fly": {
     "why": "Rear delts.",
     "setup": ["Chest on the pad, handles at shoulder height.", "Elbows slightly bent."],
-    "form": ["Open your arms back until in line with your body.", "Return slowly."],
+    "form": ["Open your arms back until in line with your body."],
     "tips": ["Don't squeeze your shoulder blades hard together."],
     "avoid": ["Swinging your body.", "Going past your body."],
     "rangeOfMotion": "Arms in front → arms in line with your body",
@@ -120,7 +120,7 @@
   "leg-extension": {
     "why": "Quads only.",
     "setup": ["Backrest all the way back, lean back against it.", "Knees at the seat edge, lined up with the pivot.", "Pad just above your ankles."],
-    "form": ["Straighten your legs, squeeze 1 s.", "Lower slowly."],
+    "form": ["Straighten your legs, squeeze."],
     "tips": ["Leaning back stretches the front of the thigh more."],
     "avoid": ["Kicking up and letting it drop.", "Hips lifting off the seat."],
     "rangeOfMotion": "Knees bent → legs straight",
@@ -129,7 +129,7 @@
   "prone-leg-curl": {
     "why": "Hamstrings with knees fully bent.",
     "setup": ["Face down, knees just past the pad edge.", "Pad just above your heels."],
-    "form": ["Curl your heels to your butt, hold 1 s.", "Lower slowly until almost straight."],
+    "form": ["Curl your heels to your butt, hold.", "Lower until almost straight."],
     "tips": [],
     "avoid": ["Hips lifting off the pad.", "Dropping the weight."],
     "rangeOfMotion": "Legs almost straight → full curl",
@@ -138,7 +138,7 @@
   "hip-adduction": {
     "why": "Inner thighs.",
     "setup": ["Sit tall, pads inside your knees.", "Start as wide as you can control."],
-    "form": ["Squeeze your legs together, hold 1 s.", "Open slowly back to the stretch."],
+    "form": ["Squeeze your legs together, hold.", "Open back to the stretch."],
     "tips": ["The wide part does the most. Don't cut it short."],
     "avoid": ["Letting the weights slam.", "Rocking your body."],
     "rangeOfMotion": "Legs wide → legs together",
@@ -147,7 +147,7 @@
   "standing-calf-raise": {
     "why": "Upper calves (knees straight).",
     "setup": ["Balls of your feet on the edge, knees straight."],
-    "form": ["Lower your heels all the way, pause 2 s.", "Rise as high as you can."],
+    "form": ["Lower your heels all the way, pause.", "Rise as high as you can."],
     "tips": ["The pause at the bottom matters most."],
     "avoid": ["Bouncing.", "Bending your knees."],
     "rangeOfMotion": "Heels all the way down → all the way up",
@@ -165,7 +165,7 @@
   "cable-seated-row": {
     "why": "Heavy row for your back.",
     "setup": ["Neutral handle, feet on the plate, knees slightly bent."],
-    "form": ["Row to your lower ribs, squeeze 1 s.", "Let your arms go straight and shoulder blades spread."],
+    "form": ["Row to your lower ribs, squeeze.", "Let your arms go straight and shoulder blades spread."],
     "tips": ["A small forward lean at the stretch is fine."],
     "avoid": ["Leaning back or throwing it with your lower back.", "Shrugging at the end."],
     "rangeOfMotion": "Arms straight → handle at your lower ribs",
@@ -201,7 +201,7 @@
   "rope-face-pull": {
     "why": "Rear delts and upper back. Good for shoulder health.",
     "setup": ["Rope at face height."],
-    "form": ["Pull to your forehead, pulling the rope apart.", "Finish with hands beside your ears, elbows high. Hold 1 s."],
+    "form": ["Pull to your forehead, pulling the rope apart.", "Finish with hands beside your ears, elbows high, hold."],
     "tips": ["Light and controlled."],
     "avoid": ["Leaning back.", "Elbows dropping below your hands."],
     "rangeOfMotion": "Arms straight → hands beside your ears",
@@ -210,7 +210,7 @@
   "lean-away-lateral-raise": {
     "why": "Leaning away gives a longer range of motion.",
     "setup": ["Pulley low. Hold the machine, lean away 15–30°.", "Handle in the other hand."],
-    "form": ["Start with your hand across your body.", "Raise to shoulder height, lower slowly."],
+    "form": ["Start with your hand across your body.", "Raise to shoulder height, lower."],
     "tips": ["Start each rep from a full stop."],
     "avoid": ["Swinging.", "Changing how far you lean."],
     "rangeOfMotion": "Hand across your body → shoulder height",
@@ -219,7 +219,7 @@
   "all-the-way-up-lateral-raise": {
     "why": "Side delts to shoulder height, then traps above.",
     "setup": ["Lighter dumbbells than a normal side raise."],
-    "form": ["Raise out to the sides, past shoulder height, almost overhead.", "Lower slowly."],
+    "form": ["Raise out to the sides, past shoulder height, almost overhead."],
     "tips": [],
     "avoid": ["Swinging the weight up."],
     "rangeOfMotion": "Arms at your sides → almost overhead",
@@ -228,7 +228,7 @@
   "kelso-shrug": {
     "why": "Middle traps.",
     "setup": ["Chest on the T-bar row pad, arms straight."],
-    "form": ["Squeeze your shoulder blades together, hold 1 s.", "Let them go forward."],
+    "form": ["Squeeze your shoulder blades together, hold.", "Let them go forward."],
     "tips": ["Short move. Make the squeeze count."],
     "avoid": ["Bending your elbows."],
     "rangeOfMotion": "Shoulder blades apart → together",
@@ -237,7 +237,7 @@
   "single-arm-cable-reverse-fly": {
     "why": "Rear delt, one arm.",
     "setup": ["Pulley at shoulder height.", "Far hand on the handle, across your body."],
-    "form": ["Swing out and back at shoulder height, elbow slightly bent.", "Return across slowly."],
+    "form": ["Swing out and back at shoulder height, elbow slightly bent.", "Return across."],
     "tips": ["Shoulder down, body still."],
     "avoid": ["Turning your body."],
     "rangeOfMotion": "Arm across your body → in line with your body",
@@ -246,7 +246,7 @@
   "rope-overhead-tricep-extension": {
     "why": "Triceps (long head) stretched overhead.",
     "setup": ["Face away from the cable.", "Rope behind your head, elbows forward by your ears."],
-    "form": ["Straighten your arms overhead.", "Lower slowly into a deep stretch."],
+    "form": ["Straighten your arms overhead.", "Lower into a deep stretch."],
     "tips": [],
     "avoid": ["Elbows moving or flaring out.", "Cutting the stretch short."],
     "rangeOfMotion": "Hands behind your head → arms straight",
@@ -273,7 +273,7 @@
   "seated-leg-curl": {
     "why": "Hamstrings with a big stretch.",
     "setup": ["Lap pad tight, knees lined up with the pivot."],
-    "form": ["Curl all the way, hold 1 s.", "Straighten slowly."],
+    "form": ["Curl all the way, hold."],
     "tips": ["Lean forward for a bigger stretch."],
     "avoid": ["Letting the weight yank your legs straight."],
     "rangeOfMotion": "Legs straight → full curl",
@@ -282,7 +282,7 @@
   "seated-calf-raise": {
     "why": "Lower calves (knees bent).",
     "setup": ["Knees bent, pad on your thighs."],
-    "form": ["Lower your heels all the way, pause 2 s.", "Rise as high as you can."],
+    "form": ["Lower your heels all the way, pause.", "Rise as high as you can."],
     "tips": [],
     "avoid": ["Bouncing."],
     "rangeOfMotion": "Heels all the way down → all the way up",
@@ -291,7 +291,7 @@
   "cable-one-arm-tricep-kickback": {
     "why": "Triceps fully contracted.",
     "setup": ["Pulley low, lean forward.", "Upper arm at your side, level with the floor."],
-    "form": ["Straighten your arm, squeeze 1 s.", "Bend back to about 90°."],
+    "form": ["Straighten your arm, squeeze.", "Bend back to about 90°."],
     "tips": ["Go light. The squeeze is the point."],
     "avoid": ["Upper arm dropping.", "Swinging from the shoulder."],
     "rangeOfMotion": "Elbow at 90° → arm straight",

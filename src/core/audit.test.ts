@@ -61,3 +61,17 @@ describe("ready-for-more-weight test drops when the weight goes up", async () =>
     expect((dropTestIfRaised(mk([MANUAL_WHY], 100), "e", last) as { entries: { toFailure?: boolean }[] }).entries[0].toFailure).toBe(true);
   });
 });
+
+describe("form doesn't repeat the tempo", async () => {
+  const { MIGRATIONS } = await import("./migrations");
+  const run = MIGRATIONS.find((m) => m.id === "2026-11-22-form-no-tempo")!.run;
+  const was = (await import("./seed/form-tempo-was.json")).default as unknown as Record<string, [string[], string[]][]>;
+  it("a phone copy on the old text gets the new form; a rewritten one stays", () => {
+    const [old, now] = was["overhead-trap"][0];
+    const mk = (form: string[], isCustom = false) => ({ id: "overhead-trap", form, isCustom }) as never;
+    const out = run({ exercises: [mk(old)] } as never, "2026-11-22") as unknown as { exercises: { form: string[] }[] };
+    expect(out.exercises[0].form).toEqual(now);
+    expect(run({ exercises: [mk(["My own words."])] } as never, "2026-11-22")).toBeNull();
+    expect(now.join(" ")).not.toMatch(/\d s\b|slowly/);
+  });
+});
