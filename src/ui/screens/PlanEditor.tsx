@@ -37,7 +37,7 @@ function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, onDelete, onFi
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: slot.id });
   const sw = useSwipeDelete(onDelete);
   return (
-    <div ref={(n) => { setNodeRef(n); sw.wrap.current = n; }} className={"day-row" + (sw.dx ? " swiping" : "")} data-noswipe="" onClickCapture={sw.onClickCapture} style={{ transform: CSS.Transform.toString(transform), transition, position: "relative", zIndex: isDragging ? 5 : undefined, paddingLeft: slot.supersetGroup ? 10 : 0,
+    <div ref={(n) => { setNodeRef(n); sw.wrap.current = n; }} className={"day-row" + (sw.dx ? " swiping" : "")} data-noswipe={sw.dx ? "" : "left"} onClickCapture={sw.onClickCapture} style={{ transform: CSS.Transform.toString(transform), transition, position: "relative", zIndex: isDragging ? 5 : undefined, paddingLeft: slot.supersetGroup ? 10 : 0,
       background: isDragging ? "var(--surface-solid)" : undefined, borderRadius: 14, boxShadow: isDragging ? "0 0 0 1px var(--neon), 0 16px 40px -10px var(--glow)" : undefined }}>
       {slot.supersetGroup && <div aria-hidden style={{ position: "absolute", left: 2, top: groupStart ? 16 : 0, bottom: groupEnd ? 16 : 0, width: 3, borderRadius: 3, background: "var(--neon-2)", boxShadow: "0 0 10px var(--neon-2)" }} />}
       {sw.button}

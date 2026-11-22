@@ -20,7 +20,7 @@ function Row({ slot, ex, index, onOpen, onDelete, onFigure, fail, content }: { s
   const sw = useSwipeDelete(onDelete);
   const { dx } = sw;
   return (
-    <div ref={(n) => { setNodeRef(n); sw.wrap.current = n; }} className={"day-row" + (isDragging ? " dragging" : "") + (dx ? " swiping" : "")} data-noswipe={onDelete ? "" : undefined}
+    <div ref={(n) => { setNodeRef(n); sw.wrap.current = n; }} className={"day-row" + (isDragging ? " dragging" : "") + (dx ? " swiping" : "")} data-noswipe={onDelete ? (dx ? "" : "left") : undefined}
       style={{ transform: CSS.Transform.toString(transform), transition }} onClickCapture={sw.onClickCapture}>
       {sw.button}
       <button className="list-row" onClick={() => (dx ? sw.setDx(0) : onOpen())} {...attributes} {...listeners} aria-roledescription="Exercise. Press and hold to move it."

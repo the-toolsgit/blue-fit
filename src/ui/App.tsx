@@ -128,27 +128,32 @@ export function App() {
   // sheets, form fields and the plan editor.
   const tabRef = useRef("");
   useEffect(() => {
-    let st: { x: number; y: number; t: number } | null = null;
-    const ownsSwipe = (el: Element | null): boolean => {
+    let st: { x: number; y: number; t: number; leftOnly: boolean } | null = null;
+    /** What a sideways swipe already does under the finger: "both" ways, only "left" (rows that swipe left to delete), or nothing */
+    const ownsSwipe = (el: Element | null): "both" | "left" | null => {
+      let left = false;
       for (let n = el; n && n !== document.body; n = n.parentElement) {
-        if (n.matches("input, textarea, select, .sheet, [data-noswipe]")) return true;
+        if (n.matches('[data-noswipe="left"]')) { left = true; continue; }
+        if (n.matches("input, textarea, select, .sheet, [data-noswipe]")) return "both";
         const cs = getComputedStyle(n);
-        if (cs.touchAction === "pan-y" || cs.touchAction === "none") return true;
-        if ((cs.overflowX === "auto" || cs.overflowX === "scroll") && n.scrollWidth > n.clientWidth + 2) return true;
+        if (cs.touchAction === "pan-y" || cs.touchAction === "none") return "both";
+        if ((cs.overflowX === "auto" || cs.overflowX === "scroll") && n.scrollWidth > n.clientWidth + 2) return "both";
       }
-      return false;
+      return left ? "left" : null;
     };
     // A screen with a back arrow: swipe right goes back (runs that screen's own Back button)
     const backBtn = () => [...document.querySelectorAll<HTMLButtonElement>('.page button[aria-label="Back"]')].find((b) => b.offsetParent !== null);
     const start = (e: TouchEvent) => {
       const name = location.hash.replace(/^#\/?/, "").split("/")[0] || "today";
-      st = e.touches.length === 1 && (TABS.some((t) => t.id === name) || !!backBtn()) && !ownsSwipe(e.target as Element)
-        ? { x: e.touches[0].clientX, y: e.touches[0].clientY, t: performance.now() } : null;
+      const owns = ownsSwipe(e.target as Element);
+      st = e.touches.length === 1 && (TABS.some((t) => t.id === name) || !!backBtn()) && owns !== "both"
+        ? { x: e.touches[0].clientX, y: e.touches[0].clientY, t: performance.now(), leftOnly: owns === "left" } : null;
     };
     const end = (e: TouchEvent) => {
       if (!st) return;
-      const dx = e.changedTouches[0].clientX - st.x, dy = e.changedTouches[0].clientY - st.y, ms = performance.now() - st.t;
+      const dx = e.changedTouches[0].clientX - st.x, dy = e.changedTouches[0].clientY - st.y, ms = performance.now() - st.t, leftOnly = st.leftOnly;
       st = null;
+      if (leftOnly && dx < 0) return;
       if (Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 2 || ms > 700) return;
       const b = dx > 0 ? backBtn() : undefined;
       if (b) { document.documentElement.dataset.swipe = "prev"; b.click(); return; }

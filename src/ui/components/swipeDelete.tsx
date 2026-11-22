@@ -1,6 +1,6 @@
 // Swipe a list row left to delete it (Plan tab, plan editor): a short swipe leaves a red Delete button, a long swipe or a
 // fast flick deletes at once; tapping the row while it's open closes it. Sideways moves lock after 6 px (vertical =
-// page scroll, press and hold = drag to move). Rows with it carry data-noswipe so the app's tab swipe leaves them alone. Also: FigureTap, a row's line man that opens the exercise's how-to.
+// page scroll, press and hold = drag to move). Rows with it carry data-noswipe="left" (the app's tab swipe skips left swipes there; "" while open, so a right swipe only closes the row). Also: FigureTap, a row's line man that opens the exercise's how-to.
 import { useEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { Icon } from "./Icon";
 
