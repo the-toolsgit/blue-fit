@@ -57,14 +57,18 @@ function shortSets(sets: LoggedSet[], repMin: number): { reps: string; where: st
 }
 
 /**
- * Too heavy: the first regular set fell short of the bottom of the rep range. The weight to use next time leaves
+ * Too heavy: the first regular set fell TOO_HEAVY_SHORT+ reps short of the bottom of the rep range (1–2 short: stay
+ * and add reps, Leo Nov 22 2026). The weight to use next time leaves
  * AIM_LEFT reps at the bottom of the range (Epley), rounded down. Same rule for the end-of-workout note and the
  * workout's "go down" tip.
  */
+/** Reps under the bottom of the range before the app says to go lighter (*judgment*) */
+export const TOO_HEAVY_SHORT = 3;
+
 export function tooHeavy(e: SessionEntry, ex: Exercise, deload = false): { weight: number; from: number; reps: number } | null {
   const f = failureSet(e, deload);
   const first = e.sets.find((x) => isWork(x) && x.type === "working" && x !== f);
-  if (e.repMin == null || !first || first.reps! >= e.repMin) return null;
+  if (e.repMin == null || !first || first.reps! > e.repMin - TOO_HEAVY_SHORT) return null;
   const w = weightFor(epley(first.weight!, first.reps!), e.repMin, ex);
   return w > 0 && w < first.weight! ? { weight: w, from: first.weight!, reps: first.reps! } : null;
 }

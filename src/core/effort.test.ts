@@ -51,9 +51,13 @@ describe("tooHeavy (go-down tip)", () => {
   const ex = { id: "x", name: "X", incrementLb: 5 } as unknown as import("./types").Exercise;
   const set = (w: number, r: number) => ({ id: `s${w}${r}${Math.random()}`, type: "working", weight: w, reps: r, done: true }) as import("./types").LoggedSet;
   it("suggests a lighter weight when the first set falls short of the range", () => {
-    const e = { id: "e", exerciseId: "x", repMin: 12, repMax: 12, sets: [set(210, 10), set(210, 10), set(210, 10)] } as unknown as import("./types").SessionEntry;
+    const e = { id: "e", exerciseId: "x", repMin: 12, repMax: 12, sets: [set(210, 9), set(210, 9), set(210, 9)] } as unknown as import("./types").SessionEntry;
     const h = tooHeavy(e, ex)!;
     expect(h.from).toBe(210); expect(h.weight).toBeLessThan(210);
+  });
+  it("stays (add reps) when only 1–2 reps short", () => {
+    const e = { id: "e", exerciseId: "x", repMin: 12, repMax: 12, sets: [set(60, 10), set(60, 10), set(60, 10)] } as unknown as import("./types").SessionEntry;
+    expect(tooHeavy(e, ex)).toBeNull();
   });
   it("is quiet when the range was reached", () => {
     const e = { id: "e", exerciseId: "x", repMin: 10, repMax: 12, sets: [set(210, 10)] } as unknown as import("./types").SessionEntry;
