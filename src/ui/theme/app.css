@@ -256,7 +256,6 @@ textarea.input { min-height: 84px; resize: vertical; }
 .vt-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; grid-auto-flow: row dense; }
 .vt-tile { display: grid; gap: 4px; padding: 9px 9px 10px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface-2); text-align: left; min-width: 0; transition: border-color .2s, box-shadow .2s, transform .12s; }
 .vt-tile:active { transform: scale(0.97); }
-.vt-tile.warn { border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
 .vt-tile.open { border-color: var(--neon); box-shadow: 0 0 16px -6px var(--neon); }
 .vt-top { display: flex; align-items: center; justify-content: space-between; gap: 4px; min-width: 0; }
 .vt-name { font-size: 12px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
