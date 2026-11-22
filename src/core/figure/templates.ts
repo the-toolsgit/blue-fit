@@ -117,7 +117,7 @@ export const TEMPLATES: Record<string, Template> = {
   // Machine shoulder press (front view, seated): back pad behind, the handles on lever arms that pivot at the top of
   // the side uprights; the hands follow the handles' path
   "press-overhead-machine": T({ v: "f", base: { ...SEAT_F }, A: { ua: 90, fa: 180 }, B: { ua: 160, fa: 175 }, props: [...seatF, ...backPadF(12), ...uprightsF(12.7, 107.3),
-    { hold: [91, 22, 79.4, 3.3], kd: 90 }, { hold: [29, 22, 40.6, 3.3], arm: "L", kd: 270 }, { rod: [107.3, -1.1], to: "haR" }, { rod: [12.7, -1.1], to: "haL" }] }, { joint: "haR", dir: "up" }, "none"),
+    { hold: [86, 35, 79.4, 3.3], kd: 90 }, { hold: [34, 35, 40.6, 3.3], arm: "L", kd: 270 }, { rod: [107.3, -1.1], to: "haR" }, { rod: [12.7, -1.1], to: "haL" }] }, { joint: "haR", dir: "up" }, "none"),
   // Smith shoulder press: the bar runs in the two rails
   "press-overhead-smith": T({ v: "f", base: { ...SEAT_F }, A: { ua: 90, fa: 180 }, B: { ua: 160, fa: 175 }, props: [...seatF, ...uprightsF(20, 100)] }, { joint: "haR", dir: "up" }, "bar"),
   // Cable shoulder presses: a low pulley on each side

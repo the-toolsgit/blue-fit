@@ -656,6 +656,23 @@ export const MIGRATIONS: Migration[] = [
       return changed ? { ...d, exercises } : null;
     },
   },
+  {
+    // Nov 22 2026: machine shoulder press starts with the handles at chin height, as its text says (Leo)
+    id: "2026-11-22-shoulder-press-chin",
+    run(d) {
+      // Any app-given version (handles starting above the head at x 91/29) takes the new figure; one the user picked stays
+      const fig = (figureMachines as unknown as FigureUpdates)["machine-shoulder-press"].figure;
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        if (e.isCustom || e.id !== "machine-shoulder-press") return e;
+        const holds = (e.figure?.props ?? []).filter((p) => "hold" in p && Array.isArray(p.hold)).map((p) => String((p as { hold: number[] }).hold[0]));
+        if (holds.join() !== "91,29") return e;
+        changed = true;
+        return { ...e, figure: structuredClone(fig) };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
 ];
 
 type FigureUpdates = Record<string, { was: string[]; figure: Exercise["figure"] }>;
