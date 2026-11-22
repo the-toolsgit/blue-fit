@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { newPlanKey } from "../planDraft";
 import { SlotSheet } from "../components/SlotSheet";
 import { useKeptState } from "../keptState";
 import { deloadActive, deloadWeek, endDeload } from "../../core/deload";
@@ -93,7 +94,7 @@ export function PlanScreen() {
                   </div>
                 ))}
               </div>
-              <button className="btn btn-ghost btn-block plans-new" onClick={() => { const r = newRoutine(routines.map((x) => x.name), new Date(), freshTargets(completeProfile(settings.profile))); saveRoutine(r); setManage(false); go(`plan-edit/${r.id}`); }}><Icon name="plus" size={18} /> New plan</button>
+              <button className="btn btn-ghost btn-block plans-new" onClick={() => { const r = newRoutine(routines.map((x) => x.name), new Date(), freshTargets(completeProfile(settings.profile))); saveRoutine(r); try { sessionStorage.setItem(newPlanKey(r.id), "1"); } catch { /* ignore */ } setManage(false); go(`plan-edit/${r.id}`); }}><Icon name="plus" size={18} /> New plan</button>
             </div>
           </>
         )}

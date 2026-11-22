@@ -1,5 +1,6 @@
 // Plan editor: edit a draft copy of a routine (days, exercises, sets/reps/rest, supersets),
 // see the weekly volume update live, then Save or Cancel.
+import { draftKey, newPlanKey } from "../planDraft";
 import { SlotSheet } from "../components/SlotSheet";
 import { WEEKDAY_SHORT } from "../../core/util";
 import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent, KeyboardSensor } from "@dnd-kit/core";
@@ -28,7 +29,7 @@ import { PlanWizard, type WizardResult } from "./PlanWizard";
 
 const SHORT = WEEKDAY_SHORT;
 const mondayFirst = (w: number | null) => (w == null ? 9 : (w + 6) % 7);
-const draftKey = (id: string) => "bf-plan-draft-" + id;
+
 
 function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, onDelete, onFigure, fail }: {
   slot: Slot; ex: Exercise | undefined; index: number; groupStart: boolean; groupEnd: boolean; onOpen: () => void; onDelete: () => void; onFigure: () => void; fail?: string[];
@@ -61,7 +62,7 @@ function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, onDelete, onFi
 
 /** `onExit`: used when the Plan tab edits in place (no route change); `initialDayId`: keep the day the user was looking at. */
 export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; onExit?: () => void; initialDayId?: string }) {
-  const { routines, exMap, targets: currentTargets, settings, saveRoutine, saveSettings, toast, ensureSaved } = useStore();
+  const { routines, exMap, targets: currentTargets, settings, saveRoutine, saveSettings, toast, ensureSaved, deleteRoutine } = useStore();
   /** Build my plan's goal and eating answers: saved to the training profile with the plan, not before */
   const [answers, setAnswers] = useState<{ goal: Goal; phase: Phase } | null>(() => {
     try { const s = sessionStorage.getItem(draftKey(id ?? "") + "-answers"); if (s) return JSON.parse(s); } catch { /* ignore */ }
@@ -102,7 +103,14 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const issues = validateRoutine(draft);
   const slot = day?.slots.find((s) => s.id === slotOpen);
 
-  const leave = () => { try { sessionStorage.removeItem(draftKey(id!)); sessionStorage.removeItem(draftKey(id!) + "-targets"); sessionStorage.removeItem(draftKey(id!) + "-answers"); } catch { /* ignore */ } if (onExit) onExit(); else replace("plan"); };
+  const leave = () => { try { sessionStorage.removeItem(draftKey(id!)); sessionStorage.removeItem(draftKey(id!) + "-targets"); sessionStorage.removeItem(draftKey(id!) + "-answers"); sessionStorage.removeItem(newPlanKey(id!)); } catch { /* ignore */ } if (onExit) onExit(); else replace("plan"); };
+  /** Cancel: a plan just made with "New plan" and never kept goes away again */
+  const cancel = () => {
+    let fresh = false;
+    try { fresh = sessionStorage.getItem(newPlanKey(id!)) === "1"; } catch { /* ignore */ }
+    if (fresh && original && !original.isCurrent) deleteRoutine(original.id);
+    leave();
+  };
   const save = () => {
     if (issues.length) return toast({ kind: "error", title: "Can't save yet", body: issues[0].message });
     // Database exercises the plan uses get a full copy on the phone, so backups stay complete (§5.26)
@@ -139,7 +147,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
       <div className="spread">
         <span className="eyebrow" style={{ color: "var(--neon-2)" }}>Editing plan</span>
         <div className="row" style={{ gap: 6 }}>
-          <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px" }} onClick={() => (dirty ? setConfirm("cancel") : leave())}>Cancel</button>
+          <button className="btn btn-ghost" style={{ minHeight: 40, padding: "0 12px" }} onClick={() => (dirty ? setConfirm("cancel") : cancel())}>Cancel</button>
           <button className="btn btn-primary" style={{ minHeight: 40, padding: "0 14px" }} onClick={dirty ? save : leave}><Icon name="check" size={18} /> {dirty ? "Save" : "Done"}</button>
         </div>
       </div>
@@ -222,7 +230,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
         const hs = day?.slots.find((x) => x.id === howTo);
         return <ExerciseSheet id={hs?.exerciseId ?? null} onClose={() => setHowTo(null)} failWhy={day && hs ? weekFail.get(day.id)?.get(hs.id) : undefined} whyOverride={hs?.whyOverride} tipsOverride={hs?.tipsOverride} />;
       })()}
-      <Confirm open={confirm === "cancel"} title="Discard changes?" body="Your edits to this plan are thrown away." confirm="Discard" danger onClose={() => setConfirm(null)} onConfirm={leave} />
+      <Confirm open={confirm === "cancel"} title="Discard changes?" body="Your edits to this plan are thrown away." confirm="Discard" danger onClose={() => setConfirm(null)} onConfirm={cancel} />
       <Confirm open={confirm === "deleteDay"} title={`Delete ${day?.title ?? "this day"}?`} body="All its exercises are removed and it becomes a rest day. Past workouts stay in history." confirm="Delete" danger
         onClose={() => setConfirm(null)} onConfirm={() => { if (day) setDraft(clearDay(draft, day.id)); }} />
     </div>
