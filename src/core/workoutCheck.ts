@@ -2,7 +2,7 @@
 // user's goal (Plan → Week check). The rules are universal (training research), never taken from a plan.
 // Pure and framework-free. Numbers marked *judgment* are our own reasoning; the rest cite their source.
 import { ANGLES, NEEDS_HEAVY_LIGHT, restDaysOf, RULES, STRETCH_CHECKED } from "./muscles";
-import { muscleLabel, type Exercise, type Goal, type MuscleGroup, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "./types";
+import { muscleLabel, MUSCLE_GROUPS, type Exercise, type Goal, type MuscleGroup, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "./types";
 import { formatTarget, isFocus, planVolume } from "./volume";
 import { fmtNum } from "./util";
 import { estimateMinutes } from "./timeEstimate";
@@ -117,7 +117,9 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   /** Sets a muscle gets in one workout, indirect at ½ (as weekly volume counts them) */
   const daySets = (d: RoutineDay, g: MuscleGroup) => d.slots.reduce((a, s) => a + s.sets * (ex(s).volume.find((v) => v.group === g)?.weight ?? 0), 0);
 
-  const tiles: Tile[] = [...week].filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]).map(([g, n]) => {
+  // Every muscle the week trains, plus every focus muscle it doesn't (0 sets, below target) so an empty or thin plan still shows them
+  for (const t of targets) if (isFocus(t) && !week.has(t.group)) week.set(t.group, 0);
+  const tiles: Tile[] = [...week].filter(([g, n]) => n > 0 || isFocus(tmap.get(g))).sort((a, b) => b[1] - a[1]).map(([g, n]) => {
     const t = tmap.get(g), hit = jobsHit(g);
     return {
       group: g, week: n, days: daysFor(g).length, target: t,
@@ -134,7 +136,9 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const check = (id: CheckId, label: string, bad: string[], ok: string): Check => ({ id, label, pass: bad.length === 0, detail: bad.length ? list(bad) : ok, issues: bad.map(issue), rule: ok });
   const uniq = (xs: string[]) => [...new Set(xs)];
 
-  const volume = (minOnly: boolean) => check("volume", "Weekly volume", main.flatMap((g) => {
+  // Weekly volume looks at every focus muscle, trained or not (a muscle the plan never trains is below its target)
+  const focusAll = MUSCLE_GROUPS.map((m) => m.id).filter((g) => isFocus(tmap.get(g)));
+  const volume = (minOnly: boolean) => check("volume", "Weekly volume", focusAll.flatMap((g) => {
     const t = tmap.get(g)!, w = week.get(g) ?? 0;
     const out = w < t.min! || (!minOnly && t.max != null && w > t.max);
     return out ? [`${L(g)}: ${fmtNum(w)} sets, target ${formatTarget(t)}`] : [];

@@ -3,15 +3,14 @@
 import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent, KeyboardSensor } from "@dnd-kit/core";
 import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   addSlot, clearDay, moveSlot, removeSlot, renameDay, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine,
 } from "../../core/routineEdit";
 import { estimateMinutes } from "../../core/timeEstimate";
-import { completeProfile, MUSCLE_GROUPS, type Exercise, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
+import { completeProfile, type Exercise, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
 import { modelTarget, priorityOf } from "../../core/volumeModel";
 import defaultTargets from "../../core/seed/targets.json";
-import { planVolume } from "../../core/volume";
 import { failureApplies, failureEligible } from "../../core/failure";
 import { FailFlame, useWeekFailure } from "../components/FailFlame";
 import { Seg, Stepper } from "../components/Controls";
@@ -21,7 +20,6 @@ import { Figure } from "../components/Figure";
 import { tempoTiming } from "../../core/figure/tempo";
 import { Icon } from "../components/Icon";
 import { Confirm, Sheet } from "../components/Sheet";
-import { VolumeTable } from "../components/VolumeTable";
 import { fmtRest, repRange } from "../format";
 import { replace } from "../router";
 import { useStore } from "../store";
@@ -82,7 +80,6 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   useEffect(() => { if (!draft && original) setDraft(structuredClone(original)); }, [original, draft]);
   useEffect(() => { if (draft && id) try { sessionStorage.setItem(draftKey(id), JSON.stringify(draft)); } catch { /* ignore */ } }, [draft, id]);
   useEffect(() => { if (id) try { sessionStorage.setItem(draftKey(id) + "-targets", JSON.stringify(tdraft)); } catch { /* ignore */ } }, [tdraft, id]);
-  const vol = useMemo(() => (draft ? planVolume(draft, exMap) : []), [draft, exMap]);
   const weekFail = useWeekFailure(draft ?? undefined, tdraft);
   if (!draft || !original) return <div className="page"><div className="empty">Plan not found.</div></div>;
 
@@ -101,8 +98,6 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   }));
   const editTarget = (t: VolumeTarget) => setTdraft((ts) => (ts.some((x) => x.group === t.group) ? ts.map((x) => (x.group === t.group ? t : x)) : [...ts, t]));
   const issues = validateRoutine(draft);
-  const totals = Object.fromEntries(MUSCLE_GROUPS.map((m) => [m.id, vol.find((v) => v.group === m.id)?.sets ?? 0])) as never;
-  const dayCount = Object.fromEntries(vol.map((v) => [v.group, v.directDays]));
   const slot = day?.slots.find((s) => s.id === slotOpen);
   const slotIdx = day?.slots.findIndex((s) => s.id === slotOpen) ?? -1;
 
@@ -174,11 +169,8 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
       )}
 
 <h2 className="section-title">Plan overview</h2>
-      <WeekInsight routine={draft} exMap={exMap} targets={tdraft} weekFail={weekFail} />
+      <WeekInsight routine={draft} exMap={exMap} targets={tdraft} weekFail={weekFail} edit={{ targets: tdraft, onEdit: editTarget }} />
 
-      <h2 className="section-title">Weekly targets</h2>
-      <p className="muted" style={{ fontSize: 12, margin: "-2px 4px 8px" }}>Tap a muscle to change its weekly target, make it a priority or skip it.</p>
-      <VolumeTable totals={totals} targets={tdraft} days={dayCount} onEdit={editTarget} />
       {!profile && <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Fill in Settings → Training profile to get targets worked out for you.</p>}
       <button className="btn btn-quiet btn-block" style={{ marginTop: 8 }} onClick={() => setConfirm("resetTargets")}><Icon name="undo" size={18} /> Reset targets to defaults</button>
 

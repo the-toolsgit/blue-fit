@@ -26,7 +26,6 @@ export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
   }
   const i = weekInsight(routine, exMap, targets, settings.profile?.goal,
     { muscles: failMuscles, eligible: failureEligible, applies: failureApplies(settings.profile?.goal) });
-  if (!i.tiles.length) return null;
   const passed = i.checks.filter((c) => c.pass).length, all = passed === i.checks.length;
   return (
     <>

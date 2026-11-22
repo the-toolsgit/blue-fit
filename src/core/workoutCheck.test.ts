@@ -18,6 +18,16 @@ describe("workout check", () => {
     expect(weekInsight(r, exMap, seed.targets, "strength").checks.map((c) => c.id)).toContain("heavy");
     expect(weekInsight(r, exMap, seed.targets, "endurance").checks.map((c) => c.id)).toContain("reps");
   });
+  it("an empty or thin plan still lists every focus muscle and fails weekly volume", () => {
+    const empty = { ...r, days: r.days.map((d) => ({ ...d, slots: [] })) };
+    const w = weekInsight(empty, exMap, seed.targets);
+    const focus = seed.targets.filter((t) => !t.off && t.min != null && t.min > 0);
+    expect(w.tiles.length).toBe(focus.length);
+    expect(w.tiles.every((t) => t.week === 0 && t.status === "below")).toBe(true);
+    expect(w.checks.find((c) => c.id === "volume")!.pass).toBe(false);
+    const absOnly = { ...r, days: r.days.map((d, i) => ({ ...d, slots: i ? [] : d.slots.slice(0, 1) })) };
+    expect(weekInsight(absOnly, exMap, seed.targets).checks.every((c) => c.pass)).toBe(false);
+  });
   it("rep range shows only when broken, as a Tip; short rests are a Tip at 60 s", () => {
     const bad = { ...r, days: r.days.map((d, i) => i ? d : { ...d, slots: d.slots.map((s, k) => k ? s : { ...s, repMin: 2, repMax: 4, restSec: 45 }) }) };
     const w = weekInsight(bad, exMap, seed.targets);
