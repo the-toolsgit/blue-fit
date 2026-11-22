@@ -24,6 +24,7 @@ import { replace } from "../router";
 import { useStore } from "../store";
 import { WeekInsight } from "../components/WeekInsight";
 import { ExerciseSheet } from "./ExerciseScreen";
+import { PlanWizard, type WizardResult } from "./PlanWizard";
 
 const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const mondayFirst = (w: number | null) => (w == null ? 9 : (w + 6) % 7);
@@ -58,7 +59,7 @@ function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, fail }: {
 
 /** `onExit`: used when the Plan tab edits in place (no route change); `initialDayId`: keep the day the user was looking at. */
 export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; onExit?: () => void; initialDayId?: string }) {
-  const { routines, exMap, targets: currentTargets, settings, saveRoutine, toast } = useStore();
+  const { routines, exMap, targets: currentTargets, settings, saveRoutine, saveSettings, toast } = useStore();
   const original = routines.find((r) => r.id === id);
   // This plan's own weekly targets (older plans without their own fall back to the app-wide list)
   const targets = targetsOf(original, currentTargets);
@@ -70,6 +71,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const [slotOpen, setSlotOpen] = useState<string | null>(null);
   const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; slotId: string } | null>(null);
   const [howTo, setHowTo] = useState<string | null>(null);
+  const [wizard, setWizard] = useState(false);
   const [confirm, setConfirm] = useState<null | "cancel" | "deleteDay">(null);
   // This plan's weekly targets are edited here too and saved with Save plan.
   const [tdraft, setTdraft] = useState<VolumeTarget[]>(() => {
@@ -123,6 +125,14 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
         style={{ ...field, marginTop: 6, font: "700 32px/1 var(--display)", textTransform: "uppercase", letterSpacing: ".02em", color: "var(--neon-ink)" }} />
       <p className="muted" style={{ marginTop: 4, fontSize: 14 }}>{draft.days.filter((d) => d.slots.length).length} days · {draft.days.flatMap((d) => d.slots).length} exercises · {allSets} sets a week</p>
 
+      {/* No exercises yet: the app can build the whole week (or add them yourself below) */}
+      {!draft.days.some((d) => d.slots.length) && (
+        <div className="gen-card">
+          <b>Build it for me</b>
+          <p>Answer a few quick questions and the app builds the week from your goal, days and targets: top exercises, every angle, nothing repeated. Or add exercises yourself below.</p>
+          <button className="btn btn-primary btn-xl" onClick={() => setWizard(true)}><Icon name="bolt" size={20} /> Build my plan</button>
+        </div>
+      )}
       <div className="chips-scroll" style={{ marginTop: 12 }}>
         {days.map((d) => (
           <button key={d.id} className="chip" aria-pressed={d.id === day?.id} onClick={() => setDayId(d.id)} title={d.title}>
@@ -221,6 +231,16 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
           if (picker?.mode === "swap") setDraft(swapSlotExercise(draft, day.id, picker.slotId, ex));
           else setDraft(addSlot(draft, day.id, ex, settings.restDefaultSec).routine);
         }} />
+      <PlanWizard open={wizard} initialTargets={tdraft} onClose={() => setWizard(false)} onDone={(r: WizardResult) => {
+        setDraft({ ...draft, days: r.days });
+        setTdraft(r.targets);
+        setDayId(r.days.find((d) => d.slots.length)?.id ?? null);
+        // The goal and eating answers update the training profile (the other numbers stay as they were)
+        const p = settings.profile;
+        saveSettings({ ...settings, profile: { goal: r.goal, phase: r.phase, age: p?.age ?? null, yearsTraining: p?.yearsTraining ?? null, sleepHours: p?.sleepHours ?? null } });
+        setWizard(false);
+        toast({ kind: "info", title: "Plan built", body: "Check it, change anything, then Save plan." });
+      }} />
       <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} failWhy={day && slot ? weekFail.get(day.id)?.get(slot.id) : undefined} />
       <Confirm open={confirm === "cancel"} title="Discard changes?" body="Your edits to this plan are thrown away." confirm="Discard" danger onClose={() => setConfirm(null)} onConfirm={leave} />
       <Confirm open={confirm === "deleteDay"} title={`Delete ${day?.title ?? "this day"}?`} body="All its exercises are removed and it becomes a rest day. Past workouts stay in history." confirm="Delete" danger

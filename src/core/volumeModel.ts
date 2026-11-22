@@ -51,13 +51,14 @@ export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Pr
 }
 
 /**
- * Targets for a new plan (and a muscle's "Reset to default"): every muscle targeted, none skipped, default priority. With a
+ * Targets for a new plan (and a muscle's "Reset to default"): every muscle targeted, none skipped, all Normal. With a
  * complete training profile, the model's numbers;
  * without one, the muscle database's growth range. (Every muscle has a database minimum since Nov 21 2026; a 0 would give
  * no target: tracked, not checked.)
  */
 export function freshTargets(p: TrainingProfile | null): VolumeTarget[] {
-  return MUSCLE_GROUPS.map(({ id: g }) => ({ group: g, ...defaultRange(g, p, priorityOf(g) === "priority" ? "priority" : "normal") }));
+  // All Normal (Leo, Nov 21 2026): muscles the app would make Priority by default get an explicit Normal
+  return MUSCLE_GROUPS.map(({ id: g }) => ({ group: g, ...defaultRange(g, p, "normal"), ...(priorityOf(g) === "priority" ? { priority: false } : {}) }));
 }
 
 /**

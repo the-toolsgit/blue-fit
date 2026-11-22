@@ -1,0 +1,68 @@
+import { describe, expect, it } from "vitest";
+import { buildSeed } from "./seed";
+import { isTopPick, mergeCatalog } from "./catalog";
+import { catalog } from "./seed/exercise-db/index";
+import { generatePlan, planConflicts, setsForMinutes } from "./generator";
+import { freshTargets } from "./volumeModel";
+import { weekInsight } from "./workoutCheck";
+import type { RoutineDay, VolumeTarget } from "./types";
+
+const seed = buildSeed();
+const cat = mergeCatalog(seed.exercises, catalog());
+const targets = freshTargets(null);
+const SIX = [1, 2, 3, 4, 6, 0];
+const routine = (days: RoutineDay[]) => ({ id: "g", name: "g", isCurrent: false, createdAt: "", days });
+const ids = (days: RoutineDay[]) => days.flatMap((d) => d.slots.map((s) => s.exerciseId));
+
+describe("plan generator", () => {
+  it("6 days: push/pull/legs twice, every day on its weekday, rest days empty", () => {
+    const days = generatePlan({ goal: "growth", trainDays: SIX, maxMinutes: 75, targets, exercises: cat.exercises, seed: 1 });
+    expect(days.map((d) => d.weekday)).toEqual([1, 2, 3, 4, 5, 6, 0]);
+    expect(days.find((d) => d.weekday === 5)!.slots).toEqual([]);
+    expect(days.filter((d) => d.slots.length).map((d) => d.title)).toEqual(["Push A", "Pull A", "Legs A", "Push B", "Pull B", "Legs B"]);
+  });
+
+  it("6 days passes the plan check's main rules and stays within time", () => {
+    const days = generatePlan({ goal: "growth", trainDays: SIX, maxMinutes: 75, targets, exercises: cat.exercises, seed: 1 });
+    const w = weekInsight(routine(days), cat.exMap, targets, "growth");
+    for (const id of ["volume", "stretch", "frequency", "dose", "recovery", "rest"]) expect(w.checks.find((c) => c.id === id)!.pass, id).toBe(true);
+    for (const d of days) expect(d.slots.reduce((a, s) => a + s.sets, 0)).toBeLessThanOrEqual(setsForMinutes(75));
+  });
+
+  it("no exercise twice in a week, mostly top picks, 2–4 sets each", () => {
+    const days = generatePlan({ goal: "growth", trainDays: SIX, maxMinutes: 75, targets, exercises: cat.exercises, seed: 1 });
+    const all = ids(days);
+    expect(new Set(all).size).toBe(all.length);
+    expect(all.filter((id) => isTopPick(cat.exMap.get(id)!, "growth")).length / all.length).toBeGreaterThan(0.8);
+    for (const s of days.flatMap((d) => d.slots)) { expect(s.sets).toBeGreaterThanOrEqual(2); expect(s.sets).toBeLessThanOrEqual(4); }
+  });
+
+  it("changes up the exercises of the plan you come from, and Try again gives a different plan", () => {
+    const first = generatePlan({ goal: "growth", trainDays: SIX, maxMinutes: 75, targets, exercises: cat.exercises, seed: 1 });
+    const avoid = new Set(ids(first));
+    const second = generatePlan({ goal: "growth", trainDays: SIX, maxMinutes: 75, targets, exercises: cat.exercises, seed: 1, avoid });
+    const overlap = ids(second).filter((id) => avoid.has(id)).length / ids(second).length;
+    expect(overlap).toBeLessThan(0.35);
+    const other = generatePlan({ goal: "growth", trainDays: SIX, maxMinutes: 75, targets, exercises: cat.exercises, seed: 2 });
+    expect(ids(other)).not.toEqual(ids(first));
+  });
+
+  it("strength: key lifts get 3–6 reps and 3 min rest", () => {
+    const days = generatePlan({ goal: "strength", trainDays: SIX, maxMinutes: 90, targets, exercises: cat.exercises, seed: 1 });
+    const heavy = days.flatMap((d) => d.slots).filter((s) => cat.exMap.get(s.exerciseId)!.isHeavy);
+    expect(heavy.length).toBeGreaterThan(0);
+    for (const s of heavy) expect([s.repMin, s.repMax, s.restSec]).toEqual([3, 6, 180]);
+  });
+
+  it("conflicts: too many sets for the days, no rest between back-to-back days, too long", () => {
+    const biceps: VolumeTarget[] = targets.map((t) => (t.group === "biceps" ? { ...t, min: 25, max: 28 } : t));
+    const c = planConflicts({ trainDays: [1, 2], maxMinutes: 60, targets: biceps });
+    expect(c.find((x) => x.id === "max-biceps")?.fix?.targets?.[0]).toMatchObject({ group: "biceps", max: 22 });
+    expect(c.some((x) => x.id.startsWith("rest-"))).toBe(true);
+    expect(c.some((x) => x.id === "time")).toBe(true);
+    // When a longer workout would fit, the fix offers it
+    expect(planConflicts({ trainDays: [1, 2, 4, 5], maxMinutes: 60, targets }).find((x) => x.id === "time")?.fix?.maxMinutes).toBe(120);
+    expect(planConflicts({ trainDays: SIX, maxMinutes: 75, targets })).toEqual([]);
+    expect(planConflicts({ trainDays: [], maxMinutes: 75, targets })[0].id).toBe("days");
+  });
+});

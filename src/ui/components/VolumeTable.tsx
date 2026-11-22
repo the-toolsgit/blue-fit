@@ -101,12 +101,12 @@ export function TargetEdit({ group, label, t, current, onEdit }: {
   const edit = t ?? { group, min: null, max: null };
   const set = (p: Partial<VolumeTarget>) => onEdit({ ...edit, ...p });
   const prio = priorityOf(group, t), v = current;
-  // This muscle's default: the training profile's numbers, else the muscle database's range; normal priority, not skipped
+  // This muscle's default: the training profile's numbers, else the muscle database's range; Normal, not skipped
   const { settings } = useStore();
   const profile = completeProfile(settings.profile);
   const def = freshTargets(profile).find((x) => x.group === group)!;
-  const isDefault = edit.min === def.min && edit.max === def.max && !edit.off && !edit.acceptedBelow && edit.priority == null;
-  const reset = () => { const { off: _o, acceptedBelow: _a, priority: _p, ...rest } = edit; onEdit({ ...rest, min: def.min, max: def.max }); };
+  const isDefault = edit.min === def.min && edit.max === def.max && priorityOf(group, edit) === "normal";
+  const reset = () => { const { off: _o, acceptedBelow: _a, priority: _p, ...rest } = edit; onEdit({ ...rest, min: def.min, max: def.max, ...(def.priority != null ? { priority: def.priority } : {}) }); };
   return (
     <div className="vedit">
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>

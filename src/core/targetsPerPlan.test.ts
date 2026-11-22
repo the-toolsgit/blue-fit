@@ -27,10 +27,11 @@ describe("weekly targets per plan", () => {
   it("new plans target every muscle, none skipped", () => {
     const t = freshTargets(null);
     expect(t.some((x) => x.off)).toBe(false);
-    expect(t.find((x) => x.group === "chest")).toEqual({ group: "chest", min: 10, max: 20 });
-    expect(t.find((x) => x.group === "abs")).toEqual({ group: "abs", min: 6, max: 16 });
+    expect(t.find((x) => x.group === "chest")).toMatchObject({ group: "chest", min: 10, max: 20 });
+    expect(t.every((x) => priorityOf(x.group, x) === "normal")).toBe(true);
+    expect(t.find((x) => x.group === "abs")).toMatchObject({ group: "abs", min: 6, max: 16 });
     // Every muscle has a minimum now (Nov 21 2026), even the ones presses, pulls and grip also work
-    for (const g of ["frontDelts", "forearms", "neck"] as const) expect(t.find((x) => x.group === g)).toEqual({ group: g, min: 4, max: 8 });
+    for (const g of ["frontDelts", "forearms", "neck"] as const) expect(t.find((x) => x.group === g)).toMatchObject({ group: g, min: 4, max: 8 });
     expect(t.every((x) => isFocus(x))).toBe(true);
     const r = newRoutine([], new Date("2026-11-21T10:00:00Z"), t);
     expect(r.targets).toBe(t);
@@ -39,8 +40,8 @@ describe("weekly targets per plan", () => {
   it("uses the training profile's numbers when it's complete", () => {
     const p = { goal: "strength" as const, phase: "maintaining" as const, age: 30, yearsTraining: 5, sleepHours: 8 };
     const chest = freshTargets(p).find((x) => x.group === "chest")!;
-    const m = modelTarget("chest", p, priorityOf("chest"));
-    expect(chest).toEqual({ group: "chest", min: m.min, max: m.max });
+    const m = modelTarget("chest", p, "normal");
+    expect(chest).toMatchObject({ group: "chest", min: m.min, max: m.max });
   });
 
   it("duplicating a plan copies its targets", () => {
