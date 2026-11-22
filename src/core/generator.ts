@@ -197,7 +197,9 @@ export function generatePlan(input: GenInput): RoutineDay[] {
     for (const g of ex.stretch ?? []) stretched.add(g);
   };
   const pick = (g: MuscleGroup, d: RoutineDay, sets: number): Exercise | undefined => {
-    const cands = pool.filter((e) => e.volume.some((v) => v.group === g && v.weight === 1) && (e.measure !== "time" || g === "abs"));
+    // Never the same movement twice on one day (Leo, Nov 22 2026): no exercise whose angle for this muscle is already there
+    const taken = new Set(d.slots.filter((s) => meta.get(s.id)?.main === g).map((s) => moveKey(exMap.get(s.exerciseId)!, g)));
+    const cands = pool.filter((e) => e.volume.some((v) => v.group === g && v.weight === 1) && (e.measure !== "time" || g === "abs") && !taken.has(moveKey(e, g)));
     const needCompound = HEADLINE.has(g) && !d.slots.some((s) => meta.get(s.id)?.main === g && exMap.get(s.exerciseId)?.compound);
     let best: Exercise | undefined, bestScore = -Infinity;
     for (const e of cands) {
@@ -258,7 +260,22 @@ export function generatePlan(input: GenInput): RoutineDay[] {
       for (let c = 0; c < count && share >= 2; c++) {
         const sets = Math.min(4, Math.ceil(share / (count - c)));
         const ex = pick(g, d, sets);
-        if (!ex) break;
+        if (!ex) {
+          // No other movement for this muscle left on this day (never the same one twice): another of its days that has
+          // one free and the time, keeping the rest days; else more sets on what's here (4 each at most)
+          const alt = allowed.map(dayOf).filter((x) => x !== d).sort((a, b) => sumSets(a) - sumSets(b))
+            .map((x) => ({ x, e: pick(g, x, sets) }))
+            .find(({ x, e }) => e && fits(x, [{ sets, restSec: restOf(e) }]) && doseOn(x, g) + sets <= MAX_SESSION_SETS
+              && (restsEnough(trainDays.filter((w) => w === x.weekday || dayOf(w).slots.some((s) => meta.get(s.id)?.main === g)), g) || sets < HARD_SETS));
+          if (alt) { add(alt.x, alt.e!, sets, g); share -= sets; continue; }
+          for (const o of d.slots.filter((x) => meta.get(x.id)?.main === g)) {
+            while (share > 0 && o.sets < 4 && doseOn(d, g) + 1 <= MAX_SESSION_SETS && slotsMinutes(d.slots.map((x) => (x === o ? { ...x, sets: x.sets + 1 } : x))) <= limit) {
+              o.sets++; share--;
+              for (const v of exMap.get(o.exerciseId)!.volume) have.set(v.group, (have.get(v.group) ?? 0) + v.weight);
+            }
+          }
+          break;
+        }
         let where = d;
         if (!fits(d, [{ sets, restSec: restOf(ex) }])) {
           // No time left that day: another of its days with room, keeping its rest days between hard workouts
@@ -559,8 +576,11 @@ function polish(c: { days: RoutineDay[]; train: RoutineDay[]; meta: Map<string, 
       const byMain = new Map<MuscleGroup, Slot[]>();
       for (const s of d.slots) { const g = meta.get(s.id)?.main; if (g) byMain.set(g, [...(byMain.get(g) ?? []), s]); }
       for (const [g, xs] of byMain) {
-        const keys = xs.map((s) => [exMap.get(s.exerciseId)!.jobs?.[g]].flat().filter(Boolean).sort().join("+") || "one");
+        const keys = xs.map((s) => angleKey(exMap.get(s.exerciseId)!, g));
         k += 40 * (keys.length - new Set(keys).size);
+        // The same movement (same angle and equipment) twice on one day is a rule (Leo, Nov 22 2026): as bad as a miss
+        const moves = xs.map((s) => moveKey(exMap.get(s.exerciseId)!, g));
+        k += 1000 * (moves.length - new Set(moves).size);
         if (!HEADLINE.has(g) && xs.length >= 3) k += 40 * (xs.length - 2);
       }
       for (const g of headlinesOf(themeOf.get(d.weekday!)!)) {
@@ -690,6 +710,11 @@ export function repsFor(ex: Exercise, goal: Goal, restSec: number, mix?: "heavy"
 }
 
 /** Main muscle of an exercise: its first direct muscle */
+/** A muscle's angle(s) an exercise trains ("one" when the muscle has no angles) */
+const angleKey = (e: Exercise, g: MuscleGroup) => [e.jobs?.[g]].flat().filter(Boolean).sort().join("+") || "one";
+/** Same angle with the same equipment = the same movement (DB lateral raise and DB lateral-to-front raise); a DB and a
+ *  cable lateral raise load the muscle differently, so they're different (Leo, Nov 22 2026) */
+const moveKey = (e: Exercise, g: MuscleGroup) => angleKey(e, g) + "|" + e.equipment;
 const mainOf = (e: Exercise) => e.volume.find((v) => v.weight === 1)?.group;
 
 /**

@@ -189,3 +189,19 @@ describe("Build my plan: integrity", () => {
     expect(sig(generatePlan(inp))).toBe(sig(generatePlan(inp)));
   });
 });
+
+describe("Build my plan: never the same movement twice on one day", () => {
+  it("same angle + same equipment for a muscle appears at most once a day", () => {
+    const profile = (goal: Goal) => ({ goal, phase: "maintaining" as const, age: 30, yearsTraining: 3, sleepHours: 7.5 });
+    for (const goal of ["growth", "strength", "endurance", "maintenance"] as const) for (const days of [[1, 3, 5], [1, 2, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 6, 0]]) for (const seed of [1, 2, 3]) {
+      const plan = generatePlan({ goal, trainDays: days, maxMinutes: 60, targets: freshTargets(profile(goal)), exercises: cat.exercises, seed, restSec: REST_BY_GOAL[goal] });
+      for (const d of plan) {
+        const keys = d.slots.map((s) => {
+          const e = cat.exMap.get(s.exerciseId)!, g = e.volume.find((v) => v.weight === 1)!.group;
+          return `${g}:${[e.jobs?.[g]].flat().filter(Boolean).sort().join("+") || "one"}|${e.equipment}`;
+        });
+        expect(new Set(keys).size, `${goal} ${days.length}d s${seed} ${d.title}: ${keys.join(", ")}`).toBe(keys.length);
+      }
+    }
+  });
+});
