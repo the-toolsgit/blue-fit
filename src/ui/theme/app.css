@@ -632,13 +632,12 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 
 /* Plan tab: week strip (replaces the day chips) */
 .week-strip { display: grid; gap: 3px; margin-top: 12px; }
-.ws-day { container-type: inline-size; min-width: 0; display: grid; grid-template-rows: auto 1fr auto; justify-items: center; gap: 4px; padding: 8px 2px 7px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); text-align: center; transition: border-color .2s, background .2s, box-shadow .2s, transform .12s; }
+.ws-day { container-type: inline-size; min-width: 0; display: grid; grid-template-rows: auto 1fr; justify-items: center; gap: 4px; padding: 8px 2px 9px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); text-align: center; transition: border-color .2s, background .2s, box-shadow .2s, transform .12s; }
 .ws-day:active { transform: scale(0.95); }
 .ws-day.rest { background: transparent; border-style: dashed; }
 .ws-dow { font: 600 10px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .ws-day.today .ws-dow { color: var(--neon-ink); }
 .ws-title { align-self: center; font: 700 min(11px, 22.5cqi)/1.08 var(--display); text-transform: uppercase; letter-spacing: 0; color: var(--ink); word-break: keep-all; overflow-wrap: normal; min-height: 38px; display: flex; align-items: center; justify-content: center; max-width: 100%; }
 .ws-day.rest .ws-title { color: var(--faint); font-weight: 500; }
-.ws-sets { font-size: 10px; color: var(--muted); }
 .ws-day[aria-pressed="true"] { border-color: var(--neon); border-style: solid; background: color-mix(in srgb, var(--neon) 16%, var(--surface-2)); box-shadow: 0 0 16px -6px var(--neon); }
-.ws-day[aria-pressed="true"] .ws-dow, .ws-day[aria-pressed="true"] .ws-sets { color: var(--neon-ink); }
+.ws-day[aria-pressed="true"] .ws-dow { color: var(--neon-ink); }

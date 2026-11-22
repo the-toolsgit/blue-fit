@@ -101,17 +101,16 @@ export function PlanScreen() {
         onSave={(name) => saveRoutine({ ...routine, name })} />
       <p className="muted" style={{ marginTop: 4, fontSize: 14 }}>{days.length} days · {routine.days.flatMap((d) => d.slots).length} exercises · {allSets} sets a week</p>
 
-      {/* Week strip: every day at a glance (name and sets), tap one to see and edit it below */}
+      {/* Week strip: every day's workout at a glance, tap one to see and edit it below */}
       <div className="week-strip" style={{ gridTemplateColumns: `repeat(${chips.length}, minmax(0, 1fr))` }}>
         {chips.map((c) => {
-          const on = !!c.day?.slots.length, n = c.day?.slots.reduce((a, x) => a + x.sets, 0) ?? 0;
+          const on = !!c.day?.slots.length;
           const isToday = c.weekday === new Date().getDay();
           return (
             <button key={c.key} className={"ws-day" + (on ? "" : " rest") + (isToday ? " today" : "")} aria-pressed={c.key === cur.key} onClick={() => setSel(c.key)}
-              aria-label={`${c.label}: ${on ? `${c.day!.title}, ${n} sets` : "rest day"}${isToday ? " (today)" : ""}`}>
+              aria-label={`${c.label}: ${on ? c.day!.title : "rest day"}${isToday ? " (today)" : ""}`}>
               <span className="ws-dow">{c.weekday != null ? c.label : "Day"}</span>
               <span className="ws-title">{on ? c.day!.title : "Rest"}</span>
-              <span className="ws-sets mono">{on ? n : "—"}</span>
             </button>
           );
         })}
