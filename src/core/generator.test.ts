@@ -108,3 +108,14 @@ describe("Build my plan: rest, time and swaps", () => {
     expect(swapOptions(ex, cat.exercises, "growth", new Set([opts[0].id]))).not.toContainEqual(opts[0]);
   });
 });
+
+describe("Build my plan: balanced days", () => {
+  it("6 days: every day within 4 sets of the others, and almost no 2-set exercises", () => {
+    for (const s of [1, 2, 3, 4]) {
+      const days = generatePlan({ goal: "growth", trainDays: SIX, maxMinutes: 75, targets, exercises: cat.exercises, seed: s, restSec: 120 }).filter((d) => d.slots.length);
+      const sets = days.map((d) => d.slots.reduce((a, x) => a + x.sets, 0));
+      expect(Math.max(...sets) - Math.min(...sets), `seed ${s}`).toBeLessThanOrEqual(4);
+      expect(days.flatMap((d) => d.slots).filter((x) => x.sets < 3).length, `seed ${s}`).toBeLessThanOrEqual(3);
+    }
+  });
+});

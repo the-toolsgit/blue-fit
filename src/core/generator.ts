@@ -213,7 +213,72 @@ export function generatePlan(input: GenInput): RoutineDay[] {
     }
   }
 
-  // 6. Names from the split ("Push A", "Upper B", "Full body C"); a theme used once has no letter
+  // 6. No 2-set exercises where a third set still fits the muscle's ceiling and the day's time (Leo: "balanced")
+  const mainBySlot = new Map(trainDays.flatMap((d) => slotsOf.get(d)!.map((x) => [x.s.id, x.main] as const)));
+  const sumSets = (d: RoutineDay) => d.slots.reduce((a, s) => a + s.sets, 0);
+  {
+    const vol = new Map(planVolume({ id: "", name: "", isCurrent: false, createdAt: "", days }, exMap).map((v) => [v.group, v.sets]));
+    for (const d of days) for (const s of d.slots) {
+      if (s.sets >= 3) continue;
+      const ex = exMap.get(s.exerciseId)!;
+      if (sumSets(d) >= cap || ex.volume.some((v) => { const t = tmap.get(v.group); return t?.max != null && (vol.get(v.group) ?? 0) + v.weight > t.max; })) {
+        // No room (the muscle's ceiling or the day's time): take the set from a 4-set exercise for the same muscle instead (weekly sets stay the same)
+        const g = mainBySlot.get(s.id);
+        const four = (sumSets(d) >= cap ? d.slots : days.flatMap((x) => x.slots)).find((o) => o.sets >= 4 && mainBySlot.get(o.id) === g && o !== s);
+        if (four) { four.sets--; s.sets++; continue; }
+        // Or drop it and give its sets to the muscle's other exercises (3 → 4), when no angle or stretch is lost
+        const others = days.flatMap((x) => x.slots).filter((o) => o !== s && mainBySlot.get(o.id) === g && exMap.get(o.exerciseId));
+        const jobsOf = (e: Exercise) => [e.jobs?.[g!]].flat().filter(Boolean) as string[];
+        const keeps = jobsOf(ex).every((j) => others.some((o) => jobsOf(exMap.get(o.exerciseId)!).includes(j)))
+          && (!ex.stretch?.includes(g!) || others.some((o) => exMap.get(o.exerciseId)!.stretch?.includes(g!)));
+        const room = others.filter((o) => o.sets < 4).sort((x, y) => (d.slots.includes(y) ? 1 : 0) - (d.slots.includes(x) ? 1 : 0));
+        if (g && keeps && room.length >= s.sets && (sumSets(d) < cap || room.slice(0, s.sets).every((o) => d.slots.includes(o)))) { for (let k = 0; k < s.sets; k++) room[k].sets++; s.sets = 0; }
+        continue;
+      }
+      s.sets++;
+      for (const v of ex.volume) vol.set(v.group, (vol.get(v.group) ?? 0) + v.weight);
+    }
+  }
+
+  for (const d of days) d.slots = d.slots.filter((x) => x.sets > 0);
+
+  // 7. Even days: move whole exercises from the busiest day to the lightest while that narrows the gap, the lighter
+  //    day's theme trains that muscle, it isn't there yet, the muscle stays at 11 sets or fewer that day and keeps
+  //    its rest days between hard workouts (4+ direct sets), and the day stays within the time limit.
+  const direct = (d: RoutineDay, g: MuscleGroup) => d.slots.reduce((a, s) => a + (exMap.get(s.exerciseId)?.volume.some((v) => v.group === g && v.weight === 1) ? s.sets : 0), 0);
+  const train = days.filter((d) => d.slots.length);
+  for (let guard = 0; guard < 40; guard++) {
+    const byLoad = [...train].sort((a, b) => sumSets(b) - sumSets(a));
+    let moved = false;
+    for (const H of byLoad) {
+      for (const L of [...byLoad].reverse()) {
+        const gap0 = sumSets(H) - sumSets(L);
+        if (gap0 <= 2) break;
+        const cands = [...H.slots].sort((a, b) => a.sets - b.sets);
+        for (const s of cands) {
+          const g = mainBySlot.get(s.id), ex = exMap.get(s.exerciseId);
+          if (!g || !ex) continue;
+          if (Math.abs(gap0 - 2 * s.sets) >= gap0) continue; // must narrow the gap
+          if (FAMILY[g] !== "core" && !THEME_FAMILIES[themeOf.get(L.weekday!)!].includes(FAMILY[g])) continue;
+          if (L.slots.some((x) => x.exerciseId === s.exerciseId) || sumSets(L) + s.sets > cap) continue;
+          const groups = ex.volume.filter((v) => v.weight === 1).map((v) => v.group);
+          if (groups.some((m) => direct(L, m) + s.sets > MAX_SESSION_SETS)) continue;
+          H.slots = H.slots.filter((x) => x !== s); L.slots = [...L.slots, s];
+          const ok = groups.every((m) => restsEnough(train.filter((d) => direct(d, m) >= 4).map((d) => d.weekday!), m)
+            || !restsEnough(train.filter((d) => (d === L ? direct(d, m) - s.sets : d === H ? direct(d, m) + s.sets : direct(d, m)) >= 4).map((d) => d.weekday!), m));
+          if (ok) { moved = true; break; }
+          L.slots = L.slots.filter((x) => x !== s); H.slots = [...H.slots, s];
+        }
+        if (moved) break;
+      }
+      if (moved) break;
+    }
+    if (!moved) break;
+  }
+  const exMain = (s: Slot) => mainBySlot.get(s.id) ?? ORDER[0];
+  for (const d of train) d.slots.sort((a, b) => rank(exMap.get(a.exerciseId)!, exMain(a)) - rank(exMap.get(b.exerciseId)!, exMain(b)));
+
+  // 8. Names from the split ("Push A", "Upper B", "Full body C"); a theme used once has no letter
   const count = new Map<string, number>();
   for (const d of trainDays) count.set(themeOf.get(d)!, (count.get(themeOf.get(d)!) ?? 0) + 1);
   const seen = new Map<string, number>();
