@@ -14,7 +14,7 @@ const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 const draw = (k: number) => { const f = poseFrame(SPLASH_FLEX, k); return frameToSvg(f) + bumpsToSvg(bicepBumps(f, k)); };
 
-export function Splash({ onDone }: { onDone: () => void }) {
+export function Splash({ onDone, word: text = "BLUE FIT" }: { onDone: () => void; /** The word under the figure (Build my plan: "Your plan") */ word?: string }) {
   const overlay = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const word = useRef<HTMLDivElement>(null);
@@ -76,7 +76,7 @@ export function Splash({ onDone }: { onDone: () => void }) {
       <div className="bg-fx" style={{ position: "absolute" }} />
       <div ref={stage} className="splash-stage">
         <div className="splash-fig"><svg ref={fig} className="fig" viewBox="0 -24 120 131" width={FIG_W} height={(FIG_W * 131) / 120} /></div>
-        <div ref={word} className="splash-word brand">BLUE FIT</div>
+        <div ref={word} className="splash-word brand">{text.toUpperCase()}</div>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ import { muscleLabel, MUSCLE_GROUPS, type Exercise, type Goal, type MuscleGroup,
 import { uid } from "./util";
 import { isFocus, planVolume } from "./volume";
 import { priorityOf } from "./volumeModel";
-import { HARD_SETS, JOBS, MAX_SESSION_SETS, STRETCH_MUSCLES } from "./workoutCheck";
+import { JOBS, MAX_SESSION_SETS, STRETCH_MUSCLES } from "./workoutCheck";
 
 export interface GenInput {
   goal: Goal;
@@ -66,6 +66,12 @@ const gap = (a: number, b: number) => ((b - a + 7) % 7) || 7;
 export const restsEnough = (days: number[], g: MuscleGroup) =>
   days.length < 2 || days.every((d) => days.every((e) => d === e || gap(d, e) - 1 >= restDaysOf(g)));
 
+/** Most hard workouts a muscle can get on these days while keeping its rest days in between (up to `want`) */
+export function fitSessions(days: number[], g: MuscleGroup, want: number): number {
+  for (let k = Math.min(want, days.length); k > 1; k--) if (combos(days, k).some((c) => restsEnough(c, g))) return k;
+  return Math.min(1, days.length);
+}
+
 /** Workouts a muscle gets in the week: enough to stay at or under the per-workout limit; 2 when it gets 10+ (*judgment*). */
 const sessionsFor = (aim: number, n: number) => Math.min(n, Math.max(Math.ceil(aim / MAX_SESSION_SETS), aim >= 10 && n >= 2 ? 2 : 1));
 
@@ -96,7 +102,9 @@ export function generatePlan(input: GenInput): RoutineDay[] {
     const fam = FAMILY[g];
     // Days whose theme trains this muscle (abs and neck: any day)
     const allowed = trainDays.filter((d) => fam === "core" || THEME_FAMILIES[themeOf.get(d)!].includes(fam));
-    const k = Math.min(allowed.length, sessionsFor(aim.get(g)!, n));
+    // As many workouts as the target needs, but only as many as its rest days allow; the aim can't go past them
+    const k = fitSessions(allowed, g, sessionsFor(aim.get(g)!, n));
+    aim.set(g, Math.min(aim.get(g)!, MAX_SESSION_SETS * Math.max(1, k)));
     // Best set of k days: the muscle rests enough in between, then the lightest days
     let best: number[] = allowed.slice(0, k), bestScore = -Infinity;
     for (const c of combos(allowed, k)) {
@@ -228,17 +236,17 @@ export function planConflicts(input: Pick<GenInput, "trainDays" | "maxMinutes" |
   const days = WEEK.filter((d) => input.trainDays.includes(d));
   const focus = input.targets.filter(isFocus);
   for (const t of focus) {
-    const most = MAX_SESSION_SETS * n;
-    if (t.min! > most) {
-      out.push({ id: "max-" + t.group, text: `${muscleLabel(t.group)}: ${t.min} sets on ${n} day${n > 1 ? "s" : ""} is more than ${MAX_SESSION_SETS} per workout. Most that fits: ${most}.`,
-        fix: { label: `Set ${muscleLabel(t.group)} to ${Math.max(1, most - 4)}–${most}`, targets: [{ ...t, min: Math.max(1, most - 4), max: most }] } });
-    }
-    // A muscle hard on 2+ days needs its rest days in between: can the chosen days do it?
-    const k = sessionsFor(aimSets(t), n);
-    if (k >= 2 && aimSets(t) / k >= HARD_SETS && !combos(days, k).some((c) => restsEnough(c, t.group))) {
-      const rest = restDaysOf(t.group);
-      out.push({ id: "rest-" + t.group, text: `${muscleLabel(t.group)} needs ${rest} rest day${rest > 1 ? "s" : ""} between hard workouts, and your days are too close together for ${k} of them.` });
-    }
+    // Workouts the minimum needs (11 sets max each) vs. how many fit with the muscle's rest days in between
+    const need = Math.ceil(t.min! / MAX_SESSION_SETS);
+    const fit = fitSessions(days, t.group, need), most = MAX_SESSION_SETS * fit;
+    if (fit >= need) continue;
+    const rest = restDaysOf(t.group), M = muscleLabel(t.group);
+    const why = fit < n
+      ? `with ${rest} rest day${rest > 1 ? "s" : ""} after each hard workout, only ${fit} fit in your week`
+      : `you train ${n} day${n > 1 ? "s" : ""}`;
+    out.push({ id: "max-" + t.group,
+      text: `${M}: ${t.min} sets a week needs ${need} workouts (max ${MAX_SESSION_SETS} sets each), but ${why}. The most it can get: ${most}.`,
+      fix: { label: `Set ${M} to ${Math.max(1, most - 4)}–${most}`, targets: [{ ...t, min: Math.max(1, most - 4), max: most }] } });
   }
   // Time: the week's sets spread over the days (indirect sets cover part of the work)
   const weekSets = focus.reduce((a, t) => a + aimSets(t), 0) * INDIRECT_SHARE;

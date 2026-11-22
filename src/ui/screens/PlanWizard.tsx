@@ -1,6 +1,6 @@
 // Build a plan for me: a full-screen, one-question-per-screen flow (goal → eating → days → workout length → targets →
 // conflicts → build). The plan itself comes from core/generator.ts; this file is only the steps.
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { generatePlan, planConflicts, type Conflict } from "../../core/generator";
 import { completeProfile, MUSCLE_GROUPS, type Goal, type MuscleGroup, type Phase, type RoutineDay, type VolumeTarget } from "../../core/types";
@@ -11,7 +11,7 @@ import { useStore } from "../store";
 import { Icon } from "../components/Icon";
 import { MuscleMap } from "../components/MuscleMap";
 import { TargetEdit } from "../components/VolumeTable";
-import { FlexFigure } from "../components/FlexFigure";
+import { Splash } from "../components/Splash";
 
 export interface WizardResult { days: RoutineDay[]; targets: VolumeTarget[]; goal: Goal; phase: Phase }
 
@@ -46,6 +46,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const [sel, setSel] = useState<MuscleGroup | null>(null);
   const [seed, setSeed] = useState(1);
   const [building, setBuilding] = useState(false);
+  const built = useCallback(() => setBuilding(false), []);
 
   // Goal or eating changed and the targets weren't edited yet: work them out again for the new profile
   const profile = useMemo(() => completeProfile(settings.profile ? { ...settings.profile, goal, phase } : null), [settings.profile, goal, phase]);
@@ -64,7 +65,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const i = STEPS.indexOf(step);
   const next = () => {
     const n = STEPS[i + 1];
-    if (n === "build") { setBuilding(true); setTimeout(() => setBuilding(false), 1400); }
+    if (n === "build") setBuilding(true);
     if (n) setStep(n);
   };
   const back = () => (i ? setStep(STEPS[i - 1]) : onClose());
@@ -78,15 +79,15 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const body = (() => {
     switch (step) {
       case "goal": return (
-        <Screen eyebrow="Your goal" title="What are you training for?">
+        <Screen center eyebrow="Your goal" title="What are you training for?">
           <Choices items={GOALS} value={goal} onPick={(v) => setGoal(v as Goal)} />
         </Screen>);
       case "eating": return (
-        <Screen eyebrow="Eating" title="How are you eating?">
+        <Screen center eyebrow="Eating" title="How are you eating?">
           <Choices items={PHASES} value={phase} onPick={(v) => setPhase(v as Phase)} />
         </Screen>);
       case "days": return (
-        <Screen eyebrow={`${days.length} workout${days.length === 1 ? "" : "s"} a week`} title="Which days do you train?">
+        <Screen center eyebrow={`${days.length} workout${days.length === 1 ? "" : "s"} a week`} title="Which days do you train?">
           <div className="wz-days">
             {WEEK.map((d) => {
               const on = days.includes(d);
@@ -145,9 +146,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
             <div className="wz-ok"><Icon name="check" size={56} /><p>Your days, time and targets fit together. Ready to build.</p></div>
           )}
         </Screen>);
-      case "build": return building || !result ? (
-        <div className="wz-building"><FlexFigure size={150} /><b>Building your plan</b><span className="muted">Picking top exercises for every angle…</span></div>
-      ) : (
+      case "build": return !result ? null : (
         <Screen eyebrow={check ? `${check.checks.filter((c) => c.pass).length}/${check.checks.length} plan checks · score ${check.score.score}` : ""} title="Your plan">
           <div className="wz-plan">
             {result.map((d) => (
@@ -164,7 +163,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const cta = step === "build"
     ? (building || !result ? null : (
       <div className="wz-ctas">
-        <button type="button" className="btn btn-ghost" onClick={() => { setSeed((x) => x + 1); setBuilding(true); setTimeout(() => setBuilding(false), 900); }}><Icon name="undo" size={18} /> Try again</button>
+        <button type="button" className="btn btn-ghost" onClick={() => { setSeed((x) => x + 1); setBuilding(true); }}><Icon name="undo" size={18} /> Try again</button>
         <button type="button" className="btn btn-primary btn-xl" onClick={() => onDone({ days: result, targets, goal, phase })}><Icon name="check" size={20} /> Use this plan</button>
       </div>))
     : <button type="button" className="btn btn-primary btn-xl wz-next" disabled={step === "days" && !days.length} onClick={next}>{step === "check" ? "Build my plan" : "Continue"}</button>;
@@ -176,16 +175,18 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
         <div className="wz-progress" aria-hidden>{STEPS.map((s, k) => <span key={s} className={k <= i ? "on" : ""} />)}</div>
         <button type="button" className="icon-btn" onClick={onClose} aria-label="Close"><Icon name="close" /></button>
       </div>
-      <div className="wz-body" key={step + (building ? "-b" : "")}>{body}</div>
+      <div className="wz-body" key={step + seed}>{body}</div>
       <div className="wz-bottom">{cta}</div>
+      {/* The plan is ready: the splash flex, then the zoom into his head opens onto the plan underneath */}
+      {building && <Splash word="Your plan" onDone={built} />}
     </div>,
     document.body,
   );
 }
 
-function Screen({ eyebrow, title, children }: { eyebrow: string; title: string; children: React.ReactNode }) {
+function Screen({ eyebrow, title, children, center }: { eyebrow: string; title: string; children: React.ReactNode; center?: boolean }) {
   return (
-    <div className="wz-screen">
+    <div className={"wz-screen" + (center ? " center" : "")}>
       <span className="wz-eyebrow">{eyebrow}</span>
       <h2 className="wz-title">{title}</h2>
       {children}

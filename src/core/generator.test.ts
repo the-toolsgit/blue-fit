@@ -57,8 +57,15 @@ describe("plan generator", () => {
   it("conflicts: too many sets for the days, no rest between back-to-back days, too long", () => {
     const biceps: VolumeTarget[] = targets.map((t) => (t.group === "biceps" ? { ...t, min: 25, max: 28 } : t));
     const c = planConflicts({ trainDays: [1, 2], maxMinutes: 60, targets: biceps });
-    expect(c.find((x) => x.id === "max-biceps")?.fix?.targets?.[0]).toMatchObject({ group: "biceps", max: 22 });
-    expect(c.some((x) => x.id.startsWith("rest-"))).toBe(true);
+    // Mon + Tue: biceps needs a rest day after a hard workout, so only one of them counts: 11 sets max
+    expect(c.find((x) => x.id === "max-biceps")?.fix?.targets?.[0]).toMatchObject({ group: "biceps", min: 7, max: 11 });
+    expect(c.find((x) => x.id === "max-biceps")?.text).toMatch(/only 1 fit/);
+    // Priority back on 6 days: aims past what fits, but the minimum (17) fits in 2 workouts, so nothing to fix
+    const back: VolumeTarget[] = targets.map((t) => (t.group === "back" ? { ...t, min: 17, max: 28, priority: true } : t));
+    expect(planConflicts({ trainDays: SIX, maxMinutes: 90, targets: back }).some((x) => x.id === "max-back")).toBe(false);
+    const plan = generatePlan({ goal: "growth", trainDays: SIX, maxMinutes: 90, targets: back, exercises: cat.exercises, seed: 1 });
+    const backDays = plan.filter((d) => d.slots.some((s) => cat.exMap.get(s.exerciseId)!.volume.some((v) => v.group === "back" && v.weight === 1)));
+    expect(backDays.length).toBe(2);
     expect(c.some((x) => x.id === "time")).toBe(true);
     // When a longer workout would fit, the fix offers it
     expect(planConflicts({ trainDays: [1, 2, 4, 5], maxMinutes: 60, targets }).find((x) => x.id === "time")?.fix?.maxMinutes).toBe(120);

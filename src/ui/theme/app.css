@@ -634,11 +634,9 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .week-strip { display: grid; gap: 3px; margin-top: 12px; }
 .ws-day { container-type: inline-size; min-width: 0; display: grid; grid-template-rows: auto 1fr; justify-items: center; gap: 4px; padding: 8px 2px 9px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); text-align: center; transition: border-color .2s, background .2s, box-shadow .2s, transform .12s; }
 .ws-day:active { transform: scale(0.95); }
-.ws-day.rest { background: transparent; border-style: dashed; }
 .ws-dow { font: 600 10px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .ws-day.today .ws-dow { color: var(--neon-ink); }
 .ws-title { align-self: center; font: 700 min(11px, 22.5cqi)/1.08 var(--display); text-transform: uppercase; letter-spacing: 0; color: var(--ink); word-break: keep-all; overflow-wrap: normal; min-height: 38px; display: flex; align-items: center; justify-content: center; max-width: 100%; }
-.ws-day.rest .ws-title { color: var(--faint); font-weight: 500; }
 .ws-day[aria-pressed="true"] { border-color: var(--neon); border-style: solid; background: color-mix(in srgb, var(--neon) 16%, var(--surface-2)); box-shadow: 0 0 16px -6px var(--neon); }
 .ws-day[aria-pressed="true"] .ws-dow { color: var(--neon-ink); }
 
@@ -702,10 +700,15 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wz-pday li { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; }
 .wz-pday li .mono { color: var(--muted); flex: none; }
 .wz-bottom { padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 14px) max(16px, env(safe-area-inset-left, 0px)); }
-.wz-bottom > * { max-width: 520px; margin: 0 auto; }
+.wz-bottom { display: flex; justify-content: center; }
+.wz-bottom > * { width: 100%; max-width: 520px; }
 .wz-next { width: 100%; }
 .wz-next:disabled { opacity: .4; }
 .wz-ctas { display: grid; grid-template-columns: auto 1fr; gap: 10px; }
+.wz-screen.center { text-align: center; }
+.wz-screen.center .wz-title { justify-self: center; }
+.wz-screen.center .wz-choice { justify-items: center; text-align: center; }
+.wz-screen.center .wz-day { flex-direction: column; justify-content: center; gap: 2px; min-height: 64px; }
 .wz-ctas .btn-ghost { min-height: 56px; padding: 0 16px; }
 @media (prefers-reduced-motion: reduce) { .wz, .wz-body { animation: none; } }
 /* Plan editor: the "Build it for me" card on a plan with no exercises yet */
