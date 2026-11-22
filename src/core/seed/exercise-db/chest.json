@@ -730,7 +730,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-flat",
+  "figureTemplate": "press-flat-smith",
   "figureAdjust": {
    "equipmentProp": "bar"
   },
@@ -787,7 +787,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-incline",
+  "figureTemplate": "press-incline-smith",
   "figureAdjust": {
    "bench": "incline",
    "equipmentProp": "bar"
@@ -845,7 +845,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-decline",
+  "figureTemplate": "press-decline-smith",
   "figureAdjust": {
    "bench": "decline",
    "equipmentProp": "bar"
@@ -907,7 +907,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "press-machine-seated",
+  "figureTemplate": "press-chest-machine",
   "preferred": {
    "goals": [
     "growth"
@@ -972,7 +972,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "press-incline-machine",
+  "figureTemplate": "press-incline-lever",
   "source": {
    "url": "https://rpstrength.com/chest-training-tips-hypertrophy"
   },
@@ -1027,7 +1027,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-machine-seated",
+  "figureTemplate": "press-chest-machine",
   "source": {
    "db": "free-exercise-db",
    "id": "Leverage_Chest_Press"
@@ -1083,7 +1083,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-incline-machine",
+  "figureTemplate": "press-incline-lever",
   "source": {
    "db": "free-exercise-db",
    "id": "Leverage_Incline_Chest_Press"

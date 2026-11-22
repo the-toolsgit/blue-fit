@@ -148,7 +148,7 @@
   "bodyRegion": "upper",
   "figureTemplate": "wrist-curl",
   "figureAdjust": {
-   "equipmentProp": "none"
+   "equipmentProp": "cable"
   },
   "source": {
    "db": "free-exercise-db",
@@ -509,7 +509,7 @@
   "bodyRegion": "upper",
   "figureTemplate": "wrist-curl",
   "figureAdjust": {
-   "equipmentProp": "none"
+   "equipmentProp": "cable"
   },
   "source": {
    "url": "https://weighttraining.guide/exercises/cable-reverse-wrist-curl/"

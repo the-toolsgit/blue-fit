@@ -2142,7 +2142,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "split-squat",
+  "figureTemplate": "split-squat-smith",
   "figureAdjust": {
    "equipmentProp": "none"
   },
@@ -2672,7 +2672,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "lunge",
+  "figureTemplate": "lunge-smith",
   "figureAdjust": {
    "equipmentProp": "none"
   },

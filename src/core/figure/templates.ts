@@ -8,13 +8,16 @@ export interface Template {
   /** Pose the tempo's first move starts from */
   startsAt: "A" | "B";
   /** What the hands (or hips) do on the first move, checked by tests: "down" = moves down the screen, etc. */
-  firstMove: { joint: "ha" | "hip" | "sh" | "haR" | "an" | "knR" | "head" | "tip"; dir: "up" | "down" | "toward" | "away" };
+  firstMove: { joint: "ha" | "hip" | "sh" | "haR" | "an" | "knR" | "head" | "tip" | "toe"; dir: "up" | "down" | "toward" | "away" };
   /** Default equipment prop */
   prop: "cable" | "bar" | "db" | "none";
   /** Where a cable comes from (pulley), when the prop is a cable */
   pulley?: [number, number];
   /** The joint the cable is fixed to (default: the hand), e.g. "an" for an ankle cuff */
   cableTo?: string;
+  /** The cable tower drawn with the pulley: a column from the floor to the top at the pulley (default), at this x
+   *  with a beam over to the pulley, or none (false) */
+  post?: number | false;
   /** A static hold (tempo "Hold N s"): A and B differ only by a small brace/breathing motion, so firstMove isn't checked */
   hold?: boolean;
 }
@@ -22,24 +25,49 @@ export interface Template {
 const T = (spec: FigureSpec, firstMove: Template["firstMove"], prop: Template["prop"], pulley?: [number, number]): Template => ({ spec, startsAt: "A", firstMove, prop, pulley });
 const H = (spec: FigureSpec, prop: Template["prop"]): Template => ({ spec, startsAt: "A", firstMove: { joint: "sh", dir: "up" }, prop, hold: true });
 
+// ── Machine drawings (light layer, behind the figure) ──
+type Prop = Record<string, unknown>;
+/** A fixed line; `width` for pads and platforms */
+const ln = (x1: number, y1: number, x2: number, y2: number, width?: number): Prop => (width ? { line: [x1, y1, x2, y2], width } : { line: [x1, y1, x2, y2] });
+/** Front view, seated on a machine: hips low on the seat, short thighs toward the viewer, shins down to the floor */
+const SEAT_F = { hy: 74, lf: 0.42, la: 45, sa: 0 };
+/** Front view: the seat (cushion and post) under SEAT_F hips */
+const seatF: Prop[] = [ln(42, 76, 78, 76, 3), ln(60, 76, 60, 104)];
+/** Front view, seated: the back pad behind the torso, from the seat to above the head */
+const backPadF = (top = 6, bottom = 74): Prop[] => [ln(51, bottom, 51, top), ln(69, bottom, 69, top), ln(51, top, 69, top)];
+/** Front view: the machine's two side uprights */
+const uprightsF = (xl: number, xr: number, top = -16): Prop[] => [ln(xl, top, xl, 104), ln(xr, top, xr, 104)];
+/** Front view: a handle in each hand (short upright grips) */
+const gripsF: Prop[] = [{ perp: "haR", ang: 0, len: 10 }, { perp: "haL", ang: 0, len: 10 }];
+/** A cable tower column (for cables set in a template's props) */
+const tower = (x: number): Prop => ln(x, -22, x, 104);
+
 export const TEMPLATES: Record<string, Template> = {
   // ── Back: lats ──
-  pulldown: T({ v: "f", base: { hy: 70, lf: 0.5 }, A: { ua: 155, fa: 165 }, B: { ua: 45, fa: 170 }, props: [{ line: [44, 72, 76, 72] }, { line: [42, 80, 78, 80] }] }, { joint: "haR", dir: "down" }, "cable", [60, -22]),
-  "pulldown-single": T({ base: { hx: 52, hy: 78, t: 5, th: 0, sh: -90, nofoot: 1 }, A: { ua: 170, fa: 172 }, B: { ua: -15, fa: 160 }, props: [] }, { joint: "ha", dir: "down" }, "cable", [62, -22]),
+  pulldown: { ...T({ v: "f", base: { hy: 70, lf: 0.5 }, A: { ua: 155, fa: 165 }, B: { ua: 45, fa: 170 }, props: [{ line: [44, 72, 76, 72] }, { line: [42, 80, 78, 80] }] }, { joint: "haR", dir: "down" }, "cable", [60, -22]), post: 100 },
+  // Plate-loaded / machine pulldown (front view, seated): knee pad, the handles on lever arms from the side uprights
+  "pulldown-machine": T({ v: "f", base: { ...SEAT_F }, A: { ua: 155, fa: 165 }, B: { ua: 45, fa: 170 }, props: [...seatF, ...uprightsF(8, 112), ln(8, -16, 112, -16),
+    { hold: [84.1, 4.5, 88.3, 36.4], kd: 90 }, { hold: [35.9, 4.5, 31.7, 36.4], arm: "L", kd: 270 }, { rod: [112, 17.1], to: "haR" }, { rod: [8, 17.1], to: "haL" }] }, { joint: "haR", dir: "down" }, "none"),
+  "pulldown-single": { ...T({ base: { hx: 52, hy: 78, t: 5, th: 0, sh: -90, nofoot: 1 }, A: { ua: 170, fa: 172 }, B: { ua: -15, fa: 160 }, props: [] }, { joint: "ha", dir: "down" }, "cable", [62, -22]), post: 100 },
   pullup: T({ v: "f", base: { lf: 1, la: 4, sa: 2 }, A: { hy: 56, ua: 165, fa: 170 }, B: { hy: 28, ua: 60, fa: 175 }, props: [{ line: [22, -15, 98, -15] }] }, { joint: "sh", dir: "up" }, "none"),
   // Kneeling straight-arm pulldown (lat prayer)
   "straight-arm-pulldown-kneeling": T({ base: { hx: 50, hy: 78, t: 30, th: 0, sh: -90, nofoot: 1 }, A: { ua: 150, fa: 150 }, B: { ua: 20, fa: 20 }, props: [] }, { joint: "ha", dir: "down" }, "cable", [112, -20]),
   "straight-arm-pulldown": T({ base: { hx: 50, hy: 57, t: 30, th: 5, sh: -3 }, A: { ua: 150, fa: 150 }, B: { ua: 5, fa: 5 }, props: [] }, { joint: "ha", dir: "down" }, "cable", [112, -20]),
-  pullover: T({ base: { hx: 78, hy: 72, t: -90, th: 70, sh: 0 }, A: { ua: -180, fa: -180 }, B: { ua: -50, fa: -50 }, props: [{ line: [36, 80, 86, 80] }, { line: [52, 80, 52, 104] }] }, { joint: "ha", dir: "down" }, "db"),
+  // Lat prayer (standing): facing a high pulley, hinged ~90° at the hips with the arms reaching up toward it, then
+  // almost straight arms sweep down to the hips while the torso lifts a little
+  "lat-prayer-standing": T({ base: { anchor: 1, ax: 46, th: 14, sh: -8 }, A: { t: 84, ua: 150, fa: 155 }, B: { t: 62, ua: -35, fa: -30 }, props: [] }, { joint: "ha", dir: "down" }, "cable", [112, -20]),
+  pullover: T({ base: { hx: 78, hy: 72, t: -90, th: 70, sh: 0 }, A: { ua: -180, fa: -180 }, B: { ua: -50, fa: -50 }, props: [{ line: [36, 80, 86, 80] }, { line: [52, 80, 52, 104] }] }, { joint: "ha", dir: "down" }, "db", [6, 80]),
   // Seated machine pullover: arms from overhead down to the body
-  "pullover-machine": T({ base: { hx: 50, hy: 80, t: 0, th: 88, sh: 0 }, A: { ua: 168, fa: 160 }, B: { ua: 15, fa: 40 }, props: [{ line: [38, 84, 62, 84] }, { line: [50, 84, 50, 104] }, { line: [44, 82, 44, 40] }] }, { joint: "ha", dir: "down" }, "none"),
+  "pullover-machine": T({ base: { hx: 50, hy: 80, t: 0, th: 88, sh: 0 }, A: { ua: 168, fa: 160 }, B: { ua: 15, fa: 40 }, props: [{ line: [38, 84, 62, 84] }, { line: [50, 84, 50, 104] }, { line: [44, 82, 44, 40] }, { pad: "el", r: 3 }, { pad: "ha", r: 2.2 }] }, { joint: "ha", dir: "down" }, "none"),
   // ── Back: rows ──
   "row-cable": T({ base: { hx: 40, hy: 88, th: 85, sh: 85 }, A: { t: 15, ua: 85, fa: 88 }, B: { t: 0, ua: -40, fa: 85 }, props: [{ line: [20, 92, 50, 92] }, { line: [93, 70, 93, 95] }] }, { joint: "ha", dir: "toward" }, "cable", [118, 72]),
   "row-bent-barbell": T({ base: { hx: 46, hy: 58, t: 62, th: 14, sh: -8 }, A: { ua: 0, fa: 0 }, B: { ua: -65, fa: -5 }, props: [] }, { joint: "ha", dir: "up" }, "bar"),
+  // Smith bent-over row: the bar goes straight up and down in the rail
+  "row-bent-smith": T({ base: { hx: 46, hy: 58, t: 62, th: 14, sh: -8 }, A: { ua: 0, fa: 0 }, B: { ua: -65, fa: -5 }, props: [{ hold: [70, 80, 70, 66], kd: 200 }, ln(73, -18, 73, 104)] }, { joint: "ha", dir: "up" }, "bar"),
   "row-tbar": T({ base: { hx: 48, hy: 58, t: 50, th: 12, sh: -8 }, A: { ua: 0, fa: 0 }, B: { ua: -60, fa: -5 }, props: [{ rod: [6, 104], to: "ha" }] }, { joint: "ha", dir: "up" }, "db"),
   "row-db-one-arm": T({ base: { hx: 40, hy: 56, t: 80, th: 8, sh: 0 }, A: { ua: 0, fa: 0 }, B: { ua: -75, fa: 0 }, props: [{ line: [80, 85, 114, 85] }, { line: [84, 85, 84, 104] }, { line: [110, 85, 110, 104] }, { arm2: [25, 25] }] }, { joint: "ha", dir: "up" }, "db"),
   // Seated chest-supported machine row: chest on the pad, feet on the floor
-  "row-chest-supported-seated": T({ base: { hx: 44, hy: 80, t: 30, th: 88, sh: 0 }, A: { ua: 70, fa: 75 }, B: { ua: -45, fa: 70 }, props: [{ line: [32, 84, 56, 84] }, { line: [44, 84, 44, 104] }, { line: [70, 40, 70, 78] }] }, { joint: "ha", dir: "toward" }, "none"),
+  "row-chest-supported-seated": T({ base: { hx: 44, hy: 80, t: 30, th: 88, sh: 0 }, A: { ua: 70, fa: 75 }, B: { ua: -45, fa: 70 }, props: [{ line: [32, 84, 56, 84] }, { line: [44, 84, 44, 104] }, { line: [70, 40, 70, 78] }, { hold: [97.2, 62.1, 63.8, 70.9], kd: 0 }, ln(70, 59, 104, 59), ln(104, 59, 104, 104), { rod: [90.4, 104], to: "ha" }, { pad: "ha", r: 2.2 }] }, { joint: "ha", dir: "toward" }, "none"),
   // Seal row: lying face down on a flat bench, arms hanging
   "row-chest-supported-flat": T({ base: { hx: 68, hy: 58, t: -90, th: 90, sh: 90, nofoot: 1 }, A: { ua: 0, fa: 0 }, B: { ua: 105, fa: 0 }, props: [{ line: [40, 66, 104, 66] }, { line: [48, 66, 48, 104] }, { line: [96, 66, 96, 104] }] }, { joint: "ha", dir: "up" }, "bar"),
   // Standing one-arm cable row (split stance)
@@ -47,20 +75,34 @@ export const TEMPLATES: Record<string, Template> = {
   // Plank row (renegade): straight body from the feet, hands on dumbbells under the shoulders, one arm rows
   "row-plank": T({ base: { anchor: 1, ax: 100, th: 62, sh: 62, t: -62 }, A: { ua: 0, fa: 0 }, B: { ua: 135, fa: 0 }, props: [{ arm2: [0, 0] }] }, { joint: "ha", dir: "up" }, "db"),
   "row-chest-supported": T({ base: { hx: 44, hy: 57, t: 45, th: 10, sh: -6 }, A: { ua: 5, fa: 5 }, B: { ua: -60, fa: 15 }, props: [{ line: [54, 61, 76, 39] }, { line: [58, 61, 58, 104] }] }, { joint: "ha", dir: "up" }, "db"),
+  // Chest-supported T-bar row (plate loaded): the bar runs from a floor pivot to the handles
+  "row-tbar-chest": T({ base: { hx: 44, hy: 57, t: 45, th: 10, sh: -6 }, A: { ua: 5, fa: 5 }, B: { ua: -60, fa: 15 }, props: [{ line: [54, 61, 76, 39] }, { line: [58, 61, 58, 104] }, { rod: [6, 104], to: "ha" }, { pad: "ha", r: 2.4 }] }, { joint: "ha", dir: "up" }, "none"),
   // Straight body from the heels (fixed on the floor) to the head; hands stay on the bar (seen end-on)
   "row-inverted": T({ base: { anchor: 1, ax: 102 }, A: { th: 76, sh: 76, t: -76 }, B: { th: 58, sh: 58, t: -58 }, props: [{ hold: [36, 48], kd: 60 }] }, { joint: "sh", dir: "up" }, "bar"),
   // ── Back: lower back and hinges ──
   hinge: T({ base: { anchor: 1, ax: 60 }, A: { th: 0, sh: 0, t: 0, ua: 0, fa: 0 }, B: { th: 20, sh: -8, t: 75, ua: 0, fa: 0 }, props: [] }, { joint: "ha", dir: "down" }, "bar"),
+  // Smith stiff-legged deadlift: the bar goes straight down in the rail
+  "hinge-smith": T({ base: { anchor: 1, ax: 60 }, A: { th: 0, sh: 0, t: 0, ua: 0, fa: 0 }, B: { th: 20, sh: -8, t: 75, ua: 0, fa: 0 }, props: [{ hold: [68, 62, 70, 86], straight: 1 }, ln(74, -18, 74, 104)] }, { joint: "ha", dir: "down" }, "bar"),
   deadlift: T({ base: { anchor: 1, ax: 60 }, A: { th: 62, sh: -28, t: 58, ua: 0, fa: 0 }, B: { th: 0, sh: 0, t: 0, ua: 0, fa: 0 }, props: [] }, { joint: "ha", dir: "up" }, "bar"),
-  shrug: T({ v: "f", base: { ua: 4, fa: 4 }, A: { shr: 0 }, B: { shr: 7 }, props: [] }, { joint: "haR", dir: "up" }, "bar"),
+  // Trap bar deadlift: the hex frame and its plates at the hands
+  "deadlift-trap-bar": T({ base: { anchor: 1, ax: 60 }, A: { th: 62, sh: -28, t: 58, ua: 0, fa: 0 }, B: { th: 0, sh: 0, t: 0, ua: 0, fa: 0 }, props: [{ perp: "ha", ang: 90, len: 28 }, { pad: "ha", r: 9 }] }, { joint: "ha", dir: "up" }, "none"),
+  // Lever deadlift (plate loaded): handles on a lever from the front pivot
+  "deadlift-lever": T({ base: { anchor: 1, ax: 60 }, A: { th: 62, sh: -28, t: 58, ua: 0, fa: 0 }, B: { th: 0, sh: 0, t: 0, ua: 0, fa: 0 }, props: [ln(95.1, 61.5, 95.1, 104), { rod: [95.1, 61.5], to: "ha" }, { pad: "ha", r: 2.4 }] }, { joint: "ha", dir: "up" }, "none"),
+  shrug: { ...T({ v: "f", base: { ua: 4, fa: 4 }, A: { shr: 0 }, B: { shr: 7 }, props: [] }, { joint: "haR", dir: "up" }, "bar", [60, 104]), post: false },
+  // Smith shrug: the bar runs in the rails
+  "shrug-smith": T({ v: "f", base: { ua: 4, fa: 4 }, A: { shr: 0 }, B: { shr: 7 }, props: [...uprightsF(42, 78)] }, { joint: "haR", dir: "up" }, "bar"),
+  // Shrug in a standing calf machine: shoulders under the pads
+  "shrug-calf-machine": T({ v: "f", base: { ua: 4, fa: 4 }, A: { shr: 0 }, B: { shr: 7 }, props: [...uprightsF(12, 108), { rod: [108, 19.5], to: "shR" }, { rod: [12, 19.5], to: "shL" }, { pad: "shR", r: 3, dy: -3 }, { pad: "shL", r: 3, dy: -3 }] }, { joint: "haR", dir: "up" }, "none"),
   // ── Biceps ──
   "curl-standing": T({ base: { ua: 0 }, A: { fa: 0 }, B: { fa: 145 }, props: [] }, { joint: "ha", dir: "up" }, "db", [84, 100]),
   "curl-hammer": T({ base: { ua: 0 }, A: { fa: 0 }, B: { fa: 145 }, props: [] }, { joint: "ha", dir: "up" }, "db", [84, 100]),
   "curl-cable-standing": T({ base: { ua: 0, t: -4 }, A: { fa: 10 }, B: { fa: 145 }, props: [] }, { joint: "ha", dir: "up" }, "cable", [84, 100]),
-  "curl-incline": T({ base: { hx: 52, hy: 80, t: -35, th: 88, sh: 0, ua: -5 }, A: { fa: -5 }, B: { fa: 140 }, props: [{ line: [49, 85, 28, 55] }, { line: [48, 84, 70, 85] }, { line: [58, 85, 58, 104] }] }, { joint: "ha", dir: "up" }, "db"),
+  "curl-incline": T({ base: { hx: 52, hy: 80, t: -35, th: 88, sh: 0, ua: -5 }, A: { fa: -5 }, B: { fa: 140 }, props: [{ line: [49, 85, 28, 55] }, { line: [48, 84, 70, 85] }, { line: [58, 85, 58, 104] }] }, { joint: "ha", dir: "up" }, "db", [8, 104]),
   "curl-bayesian": T({ base: { t: 6, ua: -28 }, A: { fa: -28 }, B: { fa: 115 }, props: [] }, { joint: "ha", dir: "up" }, "cable", [16, 84]),
   "curl-preacher": T({ base: { hx: 45, hy: 78, t: 12, th: 88, sh: 0, ua: 45 }, A: { fa: 60 }, B: { fa: 165 }, props: [{ line: [54, 53, 70, 68] }, { line: [66, 68, 66, 104] }] }, { joint: "ha", dir: "up" }, "db", [100, 100]),
-  "curl-spider": T({ base: { hx: 44, hy: 58, t: 48, th: 20, sh: -10, ua: 0 }, A: { fa: 0 }, B: { fa: 140 }, props: [{ line: [52, 62, 74, 38] }, { line: [56, 62, 56, 104] }] }, { joint: "ha", dir: "up" }, "db"),
+  // Preacher curl machine: a handle on the lever
+  "curl-preacher-machine": T({ base: { hx: 45, hy: 78, t: 12, th: 88, sh: 0, ua: 45 }, A: { fa: 60 }, B: { fa: 165 }, props: [{ line: [54, 53, 70, 68] }, { line: [66, 68, 66, 104] }, { pad: "ha", r: 2.4 }] }, { joint: "ha", dir: "up" }, "none"),
+  "curl-spider": T({ base: { hx: 44, hy: 58, t: 48, th: 20, sh: -10, ua: 0 }, A: { fa: 0 }, B: { fa: 140 }, props: [{ line: [52, 62, 74, 38] }, { line: [56, 62, 56, 104] }] }, { joint: "ha", dir: "up" }, "db", [94, 100]),
   "curl-concentration": T({ base: { hx: 44, hy: 78, t: 38, th: 88, sh: 0, ua: 14 }, A: { fa: 14 }, B: { fa: 150 }, props: [{ line: [30, 82, 52, 82] }, { line: [40, 82, 40, 104] }] }, { joint: "ha", dir: "up" }, "db"),
   // Lying, head toward a high pulley, arms pointing up; curls the bar toward the forehead
   "curl-lying-high-pulley": T({ base: { hx: 70, hy: 98, t: -90, th: 90, sh: 90, nofoot: 1, ua: 180 }, A: { fa: 200 }, B: { fa: 300 }, props: [] }, { joint: "ha", dir: "toward" }, "cable", [8, -10]),
@@ -68,33 +110,58 @@ export const TEMPLATES: Record<string, Template> = {
   "curl-incline-flat": T({ base: { hx: 74, hy: 61, t: -90, th: 40, sh: 0, ua: 0 }, A: { fa: 0 }, B: { fa: -140 }, props: [{ line: [44, 67, 78, 67] }, { line: [50, 67, 50, 104] }, { line: [72, 67, 72, 104] }] }, { joint: "ha", dir: "up" }, "db"),
   "curl-lying-cable": T({ base: { hx: 64, hy: 98, t: 90, th: -90, sh: -90, nofoot: 1, ua: -120 }, A: { fa: -100 }, B: { fa: -210 }, props: [] }, { joint: "ha", dir: "away" }, "cable", [4, 88]),
   "curl-overhead-cable": T({ base: { ua: 88 }, A: { fa: 88 }, B: { fa: 190 }, props: [] }, { joint: "ha", dir: "up" }, "cable", [116, 20]),
-  "curl-drag": T({ base: {}, A: { ua: 0, fa: 0 }, B: { ua: -48, fa: 120 }, props: [] }, { joint: "ha", dir: "up" }, "bar"),
+  "curl-drag": T({ base: {}, A: { ua: 0, fa: 0 }, B: { ua: -48, fa: 120 }, props: [] }, { joint: "ha", dir: "up" }, "bar", [84, 100]),
 
   // ── Shoulders and traps ──
   "press-overhead": T({ v: "f", base: { hy: 66, lf: 0.45, la: 12, sa: 4 }, A: { ua: 90, fa: 180 }, B: { ua: 160, fa: 175 }, props: [{ line: [44, 68, 76, 68] }, { db: "haR" }, { db: "haL" }] }, { joint: "haR", dir: "up" }, "none"),
+  // Machine shoulder press (front view, seated): back pad behind, the handles on lever arms that pivot at the top of
+  // the side uprights; the hands follow the handles' path
+  "press-overhead-machine": T({ v: "f", base: { ...SEAT_F }, A: { ua: 90, fa: 180 }, B: { ua: 160, fa: 175 }, props: [...seatF, ...backPadF(12), ...uprightsF(12.7, 107.3),
+    { hold: [91, 22, 79.4, 3.3], kd: 90 }, { hold: [29, 22, 40.6, 3.3], arm: "L", kd: 270 }, { rod: [107.3, -1.1], to: "haR" }, { rod: [12.7, -1.1], to: "haL" }] }, { joint: "haR", dir: "up" }, "none"),
+  // Smith shoulder press: the bar runs in the two rails
+  "press-overhead-smith": T({ v: "f", base: { ...SEAT_F }, A: { ua: 90, fa: 180 }, B: { ua: 160, fa: 175 }, props: [...seatF, ...uprightsF(20, 100)] }, { joint: "haR", dir: "up" }, "bar"),
+  // Cable shoulder presses: a low pulley on each side
+  "press-overhead-cable": T({ v: "f", base: { ...SEAT_F }, A: { ua: 90, fa: 180 }, B: { ua: 160, fa: 175 }, props: [...seatF, tower(6), tower(114), { cable: [6, 100], to: "haL" }, { cable: [114, 100], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
+  "press-overhead-cable-standing": T({ v: "f", base: {}, A: { ua: 90, fa: 180 }, B: { ua: 160, fa: 175 }, props: [tower(6), tower(114), { cable: [6, 100], to: "haL" }, { cable: [114, 100], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
   "press-overhead-standing": T({ v: "f", base: {}, A: { ua: 90, fa: 180 }, B: { ua: 160, fa: 175 }, props: [] }, { joint: "haR", dir: "up" }, "bar"),
   "lateral-raise": T({ v: "f", base: {}, A: { ua: 8, fa: 8 }, B: { ua: 88, fa: 90 }, props: [{ db: "haR" }, { db: "haL" }] }, { joint: "haR", dir: "up" }, "none"),
   "lateral-raise-full": T({ v: "f", base: {}, A: { ua: 8, fa: 8 }, B: { ua: 165, fa: 165 }, props: [{ db: "haR" }, { db: "haL" }] }, { joint: "haR", dir: "up" }, "none"),
   "lateral-raise-cable": T({ v: "f", base: { L: { ua: 72, fa: 80 }, cx: 53, rot: 14, la: 0, sa: 0, hw: 1.5 }, A: { ua: -30, fa: -32 }, B: { ua: 90, fa: 92 }, props: [{ line: [19, -14, 19, 104] }, { line: [13, 104, 27, 104] }, { cable: [19, 96], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
   "lateral-raise-lean-away": T({ v: "f", base: { cx: 36, la: 0, sa: 0, hw: 1.5, rot: 20, L: { ua: 22, fa: 22 } }, A: { ua: -10, fa: -10 }, B: { ua: 98, fa: 98 }, props: [{ line: [28, -14, 28, 104] }, { line: [22, 104, 36, 104] }, { cable: [28, 96], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
-  "front-raise": T({ base: { ua: 0 }, A: { ua: 0, fa: 0 }, B: { ua: 95, fa: 95 }, props: [] }, { joint: "ha", dir: "up" }, "db", [86, 100]),
-  "upright-row": T({ v: "f", base: {}, A: { ua: 6, fa: 6, al: 1 }, B: { ua: 100, fa: -35, al: 0.8 }, props: [] }, { joint: "haR", dir: "up" }, "bar"),
-  "reverse-fly-machine": T({ v: "f", base: { hy: 66, lf: 0.45, la: 12, sa: 4, ua: 90, fa: 90 }, A: { al: 0.2, fl: 0.2 }, B: { al: 1, fl: 1 }, props: [{ line: [44, 68, 76, 68] }, { db: "haR" }, { db: "haL" }] }, { joint: "haR", dir: "away" }, "none"),
-  "reverse-fly-cable": T({ v: "f", base: { L: { ua: 4, fa: 4 }, ua: 90, fa: 90 }, A: { al: -0.55, fl: -0.55 }, B: { al: 1, fl: 1 }, props: [{ cable: [12, 24], to: "haR" }] }, { joint: "haR", dir: "away" }, "none"),
-  "reverse-fly-bent": T({ base: { hx: 46, hy: 58, t: 70, th: 14, sh: -8 }, A: { ua: 0, fa: 0 }, B: { ua: -80, fa: -80 }, props: [] }, { joint: "ha", dir: "up" }, "db"),
+  "front-raise": { ...T({ base: { ua: 0 }, A: { ua: 0, fa: 0 }, B: { ua: 95, fa: 95 }, props: [] }, { joint: "ha", dir: "up" }, "db", [86, 100]), post: 110 },
+  "upright-row": { ...T({ v: "f", base: {}, A: { ua: 6, fa: 6, al: 1 }, B: { ua: 100, fa: -35, al: 0.8 }, props: [] }, { joint: "haR", dir: "up" }, "bar", [60, 104]), post: false },
+  // Smith upright row: the bar runs in the rails
+  "upright-row-smith": T({ v: "f", base: {}, A: { ua: 6, fa: 6, al: 1 }, B: { ua: 100, fa: -35, al: 0.8 }, props: [...uprightsF(42, 78)] }, { joint: "haR", dir: "up" }, "bar"),
+  "reverse-fly-machine": T({ v: "f", base: { ...SEAT_F, ua: 90, fa: 90 }, A: { al: 0.2, fl: 0.2 }, B: { al: 1, fl: 1 }, props: [...seatF, ...backPadF(10), ...uprightsF(4, 116), ln(4, -16, 116, -16), ...gripsF] }, { joint: "haR", dir: "away" }, "none"),
+  "reverse-fly-cable": T({ v: "f", base: { L: { ua: 4, fa: 4 }, ua: 90, fa: 90 }, A: { al: -0.55, fl: -0.55 }, B: { al: 1, fl: 1 }, props: [tower(12), { cable: [12, 24], to: "haR" }] }, { joint: "haR", dir: "away" }, "none"),
+  "reverse-fly-bent": { ...T({ base: { hx: 46, hy: 58, t: 70, th: 14, sh: -8 }, A: { ua: 0, fa: 0 }, B: { ua: -80, fa: -80 }, props: [] }, { joint: "ha", dir: "up" }, "db", [80, 104]), post: 112 },
   "face-pull": T({ base: { hx: 48, th: 4, sh: -3 }, A: { t: 0, ua: 95, fa: 95, al: 1, fl: 1 }, B: { t: 0, ua: 92, al: 0.3, fa: 168, fl: 0.75 }, props: [{ line: [110, -16, 110, 104] }, { line: [100, 104, 116, 104] }, { line: [104, -16, 110, -16] }, { cable: [106, 16], to: "ha" }] }, { joint: "ha", dir: "toward" }, "none"),
   "kelso-shrug": T({ base: { hx: 46, hy: 59, t: 42, th: 10, sh: -6, ua: 35, fa: 35 }, A: { sb: 0, tq: 0, al: 1 }, B: { sb: 0, tq: 1, al: 0.8 }, props: [{ line: [56, 63, 78, 41] }, { trap: true }] }, { joint: "ha", dir: "toward" }, "db"),
-  "y-raise": T({ v: "f", base: { L: { ua: 4, fa: 4 } }, A: { ua: 15, fa: 15 }, B: { ua: 155, fa: 155 }, props: [{ cable: [34, 104], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
+  "y-raise": T({ v: "f", base: { L: { ua: 4, fa: 4 } }, A: { ua: 15, fa: 15 }, B: { ua: 155, fa: 155 }, props: [tower(34), { cable: [34, 104], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
   "shrug-db": T({ v: "f", base: {}, A: { ua: 6, fa: 6, shr: 0 }, B: { ua: 6, fa: 6, shr: 7 }, props: [{ db: "haR" }, { db: "haL" }] }, { joint: "haR", dir: "up" }, "none"),
+  // Trap bar shrug: the hex bar in both hands
+  "shrug-trap-bar": T({ v: "f", base: {}, A: { ua: 6, fa: 6, shr: 0 }, B: { ua: 6, fa: 6, shr: 7 }, props: [{ hex: 1 }] }, { joint: "haR", dir: "up" }, "none"),
+  // Lever shrug machine: handles on lever arms from the side uprights
+  "shrug-machine": T({ v: "f", base: {}, A: { ua: 6, fa: 6, shr: 0 }, B: { ua: 6, fa: 6, shr: 7 }, props: [...gripsF, ...uprightsF(12, 108), { rod: [108, 57.3], to: "haR" }, { rod: [12, 57.3], to: "haL" }] }, { joint: "haR", dir: "up" }, "none"),
   // ── Chest ──
   "press-flat": T({ base: { hx: 70, hy: 72, t: -90, th: 70, sh: 0, ua: 180, fa: 180 }, A: { al: 1 }, B: { al: -0.35 }, props: [{ line: [28, 80, 82, 80] }, { line: [44, 80, 44, 104] }] }, { joint: "ha", dir: "down" }, "bar"),
+  // Smith bench press: the bar runs in the rail
+  "press-flat-smith": T({ base: { hx: 70, hy: 72, t: -90, th: 70, sh: 0, ua: 180, fa: 180 }, A: { al: 1 }, B: { al: -0.35 }, props: [{ line: [28, 80, 82, 80] }, { line: [44, 80, 44, 104] }, ln(40, -18, 40, 104)] }, { joint: "ha", dir: "down" }, "bar"),
   "press-incline": T({ base: { hx: 66, hy: 80, t: -55, th: 88, sh: 0, ua: 150, fa: 150 }, A: { al: 1 }, B: { al: -0.35 }, props: [{ line: [64, 86, 34, 64] }, { line: [62, 84, 82, 84] }, { line: [66, 86, 66, 104] }] }, { joint: "ha", dir: "down" }, "bar"),
+  // Smith incline press: the bar goes straight up and down in the rail
+  "press-incline-smith": T({ base: { hx: 66, hy: 80, t: -55, th: 88, sh: 0, ua: 150, fa: 150 }, A: { al: 1 }, B: { al: -0.35 }, props: [{ line: [64, 86, 34, 64] }, { line: [62, 84, 82, 84] }, { line: [66, 86, 66, 104] }, { hold: [50, 28, 50, 56], kd: 300 }, ln(54, -18, 54, 104)] }, { joint: "ha", dir: "down" }, "bar"),
   "press-decline": T({ base: { hx: 50, hy: 61, t: -110, th: 60, sh: 0, ua: 185, fa: 185 }, A: { al: 1 }, B: { al: -0.35 }, props: [{ line: [16, 80, 62, 66] }, { line: [36, 74, 36, 104] }, { pad: "an" }] }, { joint: "ha", dir: "down" }, "bar"),
+  // Smith decline press: the bar runs in the rail
+  "press-decline-smith": T({ base: { hx: 50, hy: 61, t: -110, th: 60, sh: 0, ua: 185, fa: 185 }, A: { al: 1 }, B: { al: -0.35 }, props: [{ line: [16, 80, 62, 66] }, { line: [36, 74, 36, 104] }, { pad: "an" }, ln(21, -18, 21, 104)] }, { joint: "ha", dir: "down" }, "bar"),
   "press-machine-seated": T({ base: { hx: 48, hy: 80, t: 0, th: 88, sh: 0 }, A: { ua: -50, fa: 92 }, B: { ua: 90, fa: 90 }, props: [{ line: [36, 84, 60, 84] }, { line: [48, 84, 48, 104] }, { line: [44, 82, 44, 40] }] }, { joint: "ha", dir: "away" }, "none", [12, 46]),
+  // Machine chest press (side view): seat, back pad, a column behind and a beam over the head to the lever's pivot;
+  // the hands follow the handles from beside the chest straight forward
+  "press-chest-machine": T({ base: { hx: 48, hy: 80, t: 0, th: 88, sh: 0 }, A: { ua: -50, fa: 92 }, B: { ua: 90, fa: 90 }, props: [ln(36, 84, 60, 84), ln(48, 84, 48, 104), ln(44, 82, 44, 40, 3), ln(36, -14, 36, 104), ln(36, -14, 67.1, -14),
+    { hold: [62, 52, 84, 50], kd: 300 }, { rod: [67.1, -14], to: "ha" }, { pad: "ha", r: 2.2 }] }, { joint: "ha", dir: "away" }, "none"),
   fly: T({ v: "f", base: {}, A: { ua: 92, fa: 92 }, B: { ua: 35, fa: -15 }, props: [{ db: "haR" }, { db: "haL" }] }, { joint: "haR", dir: "toward" }, "none"),
-  "fly-cable": T({ v: "f", base: {}, A: { ua: 120, fa: 115 }, B: { ua: 30, fa: -20 }, props: [{ cable: [112, -12], to: "haR" }] }, { joint: "haR", dir: "toward" }, "none"),
+  "fly-cable": T({ v: "f", base: {}, A: { ua: 120, fa: 115 }, B: { ua: 30, fa: -20 }, props: [tower(112), { cable: [112, -12], to: "haR" }] }, { joint: "haR", dir: "toward" }, "none"),
   pushup: T({ base: { anchor: 1, ax: 102 }, A: { th: 60, sh: 60, t: -60 }, B: { th: 75, sh: 75, t: -75 }, props: [{ hold: [32, 103], kd: 135 }] }, { joint: "sh", dir: "down" }, "none"),
-  "dip-machine": T({ base: { hx: 50, hy: 78, t: 0, th: 88, sh: 0 }, A: { ua: -55, fa: 28 }, B: { ua: -3, fa: 3 }, props: [{ line: [38, 81, 64, 81] }, { db: "ha" }] }, { joint: "ha", dir: "down" }, "none"),
+  "dip-machine": T({ base: { hx: 50, hy: 78, t: 0, th: 88, sh: 0 }, A: { ua: -55, fa: 28 }, B: { ua: -3, fa: 3 }, props: [{ line: [38, 81, 64, 81] }, { db: "ha" }, ln(46, 80, 46, 42, 3), ln(21.9, 40, 21.9, 104), { rod: [21.9, 94.5], to: "ha" }] }, { joint: "ha", dir: "down" }, "none"),
   dip: T({ base: { th: 20, sh: -40 }, A: { hy: 48, t: 10 }, B: { hy: 56, t: 25 }, props: [{ line: [44, 52, 82, 52] }, { line: [82, 52, 82, 104] }, { hold: [64, 52], kd: 270 }] }, { joint: "sh", dir: "down" }, "none"),
   // ── Triceps ──
   pushdown: T({ base: { hx: 55, hy: 57, t: 12, th: 4, sh: -2, ua: -5 }, A: { fa: 115 }, B: { fa: 2 }, props: [] }, { joint: "ha", dir: "down" }, "cable", [84, -22]),
@@ -102,18 +169,27 @@ export const TEMPLATES: Record<string, Template> = {
   "overhead-extension-db": T({ base: { hx: 50, hy: 80, t: 0, th: 88, sh: 0, ua: 172 }, A: { fa: 330 }, B: { fa: 172 }, props: [{ line: [38, 84, 62, 84] }, { line: [50, 84, 50, 104] }] }, { joint: "ha", dir: "up" }, "db"),
   skullcrusher: T({ base: { hx: 70, hy: 72, t: -90, th: 70, sh: 0, ua: 195 }, A: { fa: 195 }, B: { fa: 320 }, props: [{ line: [28, 80, 82, 80] }, { line: [44, 80, 44, 104] }] }, { joint: "ha", dir: "down" }, "bar", [6, 96]),
   "skullcrusher-incline": T({ base: { hx: 58, hy: 78, t: -55, th: 80, sh: 0, ua: 200 }, A: { fa: 200 }, B: { fa: 350 }, props: [{ line: [56, 84, 26, 64] }, { line: [52, 82, 72, 82] }] }, { joint: "ha", dir: "down" }, "bar"),
-  "kickback-standing": T({ base: { hx: 66, hy: 58, t: -12, th: 12, sh: 12, ua: -15 }, A: { fa: 80 }, B: { fa: -15 }, props: [{ line: [94, -14, 94, 104] }, { arm2: [106, 106] }] }, { joint: "ha", dir: "toward" }, "cable", [92, -8]),
+  "kickback-standing": { ...T({ base: { hx: 66, hy: 58, t: -12, th: 12, sh: 12, ua: -15 }, A: { fa: 80 }, B: { fa: -15 }, props: [{ line: [94, -14, 94, 104] }, { arm2: [106, 106] }] }, { joint: "ha", dir: "toward" }, "cable", [92, -8]), post: false },
   "kickback-bent": T({ base: { hx: 46, hy: 58, t: 60, th: 14, sh: -8, ua: -80 }, A: { fa: 0 }, B: { fa: -80 }, props: [] }, { joint: "ha", dir: "toward" }, "db", [100, 100]),
   // ── Quads ──
   squat: T({ base: { anchor: 1, ax: 60, ua: -25, fa: 150 }, A: { th: 0, sh: 0, t: 8 }, B: { th: 82, sh: -32, t: 38 }, props: [{ pad: "sh", r: 3 }] }, { joint: "hip", dir: "down" }, "none"),
   "squat-smith": T({ base: { anchor: 1, ax: 60, ua: -25, fa: 150 }, A: { th: 0, sh: 0, t: 8 }, B: { th: 82, sh: -32, t: 38 }, props: [{ line: [67, -18, 67, 104] }, { pad: "sh", r: 3 }] }, { joint: "hip", dir: "down" }, "none"),
   "squat-front": T({ base: { anchor: 1, ax: 60, ua: 25, fa: 165 }, A: { th: 0, sh: 0, t: 4 }, B: { th: 88, sh: -36, t: 22 }, props: [] }, { joint: "hip", dir: "down" }, "db"),
-  "hack-squat": T({ base: { anchor: 1, ax: 64, ua: 0, fa: 160 }, A: { th: 0, sh: 4, t: -18 }, B: { th: 90, sh: -40, t: -8 }, props: [{ line: [40, -6, 30, 60] }] }, { joint: "hip", dir: "down" }, "none"),
-  "leg-press": T({ base: { hx: 40, hy: 80, t: -45, ua: 20, fa: 40 }, A: { th: 125, sh: 128 }, B: { th: 168, sh: 78 }, props: [{ line: [41, 88, 12, 59] }, { line: [41, 88, 41, 104] }, { perp: "an", ang: 40, len: 20 }] }, { joint: "an", dir: "toward" }, "none"),
+  // Hack squat (plate machine): back on a sled that slides down 45° rails, shoulders under the pads, feet on an
+  // angled platform at the bottom of the rails; the hips travel straight down the rails
+  "hack-squat": T({ base: { t: -45, ua: 60, fa: 223 }, A: { hx: 48.4, hy: 46 }, B: { hx: 64.4, hy: 62.1 }, props: [{ foot: [84, 76], kd: 135, toe: 110 },
+    ln(12, 25.2, 66, 79.2), ln(12, 25.2, 12, 104), ln(66, 79.2, 66, 104), ln(66, 79.2, 82.6, 78.1), ln(82.6, 78.1, 94.8, 73.7, 3), ln(90, 75.6, 90, 104),
+    { along: ["hip", "sh"], off: 3, ext: [6, 2] }, { along: ["hip", "sh"], off: 7.3, ext: [-37, 18] }, { pad: "sh", dx: 2.1, dy: -2.1, r: 3 }] }, { joint: "hip", dir: "down" }, "none"),
+  "leg-press": T({ base: { hx: 40, hy: 80, t: -45, ua: 20, fa: 40 }, A: { th: 125, sh: 128 }, B: { th: 168, sh: 78 }, props: [ln(42.5, 86, 12, 55.5, 3), ln(42, 86, 42, 104), { pad: "ha", r: 2.2 },
+    ln(57.4, 72.5, 93.2, 40.5), ln(93.2, 40.5, 93.2, 104), ln(57.4, 72.5, 57.4, 104), { foot: [72.8, 50.7, 59.4, 62.7], kd: 222, toe: 222 }, { along: ["an", "toe"], off: -1.8, ext: [6, 4] }] }, { joint: "an", dir: "toward" }, "none"),
   lunge: T({ base: { anchor: 1, ax: 72 }, A: { th: 39.6, sh: 11.8, t: 2 }, B: { th: 87.4, sh: -4.9, t: 6 }, props: [{ leg2: [30, 100], kd: 0, toe: 120 }] }, { joint: "hip", dir: "down" }, "db"),
+  // Smith reverse lunge: bar on the back, running in the rail
+  "lunge-smith": T({ base: { anchor: 1, ax: 72, ua: -25, fa: 150 }, A: { th: 39.6, sh: 11.8, t: 2 }, B: { th: 87.4, sh: -4.9, t: 6 }, props: [{ leg2: [30, 100], kd: 0, toe: 120 }, { pad: "sh", r: 3 }, ln(57, -18, 57, 104)] }, { joint: "hip", dir: "down" }, "none"),
   "split-squat": T({ base: { anchor: 1, ax: 74 }, A: { th: 37.5, sh: 3.5, t: 4 }, B: { th: 82.1, sh: -9.4, t: 8 }, props: [{ line: [8, 78, 38, 78] }, { line: [16, 78, 16, 104] }, { line: [32, 78, 32, 104] }, { leg2: [33, 76], kd: 0, toe: 270 }] }, { joint: "hip", dir: "down" }, "db"),
+  // Smith split squat: bar on the back, running in the rail
+  "split-squat-smith": T({ base: { anchor: 1, ax: 74, ua: -25, fa: 150 }, A: { th: 37.5, sh: 3.5, t: 4 }, B: { th: 82.1, sh: -9.4, t: 8 }, props: [{ line: [8, 78, 38, 78] }, { line: [16, 78, 16, 104] }, { line: [32, 78, 32, 104] }, { leg2: [33, 76], kd: 0, toe: 270 }, { pad: "sh", r: 3 }, ln(63, -18, 63, 104)] }, { joint: "hip", dir: "down" }, "none"),
   "step-up": T({ base: { anchor: 1, ax: 70, ah: 22 }, A: { th: 80, sh: -20, t: 20 }, B: { th: 0, sh: 0, t: 0 }, props: [{ line: [56, 82, 90, 82] }, { line: [56, 82, 56, 104] }, { line: [90, 82, 90, 104] }, { leg2: [40, 104], kd: 0 }] }, { joint: "hip", dir: "up" }, "db"),
-  "leg-extension": T({ base: { hx: 45, hy: 72, t: -50, th: 90, ua: 40, fa: 60 }, A: { sh: 0 }, B: { sh: 85 }, props: [{ line: [43, 77, 70, 77] }, { line: [43, 77, 16, 54] }, { line: [56, 77, 56, 104] }, { pad: "an" }] }, { joint: "an", dir: "up" }, "none"),
+  "leg-extension": T({ base: { hx: 45, hy: 72, t: -50, th: 90, ua: 40, fa: 60 }, A: { sh: 0 }, B: { sh: 85 }, props: [{ line: [43, 77, 70, 77] }, { line: [43, 77, 16, 54] }, { line: [56, 77, 56, 104] }, { pad: "an" }, ln(69, 72, 86, 104)] }, { joint: "an", dir: "up" }, "none"),
   // ── Hamstrings ──
   "leg-curl-lying": T({ base: { hx: 58, hy: 67, t: 90, th: -90, ua: 10, fa: 80 }, A: { sh: -90 }, B: { sh: -175 }, props: [{ line: [8, 75, 106, 75] }, { line: [30, 75, 30, 104] }, { line: [90, 75, 90, 104] }, { pad: "an" }] }, { joint: "an", dir: "up" }, "none"),
   "leg-curl-seated": T({ base: { hx: 45, hy: 72, t: 15, th: 90, ua: 20, fa: 40 }, A: { sh: 85 }, B: { sh: -15 }, props: [{ line: [36, 75, 66, 75] }, { line: [50, 67, 70, 67] }, { line: [52, 75, 52, 104] }, { pad: "an" }] }, { joint: "an", dir: "toward" }, "none"),
@@ -121,24 +197,36 @@ export const TEMPLATES: Record<string, Template> = {
   "good-morning": T({ base: { anchor: 1, ax: 60, ua: -25, fa: 150 }, A: { th: 0, sh: 0, t: 0 }, B: { th: 16, sh: -6, t: 78 }, props: [{ pad: "sh", r: 3 }] }, { joint: "sh", dir: "down" }, "none"),
   // ── Glutes ──
   "hip-thrust": T({ base: { anchor: 1, ax: 90, sh: -10, ua: 45, fa: 110 }, A: { th: 150, t: -50 }, B: { th: 100, t: -72 }, props: [{ line: [22, 74, 44, 74] }, { line: [32, 74, 32, 104] }] }, { joint: "hip", dir: "up" }, "bar"),
+  // Smith hip thrust: the bar on the hips runs in the rail
+  "hip-thrust-smith": T({ base: { ua: 45, fa: 110 }, A: { hx: 76, hy: 100, t: -41.5 }, B: { hx: 76, hy: 85, t: -72 }, props: [ln(22, 74, 56, 74), ln(32, 74, 32, 104), { foot: [90, 104], kd: 180, toe: 90 }, { pad: "hip", r: 3, dy: -3 }, ln(79, -18, 79, 104)] }, { joint: "hip", dir: "up" }, "none"),
+  // Hip thrust machine: a pad over the hips, belted to the base
+  "hip-thrust-machine": T({ base: { anchor: 1, ax: 90, sh: -10, ua: 45, fa: 110 }, A: { th: 150, t: -50 }, B: { th: 100, t: -72 }, props: [{ line: [22, 74, 44, 74] }, { line: [32, 74, 32, 104] }, { pad: "hip", r: 3, dy: -3 }, { cable: [76, 104], to: "hip" }] }, { joint: "hip", dir: "up" }, "none"),
   "glute-bridge": T({ base: { anchor: 1, ax: 88, ua: 88, fa: 88 }, A: { th: 126.7, sh: 27.9, t: -90, hn: 0 }, B: { th: 107.2, sh: 0, t: -107.1, hn: 17.1 }, props: [] }, { joint: "hip", dir: "up" }, "none"),
-  "hip-abduction": T({ v: "f", base: { hy: 66, lf: 0.5, ua: 20, fa: 20 }, A: { la: 6, sa: 4 }, B: { la: 40, sa: 10 }, props: [{ line: [44, 68, 76, 68] }, { pad: "knR" }, { pad: "knL" }] }, { joint: "knR", dir: "away" }, "none"),
-  "hip-adduction": T({ v: "f", base: { hy: 66, lf: 0.5, ua: 20, fa: 20 }, A: { la: 40, sa: 10 }, B: { la: 6, sa: 4 }, props: [{ line: [44, 68, 76, 68] }, { pad: "knR" }, { pad: "knL" }] }, { joint: "knR", dir: "toward" }, "none"),
+  "hip-abduction": T({ v: "f", base: { hy: 71, lf: 0.4, ua: 20, fa: 20 }, A: { la: 6, sa: 4 }, B: { la: 40, sa: 10 }, props: [ln(42, 73, 78, 73, 3), { pad: "knR" }, { pad: "knL" }, ln(60, 73, 60, 104), ...backPadF(10, 71)] }, { joint: "knR", dir: "away" }, "none"),
+  "hip-adduction": T({ v: "f", base: { hy: 71, lf: 0.4, ua: 20, fa: 20 }, A: { la: 40, sa: 10 }, B: { la: 6, sa: 4 }, props: [ln(42, 73, 78, 73, 3), { pad: "knR" }, { pad: "knL" }, ln(60, 73, 60, 104), ...backPadF(10, 71)] }, { joint: "knR", dir: "toward" }, "none"),
   "kickback-glute": { ...T({ base: { hx: 60, hy: 57, t: 22, ua: 30, fa: 30 }, A: { th: 0, sh: 0 }, B: { th: -45, sh: -35 }, props: [{ leg2: [61, 104], kd: 90 }] }, { joint: "an", dir: "toward" }, "cable", [104, 100]), cableTo: "an" },
+  // Glute kickback machine: hands on the frame in front, a pad behind the working foot
+  "kickback-glute-machine": T({ base: { hx: 60, hy: 57, t: 22, ua: 30, fa: 30 }, A: { th: 0, sh: 0 }, B: { th: -45, sh: -35 }, props: [{ leg2: [61, 104], kd: 90 }, ln(98, 30, 98, 104), ln(91.7, 58.4, 98, 58.4), { pad: "an", r: 2.6, dx: -2.5 }] }, { joint: "an", dir: "toward" }, "none"),
   // ── Calves ──
   "calf-raise-standing": T({ base: { anchor: 1, ax: 60, ua: -25, fa: 150 }, A: { ah: 7 }, B: { ah: 0 }, props: [{ pad: "sh", r: 3 }] }, { joint: "hip", dir: "down" }, "none"),
+  // Smith calf raise: the bar runs in the rail
+  "calf-raise-smith": T({ base: { anchor: 1, ax: 60, ua: -25, fa: 150 }, A: { ah: 7 }, B: { ah: 0 }, props: [{ pad: "sh", r: 3 }, ln(64, -18, 64, 104)] }, { joint: "hip", dir: "down" }, "none"),
+  // Standing calf raise machine: shoulder pad on an arm from the column behind
+  "calf-raise-machine": T({ base: { anchor: 1, ax: 60, ua: -25, fa: 150 }, A: { ah: 7 }, B: { ah: 0 }, props: [{ pad: "sh", r: 3 }, ln(34, -10, 34, 104), { rod: [34, 19.5], to: "sh" }] }, { joint: "hip", dir: "down" }, "none"),
   "calf-raise-seated": T({ base: { anchor: 1, ax: 70, sh: 0, t: 0, ua: 20, fa: 60 }, A: { ah: 6, th: 104.5 }, B: { ah: 0, th: 90 }, props: [{ line: [34, 85, 56, 85] }, { line: [44, 85, 44, 104] }, { pad: "kn", r: 3 }] }, { joint: "an", dir: "down" }, "none"),
+  // Seated calf machine: the knee pad on a lever from the front column
+  "calf-raise-seated-machine": T({ base: { anchor: 1, ax: 70, sh: 0, t: 0, ua: 20, fa: 60 }, A: { ah: 6, th: 104.5 }, B: { ah: 0, th: 90 }, props: [{ line: [34, 85, 56, 85] }, { line: [44, 85, 44, 104] }, { pad: "kn", r: 3 }, ln(94, 72, 94, 104), { rod: [94, 72], to: "kn" }] }, { joint: "an", dir: "down" }, "none"),
   // ── Abs ──
   crunch: T({ base: { hx: 62, hy: 98, th: 140, sh: 0, ua: 150, fa: 230 }, A: { t: -90 }, B: { t: -55 }, props: [] }, { joint: "sh", dir: "up" }, "none"),
-  "cable-crunch": T({ base: { hx: 52, hy: 78, th: 0, sh: -90, nofoot: 1, ua: 170, fa: 300 }, A: { t: 10 }, B: { t: 75 }, props: [] }, { joint: "sh", dir: "down" }, "cable", [96, -20]),
+  "cable-crunch": { ...T({ base: { hx: 52, hy: 78, th: 0, sh: -90, nofoot: 1, ua: 170, fa: 300 }, A: { t: 10 }, B: { t: 75 }, props: [] }, { joint: "sh", dir: "down" }, "cable", [96, -20]), post: 112 },
   "leg-raise-hanging": T({ base: { hx: 60, hy: 58, t: 0, ua: 180, fa: 180 }, A: { th: 0, sh: 0 }, B: { th: 95, sh: 95 }, props: [{ line: [44, -18, 76, -18] }] }, { joint: "an", dir: "up" }, "none"),
   "leg-raise-lying": T({ base: { hx: 70, hy: 98, t: -90, ua: 86, fa: 86 }, A: { th: 90, sh: 90 }, B: { th: 175, sh: 175 }, props: [] }, { joint: "an", dir: "up" }, "none"),
   // Kneeling rollout: knees stay put, hands on the wheel on the floor roll out until the body is long and low
   "ab-wheel": T({ base: { sh: -90, nofoot: 1 }, A: { hx: 26, hy: 78, th: 0, t: 68, ua: 20, fa: 20 }, B: { hx: 38, hy: 81.2, th: -30, t: 84, ua: 52, fa: 52 }, props: [{ pad: "ha", r: 3 }] }, { joint: "ha", dir: "away" }, "none"),
-  woodchop: T({ v: "f", base: {}, A: {}, B: {}, props: [{ hold: [84, 18, 50, 54], kd: 90 }, { hold: "haR", arm: "L", kd: 270 }, { cable: [112, -12], to: "haR" }] }, { joint: "haR", dir: "down" }, "none"),
-  "side-bend": T({ v: "f", base: { L: { ua: 4, fa: 4 } }, A: { tl: 0, ua: 4, fa: 4 }, B: { tl: 16, ua: 4, fa: 4 }, props: [{ db: "haR" }] }, { joint: "haR", dir: "down" }, "none"),
+  woodchop: T({ v: "f", base: {}, A: {}, B: {}, props: [tower(112), { hold: [84, 18, 50, 54], kd: 90 }, { hold: "haR", arm: "L", kd: 270 }, { cable: [112, -12], to: "haR" }] }, { joint: "haR", dir: "down" }, "none"),
+  "side-bend": { ...T({ v: "f", base: { L: { ua: 4, fa: 4 } }, A: { tl: 0, ua: 4, fa: 4 }, B: { tl: 16, ua: 4, fa: 4 }, props: [{ db: "haR" }] }, { joint: "haR", dir: "down" }, "none", [84, 104]), cableTo: "haR" },
   // ── Forearms and neck ──
-  "wrist-curl": T({ base: { hx: 50, hy: 80, t: 20, th: 88, sh: 0, ua: 30 }, A: { fa: 70 }, B: { fa: 100 }, props: [{ line: [38, 84, 62, 84] }, { line: [50, 84, 50, 104] }] }, { joint: "ha", dir: "up" }, "db"),
+  "wrist-curl": T({ base: { hx: 50, hy: 80, t: 20, th: 88, sh: 0, ua: 30 }, A: { fa: 70 }, B: { fa: 100 }, props: [{ line: [38, 84, 62, 84] }, { line: [50, 84, 50, 104] }] }, { joint: "ha", dir: "up" }, "db", [96, 104]),
   "neck-flexion": T({ base: { hx: 74, hy: 81, t: -90, th: 92, sh: 0 }, A: { hn: -10 }, B: { hn: 50 }, props: [{ line: [40, 88, 86, 88] }, { line: [56, 88, 56, 104] }, { hold: "head", kd: 180 }] }, { joint: "head", dir: "up" }, "none"),
   "neck-extension": T({ base: { hx: 44, hy: 81, t: 90, th: -92.4, sh: 0 }, A: { hn: 45 }, B: { hn: -10 }, props: [{ line: [30, 88, 78, 88] }, { line: [62, 88, 62, 104] }, { hold: "head", kd: 180 }] }, { joint: "head", dir: "up" }, "none"),
 
@@ -151,24 +239,25 @@ export const TEMPLATES: Record<string, Template> = {
   "pullup-scapular": T({ v: "f", base: { lf: 1, la: 4, sa: 2 }, A: { hy: 58, ua: 172, fa: 172 }, B: { hy: 51, ua: 160, fa: 172 }, props: [{ line: [22, -18, 98, -18] }] }, { joint: "sh", dir: "up" }, "none"),
   "handstand-pushup": T({ base: { nofoot: 1 }, A: { hx: 60, hy: 32, t: 186.7, th: 150.7, sh: 150.7 }, B: { hx: 58, hy: 52, t: 190, th: 148, sh: 148 }, props: [{ line: [84, -20, 84, 104] }, { hold: [58, 103], kd: 270 }] }, { joint: "sh", dir: "down" }, "none"),
   "overhead-extension-standing": T({ base: { ua: 172 }, A: { fa: 330 }, B: { fa: 172 }, props: [] }, { joint: "ha", dir: "up" }, "db", [16, 100]),
-  "fly-cable-low": T({ v: "f", base: {}, A: { ua: 40, fa: 30 }, B: { ua: 130, fa: 190 }, props: [{ cable: [112, 100], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
+  "fly-cable-low": T({ v: "f", base: {}, A: { ua: 40, fa: 30 }, B: { ua: 130, fa: 190 }, props: [tower(112), { cable: [112, 100], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
   "press-floor": T({ base: { hx: 70, hy: 98, t: -90, th: 135, sh: 0 }, A: { ua: 180, fa: 180 }, B: { ua: 110, fa: 175 }, props: [] }, { joint: "ha", dir: "down" }, "bar"),
   "pallof-press": T({ base: { t: 0 }, A: { ua: -40, fa: 90 }, B: { ua: 90, fa: 90 }, props: [] }, { joint: "ha", dir: "away" }, "cable", [116, 62]),
-  "woodchop-up": T({ v: "f", base: {}, A: {}, B: {}, props: [{ hold: [66, 56, 36, 18], kd: 90 }, { hold: "haR", arm: "L", kd: 270 }, { cable: [112, 100], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
+  "woodchop-up": T({ v: "f", base: {}, A: {}, B: {}, props: [tower(112), { hold: [66, 56, 36, 18], kd: 90 }, { hold: "haR", arm: "L", kd: 270 }, { cable: [112, 100], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
   "leg-lower-lying": T({ base: { hx: 70, hy: 98, t: -90, ua: 180, fa: 180 }, A: { th: 175, sh: 175 }, B: { th: 100, sh: 100 }, props: [] }, { joint: "an", dir: "down" }, "none"),
   "reverse-nordic": T({ base: { sh: -90, nofoot: 1, ua: 20, fa: 120 }, A: { hx: 52, hy: 78, th: 0, t: 0 }, B: { hx: 41.9, hy: 80.2, th: 25, t: -25 }, props: [] }, { joint: "sh", dir: "down" }, "none"),
   "sissy-squat": T({ base: { anchor: 1, ax: 56, ah: 6, ua: 60, fa: 120 }, A: { th: 0, sh: 0, t: 0 }, B: { th: 60, sh: -40, t: -30 }, props: [{ line: [70, 30, 70, 104] }] }, { joint: "hip", dir: "down" }, "none"),
-  "calf-press": T({ base: { hx: 40, hy: 80, t: -45, ua: 20, fa: 40 }, A: { th: 127, sh: 120 }, B: { th: 120, sh: 138 }, props: [{ line: [41, 88, 12, 59] }, { line: [41, 88, 41, 104] }, { perp: "an", ang: 40, len: 20 }] }, { joint: "an", dir: "toward" }, "none"),
-  "calf-raise-donkey": T({ base: { anchor: 1, ax: 46, t: 80, th: 0, sh: 0, ua: 10, fa: 10 }, A: { ah: 7 }, B: { ah: 0 }, props: [{ line: [84, 70, 104, 70] }, { line: [96, 70, 96, 104] }] }, { joint: "hip", dir: "down" }, "none"),
+  "calf-press": T({ base: { hx: 40, hy: 80, t: -45, ua: 20, fa: 40 }, A: { th: 127, sh: 120 }, B: { th: 120, sh: 138 }, props: [ln(42.5, 86, 12, 55.5, 3), ln(42, 86, 42, 104), { pad: "ha", r: 2.2 },
+    ln(57.4, 72.5, 93.2, 40.5), ln(93.2, 40.5, 93.2, 104), ln(57.4, 72.5, 57.4, 104), { foot: [74.5, 49.2], kd: 222, toe: [192, 242] }, { perp: "toe", ang: 42, len: 28 }] }, { joint: "toe", dir: "toward" }, "none"),
+  "calf-raise-donkey": T({ base: { anchor: 1, ax: 46, t: 80, th: 0, sh: 0, ua: 10, fa: 10 }, A: { ah: 7 }, B: { ah: 0 }, props: [{ line: [84, 70, 104, 70] }, { line: [96, 70, 96, 104] }, { pad: "hip", r: 3, dy: -3 }, ln(20, 40, 20, 104), { rod: [20, 53.5], to: "hip" }] }, { joint: "hip", dir: "down" }, "none"),
   "kickback-quadruped": T({ base: { hx: 50, hy: 80, t: 65, ua: 0, fa: 0, nofoot: 1 }, A: { th: 0, sh: -90 }, B: { th: -100, sh: -100 }, props: [{ leg2: [27, 104], kd: 0, toe: 270 }] }, { joint: "an", dir: "up" }, "none", [4, 100]),
   "hip-abduction-standing": T({ v: "f", base: {}, A: { la: 4, sa: 2 }, B: { la: 26, sa: 6 }, props: [{ line: [16, -14, 16, 104] }, { cable: [16, 100], to: "anR" }] }, { joint: "knR", dir: "away" }, "none"),
-  "pull-through": T({ base: { anchor: 1, ax: 60 }, A: { th: 0, sh: 0, t: 0, ua: 0, fa: 0 }, B: { th: 20, sh: -8, t: 75, ua: 0, fa: 0 }, props: [{ cable: [8, 100], to: "ha" }] }, { joint: "ha", dir: "down" }, "none"),
+  "pull-through": T({ base: { anchor: 1, ax: 60 }, A: { th: 0, sh: 0, t: 0, ua: 0, fa: 0 }, B: { th: 20, sh: -8, t: 75, ua: 0, fa: 0 }, props: [tower(8), { cable: [8, 100], to: "ha" }] }, { joint: "ha", dir: "down" }, "none"),
 
   // ── Added by the review fixes (phase 2) ──
   // Lean-in cable raise: post and low pulley on the working side, body leaning toward the free hand's post
   "lateral-raise-lean-in-cable": T({ v: "f", base: { cx: 52, la: 0, sa: 0, hw: 1.5, rot: -14, L: { ua: 50, fa: 50 } }, A: { ua: -20, fa: -22 }, B: { ua: 92, fa: 92 }, props: [{ line: [12, -14, 12, 104] }, { line: [6, 104, 18, 104] }, { cable: [12, 96], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
   // Lying fly (flat bench): arms up over the chest, then open wide (side view: the arms drop and shorten as they go out)
-  "fly-lying": T({ base: { hx: 70, hy: 72, t: -90, th: 70, sh: 0 }, A: { ua: 180, fa: 180, al: 1, fl: 1 }, B: { ua: 190, fa: 205, al: 0.3, fl: 0.45 }, props: [{ line: [28, 80, 82, 80] }, { line: [44, 80, 44, 104] }, { db: "ha" }] }, { joint: "ha", dir: "down" }, "none", [30, 104]),
+  "fly-lying": { ...T({ base: { hx: 70, hy: 72, t: -90, th: 70, sh: 0 }, A: { ua: 180, fa: 180, al: 1, fl: 1 }, B: { ua: 190, fa: 205, al: 0.3, fl: 0.45 }, props: [{ line: [28, 80, 82, 80] }, { line: [44, 80, 44, 104] }, { db: "ha" }] }, { joint: "ha", dir: "down" }, "none", [30, 104]), post: false },
   // Standing front raise all the way overhead
   "front-raise-full": T({ base: {}, A: { ua: 0, fa: 0 }, B: { ua: 170, fa: 170 }, props: [] }, { joint: "ha", dir: "up" }, "db", [86, 100]),
   // Chest on an incline bench, arms hanging, raised out to the sides (drawn like reverse-fly-bent)
@@ -176,13 +265,13 @@ export const TEMPLATES: Record<string, Template> = {
   // Face down on a flat bench (variant for bench: "flat")
   "reverse-fly-prone-flat": T({ base: { hx: 68, hy: 58, t: -90, th: 90, sh: 90, nofoot: 1 }, A: { ua: 0, fa: 0, al: 1, fl: 1 }, B: { ua: -20, fa: -20, al: 0.25, fl: 0.25 }, props: [{ line: [40, 66, 104, 66] }, { line: [48, 66, 48, 104] }, { line: [96, 66, 96, 104] }] }, { joint: "ha", dir: "up" }, "db"),
   // Seated on a bench end, chest on the thighs, arms from under the knees out to the sides (variant for seated)
-  "reverse-fly-bent-seated": T({ base: { hx: 40, hy: 76, t: 72, th: 88, sh: 0 }, A: { ua: 0, fa: 0, al: 1, fl: 1 }, B: { ua: -80, fa: -80, al: 0.7, fl: 0.7 }, props: [{ line: [26, 80, 50, 80] }, { line: [36, 80, 36, 104] }] }, { joint: "ha", dir: "up" }, "db", [76, 104]),
+  "reverse-fly-bent-seated": { ...T({ base: { hx: 40, hy: 76, t: 72, th: 88, sh: 0 }, A: { ua: 0, fa: 0, al: 1, fl: 1 }, B: { ua: -80, fa: -80, al: 0.7, fl: 0.7 }, props: [{ line: [26, 80, 50, 80] }, { line: [36, 80, 36, 104] }] }, { joint: "ha", dir: "up" }, "db", [76, 104]), post: 112 },
   // Seated cable row to the neck, elbows high and wide
-  "row-rear-delt-seated": T({ base: { hx: 40, hy: 88, th: 85, sh: 85, t: 0 }, A: { ua: 90, fa: 90, al: 1, fl: 1 }, B: { ua: 90, fa: 170, al: 0.3, fl: 0.75 }, props: [{ line: [20, 92, 50, 92] }, { line: [93, 70, 93, 95] }, { cable: [118, 52], to: "ha" }] }, { joint: "ha", dir: "toward" }, "none"),
+  "row-rear-delt-seated": T({ base: { hx: 40, hy: 88, th: 85, sh: 85, t: 0 }, A: { ua: 90, fa: 90, al: 1, fl: 1 }, B: { ua: 90, fa: 170, al: 0.3, fl: 0.75 }, props: [tower(118), { line: [20, 92, 50, 92] }, { line: [93, 70, 93, 95] }, { cable: [118, 52], to: "ha" }] }, { joint: "ha", dir: "toward" }, "none"),
   // Back extension starting at the top: body straight in line with the bench, then hinge down
   "back-extension": T({ base: { hx: 46, hy: 56, th: -45, sh: -45 }, A: { t: 45, ua: 315, fa: 135 }, B: { t: 158, ua: 202, fa: 22 }, props: [{ pad: "hip", r: 3, dy: 4 }, { line: [12, 103, 48, 67] }, { line: [31, 84, 31, 104] }] }, { joint: "sh", dir: "down" }, "none"),
   // Reverse hyper: face down on a high pad, legs hanging, swung up in line with the body
-  "reverse-hyper": T({ base: { hx: 70, hy: 51, t: -90, ua: 0, fa: 0, nofoot: 1 }, A: { th: 0, sh: 0 }, B: { th: 86, sh: 86 }, props: [{ line: [30, 58, 72, 58] }, { line: [46, 58, 46, 104] }] }, { joint: "an", dir: "up" }, "none"),
+  "reverse-hyper": T({ base: { hx: 70, hy: 51, t: -90, ua: 0, fa: 0, nofoot: 1 }, A: { th: 0, sh: 0 }, B: { th: 86, sh: 86 }, props: [{ line: [30, 58, 72, 58] }, { line: [46, 58, 46, 104] }, { pad: "an", r: 3 }] }, { joint: "an", dir: "up" }, "none"),
   // Reverse crunch: lying, thighs straight up, knees bent; the hips curl up off the floor
   "reverse-crunch": T({ base: { ua: 90, fa: 90 }, A: { hx: 70, hy: 98, t: -90, th: 180, sh: 90 }, B: { hx: 70, hy: 90, t: -104, th: 222, sh: 120 }, props: [] }, { joint: "hip", dir: "up" }, "none"),
   // Dead bug: lying, arm up and knee bent 90°; the arm goes overhead and the leg straightens toward the floor
@@ -195,12 +284,18 @@ export const TEMPLATES: Record<string, Template> = {
   "lying-cable-extension-incline": T({ base: { hx: 58, hy: 78, t: -55, th: 80, sh: 0, ua: 200 }, A: { fa: 350 }, B: { fa: 200 }, props: [{ line: [56, 84, 26, 64] }, { line: [52, 82, 72, 82] }] }, { joint: "ha", dir: "up" }, "cable", [6, -16]),
   // Trunk rotation (front view): arms out in front, the torso turns to one side
   "trunk-rotation": T({ v: "f", base: { la: 8, sa: 4 }, A: {}, B: {}, props: [{ hold: [60, 34, 86, 30], straight: 1 }, { hold: "haR", arm: "L", straight: 1 }] }, { joint: "haR", dir: "away" }, "none"),
+  // Cable rotation: the cable from a tower at the side, at chest height
+  "trunk-rotation-cable": T({ v: "f", base: { la: 8, sa: 4 }, A: {}, B: {}, props: [{ hold: [60, 34, 86, 30], straight: 1 }, { hold: "haR", arm: "L", straight: 1 }, tower(114), { cable: [114, 34], to: "haR" }] }, { joint: "haR", dir: "away" }, "none"),
   // Seated version (variant for seated): sitting on the floor or a bench
   "trunk-rotation-seated": T({ v: "f", base: { hy: 66, lf: 0.45, la: 12, sa: 4 }, A: {}, B: {}, props: [{ line: [44, 68, 76, 68] }, { hold: [60, 43, 86, 39], straight: 1 }, { hold: "haR", arm: "L", straight: 1 }] }, { joint: "haR", dir: "away" }, "none"),
+  // Rotary torso machine: seated, back pad behind
+  "trunk-rotation-machine": T({ v: "f", base: { ...SEAT_F }, A: {}, B: {}, props: [...seatF, { hold: [60, 51, 86, 47], straight: 1 }, { hold: "haR", arm: "L", straight: 1 }, ...backPadF(10)] }, { joint: "haR", dir: "away" }, "none"),
   // Standing cable crunch, back to a high pulley: the spine curls down from a slight arch
   "cable-crunch-standing": T({ base: { anchor: 1, ax: 62, th: 4, sh: -2 }, A: { t: -6, ua: 25, fa: 165 }, B: { t: 55, ua: 85, fa: 225 }, props: [] }, { joint: "sh", dir: "down" }, "cable", [8, -20]),
   // Seated version (variant for seated): sitting on a bench, back to a high pulley
   "cable-crunch-seated": T({ base: { hx: 52, hy: 80, th: 88, sh: 0 }, A: { t: -6, ua: 25, fa: 165 }, B: { t: 55, ua: 85, fa: 225 }, props: [{ line: [40, 84, 64, 84] }, { line: [52, 84, 52, 104] }] }, { joint: "sh", dir: "down" }, "cable", [8, -20]),
+  // Ab crunch machine: seat, back pad, handles by the head
+  "crunch-machine-seated": T({ base: { hx: 52, hy: 80, th: 88, sh: 0 }, A: { t: -6, ua: 25, fa: 165 }, B: { t: 55, ua: 85, fa: 225 }, props: [{ line: [40, 84, 64, 84] }, { line: [52, 84, 52, 104] }, ln(48, 82, 44.4, 46, 3), ln(36, 23.3, 36, 104), ln(36, 23.3, 76.9, 23.3), { rod: [76.9, 23.3], to: "ha" }, { pad: "ha", r: 2.4 }] }, { joint: "sh", dir: "down" }, "none"),
   // Seated neck machine (variants for seated): torso still, only the head tips forward, or back
   "neck-flexion-seated": T({ base: { hx: 50, hy: 80, t: 0, th: 88, sh: 0, ua: 20, fa: 80 }, A: { hn: 0 }, B: { hn: 40 }, props: [{ line: [38, 84, 62, 84] }, { line: [50, 84, 50, 104] }, { line: [84, 20, 84, 104] }, { cable: [84, 34], to: "head" }] }, { joint: "head", dir: "away" }, "none"),
   "neck-extension-seated": T({ base: { hx: 50, hy: 80, t: 0, th: 88, sh: 0, ua: 20, fa: 80 }, A: { hn: 12 }, B: { hn: -24 }, props: [{ line: [38, 84, 62, 84] }, { line: [50, 84, 50, 104] }, { line: [16, 20, 16, 104] }, { cable: [16, 34], to: "head" }] }, { joint: "head", dir: "toward" }, "none"),
@@ -226,19 +321,23 @@ export const TEMPLATES: Record<string, Template> = {
   // Seated lateral raise (variant for seated)
   "lateral-raise-seated": T({ v: "f", base: { hy: 66, lf: 0.45, la: 12, sa: 4 }, A: { ua: 8, fa: 8 }, B: { ua: 88, fa: 90 }, props: [{ line: [44, 68, 76, 68] }, { db: "haR" }, { db: "haL" }] }, { joint: "haR", dir: "up" }, "none"),
   // Machine lateral raise: elbows bent, pads on the outside of the arms
-  "lateral-raise-machine": T({ v: "f", base: { fl: 0.4 }, A: { ua: 8, fa: 20 }, B: { ua: 88, fa: 60 }, props: [{ pad: "elR", r: 3 }, { pad: "elL", r: 3 }] }, { joint: "haR", dir: "up" }, "none"),
-  "lateral-raise-machine-seated": T({ v: "f", base: { hy: 66, lf: 0.45, la: 12, sa: 4, fl: 0.4 }, A: { ua: 8, fa: 20 }, B: { ua: 88, fa: 60 }, props: [{ line: [44, 68, 76, 68] }, { pad: "elR", r: 3 }, { pad: "elL", r: 3 }] }, { joint: "haR", dir: "up" }, "none"),
+  "lateral-raise-machine": T({ v: "f", base: { fl: 0.4 }, A: { ua: 8, fa: 20 }, B: { ua: 88, fa: 60 }, props: [{ pad: "elR", r: 3 }, { pad: "elL", r: 3 }, { along: ["shR", "elR"], off: 2.5, ext: [0, 2], w: 2 }, { along: ["shL", "elL"], off: -2.5, ext: [0, 2], w: 2 }, ...uprightsF(8, 112)] }, { joint: "haR", dir: "up" }, "none"),
+  "lateral-raise-machine-seated": T({ v: "f", base: { ...SEAT_F, fl: 0.4 }, A: { ua: 8, fa: 20 }, B: { ua: 88, fa: 60 }, props: [...seatF, { pad: "elR", r: 3 }, { pad: "elL", r: 3 }, { along: ["shR", "elR"], off: 2.5, ext: [0, 2], w: 2 }, { along: ["shL", "elL"], off: -2.5, ext: [0, 2], w: 2 }, ...backPadF(10), ...uprightsF(8, 112)] }, { joint: "haR", dir: "up" }, "none"),
   // Incline / decline seated press (machine, or cable with the pulley behind), and the standing cable press
   "press-incline-machine": T({ base: { hx: 50, hy: 80, t: -25, th: 88, sh: 0 }, A: { ua: -40, fa: 70 }, B: { ua: 125, fa: 125 }, props: [{ line: [38, 84, 62, 84] }, { line: [50, 84, 50, 104] }, { line: [46, 84, 32, 52] }] }, { joint: "ha", dir: "up" }, "none", [14, 76]),
-  "press-decline-machine": T({ base: { hx: 48, hy: 80, t: -8, th: 88, sh: 0 }, A: { ua: -45, fa: 95 }, B: { ua: 62, fa: 62 }, props: [{ line: [36, 84, 60, 84] }, { line: [48, 84, 48, 104] }, { line: [44, 82, 40, 40] }] }, { joint: "ha", dir: "away" }, "none"),
+  // Incline lever press (machine / plate loaded): the lever pivots low in front, the hands push up and forward
+  "press-incline-lever": T({ base: { hx: 50, hy: 80, t: -25, th: 88, sh: 0 }, A: { ua: -40, fa: 70 }, B: { ua: 125, fa: 125 }, props: [ln(38, 84, 62, 84), ln(50, 84, 50, 104), ln(46, 84, 32, 52, 3), ln(90.7, 68.8, 90.7, 104),
+    { hold: [46, 52, 66.8, 27.4], kd: 315 }, { rod: [90.7, 68.8], to: "ha" }, { pad: "ha", r: 2.2 }] }, { joint: "ha", dir: "up" }, "none"),
+  "press-decline-machine": T({ base: { hx: 48, hy: 80, t: -8, th: 88, sh: 0 }, A: { ua: -45, fa: 95 }, B: { ua: 62, fa: 62 }, props: [ln(36, 84, 60, 84), ln(48, 84, 48, 104), ln(44, 82, 40, 40, 3), ln(34, -5.4, 34, 104), ln(34, -5.4, 74, -5.4),
+    { hold: [47.1, 58.9, 76.8, 64.2], kd: 315 }, { rod: [74, -5.4], to: "ha" }, { pad: "ha", r: 2.2 }] }, { joint: "ha", dir: "away" }, "none"),
   "press-cable-standing": T({ base: { t: 10, th: 4, sh: -2 }, A: { ua: -40, fa: 90 }, B: { ua: 85, fa: 88 }, props: [] }, { joint: "ha", dir: "away" }, "cable", [16, 28]),
   // Pec deck (front view, seated): arms open wide, then together in front of the chest (drawn shorter as they come
   // forward, like reverse-fly-cable)
-  "pec-deck": T({ v: "f", base: { hy: 66, lf: 0.45, la: 12, sa: 4, ua: 92, fa: 92 }, A: { al: 1, fl: 1 }, B: { al: -0.3, fl: -0.3 }, props: [{ line: [44, 68, 76, 68] }] }, { joint: "haR", dir: "toward" }, "none"),
+  "pec-deck": T({ v: "f", base: { ...SEAT_F, ua: 92, fa: 92 }, A: { al: 1, fl: 1 }, B: { al: -0.3, fl: -0.3 }, props: [...seatF, ...backPadF(10), ...uprightsF(4, 116), ln(4, -16, 116, -16), ...gripsF] }, { joint: "haR", dir: "toward" }, "none"),
   // Seated cable fly (variant for seated): pulleys at shoulder height on both sides
-  "fly-cable-seated": T({ v: "f", base: { hy: 66, lf: 0.45, la: 12, sa: 4, ua: 92, fa: 92 }, A: { al: 1, fl: 1 }, B: { al: -0.3, fl: -0.3 }, props: [{ line: [44, 68, 76, 68] }, { cable: [114, 32], to: "haR" }, { cable: [6, 32], to: "haL" }] }, { joint: "haR", dir: "toward" }, "none"),
+  "fly-cable-seated": T({ v: "f", base: { hy: 66, lf: 0.45, la: 12, sa: 4, ua: 92, fa: 92 }, A: { al: 1, fl: 1 }, B: { al: -0.3, fl: -0.3 }, props: [tower(114), tower(6), { line: [44, 68, 76, 68] }, { cable: [114, 32], to: "haR" }, { cable: [6, 32], to: "haL" }] }, { joint: "haR", dir: "toward" }, "none"),
   // Cable press-around (front view): one hand from beside the chest, forward and across past the middle
-  "press-around": T({ v: "f", base: { L: { ua: 4, fa: 4 } }, A: { ua: 35, fa: 165, al: 0.7, fl: 0.6 }, B: { ua: -75, fa: -80, al: 0.6, fl: 0.6 }, props: [{ cable: [84, 14], to: "haR" }] }, { joint: "haR", dir: "toward" }, "none"),
+  "press-around": T({ v: "f", base: { L: { ua: 4, fa: 4 } }, A: { ua: 35, fa: 165, al: 0.7, fl: 0.6 }, B: { ua: -75, fa: -80, al: 0.6, fl: 0.6 }, props: [ln(84, 14, 110, 14), tower(110), { cable: [84, 14], to: "haR" }] }, { joint: "haR", dir: "toward" }, "none"),
   // Push-ups: hands on a bench (incline), feet on a bench (decline), hands on blocks (deficit)
   "pushup-incline": T({ base: { anchor: 1, ax: 102 }, A: { th: 42, sh: 42, t: -42 }, B: { th: 56, sh: 56, t: -56 }, props: [{ line: [30, 81, 58, 81] }, { line: [34, 81, 34, 104] }, { line: [54, 81, 54, 104] }, { hold: [50, 80], kd: 135 }] }, { joint: "sh", dir: "down" }, "none"),
   "pushup-decline": T({ base: { anchor: 1, ax: 104, ah: 24, fh: 20 }, A: { th: 79, sh: 79, t: -79 }, B: { th: 95, sh: 95, t: -95 }, props: [{ line: [94, 84, 118, 84] }, { line: [98, 84, 98, 104] }, { line: [114, 84, 114, 104] }, { hold: [25, 103], kd: 135 }] }, { joint: "sh", dir: "down" }, "none"),
@@ -246,11 +345,11 @@ export const TEMPLATES: Record<string, Template> = {
   // Tate press: lying, dumbbells from straight up in to the chest, elbows out (arms drawn short: they point out sideways)
   "tate-press": T({ base: { hx: 70, hy: 72, t: -90, th: 70, sh: 0 }, A: { ua: 180, fa: 180, al: 1, fl: 1 }, B: { ua: 175, fa: 100, al: 0.5, fl: 0.35 }, props: [{ line: [28, 80, 82, 80] }, { line: [44, 80, 44, 104] }] }, { joint: "ha", dir: "down" }, "db"),
   // Cross-body cable extension (front view): cables crossed, hands by the opposite shoulders, then down and out
-  "cross-body-extension": T({ v: "f", base: {}, A: { ua: 15, al: 0.6, fa: -115 }, B: { ua: 30, al: 1, fa: 35 }, props: [{ cable: [8, -16], to: "haR" }, { cable: [112, -16], to: "haL" }] }, { joint: "haR", dir: "down" }, "none"),
+  "cross-body-extension": T({ v: "f", base: {}, A: { ua: 15, al: 0.6, fa: -115 }, B: { ua: 30, al: 1, fa: 35 }, props: [tower(8), tower(112), { cable: [8, -16], to: "haR" }, { cable: [112, -16], to: "haL" }] }, { joint: "haR", dir: "down" }, "none"),
   // Katana extension (front view): hand behind the head on the other side, then up and out; low pulley behind
-  katana: T({ v: "f", base: { L: { ua: 4, fa: 4 } }, A: { ua: 160, fa: 300 }, B: { ua: 150, fa: 150 }, props: [{ cable: [34, 100], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
+  katana: T({ v: "f", base: { L: { ua: 4, fa: 4 } }, A: { ua: 160, fa: 300 }, B: { ua: 150, fa: 150 }, props: [tower(34), { cable: [34, 100], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
   // Seated machine extension: upper arms on a sloped pad, the hands push down until the arms are straight
-  "triceps-extension-machine": T({ base: { hx: 46, hy: 80, t: 5, th: 88, sh: 0, ua: 60 }, A: { fa: 170 }, B: { fa: 60 }, props: [{ line: [34, 84, 58, 84] }, { line: [46, 84, 46, 104] }, { line: [50, 51, 68, 61] }] }, { joint: "ha", dir: "down" }, "none"),
+  "triceps-extension-machine": T({ base: { hx: 46, hy: 80, t: 5, th: 88, sh: 0, ua: 60 }, A: { fa: 170 }, B: { fa: 60 }, props: [{ line: [34, 84, 58, 84] }, { line: [46, 84, 46, 104] }, { line: [50, 51, 68, 61] }, ln(41.5, 80, 44.5, 46, 3), ln(68, 61, 84, 61), ln(84, 61, 84, 104), { pad: "ha", r: 2.2 }] }, { joint: "ha", dir: "down" }, "none"),
   // Kneeling overhead cable extension (variant for kneeling): upper arms on a bench, back to a high pulley
   "overhead-extension-cable-kneeling": T({ base: { hx: 44, hy: 78, th: 0, sh: -90, nofoot: 1, t: 45, ua: 100 }, A: { fa: 270 }, B: { fa: 100 }, props: [{ line: [74, 61, 100, 61] }, { line: [94, 61, 94, 104] }] }, { joint: "ha", dir: "away" }, "cable", [10, -12]),
   // ── Abs (phase 3) ──
@@ -279,7 +378,7 @@ export const TEMPLATES: Record<string, Template> = {
   // Cable Russian twist on a ball: shoulders on the ball, hips up, arms straight up; the arms swing to one side
   "russian-twist-ball": T({ base: { anchor: 1, ax: 96, sh: -10, th: 95, t: -90, ua: 180, fa: 180 }, A: { al: 1, fl: 1 }, B: { al: 0.55, fl: 0.55 }, props: [{ pad: "sh", r: 10, dy: 10.5 }] }, { joint: "ha", dir: "down" }, "none"),
   // High-pulley side bend (front view): handle by the shoulder, bend sideways toward it
-  "side-bend-high-cable": T({ v: "f", base: { L: { ua: 4, fa: 4 }, ua: 8, fa: 172 }, A: { tl: 0 }, B: { tl: 18 }, props: [{ cable: [78, -20], to: "haR" }] }, { joint: "haR", dir: "down" }, "none"),
+  "side-bend-high-cable": T({ v: "f", base: { L: { ua: 4, fa: 4 }, ua: 8, fa: 172 }, A: { tl: 0 }, B: { tl: 18 }, props: [ln(78, -20, 100, -20), tower(100), { cable: [78, -20], to: "haR" }] }, { joint: "haR", dir: "down" }, "none"),
   // Decline crunch (variant for bench decline): head low on the bench, feet hooked high
   "crunch-decline": T({ base: { hx: 64, hy: 76, th: 125, sh: 70, ua: 150, fa: 230 }, A: { t: -114 }, B: { t: -70 }, props: [{ line: [20, 103, 96, 69] }, { line: [82, 75, 82, 104] }, { pad: "an" }] }, { joint: "sh", dir: "up" }, "none"),
   // Behind-the-back wrist curl: standing, bar behind the hips; only the hands curl up
@@ -294,7 +393,7 @@ export const TEMPLATES: Record<string, Template> = {
   // Barbell hack squat: bar held behind the legs, arms straight
   "hack-squat-barbell": T({ base: { anchor: 1, ax: 60 }, A: { th: 0, sh: 0, t: 4, ua: -6, fa: -6 }, B: { th: 82, sh: -34, t: 30, ua: -22, fa: -22 }, props: [] }, { joint: "hip", dir: "down" }, "bar"),
   // Lying leg press (Smith or lying machine): on the back, feet up on a bar or platform
-  "leg-press-lying": T({ base: { hx: 74, hy: 98, t: -90, ua: 90, fa: 90 }, A: { th: 178, sh: 178 }, B: { th: 215, sh: 140 }, props: [{ perp: "an", ang: 90, len: 16 }] }, { joint: "an", dir: "down" }, "none"),
+  "leg-press-lying": T({ base: { hx: 74, hy: 98, t: -90, ua: 90, fa: 90 }, A: { th: 178, sh: 178 }, B: { th: 215, sh: 140 }, props: [{ foot: [75, 51, 75, 62], kd: 270, toe: 270 }, { along: ["an", "toe"], off: -1.8, ext: [8, 4] }, ln(83, -14, 83, 104)] }, { joint: "an", dir: "down" }, "none"),
   // Side lunge (front view): bar on the back, sit to one side, the other leg straight
   "side-lunge": T({ v: "f", base: { ua: 60, fa: 205, fl: 0.8, lfL: 1 }, A: { cx: 60, hy: 61.4, la: 25, sa: 25, lf: 1, laL: 25, saL: 25 }, B: { cx: 72, hy: 69.4, la: 47.4, sa: -13.5, lf: 0.75, laL: 42.7, saL: 42.7 }, props: [] }, { joint: "sh", dir: "down" }, "bar"),
   // ── Holds (tempo "Hold N s"): a still pose with a small brace/breathing motion ──
@@ -323,9 +422,9 @@ export const TEMPLATES: Record<string, Template> = {
   // Seated neck side bend (front view): torso still, the head tilts to one side against a pad
   "neck-side-bend-seated": T({ v: "f", base: { hy: 66, lf: 0.45, la: 12, sa: 4, ua: 20, fa: 20 }, A: { hn: 0 }, B: { hn: 28 }, props: [{ line: [44, 68, 76, 68] }, { line: [98, -6, 98, 104] }, { cable: [98, 18], to: "head" }] }, { joint: "head", dir: "away" }, "none"),
   // Assisted dip machine: kneeling on the assist pad, hands on the bars
-  "dip-assisted": T({ base: { th: 20, sh: -40 }, A: { hy: 48, t: 10 }, B: { hy: 56, t: 25 }, props: [{ line: [44, 52, 82, 52] }, { line: [82, 52, 82, 104] }, { hold: [64, 52], kd: 270 }, { pad: "kn", r: 3 }] }, { joint: "sh", dir: "down" }, "none"),
+  "dip-assisted": T({ base: { th: 20, sh: -40 }, A: { hy: 48, t: 10 }, B: { hy: 56, t: 25 }, props: [{ line: [44, 52, 82, 52] }, { line: [82, 52, 82, 104] }, { hold: [64, 52], kd: 270 }, { pad: "kn", r: 3 }, ln(100, 74.6, 100, 104), { rod: [100, 74.6], to: "kn" }] }, { joint: "sh", dir: "down" }, "none"),
   // Seated overhead machine extension: upper arms up on the pad, hands from behind the head to straight up
-  "overhead-extension-machine": T({ base: { hx: 50, hy: 80, t: 0, th: 88, sh: 0, ua: 172 }, A: { fa: 330 }, B: { fa: 172 }, props: [{ line: [38, 84, 62, 84] }, { line: [50, 84, 50, 104] }] }, { joint: "ha", dir: "up" }, "none"),
+  "overhead-extension-machine": T({ base: { hx: 50, hy: 80, t: 0, th: 88, sh: 0, ua: 172 }, A: { fa: 330 }, B: { fa: 172 }, props: [{ line: [38, 84, 62, 84] }, { line: [50, 84, 50, 104] }, ln(46, 82, 46, 44, 3), { along: ["sh", "el"], off: 3, ext: [-4, 2] }, { pad: "ha", r: 2.2 }] }, { joint: "ha", dir: "up" }, "none"),
   // ── Added by the figure review ──
   // Russian twist (front view): sitting on the floor, knees up; both hands together swing from one hip to the other
   "russian-twist": T({ v: "f", base: { hy: 90, lf: 0.5, la: 130, sa: 20 }, A: { tl: -6 }, B: { tl: 6 }, props: [{ hold: [46, 76, 74, 76], straight: 1 }, { hold: "haR", arm: "L", straight: 1 }] }, { joint: "haR", dir: "away" }, "none"),
@@ -341,6 +440,9 @@ export interface FigureAdjust {
   bench?: "flat" | "incline" | "decline";
   equipmentProp?: "cable" | "bar" | "db" | "none";
 }
+
+/** Top of a cable tower (viewBox y) */
+const TOWER_TOP = -22;
 
 /** Template + an exercise's adjustments → the figure the app draws. Unknown template: null. */
 export function buildFigure(templateId: string, adj: FigureAdjust = {}): FigureSpec | null {
@@ -362,7 +464,13 @@ export function buildFigure(templateId: string, adj: FigureAdjust = {}): FigureS
   const prop = adj.equipmentProp ?? t.prop;
   if (prop === "db") props.push({ db: side ? "ha" : "haR" });
   else if (prop === "bar") props.push(side ? { pad: "ha", r: 3 } : { bar: 1 });
-  else if (prop === "cable" && t.pulley) props.push({ cable: t.pulley, to: t.cableTo ?? (side ? "ha" : "barmid") });
+  else if (prop === "cable" && t.pulley) {
+    // The tower first (behind the cable): a column at the pulley, or at `post` with a beam over to the pulley
+    const [px, py] = t.pulley, x = t.post === false ? null : t.post ?? px;
+    if (x != null) props.push({ line: [x, TOWER_TOP, x, 104] });
+    if (x != null && x !== px) props.push({ line: [px, py, x, py] });
+    props.push({ cable: t.pulley, to: t.cableTo ?? (side ? "ha" : "barmid") });
+  }
   if (!side && prop === "cable" && t.pulley && !t.cableTo) props.push({ bar: 1 });
   spec.props = props;
   return spec;

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
 import { MIGRATIONS } from "./migrations";
+import { catalog } from "./seed/exercise-db";
 import { duplicateRoutine, newRoutine } from "./routineEdit";
 import { defaultRange, freshTargets, modelTarget, priorityOf, targetsOf } from "./volumeModel";
 import { isFocus } from "./volume";
@@ -76,5 +77,32 @@ describe("figure audit migration (Nov 21 2026)", () => {
     expect(next.exercises.find((e) => e.id === picked.id)!.figure).toEqual(picked.figure);
     expect(next.exercises.find((e) => e.id === "my-press")!.figure).toEqual(custom.figure);
     expect(mig.run(next, "2026-11-21")).toBeNull();
+  });
+});
+
+describe("machine figures migration (Nov 22 2026)", () => {
+  const mig = MIGRATIONS.find((m) => m.id === "2026-11-22-machine-figures")!;
+  it("draws the machine on app exercises, keeps a figure the user picked, runs once", () => {
+    let d: AppData = buildSeed();
+    for (const m of MIGRATIONS) { if (m === mig) break; d = m.run(d, "2026-11-22") ?? d; }
+    const press = d.exercises.find((e) => e.id === "machine-shoulder-press")!;
+    const picked = { ...d.exercises.find((e) => e.id === "leg-press")!, figure: structuredClone(press.figure) };
+    const custom = { ...press, id: "my-press", isCustom: true };
+    const next = mig.run({ ...d, exercises: d.exercises.map((e) => (e.id === picked.id ? picked : e)).concat(custom) }, "2026-11-22")!;
+    const fig = next.exercises.find((e) => e.id === "machine-shoulder-press")!.figure!;
+    expect(fig).not.toEqual(press.figure);
+    expect((fig.props as any[]).some((p) => p.rod)).toBe(true); // the lever arms to the handles
+    expect((next.exercises.find((e) => e.id === "hack-squat") ?? { figure: null }).figure).toBeFalsy(); // not in the plan: nothing added
+    expect(next.exercises.find((e) => e.id === picked.id)!.figure).toEqual(picked.figure);
+    expect(next.exercises.find((e) => e.id === "my-press")!.figure).toEqual(custom.figure);
+    expect(mig.run(next, "2026-11-22")).toBeNull();
+  });
+  it("updates a database exercise saved before (hack squat) to the 45° sled", () => {
+    const hack = catalog().find((e) => e.id === "hack-squat")!;
+    const old = { ...hack, figure: { base: { anchor: 1, ax: 64, ua: 0, fa: 160 }, A: { th: 0, sh: 4, t: -18 }, B: { th: 90, sh: -40, t: -8 }, props: [{ line: [40, -6, 30, 60] }] } } as typeof hack;
+    const d = { ...buildSeed(), exercises: [old] };
+    const next = mig.run(d, "2026-11-22")!;
+    expect(next.exercises[0].figure).toEqual(hack.figure);
+    expect((hack.figure!.props as any[]).some((p) => p.foot)).toBe(true);
   });
 });

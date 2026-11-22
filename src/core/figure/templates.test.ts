@@ -57,3 +57,20 @@ describe("movement templates", () => {
     }
   });
 });
+
+describe("machine drawings", () => {
+  it("a cable figure stands its pulley on a tower (or a beam over to one), unless the template says none", () => {
+    const pd = buildFigure("pushdown")!.props as any[];
+    expect(pd.some((p) => p.line && p.line[0] === 84 && p.line[2] === 84 && p.line[3] === 104)).toBe(true);
+    const lat = buildFigure("pulldown")!.props as any[];
+    expect(lat.some((p) => p.line && p.line[0] === 100 && p.line[3] === 104)).toBe(true); // column beside the body
+    expect(lat.some((p) => p.line && p.line[1] === -22 && p.line[3] === -22)).toBe(true); // beam to the pulley
+    expect((buildFigure("kickback-standing")!.props as any[]).filter((p) => p.line).length).toBe(1); // its own post only
+  });
+  it("hack squat: hips slide down the 45° rail, back on the sled pad, feet on the platform", () => {
+    const s = buildFigure("hack-squat")!, a = joints(s, "A"), b = joints(s, "B");
+    expect(b.an).toEqual(a.an);
+    expect((b.hip[1] - a.hip[1]) / (b.hip[0] - a.hip[0])).toBeCloseTo(1, 1); // 45°
+    expect((s.props as any[]).some((p) => p.along)).toBe(true);
+  });
+});

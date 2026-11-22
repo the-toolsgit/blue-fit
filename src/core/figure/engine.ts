@@ -127,7 +127,10 @@ export function reach2(s: Pt, t: Pt, a: number, b: number, kd: number): [Pt, Pt]
  *    (e.g. "head", "haR"); `arm` "L" for the left arm (front view), `kd` the elbow's direction (degrees), `straight`
  *    for an unbent arm. E.g. hands on the floor in a push-up, on dip bars, both hands on one handle in a woodchop.
  *  - `leg2`: side view, the other leg from the hip to a foot point (`kd`: the knee's direction, `toe`: the foot's
- *    angle, default 90 = forward), e.g. the back leg of a lunge or the standing leg of a kickback. */
+ *    angle, default 90 = forward), e.g. the back leg of a lunge or the standing leg of a kickback.
+ *  - `foot`: side view, the drawn leg itself from the hip to a foot point, or one moving in a line [xA, yA, xB, yB]
+ *    (`kd` as leg2; `toe`: the foot's angle, or [A, B] for a foot that turns), so a hip that slides (hack squat sled)
+ *    or a foot on a moving sled (leg press) stays on its platform. */
 export function poseJoints(f: FigureSpec, k: number): { p: P; J: Joints } {
   const p = interp(f, k);
   const J = f.v === "f" ? frontPose(p) : sidePose(p);
@@ -144,6 +147,14 @@ export function poseJoints(f: FigureSpec, k: number): { p: P; J: Joints } {
       el[0] = e2[0]; el[1] = e2[1]; ha[0] = h2[0]; ha[1] = h2[1];
       if (p.pa != null && (s === "" || s === "R")) J.tip = add(ha, V(p.pa, p.pl ?? 9));
     }
+    if (o.foot && f.v !== "f") {
+      // foot: a point, or one moving in a line [xA, yA, xB, yB] (e.g. on a sliding sled); toe: an angle or [A, B]
+      const ft = o.foot, tgt: Pt = ft.length === 4 ? [ft[0] + (ft[2] - ft[0]) * k, ft[1] + (ft[3] - ft[1]) * k] : ft;
+      const ta = Array.isArray(o.toe) ? o.toe[0] + (o.toe[1] - o.toe[0]) * k : o.toe ?? 90;
+      const [kn, an] = reach2(J.hip, tgt, 24, 23, o.kd ?? 90), toe = add(an, V(ta, 8));
+      // Move the leg's points in place: they are shared with J.lines[0]
+      for (const [q, v] of [[J.kn, kn], [J.an, an], [J.toe, toe]] as [Pt, Pt][]) if (q !== J.an || v === an) { q[0] = v[0]; q[1] = v[1]; }
+    }
     if (o.leg2 && f.v !== "f") {
       const [kn, an] = reach2(J.hip, o.leg2, 24, 23, o.kd ?? 90);
       J.lines.unshift([J.hip, kn, an, add(an, V(o.toe ?? 90, 8))]);
@@ -157,7 +168,10 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
   const { p, J } = poseJoints(f, k);
   const light: LightShape[] = [];
   for (const o of (f.props || []) as any[]) {
-    if (o.line) light.push({ kind: "line", x1: o.line[0], y1: o.line[1], x2: o.line[2], y2: o.line[3] });
+    if (o.line) light.push({ kind: "line", x1: o.line[0], y1: o.line[1], x2: o.line[2], y2: o.line[3], ...(o.width ? { width: o.width } : {}) });
+    // A straight up/down bar from a joint to height `y` that moves sideways with it, e.g. a pec deck arm hanging
+    // from the frame to the handle
+    if (o.vline) { const h = J[o.vline]; light.push({ kind: "line", x1: h[0].toFixed(1), y1: h[1].toFixed(1), x2: h[0].toFixed(1), y2: o.y, ...(o.width ? { width: o.width } : {}) }); }
     if (o.cable) {
       const t: Pt = o.to === "barmid" ? [(J.haL[0] + J.haR[0]) / 2, (J.haL[1] + J.haR[1]) / 2] : J[o.to];
       light.push({ kind: "cable", points: [o.cable, t], anchor: o.cable });
@@ -165,6 +179,16 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
     if (o.db) {
       const h = J[o.db];
       light.push({ kind: "line", x1: (h[0] - 4).toFixed(1), y1: h[1].toFixed(1), x2: (h[0] + 4).toFixed(1), y2: h[1].toFixed(1), width: 4 });
+    }
+    // Front view: a trap (hex) bar in both hands: the front rail from handle to handle, the sleeves out to the sides
+    // and a plate on each
+    if (o.hex && J.haL && J.haR) {
+      const a: Pt = J.haL, b: Pt = J.haR, y = (a[1] + b[1]) / 2, f = (v: number) => v.toFixed(1);
+      light.push({ kind: "line", x1: f(a[0]), y1: f(y), x2: f(b[0]), y2: f(y), width: 2.5 });
+      light.push({ kind: "line", x1: f(a[0] - 3), y1: f(y), x2: f(a[0] - 17), y2: f(y), width: 2.5 });
+      light.push({ kind: "line", x1: f(b[0] + 3), y1: f(y), x2: f(b[0] + 17), y2: f(y), width: 2.5 });
+      light.push({ kind: "line", x1: f(a[0] - 11), y1: f(y - 11), x2: f(a[0] - 11), y2: f(y + 11), width: 3.5 });
+      light.push({ kind: "line", x1: f(b[0] + 11), y1: f(y - 11), x2: f(b[0] + 11), y2: f(y + 11), width: 3.5 });
     }
     if (o.bar) {
       const a = J.haL, b = J.haR;
@@ -182,7 +206,16 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
     }
     // A rigid bar from a fixed point to a joint, e.g. a landmine or T-bar pivoting on the floor
     if (o.rod) { const h = J[o.to || "ha"]; light.push({ kind: "line", x1: o.rod[0], y1: o.rod[1], x2: h[0].toFixed(1), y2: h[1].toFixed(1), width: 2.5 }); }
-    if (o.pad) { const h = J[o.pad]; light.push({ kind: "circle", cx: h[0], cy: h[1] + (o.dy || 0), r: o.r || 2.6 }); }
+    if (o.pad) { const h = J[o.pad]; light.push({ kind: "circle", cx: h[0] + (o.dx || 0), cy: h[1] + (o.dy || 0), r: o.r || 2.6 }); }
+    // A pad or sled that moves with a body segment: a line parallel to joint a → joint b, `off` to the side (+ = behind
+    // a side-view torso, i.e. to the left of a → b), stretched `ext` [before a, past b]; e.g. a hack squat's back pad
+    if (o.along) {
+      const a: Pt = J[o.along[0]], b: Pt = J[o.along[1]];
+      const len = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1, u: Pt = [(b[0] - a[0]) / len, (b[1] - a[1]) / len], n: Pt = [u[1], -u[0]];
+      const [e0, e1] = o.ext ?? [0, 0], off = o.off ?? 0;
+      const p1 = add(add(a, u, -e0), n, off), p2 = add(add(b, u, e1), n, off);
+      light.push({ kind: "line", x1: p1[0].toFixed(1), y1: p1[1].toFixed(1), x2: p2[0].toFixed(1), y2: p2[1].toFixed(1), width: o.w ?? 3 });
+    }
     // A handle held at one end (pa / pl: angle and length from the hand), e.g. a forearm rotation dumbbell
     if (o.tip && J.tip) light.push({ kind: "line", x1: J.ha[0].toFixed(1), y1: J.ha[1].toFixed(1), x2: J.tip[0].toFixed(1), y2: J.tip[1].toFixed(1), width: 3 });
     // A weight hanging straight down from a joint: a solid bar (dumbbell held by one end), or with `plate`, a chain

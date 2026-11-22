@@ -330,7 +330,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "deadlift",
+  "figureTemplate": "deadlift-trap-bar",
   "source": {
    "db": "free-exercise-db",
    "id": "Trap_Bar_Deadlift"
@@ -394,7 +394,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "lower",
-  "figureTemplate": "deadlift",
+  "figureTemplate": "deadlift-lever",
   "source": {
    "db": "free-exercise-db",
    "id": "Leverage_Deadlift"
@@ -507,7 +507,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "lower",
-  "figureTemplate": "hip-thrust",
+  "figureTemplate": "hip-thrust-machine",
   "figureAdjust": {
    "equipmentProp": "none"
   },
@@ -569,7 +569,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "hip-thrust",
+  "figureTemplate": "hip-thrust-smith",
   "source": {
    "url": "https://www.strengthlog.com/smith-machine-hip-thrust/",
    "url2": "https://barbend.com/hip-thrust/"
@@ -1148,7 +1148,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "lower",
-  "figureTemplate": "kickback-glute",
+  "figureTemplate": "kickback-glute-machine",
   "figureAdjust": {
    "equipmentProp": "none"
   },

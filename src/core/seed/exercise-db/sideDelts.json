@@ -1155,7 +1155,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "upright-row",
+  "figureTemplate": "upright-row-smith",
   "source": {
    "db": "free-exercise-db",
    "id": "Smith_Machine_Upright_Row"
@@ -1204,7 +1204,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "upright-row",
+  "figureTemplate": "upright-row-smith",
   "figureAdjust": {
    "oneArm": true
   },

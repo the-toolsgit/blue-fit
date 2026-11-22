@@ -44,7 +44,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "lower",
-  "figureTemplate": "calf-raise-standing",
+  "figureTemplate": "calf-raise-machine",
   "preferred": {
    "goals": [
     "growth"
@@ -102,7 +102,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "lower",
-  "figureTemplate": "calf-raise-seated",
+  "figureTemplate": "calf-raise-seated-machine",
   "preferred": {
    "goals": [
     "growth"
@@ -354,7 +354,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "calf-raise-standing",
+  "figureTemplate": "calf-raise-smith",
   "source": {
    "db": "free-exercise-db",
    "id": "Smith_Machine_Calf_Raise"

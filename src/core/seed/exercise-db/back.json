@@ -53,7 +53,7 @@
   "defaultRestSec": 120,
   "incrementLb": 2.5,
   "bodyRegion": "upper",
-  "figureTemplate": "row-chest-supported",
+  "figureTemplate": "row-tbar-chest",
   "figureAdjust": {
    "grip": "underhand"
   },
@@ -803,7 +803,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "row-bent-barbell",
+  "figureTemplate": "row-bent-smith",
   "figureAdjust": {
    "equipmentProp": "bar"
   },
@@ -1223,7 +1223,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "row-chest-supported",
+  "figureTemplate": "row-tbar-chest",
   "source": {
    "db": "free-exercise-db",
    "id": "Lying_T-Bar_Row"
@@ -1412,7 +1412,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "pulldown",
+  "figureTemplate": "pulldown-machine",
   "figureAdjust": {
    "seated": true,
    "equipmentProp": "none"
@@ -2752,7 +2752,7 @@
   "id": "lat-prayer",
   "name": "Lat Prayer",
   "aliases": [
-   "Kneeling cable pullover",
+   "Standing cable pullover",
    "Cable lat prayer"
   ],
   "equipment": "cable",
@@ -2772,13 +2772,14 @@
   ],
   "isHeavy": false,
   "heavyWhy": "single-joint",
-  "why": "Straight-arm pull from overhead to your thighs: lats only.",
+  "why": "Straight-arm pull from overhead to your hips: lats only.",
   "setup": [
    "Rope or bar on a high pulley.",
-   "Kneel facing it, arms long overhead, hips back."
+   "Stand facing it, step back, bend forward about 90°, arms long overhead."
   ],
   "form": [
-   "Pull your hands down to your thighs, arms almost straight.",
+   "Pull your hands down to your hips in an arc, arms almost straight.",
+   "Lift your chest a little as they reach your hips, squeeze.",
    "Return slowly to the stretch."
   ],
   "tips": [],
@@ -2786,15 +2787,12 @@
    "Bending your elbows.",
    "Crunching your stomach to pull."
   ],
-  "rangeOfMotion": "Arms overhead → hands at your thighs",
+  "rangeOfMotion": "Arms overhead, bent 90° → hands at your hips",
   "tempo": "Down 1 s · Up 3 s",
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "straight-arm-pulldown",
-  "figureAdjust": {
-   "kneeling": true
-  },
+  "figureTemplate": "lat-prayer-standing",
   "source": {
    "url": "https://mennohenselmans.com/lat-prayers/"
   }
@@ -2844,7 +2842,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "pulldown",
+  "figureTemplate": "pulldown-machine",
   "figureAdjust": {
    "seated": true,
    "equipmentProp": "none"

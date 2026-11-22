@@ -48,7 +48,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-overhead",
+  "figureTemplate": "press-overhead-machine",
   "preferred": {
    "goals": [
     "growth",
@@ -117,7 +117,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "press-overhead",
+  "figureTemplate": "press-overhead-machine",
   "source": {
    "db": "free-exercise-db",
    "id": "Leverage_Shoulder_Press"
@@ -733,7 +733,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-overhead",
+  "figureTemplate": "press-overhead-smith",
   "figureAdjust": {
    "equipmentProp": "bar"
   },
@@ -802,7 +802,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-overhead-standing",
+  "figureTemplate": "press-overhead-cable-standing",
   "figureAdjust": {
    "equipmentProp": "cable"
   },
@@ -859,7 +859,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-overhead",
+  "figureTemplate": "press-overhead-cable",
   "figureAdjust": {
    "equipmentProp": "cable"
   },

@@ -4,6 +4,7 @@ import { deriveSkipped } from "./session";
 import plainText from "./seed/exercise-text.json";
 import figureFixes from "./seed/figure-fixes.json";
 import figureAudit from "./seed/figure-audit.json";
+import figureMachines from "./seed/figure-machines.json";
 import exerciseJobs from "./seed/exercise-jobs.json";
 import extraExercises from "./seed/extra-exercises.json";
 import textWas from "./seed/text-review-was.json";
@@ -608,7 +609,51 @@ export const MIGRATIONS: Migration[] = [
       return changed ? { ...d, exercises } : null;
     },
   },
+  {
+    // Nov 22 2026: the figures show their machine (Leo: "many exercises' animations miss the machine"): seat, back pad,
+    // frame, lever arms on the handles, sled and rails (hack squat redrawn on a 45° sled), Smith rails, cable towers,
+    // the trap bar, and the standing lat prayer. Same rule as the audit: only while the figure is still one the app gave.
+    id: "2026-11-22-machine-figures",
+    run(d) {
+      return replaceAppFigures(d, figureMachines as unknown as FigureUpdates);
+    },
+  },
+  {
+    // Nov 22 2026: the lat prayer is done standing, bent forward ~90°, chest lifting a little at the hips (Leo). A phone
+    // copy still on the old kneeling text gets the new text; anything the user rewrote stays.
+    id: "2026-11-22-lat-prayer-standing",
+    run(d) {
+      const old = { why: "Straight-arm pull from overhead to your thighs: lats only.", setup1: "Kneel facing it, arms long overhead, hips back." };
+      let changed = false;
+      const exercises = d.exercises.map((x) => {
+        if (x.id !== "lat-prayer" || x.isCustom || x.setup[1] !== old.setup1) return x;
+        changed = true;
+        return {
+          ...x,
+          aliases: x.aliases.map((a) => (a === "Kneeling cable pullover" ? "Standing cable pullover" : a)),
+          why: x.why === old.why ? "Straight-arm pull from overhead to your hips: lats only." : x.why,
+          setup: ["Rope or bar on a high pulley.", "Stand facing it, step back, bend forward about 90°, arms long overhead."],
+          form: ["Pull your hands down to your hips in an arc, arms almost straight.", "Lift your chest a little as they reach your hips, squeeze.", "Return slowly to the stretch."],
+          rangeOfMotion: "Arms overhead, bent 90° → hands at your hips",
+        };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
 ];
+
+type FigureUpdates = Record<string, { was: string[]; figure: Exercise["figure"] }>;
+/** Give app exercises a new figure while theirs is one of the listed fingerprints (`was`). Null if none changed. */
+function replaceAppFigures(d: AppData, updates: FigureUpdates): AppData | null {
+  let changed = false;
+  const exercises = d.exercises.map((e) => {
+    const a = !e.isCustom ? updates[e.id] : undefined;
+    if (!a || !e.figure || !a.was.includes(figureHash(e.figure))) return e;
+    changed = true;
+    return { ...e, figure: structuredClone(a.figure) };
+  });
+  return changed ? { ...d, exercises } : null;
+}
 
 /** Short fingerprint of a figure (djb2 over its JSON), to tell an app-given figure from one the user picked */
 export const figureHash = (f: unknown): string => {

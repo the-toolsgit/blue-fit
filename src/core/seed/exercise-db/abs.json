@@ -205,7 +205,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "cable-crunch",
+  "figureTemplate": "crunch-machine-seated",
   "figureAdjust": {
    "seated": true,
    "equipmentProp": "none"
@@ -2033,7 +2033,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "trunk-rotation",
+  "figureTemplate": "trunk-rotation-cable",
   "source": {
    "db": "free-exercise-db",
    "id": "Pallof_Press_With_Rotation"
@@ -2305,7 +2305,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "trunk-rotation",
+  "figureTemplate": "trunk-rotation-machine",
   "figureAdjust": {
    "seated": true
   },

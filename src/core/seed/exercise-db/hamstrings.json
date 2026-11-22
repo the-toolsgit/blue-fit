@@ -526,7 +526,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "lower",
-  "figureTemplate": "hinge",
+  "figureTemplate": "hinge-smith",
   "source": {
    "db": "free-exercise-db",
    "id": "Smith_Machine_Stiff-Legged_Deadlift"

@@ -106,3 +106,43 @@ describe("engine additions (figure review): limbs pinned to points", () => {
     expect(m.haL).toEqual([65, 30]);
   });
 });
+
+describe("engine additions (machine figures)", () => {
+  it("foot keeps the drawn leg on a foot point while the hip slides; along draws a pad parallel to a segment", () => {
+    const spec = { base: { t: -45 }, A: { hx: 50, hy: 67 }, B: { hx: 65, hy: 82 }, props: [{ foot: [86, 94], kd: 135, toe: 110 }, { along: ["hip", "sh"], off: 3, ext: [2, 1] }] } as unknown as FigureSpec;
+    for (const k of [0, 0.5, 1]) {
+      const { J } = poseJoints(spec, k);
+      expect(J.an[0]).toBeCloseTo(86, 5);
+      expect(J.an[1]).toBeCloseTo(94, 5);
+      expect(Math.hypot(J.kn[0] - J.hip[0], J.kn[1] - J.hip[1])).toBeCloseTo(24, 5);
+      expect(poseFrame(spec, k).main[0][2]).toEqual(J.an); // the drawn leg is the moved one
+    }
+    const fr = poseFrame(spec, 0), J = poseJoints(spec, 0).J, pad = fr.light[0] as any;
+    // parallel to hip → shoulder, 3 behind it (to the left of the direction of travel)
+    const u = [J.sh[0] - J.hip[0], J.sh[1] - J.hip[1]], v = [pad.x2 - pad.x1, pad.y2 - pad.y1];
+    expect(Math.abs(u[0] * v[1] - u[1] * v[0]) / Math.hypot(...u) / Math.hypot(...v)).toBeLessThan(0.01);
+    expect(Math.hypot(v[0], v[1])).toBeCloseTo(37, 0);
+  });
+  it("foot can ride a moving sled (a line) and turn (toe [A, B])", () => {
+    const spec = { base: { hx: 40, hy: 80, t: -45 }, A: {}, B: {}, props: [{ foot: [72, 50, 60, 62], kd: 222, toe: [192, 242] }] } as unknown as FigureSpec;
+    for (const k of [0, 0.5, 1]) {
+      const { J } = poseJoints(spec, k), a = 192 + 50 * k;
+      expect(J.an[0]).toBeCloseTo(72 - 12 * k, 5);
+      expect(J.an[1]).toBeCloseTo(50 + 12 * k, 5);
+      expect(Math.atan2(J.toe[0] - J.an[0], J.toe[1] - J.an[1]) * 180 / Math.PI).toBeCloseTo(a - 360, 5);
+    }
+  });
+  it("line width, vline, pad dx and the hex (trap) bar", () => {
+    const spec = { v: "f", base: {}, A: {}, B: {}, props: [{ line: [0, 0, 10, 0], width: 3 }, { vline: "haR", y: -10 }, { pad: "haR", dx: 2 }, { hex: 1 }] } as unknown as FigureSpec;
+    const { J } = poseJoints(spec, 0), fr = poseFrame(spec, 0);
+    expect((fr.light[0] as any).width).toBe(3);
+    expect(fr.light[1]).toMatchObject({ x1: J.haR[0].toFixed(1), x2: J.haR[0].toFixed(1), y2: -10 });
+    expect((fr.light[2] as any).cx).toBeCloseTo(J.haR[0] + 2, 5);
+    const hex = fr.light.slice(3) as any[];
+    expect(hex.length).toBe(5); // rail, two sleeves, two plates
+    expect(Number(hex[0].x1)).toBeCloseTo(J.haL[0], 1);
+    expect(Number(hex[0].x2)).toBeCloseTo(J.haR[0], 1);
+    expect(Number(hex[3].x1)).toBeLessThan(J.haL[0]);
+    expect(Number(hex[4].x1)).toBeGreaterThan(J.haR[0]);
+  });
+});

@@ -139,7 +139,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "shrug",
+  "figureTemplate": "shrug-smith",
   "source": {
    "url": "https://generationiron.com/smith-machine-shrug-exercise-guide/"
   }
@@ -183,7 +183,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "shrug",
+  "figureTemplate": "shrug-smith",
   "source": {
    "db": "free-exercise-db",
    "id": "Smith_Machine_Behind_the_Back_Shrug"
@@ -229,7 +229,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "shrug-db",
+  "figureTemplate": "shrug-trap-bar",
   "figureAdjust": {
    "equipmentProp": "none"
   },
@@ -383,7 +383,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "shrug",
+  "figureTemplate": "shrug-calf-machine",
   "figureAdjust": {
    "equipmentProp": "none"
   },
@@ -433,7 +433,7 @@
   "defaultRestSec": 120,
   "incrementLb": 10,
   "bodyRegion": "upper",
-  "figureTemplate": "shrug-db",
+  "figureTemplate": "shrug-machine",
   "figureAdjust": {
    "equipmentProp": "none"
   },

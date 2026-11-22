@@ -236,7 +236,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-flat",
+  "figureTemplate": "press-flat-smith",
   "figureAdjust": {
    "grip": "close",
    "equipmentProp": "bar"
@@ -586,7 +586,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "press-flat",
+  "figureTemplate": "press-flat-smith",
   "figureAdjust": {
    "grip": "close",
    "equipmentProp": "bar"

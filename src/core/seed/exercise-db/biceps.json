@@ -1201,7 +1201,7 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "curl-preacher",
+  "figureTemplate": "curl-preacher-machine",
   "figureAdjust": {
    "seated": true,
    "equipmentProp": "none"
