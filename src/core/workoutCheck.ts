@@ -213,11 +213,13 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   };
 
   const tip = (c: Check): Check => (c.pass ? c : { ...c, warn: true });
-  const stars = slots.filter((s) => ex(s).isHeavy);
+  // Heavy lifts and their 3-min rests are for ★ compound lifts; ★ calf raises and shrugs go a little lighter (6–8,
+  // Leo Nov 21 2026: most coaches load these small movements less)
+  const stars = slots.filter((s) => ex(s).isHeavy && ex(s).compound);
   const checks0: Check[] =
     goal === "maintenance" ? [volume(true), recovery]
     : goal === "strength" ? [volume(false), jobs, frequency, recovery,
-        check("heavy", "Heavy lifts", stars.length && stars.every((s) => s.repMin <= 6) ? [] : stars.length ? uniq(stars.filter((s) => s.repMin > 6).map((s) => `${ex(s).name}: ${s.repMin}+ reps`)) : ["No ★ heavy lift"], "★ lifts at 6 reps or less"),
+        check("heavy", "Heavy lifts", stars.length && stars.every((s) => s.repMin <= 6) ? [] : stars.length ? uniq(stars.filter((s) => s.repMin > 6).map((s) => `${ex(s).name}: ${s.repMin}+ reps`)) : ["No ★ heavy compound lift"], "★ compound lifts at 6 reps or less (calf raises and shrugs: 6–8 is fine)"),
         rest(STRENGTH_REST, null, stars)]
     : goal === "endurance" ? [volume(false), jobs, frequency, recovery,
         check("reps", "High reps", repSlots.filter((s) => mid(s) >= 15).length * 2 >= repSlots.length ? [] : ["Most exercises under 15 reps"], "Most exercises 15+ reps (ACSM 2009)"),

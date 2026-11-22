@@ -637,11 +637,12 @@ function polish(c: { days: RoutineDay[]; train: RoutineDay[]; meta: Map<string, 
 export function repsFor(ex: Exercise, goal: Goal, restSec: number, mix?: "heavy" | "light"): Pick<Slot, "repMin" | "repMax" | "restSec"> {
   if (ex.measure === "time") return { repMin: HOLD_SLOT.repMin, repMax: HOLD_SLOT.repMax, restSec: 60 };
   const big = ex.isHeavy || ex.compound;
-  const r: [number, number] = goal === "strength" ? (ex.isHeavy ? [3, 6] : big ? [6, 8] : [8, 12])
+  const r: [number, number] = goal === "strength" ? (ex.isHeavy && ex.compound ? [3, 6] : big ? [6, 8] : [8, 12])
     : goal === "endurance" ? [15, 20] : goal === "maintenance" ? [8, 12]
     : mix === "heavy" ? [6, 10] : mix === "light" ? [12, 15] : big ? [8, 12] : [10, 15];
-  // Strength: ★ heavy lifts rest 3 min or more whatever the rest picked (ACSM 2009; the Long rests check)
-  return { repMin: r[0], repMax: r[1], restSec: goal === "strength" && ex.isHeavy ? Math.max(restSec, 180) : restSec };
+  // Strength: ★ compound lifts rest 3 min or more whatever the rest picked (ACSM 2009; the Long rests check);
+  // ★ calf raises and shrugs get 6–8 reps (isHeavy && !compound → big → 6–8) and the picked rest
+  return { repMin: r[0], repMax: r[1], restSec: goal === "strength" && ex.isHeavy && ex.compound ? Math.max(restSec, 180) : restSec };
 }
 
 /** Main muscle of an exercise: its first direct muscle */

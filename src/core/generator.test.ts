@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
 import { isTopPick, mergeCatalog } from "./catalog";
 import { catalog } from "./seed/exercise-db/index";
-import { generatePlan, planConflicts, REST_BY_GOAL, setsForMinutes, swapOptions } from "./generator";
+import { generatePlan, planConflicts, repsFor, REST_BY_GOAL, setsForMinutes, swapOptions } from "./generator";
 import { estimateMinutes, slotsMinutes } from "./timeEstimate";
 import { freshTargets } from "./volumeModel";
 import { JOBS, weekInsight } from "./workoutCheck";
@@ -49,11 +49,16 @@ describe("plan generator", () => {
     expect(ids(other)).not.toEqual(ids(first));
   });
 
-  it("strength: key lifts get 3–6 reps and 3 min rest", () => {
-    const days = generatePlan({ goal: "strength", trainDays: SIX, maxMinutes: 90, targets, exercises: cat.exercises, seed: 1 });
+  it("strength: ★ compound lifts get 3–6 reps and 3 min rest; ★ calf raises and shrugs 6–8 (Leo)", () => {
+    const days = generatePlan({ goal: "strength", trainDays: SIX, maxMinutes: 90, targets, exercises: cat.exercises, seed: 1, restSec: 120 });
     const heavy = days.flatMap((d) => d.slots).filter((s) => cat.exMap.get(s.exerciseId)!.isHeavy);
-    expect(heavy.length).toBeGreaterThan(0);
-    for (const s of heavy) expect([s.repMin, s.repMax, s.restSec]).toEqual([3, 6, 180]);
+    expect(heavy.some((s) => cat.exMap.get(s.exerciseId)!.compound)).toBe(true);
+    for (const s of heavy) {
+      const e = cat.exMap.get(s.exerciseId)!;
+      expect([s.repMin, s.repMax, s.restSec], e.name).toEqual(e.compound ? [3, 6, 180] : [6, 8, 120]);
+    }
+    const calf = cat.exercises.find((e) => e.name === "Standing Calf Raise")!;
+    expect(repsFor(calf, "strength", 120)).toEqual({ repMin: 6, repMax: 8, restSec: 120 });
   });
 
   it("conflicts: too many sets for the days, no rest between back-to-back days, too long", () => {
