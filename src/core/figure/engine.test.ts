@@ -84,3 +84,25 @@ describe("engine additions (phase 3)", () => {
     expect(fr.light.find((s) => s.kind === "circle")).toMatchObject({ cy: J.sh[1] + 9, r: 9 });
   });
 });
+
+import { poseJoints, reach2 } from "./engine";
+describe("engine additions (figure review): limbs pinned to points", () => {
+  it("reach2 keeps both bone lengths and lands on the target, bending toward kd", () => {
+    const [el, ha] = reach2([0, 0], [20, 20], 20, 18, 90);
+    expect(Math.hypot(el[0], el[1])).toBeCloseTo(20, 5);
+    expect(Math.hypot(ha[0] - el[0], ha[1] - el[1])).toBeCloseTo(18, 5);
+    expect(ha).toEqual([20, 20]);
+    expect(el[0]).toBeGreaterThan(reach2([0, 0], [20, 20], 20, 18, 270)[0][0]);
+  });
+  it("hold keeps a hand on a point (or moving in a line) at every frame; leg2 draws the other leg; rod draws a bar", () => {
+    const spec = { base: { anchor: 1, ax: 102 }, A: { th: 60, sh: 60, t: -60 }, B: { th: 75, sh: 75, t: -75 }, props: [{ hold: [32, 103], kd: 135 }, { leg2: [40, 104] }, { rod: [0, 104], to: "ha" }] } as unknown as FigureSpec;
+    for (const k of [0.3, 0.7, 1]) expect(poseJoints(spec, k).J.ha).toEqual([32, 103]); // (at 0 it is just out of reach: straight arm)
+    const fr = poseFrame(spec, 0.5);
+    expect(fr.main.length).toBe(4); // the second leg is added
+    expect(fr.light.some((s) => s.kind === "line" && s.width === 2.5 && s.x2 === "32.0")).toBe(true);
+    const moving = { v: "f", base: {}, A: {}, B: {}, props: [{ hold: [80, 10, 50, 50], kd: 90 }, { hold: "haR", arm: "L", straight: 1 }] } as unknown as FigureSpec;
+    const m = poseJoints(moving, 0.5).J;
+    expect(m.haR).toEqual([65, 30]);
+    expect(m.haL).toEqual([65, 30]);
+  });
+});

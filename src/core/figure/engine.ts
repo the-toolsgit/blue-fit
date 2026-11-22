@@ -109,9 +109,52 @@ const interp = (f: FigureSpec, k: number): P => {
   return p;
 };
 
-export function poseFrame(f: FigureSpec, k: number): FigureFrame {
+/** Two-bone reach: from `s` toward target `t` with bones `a` and `b`. Of the two bends, the one whose middle joint
+ *  points most along direction `kd` (degrees, as V) wins. Out of reach: the limb points straight at the target. */
+export function reach2(s: Pt, t: Pt, a: number, b: number, kd: number): [Pt, Pt] {
+  const dx = t[0] - s[0], dy = t[1] - s[1], d = Math.hypot(dx, dy) || 1e-6, u: Pt = [dx / d, dy / d];
+  if (d >= a + b) return [add(s, u, a), add(s, u, a + b)];
+  const dd = Math.max(d, Math.abs(a - b) + 0.01);
+  const A = Math.acos(Math.min(1, Math.max(-1, (a * a + dd * dd - b * b) / (2 * a * dd))));
+  const pref = V(kd, 1);
+  const cand = [A, -A].map((r): Pt => add(s, [u[0] * Math.cos(r) - u[1] * Math.sin(r), u[0] * Math.sin(r) + u[1] * Math.cos(r)], a));
+  const score = (m: Pt) => (m[0] - s[0]) * pref[0] + (m[1] - s[1]) * pref[1];
+  return [score(cand[0]) >= score(cand[1]) ? cand[0] : cand[1], [t[0], t[1]]];
+}
+
+/** The joints of a spec at progress k, after the props that pin limbs to points:
+ *  - `hold`: a hand stays on a point ([x, y]), moves in a straight line ([xA, yA, xB, yB]) or stays on another joint
+ *    (e.g. "head", "haR"); `arm` "L" for the left arm (front view), `kd` the elbow's direction (degrees), `straight`
+ *    for an unbent arm. E.g. hands on the floor in a push-up, on dip bars, both hands on one handle in a woodchop.
+ *  - `leg2`: side view, the other leg from the hip to a foot point (`kd`: the knee's direction, `toe`: the foot's
+ *    angle, default 90 = forward), e.g. the back leg of a lunge or the standing leg of a kickback. */
+export function poseJoints(f: FigureSpec, k: number): { p: P; J: Joints } {
   const p = interp(f, k);
   const J = f.v === "f" ? frontPose(p) : sidePose(p);
+  for (const o of (f.props || []) as any[]) {
+    if (o.hold) {
+      const s = o.arm === "L" ? "L" : f.v === "f" ? "R" : "";
+      const sh: Pt = J["sh" + s], el: Pt = J["el" + s], ha: Pt = J["ha" + s];
+      if (!sh || !el || !ha) continue;
+      const arm = s === "L" && p.L ? Object.assign({ al: 1, fl: 1 }, p.L) : p;
+      const h = o.hold, t: Pt = typeof h === "string" ? J[h] : h.length === 4 ? [h[0] + (h[2] - h[0]) * k, h[1] + (h[3] - h[1]) * k] : h;
+      const a = 20 * (arm.al ?? 1), b = 18 * (arm.fl ?? 1);
+      // straight: the arm points at the target, drawn shorter when it reaches toward the viewer (front view)
+      const [e2, h2] = o.straight ? [add(sh, [t[0] - sh[0], t[1] - sh[1]], a / (a + b)), [t[0], t[1]] as Pt] : reach2(sh, t, a, b, o.kd ?? 0);
+      el[0] = e2[0]; el[1] = e2[1]; ha[0] = h2[0]; ha[1] = h2[1];
+      if (p.pa != null && (s === "" || s === "R")) J.tip = add(ha, V(p.pa, p.pl ?? 9));
+    }
+    if (o.leg2 && f.v !== "f") {
+      const [kn, an] = reach2(J.hip, o.leg2, 24, 23, o.kd ?? 90);
+      J.lines.unshift([J.hip, kn, an, add(an, V(o.toe ?? 90, 8))]);
+      J.kn2 = kn; J.an2 = an;
+    }
+  }
+  return { p, J };
+}
+
+export function poseFrame(f: FigureSpec, k: number): FigureFrame {
+  const { p, J } = poseJoints(f, k);
   const light: LightShape[] = [];
   for (const o of (f.props || []) as any[]) {
     if (o.line) light.push({ kind: "line", x1: o.line[0], y1: o.line[1], x2: o.line[2], y2: o.line[3] });
@@ -137,6 +180,8 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
       const el = add(J.sh, V(o.arm2[0], 20)), ha = add(el, V(o.arm2[1], 18));
       J.lines.push([J.sh, el, ha]);
     }
+    // A rigid bar from a fixed point to a joint, e.g. a landmine or T-bar pivoting on the floor
+    if (o.rod) { const h = J[o.to || "ha"]; light.push({ kind: "line", x1: o.rod[0], y1: o.rod[1], x2: h[0].toFixed(1), y2: h[1].toFixed(1), width: 2.5 }); }
     if (o.pad) { const h = J[o.pad]; light.push({ kind: "circle", cx: h[0], cy: h[1] + (o.dy || 0), r: o.r || 2.6 }); }
     // A handle held at one end (pa / pl: angle and length from the hand), e.g. a forearm rotation dumbbell
     if (o.tip && J.tip) light.push({ kind: "line", x1: J.ha[0].toFixed(1), y1: J.ha[1].toFixed(1), x2: J.tip[0].toFixed(1), y2: J.tip[1].toFixed(1), width: 3 });

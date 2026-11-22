@@ -3,6 +3,7 @@ import type { AppData, Exercise, MuscleGroup, Routine } from "./types";
 import { deriveSkipped } from "./session";
 import plainText from "./seed/exercise-text.json";
 import figureFixes from "./seed/figure-fixes.json";
+import figureAudit from "./seed/figure-audit.json";
 import exerciseJobs from "./seed/exercise-jobs.json";
 import extraExercises from "./seed/extra-exercises.json";
 import textWas from "./seed/text-review-was.json";
@@ -590,5 +591,30 @@ export const MIGRATIONS: Migration[] = [
       return { ...d, routines: d.routines.map((r) => (r.targets ? r : { ...r, targets: structuredClone(d.targets) })) };
     },
   },
+  {
+    // Nov 21 2026: the figure audit redrew 56 movement templates (bodies clear of benches, both legs, hands on the bar,
+    // …). App exercises saved on the phone keep their own copy, so each gets the new figure, but only while its
+    // figure is still one the app gave it (the old database figure or the shipped one); a figure the user picked stays.
+    id: "2026-11-21-figure-audit",
+    run(d) {
+      const audit = figureAudit as unknown as Record<string, { was: string[]; figure: Exercise["figure"] }>;
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        const a = !e.isCustom ? audit[e.id] : undefined;
+        if (!a || !e.figure || !a.was.includes(figureHash(e.figure))) return e;
+        changed = true;
+        return { ...e, figure: structuredClone(a.figure) };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
 ];
+
+/** Short fingerprint of a figure (djb2 over its JSON), to tell an app-given figure from one the user picked */
+export const figureHash = (f: unknown): string => {
+  const s = JSON.stringify(f);
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
+  return h.toString(36);
+};
 

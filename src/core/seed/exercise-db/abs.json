@@ -2122,13 +2122,10 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "trunk-rotation",
+  "figureTemplate": "russian-twist",
   "source": {
    "db": "free-exercise-db",
    "id": "Russian_Twist"
-  },
-  "figureAdjust": {
-   "seated": true
   }
  },
  {
@@ -2170,13 +2167,10 @@
   "defaultRestSec": 120,
   "incrementLb": 5,
   "bodyRegion": "upper",
-  "figureTemplate": "trunk-rotation",
+  "figureTemplate": "russian-twist",
   "source": {
    "db": "free-exercise-db",
    "id": "Plate_Twist"
-  },
-  "figureAdjust": {
-   "seated": true
   }
  },
  {

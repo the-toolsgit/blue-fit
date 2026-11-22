@@ -1,11 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { buildFigure, TEMPLATES } from "./templates";
-import { figureBox, frontPose, sidePose } from "./engine";
+import { figureBox, poseJoints } from "./engine";
 
-const joints = (spec: any, pose: "A" | "B") => {
-  const p = Object.assign({ hx: 60, hy: 57, t: 0, ua: 0, fa: 0, th: 0, sh: 0 }, spec.base, spec[pose]);
-  return (spec.v === "f" ? frontPose(p) : sidePose(p)) as any;
-};
+// Joints at pose A or B, after the props that pin hands and feet (hold, leg2)
+const joints = (spec: any, pose: "A" | "B") => poseJoints(spec, pose === "A" ? 0 : 1).J as any;
 
 describe("movement templates", () => {
   for (const [id, t] of Object.entries(TEMPLATES)) {

@@ -62,3 +62,19 @@ describe("weekly targets per plan", () => {
     expect(pr.min!).toBeGreaterThanOrEqual(n.max!);
   });
 });
+
+describe("figure audit migration (Nov 21 2026)", () => {
+  const mig = MIGRATIONS.find((m) => m.id === "2026-11-21-figure-audit")!;
+  it("gives app exercises the redrawn figure, but keeps a figure the user picked", () => {
+    let d: AppData = buildSeed();
+    for (const m of MIGRATIONS) { if (m === mig) break; d = m.run(d, "2026-11-21") ?? d; }
+    const lp = d.exercises.find((e) => e.id === "leg-press")!;
+    const picked = { ...d.exercises.find((e) => e.id === "seated-calf-raise")!, figure: structuredClone(lp.figure) };
+    const custom = { ...lp, id: "my-press", isCustom: true };
+    const next = mig.run({ ...d, exercises: d.exercises.map((e) => (e.id === picked.id ? picked : e)).concat(custom) }, "2026-11-21")!;
+    expect(next.exercises.find((e) => e.id === "leg-press")!.figure).not.toEqual(lp.figure);
+    expect(next.exercises.find((e) => e.id === picked.id)!.figure).toEqual(picked.figure);
+    expect(next.exercises.find((e) => e.id === "my-press")!.figure).toEqual(custom.figure);
+    expect(mig.run(next, "2026-11-21")).toBeNull();
+  });
+});
