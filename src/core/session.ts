@@ -320,16 +320,18 @@ export function applyHint(s: Session, entryId: string, weight: number, reps: num
 export { progressionHint };
 
 /**
- * A failure set that only tests "ready for more weight?" is moot once you've already gone heavier than last time:
- * raising the weight (by hand or with Use) above last time's top working weight drops it.
+ * A failure set that only tests "ready for more weight?" is moot once you've already gone heavier than last time's
+ * top working weight in this workout (typed, or Use on the hint).
  */
-export function dropTestIfRaised(s: Session, entryId: string, lastSets: LoggedSet[] | undefined): Session {
+export function testMoot(e: SessionEntry, lastSets: LoggedSet[] | undefined): boolean {
+  if (!e.toFailure || e.failWhy?.length !== 1 || e.failWhy[0] !== TEST_WHY) return false;
   const work = (lastSets ?? []).filter((x) => x.done && (x.type === "working" || x.type === "failure") && x.weight != null);
-  if (!work.length) return s;
+  if (!work.length) return false;
   const top = Math.max(...work.map((x) => x.weight!));
-  return mapEntry(s, entryId, (e) => {
-    if (!e.toFailure || e.failWhy?.length !== 1 || e.failWhy[0] !== TEST_WHY) return e;
-    const raised = e.sets.some((x) => (x.type === "working" || x.type === "failure") && x.weight != null && x.weight > top);
-    return raised ? { ...e, toFailure: undefined, failWhy: undefined } : e;
-  });
+  return e.sets.some((x) => (x.type === "working" || x.type === "failure") && x.weight != null && x.weight > top);
+}
+
+/** Drops a moot test (see testMoot) from the stored entry. */
+export function dropTestIfRaised(s: Session, entryId: string, lastSets: LoggedSet[] | undefined): Session {
+  return mapEntry(s, entryId, (e) => (testMoot(e, lastSets) ? { ...e, toFailure: undefined, failWhy: undefined } : e));
 }

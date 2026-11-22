@@ -14,7 +14,7 @@ import { progressionHint } from "../../core/progression";
 import { alignHint, effortGap, effortLine, failureSet, tooLight } from "../../core/effort";
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
-  addEntry, addSet, afterSetDone, applyHint, dropTestIfRaised, takeExtra, takeFailure, buildEntry, durationMin, finishSession, lastEntryFor, prevEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
+  addEntry, addSet, afterSetDone, applyHint, dropTestIfRaised, testMoot, takeExtra, takeFailure, buildEntry, durationMin, finishSession, lastEntryFor, prevEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
   setEntry, swapEntry, toggleDone, toggleSupersetWithNext, updateSet,
 } from "../../core/session";
 import type { Exercise, LoggedSet, Session, SessionEntry, SetType } from "../../core/types";
@@ -186,7 +186,7 @@ export function WorkoutScreen() {
     const ex = exMap.get(e.exerciseId)!;
     if (!x.done && needsValues(x, ex)) return; // the card shakes the button and highlights what's missing
     // Gym order can differ from the plan: the failure set stays, its "Last … exercise" reason adapts
-    const next = refitFailure(toggleDone(s, e.id, x.id, new Date()), exMap);
+    const next = refitFailure(toggleDone(dropTestIfRaised(s, e.id, lastEntryFor(finished, e.exerciseId, s.id)?.entry.sets), e.id, x.id, new Date()), exMap);
     commit(next);
     if (x.done) return; // undo
     vibrate(12);
@@ -429,7 +429,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const workIdx = (x: LoggedSet) => e.sets.filter((y) => y.type === "working" && e.sets.indexOf(y) <= e.sets.indexOf(x)).length;
   const swappedFrom = e.swappedFromId ? exMap.get(e.swappedFromId)?.name : undefined;
   // Last set to failure: picked when the workout started (stored on the entry, so it never changes mid-workout)
-  const failSetId = !s.deload && e.toFailure
+  const failSetId = !s.deload && e.toFailure && !testMoot(e, last?.entry.sets)
     ? [...e.sets].reverse().find((x) => x.type === "working" || x.type === "failure")?.id : undefined;
 
   return (
