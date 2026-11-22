@@ -31,6 +31,7 @@ export function PlanScreen() {
   const weekFail = useWeekFailure(routine);
   const deloading = deloadActive(settings, today);
   const [confirmDeload, setConfirmDeload] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
   const [manage, setManage] = useState(false);
   const [slotId, setSlotId] = useState<string | null>(null); // the exercise whose popup is open
   const [howTo, setHowTo] = useState<string | null>(null);
@@ -134,6 +135,8 @@ export function PlanScreen() {
 
       <h2 className="section-title">Plan overview</h2>
       <WeekInsight routine={routine} exMap={exMap} targets={targets} weekFail={weekFail} edit={{ targets, onEdit: (t) => saveTargets([t]) }} />
+      {!completeProfile(settings.profile) && <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Fill in Settings → Training profile to get targets worked out for you.</p>}
+      <button className="btn btn-quiet btn-block" style={{ marginTop: 8 }} onClick={() => setConfirmReset(true)}><Icon name="undo" size={18} /> Reset targets to defaults</button>
 
       {routine.rules?.length ? (
         <div className="chips-scroll" style={{ marginTop: 22, gap: 10 }}>
@@ -214,6 +217,9 @@ export function PlanScreen() {
       <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} failWhy={day && slot ? weekFail.get(day.id)?.get(slot.id) : undefined} />
       <Confirm open={delDay} title={`Delete ${day?.title ?? "this day"}?`} body="All its exercises are removed and it becomes a rest day. Past workouts stay in history." confirm="Delete" danger
         onClose={() => setDelDay(false)} onConfirm={() => { if (day) saveRoutine(clearDay(routine, day.id)); }} />
+      <Confirm open={confirmReset} title="Reset targets?" confirm="Reset"
+        body={completeProfile(settings.profile) ? "Every muscle in this plan gets the target worked out from your training profile, with default priorities and none skipped." : "Every muscle in this plan gets the usual range for building muscle from the exercise database, with default priorities and none skipped. Fill in your training profile in Settings to get targets worked out for you."}
+        onClose={() => setConfirmReset(false)} onConfirm={() => { saveTargets(freshTargets(completeProfile(settings.profile))); toast({ kind: "info", title: "Targets reset" }); }} />
       <Confirm open={confirmDeload} title="Start a deload week?" confirm="Start deload"
         body={<>{DELOAD_RULE} It lasts until {fmtDate(deloadWeek(today, settings.weekStartDay).end, { weekday: "long" })}, then your normal plan comes back.</>}
         onClose={() => setConfirmDeload(false)} onConfirm={() => saveSettings({ ...settings, deload: deloadWeek(today, settings.weekStartDay), deloadDismissedAt: null })} />
