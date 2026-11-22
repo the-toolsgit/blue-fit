@@ -22,9 +22,15 @@ export interface GenInput {
   exercises: Exercise[];
   /** Exercises of the plan the user comes from: picked only when nothing else fits, so the new plan changes them up */
   avoid?: Set<string>;
-  /** Different seed → a different plan (Try again) */
+  /** Rest between sets the user picked, in seconds (holds keep 60 s). Unset → by goal (REST_BY_GOAL) */
+  restSec?: number;
+  /** Different seed → a different plan (Build again) */
   seed?: number;
 }
+
+/** Rest between sets each goal does best with (research: 3 min+ for strength, de Salles 2009; 2 min for growth, more than
+ *  60 s helps a little, Schoenfeld 2016 / Singer 2024; about 1 min for endurance, ACSM 2009; 90 s to maintain is *judgment*) */
+export const REST_BY_GOAL: Record<Goal, number> = { strength: 180, growth: 120, endurance: 60, maintenance: 90 };
 
 /** Families decide which muscles share a day (push / pull / legs, *judgment*: the classic splits). */
 const FAMILY: Record<MuscleGroup, "push" | "pull" | "legs" | "core"> = {
@@ -49,7 +55,7 @@ const SPLITS: Record<number, Theme[]> = {
 const THEME_FAMILIES: Record<Theme, string[]> = { full: ["push", "pull", "legs"], upper: ["push", "pull"], lower: ["legs"], push: ["push"], pull: ["pull"], legs: ["legs"] };
 const THEME_NAME: Record<Theme, string> = { full: "Full body", upper: "Upper", lower: "Lower", push: "Push", pull: "Pull", legs: "Legs" };
 
-/** Small seeded random (mulberry32) so "Try again" gives a different but repeatable plan */
+/** Small seeded random (mulberry32) so "Build again" gives a different but repeatable plan */
 function rng(seed: number) {
   let a = seed >>> 0;
   return () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
@@ -78,7 +84,7 @@ export function fitSessions(days: number[], g: MuscleGroup, want: number): numbe
 const sessionsFor = (aim: number, n: number) => Math.min(n, Math.max(Math.ceil(aim / MAX_SESSION_SETS), aim >= 10 && n >= 2 ? 2 : 1));
 
 /** Sets one workout can hold within the time limit (inverse of estimateMinutes, ~3.5 sets per exercise) */
-export const setsForMinutes = (min: number) => { let s = 0; while (estimateMinutes(s + 1, Math.ceil((s + 1) / 3.5)) <= min) s++; return s; };
+export const setsForMinutes = (min: number, restSec = 120) => { let s = 0; while (estimateMinutes(s + 1, Math.ceil((s + 1) / 3.5), restSec) <= min) s++; return s; };
 
 export function generatePlan(input: GenInput): RoutineDay[] {
   const rand = rng(input.seed ?? 1);
@@ -88,7 +94,8 @@ export function generatePlan(input: GenInput): RoutineDay[] {
   const focus = ORDER.filter((g) => isFocus(tmap.get(g)));
   const aim = new Map(focus.map((g) => [g, aimSets(tmap.get(g)!)]));
   // The length is an average with a 5-minute buffer both ways (Leo, Nov 21 2026): a day may run up to 5 min over
-  const cap = setsForMinutes(input.maxMinutes + LENGTH_BUFFER);
+  const restSec = input.restSec ?? REST_BY_GOAL[input.goal];
+  const cap = setsForMinutes(input.maxMinutes + LENGTH_BUFFER, restSec);
   // Not enough time for every target: scale them all down evenly (at least 2 sets each), so no muscle is left out
   const need0 = [...aim.values()].reduce((a, b) => a + b, 0) * INDIRECT_SHARE;
   const room = cap * n;
@@ -176,25 +183,18 @@ export function generatePlan(input: GenInput): RoutineDay[] {
     });
   }
 
-  // 3. Reps and rest for the goal (database rules: heavy ≤ 10, light ≥ 12; rest 60 s+ for growth, 3 min for strength)
+  // 3. Reps for the goal and the rest the user picked
   const heavyDone = new Set<MuscleGroup>();
   const lightDone = new Set<MuscleGroup>();
   for (const d of trainDays) for (const x of slotsOf.get(d)!) {
     const { s, ex, main } = x;
-    if (ex.measure === "time") { Object.assign(s, { repMin: HOLD_SLOT.repMin, repMax: HOLD_SLOT.repMax, restSec: 60 }); continue; }
-    const big = ex.isHeavy || ex.compound;
-    let r: [number, number], rest: number;
-    if (input.goal === "strength") { r = ex.isHeavy ? [3, 6] : big ? [6, 8] : [8, 12]; rest = big ? 180 : 120; }
-    else if (input.goal === "endurance") { r = [15, 20]; rest = 60; }
-    else if (input.goal === "maintenance") { r = [8, 12]; rest = 90; }
-    else {
-      // Mass gain: heavy for the first big lift of a muscle that needs the mix, light for its next exercise
-      if (NEEDS_HEAVY_LIGHT.has(main) && big && !heavyDone.has(main)) { r = [6, 10]; heavyDone.add(main); }
-      else if (NEEDS_HEAVY_LIGHT.has(main) && heavyDone.has(main) && !lightDone.has(main)) { r = [12, 15]; lightDone.add(main); }
-      else r = big ? [8, 12] : [10, 15];
-      rest = big ? 120 : 90;
+    let mix: "heavy" | "light" | undefined;
+    // Mass gain: heavy for the first big lift of a muscle that needs the mix, light for its next exercise
+    if (input.goal === "growth" && NEEDS_HEAVY_LIGHT.has(main) && ex.measure !== "time") {
+      if ((ex.isHeavy || ex.compound) && !heavyDone.has(main)) { mix = "heavy"; heavyDone.add(main); }
+      else if (heavyDone.has(main) && !lightDone.has(main)) { mix = "light"; lightDone.add(main); }
     }
-    Object.assign(s, { repMin: r[0], repMax: r[1], restSec: rest });
+    Object.assign(s, repsFor(ex, input.goal, restSec, mix));
   }
 
   // 4. Order within each day
@@ -226,6 +226,36 @@ export function generatePlan(input: GenInput): RoutineDay[] {
   return days;
 }
 
+/** Reps and rest for one exercise (database rules: heavy ≤ 10, light ≥ 12; holds 60 s rest). `mix` forces the
+ *  heavy (6–10) or light (12–15) half for mass gain. */
+export function repsFor(ex: Exercise, goal: Goal, restSec: number, mix?: "heavy" | "light"): Pick<Slot, "repMin" | "repMax" | "restSec"> {
+  if (ex.measure === "time") return { repMin: HOLD_SLOT.repMin, repMax: HOLD_SLOT.repMax, restSec: 60 };
+  const big = ex.isHeavy || ex.compound;
+  const r: [number, number] = goal === "strength" ? (ex.isHeavy ? [3, 6] : big ? [6, 8] : [8, 12])
+    : goal === "endurance" ? [15, 20] : goal === "maintenance" ? [8, 12]
+    : mix === "heavy" ? [6, 10] : mix === "light" ? [12, 15] : big ? [8, 12] : [10, 15];
+  return { repMin: r[0], repMax: r[1], restSec };
+}
+
+/** Main muscle of an exercise: its first direct muscle */
+const mainOf = (e: Exercise) => e.volume.find((v) => v.weight === 1)?.group;
+
+/**
+ * Other exercises for the same job (Build my plan → swap): the same main muscle worked directly, at least one of the
+ * same angles, same kind (reps or a hold). The same type first (compound or isolation), then top picks for the goal,
+ * then ★, then by name. Exercises already in
+ * `taken` (the rest of that day) are left out.
+ */
+export function swapOptions(ex: Exercise, all: Exercise[], goal: Goal, taken: Set<string>): Exercise[] {
+  const g = mainOf(ex);
+  if (!g) return [];
+  const jobs = new Set([ex.jobs?.[g]].flat().filter(Boolean) as string[]);
+  return all
+    .filter((e) => e.id !== ex.id && !e.archived && !taken.has(e.id) && mainOf(e) === g && (e.measure === "time") === (ex.measure === "time"))
+    .filter((e) => !jobs.size || [e.jobs?.[g]].flat().some((j) => j && jobs.has(j)))
+    .sort((a, b) => (!!b.compound === !!ex.compound ? 1 : 0) - (!!a.compound === !!ex.compound ? 1 : 0) || (isTopPick(b, goal) ? 1 : 0) - (isTopPick(a, goal) ? 1 : 0) || (b.isHeavy ? 1 : 0) - (a.isHeavy ? 1 : 0) || a.name.localeCompare(b.name));
+}
+
 /** Day order: compound lifts first (big muscles first, ★ before the rest), then isolation, abs and neck last */
 const rank = (e: Exercise, main: MuscleGroup) => (FAMILY[main] === "core" ? 100 : 0) + (e.compound ? 0 : 50) + ORDER.indexOf(main) + (e.isHeavy ? 0 : 0.5);
 
@@ -236,7 +266,8 @@ export interface Conflict { id: string; text: string; fix?: { label: string; tar
   /** More than one rest day: training more days is the other way to fix it (days a week and the minutes each) */
   moreDays?: { days: number; minutes: number } }
 
-export function planConflicts(input: Pick<GenInput, "trainDays" | "maxMinutes" | "targets">): Conflict[] {
+export function planConflicts(input: Pick<GenInput, "trainDays" | "maxMinutes" | "targets" | "restSec">): Conflict[] {
+  const restSec = input.restSec ?? 120;
   const out: Conflict[] = [];
   const n = input.trainDays.length;
   if (!n) return [{ id: "days", text: "Pick at least one day to train.", edit: { kind: "days" } }];
@@ -258,11 +289,11 @@ export function planConflicts(input: Pick<GenInput, "trainDays" | "maxMinutes" |
   }
   // Time: the week's sets spread over the days (indirect sets cover part of the work)
   const weekSets = focus.reduce((a, t) => a + aimSets(t), 0) * INDIRECT_SHARE;
-  const perDay = Math.ceil(weekSets / n), minutes = estimateMinutes(perDay, Math.ceil(perDay / 3.5));
+  const perDay = Math.ceil(weekSets / n), minutes = estimateMinutes(perDay, Math.ceil(perDay / 3.5), restSec);
   if (minutes > input.maxMinutes + LENGTH_BUFFER) {
     const next = [45, 60, 75, 90, 120].find((m) => m >= minutes);
     // More than one rest day: training more days spreads the same sets over shorter workouts (Leo, Nov 21 2026)
-    const minsFor = (k: number) => { const p = Math.ceil(weekSets / k); return estimateMinutes(p, Math.ceil(p / 3.5)); };
+    const minsFor = (k: number) => { const p = Math.ceil(weekSets / k); return estimateMinutes(p, Math.ceil(p / 3.5), restSec); };
     const more = 7 - n >= 2 ? [n + 1, n + 2, n + 3, n + 4, n + 5].filter((k) => k <= 6).find((k) => minsFor(k) <= input.maxMinutes + LENGTH_BUFFER) : undefined;
     const k = more ?? Math.min(6, n + 2);
     out.push({ id: "time", text: `About ${minutes} min a workout to hit every target, over your ${input.maxMinutes} min.${!next && 7 - n < 2 ? " Lower some targets." : ""}`,

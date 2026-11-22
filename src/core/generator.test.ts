@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
 import { isTopPick, mergeCatalog } from "./catalog";
 import { catalog } from "./seed/exercise-db/index";
-import { generatePlan, planConflicts, setsForMinutes } from "./generator";
+import { generatePlan, planConflicts, REST_BY_GOAL, setsForMinutes, swapOptions } from "./generator";
+import { estimateMinutes, slotsMinutes } from "./timeEstimate";
 import { freshTargets } from "./volumeModel";
 import { weekInsight } from "./workoutCheck";
 import type { RoutineDay, VolumeTarget } from "./types";
@@ -75,5 +76,35 @@ describe("plan generator", () => {
     expect(t4.moreDays?.minutes).toBeLessThan(90);
     expect(planConflicts({ trainDays: SIX, maxMinutes: 75, targets })).toEqual([]);
     expect(planConflicts({ trainDays: [], maxMinutes: 75, targets })[0].id).toBe("days");
+  });
+});
+
+describe("Build my plan: rest, time and swaps", () => {
+  it("the time estimate uses the rest: 3 min rests make longer workouts than 1 min", () => {
+    expect(estimateMinutes(15, 5, 180)).toBeGreaterThan(estimateMinutes(15, 5, 60));
+    expect(estimateMinutes(15, 5)).toBe(estimateMinutes(15, 5, 120));
+    expect(slotsMinutes([{ sets: 3, restSec: 120 }, { sets: 3, restSec: 120 }])).toBe(estimateMinutes(6, 2));
+    expect(slotsMinutes([])).toBe(0);
+  });
+
+  it("every exercise gets the picked rest (holds 60 s), and short rests fit more sets", () => {
+    const days = generatePlan({ goal: "growth", trainDays: SIX, maxMinutes: 60, targets, exercises: cat.exercises, seed: 1, restSec: 90 });
+    for (const s of days.flatMap((d) => d.slots)) expect(s.restSec).toBe(cat.exMap.get(s.exerciseId)!.measure === "time" ? 60 : 90);
+    expect(setsForMinutes(60, 60)).toBeGreaterThan(setsForMinutes(60, 180));
+    expect(REST_BY_GOAL.strength).toBe(180);
+  });
+
+  it("swap options work the same main muscle and angle, and skip the day's other exercises", () => {
+    const ex = cat.exercises.find((e) => e.name === "Incline Dumbbell Press")!;
+    const main = ex.volume.find((v) => v.weight === 1)!.group;
+    const jobs = [ex.jobs?.[main]].flat();
+    const opts = swapOptions(ex, cat.exercises, "growth", new Set());
+    expect(opts.length).toBeGreaterThan(3);
+    for (const o of opts) {
+      expect(o.volume.find((v) => v.weight === 1)!.group).toBe(main);
+      expect([o.jobs?.[main]].flat().some((j) => jobs.includes(j))).toBe(true);
+    }
+    expect(opts[0].compound).toBe(true); // presses before flies
+    expect(swapOptions(ex, cat.exercises, "growth", new Set([opts[0].id]))).not.toContainEqual(opts[0]);
   });
 });

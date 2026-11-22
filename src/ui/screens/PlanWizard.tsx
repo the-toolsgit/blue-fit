@@ -1,8 +1,10 @@
-// Build a plan for me: a full-screen, one-question-per-screen flow (goal → eating → days → workout length → targets →
-// conflicts → build). The plan itself comes from core/generator.ts; this file is only the steps.
+// Build a plan for me: a full-screen, one-question-per-screen flow (goal → eating → days → workout length → rest →
+// targets → conflicts → build). On the plan, each exercise can be swapped or removed and exercises added. The plan itself comes from core/generator.ts; this file is only the steps.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { generatePlan, planConflicts, type Conflict } from "../../core/generator";
+import { generatePlan, planConflicts, repsFor, REST_BY_GOAL, swapOptions, type Conflict } from "../../core/generator";
+import { slotsMinutes } from "../../core/timeEstimate";
+import { uid } from "../../core/util";
 import { completeProfile, MUSCLE_GROUPS, muscleLabel, type Goal, type MuscleGroup, type Phase, type RoutineDay, type VolumeTarget } from "../../core/types";
 import { formatTarget, isFocus } from "../../core/volume";
 import { freshTargets, priorityOf } from "../../core/volumeModel";
@@ -12,6 +14,7 @@ import { Icon } from "../components/Icon";
 import { MuscleMap } from "../components/MuscleMap";
 import { TargetEdit } from "../components/VolumeTable";
 import { Splash } from "../components/Splash";
+import { ExercisePicker } from "../components/ExercisePicker";
 
 export interface WizardResult { days: RoutineDay[]; targets: VolumeTarget[]; goal: Goal; phase: Phase }
 
@@ -29,7 +32,13 @@ const PHASES: { v: Phase; label: string; sub: string }[] = [
 const MINUTES = [45, 60, 75, 90];
 const WEEK = [1, 2, 3, 4, 5, 6, 0];
 const DAY_NAME = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const STEPS = ["goal", "eating", "days", "length", "targets", "check", "build"] as const;
+/** Rest between sets: what each one suits (REST_BY_GOAL) */
+const RESTS: { sec: number; big: string; goal: Goal }[] = [
+  { sec: 60, big: "1", goal: "endurance" }, { sec: 90, big: "1½", goal: "maintenance" },
+  { sec: 120, big: "2", goal: "growth" }, { sec: 180, big: "3", goal: "strength" },
+];
+const GOAL_LABEL: Record<Goal, string> = { growth: "mass gain", strength: "strength", endurance: "endurance", maintenance: "maintaining" };
+const STEPS = ["goal", "eating", "days", "length", "rest", "targets", "check", "build"] as const;
 type Step = (typeof STEPS)[number];
 
 export function PlanWizard({ open, initialTargets, onClose, onDone }: {
@@ -41,6 +50,9 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const [phase, setPhase] = useState<Phase>(settings.profile?.phase ?? "maintaining");
   const [days, setDays] = useState<number[]>([1, 2, 3, 4, 6, 0]);
   const [minutes, setMinutes] = useState(75);
+  // Rest between sets: the goal's best until the user picks one
+  const [restPick, setRestPick] = useState<number | null>(null);
+  const restSec = restPick ?? REST_BY_GOAL[goal];
   const [targets, setTargets] = useState<VolumeTarget[]>(initialTargets);
   const [touched, setTouched] = useState(false);
   const [sel, setSel] = useState<MuscleGroup | null>(null);
@@ -54,11 +66,18 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   useEffect(() => { if (open) { setStep("goal"); setBuilding(false); } }, [open]);
   useEffect(() => { if (!open) return; const prev = document.body.style.overflow; document.body.style.overflow = "hidden"; return () => { document.body.style.overflow = prev; }; }, [open]);
 
-  const conflicts = useMemo(() => planConflicts({ trainDays: days, maxMinutes: minutes, targets }), [days, minutes, targets]);
+  const conflicts = useMemo(() => planConflicts({ trainDays: days, maxMinutes: minutes, targets, restSec }), [days, minutes, targets, restSec]);
   // The plan you come from: its exercises are swapped for others wherever possible
   const avoid = useMemo(() => new Set(routine?.days.flatMap((d) => d.slots.map((s) => s.exerciseId)) ?? []), [routine]);
-  const result = useMemo(() => (step === "build" ? generatePlan({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed }) : null),
-    [step, goal, days, minutes, targets, exercises, avoid, seed]);
+  const generated = useMemo(() => (step === "build" ? generatePlan({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed, restSec }) : null),
+    [step, goal, days, minutes, targets, exercises, avoid, seed, restSec]);
+  // The built plan, then the user's swaps, removals and additions on top
+  const [result, setResult] = useState<RoutineDay[] | null>(null);
+  useEffect(() => { setResult(generated); setSwaps({}); setOpenRow(null); }, [generated]);
+  /** Per slot: the exercise the plan picked and how many swaps along its list of alternatives */
+  const [swaps, setSwaps] = useState<Record<string, { orig: string; k: number }>>({});
+  const [openRow, setOpenRow] = useState<string | null>(null);
+  const [addTo, setAddTo] = useState<string | null>(null);
   const check = useMemo(() => (result ? weekInsight({ id: "", name: "", isCurrent: false, createdAt: "", days: result }, exMap, targets, goal) : null), [result, exMap, targets, goal]);
 
   if (!open) return null;
@@ -73,6 +92,22 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const applyFix = (c: Conflict) => {
     if (c.fix?.maxMinutes) setMinutes(c.fix.maxMinutes);
     if (c.fix?.targets) { setTouched(true); setTargets((ts) => ts.map((x) => c.fix!.targets!.find((y) => y.group === x.group) ?? x)); }
+  };
+  const editDay = (dayId: string, f: (d: RoutineDay) => RoutineDay) => setResult((ds) => ds && ds.map((d) => (d.id === dayId ? f(d) : d)));
+  /** Alternatives for a slot: same main muscle and angle, not already in that day; the plan's own pick comes first */
+  const altsOf = (d: RoutineDay, slotId: string) => {
+    const s = d.slots.find((x) => x.id === slotId)!, orig = swaps[slotId]?.orig ?? s.exerciseId, ex = exMap.get(orig);
+    const taken = new Set(d.slots.filter((x) => x.id !== slotId).map((x) => x.exerciseId));
+    return ex ? [orig, ...swapOptions(ex, exercises, goal, taken).map((e) => e.id)] : [orig];
+  };
+  const swap = (d: RoutineDay, slotId: string) => {
+    const list = altsOf(d, slotId), cur = swaps[slotId] ?? { orig: list[0], k: 0 }, k = (cur.k + 1) % list.length;
+    setSwaps((x) => ({ ...x, [slotId]: { orig: cur.orig, k } }));
+    editDay(d.id, (day) => ({ ...day, slots: day.slots.map((x) => (x.id === slotId ? { ...x, exerciseId: list[k] } : x)) }));
+  };
+  const remove = (d: RoutineDay, slotId: string) => {
+    setOpenRow(null);
+    editDay(d.id, (day) => ({ ...day, slots: day.slots.filter((x) => x.id !== slotId) }));
   };
   const intensity = Object.fromEntries(MUSCLE_GROUPS.map((m) => { const t = targets.find((x) => x.group === m.id); return [m.id, !isFocus(t) ? 0 : priorityOf(m.id, t) === "priority" ? 1 : 0.55]; }));
 
@@ -107,6 +142,17 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
             {MINUTES.map((m) => (
               <button key={m} type="button" className={"wz-min" + (m === minutes ? " on" : "")} aria-pressed={m === minutes} onClick={() => setMinutes(m)}>
                 <b>{m}</b><span>min</span><small>{m - 5}–{m + 5} on average</small>
+              </button>
+            ))}
+          </div>
+        </Screen>);
+      case "rest": return (
+        <Screen eyebrow="Rest between sets" title="How long do you rest?">
+          <p className="muted wz-note">Best for {GOAL_LABEL[goal]}: {RESTS.find((x) => x.sec === REST_BY_GOAL[goal])!.big} min. It sets how long each workout takes.</p>
+          <div className="wz-minutes">
+            {RESTS.map((x) => (
+              <button key={x.sec} type="button" className={"wz-min" + (x.sec === restSec ? " on" : "")} aria-pressed={x.sec === restSec} onClick={() => setRestPick(x.sec)}>
+                <b>{x.big}</b><span>min</span><small>{x.goal === goal ? "Best for your goal" : `For ${GOAL_LABEL[x.goal]}`}</small>
               </button>
             ))}
           </div>
@@ -179,14 +225,44 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
         </Screen>);
       case "build": return !result ? null : (
         <Screen eyebrow={check ? `${check.checks.filter((c) => c.pass).length}/${check.checks.length} plan checks · score ${check.score.score}` : ""} title="Your plan">
+          <div className="wz-planbar">
+            <span className="muted">Tap an exercise to swap or remove it.</span>
+            <button type="button" className="wz-edit" onClick={() => setStep("goal")}>Edit settings</button>
+          </div>
           <div className="wz-plan">
             {result.map((d) => (
               <div key={d.id} className={"wz-pday" + (d.slots.length ? "" : " rest")}>
-                <div className="wz-pdh"><span>{DAY_NAME[d.weekday!].slice(0, 3)}</span><b>{d.slots.length ? d.title : "Rest"}</b>{d.slots.length > 0 && <span className="mono">{d.slots.reduce((a, s) => a + s.sets, 0)} sets</span>}</div>
-                {d.slots.length > 0 && <ul>{d.slots.map((s) => <li key={s.id}><span>{exMap.get(s.exerciseId)?.name}</span><span className="mono">{s.sets} × {s.repMin === s.repMax ? s.repMin : `${s.repMin}–${s.repMax}`}</span></li>)}</ul>}
+                <div className="wz-pdh">
+                  <span>{DAY_NAME[d.weekday!].slice(0, 3)}</span><b>{d.slots.length ? d.title : "Rest"}</b>
+                  {d.slots.length > 0 && <span className="mono">{d.slots.reduce((a, s) => a + s.sets, 0)} sets · ~{slotsMinutes(d.slots)} min</span>}
+                </div>
+                {d.slots.length > 0 && (
+                  <ul>
+                    {d.slots.map((s) => {
+                      const on = openRow === s.id, alts = on ? altsOf(d, s.id) : [];
+                      return (
+                        <li key={s.id} className={on ? "open" : ""}>
+                          <button type="button" className="wz-ex" aria-expanded={on} onClick={() => setOpenRow(on ? null : s.id)}>
+                            <span>{exMap.get(s.exerciseId)?.name}</span><span className="mono">{s.sets} × {s.repMin === s.repMax ? s.repMin : `${s.repMin}–${s.repMax}`}</span>
+                          </button>
+                          {on && (
+                            <div className="wz-exact">
+                              <button type="button" className="btn btn-ghost" disabled={alts.length < 2} onClick={() => swap(d, s.id)}><Icon name="swap" size={16} /> Swap</button>
+                              <button type="button" className="btn btn-ghost" onClick={() => remove(d, s.id)}><Icon name="trash" size={16} /> Remove</button>
+                              <small className="muted">{alts.length < 2 ? "No other exercise works the same angle" : `Same muscle and angle · ${(swaps[s.id]?.k ?? 0) + 1} of ${alts.length}`}</small>
+                            </div>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+                {d.slots.length > 0 && <button type="button" className="wz-add" onClick={() => setAddTo(d.id)}><Icon name="plus" size={16} /> Add exercise</button>}
               </div>
             ))}
           </div>
+          <ExercisePicker open={!!addTo} title="Add exercise" onClose={() => setAddTo(null)}
+            onPick={(e) => { const id = addTo!; setAddTo(null); editDay(id, (d) => ({ ...d, slots: [...d.slots, { id: "slot-" + uid().slice(0, 8), exerciseId: e.id, sets: 3, ...repsFor(e, goal, restSec) }] })); }} />
         </Screen>);
     }
   })();
@@ -194,7 +270,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const cta = step === "build"
     ? (building || !result ? null : (
       <div className="wz-ctas">
-        <button type="button" className="btn btn-ghost" onClick={() => { setSeed((x) => x + 1); setBuilding(true); }}><Icon name="undo" size={18} /> Try again</button>
+        <button type="button" className="btn btn-ghost" onClick={() => { setSeed((x) => x + 1); setBuilding(true); }}><Icon name="undo" size={18} /> Build again</button>
         <button type="button" className="btn btn-primary btn-xl" onClick={() => onDone({ days: result, targets, goal, phase })}><Icon name="check" size={20} /> Use this plan</button>
       </div>))
     : <button type="button" className="btn btn-primary btn-xl wz-next" disabled={step === "days" && !days.length} onClick={next}>{step === "check" ? "Build my plan" : "Continue"}</button>;
