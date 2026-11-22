@@ -24,13 +24,14 @@ describe("weekly targets per plan", () => {
     expect(targetsOf({ ...r, targets: [] }, seed.targets)).toEqual([]);
   });
 
-  it("new plans target every muscle the database gives a minimum, none skipped", () => {
+  it("new plans target every muscle, none skipped", () => {
     const t = freshTargets(null);
     expect(t.some((x) => x.off)).toBe(false);
     expect(t.find((x) => x.group === "chest")).toEqual({ group: "chest", min: 10, max: 20 });
     expect(t.find((x) => x.group === "abs")).toEqual({ group: "abs", min: 6, max: 16 });
-    // Optional in the database (minimum 0): tracked, not checked
-    expect(isFocus(t.find((x) => x.group === "frontDelts"))).toBe(false);
+    // Every muscle has a minimum now (Nov 21 2026), even the ones presses, pulls and grip also work
+    for (const g of ["frontDelts", "forearms", "neck"] as const) expect(t.find((x) => x.group === g)).toEqual({ group: g, min: 4, max: 8 });
+    expect(t.every((x) => isFocus(x))).toBe(true);
     const r = newRoutine([], new Date("2026-11-21T10:00:00Z"), t);
     expect(r.targets).toBe(t);
   });

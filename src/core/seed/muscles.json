@@ -45,7 +45,7 @@
       "strength": "J",
       "endurance": "J",
       "maintain": "R",
-      "note": "Mass gain ranges: about 10–20 sets a week (Schoenfeld 2017; Pelland 2024). Maintain: about a third (Bickel 2011). Strength and endurance ranges and the per-muscle tweaks are coaching practice and our call."
+      "note": "Mass gain ranges: about 10–20 sets a week (Schoenfeld 2017; Pelland 2024). Maintain: about a third (Bickel 2011). Strength and endurance ranges and the per-muscle tweaks are coaching practice and our call. Front delts, forearms and neck (Nov 21 2026): every muscle gets a minimum; theirs is low because presses, pulls and grip work them too (indirect sets count ½ toward it): about 4 sets a week for mass gain (growth is measurable below ~5 weekly sets; Schoenfeld 2017, Pelland 2024), the strength, endurance and maintain numbers our call."
     }
   },
   "muscles": [
@@ -249,19 +249,19 @@
       "keyLifts": "Overhead press.",
       "weeklySets": {
         "growth": [
-          0,
+          4,
           8
         ],
         "strength": [
-          0,
+          3,
           6
         ],
         "endurance": [
-          0,
+          4,
           8
         ],
         "maintain": [
-          0,
+          2,
           4
         ]
       },
@@ -698,19 +698,19 @@
       "keyLifts": "None.",
       "weeklySets": {
         "growth": [
-          0,
+          4,
           8
         ],
         "strength": [
-          0,
+          3,
           6
         ],
         "endurance": [
-          0,
+          4,
           8
         ],
         "maintain": [
-          0,
+          2,
           4
         ]
       },
@@ -1211,19 +1211,19 @@
       "keyLifts": "None.",
       "weeklySets": {
         "growth": [
-          0,
+          4,
           8
         ],
         "strength": [
-          0,
+          3,
           6
         ],
         "endurance": [
-          0,
+          4,
           8
         ],
         "maintain": [
-          0,
+          2,
           4
         ]
       },
