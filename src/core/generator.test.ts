@@ -5,8 +5,9 @@ import { catalog } from "./seed/exercise-db/index";
 import { generatePlan, planConflicts, REST_BY_GOAL, setsForMinutes, swapOptions } from "./generator";
 import { estimateMinutes, slotsMinutes } from "./timeEstimate";
 import { freshTargets } from "./volumeModel";
-import { weekInsight } from "./workoutCheck";
-import type { RoutineDay, VolumeTarget } from "./types";
+import { JOBS, weekInsight } from "./workoutCheck";
+import type { Goal, RoutineDay, VolumeTarget } from "./types";
+import { planVolume } from "./volume";
 
 const seed = buildSeed();
 const cat = mergeCatalog(seed.exercises, catalog());
@@ -115,7 +116,39 @@ describe("Build my plan: balanced days", () => {
       const days = generatePlan({ goal: "growth", trainDays: SIX, maxMinutes: 75, targets, exercises: cat.exercises, seed: s, restSec: 120 }).filter((d) => d.slots.length);
       const sets = days.map((d) => d.slots.reduce((a, x) => a + x.sets, 0));
       expect(Math.max(...sets) - Math.min(...sets), `seed ${s}`).toBeLessThanOrEqual(4);
-      expect(days.flatMap((d) => d.slots).filter((x) => x.sets < 3).length, `seed ${s}`).toBeLessThanOrEqual(3);
+      // 2-set exercises only to cover another angle of a muscle with 2+ angles (3 sets each would pass its max)
+      for (const x of days.flatMap((d) => d.slots).filter((y) => y.sets < 3)) {
+        const g = cat.exMap.get(x.exerciseId)!.volume.find((v) => v.weight === 1)!.group;
+        expect((JOBS[g] ?? []).length, cat.exMap.get(x.exerciseId)!.name).toBeGreaterThan(1);
+      }
+    }
+  });
+});
+
+describe("Build my plan: across settings", () => {
+  const profileFor = (goal: Goal) => ({ goal, phase: "maintaining" as const, age: 30, yearsTraining: 3, sleepHours: 7.5 });
+  const DAYS: Record<number, number[]> = { 3: [1, 3, 5], 4: [1, 2, 4, 5], 5: [1, 2, 3, 4, 5], 6: [1, 2, 3, 4, 6, 0], 7: [0, 1, 2, 3, 4, 5, 6] };
+  for (const goal of ["growth", "strength", "endurance", "maintenance"] as const) it(`${goal}: no muscle left out, nothing twice, days within time and 10–11 exercises; 5+ days pass the main checks`, () => {
+    for (const n of [3, 4, 5, 6, 7]) for (const minutes of [60, 75]) {
+      const t = freshTargets(profileFor(goal));
+      const days = generatePlan({ goal, trainDays: DAYS[n], maxMinutes: minutes, targets: t, exercises: cat.exercises, seed: 1, restSec: REST_BY_GOAL[goal] });
+      const where = `${n} days, ${minutes} min`;
+      const all = ids(days);
+      expect(new Set(all).size, where).toBe(all.length);
+      for (const d of days.filter((x) => x.slots.length)) {
+        expect(d.slots.length, where).toBeLessThanOrEqual(11);
+        expect(slotsMinutes(d.slots), where).toBeLessThanOrEqual(minutes + 10);
+      }
+      const clean = !planConflicts({ trainDays: DAYS[n], maxMinutes: minutes, targets: t, restSec: REST_BY_GOAL[goal], goal }).length;
+      const vol = new Map(planVolume(routine(days), cat.exMap).map((v) => [v.group, v.sets]));
+      if (clean) for (const x of t.filter((y) => y.min)) expect(vol.get(x.group) ?? 0, `${where} ${x.group}`).toBeGreaterThan(0);
+      if (n >= 5 && clean) {
+        const w = weekInsight(routine(days), cat.exMap, t, goal);
+        for (const id of ["volume", "jobs", "stretch", "frequency", "recovery"]) {
+          const c = w.checks.find((x) => x.id === id);
+          expect(!c || c.pass || c.warn, `${where} ${id}: ${c?.issues.map((i) => i.who + " " + i.what).join("; ")}`).toBe(true);
+        }
+      }
     }
   });
 });

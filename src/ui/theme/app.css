@@ -694,6 +694,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wz-fix { min-height: 40px; padding: 0 14px; font-size: 13px; }
 .wz-fix.btn-ghost { color: var(--neon-ink); }
 .wz-cedit { grid-column: 2; min-width: 0; }
+.wz-misses { grid-column: 2; margin: -6px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+.wz-misses li::before { content: "·"; margin-right: 6px; color: var(--warn); }
 .wz-cedit .vedit { margin-top: 0; }
 .wz-cmin { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
 .wz-cmin .chip { min-height: 44px; padding: 0; justify-content: center; font-size: 13px; }

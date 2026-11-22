@@ -92,9 +92,17 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (!open) return; const prev = document.body.style.overflow; document.body.style.overflow = "hidden"; return () => { document.body.style.overflow = prev; }; }, [open]);
 
-  const conflicts = useMemo(() => planConflicts({ trainDays: days, maxMinutes: minutes, targets, restSec }), [days, minutes, targets, restSec]);
+  const conflicts = useMemo(() => planConflicts({ trainDays: days, maxMinutes: minutes, targets, restSec, goal }), [days, minutes, targets, restSec, goal]);
   // The plan you come from: its exercises are swapped for others wherever possible
   const avoid = useMemo(() => new Set(routine?.days.flatMap((d) => d.slots.map((s) => s.exerciseId)) ?? []), [routine]);
+  // The check screen builds the plan quietly (same seed as the real build) and lists what it would still miss, so
+  // "All good" only shows when the plan really passes
+  const preview = useMemo(() => {
+    if (step !== "check" || conflicts.length) return [];
+    const p = generatePlan({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed, restSec });
+    const w = weekInsight({ id: "", name: "", isCurrent: false, createdAt: "", days: p }, exMap, targets, goal);
+    return [...new Set(w.checks.filter((c) => !c.pass && !c.warn).flatMap((c) => c.issues.map((x) => `${x.who}: ${x.what.split(" · ")[0]}`)))];
+  }, [step, conflicts.length, goal, days, minutes, targets, exercises, avoid, seed, restSec, exMap]);
   const build = (sd: number) => {
     setResult(generatePlan({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed: sd, restSec }));
     setSwaps({}); setOpenRow(null); setEdited(false);
@@ -134,6 +142,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const setShoulders = (x: Priority) => editAll(shouldersTo(targets, x, profile, goal));
   const applyFix = (c: Conflict) => {
     if (c.fix?.maxMinutes) setMinutes(c.fix.maxMinutes);
+    if (c.fix?.restSec) setRestPick(c.fix.restSec);
     if (c.fix?.targets) { setTouched(true); setTargets((ts) => ts.map((x) => c.fix!.targets!.find((y) => y.group === x.group) ?? x)); }
   };
   const editDay = (dayId: string, f: (d: RoutineDay) => RoutineDay) => setResult((ds) => ds && ds.map((d) => (d.id === dayId ? f(d) : d)));
@@ -263,7 +272,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
           </div>
         </Screen>);
       case "check": return (
-        <Screen eyebrow="Before we build" title={conflicts.length ? `${conflicts.length} thing${conflicts.length > 1 ? "s" : ""} to fix` : "All good"}>
+        <Screen eyebrow="Before we build" title={conflicts.length ? `${conflicts.length} thing${conflicts.length > 1 ? "s" : ""} to fix` : preview.length ? "Almost there" : "All good"}>
           {conflicts.length ? (
             <div className="wz-conflicts">
               {conflicts.map((c) => {
@@ -275,7 +284,9 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                     {c.edit.kind !== "time" && <div className="wz-fixes">
                       {c.fix && <button type="button" className="btn btn-primary wz-fix" onClick={() => applyFix(c)}>{c.fix.label}</button>}
                       {c.edit.kind === "target" && <button type="button" className="btn btn-ghost wz-fix" aria-expanded={sel === c.edit.group} onClick={() => setSel(sel === (c.edit as { group: MuscleGroup }).group ? null : (c.edit as { group: MuscleGroup }).group)}>Edit target</button>}
-                      <button type="button" className="btn btn-ghost wz-fix" onClick={() => { setDir("back"); setStep("days"); }}>Change days</button>
+                      {c.edit.kind === "rest"
+                        ? <button type="button" className="btn btn-ghost wz-fix" onClick={() => { setDir("back"); setStep("rest"); }}>Change rest</button>
+                        : <button type="button" className="btn btn-ghost wz-fix" onClick={() => { setDir("back"); setStep("days"); }}>Change days</button>}
                     </div>}
                     {c.edit.kind === "target" && sel === c.edit.group && <div className="wz-cedit"><TargetEdit group={c.edit.group} label={muscleLabel(c.edit.group)} t={t} current={0} onEdit={editTarget} all={targets} onEditAll={editAll} answers={{ goal, phase }} /></div>}
                     {c.edit.kind === "time" && (
@@ -303,6 +314,19 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                   </div>
                 );
               })}
+              <p className="muted" style={{ fontSize: 13 }}>You can build anyway: the plan gets as close as it can.</p>
+            </div>
+          ) : preview.length ? (
+            <div className="wz-conflicts">
+              <div className="wz-conflict">
+                <span className="wz-cic"><Icon name="flame" size={18} /></span>
+                <span className="grow">Not everything fits in {days.length} workout{days.length > 1 ? "s" : ""} of {minutes} min. The plan would still miss:</span>
+                <ul className="wz-misses">{preview.slice(0, 6).map((x) => <li key={x}>{x}</li>)}</ul>
+                <div className="wz-fixes">
+                  <button type="button" className="btn btn-ghost wz-fix" onClick={() => { setDir("back"); setStep("days"); }}>More days</button>
+                  <button type="button" className="btn btn-ghost wz-fix" onClick={() => { setDir("back"); setStep("length"); }}>Longer workouts</button>
+                </div>
+              </div>
               <p className="muted" style={{ fontSize: 13 }}>You can build anyway: the plan gets as close as it can.</p>
             </div>
           ) : (

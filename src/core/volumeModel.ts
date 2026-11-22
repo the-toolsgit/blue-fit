@@ -1,7 +1,7 @@
 // Weekly set targets: the muscle database (seed/muscles.json) gives each muscle a range per goal and the rules for how
 // the training profile changes it. Units: fractional weekly sets (direct 1, indirect ½). Pure and framework-free.
 import { MUSCLE_GROUPS, type Goal, type MuscleGroup, type Routine, type TrainingProfile, type VolumeTarget } from "./types";
-import { muscleInfo, PROFILE_RULES, profileStep, RULES, type GoalKey } from "./muscles";
+import { ANGLES, muscleInfo, PROFILE_RULES, profileStep, RULES, type GoalKey } from "./muscles";
 export type { Goal, Phase, TrainingProfile } from "./types";
 
 export type Priority = "priority" | "normal" | "off";
@@ -65,8 +65,8 @@ export function freshTargets(p: TrainingProfile | null, goal?: Goal): VolumeTarg
 
 /**
  * A muscle's default weekly range for a priority: the model's numbers with a complete profile; without one, the muscle
- * database's range for `goal` (Mass gain when not given; Build my plan passes the goal it asked), where Priority moves the minimum to the middle and the ceiling up 25% (the model's own
- * priority rule). A minimum of 0 gives no target (tracked, not checked).
+ * database's range for `goal` (Mass gain when not given; Build my plan passes the goal it asked), split the same way
+ * (Normal the lower half, Priority the upper half; maintain one range). The ceiling leaves 2 sets per angle. A minimum of 0 gives no target (tracked, not checked).
  */
 export function defaultRange(g: MuscleGroup, p: TrainingProfile | null, priority: Exclude<Priority, "off">, goal: Goal = "growth"): { min: number | null; max: number | null } {
   let min: number, max: number;
@@ -79,7 +79,10 @@ export function defaultRange(g: MuscleGroup, p: TrainingProfile | null, priority
     if (k !== "maintain") { if (priority === "priority") min = mid; else max = mid; }
   }
   const lo = Math.round(min), hi = Math.round(max);
-  return lo > 0 ? { min: lo, max: Math.max(lo, hi) } : { min: null, max: null };
+  // Room for every angle: a muscle with 2+ angles needs an exercise for each, 2 sets at least, so the ceiling is never
+  // under 2 sets per angle (*judgment*, Nov 21 2026: e.g. neck's 3 angles need 6; Build my plan covers every angle)
+  const angles = ANGLES[g]?.length ?? 1;
+  return lo > 0 ? { min: lo, max: Math.max(lo, hi, angles > 1 ? 2 * angles : 0) } : { min: null, max: null };
 }
 
 export function modelTargets(p: TrainingProfile, priorities: Partial<Record<MuscleGroup, Priority>> = {}): ModelTarget[] {
