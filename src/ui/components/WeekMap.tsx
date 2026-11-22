@@ -227,7 +227,7 @@ function MuscleExercises({ g, routine, exMap, t }: { g: MuscleGroup; routine: Ro
       {!!x.other.length && <div className="wm-ex-part">{!!x.parts.length && <div className="wm-ex-job">other</div>}<ul>{x.other.map(line)}</ul></div>}
       {!x.parts.length && !x.other.length && <p className="wm-ex-none">No exercise in your plan works it directly.</p>}
       {!!x.indirect.length && (
-        <div className="wm-ex-part"><div className="wm-ex-job">also works it (½ set each)</div><ul className="wm-ex-ind">{x.indirect.map(line)}</ul></div>
+        <div className="wm-ex-part"><div className="wm-ex-job">also works it (each set counts ½)</div><ul className="wm-ex-ind">{x.indirect.map(line)}</ul></div>
       )}
     </div>
   );
