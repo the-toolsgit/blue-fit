@@ -1,7 +1,7 @@
 // Build a plan for me: a full-screen, one-question-per-screen flow (goal → eating → days → workout length → rest →
 // targets → conflicts → build). On the plan, each exercise can be swapped or removed and exercises added. The plan itself comes from core/generator.ts; this file is only the steps.
 import { reducedMotion } from "../device";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { generatePlanAsync } from "../generate";
 import { planConflicts, repsFor, REST_BY_GOAL, swapOptions, type Conflict } from "../../core/generator";
@@ -14,7 +14,8 @@ import { weekInsight } from "../../core/workoutCheck";
 import { useStore } from "../store";
 import { Icon } from "../components/Icon";
 import { MuscleMap } from "../components/MuscleMap";
-import { DELTS, shouldersTo, TargetEdit, withPriority } from "../components/TargetEdit";
+import { DELTS, shouldersTo, TargetEdit, toggleSkip, withPriority } from "../components/TargetEdit";
+import { useLongPress } from "../components/longPress";
 import { Seg } from "../components/Controls";
 import { Splash } from "../components/Splash";
 import { ExercisePicker } from "../components/ExercisePicker";
@@ -175,6 +176,8 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   };
   const editTarget = (t: VolumeTarget) => { setTouched(true); setTargets((ts) => ts.map((x) => (x.group === t.group ? t : x))); };
   /** Priority / Normal / Skip for all three delt heads at once, each to its own default range */
+  /** Press and hold a muscle row: Skip it, or back to Normal when skipped (Shoulders: all three heads) */
+  const holdSkip = (g: MuscleGroup) => editAll(toggleSkip(targets, g, profileFor(goal, phase), goal));
   const editAll = (ns: VolumeTarget[]) => { setTouched(true); setTargets((ts) => ts.map((x) => ns.find((y) => y.group === x.group) ?? x)); };
   const setShoulders = (x: Priority) => editAll(shouldersTo(targets, x, profile, goal));
   const applyFix = (c: Conflict) => {
@@ -264,11 +267,11 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                 const p = ps.every((x) => x === ps[0]) ? ps[0] : null, open = !!sel && DELTS.includes(sel);
                 return (
                   <div key="shoulders" className={"wz-trow" + (open ? " open" : "")}>
-                    <button type="button" className="wz-thead" onClick={() => { setSel(open ? null : "sideDelts"); setHead(null); }} aria-expanded={open}>
+                    <HoldButton className="wz-thead" onClick={() => { setSel(open ? null : "sideDelts"); setHead(null); }} onHold={() => holdSkip("sideDelts")} aria-expanded={open}>
                       <span className="wz-tname">Shoulders</span>
                       <span className={"wz-tprio " + (p ?? "mixed")}>{p ? PRIO_LABEL[p] : "Mixed"}</span>
                       <span className="mono wz-trange">3 heads</span>
-                    </button>
+                    </HoldButton>
                     {open && (
                       <div className="vedit">
                         <Seg label="Shoulders: focus" value={(p ?? "") as Priority} onChange={setShoulders}
@@ -297,11 +300,11 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
               const t = targets.find((x) => x.group === m.id), p = priorityOf(m.id, t), focus = isFocus(t);
               return (
                 <div key={m.id} className={"wz-trow" + (sel === m.id ? " open" : "")}>
-                  <button type="button" className="wz-thead" onClick={() => setSel(sel === m.id ? null : m.id)} aria-expanded={sel === m.id}>
+                  <HoldButton className="wz-thead" onClick={() => setSel(sel === m.id ? null : m.id)} onHold={() => holdSkip(m.id)} aria-expanded={sel === m.id}>
                     <span className="wz-tname">{m.label}</span>
                     <span className={"wz-tprio " + p}>{p === "off" ? "Skip" : p === "priority" ? "Priority" : "Normal"}</span>
                     <span className="mono wz-trange">{focus ? formatTarget(t) : "—"}</span>
-                  </button>
+                  </HoldButton>
                   {sel === m.id && <TargetEdit group={m.id} label={m.label} t={t} current={0} onEdit={editTarget} all={targets} onEditAll={editAll} answers={{ goal, phase }} />}
                 </div>
               );
@@ -472,3 +475,9 @@ function Choices({ items, value, onPick }: { items: { v: string; label: string; 
   );
 }
 
+
+/** A row button that also does something on press and hold (~0.45 s) */
+function HoldButton({ onHold, children, ...rest }: { onHold: () => void; children: ReactNode } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type">) {
+  const long = useLongPress(onHold);
+  return <button type="button" {...rest} {...long}>{children}</button>;
+}

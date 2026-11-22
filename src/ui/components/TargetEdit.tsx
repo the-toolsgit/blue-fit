@@ -83,3 +83,12 @@ export function TargetEdit({ group, label, t, current, onEdit, all, onEditAll, h
     </div>
   );
 }
+
+/** Long press on a muscle row: Skip it, or bring a skipped one back as Normal (its default range). A delt head turns all
+ *  three Shoulders heads (one choice for them). Returns the changed targets. */
+export function toggleSkip(targets: VolumeTarget[], g: MuscleGroup, profile: TrainingProfile | null, goal?: Goal): VolumeTarget[] {
+  const t = targets.find((x) => x.group === g) ?? { group: g, min: null, max: null };
+  const next: Priority = priorityOf(g, t) === "off" ? "normal" : "off";
+  if (DELTS.includes(g)) return shouldersTo(targets, next, profile, goal);
+  return [withPriority(t, next, next === "off" ? t : defaultRange(g, profile, next, goal))];
+}

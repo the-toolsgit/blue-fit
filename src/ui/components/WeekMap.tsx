@@ -5,10 +5,12 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { GUIDES, HEAD, MAP_H, MAP_PARTS, MAP_W, OUTLINE, partsKey, regionsFor, viewOf, zoomBox, type MapView } from "../../core/muscleMap";
 import { fmtNum } from "../../core/util";
-import { muscleLabel, type MuscleGroup } from "../../core/types";
+import { completeProfile, muscleLabel, type MuscleGroup } from "../../core/types";
 import { exercisesFor, type Tile } from "../../core/workoutCheck";
 import type { Exercise, Routine, VolumeTarget } from "../../core/types";
-import { TargetEdit } from "./TargetEdit";
+import { DELTS, TargetEdit, toggleSkip } from "./TargetEdit";
+import { useLongPress } from "./longPress";
+import { useStore } from "../store";
 import { reducedMotion } from "../device";
 import { Icon } from "./Icon";
 
@@ -136,10 +138,7 @@ export function WeekMap({ tiles, routine, exMap, edit }: { tiles: Tile[]; routin
             const t = byGroup.get(g), open = sel === g;
             return (
               <div key={g}>
-                <button type="button" className={"weekmap-row" + (open ? " sel" : "")} onClick={() => pick(g)} aria-expanded={open}>
-                  <i style={{ background: tileColor(t) }} /><span className="grow">{muscleLabel(g)}</span>
-                  <span className="mono muted">{fmtNum(t?.week ?? 0)}/{t?.target?.min ?? "–"}</span>
-                </button>
+                <ListRow g={g} open={open} color={tileColor(t)} count={`${fmtNum(t?.week ?? 0)}/${t?.target?.min ?? "–"}`} onTap={() => pick(g)} edit={edit} />
               </div>
             );
           })}
@@ -152,6 +151,25 @@ export function WeekMap({ tiles, routine, exMap, edit }: { tiles: Tile[]; routin
         {[["var(--good)", "in target"], ["hsl(50 100% 58%)", "a bit short"], ["hsl(0 100% 58%)", "far short"], ["var(--pink-2)", "above"], ["var(--faint)", "skipped"]].map(([c, l]) => <span key={l}><i style={{ background: c }} />{l}</span>)}
       </div>
     </div>
+  );
+}
+
+/** A muscle in the list. With editing on, press and hold to Skip it (or bring a skipped one back as Normal; a delt head
+ *  turns all three Shoulders heads); a toast says so, with Undo (Nov 22 2026). */
+function ListRow({ g, open, color, count, onTap, edit }: { g: MuscleGroup; open: boolean; color: string; count: string; onTap: () => void; edit?: TargetEditing }) {
+  const { settings, toast } = useStore();
+  const long = useLongPress(edit ? () => {
+    const ch = toggleSkip(edit.targets, g, completeProfile(settings.profile), settings.profile?.goal);
+    const before = ch.map((c) => edit.targets.find((x) => x.group === c.group) ?? { group: c.group, min: null, max: null });
+    edit.onEditAll(ch);
+    const name = DELTS.includes(g) ? "Shoulders" : muscleLabel(g), skipped = !!ch[0].off;
+    toast({ kind: "info", title: `${name} ${skipped ? "skipped" : "back to Normal"}`, action: { label: "Undo", run: () => edit.onEditAll(before) } });
+  } : undefined);
+  return (
+    <button type="button" className={"weekmap-row" + (open ? " sel" : "")} onClick={onTap} aria-expanded={open} {...long}>
+      <i style={{ background: color }} /><span className="grow">{muscleLabel(g)}</span>
+      <span className="mono muted">{count}</span>
+    </button>
   );
 }
 
