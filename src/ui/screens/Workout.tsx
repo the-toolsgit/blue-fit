@@ -407,8 +407,10 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   // when the failure set says the weight was too light.
   // "Go down" when last time's first regular set fell short of today's rep range (same rule as the workout note)
   const heavy = hint0.kind === "none" || !last ? null : tooHeavy({ ...last.entry, repMin }, ex);
+  // Today already proves it: a done set at that weight or heavier reached the plan's reps → no "go down"
+  const heavyNow = heavy && e.sets.some((x) => x.done && x.type === "working" && (x.weight ?? 0) >= heavy.from && (x.reps ?? 0) >= repMin);
   const hint = hint1.kind === "addWeight" ? hint1
-    : heavy ? ({ kind: "lowerWeight", weight: heavy.weight, reps: repMin, got: heavy.reps, from: heavy.from } as const)
+    : heavy && !heavyNow ? ({ kind: "lowerWeight", weight: heavy.weight, reps: repMin, got: heavy.reps, from: heavy.from } as const)
     : ({ kind: "none" } as const);
   // Settings → Inline workout tips turns off every tip in the card (go up/down and the effort notes)
   const tipsOn = settings.progressionHints;
