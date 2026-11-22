@@ -3,6 +3,8 @@ let ctx: AudioContext | null = null;
 
 /** iOS only allows audio after a user gesture: unlock on the first tap anywhere. */
 export function unlockAudio() {
+  // Back from the lock screen or another app: iOS suspends (or interrupts) the audio, so wake it for the next chime
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && ctx && ctx.state !== "running") void ctx.resume().catch(() => {}); });
   const unlock = () => {
     try {
       const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
@@ -18,6 +20,7 @@ export function unlockAudio() {
 /** Rest-over chime: three rising tones. */
 export function chime() {
   if (!ctx) return;
+  if (ctx.state !== "running") void ctx.resume().catch(() => {});
   const t0 = ctx.currentTime + 0.02;
   [880, 1175, 1568].forEach((f, i) => {
     const o = ctx!.createOscillator(), g = ctx!.createGain();

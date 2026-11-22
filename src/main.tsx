@@ -14,7 +14,13 @@ import { unlockAudio } from "./ui/device";
 unlockAudio();
 // Behave like an app, not a web page: no pinch zoom or double-tap zoom (iOS ignores user-scalable=no, so stop the gestures).
 for (const ev of ["gesturestart", "gesturechange"]) document.addEventListener(ev, (e) => e.preventDefault(), { passive: false });
-document.addEventListener("touchmove", (e) => { if ((e as TouchEvent).touches.length > 1) e.preventDefault(); }, { passive: false });
+// (No page-wide touchmove listener: gesturestart already stops pinch, and a non-passive one makes iOS wait on JS to scroll.)
+// After an update, a screen's old code file may be gone: reload to get the new version instead of a crash screen
+window.addEventListener("vite:preloadError", (e) => {
+  // Once a minute at most, so a missing file while offline can't loop
+  try { const last = Number(sessionStorage.getItem("bf-reloaded") ?? 0); if (Date.now() - last < 60_000) return; sessionStorage.setItem("bf-reloaded", String(Date.now())); } catch { /* storage blocked */ }
+  e.preventDefault(); location.reload();
+});
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <StoreProvider>

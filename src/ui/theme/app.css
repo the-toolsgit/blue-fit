@@ -61,7 +61,10 @@ ul { margin: 0; padding-left: 18px; }
 .section-title { font: 700 15px/1 var(--display); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: var(--s5) 4px var(--s2); }
 
 /* ---------- Surfaces ---------- */
-.glass { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
+/* No backdrop blur on cards in the page (Nov 22 2026, speed: iOS redraws every blurred layer while scrolling, and over the
+   dark page it barely shows); only the floating bars, which sit over moving content, keep it */
+.glass { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); }
+.tabbar.glass, .dock .glass { backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
 .glass.pad { padding: var(--s4); }
 .edge { position: relative; overflow: hidden; }
 .edge::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
@@ -82,8 +85,10 @@ ul { margin: 0; padding-left: 18px; }
 .btn-block { width: 100%; }
 .icon-btn { width: var(--tap); height: var(--tap); display: inline-grid; place-items: center; border-radius: 12px; color: var(--muted); transition: transform 0.12s, color 0.2s, background 0.2s; }
 .icon-btn:active { transform: scale(0.9); background: var(--surface-2); }
-.pulse { animation: pulse 2.4s ease-in-out infinite; }
-@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.12) inset, 0 10px 34px -6px var(--glow); } 50% { box-shadow: 0 0 0 1px rgba(255,255,255,0.2) inset, 0 12px 48px -2px var(--glow); } }
+/* Breathing glow: the bigger glow sits on a layer that only fades (opacity is cheap to animate; box-shadow repaints) */
+.pulse { position: relative; box-shadow: 0 0 0 1px rgba(255,255,255,0.12) inset, 0 10px 34px -6px var(--glow); }
+.pulse::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; box-shadow: 0 0 0 1px rgba(255,255,255,0.2) inset, 0 12px 48px -2px var(--glow); opacity: 0; animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
 
 /* ---------- Chips / badges ---------- */
 .chip { position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--line-strong); color: var(--muted); font: 600 13px var(--body); background: var(--surface-2); white-space: nowrap; transition: all 0.2s var(--ease); }

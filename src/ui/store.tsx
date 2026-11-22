@@ -124,10 +124,19 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [write]);
 
   const cat = useMemo(() => mergeCatalog(data.exercises, db), [data.exercises, db]);
+  // Speed (Nov 22 2026): workouts sorted once per change to them, so a toast, the rest timer or a settings change
+  // doesn't hand every screen new `finished` / `active` lists (which re-ran their memoized work)
+  const sessionsView = useMemo(() => {
+    const sorted = [...data.sessions].sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1));
+    return { active: sorted.find((s) => s.status === "active"), finished: sorted.filter((s) => s.status === "finished") };
+  }, [data.sessions]);
+  const planView = useMemo(() => {
+    const current = data.routines.find((r) => r.isCurrent) ?? data.routines[0];
+    return { current, targets: targetsOf(current, data.targets) };
+  }, [data.routines, data.targets]);
   const store = useMemo<Store>(() => {
     const { exMap } = cat;
-    const current = data.routines.find((r) => r.isCurrent) ?? data.routines[0];
-    const sorted = [...data.sessions].sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1));
+    const { current } = planView;
     return {
       ...data,
       exercises: cat.exercises,
@@ -137,9 +146,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       exMap,
       routine: current,
       // Weekly targets belong to the current plan (app-wide list only as a fallback for plans from older versions)
-      targets: targetsOf(current, data.targets),
-      active: sorted.find((s) => s.status === "active"),
-      finished: sorted.filter((s) => s.status === "finished"),
+      targets: planView.targets,
+      active: sessionsView.active,
+      finished: sessionsView.finished,
       restTimer,
       toasts,
       toast,
@@ -192,7 +201,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return adapter.exportAll();
       },
     };
-  }, [data, cat, ready, restTimer, toasts, toast, dismissToast, putRow, write, backup]);
+  }, [data, cat, sessionsView, planView, ready, restTimer, toasts, toast, dismissToast, putRow, write, backup]);
 
   return <Ctx.Provider value={store}>{children}</Ctx.Provider>;
 }

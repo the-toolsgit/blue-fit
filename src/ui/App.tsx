@@ -16,9 +16,10 @@ import { PlanScreen } from "./screens/Plan";
 import { SettingsScreen } from "./screens/Settings";
 import { SummaryScreen } from "./screens/Summary";
 import { TodayScreen } from "./screens/Today";
-import { WorkoutScreen } from "./screens/Workout";
 
 // Heavier screens (charts, drag and drop) load on first visit.
+// The logger loads when first opened (it brings the drag library); the rest of startup stays smaller
+const WorkoutScreen = lazy(() => import("./screens/Workout").then((m) => ({ default: m.WorkoutScreen })));
 const ProgressScreen = lazy(() => import("./screens/Progress").then((m) => ({ default: m.ProgressScreen })));
 const PlanEditorScreen = lazy(() => import("./screens/PlanEditor").then((m) => ({ default: m.PlanEditorScreen })));
 const EditWorkoutScreen = lazy(() => import("./screens/EditWorkout").then((m) => ({ default: m.EditWorkoutScreen })));

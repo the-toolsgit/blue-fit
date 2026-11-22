@@ -30,10 +30,11 @@ export function RestTimerDock() {
   const alerted = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!restTimer && !active) return;
+    // Ticks only while a rest runs (nothing here changes between rests)
+    if (!restTimer) return;
     const t = setInterval(() => setNow(Date.now()), 250);
     return () => clearInterval(t);
-  }, [restTimer, active]);
+  }, [restTimer]);
 
   const left = restTimer ? (restTimer.endsAt - now) / 1000 : 0;
   const over = !!restTimer && left <= 0;

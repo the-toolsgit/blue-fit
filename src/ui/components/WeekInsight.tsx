@@ -1,5 +1,6 @@
 // The whole week of a plan at a glance (Plan tab, view and edit mode): quick facts, the muscle map with a list per side
 // (components/WeekMap.tsx), and the Week check (does the routine tick every box for the user's goal).
+import { useMemo } from "react";
 import type { Exercise, Goal, Routine, VolumeTarget } from "../../core/types";
 import { weekInsight, type CheckId } from "../../core/workoutCheck";
 import { failureApplies, failureEligible, mainMuscle } from "../../core/failure";
@@ -29,7 +30,8 @@ export function WeekInsight({ routine, exMap, targets, weekFail, edit }: {
 }) {
   const { settings } = useStore();
   // Muscles that get a failure set this week, for the score
-  const i = weekInsight(routine, exMap, targets, settings.profile?.goal, failureInput(routine, exMap, weekFail, settings.profile?.goal));
+  const goal = settings.profile?.goal;
+  const i = useMemo(() => weekInsight(routine, exMap, targets, goal, failureInput(routine, exMap, weekFail, goal)), [routine, exMap, targets, goal, weekFail]);
   const passed = i.checks.filter((c) => c.pass).length, all = passed === i.checks.length;
   return (
     <>

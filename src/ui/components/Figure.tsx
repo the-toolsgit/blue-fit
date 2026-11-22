@@ -6,18 +6,26 @@ import { frameToSvg } from "../../core/figure/svg";
 import type { FigureSpec } from "../../core/types";
 import { reducedMotion } from "../device";
 
-type Reg = { spec: FigureSpec; visible: boolean; speed: number; timing?: Timing; t0: number; dx: number };
+type Reg = { spec: FigureSpec; visible: boolean; speed: number; timing?: Timing; t0: number; dx: number; svg?: string };
 const registry = new Map<SVGSVGElement, Reg>();
 let raf = 0, last = 0;
+// Speed (Nov 22 2026): the loop sleeps while no figure is on screen, and a frame that draws the same as the last one
+// (the holds at each end of a rep) isn't written again, so the SVG and its glow aren't redrawn for nothing.
+const anyVisible = () => { for (const r of registry.values()) if (r.visible) return true; return false; };
 const loop = (ms: number) => {
   if (ms - last > 32) {
     last = ms;
-    registry.forEach((r, el) => { if (r.visible) el.innerHTML = frameToSvg(poseFrame(r.spec, phase((ms - r.t0) * r.speed, r.timing)), r.dx); });
+    registry.forEach((r, el) => {
+      if (!r.visible) return;
+      const svg = frameToSvg(poseFrame(r.spec, phase((ms - r.t0) * r.speed, r.timing)), r.dx);
+      if (svg !== r.svg) { r.svg = svg; el.innerHTML = svg; }
+    });
   }
-  raf = registry.size ? requestAnimationFrame(loop) : 0;
+  raf = anyVisible() ? requestAnimationFrame(loop) : 0;
 };
+const wake = () => { if (!raf && anyVisible()) raf = requestAnimationFrame(loop); };
 const io = typeof IntersectionObserver === "function"
-  ? new IntersectionObserver((es) => es.forEach((e) => { const r = registry.get(e.target as SVGSVGElement); if (r) r.visible = e.isIntersecting; }), { rootMargin: "80px" })
+  ? new IntersectionObserver((es) => { es.forEach((e) => { const r = registry.get(e.target as SVGSVGElement); if (r) r.visible = e.isIntersecting; }); wake(); }, { rootMargin: "80px" })
   : null;
 
 /** `timing`: per-exercise speed from its tempo (core/figure/tempo.ts); each figure starts its loop when it appears. */
@@ -41,7 +49,7 @@ export function Figure({ spec, size = 112, className = "", still, k = 1, label, 
     if (still || reducedMotion()) return;
     registry.set(el, { spec, visible: !io, speed, timing, t0: performance.now(), dx });
     io?.observe(el);
-    if (!raf) raf = requestAnimationFrame(loop);
+    wake();
     return () => { registry.delete(el); io?.unobserve(el); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spec, still, bumps, k, speed, dx, timing?.ab, timing?.ba, timing?.holdA, timing?.holdB]);
