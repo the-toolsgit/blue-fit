@@ -398,7 +398,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
             ))}
           </div>
           <ExercisePicker open={!!addTo} title="Add exercise" onClose={() => setAddTo(null)}
-            onPick={(e) => { const id = addTo!; setAddTo(null); setEdited(true); editDay(id, (d) => ({ ...d, slots: [...d.slots, { id: "slot-" + uid().slice(0, 8), exerciseId: e.id, sets: 3, ...repsFor(e, goal, restSec) }] })); }} />
+            onPickMany={(es) => { const id = addTo!; setAddTo(null); setEdited(true); editDay(id, (d) => ({ ...d, slots: [...d.slots, ...es.map((e) => ({ id: "slot-" + uid().slice(0, 8), exerciseId: e.id, sets: 3, ...repsFor(e, goal, restSec) }))] })); }} />
         </Screen>);
     }
   })();

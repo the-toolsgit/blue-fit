@@ -216,11 +216,11 @@ export function PlanScreen() {
       <ExercisePicker open={!!picker} title={picker?.mode === "swap" ? "Swap exercise" : "Add exercise"}
         exclude={picker?.mode === "swap" ? day?.slots.find((x) => x.id === picker.slotId)?.exerciseId : undefined}
         onClose={() => setPicker(null)}
-        onPick={(ex) => {
-          if (picker?.mode === "swap") { if (day) saveRoutine(swapSlotExercise(routine, day.id, picker.slotId, ex)); return; }
+        onPick={picker?.mode === "swap" ? (ex) => { if (day) saveRoutine(swapSlotExercise(routine, day.id, picker.slotId, ex)); } : undefined}
+        onPickMany={picker?.mode === "swap" ? undefined : (exs) => {
           // A rest day without a plan day yet gets one on that weekday
           const made = day ? { routine, dayId: day.id } : addDay(routine, cur.weekday);
-          saveRoutine(addSlot(made.routine, made.dayId, ex, settings.restDefaultSec).routine);
+          saveRoutine(exs.reduce((r, ex) => addSlot(r, made.dayId, ex, settings.restDefaultSec).routine, made.routine));
         }} />
       <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} failWhy={day && slot ? weekFail.get(day.id)?.get(slot.id) : undefined} />
       <Confirm open={delDay} title={`Delete ${day?.title ?? "this day"}?`} body="All its exercises are removed and it becomes a rest day. Past workouts stay in history." confirm="Delete" danger

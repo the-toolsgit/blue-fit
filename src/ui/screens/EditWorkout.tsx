@@ -160,17 +160,16 @@ export function EditWorkoutScreen({ id }: { id?: string }) {
         )}
       </Sheet>
       <ExercisePicker open={!!picker} title={picker?.mode === "swap" ? "Change exercise" : "Add exercise"} onClose={() => setPicker(null)}
-        onPick={(ex) => {
-          if (picker?.mode === "swap") {
-            // keep the logged sets, only the exercise changes
-            const old = s.entries.find((x) => x.id === picker.entryId)!;
-            const n = swapEntry(s, picker.entryId, ex, history);
-            commit(setEntry(n, picker.entryId, { sets: old.sets, swappedFromId: undefined }));
-          } else {
-            const ne = buildEntry(ex, history, { restSec: ex.defaultRestSec || settings.restDefaultSec, sets: 1 });
-            commit(addEntry(s, { ...ne, sets: ne.sets.map((x) => ({ ...x, done: true, completedAt: s.finishedAt ?? s.startedAt })) }));
-          }
-        }} />
+        onPick={picker?.mode === "swap" ? (ex) => {
+          // keep the logged sets, only the exercise changes
+          const old = s.entries.find((x) => x.id === picker.entryId)!;
+          const n = swapEntry(s, picker.entryId, ex, history);
+          commit(setEntry(n, picker.entryId, { sets: old.sets, swappedFromId: undefined }));
+        } : undefined}
+        onPickMany={picker?.mode === "swap" ? undefined : (exs) => commit(exs.reduce((n, ex) => {
+          const ne = buildEntry(ex, history, { restSec: ex.defaultRestSec || settings.restDefaultSec, sets: 1 });
+          return addEntry(n, { ...ne, sets: ne.sets.map((x) => ({ ...x, done: true, completedAt: s.finishedAt ?? s.startedAt })) });
+        }, s))} />
       <NoteSheet open={!!noteFor} title="Note" value={s.entries.find((x) => x.id === noteFor)?.notes ?? ""}
         onSave={(v) => noteFor && commit(setEntry(s, noteFor, { notes: v || undefined }))} onClose={() => setNoteFor(null)} />
       <Confirm open={!!remove} title="Remove this exercise?" body="Its sets in this workout are deleted." confirm="Remove" danger onClose={() => setRemove(null)} onConfirm={() => remove && commit(removeEntry(s, remove))} />

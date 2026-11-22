@@ -1,5 +1,6 @@
-// Exercise picker: search + Muscle and Equipment filters (each opens a sheet with checkbox rows, multi-select). Used for swap and add (and the plan editor later).
-import { useMemo, useState } from "react";
+// Exercise picker: search + Muscle and Equipment filters (each opens a sheet with checkbox rows, multi-select). Used for swap and add.
+// Swap: one tap picks and closes. Add (onPickMany): tap rows to tick several, then "Add N exercises" adds them in tap order.
+import { useEffect, useMemo, useState } from "react";
 import { EQUIPMENT_LABEL, MUSCLE_GROUPS, muscleLabel, type Equipment, type Exercise, type MuscleGroup } from "../../core/types";
 import { useStore } from "../store";
 import { isTopPick } from "../../core/catalog";
@@ -10,8 +11,20 @@ import { Icon } from "./Icon";
 import { Sheet } from "./Sheet";
 import { ExerciseEditor } from "./ExerciseEditor";
 
-export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open: boolean; title: string; onClose: () => void; onPick: (e: Exercise) => void; exclude?: string }) {
+export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclude }: {
+  open: boolean; title: string; onClose: () => void; onPick?: (e: Exercise) => void;
+  /** Add mode: pick several before closing; called once with them in tap order */
+  onPickMany?: (es: Exercise[]) => void; exclude?: string;
+}) {
   const [creating, setCreating] = useState(false);
+  const [picked, setPicked] = useState<Exercise[]>([]);
+  useEffect(() => { if (open) setPicked([]); }, [open]);
+  const isOn = (e: Exercise) => picked.some((x) => x.id === e.id);
+  const tap = (e: Exercise) => {
+    if (onPickMany) return setPicked(isOn(e) ? picked.filter((x) => x.id !== e.id) : [...picked, e]);
+    ensureSaved(e); onPick?.(e); onClose();
+  };
+  const addPicked = () => { picked.forEach(ensureSaved); onPickMany?.(picked); onClose(); };
   const { exercises, settings, ensureSaved } = useStore();
   const goal = settings.profile?.goal;
   // ~430 exercises: draw the first 60, more on request (search and filters narrow it first)
@@ -67,18 +80,19 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
       </div>
       <div style={{ marginTop: 6 }}>
         {(more ? list : list.slice(0, 60)).map((e) => (
-          <button key={e.id} className="list-row" onClick={() => { ensureSaved(e); onPick(e); onClose(); }}>
+          <button key={e.id} className={"list-row" + (onPickMany ? " filter-row" + (isOn(e) ? " on" : "") : "")} aria-pressed={onPickMany ? isOn(e) : undefined} onClick={() => tap(e)}>
             <Figure spec={e.figure} size={40} still className="thin" />
             <span className="grow">
               <span style={{ display: "block", fontWeight: 600 }}>{e.name} {e.isHeavy && <span className="star">★</span>}{top(e) && <span className="badge p" style={{ marginLeft: 6, verticalAlign: 2 }}>Top pick</span>}</span>
               <span className="muted" style={{ fontSize: 13 }}>{e.muscles.join(", ")} · {EQUIPMENT_LABEL[e.equipment]}</span>
             </span>
-            <Icon name="plus" size={20} />
+            {onPickMany ? <span className="filter-box">{isOn(e) && <Icon name="check" size={18} />}</span> : <Icon name="plus" size={20} />}
           </button>
         ))}
         {!more && list.length > 60 && <button className="btn btn-ghost btn-block" style={{ marginTop: 8 }} onClick={() => setMore(true)}>Show all {list.length}</button>}
         {!list.length && <div className="empty">No exercise matches. Tap "New exercise" to add your own.</div>}
       </div>
+      {onPickMany && picked.length > 0 && <button className="btn btn-primary btn-block picker-add" onClick={addPicked}><Icon name="plus" size={18} /> Add {picked.length} exercise{picked.length === 1 ? "" : "s"}</button>}
       <Sheet open={tab !== null} onClose={() => setTab(null)} label="Filter exercises" tall>
         <Seg label="Filter by" value={tab ?? "muscle"} onChange={setTab} options={[{ v: "muscle", label: "Muscle" }, { v: "equipment", label: "Equipment" }]} />
         <div style={{ marginTop: 10 }}>
@@ -96,7 +110,7 @@ export function ExercisePicker({ open, title, onClose, onPick, exclude }: { open
         </div>
         <button className="btn btn-primary btn-block" style={{ position: "sticky", bottom: 0, marginTop: 12 }} onClick={() => setTab(null)}>Show {list.length} exercises</button>
       </Sheet>
-      <ExerciseEditor open={creating} onClose={() => setCreating(false)} onSaved={(e) => { onPick(e); onClose(); }} />
+      <ExerciseEditor open={creating} onClose={() => setCreating(false)} onSaved={(e) => (onPickMany ? setPicked((ps) => [...ps, e]) : (onPick?.(e), onClose()))} />
     </Sheet>
   );
 }

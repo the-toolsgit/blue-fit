@@ -239,11 +239,8 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
       <ExercisePicker open={!!picker} title={picker?.mode === "swap" ? "Swap exercise" : "Add exercise"}
         exclude={picker?.mode === "swap" ? day?.slots.find((s) => s.id === picker.slotId)?.exerciseId : undefined}
         onClose={() => setPicker(null)}
-        onPick={(ex) => {
-          if (!day) return;
-          if (picker?.mode === "swap") setDraft(swapSlotExercise(draft, day.id, picker.slotId, ex));
-          else setDraft(addSlot(draft, day.id, ex, settings.restDefaultSec).routine);
-        }} />
+        onPick={picker?.mode === "swap" ? (ex) => { if (day) setDraft(swapSlotExercise(draft, day.id, picker.slotId, ex)); } : undefined}
+        onPickMany={picker?.mode === "swap" ? undefined : (exs) => { if (day) setDraft(exs.reduce((r, ex) => addSlot(r, day.id, ex, settings.restDefaultSec).routine, draft)); }} />
       <PlanWizard open={wizard} initialTargets={tdraft} onClose={() => setWizard(false)} onDone={(r: WizardResult) => {
         setDraft({ ...draft, days: r.days });
         setTdraft(r.targets);

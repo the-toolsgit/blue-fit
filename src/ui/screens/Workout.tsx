@@ -306,9 +306,11 @@ export function WorkoutScreen() {
         title={picker?.mode === "swap" ? "Swap exercise" : "Add exercise"}
         exclude={picker?.mode === "swap" ? s.entries.find((x) => x.id === picker.entryId)?.exerciseId : undefined}
         onClose={() => setPicker(null)}
-        onPick={(ex) => {
-          if (picker?.mode === "swap") commit(swapEntry(s, picker.entryId, ex, finished));
-          else { const ne = buildEntry(ex, finished, { restSec: ex.defaultRestSec || settings.restDefaultSec }); commit(addEntry(s, ne)); scrollTo(ne.id); }
+        onPick={picker?.mode === "swap" ? (ex) => commit(swapEntry(s, picker.entryId, ex, finished)) : undefined}
+        onPickMany={picker?.mode === "swap" ? undefined : (exs) => {
+          let n = s, first: string | null = null;
+          for (const ex of exs) { const ne = buildEntry(ex, finished, { restSec: ex.defaultRestSec || settings.restDefaultSec }); n = addEntry(n, ne); first ??= ne.id; }
+          commit(n); scrollTo(first);
         }}
       />
 
