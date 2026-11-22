@@ -586,7 +586,7 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wm-edit { min-height: 44px; padding: 0 2px 0 12px; color: var(--neon-ink); font-weight: 600; font-size: 14px; }
 .wm-meta { font-size: 11px; color: var(--muted); white-space: nowrap; }
 .wm-state { font: 600 11px var(--body); padding: 1px 8px; border-radius: 99px; border: 1px solid; }
-.wm-parts { list-style: none; margin: 2px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 4px 12px; width: 100%; }
+.wm-parts { list-style: none; margin: 2px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; width: 100%; }
 .wm-parts li { display: flex; align-items: center; gap: 6px; font-size: 12px; }
 .wm-parts li svg { flex: none; }
 .wm-parts li.hit { color: var(--ink); } .wm-parts li.hit svg { color: var(--good); }
