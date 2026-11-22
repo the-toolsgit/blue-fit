@@ -57,11 +57,23 @@ export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Pr
  * no target: tracked, not checked.
  */
 export function freshTargets(p: TrainingProfile | null): VolumeTarget[] {
-  return MUSCLE_GROUPS.map(({ id: g }) => {
-    const [min, max] = p ? ((t) => [t.min, t.max])(modelTarget(g, p, priorityOf(g))) : muscleInfo(g).weeklySets.growth;
-    const lo = Math.round(min), hi = Math.round(max);
-    return lo > 0 ? { group: g, min: lo, max: Math.max(lo, hi) } : { group: g, min: null, max: null };
-  });
+  return MUSCLE_GROUPS.map(({ id: g }) => ({ group: g, ...defaultRange(g, p, priorityOf(g) === "priority" ? "priority" : "normal") }));
+}
+
+/**
+ * A muscle's default weekly range for a priority: the model's numbers with a complete profile; without one, the muscle
+ * database's Mass gain range, where Priority moves the minimum to the middle and the ceiling up 25% (the model's own
+ * priority rule). A minimum of 0 gives no target (tracked, not checked).
+ */
+export function defaultRange(g: MuscleGroup, p: TrainingProfile | null, priority: Exclude<Priority, "off">): { min: number | null; max: number | null } {
+  let min: number, max: number;
+  if (p) ({ min, max } = modelTarget(g, p, priority));
+  else {
+    [min, max] = muscleInfo(g).weeklySets.growth;
+    if (priority === "priority") { min = (min + max) / 2; max *= PROFILE_RULES.priority.maxGrowth; }
+  }
+  const lo = Math.round(min), hi = Math.round(max);
+  return lo > 0 ? { min: lo, max: Math.max(lo, hi) } : { min: null, max: null };
 }
 
 export function modelTargets(p: TrainingProfile, priorities: Partial<Record<MuscleGroup, Priority>> = {}): ModelTarget[] {

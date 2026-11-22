@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
 import { MIGRATIONS } from "./migrations";
 import { duplicateRoutine, newRoutine } from "./routineEdit";
-import { freshTargets, modelTarget, priorityOf, targetsOf } from "./volumeModel";
+import { defaultRange, freshTargets, modelTarget, priorityOf, targetsOf } from "./volumeModel";
 import { isFocus } from "./volume";
 import type { AppData } from "./types";
 
@@ -47,5 +47,16 @@ describe("weekly targets per plan", () => {
     const c = duplicateRoutine(r, "Copy", new Date());
     expect(c.targets).toEqual(r.targets);
     expect(c.targets).not.toBe(r.targets);
+  });
+
+  it("Priority narrows and raises a muscle's range; Normal gives the full range", () => {
+    // No profile: database Mass gain range (adductors 6–14); Priority → minimum to the middle, ceiling +25%
+    expect(defaultRange("adductors", null, "normal")).toEqual({ min: 6, max: 14 });
+    expect(defaultRange("adductors", null, "priority")).toEqual({ min: 10, max: 18 });
+    // With a profile: the model's numbers for that priority
+    const p = { goal: "growth" as const, phase: "maintaining" as const, age: 30, yearsTraining: 5, sleepHours: 8 };
+    const n = defaultRange("adductors", p, "normal"), pr = defaultRange("adductors", p, "priority");
+    expect(pr.min!).toBeGreaterThan(n.min!);
+    expect(pr.max! - pr.min!).toBeLessThanOrEqual(n.max! - n.min!);
   });
 });

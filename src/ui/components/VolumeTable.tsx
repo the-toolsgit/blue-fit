@@ -5,7 +5,7 @@ import { completeProfile, MUSCLE_GROUPS, type MuscleGroup, type VolumeTarget } f
 import { fmtNum } from "../../core/util";
 import { useState } from "react";
 import { Seg, Stepper } from "./Controls";
-import { freshTargets, priorityOf, type Priority } from "../../core/volumeModel";
+import { defaultRange, freshTargets, priorityOf, type Priority } from "../../core/volumeModel";
 import { useStore } from "../store";
 import { Icon } from "./Icon";
 
@@ -26,12 +26,15 @@ const offNote = (note?: string) => {
  * stillPlanned: groups a planned day later this week still works (live week only) → below target shows "in progress".
  * onEdit: makes rows tappable to change the target (min/max sets) and turn Priority, Normal or Skip.
  */
-/** Set a target's focus level, storing only what differs from the app default (keeps saved data clean). */
-export function withPriority(t: VolumeTarget, p: Priority, fallbackMin: number): VolumeTarget {
+/** Set a target's focus level, storing only what differs from the app default (keeps saved data clean).
+ *  Priority and Normal also set the range for that priority (Nov 21 2026: Priority needs more sets, so its range is
+ *  narrower and higher): `range` is the default range for the chosen priority (volumeModel.defaultRange). Skip keeps
+ *  the numbers. */
+export function withPriority(t: VolumeTarget, p: Priority, range: { min: number | null; max: number | null }): VolumeTarget {
   const { off: _o, acceptedBelow: _a, priority: _p, ...rest } = t;
   if (p === "off") return { ...rest, ...(t.priority != null ? { priority: t.priority } : {}), off: true };
   const isDefault = priorityOf(t.group) === p;
-  return { ...rest, min: t.min ?? fallbackMin, ...(isDefault ? {} : { priority: p === "priority" }) };
+  return { ...rest, min: range.min, max: range.max, ...(isDefault ? {} : { priority: p === "priority" }) };
 }
 
 export function VolumeTable({ totals, targets, days, stillPlanned, onEdit }: { totals: GroupTotals; targets: VolumeTarget[]; days?: Record<string, number>; stillPlanned?: Set<MuscleGroup>; onEdit?: (t: VolumeTarget) => void }) {
@@ -100,7 +103,8 @@ export function TargetEdit({ group, label, t, current, onEdit }: {
   const prio = priorityOf(group, t), v = current;
   // This muscle's default: the training profile's numbers, else the muscle database's range; normal priority, not skipped
   const { settings } = useStore();
-  const def = freshTargets(completeProfile(settings.profile)).find((x) => x.group === group)!;
+  const profile = completeProfile(settings.profile);
+  const def = freshTargets(profile).find((x) => x.group === group)!;
   const isDefault = edit.min === def.min && edit.max === def.max && !edit.off && !edit.acceptedBelow && edit.priority == null;
   const reset = () => { const { off: _o, acceptedBelow: _a, priority: _p, ...rest } = edit; onEdit({ ...rest, min: def.min, max: def.max }); };
   return (
@@ -112,7 +116,7 @@ export function TargetEdit({ group, label, t, current, onEdit }: {
           onChange={(x) => set({ max: x })} />
       </div>
       <div style={{ marginTop: 10 }}>
-        <Seg label={`${label}: focus`} value={prio} onChange={(x: Priority) => onEdit(withPriority(edit, x, Math.max(1, Math.round(v))))}
+        <Seg label={`${label}: focus`} value={prio} onChange={(x: Priority) => onEdit(withPriority(edit, x, x === "off" ? edit : defaultRange(group, profile, x)))}
           options={[{ v: "priority", label: "Priority" }, { v: "normal", label: "Normal" }, { v: "off", label: "Skip" }]} />
         <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>{prio === "priority" ? "Aims for the top half of its range." : prio === "off" ? "Skipped: grayed out, no warnings. Your numbers are kept." : "Full range."}</p>
         {!isDefault && <button type="button" className="btn btn-quiet vedit-reset" onClick={reset}><Icon name="undo" size={16} /> Reset to default · {def.min == null ? "no target" : formatTarget(def)}</button>}
