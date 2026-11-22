@@ -211,7 +211,7 @@ textarea.input { min-height: 84px; resize: vertical; }
 .setting:last-child { border-bottom: 0; }
 
 /* ---------- Stepper ---------- */
-.stepper { display: grid; grid-template-columns: var(--tap) 1fr var(--tap); align-items: center; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line-strong); overflow: hidden; }
+.stepper { touch-action: pan-y; user-select: none; -webkit-user-select: none; display: grid; grid-template-columns: var(--tap) 1fr var(--tap); align-items: center; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line-strong); overflow: hidden; }
 .stepper button { height: 52px; display: grid; place-items: center; color: var(--neon-ink); transition: background 0.15s; }
 .stepper button:active { background: var(--glow-soft); }
 .stepper input { width: 100%; min-width: 0; height: 52px; border: 0; background: transparent; text-align: center; font: 600 23px var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; outline: none; padding: 0; }
@@ -767,3 +767,4 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 /* Sheets opened from Build my plan (Add exercise) sit above the full-screen flow */
 .wz ~ .sheet-backdrop { z-index: 90; }
 .wz ~ .sheet { z-index: 91; }
+.stepper input { user-select: text; -webkit-user-select: text; }
