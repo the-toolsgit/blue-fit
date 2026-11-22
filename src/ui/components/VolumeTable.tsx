@@ -1,11 +1,11 @@
-// Sets per muscle vs weekly target, with neon bars and the target band (dashed). Muscles that aren't a focus are grayed with a striped bar.
+// Sets per muscle vs weekly target as a grid of tiles (number, target, mini bar with the dashed target band, status mark).
+// Skipped muscles collapse into one line. Tap a tile for days, angles and notes (and the target editor when editing).
 import { formatTarget, targetStatus, type GroupTotals } from "../../core/volume";
 import { MUSCLE_GROUPS, type MuscleGroup, type VolumeTarget } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { useState } from "react";
 import { Seg, Stepper } from "./Controls";
 import { priorityOf, type Priority } from "../../core/volumeModel";
-import { Icon } from "./Icon";
 
 const STATUS = {
   ok: { label: "✓", cls: "status-ok" },
@@ -35,42 +35,58 @@ export function withPriority(t: VolumeTarget, p: Priority, fallbackMin: number):
 export function VolumeTable({ totals, targets, days, stillPlanned, onEdit }: { totals: GroupTotals; targets: VolumeTarget[]; days?: Record<string, number>; stillPlanned?: Set<MuscleGroup>; onEdit?: (t: VolumeTarget) => void }) {
   const tmap = new Map(targets.map((t) => [t.group, t]));
   const [open, setOpen] = useState<MuscleGroup | null>(null);
-  const scale = Math.max(24, ...MUSCLE_GROUPS.map((m) => totals[m.id]), ...targets.map((t) => t.max ?? t.min ?? 0));
+  const toggle = (g: MuscleGroup) => setOpen(open === g ? null : g);
+  const rows = MUSCLE_GROUPS.map((m) => {
+    const t = tmap.get(m.id), v = totals[m.id];
+    return { m, t, v, st: targetStatus(v, t, stillPlanned?.has(m.id)) };
+  });
+  const focus = rows.filter((r) => r.st !== "off"), skipped = rows.filter((r) => r.st === "off");
+  /** The detail under a tile (full width): days · angles · note, and the target editor when editing */
+  const detail = (r: (typeof rows)[number]) => {
+    const note = r.st === "off" ? offNote(r.t?.note) : r.t?.gap;
+    const bits = [days && `${days[r.m.id] ?? 0} day${days[r.m.id] === 1 ? "" : "s"}`, days && r.t?.angles, note].filter(Boolean);
+    return (
+      <div key={r.m.id + "-detail"} className="vt-detail">
+        <div className="spread"><b>{r.m.label}</b><span className="mono">{fmtNum(r.v)}<span className="muted"> / {formatTarget(r.t)}</span></span></div>
+        {bits.length > 0 && <div className="muted" style={{ fontSize: 12, marginTop: 4 }}>{bits.join(" · ")}</div>}
+        {onEdit && <TargetEdit group={r.m.id} label={r.m.label} t={r.t} current={r.v} onEdit={onEdit} />}
+      </div>
+    );
+  };
   return (
-    <div className="glass" style={{ padding: "6px 14px" }}>
-      {MUSCLE_GROUPS.map((m) => {
-        const t = tmap.get(m.id), v = totals[m.id], st = targetStatus(v, t, stillPlanned?.has(m.id)), s = STATUS[st];
-        const off = st === "off";
-        const note = off ? offNote(t?.note) : t?.gap;
-        const isOpen = onEdit && open === m.id;
-        return (
-          <div key={m.id} className={off ? "vrow off" : "vrow"} style={{ padding: "10px 0", borderBottom: "1px solid var(--line)" }}>
-            <div className="spread" style={{ alignItems: "baseline", cursor: onEdit ? "pointer" : undefined }} onClick={onEdit ? () => setOpen(isOpen ? null : m.id) : undefined}
-              role={onEdit ? "button" : undefined} aria-expanded={onEdit ? !!isOpen : undefined} tabIndex={onEdit ? 0 : undefined}
-              onKeyDown={onEdit ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen(isOpen ? null : m.id); } } : undefined}>
-              <span className="row" style={{ gap: 6, fontWeight: priorityOf(m.id, t) === "priority" ? 600 : 400 }}>{m.label}{onEdit && <span className="muted" style={{ display: "inline-flex", transform: isOpen ? "rotate(-90deg)" : "rotate(90deg)", transition: "transform .25s var(--ease)" }}><Icon name="chevron" size={16} /></span>}</span>
-              <span className="row" style={{ gap: 10 }}>
-                <span className="mono" style={{ fontSize: 16 }}>{fmtNum(v)}<span className="muted" style={{ fontSize: 12 }}> / {formatTarget(t)}</span></span>
-                <span className={s.cls} style={{ fontSize: 13, minWidth: 18, textAlign: "right" }}>{s.label}</span>
+    <div className="glass" style={{ padding: 10 }}>
+      {/* Tiles, three per row; the open one's details span the row right under it (dense flow backfills the row) */}
+      <div className="vt-grid">
+        {focus.flatMap((r) => {
+          const { m, t, v, st } = r, s = STATUS[st];
+          const hi = Math.max(t?.max ?? (t?.min ?? 0) * 1.5, v, 1) * 1.15;
+          const tile = (
+            <button key={m.id} type="button" className={"vt-tile" + (open === m.id ? " open" : "") + (st === "above" || st === "below" ? " warn" : "")} onClick={() => toggle(m.id)} aria-expanded={open === m.id}>
+              <span className="vt-top"><span className="vt-name" style={{ fontWeight: priorityOf(m.id, t) === "priority" ? 700 : 500 }}>{m.label}</span><span className={s.cls + " vt-mark"} title={s.label.replace("⚠ ", "")}>{MARK[st]}</span></span>
+              <span className="vt-num"><span className="mono">{fmtNum(v)}</span><span className="mono muted">/{formatTarget(t)}</span></span>
+              <span className="vbar vt-bar">
+                {t?.min != null && <span className="band" style={{ left: `${(t.min / hi) * 100}%`, width: `${(((t.max ?? hi) - t.min) / hi) * 100}%` }} />}
+                <span className={"fill" + (st === "ok" || st === "inProgress" ? "" : " warn")} style={{ width: `${Math.min(100, (v / hi) * 100)}%` }} />
               </span>
-            </div>
-            <div className={off ? "vbar off" : "vbar"} style={{ marginTop: 7 }}>
-              {!off && t?.min != null && <div className="band" style={{ left: `${(t.min / scale) * 100}%`, width: `${(((t.max ?? scale) - t.min) / scale) * 100}%` }} />}
-              <div className={"fill" + (st === "ok" || st === "inProgress" ? "" : off ? " none" : " warn")} style={{ width: `${Math.min(100, (v / scale) * 100)}%` }} />
-            </div>
-            {(note || days) && (
-              <div className="muted" style={{ fontSize: 12, marginTop: 5 }}>
-                {days && `${days[m.id] ?? 0} day${days[m.id] === 1 ? "" : "s"}`}{days && t?.angles ? ` · ${t.angles}` : ""}{note ? `${days ? " · " : ""}${note}` : ""}
-              </div>
-            )}
-            {isOpen && <TargetEdit group={m.id} label={m.label} t={t} current={v} onEdit={onEdit!} />}
-          </div>
-        );
-      })}
-      <p className="muted" style={{ fontSize: 12, padding: "10px 0 6px" }}>Indirect sets count as half. Warm-ups and drop sets don't count.</p>
+            </button>
+          );
+          return open === m.id ? [tile, detail(r)] : [tile];
+        })}
+      </div>
+      {skipped.length > 0 && (
+        <div className="vt-skipped">
+          <span className="muted">Skipped</span>
+          {skipped.map((r) => <button key={r.m.id} type="button" className={"vt-skip" + (open === r.m.id ? " open" : "")} onClick={() => toggle(r.m.id)} aria-expanded={open === r.m.id}>{r.m.label}{r.v > 0 ? ` ${fmtNum(r.v)}` : ""}</button>)}
+          {skipped.filter((r) => r.m.id === open).map(detail)}
+        </div>
+      )}
+      <p className="muted" style={{ fontSize: 12, padding: "10px 4px 2px" }}>{onEdit ? "" : "Tap a muscle for details. "}Indirect sets count as half. Warm-ups and drop sets don't count.</p>
     </div>
   );
 }
+
+/** Tile status mark: on target ✓, above ▲, below ▼, still to come this week … */
+const MARK = { ok: "✓", above: "▲", below: "▼", inProgress: "…", off: "" } as const;
 
 /** Change one muscle's weekly target: min/max sets and Priority · Normal · Skip.
  *  current: its sets a week now (seeds empty steppers). Used by the targets table and the week map's muscle card. */

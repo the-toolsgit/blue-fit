@@ -252,6 +252,27 @@ textarea.input { min-height: 84px; resize: vertical; }
 @media (prefers-reduced-motion: reduce) { .run-air line { animation: none; } }
 
 /* ---------- Volume bars ---------- */
+/* Weekly targets: tile grid */
+.vt-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; grid-auto-flow: row dense; }
+.vt-tile { display: grid; gap: 4px; padding: 9px 9px 10px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface-2); text-align: left; min-width: 0; transition: border-color .2s, box-shadow .2s, transform .12s; }
+.vt-tile:active { transform: scale(0.97); }
+.vt-tile.warn { border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
+.vt-tile.open { border-color: var(--neon); box-shadow: 0 0 16px -6px var(--neon); }
+.vt-top { display: flex; align-items: center; justify-content: space-between; gap: 4px; min-width: 0; }
+.vt-name { font-size: 12px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vt-mark { font-size: 11px; flex: none; }
+.vt-num { display: flex; align-items: baseline; gap: 3px; white-space: nowrap; }
+.vt-num > :first-child { font-size: 21px; line-height: 1.05; color: var(--ink); }
+.vt-num > :last-child { font-size: 11px; }
+.vt-bar { height: 5px; margin-top: 3px; }
+.vt-bar .band { top: -2px; bottom: -2px; }
+.vt-detail { grid-column: 1 / -1; padding: 10px 12px; border-radius: 14px; border: 1px solid color-mix(in srgb, var(--neon) 40%, transparent); background: var(--surface); animation: fadeIn .2s ease both; }
+.vt-detail .vedit { margin-top: 10px; padding: 0; border: 0; background: none; box-shadow: none; }
+.vt-skipped { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; padding: 0 4px; font-size: 12px; }
+.vt-skip { position: relative; padding: 4px 10px; border-radius: 99px; border: 1px dashed var(--line-strong); color: var(--muted); font: 600 12px var(--body); }
+.vt-skip::before { content: ""; position: absolute; inset: -6px -2px; }
+.vt-skip.open { border-style: solid; border-color: var(--neon); color: var(--neon-ink); }
+.vt-skipped .vt-detail { flex-basis: 100%; }
 .vbar { position: relative; height: 8px; border-radius: 8px; background: var(--surface-2); overflow: visible; }
 .vbar .band { position: absolute; top: -3px; bottom: -3px; border-radius: 6px; border: 1px dashed var(--line-strong); }
 .vbar .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 8px; background: linear-gradient(90deg, var(--neon), var(--neon-2)); box-shadow: 0 0 12px var(--glow); transform-origin: left; animation: grow 0.9s var(--ease) both; }
