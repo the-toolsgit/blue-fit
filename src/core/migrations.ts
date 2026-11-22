@@ -581,5 +581,14 @@ export const MIGRATIONS: Migration[] = [
       return { ...d, exercises: d.exercises.map((x) => (x === e ? { ...x, avoid: x.avoid.filter((y) => y !== "Sitting upright.") } : x)) };
     },
   },
+  {
+    // Nov 21 2026: weekly targets move onto each plan. Every plan gets a copy of the app-wide list it used until now,
+    // so nothing changes on screen; from here on, editing one plan's targets leaves the others alone.
+    id: "2026-11-21-targets-per-plan",
+    run(d) {
+      if (!d.routines.some((r) => !r.targets)) return null;
+      return { ...d, routines: d.routines.map((r) => (r.targets ? r : { ...r, targets: structuredClone(d.targets) })) };
+    },
+  },
 ];
 

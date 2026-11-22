@@ -112,6 +112,8 @@ export interface Routine {
   /** Short training rules shown with the plan (e.g. Effort, Progression, ★ Key lift) */
   rules?: { title: string; text: string }[];
   days: RoutineDay[];
+  /** This plan's weekly set targets per muscle (Nov 21 2026: per plan; before, one list for the whole app) */
+  targets?: VolumeTarget[];
 }
 
 export interface VolumeTarget {

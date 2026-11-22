@@ -9,8 +9,7 @@ import {
 } from "../../core/routineEdit";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { completeProfile, type Exercise, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
-import { modelTarget, priorityOf } from "../../core/volumeModel";
-import defaultTargets from "../../core/seed/targets.json";
+import { freshTargets, targetsOf } from "../../core/volumeModel";
 import { failureApplies, failureEligible } from "../../core/failure";
 import { FailFlame, useWeekFailure } from "../components/FailFlame";
 import { Seg, Stepper } from "../components/Controls";
@@ -59,8 +58,10 @@ function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, fail }: {
 
 /** `onExit`: used when the Plan tab edits in place (no route change); `initialDayId`: keep the day the user was looking at. */
 export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; onExit?: () => void; initialDayId?: string }) {
-  const { routines, exMap, targets, settings, saveRoutine, saveTargets, toast } = useStore();
+  const { routines, exMap, targets: currentTargets, settings, saveRoutine, toast } = useStore();
   const original = routines.find((r) => r.id === id);
+  // This plan's own weekly targets (older plans without their own fall back to the app-wide list)
+  const targets = targetsOf(original, currentTargets);
   const [draft, setDraft] = useState<Routine | null>(() => {
     try { const s = sessionStorage.getItem(draftKey(id ?? "")); if (s) return JSON.parse(s); } catch { /* ignore */ }
     return original ? structuredClone(original) : null;
@@ -70,7 +71,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; slotId: string } | null>(null);
   const [howTo, setHowTo] = useState<string | null>(null);
   const [confirm, setConfirm] = useState<null | "cancel" | "deleteDay" | "resetTargets">(null);
-  // Weekly targets are edited here too (they apply to every plan) and saved with Save plan.
+  // This plan's weekly targets are edited here too and saved with Save plan.
   const [tdraft, setTdraft] = useState<VolumeTarget[]>(() => {
     try { const s = sessionStorage.getItem(draftKey(id ?? "") + "-targets"); if (s) return JSON.parse(s); } catch { /* ignore */ }
     return structuredClone(targets);
@@ -87,15 +88,10 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const day: RoutineDay | undefined = days.find((d) => d.id === dayId) ?? days.find((d) => d.slots.length) ?? days[0];
   const targetsDirty = JSON.stringify(tdraft) !== JSON.stringify(targets);
   const dirty = JSON.stringify(draft) !== JSON.stringify(original) || targetsDirty;
-  // Interview: the model's suggestion for each muscle, from the training profile and the muscle's priority
   const profile = completeProfile(settings.profile);
-  const suggest = (g: VolumeTarget["group"], t?: VolumeTarget) => (profile ? modelTarget(g, profile, priorityOf(g, t)) : null);
-  /** Reset: model numbers when the profile is filled in, else the plan's original numbers. Notes are kept; no muscle is skipped; priorities go back to the default. */
-  const resetTargets = () => setTdraft((defaultTargets as VolumeTarget[]).map((t) => {
-    const s = suggest(t.group);
-    // A suggested minimum of 0 is saved as no minimum: the muscle is tracked, not checked (no "in target" with no work)
-    return s ? { group: t.group, min: s.min > 0 ? s.min : null, max: s.max, ...(t.angles ? { angles: t.angles } : {}), ...(t.gap ? { gap: t.gap } : {}), ...(t.note ? { note: t.note } : {}) } : { ...t };
-  }));
+  /** Reset: every muscle targeted, none skipped, default priorities: the model's numbers with a complete profile, else the
+   *  muscle database's growth range (same as a new plan). */
+  const resetTargets = () => setTdraft(freshTargets(profile));
   const editTarget = (t: VolumeTarget) => setTdraft((ts) => (ts.some((x) => x.group === t.group) ? ts.map((x) => (x.group === t.group ? t : x)) : [...ts, t]));
   const issues = validateRoutine(draft);
   const slot = day?.slots.find((s) => s.id === slotOpen);
@@ -104,8 +100,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const leave = () => { try { sessionStorage.removeItem(draftKey(id!)); sessionStorage.removeItem(draftKey(id!) + "-targets"); } catch { /* ignore */ } if (onExit) onExit(); else replace("plan"); };
   const save = () => {
     if (issues.length) return toast({ kind: "error", title: "Can't save yet", body: issues[0].message });
-    saveRoutine({ ...draft, name: draft.name.trim(), days: draft.days.map((d) => ({ ...d, title: d.title.trim() })) });
-    if (targetsDirty) saveTargets(tdraft);
+    saveRoutine({ ...draft, name: draft.name.trim(), days: draft.days.map((d) => ({ ...d, title: d.title.trim() })), targets: tdraft });
     toast({ kind: "info", title: "Plan saved" });
     leave();
   };
@@ -236,7 +231,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
       <Confirm open={confirm === "cancel"} title="Discard changes?" body="Your edits to this plan are thrown away." confirm="Discard" danger onClose={() => setConfirm(null)} onConfirm={leave} />
       <Confirm open={confirm === "deleteDay"} title={`Delete ${day?.title ?? "this day"}?`} body="All its exercises are removed and it becomes a rest day. Past workouts stay in history." confirm="Delete" danger
         onClose={() => setConfirm(null)} onConfirm={() => { if (day) setDraft(clearDay(draft, day.id)); }} />
-      <Confirm open={confirm === "resetTargets"} title="Reset targets?" body={profile ? "Every muscle gets the target worked out from your training profile, with default priorities and none skipped. Nothing is saved until you tap Save plan." : "Every muscle goes back to the plan's original target. Fill in your training profile in Settings to get targets worked out for you. Nothing is saved until you tap Save plan."} confirm="Reset"
+      <Confirm open={confirm === "resetTargets"} title="Reset targets?" body={profile ? "Every muscle gets the target worked out from your training profile, with default priorities and none skipped. Nothing is saved until you tap Save plan." : "Every muscle gets the usual range for building muscle, with default priorities and none skipped. Fill in your training profile in Settings to get targets worked out for you. Nothing is saved until you tap Save plan."} confirm="Reset"
         onClose={() => setConfirm(null)} onConfirm={resetTargets} />
     </div>
   );

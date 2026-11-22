@@ -1,5 +1,5 @@
 // Plan (routine) editing. Pure functions: every operation returns a new Routine.
-import type { Exercise, Routine, RoutineDay, Session, Slot } from "./types";
+import type { Exercise, Routine, RoutineDay, Session, Slot, VolumeTarget } from "./types";
 import { uid } from "./util";
 
 export const NEW_SLOT = { sets: 3, repMin: 10, repMax: 12 };
@@ -104,11 +104,11 @@ export function duplicateRoutine(r: Routine, name: string, now: Date): Routine {
 }
 /** A new empty plan, not current: one empty day per weekday (Mon–Sun) so the editor has a chip for each to fill.
  *  Named "New plan", "New plan 2", … */
-export function newRoutine(existing: string[], now: Date): Routine {
+export function newRoutine(existing: string[], now: Date, targets?: VolumeTarget[]): Routine {
   let name = "New plan";
   for (let i = 2; existing.includes(name); i++) name = `New plan ${i}`;
   const days: RoutineDay[] = [1, 2, 3, 4, 5, 6, 0].map((wd) => ({ id: "day-" + uid().slice(0, 8), weekday: wd, title: "New day", slots: [] }));
-  return { id: "routine-" + uid().slice(0, 8), name, isCurrent: false, createdAt: now.toISOString(), days };
+  return { id: "routine-" + uid().slice(0, 8), name, isCurrent: false, createdAt: now.toISOString(), days, ...(targets ? { targets } : {}) };
 }
 export const setCurrent = (routines: Routine[], id: string): Routine[] => routines.map((r) => ({ ...r, isCurrent: r.id === id }));
 

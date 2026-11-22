@@ -1,6 +1,6 @@
 // Weekly set targets: the muscle database (seed/muscles.json) gives each muscle a range per goal and the rules for how
 // the training profile changes it. Units: fractional weekly sets (direct 1, indirect ½). Pure and framework-free.
-import { MUSCLE_GROUPS, type MuscleGroup, type TrainingProfile, type VolumeTarget } from "./types";
+import { MUSCLE_GROUPS, type MuscleGroup, type Routine, type TrainingProfile, type VolumeTarget } from "./types";
 import { muscleInfo, PROFILE_RULES, profileStep, RULES, type GoalKey } from "./muscles";
 export type { Goal, Phase, TrainingProfile } from "./types";
 
@@ -50,6 +50,22 @@ export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Pr
   return { group, min: lo, max: hi, why: lo === 0 ? [...why, "Optional: not tracked unless you set a minimum"] : why };
 }
 
+/**
+ * Targets for a new plan: every muscle targeted, none skipped. With a complete training profile, the model's numbers;
+ * without one, the muscle database's growth range. A database minimum of 0 (optional muscles, e.g. front delts) gives
+ * no target: tracked, not checked.
+ */
+export function freshTargets(p: TrainingProfile | null): VolumeTarget[] {
+  return MUSCLE_GROUPS.map(({ id: g }) => {
+    const [min, max] = p ? ((t) => [t.min, t.max])(modelTarget(g, p)) : muscleInfo(g).weeklySets.growth;
+    const lo = Math.round(min), hi = Math.round(max);
+    return lo > 0 ? { group: g, min: lo, max: Math.max(lo, hi) } : { group: g, min: null, max: null };
+  });
+}
+
 export function modelTargets(p: TrainingProfile, priorities: Partial<Record<MuscleGroup, Priority>> = {}): ModelTarget[] {
   return MUSCLE_GROUPS.map((x) => x.id).map((g) => modelTarget(g, p, priorities[g] ?? "normal"));
 }
+
+/** A plan's targets; plans saved before targets moved onto plans (and old backups) fall back to the app-wide list. */
+export const targetsOf = (r: Routine | undefined, fallback: VolumeTarget[]): VolumeTarget[] => r?.targets ?? fallback;

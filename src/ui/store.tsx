@@ -7,6 +7,7 @@ import type { StorageAdapter, TableName, Tables } from "../core/storage/StorageA
 import { DEFAULT_SETTINGS, type AppData, type Exercise, type RestTimer, type Routine, type Session, type Settings, type VolumeTarget } from "../core/types";
 import { IdbAdapter } from "../storage/idbAdapter";
 import { mergeCatalog } from "../core/catalog";
+import { targetsOf } from "../core/volumeModel";
 
 export type Toast = { id: number; kind: "info" | "pr" | "error"; title: string; body?: string; leaving?: boolean;
   /** A button on the toast (e.g. Undo); tapping it runs `run` and closes the toast */
@@ -130,6 +131,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const cat = useMemo(() => mergeCatalog(data.exercises, db), [data.exercises, db]);
   const store = useMemo<Store>(() => {
     const { exMap } = cat;
+    const current = data.routines.find((r) => r.isCurrent) ?? data.routines[0];
     const sorted = [...data.sessions].sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1));
     return {
       ...data,
@@ -138,7 +140,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       ensureSaved: (e) => { if (!cat.phoneIds.has(e.id)) putRow("exercises", e, "id"); },
       ready,
       exMap,
-      routine: data.routines.find((r) => r.isCurrent) ?? data.routines[0],
+      routine: current,
+      // Weekly targets belong to the current plan (app-wide list only as a fallback for plans from older versions)
+      targets: targetsOf(current, data.targets),
       active: sorted.find((s) => s.status === "active"),
       finished: sorted.filter((s) => s.status === "finished"),
       restTimer,
@@ -152,7 +156,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       saveExercise: (e) => putRow("exercises", e, "id"),
       saveRoutine: (r) => putRow("routines", r, "id"),
       saveRoutines: (rs) => rs.forEach((r) => putRow("routines", r, "id")),
-      saveTargets: (ts) => ts.forEach((t) => putRow("targets", t, "group")),
+      // Changed targets go into the current plan (merged by muscle)
+      saveTargets: (ts) => {
+        if (!current) return;
+        const base = targetsOf(current, data.targets);
+        const next = [...base.map((t) => ts.find((x) => x.group === t.group) ?? t), ...ts.filter((x) => !base.some((t) => t.group === x.group))];
+        putRow("routines", { ...current, targets: next }, "id");
+      },
       deleteRoutine: (id) => {
         setData((d) => ({ ...d, routines: d.routines.filter((r) => r.id !== id) }));
         write(() => adapter.remove("routines", id));

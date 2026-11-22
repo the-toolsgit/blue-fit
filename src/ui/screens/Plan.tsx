@@ -11,7 +11,8 @@ import { ExercisePicker } from "../components/ExercisePicker";
 import { Figure } from "../components/Figure";
 import { fmtRest } from "../format";
 import { Confirm, Sheet } from "../components/Sheet";
-import type { Routine, Slot } from "../../core/types";
+import { completeProfile, type Routine, type Slot } from "../../core/types";
+import { freshTargets } from "../../core/volumeModel";
 import { estimateMinutes } from "../../core/timeEstimate";
 import { useWeekFailure } from "../components/FailFlame";
 import { Icon } from "../components/Icon";
@@ -91,7 +92,7 @@ export function PlanScreen() {
                   </div>
                 ))}
               </div>
-              <button className="btn btn-ghost btn-block plans-new" onClick={() => { const r = newRoutine(routines.map((x) => x.name), new Date()); saveRoutine(r); setManage(false); go(`plan-edit/${r.id}`); }}><Icon name="plus" size={18} /> New plan</button>
+              <button className="btn btn-ghost btn-block plans-new" onClick={() => { const r = newRoutine(routines.map((x) => x.name), new Date(), freshTargets(completeProfile(settings.profile))); saveRoutine(r); setManage(false); go(`plan-edit/${r.id}`); }}><Icon name="plus" size={18} /> New plan</button>
             </div>
           </>
         )}
