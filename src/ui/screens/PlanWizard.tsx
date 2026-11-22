@@ -140,11 +140,11 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                   <div key={c.id} className="wz-conflict">
                     <span className="wz-cic"><Icon name="flame" size={18} /></span>
                     <span className="grow">{c.text}</span>
-                    <div className="wz-fixes">
+                    {c.edit.kind !== "time" && <div className="wz-fixes">
                       {c.fix && <button type="button" className="btn btn-primary wz-fix" onClick={() => applyFix(c)}>{c.fix.label}</button>}
                       {c.edit.kind === "target" && <button type="button" className="btn btn-ghost wz-fix" aria-expanded={sel === c.edit.group} onClick={() => setSel(sel === (c.edit as { group: MuscleGroup }).group ? null : (c.edit as { group: MuscleGroup }).group)}>Edit target</button>}
-                      {c.edit.kind !== "time" && <button type="button" className="btn btn-ghost wz-fix" onClick={() => setStep("days")}>Change days</button>}
-                    </div>
+                      <button type="button" className="btn btn-ghost wz-fix" onClick={() => setStep("days")}>Change days</button>
+                    </div>}
                     {c.edit.kind === "target" && sel === c.edit.group && <div className="wz-cedit"><TargetEdit group={c.edit.group} label={muscleLabel(c.edit.group)} t={t} current={0} onEdit={editTarget} /></div>}
                     {c.edit.kind === "time" && (
                       <div className="wz-cedit wz-cmin">
