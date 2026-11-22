@@ -69,6 +69,10 @@ describe("plan generator", () => {
     expect(c.some((x) => x.id === "time")).toBe(true);
     // When a longer workout would fit, the fix offers it
     expect(planConflicts({ trainDays: [1, 2, 4, 5], maxMinutes: 45, targets }).find((x) => x.id === "time")?.fix?.maxMinutes).toBeGreaterThan(45);
+    // 3 rest days: it also suggests training more days
+    const t4 = planConflicts({ trainDays: [1, 2, 4, 5], maxMinutes: 45, targets }).find((x) => x.id === "time")!;
+    expect(t4.moreDays).toBe(true);
+    expect(t4.text).toMatch(/train \d days a week|Training more days/);
     expect(planConflicts({ trainDays: SIX, maxMinutes: 75, targets })).toEqual([]);
     expect(planConflicts({ trainDays: [], maxMinutes: 75, targets })[0].id).toBe("days");
   });
