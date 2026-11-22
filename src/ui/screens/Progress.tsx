@@ -1,17 +1,16 @@
 import { useMemo, useRef, useState } from "react";
 import { useKeptState } from "../keptState";
-import { averageSets, inRange, muscleFrequency, rangeStart, RANGE_LABEL, weeklyTotals, type Range } from "../../core/progress";
+import { inRange, muscleFrequency, rangeStart, RANGE_LABEL, weeklyTotals, type Range } from "../../core/progress";
 import { recoveryStatus, type MuscleRecovery, type Recovery } from "../../core/recovery";
 import { MUSCLE_GROUPS, muscleLabel, type MuscleGroup } from "../../core/types";
 import { fmtNum, localDate } from "../../core/util";
-import { formatTarget, groupsLeftThisWeek } from "../../core/volume";
+import { formatTarget } from "../../core/volume";
 import { CURL } from "../../core/figure/poses";
 import { BarChart, weekLabel } from "../components/Charts";
 import { Seg } from "../components/Controls";
 import { ExerciseProgress } from "../components/ExerciseProgress";
 import { Figure } from "../components/Figure";
 import { MuscleMap, RECOVERY_COLOR } from "../components/MuscleMap";
-import { VolumeTable } from "../components/VolumeTable";
 import { fmtVolume } from "../format";
 import { useStore } from "../store";
 
@@ -22,7 +21,7 @@ const MAP_ORDER: MuscleGroup[] = ["neck", "traps", "frontDelts", "sideDelts", "r
 const REC_LABEL: Record<Recovery, string> = { recovering: "Recovering", partial: "Partly recovered", fresh: "Fresh" };
 
 export function ProgressScreen() {
-  const { finished, exMap, targets, exercises, settings, routine } = useStore();
+  const { finished, exMap, targets, exercises, settings } = useStore();
   const sd = settings.weekStartDay;
   const today = localDate(new Date());
   const [range, setRange] = useKeptState<Range>("progress-range", "4w");
@@ -37,13 +36,9 @@ export function ProgressScreen() {
   };
   const [muscle, setMuscle] = useKeptState<MuscleGroup>("progress-muscle", "back");
   // "This week" by default; the last choice is remembered on this phone
-  const [tableMode, setTableModeState] = useState<"week" | "avg">(() => { try { return localStorage.getItem("bf-volume-table") === "avg" ? "avg" : "week"; } catch { return "week"; } });
-  const setTableMode = (v: "week" | "avg") => { setTableModeState(v); try { localStorage.setItem("bf-volume-table", v); } catch { /* ignore */ } };
   const from = rangeStart(range, today, sd);
   const weeks = useMemo(() => weeklyTotals(finished, exMap, from, today, sd), [finished, exMap, from, today, sd]);
-  const avg = useMemo(() => averageSets(weeks), [weeks]);
   const freq = useMemo(() => muscleFrequency(inRange(finished, from), exMap, weeks.length), [finished, exMap, from, weeks.length]);
-  const left = useMemo(() => groupsLeftThisWeek(routine, exMap, finished, today, sd), [routine, exMap, finished, today, sd]);
   const rec = useMemo(() => recoveryStatus(finished, exMap, today, settings.profile), [finished, exMap, today, settings.profile]);
   const tmap = new Map(targets.map((t) => [t.group, t]));
   const workouts = inRange(finished, from).length;
@@ -123,10 +118,6 @@ export function ProgressScreen() {
         <BarChart key={muscle + range} points={weeks.map((w) => ({ label: weekLabel(w.weekStart), value: w.sets[muscle] }))} unit="sets" band={t ? { min: t.min, max: t.max } : undefined} highlightLast />
         <p className="muted" style={{ fontSize: 12, marginTop: 4 }}>Green band = target {formatTarget(t)} sets a week.</p>
       </section>
-      <div style={{ margin: "12px 0 8px" }}>
-        <Seg label="Table" value={tableMode} onChange={setTableMode} options={[{ v: "week", label: "This week" }, { v: "avg", label: `Average · ${RANGE_LABEL[range]}` }]} />
-      </div>
-      <VolumeTable totals={tableMode === "week" ? weeks[weeks.length - 1].sets : avg} targets={targets} stillPlanned={tableMode === "week" ? left : undefined} />
 
       <h2 className="section-title">Weekly volume</h2>
       <section className="glass" style={{ padding: 14 }}>
