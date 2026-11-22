@@ -14,7 +14,7 @@ export interface ModelTarget { group: MuscleGroup; min: number; max: number; why
 
 /**
  * Weekly set range for a muscle: the muscle database's range for the goal (seed/muscles.json weeklySets), then the
- * profile rules from the same file (years training, age, sleep, cutting/bulking) scale it. Priority → top half of the
+ * profile rules from the same file (years training, age, sleep, cutting/bulking) scale it. Normal → lower half, Priority → upper half of the
  * range; skipped → no sets.
  */
 export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Priority = "normal"): ModelTarget {
@@ -39,8 +39,6 @@ export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Pr
   if (goal !== "maintain" && (p.phase === "cutting" || p.phase === "bulking")) { rec *= R.phase[p.phase].max; why.push(R.phase[p.phase].why); }
   max *= rec;
   if (max > 0 && min > max - 2) min = Math.max(0, max - 2);
-  // Priority on mass gain: more sets (more weekly sets grow more muscle, with smaller gains as you add more;
-  // Schoenfeld 2017, Pelland 2024). Minimum to the middle, ceiling +25% (*judgment*). Other goals: the top half.
   // Normal and Priority split the goal's range in two, no overlap (Leo, Nov 21 2026): Normal the lower half, Priority
   // the upper half (more weekly sets grow more muscle, with smaller gains as you add more: Schoenfeld 2017, Pelland 2024;
   // the halfway split is *judgment*). Maintain keeps one range.

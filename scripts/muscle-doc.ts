@@ -114,8 +114,8 @@ function profileSection(): string {
     ...P.age.map((s: any) => step("Age", s)),
     ...P.sleepHours.map((s: any) => step("Sleep (h)", s)),
     ...Object.entries(P.phase).map(([k, v]: any) => `<tr><td>${k === "cutting" ? "Cutting" : "Bulking"}</td><td class="mono">max ${pct(v.max)}</td><td>${esc(v.why)} (not for maintain)</td></tr>`),
-    `<tr><td>Priority muscle, mass gain</td><td class="mono">min → middle · max +${Math.round((P.priority.maxGrowth - 1) * 100)}%</td><td>More sets grow more muscle (Schoenfeld 2017, Pelland 2024)</td></tr>`,
-    `<tr><td>Priority muscle, other goals</td><td class="mono">min → middle</td><td>Top half of the range</td></tr>`,
+    `<tr><td>Normal muscle</td><td class="mono">min → middle</td><td>Lower half of the goal's range (not for maintain)</td></tr>`,
+    `<tr><td>Priority muscle</td><td class="mono">middle → max</td><td>Upper half: more sets grow more muscle, with smaller gains as you add more (Schoenfeld 2017, Pelland 2024); the halfway split is our call (not for maintain)</td></tr>`,
     `<tr><td>Key lift to failure</td><td class="mono">+1 recovery day</td><td>Not a profile setting: sets to failure take about a day longer to recover (Morán-Navarro 2017)</td></tr>`,
   ].join("");
   return `<section class="profile"><h2>How your profile changes sets goal</h2>

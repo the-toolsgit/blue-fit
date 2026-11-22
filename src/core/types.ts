@@ -125,7 +125,7 @@ export interface VolumeTarget {
   note?: string;
   /** Skip (was "not a focus"): grayed out, no warnings. min/max are kept for when it's turned back on. */
   off?: boolean;
-  /** Priority muscle (aims for the top half of its range). Unset → the app's default (bold muscles). */
+  /** Priority muscle (its range is the upper half of the usual one; Normal the lower half). Unset → the app's default (bold muscles). */
   priority?: boolean;
   /** Older data: below min was a deliberate choice. Treated like `off`. */
   acceptedBelow?: boolean;
