@@ -576,10 +576,7 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .weekmap-legend i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
 
 /* Week score: a tile in the facts row; tap for the breakdown */
-.insight-score { cursor: pointer; border-color: color-mix(in srgb, var(--neon) 35%, transparent); }
-.score-card { margin-top: 8px; padding: 6px 14px 12px; }
-.score-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
-.score-row .muted { font-size: 12px; }
+.insight-score { border-color: color-mix(in srgb, var(--neon) 35%, transparent); }
 
 /* Exercises for the picked muscle, by part */
 .wm-ex { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); display: grid; gap: 10px; }
