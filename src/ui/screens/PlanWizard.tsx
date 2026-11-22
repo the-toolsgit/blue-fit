@@ -1,6 +1,6 @@
 // Build a plan for me: a full-screen, one-question-per-screen flow (goal → eating → days → workout length → rest →
 // targets → conflicts → build). On the plan, each exercise can be swapped or removed and exercises added. The plan itself comes from core/generator.ts; this file is only the steps.
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { generatePlan, planConflicts, repsFor, REST_BY_GOAL, swapOptions, type Conflict } from "../../core/generator";
 import { slotsMinutes } from "../../core/timeEstimate";
@@ -75,6 +75,9 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const [edited, setEdited] = useState(false);
   /** Leaving the plan would drop the user's edits: what to do once they confirm */
   const [discard, setDiscard] = useState<(() => void) | null>(null);
+  /** Which way the last step change went, so the screen slides in from that side */
+  const [dir, setDir] = useState<"fwd" | "back">("fwd");
+  const swipe = useRef<{ x: number; y: number } | null>(null);
 
   const profileFor = (g: Goal, p: Phase) => completeProfile(settings.profile ? { ...settings.profile, goal: g, phase: p } : null);
   const profile = useMemo(() => profileFor(goal, phase), [settings.profile, goal, phase]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -106,11 +109,25 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const next = () => {
     const n = STEPS[i + 1];
     if (n === "build") { setBuilding(true); build(seed); }
-    if (n) setStep(n);
+    if (n) { setDir("fwd"); setStep(n); }
   };
   /** Leave the built plan (Back, Edit settings, Build again): ask first when the user changed it */
   const leavePlan = (go: () => void) => (step === "build" && edited ? setDiscard(() => go) : go());
-  const back = () => (i ? leavePlan(() => setStep(STEPS[i - 1])) : onClose());
+  const back = () => (i ? leavePlan(() => { setDir("back"); setStep(STEPS[i - 1]); }) : onClose());
+  // Swipe between steps: left = next (up to the check screen; building stays a button tap), right = back.
+  // Not from the screen edges (the phone's own back gesture), not on rows that scroll sideways or on fields.
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0], el = e.target as HTMLElement;
+    swipe.current = e.touches.length === 1 && t.clientX > 24 && t.clientX < window.innerWidth - 24 && !el.closest("input, textarea, .wz-cmin, .chips-scroll, .stepper") ? { x: t.clientX, y: t.clientY } : null;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const s0 = swipe.current; swipe.current = null;
+    if (!s0 || building || discard) return;
+    const t = e.changedTouches[0], dx = t.clientX - s0.x, dy = t.clientY - s0.y;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    if (dx > 0) { if (i) back(); }
+    else if (STEPS[i + 1] && STEPS[i + 1] !== "build" && !(step === "days" && !days.length)) next();
+  };
   const editTarget = (t: VolumeTarget) => { setTouched(true); setTargets((ts) => ts.map((x) => (x.group === t.group ? t : x))); };
   /** Priority / Normal / Skip for all three delt heads at once, each to its own default range */
   const editAll = (ns: VolumeTarget[]) => { setTouched(true); setTargets((ts) => ts.map((x) => ns.find((y) => y.group === x.group) ?? x)); };
@@ -258,7 +275,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                     {c.edit.kind !== "time" && <div className="wz-fixes">
                       {c.fix && <button type="button" className="btn btn-primary wz-fix" onClick={() => applyFix(c)}>{c.fix.label}</button>}
                       {c.edit.kind === "target" && <button type="button" className="btn btn-ghost wz-fix" aria-expanded={sel === c.edit.group} onClick={() => setSel(sel === (c.edit as { group: MuscleGroup }).group ? null : (c.edit as { group: MuscleGroup }).group)}>Edit target</button>}
-                      <button type="button" className="btn btn-ghost wz-fix" onClick={() => setStep("days")}>Change days</button>
+                      <button type="button" className="btn btn-ghost wz-fix" onClick={() => { setDir("back"); setStep("days"); }}>Change days</button>
                     </div>}
                     {c.edit.kind === "target" && sel === c.edit.group && <div className="wz-cedit"><TargetEdit group={c.edit.group} label={muscleLabel(c.edit.group)} t={t} current={0} onEdit={editTarget} all={targets} onEditAll={editAll} answers={{ goal, phase }} /></div>}
                     {c.edit.kind === "time" && (
@@ -274,7 +291,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                             <div className="wz-or" aria-hidden><span>or</span></div>
                             <div className="wz-opt">
                               <span className="wz-opt-label">Option 2 · More training days</span>
-                              <button type="button" className="wz-opt-days" onClick={() => setStep("days")}>
+                              <button type="button" className="wz-opt-days" onClick={() => { setDir("back"); setStep("days"); }}>
                                 <span><b>{c.moreDays.days} days a week</b><small>about {c.moreDays.minutes} min each</small></span>
                                 <span className="wz-opt-go">Pick days <Icon name="chevron" size={16} /></span>
                               </button>
@@ -296,7 +313,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
         <Screen eyebrow={check ? `${check.checks.filter((c) => c.pass).length}/${check.checks.length} plan checks · score ${check.score.score}` : ""} title="Your plan">
           <div className="wz-planbar">
             <span className="muted">Tap an exercise to swap or remove it.</span>
-            <button type="button" className="wz-edit" onClick={() => leavePlan(() => setStep("goal"))}>Edit settings</button>
+            <button type="button" className="wz-edit" onClick={() => leavePlan(() => { setDir("back"); setStep("goal"); })}>Edit settings</button>
           </div>
           <div className="wz-plan">
             {result.map((d) => (
@@ -351,7 +368,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
         <div className="wz-progress" aria-hidden>{STEPS.map((s, k) => <span key={s} className={k <= i ? "on" : ""} />)}</div>
         <button type="button" className="icon-btn" onClick={onClose} aria-label="Close"><Icon name="close" /></button>
       </div>
-      <div className="wz-body" key={step + seed}>{body}</div>
+      <div className={"wz-body" + (dir === "back" ? " back" : "")} key={step + seed} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>{body}</div>
       <div className="wz-bottom">{cta}</div>
       {/* The plan is ready: the splash flex, then the zoom into his head opens onto the plan underneath */}
       {building && <Splash word="Your plan" onDone={built} />}

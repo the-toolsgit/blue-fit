@@ -649,6 +649,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wz-progress span.on { background: var(--neon); box-shadow: 0 0 8px var(--neon); }
 .wz-body { overflow-y: auto; overscroll-behavior: contain; padding: 8px max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px)); animation: wzIn .35s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes wzIn { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+.wz-body.back { animation-name: wzBack; }
+@keyframes wzBack { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
 .wz-screen { display: grid; gap: 18px; max-width: 520px; margin: 0 auto; padding-top: 10px; }
 .wz-eyebrow { font: 600 12px var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--neon-ink); }
 .wz-title { margin: -8px 0 4px; font: 800 44px/.95 var(--display); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
