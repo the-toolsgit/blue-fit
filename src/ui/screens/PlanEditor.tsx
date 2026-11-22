@@ -8,8 +8,8 @@ import {
   addSlot, clearDay, moveSlot, removeSlot, renameDay, swapSlotExercise, toggleSlotSuperset, updateSlot, validateRoutine,
 } from "../../core/routineEdit";
 import { estimateMinutes } from "../../core/timeEstimate";
-import { completeProfile, type Exercise, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
-import { freshTargets, targetsOf } from "../../core/volumeModel";
+import { type Exercise, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
+import { targetsOf } from "../../core/volumeModel";
 import { failureApplies, failureEligible } from "../../core/failure";
 import { FailFlame, useWeekFailure } from "../components/FailFlame";
 import { Seg, Stepper } from "../components/Controls";
@@ -70,7 +70,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const [slotOpen, setSlotOpen] = useState<string | null>(null);
   const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; slotId: string } | null>(null);
   const [howTo, setHowTo] = useState<string | null>(null);
-  const [confirm, setConfirm] = useState<null | "cancel" | "deleteDay" | "resetTargets">(null);
+  const [confirm, setConfirm] = useState<null | "cancel" | "deleteDay">(null);
   // This plan's weekly targets are edited here too and saved with Save plan.
   const [tdraft, setTdraft] = useState<VolumeTarget[]>(() => {
     try { const s = sessionStorage.getItem(draftKey(id ?? "") + "-targets"); if (s) return JSON.parse(s); } catch { /* ignore */ }
@@ -88,10 +88,6 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const day: RoutineDay | undefined = days.find((d) => d.id === dayId) ?? days.find((d) => d.slots.length) ?? days[0];
   const targetsDirty = JSON.stringify(tdraft) !== JSON.stringify(targets);
   const dirty = JSON.stringify(draft) !== JSON.stringify(original) || targetsDirty;
-  const profile = completeProfile(settings.profile);
-  /** Reset: every muscle targeted, none skipped, default priorities: the model's numbers with a complete profile, else the
-   *  muscle database's growth range (same as a new plan). */
-  const resetTargets = () => setTdraft(freshTargets(profile));
   const editTarget = (t: VolumeTarget) => setTdraft((ts) => (ts.some((x) => x.group === t.group) ? ts.map((x) => (x.group === t.group ? t : x)) : [...ts, t]));
   const issues = validateRoutine(draft);
   const slot = day?.slots.find((s) => s.id === slotOpen);
@@ -166,8 +162,6 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
 <h2 className="section-title">Plan overview</h2>
       <WeekInsight routine={draft} exMap={exMap} targets={tdraft} weekFail={weekFail} edit={{ targets: tdraft, onEdit: editTarget }} />
 
-      {!profile && <p className="muted" style={{ fontSize: 12, margin: "8px 4px 0" }}>Fill in Settings → Training profile to get targets worked out for you.</p>}
-      <button className="btn btn-quiet btn-block" style={{ marginTop: 8 }} onClick={() => setConfirm("resetTargets")}><Icon name="undo" size={18} /> Reset targets to defaults</button>
 
       <Dock>
         <button className="btn btn-primary btn-xl" onClick={dirty ? save : leave}><Icon name="check" size={20} /> {dirty ? "Save plan" : "Done"}</button>
@@ -231,8 +225,6 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
       <Confirm open={confirm === "cancel"} title="Discard changes?" body="Your edits to this plan are thrown away." confirm="Discard" danger onClose={() => setConfirm(null)} onConfirm={leave} />
       <Confirm open={confirm === "deleteDay"} title={`Delete ${day?.title ?? "this day"}?`} body="All its exercises are removed and it becomes a rest day. Past workouts stay in history." confirm="Delete" danger
         onClose={() => setConfirm(null)} onConfirm={() => { if (day) setDraft(clearDay(draft, day.id)); }} />
-      <Confirm open={confirm === "resetTargets"} title="Reset targets?" body={profile ? "Every muscle gets the target worked out from your training profile, with default priorities and none skipped. Nothing is saved until you tap Save plan." : "Every muscle gets the usual range for building muscle, with default priorities and none skipped. Fill in your training profile in Settings to get targets worked out for you. Nothing is saved until you tap Save plan."} confirm="Reset"
-        onClose={() => setConfirm(null)} onConfirm={resetTargets} />
     </div>
   );
 }

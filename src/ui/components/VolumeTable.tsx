@@ -1,11 +1,13 @@
 // Sets per muscle vs weekly target as a grid of tiles (number, target, mini bar with the dashed target band, status mark).
 // Skipped muscles collapse into one line. Tap a tile for days, angles and notes (and the target editor when editing).
 import { formatTarget, targetStatus, type GroupTotals } from "../../core/volume";
-import { MUSCLE_GROUPS, type MuscleGroup, type VolumeTarget } from "../../core/types";
+import { completeProfile, MUSCLE_GROUPS, type MuscleGroup, type VolumeTarget } from "../../core/types";
 import { fmtNum } from "../../core/util";
 import { useState } from "react";
 import { Seg, Stepper } from "./Controls";
-import { priorityOf, type Priority } from "../../core/volumeModel";
+import { freshTargets, priorityOf, type Priority } from "../../core/volumeModel";
+import { useStore } from "../store";
+import { Icon } from "./Icon";
 
 const STATUS = {
   ok: { label: "✓", cls: "status-ok" },
@@ -96,6 +98,11 @@ export function TargetEdit({ group, label, t, current, onEdit }: {
   const edit = t ?? { group, min: null, max: null };
   const set = (p: Partial<VolumeTarget>) => onEdit({ ...edit, ...p });
   const prio = priorityOf(group, t), v = current;
+  // This muscle's default: the training profile's numbers, else the muscle database's range; normal priority, not skipped
+  const { settings } = useStore();
+  const def = freshTargets(completeProfile(settings.profile)).find((x) => x.group === group)!;
+  const isDefault = edit.min === def.min && edit.max === def.max && !edit.off && !edit.acceptedBelow && edit.priority == null;
+  const reset = () => { const { off: _o, acceptedBelow: _a, priority: _p, ...rest } = edit; onEdit({ ...rest, min: def.min, max: def.max }); };
   return (
     <div className="vedit">
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
@@ -108,6 +115,7 @@ export function TargetEdit({ group, label, t, current, onEdit }: {
         <Seg label={`${label}: focus`} value={prio} onChange={(x: Priority) => onEdit(withPriority(edit, x, Math.max(1, Math.round(v))))}
           options={[{ v: "priority", label: "Priority" }, { v: "normal", label: "Normal" }, { v: "off", label: "Skip" }]} />
         <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>{prio === "priority" ? "Aims for the top half of its range." : prio === "off" ? "Skipped: grayed out, no warnings. Your numbers are kept." : "Full range."}</p>
+        {!isDefault && <button type="button" className="btn btn-quiet vedit-reset" onClick={reset}><Icon name="undo" size={16} /> Reset to default · {def.min == null ? "no target" : formatTarget(def)}</button>}
       </div>
     </div>
   );

@@ -266,6 +266,7 @@ textarea.input { min-height: 84px; resize: vertical; }
 .vt-bar { height: 5px; margin-top: 3px; }
 .vt-bar .band { top: -2px; bottom: -2px; }
 .vt-detail { grid-column: 1 / -1; padding: 10px 12px; border-radius: 14px; border: 1px solid color-mix(in srgb, var(--neon) 40%, transparent); background: var(--surface); animation: fadeIn .2s ease both; }
+.vedit-reset { min-height: 44px; padding: 0 2px; margin-top: 4px; font-size: 13px; gap: 6px; color: var(--neon-ink); }
 .vt-detail .vedit { margin-top: 10px; padding: 0; border: 0; background: none; box-shadow: none; }
 .vt-skipped { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; padding: 0 4px; font-size: 12px; }
 .vt-skip { position: relative; padding: 4px 10px; border-radius: 99px; border: 1px dashed var(--line-strong); color: var(--muted); font: 600 12px var(--body); }

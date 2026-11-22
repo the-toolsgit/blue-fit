@@ -51,13 +51,14 @@ export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Pr
 }
 
 /**
- * Targets for a new plan: every muscle targeted, none skipped. With a complete training profile, the model's numbers;
+ * Targets for a new plan (and a muscle's "Reset to default"): every muscle targeted, none skipped, default priority. With a
+ * complete training profile, the model's numbers;
  * without one, the muscle database's growth range. A database minimum of 0 (optional muscles, e.g. front delts) gives
  * no target: tracked, not checked.
  */
 export function freshTargets(p: TrainingProfile | null): VolumeTarget[] {
   return MUSCLE_GROUPS.map(({ id: g }) => {
-    const [min, max] = p ? ((t) => [t.min, t.max])(modelTarget(g, p)) : muscleInfo(g).weeklySets.growth;
+    const [min, max] = p ? ((t) => [t.min, t.max])(modelTarget(g, p, priorityOf(g))) : muscleInfo(g).weeklySets.growth;
     const lo = Math.round(min), hi = Math.round(max);
     return lo > 0 ? { group: g, min: lo, max: Math.max(lo, hi) } : { group: g, min: null, max: null };
   });

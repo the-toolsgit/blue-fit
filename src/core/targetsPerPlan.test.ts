@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
 import { MIGRATIONS } from "./migrations";
 import { duplicateRoutine, newRoutine } from "./routineEdit";
-import { freshTargets, modelTarget, targetsOf } from "./volumeModel";
+import { freshTargets, modelTarget, priorityOf, targetsOf } from "./volumeModel";
 import { isFocus } from "./volume";
 import type { AppData } from "./types";
 
@@ -38,7 +38,7 @@ describe("weekly targets per plan", () => {
   it("uses the training profile's numbers when it's complete", () => {
     const p = { goal: "strength" as const, phase: "maintaining" as const, age: 30, yearsTraining: 5, sleepHours: 8 };
     const chest = freshTargets(p).find((x) => x.group === "chest")!;
-    const m = modelTarget("chest", p);
+    const m = modelTarget("chest", p, priorityOf("chest"));
     expect(chest).toEqual({ group: "chest", min: m.min, max: m.max });
   });
 

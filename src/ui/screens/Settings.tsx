@@ -67,7 +67,7 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
           <Stepper label="Years lifting" value={prof.yearsTraining} step={0.5} min={0} empty={1} onChange={(v) => setProf({ yearsTraining: v })} />
           <Stepper label="Sleep a night (h)" value={prof.sleepHours} step={0.5} min={0} empty={7} onChange={(v) => setProf({ sleepHours: v })} />
         </div>
-        <p className="muted" style={{ fontSize: 12, margin: 0 }}>Used to work out your weekly set targets (Plan → Reset targets to defaults). Stays on this phone.</p>
+        <p className="muted" style={{ fontSize: 12, margin: 0 }}>Used to work out your weekly set targets (tap a muscle on the Plan tab → Reset to default). Stays on this phone.</p>
       </div>
 
       <h2 className="section-title">Workout</h2>
