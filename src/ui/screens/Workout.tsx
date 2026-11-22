@@ -186,7 +186,7 @@ export function WorkoutScreen() {
     const ex = exMap.get(e.exerciseId)!;
     if (!x.done && needsValues(x, ex)) return; // the card shakes the button and highlights what's missing
     // Gym order can differ from the plan: the failure set stays, its "Last … exercise" reason adapts
-    const next = refitFailure(toggleDone(dropTestIfRaised(s, e.id, lastEntryFor(finished, e.exerciseId, s.id)?.entry.sets), e.id, x.id, new Date()), exMap);
+    const next = refitFailure(toggleDone(s, e.id, x.id, new Date()), exMap);
     commit(next);
     if (x.done) return; // undo
     vibrate(12);
@@ -206,7 +206,8 @@ export function WorkoutScreen() {
   };
 
   const doFinish = () => {
-    const f = finishSession(s, new Date());
+    // A test for more weight that's moot (heavier than last time) isn't saved as a failure set
+    const f = finishSession(s.entries.reduce((acc, e) => dropTestIfRaised(acc, e.id, lastEntryFor(finished, e.exerciseId, s.id)?.entry.sets), s), new Date());
     if (!f.entries.length) { setFinishOpen(false); setConfirmDiscard(true); return; }
     commit(f);
     setRestTimer(null);
@@ -396,7 +397,9 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
     : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb, { time: ex.measure === "time", fail: last ? failureSet(last.entry) : undefined, prev: prev ? { sets: prev.entry.sets, fail: failureSet(prev.entry) } : undefined });
   const allDone = e.sets.length > 0 && e.sets.every((x) => x.done);
   // Effort check: the failure set shows earlier sets at the same weight left too many reps (today, and last time)
-  const gap = effortGap(e, s.deload);
+  // A moot test for more weight (already heavier than last time) isn't a failure set today
+  const moot = testMoot(e, last?.entry.sets);
+  const gap = effortGap(moot ? { ...e, toFailure: undefined } : e, s.deload);
   const lastGap = last ? effortGap(last.entry) : null;
   // The blue hint uses the same rep target as the effort tip, so the two never disagree
   const hint1 = alignHint(hint0, lastGap, repMax);
@@ -429,7 +432,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const workIdx = (x: LoggedSet) => e.sets.filter((y) => y.type === "working" && e.sets.indexOf(y) <= e.sets.indexOf(x)).length;
   const swappedFrom = e.swappedFromId ? exMap.get(e.swappedFromId)?.name : undefined;
   // Last set to failure: picked when the workout started (stored on the entry, so it never changes mid-workout)
-  const failSetId = !s.deload && e.toFailure && !testMoot(e, last?.entry.sets)
+  const failSetId = !s.deload && e.toFailure && !moot
     ? [...e.sets].reverse().find((x) => x.type === "working" || x.type === "failure")?.id : undefined;
 
   return (
@@ -479,7 +482,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   : <>You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>}
               </span>
               <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
-                onClick={(ev) => { ev.stopPropagation(); commit(dropTestIfRaised(applyHint(s, e.id, hint.weight, hint.reps), e.id, last?.entry.sets)); markUsed(); }}>Use</button>
+                onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.reps)); markUsed(); }}>Use</button>
             </div>
           )}
           {sugExtra && (
@@ -539,7 +542,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               {isSel && !x.done && (
                 <div style={{ padding: "4px 10px 12px", display: "grid", gap: 10, animation: "pageIn .3s var(--ease) both" }} onClick={(ev) => ev.stopPropagation()}>
                   <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 8, alignItems: "end" }}>
-                    <Stepper invalid={missing?.id === x.id && ex.equipment !== "bodyweight" && !(x.weight != null && x.weight > 0)} label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(dropTestIfRaised(updateSet(s, e.id, x.id, { weight: v }), e.id, last?.entry.sets))} />
+                    <Stepper invalid={missing?.id === x.id && ex.equipment !== "bodyweight" && !(x.weight != null && x.weight > 0)} label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />
                     <Stepper invalid={missing?.id === x.id && !(x.reps != null && x.reps > 0)} label={ex.measure === "time" ? "Seconds" : "Reps"} value={x.reps} step={ex.measure === "time" ? 5 : 1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
                   </div>
                   {ex.measure === "time" && <HoldTimer onStop={(sec) => commit(updateSet(s, e.id, x.id, { reps: sec }))} />}
