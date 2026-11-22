@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { generatePlan, planConflicts, type Conflict } from "../../core/generator";
-import { completeProfile, MUSCLE_GROUPS, type Goal, type MuscleGroup, type Phase, type RoutineDay, type VolumeTarget } from "../../core/types";
+import { completeProfile, MUSCLE_GROUPS, muscleLabel, type Goal, type MuscleGroup, type Phase, type RoutineDay, type VolumeTarget } from "../../core/types";
 import { formatTarget, isFocus } from "../../core/volume";
 import { freshTargets, priorityOf } from "../../core/volumeModel";
 import { weekInsight } from "../../core/workoutCheck";
@@ -102,10 +102,11 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
         </Screen>);
       case "length": return (
         <Screen eyebrow="Workout length" title="How long can a workout be?">
+          <p className="muted wz-note">An average: a workout 5 minutes shorter or longer still counts.</p>
           <div className="wz-minutes">
             {MINUTES.map((m) => (
               <button key={m} type="button" className={"wz-min" + (m === minutes ? " on" : "")} aria-pressed={m === minutes} onClick={() => setMinutes(m)}>
-                <b>{m}</b><span>min</span>
+                <b>{m}</b><span>min</span><small>{m - 5}–{m + 5} on average</small>
               </button>
             ))}
           </div>
@@ -133,13 +134,26 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
         <Screen eyebrow="Before we build" title={conflicts.length ? `${conflicts.length} thing${conflicts.length > 1 ? "s" : ""} to fix` : "All good"}>
           {conflicts.length ? (
             <div className="wz-conflicts">
-              {conflicts.map((c) => (
-                <div key={c.id} className="wz-conflict">
-                  <span className="wz-cic"><Icon name="flame" size={18} /></span>
-                  <span className="grow">{c.text}</span>
-                  {c.fix && <button type="button" className="btn btn-ghost wz-fix" onClick={() => applyFix(c)}>{c.fix.label}</button>}
-                </div>
-              ))}
+              {conflicts.map((c) => {
+                const t = c.edit.kind === "target" ? targets.find((x) => x.group === (c.edit as { group: MuscleGroup }).group) : undefined;
+                return (
+                  <div key={c.id} className="wz-conflict">
+                    <span className="wz-cic"><Icon name="flame" size={18} /></span>
+                    <span className="grow">{c.text}</span>
+                    <div className="wz-fixes">
+                      {c.fix && <button type="button" className="btn btn-primary wz-fix" onClick={() => applyFix(c)}>{c.fix.label}</button>}
+                      {c.edit.kind === "target" && <button type="button" className="btn btn-ghost wz-fix" aria-expanded={sel === c.edit.group} onClick={() => setSel(sel === (c.edit as { group: MuscleGroup }).group ? null : (c.edit as { group: MuscleGroup }).group)}>Edit target</button>}
+                      {c.edit.kind !== "time" && <button type="button" className="btn btn-ghost wz-fix" onClick={() => setStep("days")}>Change days</button>}
+                    </div>
+                    {c.edit.kind === "target" && sel === c.edit.group && <div className="wz-cedit"><TargetEdit group={c.edit.group} label={muscleLabel(c.edit.group)} t={t} current={0} onEdit={editTarget} /></div>}
+                    {c.edit.kind === "time" && (
+                      <div className="wz-cedit wz-cmin">
+                        {MINUTES.map((m) => <button key={m} type="button" className={"chip" + (m === minutes ? " on" : "")} aria-pressed={m === minutes} onClick={() => setMinutes(m)}>{m} min</button>)}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
               <p className="muted" style={{ fontSize: 13 }}>You can build anyway: the plan gets as close as it can.</p>
             </div>
           ) : (

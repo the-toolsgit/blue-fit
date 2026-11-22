@@ -16,12 +16,13 @@ describe("volume model (draft 2)", () => {
     expect(b.min).toBeLessThan(k.min);
     expect(b.max).toBeLessThan(k.max);
   });
-  it("priority on mass gain gives more sets (floor and ceiling up); other goals only the top half", () => {
-    const n = modelTarget("biceps", base), p = modelTarget("biceps", base, "priority");
-    expect(p.min).toBeGreaterThan(n.min);
-    expect(p.max).toBeGreaterThan(n.max);
-    const sb = { ...base, goal: "strength" as const };
-    expect(modelTarget("biceps", sb, "priority").max).toBe(modelTarget("biceps", sb).max);
+  it("Normal is the lower half of the goal's range, Priority the upper half: they meet, never overlap", () => {
+    for (const goal of ["growth", "strength", "endurance"] as const) {
+      const n = modelTarget("biceps", { ...base, goal }), p = modelTarget("biceps", { ...base, goal }, "priority");
+      expect(p.min).toBeGreaterThan(n.min);
+      expect(p.max).toBeGreaterThan(n.max);
+      expect(p.min).toBeGreaterThanOrEqual(n.max);
+    }
   });
   it("a skipped muscle gets no sets", () => {
     const off = modelTarget("chest", base, "off");

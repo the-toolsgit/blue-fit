@@ -41,8 +41,12 @@ export function modelTarget(group: MuscleGroup, p: TrainingProfile, priority: Pr
   if (max > 0 && min > max - 2) min = Math.max(0, max - 2);
   // Priority on mass gain: more sets (more weekly sets grow more muscle, with smaller gains as you add more;
   // Schoenfeld 2017, Pelland 2024). Minimum to the middle, ceiling +25% (*judgment*). Other goals: the top half.
-  if (priority === "priority" && goal === "growth") { min = (min + max) / 2; max *= R.priority.maxGrowth; why.push(R.priority.why); }
-  else if (priority === "priority" && goal !== "maintain") { min = (min + max) / 2; why.push("Priority: top half of the range"); }
+  // Normal and Priority split the goal's range in two, no overlap (Leo, Nov 21 2026): Normal the lower half, Priority
+  // the upper half (more weekly sets grow more muscle, with smaller gains as you add more: Schoenfeld 2017, Pelland 2024;
+  // the halfway split is *judgment*). Maintain keeps one range.
+  const mid = (min + max) / 2;
+  if (goal !== "maintain" && priority === "priority") { min = mid; why.push(R.priority.why); }
+  else if (goal !== "maintain") { max = mid; why.push("Normal: lower half of the range"); }
 
   const lo = Math.max(0, Math.round(min));
   const hi = Math.max(lo + 2, Math.round(max));
@@ -71,7 +75,9 @@ export function defaultRange(g: MuscleGroup, p: TrainingProfile | null, priority
   if (p) ({ min, max } = modelTarget(g, p, priority));
   else {
     [min, max] = muscleInfo(g).weeklySets.growth;
-    if (priority === "priority") { min = (min + max) / 2; max *= PROFILE_RULES.priority.maxGrowth; }
+    // Same split as the model: Normal the lower half, Priority the upper half
+    const mid = (min + max) / 2;
+    if (priority === "priority") min = mid; else max = mid;
   }
   const lo = Math.round(min), hi = Math.round(max);
   return lo > 0 ? { min: lo, max: Math.max(lo, hi) } : { min: null, max: null };

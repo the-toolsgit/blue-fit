@@ -1362,9 +1362,10 @@
       }
     },
     "priority": {
-      "why": "Priority on mass gain: more sets",
+      "why": "Priority: upper half of the range (more sets)",
+      "split": "Normal = lower half, Priority = upper half of the goal's range, no overlap (Nov 21 2026, Leo; the split is our call)",
       "minToMiddle": true,
-      "maxGrowth": 1.25
+      "maxGrowth": 1
     }
   }
 }

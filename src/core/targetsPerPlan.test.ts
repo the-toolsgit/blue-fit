@@ -27,11 +27,11 @@ describe("weekly targets per plan", () => {
   it("new plans target every muscle, none skipped", () => {
     const t = freshTargets(null);
     expect(t.some((x) => x.off)).toBe(false);
-    expect(t.find((x) => x.group === "chest")).toMatchObject({ group: "chest", min: 10, max: 20 });
+    expect(t.find((x) => x.group === "chest")).toMatchObject({ group: "chest", min: 10, max: 15 });
     expect(t.every((x) => priorityOf(x.group, x) === "normal")).toBe(true);
-    expect(t.find((x) => x.group === "abs")).toMatchObject({ group: "abs", min: 6, max: 16 });
+    expect(t.find((x) => x.group === "abs")).toMatchObject({ group: "abs", min: 6, max: 11 });
     // Every muscle has a minimum now (Nov 21 2026), even the ones presses, pulls and grip also work
-    for (const g of ["frontDelts", "forearms", "neck"] as const) expect(t.find((x) => x.group === g)).toMatchObject({ group: g, min: 4, max: 8 });
+    for (const g of ["frontDelts", "forearms", "neck"] as const) expect(t.find((x) => x.group === g)).toMatchObject({ group: g, min: 4, max: 6 });
     expect(t.every((x) => isFocus(x))).toBe(true);
     const r = newRoutine([], new Date("2026-11-21T10:00:00Z"), t);
     expect(r.targets).toBe(t);
@@ -51,14 +51,14 @@ describe("weekly targets per plan", () => {
     expect(c.targets).not.toBe(r.targets);
   });
 
-  it("Priority narrows and raises a muscle's range; Normal gives the full range", () => {
-    // No profile: database Mass gain range (adductors 6–14); Priority → minimum to the middle, ceiling +25%
-    expect(defaultRange("adductors", null, "normal")).toEqual({ min: 6, max: 14 });
-    expect(defaultRange("adductors", null, "priority")).toEqual({ min: 10, max: 18 });
+  it("Normal is the lower half of the range, Priority the upper half", () => {
+    // No profile: database Mass gain range (adductors 6–14), split in two: Normal 6–10, Priority 10–14
+    expect(defaultRange("adductors", null, "normal")).toEqual({ min: 6, max: 10 });
+    expect(defaultRange("adductors", null, "priority")).toEqual({ min: 10, max: 14 });
     // With a profile: the model's numbers for that priority
     const p = { goal: "growth" as const, phase: "maintaining" as const, age: 30, yearsTraining: 5, sleepHours: 8 };
     const n = defaultRange("adductors", p, "normal"), pr = defaultRange("adductors", p, "priority");
     expect(pr.min!).toBeGreaterThan(n.min!);
-    expect(pr.max! - pr.min!).toBeLessThanOrEqual(n.max! - n.min!);
+    expect(pr.min!).toBeGreaterThanOrEqual(n.max!);
   });
 });

@@ -118,7 +118,7 @@ export function TargetEdit({ group, label, t, current, onEdit }: {
       <div style={{ marginTop: 10 }}>
         <Seg label={`${label}: focus`} value={prio} onChange={(x: Priority) => onEdit(withPriority(edit, x, x === "off" ? edit : defaultRange(group, profile, x)))}
           options={[{ v: "priority", label: "Priority" }, { v: "normal", label: "Normal" }, { v: "off", label: "Skip" }]} />
-        <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>{prio === "priority" ? "Aims for the top half of its range." : prio === "off" ? "Skipped: grayed out, no warnings. Your numbers are kept." : "Full range."}</p>
+        <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>{prio === "priority" ? "Upper half of the usual range: more sets to grow it faster." : prio === "off" ? "Skipped: grayed out, no warnings. Your numbers are kept." : "Lower half of the usual range: enough to grow."}</p>
         {!isDefault && <button type="button" className="btn btn-quiet vedit-reset" onClick={reset}><Icon name="undo" size={16} /> Reset to default · {def.min == null ? "no target" : formatTarget(def)}</button>}
       </div>
     </div>

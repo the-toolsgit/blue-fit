@@ -38,6 +38,8 @@ const ORDER: MuscleGroup[] = ["back", "chest", "quads", "hamstrings", "glutes", 
 const WEEK = [1, 2, 3, 4, 5, 6, 0];
 /** Share of the summed targets that needs sets of its own: compound lifts cover the rest as indirect sets (about 80%, *judgment*) */
 const INDIRECT_SHARE = 0.8;
+/** Workout length is an average: ±5 min still counts as that length (Leo: 55–65 is "60") */
+export const LENGTH_BUFFER = 5;
 type Theme = "full" | "upper" | "lower" | "push" | "pull" | "legs";
 const SPLITS: Record<number, Theme[]> = {
   1: ["full"], 2: ["full", "full"], 3: ["full", "full", "full"], 4: ["upper", "lower", "upper", "lower"],
@@ -85,7 +87,8 @@ export function generatePlan(input: GenInput): RoutineDay[] {
   const tmap = new Map(input.targets.map((t) => [t.group, t]));
   const focus = ORDER.filter((g) => isFocus(tmap.get(g)));
   const aim = new Map(focus.map((g) => [g, aimSets(tmap.get(g)!)]));
-  const cap = setsForMinutes(input.maxMinutes);
+  // The length is an average with a 5-minute buffer both ways (Leo, Nov 21 2026): a day may run up to 5 min over
+  const cap = setsForMinutes(input.maxMinutes + LENGTH_BUFFER);
   // Not enough time for every target: scale them all down evenly (at least 2 sets each), so no muscle is left out
   const need0 = [...aim.values()].reduce((a, b) => a + b, 0) * INDIRECT_SHARE;
   const room = cap * n;
@@ -227,12 +230,14 @@ export function generatePlan(input: GenInput): RoutineDay[] {
 const rank = (e: Exercise, main: MuscleGroup) => (FAMILY[main] === "core" ? 100 : 0) + (e.compound ? 0 : 50) + ORDER.indexOf(main) + (e.isHeavy ? 0 : 0.5);
 
 // ——— Conflicts: what in the inputs breaks the main rules, shown before building ———
-export interface Conflict { id: string; text: string; fix?: { label: string; targets?: VolumeTarget[]; maxMinutes?: number } }
+export interface Conflict { id: string; text: string; fix?: { label: string; targets?: VolumeTarget[]; maxMinutes?: number };
+  /** What the user can change to solve it on the check screen: a muscle's target, the workout length or the days */
+  edit: { kind: "target"; group: MuscleGroup } | { kind: "time" } | { kind: "days" } }
 
 export function planConflicts(input: Pick<GenInput, "trainDays" | "maxMinutes" | "targets">): Conflict[] {
   const out: Conflict[] = [];
   const n = input.trainDays.length;
-  if (!n) return [{ id: "days", text: "Pick at least one day to train." }];
+  if (!n) return [{ id: "days", text: "Pick at least one day to train.", edit: { kind: "days" } }];
   const days = WEEK.filter((d) => input.trainDays.includes(d));
   const focus = input.targets.filter(isFocus);
   for (const t of focus) {
@@ -246,15 +251,16 @@ export function planConflicts(input: Pick<GenInput, "trainDays" | "maxMinutes" |
       : `you train ${n} day${n > 1 ? "s" : ""}`;
     out.push({ id: "max-" + t.group,
       text: `${M}: ${t.min} sets a week needs ${need} workouts (max ${MAX_SESSION_SETS} sets each), but ${why}. The most it can get: ${most}.`,
-      fix: { label: `Set ${M} to ${Math.max(1, most - 4)}–${most}`, targets: [{ ...t, min: Math.max(1, most - 4), max: most }] } });
+      fix: { label: `Set ${M} to ${Math.max(1, most - 4)}–${most}`, targets: [{ ...t, min: Math.max(1, most - 4), max: most }] },
+      edit: { kind: "target", group: t.group } });
   }
   // Time: the week's sets spread over the days (indirect sets cover part of the work)
   const weekSets = focus.reduce((a, t) => a + aimSets(t), 0) * INDIRECT_SHARE;
   const perDay = Math.ceil(weekSets / n), minutes = estimateMinutes(perDay, Math.ceil(perDay / 3.5));
-  if (minutes > input.maxMinutes) {
+  if (minutes > input.maxMinutes + LENGTH_BUFFER) {
     const next = [45, 60, 75, 90, 120].find((m) => m >= minutes);
     out.push({ id: "time", text: `About ${minutes} min a workout to hit every target, over your ${input.maxMinutes} min.${next ? "" : " Add a training day or lower some targets."}`,
-      fix: next ? { label: `Allow ${next} min`, maxMinutes: next } : undefined });
+      fix: next ? { label: `Allow ${next} min`, maxMinutes: next } : undefined, edit: { kind: "time" } });
   }
   return out;
 }
