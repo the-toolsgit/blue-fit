@@ -214,6 +214,13 @@ textarea.input { min-height: 84px; resize: vertical; }
 .stepper input { width: 100%; min-width: 0; height: 52px; border: 0; background: transparent; text-align: center; font: 600 23px var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; outline: none; padding: 0; }
 .stepper input::placeholder { color: var(--faint); }
 .stepper.invalid { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad), 0 0 14px -4px var(--bad); }
+/* Exercise editor: Equipment · Rest · Key lift row, same label line and same 54 px control height */
+.ee-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 10px; align-items: start; }
+.ee-row .field { gap: 6px; }
+.ee-row .stepper-label { font: 600 12px var(--body); letter-spacing: 0.1em; margin: 0 2px 6px; line-height: normal; }
+.ee-row .input { height: 54px; border-radius: 14px; }
+.ee-key { justify-items: center; }
+.ee-key-box { height: 54px; display: flex; align-items: center; justify-content: center; }
 .stepper-label.invalid { color: var(--bad); }
 /* Refused action: a quick left-right shake, no bounce */
 .shake { animation: shake 0.36s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }

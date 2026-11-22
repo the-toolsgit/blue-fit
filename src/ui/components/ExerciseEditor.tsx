@@ -90,13 +90,13 @@ export function ExerciseEditor({ open, exercise, onClose, onSaved }: { open: boo
         </div>
 
         {/* Equipment · Rest · Key lift on one row (weight step isn't asked: it keeps its default) */}
-        <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr) auto", gap: 10, alignItems: "start" }}>
+        <div className="ee-row">
           <div className="field"><label htmlFor="eeeq">Equipment</label>
             <select id="eeeq" className="input" value={d.equipment} onChange={(e) => { const eq = e.target.value as Equipment; setD((x) => ({ ...x, equipment: eq, loadMode: defaultLoadMode(eq) })); }}>
               {(Object.keys(EQUIPMENT_LABEL) as Equipment[]).map((k) => <option key={k} value={k}>{EQUIPMENT_LABEL[k]}</option>)}
             </select></div>
           <Stepper label="Rest" suffix={fmtRest(d.defaultRestSec)} value={d.defaultRestSec} step={15} decimals={false} onChange={(v) => set("defaultRestSec", v ?? 120)} />
-          <div className="field"><span className="label">Key lift ★</span><div style={{ minHeight: 44, display: "flex", alignItems: "center" }}><Switch label="Key lift" checked={d.isHeavy} onChange={(v) => set("isHeavy", v)} /></div></div>
+          <div className="field ee-key"><span className="label">Key lift ★</span><div className="ee-key-box"><Switch label="Key lift" checked={d.isHeavy} onChange={(v) => set("isHeavy", v)} /></div></div>
         </div>
         <div className="field"><span className="label">Log weight</span>
           <Seg label="Log weight" value={d.loadMode} onChange={(v: LoadMode) => set("loadMode", v)} options={[{ v: "total", label: "As shown" }, { v: "perSide", label: "Per side" }, { v: "perHand", label: "Per hand" }]} />
