@@ -16,6 +16,7 @@ import { Seg, Stepper } from "../components/Controls";
 import { Dock } from "../components/Dock";
 import { ExercisePicker } from "../components/ExercisePicker";
 import { Figure } from "../components/Figure";
+import { FigureTap, useSwipeDelete } from "../components/swipeDelete";
 import { tempoTiming } from "../../core/figure/tempo";
 import { Icon } from "../components/Icon";
 import { Confirm, Sheet } from "../components/Sheet";
@@ -30,21 +31,23 @@ const SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const mondayFirst = (w: number | null) => (w == null ? 9 : (w + 6) % 7);
 const draftKey = (id: string) => "bf-plan-draft-" + id;
 
-function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, fail }: {
-  slot: Slot; ex: Exercise | undefined; index: number; groupStart: boolean; groupEnd: boolean; onOpen: () => void; fail?: string[];
+function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, onDelete, onFigure, fail }: {
+  slot: Slot; ex: Exercise | undefined; index: number; groupStart: boolean; groupEnd: boolean; onOpen: () => void; onDelete: () => void; onFigure: () => void; fail?: string[];
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: slot.id });
+  const sw = useSwipeDelete(onDelete);
   return (
-    <div ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition, position: "relative", zIndex: isDragging ? 5 : undefined, paddingLeft: slot.supersetGroup ? 10 : 0,
+    <div ref={(n) => { setNodeRef(n); sw.wrap.current = n; }} className={"day-row" + (sw.dx ? " swiping" : "")} onClickCapture={sw.onClickCapture} style={{ transform: CSS.Transform.toString(transform), transition, position: "relative", zIndex: isDragging ? 5 : undefined, paddingLeft: slot.supersetGroup ? 10 : 0,
       background: isDragging ? "var(--surface-solid)" : undefined, borderRadius: 14, boxShadow: isDragging ? "0 0 0 1px var(--neon), 0 16px 40px -10px var(--glow)" : undefined }}>
       {slot.supersetGroup && <div aria-hidden style={{ position: "absolute", left: 2, top: groupStart ? 16 : 0, bottom: groupEnd ? 16 : 0, width: 3, borderRadius: 3, background: "var(--neon-2)", boxShadow: "0 0 10px var(--neon-2)" }} />}
-      <div className="row" style={{ gap: 0 }}>
+      {sw.button}
+      <div className="row" style={{ gap: 0, ...sw.slide }}>
         <button className="icon-btn" style={{ touchAction: "none", cursor: "grab", width: 32, flex: "none" }} aria-label={`Drag to reorder ${ex?.name}`} {...attributes} {...listeners}>
           <svg width="16" height="22" viewBox="0 0 16 22" aria-hidden><g fill="currentColor">{[5, 11, 17].flatMap((y) => [<circle key={"a" + y} cx="5" cy={y} r="1.8" />, <circle key={"b" + y} cx="11" cy={y} r="1.8" />])}</g></svg>
         </button>
-        <button className="list-row grow" style={{ paddingLeft: 0 }} onClick={onOpen}>
+        <button className="list-row grow" style={{ paddingLeft: 0 }} onClick={() => (sw.dx ? sw.setDx(0) : onOpen())}>
           <span className="mono muted" style={{ width: 16, fontSize: 13 }}>{index + 1}</span>
-          <Figure spec={ex?.figure} size={44} still className="thin" />
+          <FigureTap name={ex?.name ?? "this exercise"} onTap={() => (sw.dx ? sw.setDx(0) : onFigure())}><Figure spec={ex?.figure} size={44} still className="thin" /></FigureTap>
           <span className="grow" style={{ minWidth: 0 }}>
             <span style={{ display: "block", fontWeight: 600 }}>{ex?.name ?? slot.exerciseId} {ex?.isHeavy && <span className="star">★</span>}<FailFlame why={fail} /></span>
             <span className="muted" style={{ fontSize: 12 }}>{slot.supersetGroup && groupStart ? `Superset ${slot.supersetGroup} · ` : ""}{slot.notes ? `${slot.notes} · ` : ""}rest {fmtRest(slot.restSec)}</span>
@@ -120,6 +123,13 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
     const from = day.slots.findIndex((s) => s.id === e.active.id), to = day.slots.findIndex((s) => s.id === e.over!.id);
     setDraft(moveSlot(draft, day.id, from, to));
   };
+  /** Swipe left on a row: remove it from the draft, with Undo (5 s) */
+  const removeWithUndo = (s: Slot) => {
+    if (!day) return;
+    const before = draft;
+    setDraft(removeSlot(draft, day.id, s.id));
+    toast({ kind: "info", title: "Exercise removed", body: exMap.get(s.exerciseId)?.name, action: { label: "Undo", run: () => setDraft(before) } });
+  };
 
   const allSets = draft.days.reduce((a, d) => a + d.slots.reduce((b, s) => b + s.sets, 0), 0);
   const daySets = day ? day.slots.reduce((a, s) => a + s.sets, 0) : 0;
@@ -167,7 +177,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
                 {day.slots.map((s, i) => (
                   <SlotRow key={s.id} slot={s} ex={exMap.get(s.exerciseId)} index={i}
                     groupStart={s.supersetGroup !== day.slots[i - 1]?.supersetGroup} groupEnd={s.supersetGroup !== day.slots[i + 1]?.supersetGroup}
-                    onOpen={() => setSlotOpen(s.id)} fail={weekFail.get(day.id)?.get(s.id)} />
+                    onOpen={() => setSlotOpen(s.id)} onDelete={() => removeWithUndo(s)} onFigure={() => setHowTo(s.exerciseId)} fail={weekFail.get(day.id)?.get(s.id)} />
                 ))}
               </SortableContext>
             </DndContext>
@@ -175,7 +185,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
             <button className="list-row" style={{ color: "var(--neon-ink)", justifyContent: "center" }} onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
           </div>
           <div className="spread" style={{ margin: "6px 4px 0" }}>
-            <p className="muted" style={{ fontSize: 12 }}>Tap an exercise to change it. Drag ⋮⋮ to move it.</p>
+            <p className="muted" style={{ fontSize: 12 }}>Tap an exercise to change it. Drag ⋮⋮ to move it. Swipe left to delete.</p>
             <button className="btn btn-quiet" style={{ color: "var(--bad)", fontSize: 13, minHeight: 36, padding: 0, whiteSpace: "nowrap" }} onClick={() => setConfirm("deleteDay")} disabled={!day.slots.length}><Icon name="trash" size={16} /> Delete day</button>
           </div>
           

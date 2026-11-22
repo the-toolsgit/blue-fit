@@ -772,3 +772,7 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wz ~ .sheet-backdrop { z-index: 90; }
 .wz ~ .sheet { z-index: 91; }
 .stepper input { user-select: text; -webkit-user-select: text; }
+/* A row's line man opens the exercise's how-to: its own tap target inside the row */
+.fig-tap { display: inline-flex; flex: none; border-radius: 10px; cursor: pointer; transition: box-shadow .2s, background .2s; }
+.fig-tap:active { background: var(--glow-soft); box-shadow: 0 0 0 1px var(--neon); }
+.fig-tap:focus-visible { outline: 2px solid var(--neon); outline-offset: 2px; }

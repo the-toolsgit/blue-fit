@@ -132,7 +132,7 @@ export function PlanScreen() {
           </div>
           <div className="glass" style={{ padding: 4 }}>
             <Suspense fallback={<div style={{ minHeight: day.slots.length * 64 }} />}>
-              <SortableDayList slots={day.slots} exMap={exMap} onOpen={(s) => setSlotId(s.id)} onDelete={removeWithUndo}
+              <SortableDayList slots={day.slots} exMap={exMap} onOpen={(s) => setSlotId(s.id)} onDelete={removeWithUndo} onFigure={(s) => setHowTo(s.exerciseId)}
                 onMove={(from, to) => saveRoutine(moveSlot(routine, day.id, from, to))} fail={weekFail.get(day.id)} />
             </Suspense>
             <button className="list-row add-row" onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>

@@ -1,5 +1,5 @@
 // Exercise picker: search + Muscle and Equipment filters (each opens a sheet with checkbox rows, multi-select). Used for swap and add.
-// Swap: one tap picks and closes. Add (onPickMany): tap rows to tick several, then "Add N exercises" adds them in tap order.
+// Tap a row's line man for the exercise's how-to. Swap: one tap picks and closes. Add (onPickMany): tap rows to tick several, then "Add N exercises" adds them in tap order.
 import { useEffect, useMemo, useState } from "react";
 import { EQUIPMENT_LABEL, MUSCLE_GROUPS, muscleLabel, type Equipment, type Exercise, type MuscleGroup } from "../../core/types";
 import { useStore } from "../store";
@@ -10,6 +10,8 @@ import { Seg } from "./Controls";
 import { Icon } from "./Icon";
 import { Sheet } from "./Sheet";
 import { ExerciseEditor } from "./ExerciseEditor";
+import { FigureTap } from "./swipeDelete";
+import { ExerciseSheet } from "../screens/ExerciseScreen";
 
 export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclude }: {
   open: boolean; title: string; onClose: () => void; onPick?: (e: Exercise) => void;
@@ -17,6 +19,7 @@ export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclu
   onPickMany?: (es: Exercise[]) => void; exclude?: string;
 }) {
   const [creating, setCreating] = useState(false);
+  const [howTo, setHowTo] = useState<string | null>(null);
   const [picked, setPicked] = useState<Exercise[]>([]);
   useEffect(() => { if (open) setPicked([]); }, [open]);
   const isOn = (e: Exercise) => picked.some((x) => x.id === e.id);
@@ -81,7 +84,7 @@ export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclu
       <div style={{ marginTop: 6 }}>
         {(more ? list : list.slice(0, 60)).map((e) => (
           <button key={e.id} className={"list-row" + (onPickMany ? " filter-row" + (isOn(e) ? " on" : "") : "")} aria-pressed={onPickMany ? isOn(e) : undefined} onClick={() => tap(e)}>
-            <Figure spec={e.figure} size={40} still className="thin" />
+            <FigureTap name={e.name} onTap={() => setHowTo(e.id)}><Figure spec={e.figure} size={40} still className="thin" /></FigureTap>
             <span className="grow">
               <span style={{ display: "block", fontWeight: 600 }}>{e.name} {e.isHeavy && <span className="star">★</span>}{top(e) && <span className="badge p" style={{ marginLeft: 6, verticalAlign: 2 }}>Top pick</span>}</span>
               <span className="muted" style={{ fontSize: 13 }}>{e.muscles.join(", ")} · {EQUIPMENT_LABEL[e.equipment]}</span>
@@ -110,6 +113,7 @@ export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclu
         </div>
         <button className="btn btn-primary btn-block" style={{ position: "sticky", bottom: 0, marginTop: 12 }} onClick={() => setTab(null)}>Show {list.length} exercises</button>
       </Sheet>
+      <ExerciseSheet id={howTo} onClose={() => setHowTo(null)} />
       <ExerciseEditor open={creating} onClose={() => setCreating(false)} onSaved={(e) => (onPickMany ? setPicked((ps) => [...ps, e]) : (onPick?.(e), onClose()))} />
     </Sheet>
   );
