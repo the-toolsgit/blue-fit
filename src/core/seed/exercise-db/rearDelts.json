@@ -59,7 +59,11 @@
   },
   "formerIds": [
    "reverse-machine-flyes"
-  ]
+  ],
+  "nippard": {
+   "tier": "S",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
  },
  {
   "id": "single-arm-machine-reverse-fly",
@@ -221,7 +225,11 @@
   },
   "formerIds": [
    "cable-rear-delt-fly"
-  ]
+  ],
+  "nippard": {
+   "tier": "S",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
  },
  {
   "id": "rope-face-pull",
@@ -291,7 +299,11 @@
   },
   "formerIds": [
    "face-pull"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
  },
  {
   "id": "cable-rope-rear-delt-rows",
@@ -648,6 +660,10 @@
   "figureTemplate": "reverse-fly-bent",
   "source": {
    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {

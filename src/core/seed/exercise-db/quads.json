@@ -66,7 +66,11 @@
   },
   "formerIds": [
    "smith-machine-squat"
-  ]
+  ],
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
+  }
  },
  {
   "id": "barbell-squat",
@@ -147,6 +151,10 @@
     "evidence": "R",
     "note": "Kubo 2019: full squats grew the adductors and glutes more than half squats; quads grew the same."
    }
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
   }
  },
  {
@@ -222,6 +230,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Front_Barbell_Squat"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
   }
  },
  {
@@ -577,6 +589,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Goblet_Squat"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
   }
  },
  {
@@ -828,6 +844,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Hack_Squat"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
   }
  },
  {
@@ -1012,6 +1032,10 @@
   },
   "source": {
    "url": "https://fitnessvolt.com/jeff-nippard-leg-routine-one-year/"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://hackmd.io/ntziN77XRjSn4ESlUGQ9CA.md"
   }
  },
  {
@@ -1129,7 +1153,11 @@
   },
   "stretch": [
    "quads"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
+  }
  },
  {
   "id": "narrow-stance-leg-press",
@@ -1304,7 +1332,11 @@
   },
   "formerIds": [
    "leg-extensions"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-worse-quad-exercises"
+  }
  },
  {
   "id": "single-leg-leg-extension",
@@ -1443,6 +1475,10 @@
   "figureTemplate": "sissy-squat",
   "source": {
    "url": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://hackmd.io/ntziN77XRjSn4ESlUGQ9CA.md"
   }
  },
  {
@@ -1489,6 +1525,10 @@
   "figureTemplate": "reverse-nordic",
   "source": {
    "url": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
   }
  },
  {
@@ -1722,6 +1762,10 @@
   "figureTemplate": "lunge",
   "source": {
    "url": "https://www.strengthlog.com/dumbbell-walking-lunge/"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
   }
  },
  {
@@ -2026,6 +2070,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Split_Squat_with_Dumbbells"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/best-quad-exercises-ranking-best-to-worst-jeff-nippard/"
   }
  },
  {

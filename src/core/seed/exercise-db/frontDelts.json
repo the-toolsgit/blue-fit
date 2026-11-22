@@ -67,7 +67,11 @@
   },
   "formerIds": [
    "machine-shoulder-military-press"
-  ]
+  ],
+  "nippard": {
+   "tier": "A+",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
  },
  {
   "id": "leverage-shoulder-press",
@@ -194,7 +198,11 @@
   },
   "formerIds": [
    "dumbbell-shoulder-press"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
  },
  {
   "id": "standing-dumbbell-press",
@@ -558,6 +566,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Military_Press"
+  },
+  "nippard": {
+   "tier": "B+",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -622,7 +634,11 @@
   },
   "formerIds": [
    "barbell-shoulder-press"
-  ]
+  ],
+  "nippard": {
+   "tier": "B",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
  },
  {
   "id": "standing-barbell-press-behind-neck",
@@ -683,6 +699,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Barbell_Press_Behind_Neck"
+  },
+  "nippard": {
+   "tier": "D",
+   "src": "https://rosetta.to/u/jeffnippard/i-ranked-the-strangest-gym-exercises-one-is-s-tier"
   }
  },
  {
@@ -1030,7 +1050,11 @@
   },
   "formerIds": [
    "front-two-dumbbell-raise"
-  ]
+  ],
+  "nippard": {
+   "tier": "D",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
  },
  {
   "id": "front-cable-raise",
@@ -1076,6 +1100,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Front_Cable_Raise"
+  },
+  "nippard": {
+   "tier": "D",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -1120,6 +1148,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Front_Incline_Dumbbell_Raise"
+  },
+  "nippard": {
+   "tier": "D",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -1166,6 +1198,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Front_Plate_Raise"
+  },
+  "nippard": {
+   "tier": "D",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -1210,6 +1246,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Single_Dumbbell_Raise"
+  },
+  "nippard": {
+   "tier": "D",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -1259,6 +1299,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Front_Barbell_Raise_Over_Head"
+  },
+  "nippard": {
+   "tier": "D",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -1303,6 +1347,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Dumbbell_Straight-Arm_Front_Delt_Raise_Above_Head"
+  },
+  "nippard": {
+   "tier": "D",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  }
 ]

@@ -73,6 +73,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Deadlift"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
   }
  },
  {
@@ -202,6 +206,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Rack_Pulls"
+  },
+  "nippard": {
+   "tier": "F",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
  },
  {
@@ -270,6 +278,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Sumo_Deadlift"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
   }
  },
  {
@@ -461,6 +473,10 @@
    "db": "free-exercise-db",
    "id": "Barbell_Hip_Thrust",
    "url2": "https://builtwithscience.com/best-glutes-exercises/"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
   }
  },
  {
@@ -524,6 +540,10 @@
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
    "url2": "https://fitnessvolt.com/jeff-nippard-rates-glute-exercises/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
   }
  },
  {
@@ -626,6 +646,10 @@
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
    "url2": "https://builtwithscience.com/best-glutes-exercises/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
   }
  },
  {
@@ -725,6 +749,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Butt_Lift_Bridge"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
   }
  },
  {
@@ -850,6 +878,10 @@
     "evidence": "C",
     "note": "Feet out and a slightly rounded upper back shift work to the glutes (coaching practice)."
    }
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
   }
  },
  {
@@ -1013,6 +1045,10 @@
    "db": "free-exercise-db",
    "id": "Pull_Through",
    "url2": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
   }
  },
  {
@@ -1104,6 +1140,10 @@
    "db": "free-exercise-db",
    "id": "One-Legged_Cable_Kickback",
    "url2": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
   }
  },
  {
@@ -1215,6 +1255,10 @@
     "evidence": "C",
     "note": "Bending forward at the hips brings in more of the big glute (coaching practice)."
    }
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
   }
  },
  {
@@ -1259,6 +1303,10 @@
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-best-glute-exercises/",
    "url2": "https://fitnessvolt.com/jeff-nippard-rates-glute-exercises/"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://barbend.com/news/jeff-nippard-best-glute-exercises/"
   }
  },
  {

@@ -67,7 +67,11 @@
    "incline-dumbbell-curl",
    "alternate-incline-dumbbell-curl",
    "flexor-incline-dumbbell-curls"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
+  }
  },
  {
   "id": "barbell-preacher-curl",
@@ -191,7 +195,11 @@
   "formerIds": [
    "hammer-curls",
    "alternate-hammer-curl"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
+  }
  },
  {
   "id": "barbell-curl",
@@ -252,6 +260,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Curl"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
   }
  },
  {
@@ -311,6 +323,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "EZ-Bar_Curl"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
   }
  },
  {
@@ -516,7 +532,11 @@
   },
   "formerIds": [
    "dumbbell-alternate-bicep-curl"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
+  }
  },
  {
   "id": "seated-dumbbell-curl",
@@ -887,6 +907,10 @@
   "source": {
    "url": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/",
    "url2": "https://fitnessvolt.com/jeff-nippard-best-exercises-every-muscle-group/"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
   }
  },
  {
@@ -932,6 +956,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Drag_Curl"
+  },
+  "nippard": {
+   "tier": "C",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
   }
  },
  {
@@ -984,7 +1012,11 @@
   },
   "formerIds": [
    "lying-high-bench-barbell-curl"
-  ]
+  ],
+  "nippard": {
+   "tier": "C",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
+  }
  },
  {
   "id": "dumbbell-prone-incline-curl",
@@ -1103,7 +1135,11 @@
   "formerIds": [
    "two-arm-dumbbell-preacher-curl",
    "standing-one-arm-dumbbell-curl-over-incline-bench"
-  ]
+  ],
+  "nippard": {
+   "tier": "S",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
+  }
  },
  {
   "id": "cable-preacher-curl",
@@ -1212,7 +1248,11 @@
   },
   "formerIds": [
    "machine-preacher-curls"
-  ]
+  ],
+  "nippard": {
+   "tier": "S",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
+  }
  },
  {
   "id": "concentration-curls",
@@ -1410,6 +1450,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Standing_Biceps_Cable_Curl"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
   }
  },
  {
@@ -2030,6 +2074,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Preacher_Hammer_Dumbbell_Curl"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-best-and-worst-bicep-exercises/"
   }
  },
  {

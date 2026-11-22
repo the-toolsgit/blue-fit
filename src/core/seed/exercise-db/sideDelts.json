@@ -63,7 +63,11 @@
   },
   "formerIds": [
    "standing-low-pulley-deltoid-raise"
-  ]
+  ],
+  "nippard": {
+   "tier": "S",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  }
  },
  {
   "id": "lean-away-lateral-raise",
@@ -209,6 +213,10 @@
   "figureTemplate": "lateral-raise-cable",
   "source": {
    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -265,6 +273,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Side_Lateral_Raise"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -406,6 +418,10 @@
   },
   "source": {
    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -449,6 +465,10 @@
   "figureTemplate": "lateral-raise-lean-in",
   "source": {
    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -507,6 +527,10 @@
   },
   "source": {
    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -603,6 +627,10 @@
   "figureTemplate": "lateral-raise-full",
   "source": {
    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -696,6 +724,10 @@
   },
   "source": {
    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -748,6 +780,10 @@
   },
   "source": {
    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
+  },
+  "nippard": {
+   "tier": "A+",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -996,6 +1032,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Upright_Cable_Row"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  },
  {
@@ -1247,6 +1287,10 @@
   "source": {
    "url": "https://generationiron.com/jeff-nippard-shoulder-exercises/",
    "url2": "https://builtwithscience.com/fitness-tips/best-shoulder-exercises/"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://generationiron.com/jeff-nippard-shoulder-exercises/"
   }
  }
 ]

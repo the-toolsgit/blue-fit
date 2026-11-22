@@ -205,3 +205,10 @@ describe("Build my plan: never the same movement twice on one day", () => {
     }
   });
 });
+
+describe("Jeff Nippard's tiers rank swaps", () => {
+  it("swapping the seated dumbbell press offers his A+ machine shoulder press first", () => {
+    const ex = cat.exMap.get("seated-dumbbell-press")!;
+    expect(swapOptions(ex, cat.exercises, "growth", new Set())[0].id).toBe("machine-shoulder-press");
+  });
+});

@@ -70,6 +70,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Close-Grip_Barbell_Bench_Press"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
   }
  },
  {
@@ -364,6 +368,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Floor_Press"
+  },
+  "nippard": {
+   "tier": "C",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -535,6 +543,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "JM_Press"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
   }
  },
  {
@@ -593,6 +605,10 @@
   },
   "source": {
    "url": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
   }
  },
  {
@@ -657,7 +673,11 @@
   },
   "formerIds": [
    "dip-machine"
-  ]
+  ],
+  "nippard": {
+   "tier": "B",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+  }
  },
  {
   "id": "parallel-bar-dip",
@@ -731,7 +751,11 @@
   },
   "formerIds": [
    "dips-triceps-version"
-  ]
+  ],
+  "nippard": {
+   "tier": "B",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+  }
  },
  {
   "id": "bench-dips",
@@ -790,6 +814,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Bench_Dips"
+  },
+  "nippard": {
+   "tier": "C",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
   }
  },
  {
@@ -851,6 +879,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Push-Ups_-_Close_Triceps_Position"
+  },
+  "nippard": {
+   "tier": "C",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
   }
  },
  {
@@ -1025,6 +1057,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Triceps_Pushdown"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
   }
  },
  {
@@ -1077,6 +1113,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Triceps_Pushdown_-_Rope_Attachment"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
   }
  },
  {
@@ -1130,6 +1170,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Reverse_Grip_Triceps_Pushdown"
+  },
+  "nippard": {
+   "tier": "C",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
   }
  },
  {
@@ -1297,7 +1341,11 @@
   "formerIds": [
    "cable-rope-overhead-triceps-extension",
    "triceps-overhead-extension-with-rope"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+  }
  },
  {
   "id": "overhead-cable-triceps-extension-bar",
@@ -1345,6 +1393,10 @@
   "source": {
    "url": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/",
    "url2": "https://pubmed.ncbi.nlm.nih.gov/35819335/"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
   }
  },
  {
@@ -1395,6 +1447,10 @@
   },
   "source": {
    "url": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
   }
  },
  {
@@ -1543,6 +1599,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Seated_Triceps_Press"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
   }
  },
  {
@@ -1640,7 +1700,11 @@
   },
   "formerIds": [
    "standing-one-arm-dumbbell-triceps-extension"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+  }
  },
  {
   "id": "standing-overhead-barbell-triceps-extension",
@@ -1757,7 +1821,11 @@
   },
   "formerIds": [
    "lying-triceps-press"
-  ]
+  ],
+  "nippard": {
+   "tier": "S",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+  }
  },
  {
   "id": "lying-close-grip-barbell-triceps-extension-behind-the-head",
@@ -2055,7 +2123,11 @@
   },
   "formerIds": [
    "lying-dumbbell-tricep-extension"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+  }
  },
  {
   "id": "dumbbell-tricep-extension-pronated-grip",
@@ -2502,7 +2574,11 @@
   },
   "formerIds": [
    "standing-bent-over-two-arm-dumbbell-triceps-extension"
-  ]
+  ],
+  "nippard": {
+   "tier": "C",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+  }
  },
  {
   "id": "standing-bent-over-one-arm-dumbbell-triceps-extension",
@@ -2714,7 +2790,11 @@
   },
   "formerIds": [
    "cable-triceps-kickback"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-ranks-the-20-best-and-worst-triceps-exercises/"
+  }
  },
  {
   "id": "standing-cable-tricep-kickback",

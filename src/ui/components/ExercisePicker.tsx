@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { EQUIPMENT_LABEL, MUSCLE_GROUPS, muscleLabel, type Equipment, type Exercise, type MuscleGroup } from "../../core/types";
 import { useStore } from "../store";
-import { isTopPick } from "../../core/catalog";
+import { isTopPick, tierPoints } from "../../core/catalog";
 import { swapOptions } from "../../core/generator";
 import { Figure } from "./Figure";
 import { EquipmentIcon, MuscleIcon } from "./FilterIcons";
@@ -67,6 +67,8 @@ export function ExercisePicker({ open, title, onClose, onPick, onPickMany, exclu
         if (groups.length) {
           const ta = top(a), tb = top(b);
           if (ta !== tb) return ta ? -1 : 1;
+          // then Jeff Nippard's tier (best first; strength plans keep top picks only)
+          if (goal !== "strength" && tierPoints(a) !== tierPoints(b)) return tierPoints(b) - tierPoints(a);
           const w = (e: Exercise) => Math.max(...e.volume.filter((v) => groups.includes(v.group)).map((v) => v.weight)); const da = w(a), db = w(b); if (da !== db) return db - da;
         }
         return a.name.localeCompare(b.name);

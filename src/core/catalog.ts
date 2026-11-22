@@ -4,7 +4,7 @@
 import type { Exercise, Goal } from "./types";
 
 /** Fields the database owns for the app's own exercises (the user can't edit them). */
-const TAGS = ["jobs", "stretch", "compound", "unsafeFailure", "heavyWhy", "measure", "formerIds", "preferred", "assisted"] as const;
+const TAGS = ["jobs", "stretch", "compound", "unsafeFailure", "heavyWhy", "measure", "formerIds", "preferred", "assisted", "nippard"] as const;
 
 export interface Catalog {
   /** Phone exercises (tags filled in) + database exercises not on the phone */
@@ -38,3 +38,9 @@ export function mergeCatalog(phone: Exercise[], db: Exercise[]): Catalog {
 /** Top pick for this goal: strength has its own list; growth, endurance, maintenance (and no profile) use growth. */
 export const isTopPick = (e: Exercise, goal: Goal | undefined): boolean =>
   !!e.preferred?.goals.includes(goal === "strength" ? "strength" : "growth");
+
+/** Jeff Nippard's tiers as points (Leo, Nov 22 2026: his rankings decide between good options). Unrated sits at B−:
+ *  most unrated exercises are variations he didn't cover, not bad ones. */
+const TIER_POINTS: Record<string, number> = { "S+": 8, S: 7, "S-": 6.5, "A+": 6, A: 5, "A-": 4.5, "B+": 4, B: 3, "B-": 2.5, "C+": 2, C: 1.5, "C-": 1, D: 0.5, F: 0 };
+export const tierPoints = (e: Exercise): number => TIER_POINTS[e.nippard?.tier ?? ""] ?? 2.8;
+

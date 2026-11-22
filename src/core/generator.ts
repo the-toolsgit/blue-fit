@@ -1,7 +1,7 @@
 // Builds a whole week plan from the user's goal, training days, workout length and weekly targets (Plan → Generate).
 // Pure and framework-free. Rules come from the muscle database and the Plan check (workoutCheck.ts); choices marked
 // *judgment* are ours. The result is checked with weekInsight by the caller.
-import { isTopPick } from "./catalog";
+import { isTopPick, tierPoints } from "./catalog";
 import { NEEDS_HEAVY_LIGHT, restDaysOf } from "./muscles";
 import { HOLD_SLOT } from "./routineEdit";
 import { estimateMinutes, slotsMinutes } from "./timeEstimate";
@@ -208,6 +208,7 @@ export function generatePlan(input: GenInput): RoutineDay[] {
       const jobs = [e.jobs?.[g]].flat().filter(Boolean) as string[];
       score += 10 * jobs.filter((j) => !jobsHit.get(g)?.has(j)).length;
       if (isTopPick(e, input.goal)) score += 6;
+      score += tierBonus(e, input.goal);
       if (needCompound && e.compound) score += 8;
       if (needCompound && e.compound && FREE_WEIGHT.has(e.equipment)) score += 1;
       // The Stretch check is a rule too: as much as a missing angle
@@ -617,7 +618,7 @@ function polish(c: { days: RoutineDay[]; train: RoutineDay[]; meta: Map<string, 
       const missing = (JOBS[g] ?? []).filter((j) => !hit.has(j));
       const needStretch = STRETCH_MUSCLES.has(g) && !days.some((d) => d.slots.some((s) => exMap.get(s.exerciseId)!.stretch?.includes(g)));
       const cands = pool.filter((e) => isDirect(e, g) && !used.has(e.id) && (e.measure !== "time" || g === "abs"))
-        .map((e) => ({ e, sc: 10 * ([e.jobs?.[g]].flat().filter((j) => j && missing.includes(j)).length) + (needStretch && e.stretch?.includes(g) ? 10 : 0) + (isTopPick(e, input.goal) ? 6 : 0) + c.rand() }))
+        .map((e) => ({ e, sc: 10 * ([e.jobs?.[g]].flat().filter((j) => j && missing.includes(j)).length) + (needStretch && e.stretch?.includes(g) ? 10 : 0) + (isTopPick(e, input.goal) ? 6 : 0) + tierBonus(e, input.goal) + c.rand() }))
         .sort((a, b) => b.sc - a.sc).slice(0, 3).map((x) => x.e);
       for (const { d, s } of mine) {
         if (s.sets < 4) moves.push(() => { s.sets++; });
@@ -669,7 +670,7 @@ function polish(c: { days: RoutineDay[]; train: RoutineDay[]; meta: Map<string, 
       if (!isFocus(tmap.get(g)) || d.slots.some((s) => meta.get(s.id)?.main === g && exMap.get(s.exerciseId)!.compound)) continue;
       for (const o of train) if (o !== d) for (const s of o.slots.filter((x) => meta.get(x.id)?.main === g && exMap.get(x.exerciseId)!.compound))
         if (!d.slots.some((x) => x.exerciseId === s.exerciseId)) moves.push(() => { o.slots = o.slots.filter((x) => x !== s); d.slots = [...d.slots, s]; });
-      const comp = pool.filter((e) => e.compound && isDirect(e, g) && !used.has(e.id)).sort((a, b) => (isTopPick(b, input.goal) ? 1 : 0) - (isTopPick(a, input.goal) ? 1 : 0))[0];
+      const comp = pool.filter((e) => e.compound && isDirect(e, g) && !used.has(e.id)).sort((a, b) => (isTopPick(b, input.goal) ? 1 : 0) - (isTopPick(a, input.goal) ? 1 : 0) || tierBonus(b, input.goal) - tierBonus(a, input.goal))[0];
       if (comp) {
         moves.push(() => { d.slots = [...d.slots, newSlot(comp, 3, g)]; });
         // or in place of an isolation exercise for that muscle there
@@ -715,6 +716,9 @@ const angleKey = (e: Exercise, g: MuscleGroup) => [e.jobs?.[g]].flat().filter(Bo
 /** Same angle with the same equipment = the same movement (DB lateral raise and DB lateral-to-front raise); a DB and a
  *  cable lateral raise load the muscle differently, so they're different (Leo, Nov 22 2026) */
 const moveKey = (e: Exercise, g: MuscleGroup) => angleKey(e, g) + "|" + e.equipment;
+/** Jeff Nippard's tier as a pick bonus (Leo, Nov 22 2026): S+ about +8, A +3, unrated 0, F −4. His lists rank for muscle
+ *  growth, so strength plans don't use them (their ★ lifts and top picks lead there). */
+const tierBonus = (e: Exercise, goal: Goal | undefined) => (goal === "strength" ? 0 : (tierPoints(e) - 2.8) * 1.5);
 const mainOf = (e: Exercise) => e.volume.find((v) => v.weight === 1)?.group;
 
 /**
@@ -730,7 +734,7 @@ export function swapOptions(ex: Exercise, all: Exercise[], goal: Goal, taken: Se
   return all
     .filter((e) => e.id !== ex.id && !e.archived && !taken.has(e.id) && mainOf(e) === g && (e.measure === "time") === (ex.measure === "time"))
     .filter((e) => !jobs.size || [e.jobs?.[g]].flat().some((j) => j && jobs.has(j)))
-    .sort((a, b) => (!!b.compound === !!ex.compound ? 1 : 0) - (!!a.compound === !!ex.compound ? 1 : 0) || (isTopPick(b, goal) ? 1 : 0) - (isTopPick(a, goal) ? 1 : 0) || (b.isHeavy ? 1 : 0) - (a.isHeavy ? 1 : 0) || a.name.localeCompare(b.name));
+    .sort((a, b) => (!!b.compound === !!ex.compound ? 1 : 0) - (!!a.compound === !!ex.compound ? 1 : 0) || tierBonus(b, goal) - tierBonus(a, goal) || (isTopPick(b, goal) ? 1 : 0) - (isTopPick(a, goal) ? 1 : 0) || (b.isHeavy ? 1 : 0) - (a.isHeavy ? 1 : 0) || a.name.localeCompare(b.name));
 }
 
 /** Day order: compound lifts first (big muscles first, ★ before the rest, free weights before machines), then isolation, abs and neck last */

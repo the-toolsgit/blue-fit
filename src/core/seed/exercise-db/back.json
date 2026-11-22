@@ -138,7 +138,11 @@
   "formerIds": [
    "one-arm-lat-pulldown",
    "half-kneeling-one-arm-lat-pulldown"
-  ]
+  ],
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  }
  },
  {
   "id": "single-arm-db-row",
@@ -204,7 +208,11 @@
   },
   "formerIds": [
    "one-arm-dumbbell-row"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  }
  },
  {
   "id": "straight-arm-cable-pulldown",
@@ -323,6 +331,10 @@
    "plan": "Leo's plan",
    "db": "free-exercise-db",
    "id": "Wide-Grip_Lat_Pulldown"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
  },
  {
@@ -397,7 +409,11 @@
   },
   "formerIds": [
    "seated-cable-rows"
-  ]
+  ],
+  "nippard": {
+   "tier": "S",
+   "src": "https://fitnessvolt.com/jeff-nippard-best-and-worst-back-exercises"
+  }
  },
  {
   "id": "bent-over-barbell-row",
@@ -463,6 +479,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Bent_Over_Barbell_Row"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
  },
  {
@@ -516,6 +536,10 @@
   "figureTemplate": "row-bent-barbell",
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
  },
  {
@@ -571,6 +595,10 @@
   "figureTemplate": "row-bent-barbell",
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
  },
  {
@@ -638,6 +666,10 @@
     "evidence": "C",
     "note": "More upright torso lets you load more (coaching practice)."
    }
+  },
+  "nippard": {
+   "tier": "C",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
  },
  {
@@ -988,6 +1020,10 @@
   },
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
  },
  {
@@ -1048,7 +1084,11 @@
   },
   "formerIds": [
    "bent-over-two-arm-long-bar-row"
-  ]
+  ],
+  "nippard": {
+   "tier": "B",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  }
  },
  {
   "id": "one-arm-long-bar-row",
@@ -1168,6 +1208,10 @@
   },
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
  },
  {
@@ -1299,6 +1343,10 @@
   },
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
  },
  {
@@ -1714,6 +1762,10 @@
   "source": {
    "url": "https://www.strengthlog.com/cable-wide-grip-seated-row/",
    "url2": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://hackmd.io/ntziN77XRjSn4ESlUGQ9CA.md"
   }
  },
  {
@@ -1837,7 +1889,11 @@
   },
   "formerIds": [
    "weighted-pull-ups"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-best-and-worst-back-exercises"
+  }
  },
  {
   "id": "chin-up",
@@ -1889,6 +1945,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Chin-Up"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://fitnessvolt.com/jeff-nippard-best-and-worst-back-exercises"
   }
  },
  {
@@ -1946,7 +2006,11 @@
   },
   "formerIds": [
    "v-bar-pullup"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-best-and-worst-back-exercises"
+  }
  },
  {
   "id": "close-grip-front-lat-pulldown",
@@ -2057,7 +2121,11 @@
   },
   "formerIds": [
    "v-bar-pulldown"
-  ]
+  ],
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  }
  },
  {
   "id": "underhand-cable-pulldowns",
@@ -2266,6 +2334,10 @@
   },
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
  },
  {
@@ -2386,6 +2458,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Inverted_Row"
+  },
+  "nippard": {
+   "tier": "C",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
  },
  {
@@ -2688,6 +2764,10 @@
     "evidence": "C",
     "note": "Ranked low for back growth by coaches (Nippard back ranking)."
    }
+  },
+  "nippard": {
+   "tier": "F",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-best-and-worst-back-exercises/"
   }
  },
  {
@@ -2794,6 +2874,10 @@
   "figureTemplate": "lat-prayer-standing",
   "source": {
    "url": "https://mennohenselmans.com/lat-prayers/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://fitnessvolt.com/jeff-nippard-best-and-worst-back-exercises"
   }
  },
  {

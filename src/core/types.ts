@@ -74,6 +74,8 @@ export interface Exercise {
   formerIds?: string[];
   /** Top pick for these goals (exercise database): "growth", "strength"; maintenance and endurance follow growth */
   preferred?: { goals: string[]; why: string };
+  /** Jeff Nippard's tier for it (his "best and worst exercises" rankings): S+ best … F worst; ranks picks and swaps */
+  nippard?: { tier: string; src: string };
   /** "time": sets are logged in seconds (holds). Default: reps. */
   measure?: "reps" | "time";
   /** The logged weight is help (assisted machine): less is harder. No "add weight" hints or weight PRs. */

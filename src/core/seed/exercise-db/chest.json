@@ -70,7 +70,11 @@
   },
   "formerIds": [
    "bench-press-powerlifting"
-  ]
+  ],
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
+  }
  },
  {
   "id": "wide-grip-barbell-bench-press",
@@ -197,6 +201,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Barbell_Incline_Bench_Press_-_Medium_Grip"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -253,6 +261,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Decline_Barbell_Bench_Press"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -371,6 +383,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Dumbbell_Bench_Press"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -488,6 +504,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "One_Arm_Dumbbell_Bench_Press"
+  },
+  "nippard": {
+   "tier": "F",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -561,6 +581,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Incline_Dumbbell_Press"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -680,6 +704,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Decline_Dumbbell_Bench_Press"
+  },
+  "nippard": {
+   "tier": "B",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -737,6 +765,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Smith_Machine_Bench_Press"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -795,6 +827,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Smith_Machine_Incline_Bench_Press"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -924,7 +960,11 @@
   },
   "stretch": [
    "chest"
-  ]
+  ],
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
+  }
  },
  {
   "id": "incline-machine-chest-press",
@@ -1366,6 +1406,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Pushups"
+  },
+  "nippard": {
+   "tier": "C",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -1586,6 +1630,10 @@
   "figureTemplate": "pushup-deficit",
   "source": {
    "url": "https://rpstrength.com/chest-training-tips-hypertrophy"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://hackmd.io/ntziN77XRjSn4ESlUGQ9CA.md"
   }
  },
  {
@@ -1644,6 +1692,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Dips_-_Chest_Version"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -1694,6 +1746,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Dumbbell_Flyes"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -1885,6 +1941,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Butterfly"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -1933,6 +1993,10 @@
   "source": {
    "db": "free-exercise-db",
    "id": "Cable_Crossover"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -2190,6 +2254,10 @@
   },
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
+  },
+  "nippard": {
+   "tier": "S",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -2234,6 +2302,10 @@
   },
   "source": {
    "url": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
+  },
+  "nippard": {
+   "tier": "A",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -2286,6 +2358,10 @@
    "db": "free-exercise-db",
    "id": "Svend_Press",
    "url2": "https://www.garagegymreviews.com/svend-press"
+  },
+  "nippard": {
+   "tier": "F",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  },
  {
@@ -2344,6 +2420,10 @@
   "source": {
    "url": "https://generationiron.com/dumbbell-squeeze-press-pecs/",
    "url2": "https://www.exercise.com/exercises/dumbbell-squeeze-press"
+  },
+  "nippard": {
+   "tier": "F",
+   "src": "https://barbend.com/news/jeff-nippard-ranks-chest-exercises-for-hypertrophy/"
   }
  }
 ]
