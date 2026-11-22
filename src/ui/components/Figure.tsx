@@ -18,11 +18,20 @@ const loop = (ms: number) => {
     registry.forEach((r, el) => {
       if (!r.visible) return;
       const svg = frameToSvg(poseFrame(r.spec, phase((ms - r.t0) * r.speed, r.timing)), r.dx);
-      if (svg !== r.svg) { r.svg = svg; el.innerHTML = svg; }
+      if (svg !== r.svg) { r.svg = svg; paint(el, svg); }
     });
   }
   raf = anyVisible() ? requestAnimationFrame(loop) : 0;
 };
+/** Draw a frame: when it has the same shapes as what's drawn (the usual case: only the points move), just change the
+ *  attributes that differ, so the browser doesn't parse and rebuild the drawing 30 times a second (Nov 22 2026). */
+const TAG = /<(\w+)((?:\s[\w-]+="[^"]*")*)\s*\/?>/g, ATTR = /([\w-]+)="([^"]*)"/g;
+function paint(el: SVGSVGElement, svg: string) {
+  const tags = [...svg.matchAll(TAG)].map((t) => ({ tag: t[1], attrs: [...t[2].matchAll(ATTR)] })), nodes = el.getElementsByTagName("*");
+  // Different shapes (or an attribute added or dropped): draw it whole
+  if (nodes.length !== tags.length || tags.some((t, i) => nodes[i].tagName !== t.tag || nodes[i].attributes.length !== t.attrs.length)) { el.innerHTML = svg; return; }
+  tags.forEach((t, i) => { for (const [, k, v] of t.attrs) if (nodes[i].getAttribute(k) !== v) nodes[i].setAttribute(k, v); });
+}
 const wake = () => { if (!raf && anyVisible()) raf = requestAnimationFrame(loop); };
 const io = typeof IntersectionObserver === "function"
   ? new IntersectionObserver((es) => { es.forEach((e) => { const r = registry.get(e.target as SVGSVGElement); if (r) r.visible = e.isIntersecting; }); wake(); }, { rootMargin: "80px" })

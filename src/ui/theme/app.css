@@ -147,15 +147,16 @@ ul { margin: 0; padding-left: 18px; }
 .tab[aria-current="page"] { color: var(--neon-ink); }
 .tab[aria-current="page"] svg { transform: translateY(-1px) scale(1.08); filter: drop-shadow(0 0 6px var(--glow)); }
 .tab[aria-current="page"]::after { content: ""; position: absolute; top: 1px; width: 18px; height: 3px; border-radius: 3px; background: var(--neon); box-shadow: 0 0 10px var(--glow); animation: tabDot 0.35s var(--ease); }
-@keyframes tabDot { from { width: 0; opacity: 0; } }
+@keyframes tabDot { from { transform: scaleX(0); opacity: 0; } }
 
 /* ---------- Bottom dock (CTA / rest timer / resume) above the tab bar ---------- */
 /* Soft fade under the floating tab bar and dock so content scrolling behind them doesn't clash. No blur; taller when the dock has something in it. */
 .bottom-fade { position: fixed; z-index: 24; left: 0; right: 0; bottom: 0; pointer-events: none;
-  height: calc(env(safe-area-inset-bottom) + var(--tabbar-h) + 44px);
+  height: calc(env(safe-area-inset-bottom) + var(--tabbar-h) + 110px); transform: translateY(66px);
   background: linear-gradient(to bottom, color-mix(in srgb, var(--bg) 0%, transparent), color-mix(in srgb, var(--bg) 78%, transparent) 55%, var(--bg));
-  transition: height 0.32s var(--ease); }
-body:has(.dock > *) .bottom-fade { height: calc(env(safe-area-inset-bottom) + var(--tabbar-h) + 110px); }
+  transition: transform 0.32s var(--ease); }
+/* Always the tall size, pushed 66 px down without a dock: it slides up (a transform: no relayout each frame) */
+body:has(.dock > *) .bottom-fade { transform: none; }
 .dock { position: fixed; z-index: 25; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom) + var(--tabbar-h) + 18px); transition: bottom 0.32s var(--ease); width: min(560px, calc(100% - 24px)); display: grid; gap: 8px; }
 .dock > * { animation: dockIn 0.4s var(--ease) both; }
 @keyframes dockIn { from { opacity: 0; transform: translateY(16px); } }
@@ -245,11 +246,12 @@ textarea.input { min-height: 84px; resize: vertical; }
 /* Loading run: air streaks behind the runner (its own svg; the figure redraws every frame), lighter blue, streaming left */
 .run-wrap { position: relative; }
 .run-air { position: absolute; left: -6px; top: 0; width: 60px; height: 100%; overflow: visible; pointer-events: none; }
-.run-air line { stroke: var(--neon-ink); stroke-width: 1.6; stroke-linecap: round; opacity: .5; stroke-dasharray: 12 36; animation: air-streak 1.4s linear infinite; filter: drop-shadow(0 0 3px var(--neon-ink)); }
+.run-air line { stroke: var(--neon-ink); stroke-width: 1.6; stroke-linecap: round; opacity: .5; stroke-dasharray: 14 60; animation: air-streak 1.4s linear infinite; filter: drop-shadow(0 0 3px var(--neon-ink)); }
 .run-air line:nth-child(2) { animation-duration: 1.8s; animation-delay: -.5s; opacity: .35; }
 .run-air line:nth-child(3) { animation-duration: 1.2s; animation-delay: -.9s; }
 .run-air line:nth-child(4) { animation-duration: 2s; animation-delay: -.3s; opacity: .3; }
-@keyframes air-streak { from { stroke-dashoffset: -48; } to { stroke-dashoffset: 0; } }
+/* Streaks slide and fade (transform and opacity only: cheap to animate) */
+@keyframes air-streak { from { transform: translateX(14px); opacity: 0; } 40% { opacity: .55; } to { transform: translateX(-22px); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .run-air line { animation: none; } }
 
 /* ---------- Volume bars and the target editor ---------- */
