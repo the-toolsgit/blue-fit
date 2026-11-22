@@ -221,8 +221,8 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
         check("reps", "High reps", repSlots.filter((s) => mid(s) >= 15).length * 2 >= repSlots.length ? [] : ["Most exercises under 15 reps"], "Most exercises 15+ reps (ACSM 2009)"),
         rest(null, ENDURANCE_REST)]
     : [volume(false), jobs, stretch, frequency, dose, recovery, ...reps, mix, tip(rest(GROWTH_REST, null))];
-  // No exercises yet: every check but Weekly volume has nothing to judge, so it waits (gray), never passes
-  const checks = slots.length ? checks0 : checks0.map((c) => (c.id === "volume" ? c : { ...c, pass: false, warn: undefined, pending: true, issues: [] }));
+  // No exercises yet: every check waits (gray), never passes; the map already shows each muscle at 0
+  const checks = slots.length ? checks0 : checks0.map((c) => ({ ...c, pass: false, warn: undefined, pending: true, issues: [] }));
 
   // Score: each part earns its share of points
   const share = (good: number, all: number) => (all ? good / all : 1);

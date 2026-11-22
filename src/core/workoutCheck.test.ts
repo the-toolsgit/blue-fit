@@ -18,17 +18,17 @@ describe("workout check", () => {
     expect(weekInsight(r, exMap, seed.targets, "strength").checks.map((c) => c.id)).toContain("heavy");
     expect(weekInsight(r, exMap, seed.targets, "endurance").checks.map((c) => c.id)).toContain("reps");
   });
-  it("an empty or thin plan still lists every focus muscle and fails weekly volume", () => {
+  it("an empty plan lists every focus muscle and its checks wait; a thin plan fails them", () => {
     const empty = { ...r, days: r.days.map((d) => ({ ...d, slots: [] })) };
     const w = weekInsight(empty, exMap, seed.targets);
     const focus = seed.targets.filter((t) => !t.off && t.min != null && t.min > 0);
     expect(w.tiles.length).toBe(focus.length);
     expect(w.tiles.every((t) => t.week === 0 && t.status === "below")).toBe(true);
-    expect(w.checks.find((c) => c.id === "volume")!.pass).toBe(false);
-    // Nothing else can pass with no exercises: the other checks wait (gray)
-    expect(w.checks.filter((c) => c.id !== "volume").every((c) => !c.pass && c.pending)).toBe(true);
+    // No exercises: every check waits (gray), none passes
+    expect(w.checks.every((c) => !c.pass && c.pending)).toBe(true);
     const absOnly = { ...r, days: r.days.map((d, i) => ({ ...d, slots: i ? [] : d.slots.slice(0, 1) })) };
     expect(weekInsight(absOnly, exMap, seed.targets).checks.every((c) => c.pass)).toBe(false);
+    expect(weekInsight(absOnly, exMap, seed.targets).checks.find((c) => c.id === "volume")!.pass).toBe(false);
     // A muscle the plan doesn't train misses its angles and stretch
     const thin = weekInsight(absOnly, exMap, seed.targets);
     expect(thin.checks.find((c) => c.id === "jobs")!.pass).toBe(false);
