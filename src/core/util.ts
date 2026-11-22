@@ -1,8 +1,13 @@
 // Small framework-free helpers.
-export const uid = (): string =>
-  typeof globalThis.crypto?.randomUUID === "function"
-    ? globalThis.crypto.randomUUID()
-    : Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+/** Random id. randomUUID only exists on https (not on the dev server over the local network), so the fallback puts
+ *  random characters first: callers use the first 8 (`uid().slice(0, 8)`), which must differ every call. */
+export const uid = (): string => {
+  if (typeof globalThis.crypto?.randomUUID === "function") return globalThis.crypto.randomUUID();
+  const r = new Uint32Array(2);
+  if (typeof globalThis.crypto?.getRandomValues === "function") globalThis.crypto.getRandomValues(r);
+  else { r[0] = Math.random() * 2 ** 32; r[1] = Math.random() * 2 ** 32; }
+  return r[0].toString(36).padStart(7, "0") + r[1].toString(36).padStart(7, "0") + Date.now().toString(36);
+};
 
 const pad = (n: number) => String(n).padStart(2, "0");
 /** Local calendar date YYYY-MM-DD */

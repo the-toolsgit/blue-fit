@@ -104,7 +104,9 @@ const isDirect = (ex: Exercise | undefined, g: MuscleGroup) => !!ex?.volume.some
  * goal at all. Without it, failure points are given in full.
  */
 export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targets: VolumeTarget[], goal: Goal = "growth",
-  failure?: { muscles: Set<MuscleGroup>; eligible: (ex: Exercise) => boolean; applies: boolean }): WeekInsight {
+  failure?: { muscles: Set<MuscleGroup>; eligible: (ex: Exercise) => boolean; applies: boolean },
+  /** Build my plan's polish runs this hundreds of times: skip the "try …" suggestions (they scan every exercise) */
+  opts?: { fast?: boolean }): WeekInsight {
   const days = routine.days.map((d) => ({ ...d, slots: d.slots.filter((s) => exMap.has(s.exerciseId)) })).filter((d) => d.slots.length);
   const slots = days.flatMap((d) => d.slots);
   const ex = (s: Slot) => exMap.get(s.exerciseId)!;
@@ -150,7 +152,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const jobs = check("jobs", "Every angle", focusAll.flatMap((g) => {
     const miss = (JOBS[g] ?? []).filter((j) => !jobsHit(g).has(j));
     if (!miss.length) return [];
-    const tries = miss.flatMap((j) => angleExamples(exMap, g, j, goal));
+    const tries = opts?.fast ? [] : miss.flatMap((j) => angleExamples(exMap, g, j, goal));
     return [`${L(g)}: no ${miss.join(", ")}${tries.length ? ` · try ${tries.slice(0, 2).join(" or ")}` : ""}`];
   }), "Every muscle trained in all its movements");
 

@@ -61,7 +61,10 @@ function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, fail }: {
 export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; onExit?: () => void; initialDayId?: string }) {
   const { routines, exMap, targets: currentTargets, settings, saveRoutine, saveSettings, toast, ensureSaved } = useStore();
   /** Build my plan's goal and eating answers: saved to the training profile with the plan, not before */
-  const [answers, setAnswers] = useState<{ goal: Goal; phase: Phase } | null>(null);
+  const [answers, setAnswers] = useState<{ goal: Goal; phase: Phase } | null>(() => {
+    try { const s = sessionStorage.getItem(draftKey(id ?? "") + "-answers"); if (s) return JSON.parse(s); } catch { /* ignore */ }
+    return null;
+  });
   const original = routines.find((r) => r.id === id);
   // This plan's own weekly targets (older plans without their own fall back to the app-wide list)
   const targets = targetsOf(original, currentTargets);
@@ -85,6 +88,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   useEffect(() => { if (!draft && original) setDraft(structuredClone(original)); }, [original, draft]);
   useEffect(() => { if (draft && id) try { sessionStorage.setItem(draftKey(id), JSON.stringify(draft)); } catch { /* ignore */ } }, [draft, id]);
   useEffect(() => { if (id) try { sessionStorage.setItem(draftKey(id) + "-targets", JSON.stringify(tdraft)); } catch { /* ignore */ } }, [tdraft, id]);
+  useEffect(() => { if (id && answers) try { sessionStorage.setItem(draftKey(id) + "-answers", JSON.stringify(answers)); } catch { /* ignore */ } }, [answers, id]);
   const weekFail = useWeekFailure(draft ?? undefined, tdraft);
   if (!draft || !original) return <div className="page"><div className="empty">Plan not found.</div></div>;
 
@@ -97,7 +101,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const slot = day?.slots.find((s) => s.id === slotOpen);
   const slotIdx = day?.slots.findIndex((s) => s.id === slotOpen) ?? -1;
 
-  const leave = () => { try { sessionStorage.removeItem(draftKey(id!)); sessionStorage.removeItem(draftKey(id!) + "-targets"); } catch { /* ignore */ } if (onExit) onExit(); else replace("plan"); };
+  const leave = () => { try { sessionStorage.removeItem(draftKey(id!)); sessionStorage.removeItem(draftKey(id!) + "-targets"); sessionStorage.removeItem(draftKey(id!) + "-answers"); } catch { /* ignore */ } if (onExit) onExit(); else replace("plan"); };
   const save = () => {
     if (issues.length) return toast({ kind: "error", title: "Can't save yet", body: issues[0].message });
     // Database exercises the plan uses get a full copy on the phone, so backups stay complete (§5.26)

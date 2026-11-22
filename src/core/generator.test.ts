@@ -150,5 +150,37 @@ describe("Build my plan: across settings", () => {
         }
       }
     }
+  }, 60_000);
+});
+
+describe("Build my plan: integrity", () => {
+  it("ids stay unique without crypto.randomUUID (the dev server over the local network is plain http)", async () => {
+    const real = globalThis.crypto.randomUUID;
+    // @ts-expect-error simulate a non-secure context
+    globalThis.crypto.randomUUID = undefined;
+    try {
+      const { uid } = await import("./util");
+      const ids8 = Array.from({ length: 500 }, () => uid().slice(0, 8));
+      expect(new Set(ids8).size).toBe(500);
+    } finally { globalThis.crypto.randomUUID = real; }
+  });
+
+  it("no slot on two days, no exercise twice, at most 11 exercises a day, across hard settings", () => {
+    for (const goal of ["growth", "strength", "endurance", "maintenance"] as const)
+      for (const [days, minutes, rest] of [[[1], 45, 180], [[1, 4], 60, 60], [[5, 6, 0], 75, 90], [[1, 3, 5], 75, 60], [[1, 2, 4, 5], 60, 180], [[0, 1, 2, 3, 4, 5, 6], 90, 120]] as [number[], number, number][])
+        for (const seed of [1, 2]) {
+          const p = generatePlan({ goal, trainDays: days, maxMinutes: minutes, targets: freshTargets(null, goal), exercises: cat.exercises, seed, restSec: rest });
+          const slots = p.flatMap((d) => d.slots), where = `${goal} ${days.join("")} ${minutes} ${rest} ${seed}`;
+          expect(new Set(slots).size, where).toBe(slots.length);
+          expect(new Set(slots.map((s) => s.id)).size, where).toBe(slots.length);
+          expect(new Set(slots.map((s) => s.exerciseId)).size, where).toBe(slots.length);
+          for (const d of p) expect(d.slots.length, where).toBeLessThanOrEqual(11);
+        }
+  }, 60_000);
+
+  it("the same answers and seed give the same plan (the check screen's preview is the plan you get)", () => {
+    const inp = { goal: "growth" as const, trainDays: [1, 2, 4, 5], maxMinutes: 60, targets, exercises: cat.exercises, seed: 3, restSec: 90 };
+    const sig = (d: RoutineDay[]) => JSON.stringify(d.map((x) => [x.title, x.slots.map((s) => [s.exerciseId, s.sets, s.repMin, s.repMax, s.restSec])]));
+    expect(sig(generatePlan(inp))).toBe(sig(generatePlan(inp)));
   });
 });

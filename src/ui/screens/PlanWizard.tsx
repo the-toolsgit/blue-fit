@@ -7,12 +7,12 @@ import { slotsMinutes } from "../../core/timeEstimate";
 import { uid } from "../../core/util";
 import { completeProfile, MUSCLE_GROUPS, muscleLabel, type Goal, type MuscleGroup, type Phase, type RoutineDay, type VolumeTarget } from "../../core/types";
 import { formatTarget, isFocus } from "../../core/volume";
-import { freshTargets, priorityOf, type Priority } from "../../core/volumeModel";
+import { defaultRange, priorityOf, type Priority } from "../../core/volumeModel";
 import { weekInsight } from "../../core/workoutCheck";
 import { useStore } from "../store";
 import { Icon } from "../components/Icon";
 import { MuscleMap } from "../components/MuscleMap";
-import { DELTS, shouldersTo, TargetEdit } from "../components/VolumeTable";
+import { DELTS, shouldersTo, TargetEdit, withPriority } from "../components/VolumeTable";
 import { Seg } from "../components/Controls";
 import { Splash } from "../components/Splash";
 import { ExercisePicker } from "../components/ExercisePicker";
@@ -83,11 +83,17 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const profile = useMemo(() => profileFor(goal, phase), [settings.profile, goal, phase]); // eslint-disable-line react-hooks/exhaustive-deps
   // Goal or eating changed and no target was edited yet: work them out again for those answers (the plan's own
   // targets stay until then). Changing the goal also puts the rest back to that goal's best.
-  const setGoal = (g: Goal) => { setGoalRaw(g); setRestPick(null); if (!touched) setTargets(freshTargets(profileFor(g, phase), g)); };
-  const setPhase = (p: Phase) => { setPhaseRaw(p); if (!touched) setTargets(freshTargets(profileFor(goal, p), goal)); };
+  // Each muscle keeps its Priority / Normal / Skip; only the ranges follow the new answers
+  const rerange = (g: Goal, p: Phase) => setTargets((ts) => ts.map((t) => {
+    const pr = priorityOf(t.group, t);
+    return pr === "off" ? t : withPriority(t, pr, defaultRange(t.group, profileFor(g, p), pr, g));
+  }));
+  const setGoal = (g: Goal) => { setGoalRaw(g); setRestPick(null); if (!touched) rerange(g, phase); };
+  const setPhase = (p: Phase) => { setPhaseRaw(p); if (!touched) rerange(goal, p); };
   useEffect(() => {
     if (!open) return;
     setStep("goal"); setBuilding(false); setResult(null); setTargets(initialTargets); setTouched(false); setRestPick(null); setSeed(1); setEdited(false);
+    setDays([1, 2, 3, 4, 6, 0]); setMinutes(75); setOpenRow(null); setSel(null); setHead(null); setDir("fwd");
     setGoalRaw(settings.profile?.goal ?? "growth"); setPhaseRaw(settings.profile?.phase ?? "maintaining");
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (!open) return; const prev = document.body.style.overflow; document.body.style.overflow = "hidden"; return () => { document.body.style.overflow = prev; }; }, [open]);
@@ -97,14 +103,23 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const avoid = useMemo(() => new Set(routine?.days.flatMap((d) => d.slots.map((s) => s.exerciseId)) ?? []), [routine]);
   // The check screen builds the plan quietly (same seed as the real build) and lists what it would still miss, so
   // "All good" only shows when the plan really passes
+  // Built after the screen shows (a few hundred ms on a phone), so the tap that opens it never freezes
+  const [previewPlan, setPreviewPlan] = useState<RoutineDay[] | null>(null);
+  useEffect(() => {
+    setPreviewPlan(null);
+    if (step !== "check") return;
+    const t = setTimeout(() => setPreviewPlan(generatePlan({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed, restSec })), 60);
+    return () => clearTimeout(t);
+  }, [step, goal, days, minutes, targets, exercises, avoid, seed, restSec]);
   const preview = useMemo(() => {
-    if (step !== "check" || conflicts.length) return [];
-    const p = generatePlan({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed, restSec });
-    const w = weekInsight({ id: "", name: "", isCurrent: false, createdAt: "", days: p }, exMap, targets, goal);
+    if (!previewPlan || conflicts.length) return [];
+    const w = weekInsight({ id: "", name: "", isCurrent: false, createdAt: "", days: previewPlan }, exMap, targets, goal);
     return [...new Set(w.checks.filter((c) => !c.pass && !c.warn).flatMap((c) => c.issues.map((x) => `${x.who}: ${x.what.split(" · ")[0]}`)))];
-  }, [step, conflicts.length, goal, days, minutes, targets, exercises, avoid, seed, restSec, exMap]);
+  }, [previewPlan, conflicts.length, exMap, targets, goal]);
   const build = (sd: number) => {
-    setResult(generatePlan({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed: sd, restSec }));
+    // The check screen already built this exact plan (same answers and seed): use it, don't build twice
+    const same = previewPlan && sd === seed;
+    setResult(same ? structuredClone(previewPlan) : generatePlan({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed: sd, restSec }));
     setSwaps({}); setOpenRow(null); setEdited(false);
   };
   const plan = useMemo(() => (result ? { id: "wizard", name: "", isCurrent: false, createdAt: "", days: result } : undefined), [result]);
@@ -272,7 +287,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
           </div>
         </Screen>);
       case "check": return (
-        <Screen eyebrow="Before we build" title={conflicts.length ? `${conflicts.length} thing${conflicts.length > 1 ? "s" : ""} to fix` : preview.length ? "Almost there" : "All good"}>
+        <Screen eyebrow="Before we build" title={conflicts.length ? `${conflicts.length} thing${conflicts.length > 1 ? "s" : ""} to fix` : !previewPlan ? "Checking…" : preview.length ? "Almost there" : "All good"}>
           {conflicts.length ? (
             <div className="wz-conflicts">
               {conflicts.map((c) => {
@@ -329,6 +344,8 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
               </div>
               <p className="muted" style={{ fontSize: 13 }}>You can build anyway: the plan gets as close as it can.</p>
             </div>
+          ) : !previewPlan ? (
+            <div className="wz-ok wz-checking"><Icon name="target" size={56} /><p>Building it once to check every rule…</p></div>
           ) : (
             <div className="wz-ok"><Icon name="check" size={56} /><p>Your days, time and targets fit together. Ready to build.</p></div>
           )}

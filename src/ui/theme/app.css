@@ -715,6 +715,10 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wz-ok { display: grid; justify-items: center; gap: 14px; padding: 40px 0; text-align: center; color: var(--good); }
 .wz-ok svg { filter: drop-shadow(0 0 12px var(--good)); }
 .wz-ok p { color: var(--muted); max-width: 280px; }
+.wz-checking { color: var(--neon-ink); }
+.wz-checking svg { filter: drop-shadow(0 0 12px var(--neon)); animation: wzPulse 1.2s ease-in-out infinite; }
+@keyframes wzPulse { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .wz-checking svg { animation: none; } }
 .wz-building { height: 100%; min-height: 60vh; display: grid; place-content: center; justify-items: center; gap: 10px; text-align: center; }
 .wz-building b { font: 800 30px var(--display); text-transform: uppercase; color: var(--neon-ink); text-shadow: 0 0 18px var(--neon); }
 .wz-plan { display: grid; gap: 8px; }

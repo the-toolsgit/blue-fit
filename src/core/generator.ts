@@ -91,6 +91,9 @@ export const MAX_EXERCISES = 10;
 /** Big muscles: each themed day that trains them opens with one of their compound lifts */
 const HEADLINE = new Set<MuscleGroup>(["back", "chest", "quads", "hamstrings"]);
 const FREE_WEIGHT = new Set(["barbell", "dumbbell", "bodyweight", "fixedBar"]);
+/** The big muscles a themed day is for: it should have a compound lift for each (full body: none required) */
+const headlinesOf = (th: Theme): MuscleGroup[] =>
+  th === "push" ? ["chest"] : th === "pull" ? ["back"] : th === "legs" || th === "lower" ? ["quads", "hamstrings"] : th === "upper" ? ["chest", "back"] : [];
 
 type Meta = { main: MuscleGroup };
 
@@ -119,9 +122,13 @@ export function chooseThemes(trainDays: number[], targets: VolumeTarget[]): Map<
   return best;
 }
 
+/** Pull-family muscles that also fit a Push day (*judgment*: common practice trains rear delts and traps with the
+ *  shoulders, forearms with the arms), so Push and Pull days can even out */
+const ALSO_PUSH = new Set<MuscleGroup>(["rearDelts", "traps", "forearms"]);
 /** Days whose theme trains this muscle (abs and neck: any day) */
-const allowedDaysFor = (g: MuscleGroup, trainDays: number[], themeOf: Map<number, Theme>) =>
-  trainDays.filter((d) => FAMILY[g] === "core" || THEME_FAMILIES[themeOf.get(d)!].includes(FAMILY[g]));
+export const allowedDaysFor = (g: MuscleGroup, trainDays: number[], themeOf: Map<number, Theme>) =>
+  trainDays.filter((d) => FAMILY[g] === "core" || THEME_FAMILIES[themeOf.get(d)!].includes(FAMILY[g])
+    || (ALSO_PUSH.has(g) && THEME_FAMILIES[themeOf.get(d)!].includes("push")));
 
 export function generatePlan(input: GenInput): RoutineDay[] {
   const rand = rng(input.seed ?? 1);
@@ -151,7 +158,9 @@ export function generatePlan(input: GenInput): RoutineDay[] {
   //    angle (2 when only that fits). Then, when the week can't hold it all in the time, cut Normal muscles toward
   //    their minimum first, then Priority ones, then everything evenly (never under 2 sets).
   const aim = new Map(focus.map((g) => [g, aimSets(tmap.get(g)!)]));
-  for (const g of focus) {
+  // Maintain has no Every angle check (minimums only): no room kept for angles there
+  const angleRule = input.goal !== "maintenance";
+  if (angleRule) for (const g of focus) {
     const J = JOBS[g]?.length ?? 1, t = tmap.get(g)!, max = t.max ?? Infinity;
     if (J > 1) aim.set(g, Math.max(aim.get(g)!, 3 * J <= max ? 3 * J : 2 * J <= max ? 2 * J : 0));
   }
@@ -159,6 +168,8 @@ export function generatePlan(input: GenInput): RoutineDay[] {
   const capSets = setsForMinutes(limit, input.goal === "strength" ? Math.max(restSec, (restSec + 180) / 2) : restSec);
   const room = Math.min(capSets, MAX_EXERCISES * 3.5) * n;
   const direct = () => [...aim.values()].reduce((a, b) => a + b, 0) * INDIRECT_SHARE;
+  /** The week was cut to fit the time: later steps don't add the cut sets back */
+  const squeezed = direct() > room;
   for (const tier of ["normal", "priority"] as const) {
     const excess = direct() / INDIRECT_SHARE - room / INDIRECT_SHARE;
     if (excess <= 0) break;
@@ -216,12 +227,15 @@ export function generatePlan(input: GenInput): RoutineDay[] {
     const openJobs = () => (JOBS[g] ?? []).filter((j) => !jobsHit.get(g)?.has(j)).length;
     let need = Math.max(0, Math.round(aim.get(g)! - (have.get(g) ?? 0)));
     // Angles still open need their own exercise even when half sets already cover the number (ceiling allowing)
-    const open0 = (JOBS[g]?.length ?? 1) > 1 ? openJobs() : 0;
+    const open0 = angleRule && (JOBS[g]?.length ?? 1) > 1 ? openJobs() : 0;
     const roomLeft = Math.max(0, (t.max ?? Infinity) - (have.get(g) ?? 0));
-    if (open0) need = Math.max(need, Math.min(Math.floor(roomLeft), 3 * open0));
+    // Short on time: 2 sets an angle, within the cut aim (step 2's cut stays)
+    if (open0) need = Math.max(need, squeezed ? Math.min(Math.floor(roomLeft), 2 * open0, aim.get(g)!) : Math.min(Math.floor(roomLeft), 3 * open0));
     if (need < 2) continue;
     // Workouts: enough to stay at or under 11 a workout; 2 when the week's total is over 11 (Twice a week)
-    const want = Math.max(sessionsFor(need, n), aim.get(g)! > MAX_SESSION_SETS && n >= 2 ? 2 : 1);
+    // A big muscle also gets every day whose theme is for it (Push for chest, Pull for back…), 3 sets a day at least
+    const themed = allowed.filter((d) => headlinesOf(themeOf.get(d)!).includes(g)).length;
+    const want = Math.max(sessionsFor(need, n), aim.get(g)! > MAX_SESSION_SETS && n >= 2 ? 2 : 1, Math.min(themed, Math.floor(need / 3)));
     const k = Math.min(fitSessions(allowed, g, want), Math.floor(need / 2) || 1);
     let best: number[] = allowed.slice(0, k), bestScore = -Infinity;
     for (const c of combos(allowed, k)) {
@@ -388,7 +402,7 @@ export function generatePlan(input: GenInput): RoutineDay[] {
       const okRest = (m: MuscleGroup) => restsEnough(train.filter((d) => directOn(d, m) >= HARD_SETS).map((d) => d.weekday!), m);
       const tryMove = (s: Slot, from: RoutineDay, to: RoutineDay) => {
         const ex = exMap.get(s.exerciseId)!;
-        if (to.slots.some((x) => x.exerciseId === s.exerciseId) || ex.volume.some((v) => doseOn(to, v.group) + s.sets * v.weight > MAX_SESSION_SETS)) return false;
+        if (!from.slots.includes(s) || to.slots.some((x) => x.exerciseId === s.exerciseId) || ex.volume.some((v) => doseOn(to, v.group) + s.sets * v.weight > MAX_SESSION_SETS)) return false;
         const groups = ex.volume.filter((v) => v.weight === 1).map((v) => v.group), before = groups.map(okRest);
         from.slots = from.slots.filter((x) => x !== s); to.slots = [...to.slots, s];
         if (groups.every((m, i) => !before[i] || okRest(m))) return true;
@@ -404,9 +418,11 @@ export function generatePlan(input: GenInput): RoutineDay[] {
             const og = meta.get(o.id)?.main;
             if (!og || og === g || !allowedDaysFor(og, trainDays, themeOf).includes(H.weekday!)) continue;
             if (HEADLINE.has(og) && exMap.get(o.exerciseId)?.compound) continue;
-            if (!tryMove(o, L, H)) continue;
-            if (fits(L, [s]) && tryMove(s, H, L) && slotsMinutes(H.slots) <= limit) { done = true; break; }
-            tryMove(o, H, L);
+            // Both days must stay within time and the exercise limit; anything else puts both back exactly as they were
+            const keepH = H.slots, keepL = L.slots;
+            if (tryMove(o, L, H) && tryMove(s, H, L) && slotsMinutes(H.slots) <= limit && slotsMinutes(L.slots) <= limit
+              && H.slots.length <= MAX_EXERCISES && L.slots.length <= MAX_EXERCISES) { done = true; break; }
+            H.slots = keepH; L.slots = keepL;
           }
           if (done) break;
         }
@@ -454,20 +470,25 @@ export function generatePlan(input: GenInput): RoutineDay[] {
   //     aimed at what the check still flags, the days over time and the 2-set exercises; each kept only when the whole
   //     plan gets better (misses first, then warnings, time, exercises per day, 2-set exercises, even days). Bounded,
   //     so it stays fast (about 300 tries).
+  // Names first, so the check tells the days apart while polishing ("Back: 12 sets on Pull A")
+  const nameDays = () => {
+    const count = new Map<string, number>();
+    for (const d of trainDays) count.set(themeOf.get(d)!, (count.get(themeOf.get(d)!) ?? 0) + 1);
+    const seen = new Map<string, number>();
+    for (const d of days) {
+      if (!d.slots.length || d.weekday == null || !themeOf.has(d.weekday)) { d.title = "Rest"; continue; }
+      const th = themeOf.get(d.weekday)!;
+      const i = seen.get(th) ?? 0; seen.set(th, i + 1);
+      d.title = THEME_NAME[th] + (count.get(th)! > 1 ? " " + "ABC"[i] : "");
+    }
+  };
+  nameDays();
   polish({ days, train, meta, exMap, pool, input, restSec, limit, themeOf, trainDays, rand });
   assignReps();
 
   // 9. Order within each day, then names from the split ("Push A", "Upper B", "Full body C"); a theme used once has no letter
   for (const d of train) d.slots.sort((a, b) => rank(exMap.get(a.exerciseId)!, meta.get(a.id)?.main ?? ORDER[0]) - rank(exMap.get(b.exerciseId)!, meta.get(b.id)?.main ?? ORDER[0]));
-  const count = new Map<string, number>();
-  for (const d of trainDays) count.set(themeOf.get(d)!, (count.get(themeOf.get(d)!) ?? 0) + 1);
-  const seen = new Map<string, number>();
-  for (const d of days) {
-    if (!d.slots.length) continue;
-    const th = themeOf.get(d.weekday!)!;
-    const i = seen.get(th) ?? 0; seen.set(th, i + 1);
-    d.title = THEME_NAME[th] + (count.get(th)! > 1 ? " " + "ABC"[i] : "");
-  }
+  nameDays();
   return days;
 }
 
@@ -480,20 +501,38 @@ function polish(c: { days: RoutineDay[]; train: RoutineDay[]; meta: Map<string, 
   const sumSets = (d: RoutineDay) => d.slots.reduce((a, s) => a + s.sets, 0);
   const label = new Map(MUSCLE_GROUPS.map((m) => [m.label, m.id]));
   const cost = () => {
-    const w = weekInsight(plan, exMap, input.targets, input.goal);
+    const w = weekInsight(plan, exMap, input.targets, input.goal, undefined, { fast: true });
     let k = 0;
     for (const ch of w.checks) if (!ch.pass) k += (ch.warn ? 150 : 1000) * Math.max(1, ch.issues.length);
     for (const d of train) {
-      k += 300 * Math.max(0, slotsMinutes(d.slots) - limit) + 600 * Math.max(0, d.slots.length - MAX_EXERCISES) + 4 * d.slots.filter((s) => s.sets < 3).length;
+      k += 500 * Math.max(0, slotsMinutes(d.slots) - limit) + 600 * Math.max(0, d.slots.length - MAX_EXERCISES) + 4 * d.slots.filter((s) => s.sets < 3).length;
     }
     const ss = train.map(sumSets);
-    k += 10 * Math.max(0, Math.max(...ss) - Math.min(...ss) - 2);
+    k += 25 * Math.max(0, Math.max(...ss) - Math.min(...ss) - 2);
+    // A coach's eye: two exercises for the same angle of a muscle on one day, or 3+ for one small muscle, is waste;
+    // a Push / Pull / Legs / Upper / Lower day without a compound for its big muscle is missing its point
+    for (const d of train) {
+      const byMain = new Map<MuscleGroup, Slot[]>();
+      for (const s of d.slots) { const g = meta.get(s.id)?.main; if (g) byMain.set(g, [...(byMain.get(g) ?? []), s]); }
+      for (const [g, xs] of byMain) {
+        const keys = xs.map((s) => [exMap.get(s.exerciseId)!.jobs?.[g]].flat().filter(Boolean).sort().join("+") || "one");
+        k += 40 * (keys.length - new Set(keys).size);
+        if (!HEADLINE.has(g) && xs.length >= 3) k += 40 * (xs.length - 2);
+      }
+      for (const g of headlinesOf(themeOf.get(d.weekday!)!)) {
+        if (!isFocus(tmap.get(g))) continue;
+        if (!d.slots.some((s) => meta.get(s.id)?.main === g && exMap.get(s.exerciseId)!.compound)) k += 300;
+      }
+    }
     return { k, w };
   };
   // Undo keeps the same slot objects (later tries hold references to them)
-  const snap = () => days.map((d) => d.slots.map((s) => [s, { ...s }] as const));
-  const restore = (x: (readonly [Slot, Slot])[][]) => days.forEach((d, i) => { d.slots = x[i].map(([ref, v]) => Object.assign(ref, v)); });
-  const allowed = (g: MuscleGroup) => trainDays.filter((d) => FAMILY[g] === "core" || THEME_FAMILIES[themeOf.get(d)!].includes(FAMILY[g])).map((wd) => days.find((d) => d.weekday === wd)!);
+  const snap = () => ({ slots: days.map((d) => d.slots.map((s) => [s, { ...s }] as const)), meta: new Map(meta) });
+  const restore = (x: ReturnType<typeof snap>) => {
+    days.forEach((d, i) => { d.slots = x.slots[i].map(([ref, v]) => Object.assign(ref, v)); });
+    meta.clear(); for (const [k, v] of x.meta) meta.set(k, v);
+  };
+  const allowed = (g: MuscleGroup) => allowedDaysFor(g, trainDays, themeOf).map((wd) => days.find((d) => d.weekday === wd)!);
   const isDirect = (e: Exercise, g: MuscleGroup) => e.volume.some((v) => v.group === g && v.weight === 1);
   const newSlot = (ex: Exercise, sets: number, g: MuscleGroup): Slot => {
     const s: Slot = { id: "slot-" + uid().slice(0, 8), exerciseId: ex.id, sets, ...repsFor(ex, input.goal, restSec) };
@@ -530,10 +569,12 @@ function polish(c: { days: RoutineDay[]; train: RoutineDay[]; meta: Map<string, 
         const mx = meta.get(x.id)?.main;
         if (!mx || mx === g) continue;
         const jx = jobsFor(exMap.get(x.exerciseId)!, mx);
-        const twin = days.flatMap((d) => d.slots).find((y) => y !== x && meta.get(y.id)?.main === mx && y.sets < 4 && jx.every((j) => jobsFor(exMap.get(y.exerciseId)!, mx).includes(j))
-          && (!exMap.get(x.exerciseId)!.stretch?.includes(mx) || exMap.get(y.exerciseId)!.stretch?.includes(mx)));
+        const sib = days.flatMap((d) => d.slots).filter((y) => y !== x && meta.get(y.id)?.main === mx && y.sets < 4);
+        // The same angle first; else any exercise of that muscle (the check then judges the lost angle)
+        const twin = sib.find((y) => jx.every((j) => jobsFor(exMap.get(y.exerciseId)!, mx).includes(j))
+          && (!exMap.get(x.exerciseId)!.stretch?.includes(mx) || exMap.get(y.exerciseId)!.stretch?.includes(mx))) ?? sib[0];
         if (!twin || !cands[0]) continue;
-        for (const e of cands.slice(0, 2)) moves.push(() => { twin.sets = Math.min(4, twin.sets + x.sets); L.slots = [...L.slots.filter((z) => z !== x), newSlot(e, 3, g)]; });
+        for (const e of cands.slice(0, 2)) for (const n of [3, 2]) moves.push(() => { twin.sets = Math.min(4, twin.sets + x.sets); L.slots = [...L.slots.filter((z) => z !== x), newSlot(e, n, g)]; });
       }
     }
     for (const d of late) for (const s of d.slots) {
@@ -542,9 +583,39 @@ function polish(c: { days: RoutineDay[]; train: RoutineDay[]; meta: Map<string, 
       if (g) for (const L of allowed(g)) if (L !== d && L.slots.length < MAX_EXERCISES && !L.slots.some((x) => x.exerciseId === s.exerciseId)) moves.push(() => { d.slots = d.slots.filter((x) => x !== s); L.slots = [...L.slots, s]; });
     }
     for (const { s } of twos.slice(0, 4)) moves.push(() => { s.sets++; });
-    // Even days: exercises from the busiest day to lighter ones
-    const H = [...train].sort((a, b) => sumSets(b) - sumSets(a))[0];
-    if (H) for (const s of [...H.slots].sort((a, b) => a.sets - b.sets)) {
+    // Same-day trade: a set from a muscle above its minimum to a short one (time stays the same)
+    const vol = new Map(planVolume(plan, exMap).map((v) => [v.group, v.sets]));
+    const spare = (o: Slot) => o.sets > 2 && exMap.get(o.exerciseId)!.volume.every((v) => { const t = tmap.get(v.group); return !isFocus(t) || (vol.get(v.group) ?? 0) - v.weight >= t!.min!; });
+    for (const g of P) for (const d of train) for (const s of d.slots.filter((x) => meta.get(x.id)?.main === g && x.sets < 4))
+      for (const o of d.slots.filter((x) => x !== s && spare(x)).slice(0, 4)) moves.push(() => { s.sets++; o.sets--; });
+    // Fold an exercise that repeats an angle on the same day into its twin
+    for (const d of train) for (const x of d.slots) {
+      const g = meta.get(x.id)?.main;
+      if (!g) continue;
+      const key = (y: Slot) => [exMap.get(y.exerciseId)!.jobs?.[g]].flat().filter(Boolean).sort().join("+");
+      const twin = d.slots.find((y) => y !== x && meta.get(y.id)?.main === g && key(y) === key(x) && y.sets < 4);
+      if (twin) moves.push(() => { twin.sets = Math.min(4, twin.sets + x.sets); d.slots = d.slots.filter((z) => z !== x); });
+      // …or spread the repeats: one of them to another day that trains the muscle
+      const many = d.slots.filter((y) => meta.get(y.id)?.main === g).length >= 3;
+      if (twin || many) for (const L of allowed(g)) if (L !== d && L.slots.length < MAX_EXERCISES && !L.slots.some((z) => z.exerciseId === x.exerciseId))
+        moves.push(() => { d.slots = d.slots.filter((z) => z !== x); L.slots = [...L.slots, x]; });
+    }
+    // A themed day without its big muscle's compound: bring one from another day, or add one
+    for (const d of train) for (const g of headlinesOf(themeOf.get(d.weekday!)!)) {
+      if (!isFocus(tmap.get(g)) || d.slots.some((s) => meta.get(s.id)?.main === g && exMap.get(s.exerciseId)!.compound)) continue;
+      for (const o of train) if (o !== d) for (const s of o.slots.filter((x) => meta.get(x.id)?.main === g && exMap.get(x.exerciseId)!.compound))
+        if (!d.slots.some((x) => x.exerciseId === s.exerciseId)) moves.push(() => { o.slots = o.slots.filter((x) => x !== s); d.slots = [...d.slots, s]; });
+      const comp = pool.filter((e) => e.compound && isDirect(e, g) && !used.has(e.id)).sort((a, b) => (isTopPick(b, input.goal) ? 1 : 0) - (isTopPick(a, input.goal) ? 1 : 0))[0];
+      if (comp) {
+        moves.push(() => { d.slots = [...d.slots, newSlot(comp, 3, g)]; });
+        // or in place of an isolation exercise for that muscle there
+        for (const x of d.slots.filter((y) => meta.get(y.id)?.main === g)) moves.push(() => { x.exerciseId = comp.id; Object.assign(x, repsFor(comp, input.goal, restSec)); });
+      }
+    }
+    // A day over time with every exercise at 2 sets: drop a whole exercise
+    for (const d of late) if (d.slots.every((x) => x.sets <= 2)) for (const x of d.slots) moves.push(() => { d.slots = d.slots.filter((z) => z !== x); });
+    // Even days: exercises from the busier days to lighter ones
+    for (const H of [...train].sort((a, b) => sumSets(b) - sumSets(a)).slice(0, 3)) for (const s of [...H.slots].sort((a, b) => a.sets - b.sets)) {
       const g = meta.get(s.id)?.main;
       if (g) for (const L of allowed(g)) if (L !== H && L.slots.length < MAX_EXERCISES && sumSets(L) + s.sets < sumSets(H) && !L.slots.some((x) => x.exerciseId === s.exerciseId)) moves.push(() => { H.slots = H.slots.filter((x) => x !== s); L.slots = [...L.slots, s]; });
     }
@@ -637,12 +708,19 @@ export function planConflicts(input: Pick<GenInput, "trainDays" | "maxMinutes" |
       fix: { label: `Set ${M} to ${Math.min(t.min!, 2 * J)}–${2 * J}`, targets: [{ ...t, max: 2 * J }] }, edit: { kind: "target", group: t.group } });
   }
   // Time: the week's sets spread over the days (indirect sets cover part of the work)
-  const weekSets = focus.reduce((a, t) => a + aimSets(t), 0) * INDIRECT_SHARE;
-  const perDay = Math.ceil(weekSets / n), minutes = estimateMinutes(perDay, Math.ceil(perDay / 3.5), restSec);
+  // Same sizing as the builder: angles get 3 sets each where the ceiling allows (not for maintain), and for strength
+  // ★ lifts rest 3 min (about half the sets)
+  const aimOf = (t: VolumeTarget) => {
+    const J = JOBS[t.group]?.length ?? 1, a = aimSets(t), max = t.max ?? Infinity;
+    return input.goal === "maintenance" || J < 2 ? a : Math.max(a, 3 * J <= max ? 3 * J : 2 * J <= max ? 2 * J : 0);
+  };
+  const restEff = input.goal === "strength" ? Math.max(restSec, (restSec + 180) / 2) : restSec;
+  const weekSets = focus.reduce((a, t) => a + aimOf(t), 0) * INDIRECT_SHARE;
+  const perDay = Math.ceil(weekSets / n), minutes = estimateMinutes(perDay, Math.ceil(perDay / 3.5), restEff);
   if (minutes > input.maxMinutes + LENGTH_BUFFER) {
     const next = [45, 60, 75, 90, 120].find((m) => m >= minutes);
     // More than one rest day: training more days spreads the same sets over shorter workouts (Leo, Nov 21 2026)
-    const minsFor = (k: number) => { const p = Math.ceil(weekSets / k); return estimateMinutes(p, Math.ceil(p / 3.5), restSec); };
+    const minsFor = (k: number) => { const p = Math.ceil(weekSets / k); return estimateMinutes(p, Math.ceil(p / 3.5), restEff); };
     const more = 7 - n >= 2 ? [n + 1, n + 2, n + 3, n + 4, n + 5].filter((k) => k <= 6).find((k) => minsFor(k) <= input.maxMinutes + LENGTH_BUFFER) : undefined;
     const k = more ?? Math.min(6, n + 2);
     out.push({ id: "time", text: `About ${minutes} min a workout to hit every target, over your ${input.maxMinutes} min.${!next && 7 - n < 2 ? " Lower some targets." : ""}`,
