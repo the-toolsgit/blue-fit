@@ -233,7 +233,7 @@ export const TEMPLATES: Record<string, Template> = {
   "neck-extension": T({ base: { hx: 44, hy: 81, t: 90, th: -92.4, sh: 0 }, A: { hn: 45 }, B: { hn: -10 }, props: [{ line: [30, 88, 78, 88] }, { line: [62, 88, 62, 104] }, { hold: "head", kd: 180 }] }, { joint: "head", dir: "up" }, "none"),
 
   // ── Added for the writers' poor fits (phase 2) ──
-  "lateral-raise-lean-in": T({ v: "f", base: { cx: 52, la: 0, sa: 0, hw: 1.5, rot: -14, L: { ua: 50, fa: 50 } }, A: { ua: -8, fa: -8 }, B: { ua: 92, fa: 92 }, props: [{ line: [12, -14, 12, 104] }, { line: [6, 104, 18, 104] }] }, { joint: "haR", dir: "up" }, "db"),
+  "lateral-raise-lean-in": T({ v: "f", base: { cx: 52, la: 0, sa: 0, hw: 1.5, rot: -14, L: { ua: 29, fa: 29 } }, A: { ua: -8, fa: -8 }, B: { ua: 92, fa: 92 }, props: [{ line: [12, -14, 12, 104] }, { line: [6, 104, 18, 104] }] }, { joint: "haR", dir: "up" }, "db"),
   // Side-lying lateral raise (front view turned on its side, on a bench): the top arm from across the belly up to the ceiling
   "lateral-raise-lying": T({ v: "f", base: { rot: -90, cx: 106, lift: 28, la: 3, sa: 2, L: { ua: 178, fa: 178, al: 0.6, fl: 0.6 } }, A: { ua: -50, fa: -40, al: 0.55, fl: 0.55 }, B: { ua: 90, fa: 90, al: 1, fl: 1 }, props: [{ line: [10, 80, 112, 80] }, { line: [18, 80, 18, 104] }, { line: [104, 80, 104, 104] }, { db: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
   "landmine-press": T({ base: { t: 10 }, A: { ua: -20, fa: 160 }, B: { ua: 130, fa: 130 }, props: [{ rod: [110, 104], to: "ha" }] }, { joint: "ha", dir: "up" }, "none"),
@@ -257,7 +257,7 @@ export const TEMPLATES: Record<string, Template> = {
 
   // ── Added by the review fixes (phase 2) ──
   // Lean-in cable raise: post and low pulley on the working side, body leaning toward the free hand's post
-  "lateral-raise-lean-in-cable": T({ v: "f", base: { cx: 52, la: 0, sa: 0, hw: 1.5, rot: -14, L: { ua: 50, fa: 50 } }, A: { ua: -20, fa: -22 }, B: { ua: 92, fa: 92 }, props: [{ line: [12, -14, 12, 104] }, { line: [6, 104, 18, 104] }, { cable: [12, 96], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
+  "lateral-raise-lean-in-cable": T({ v: "f", base: { cx: 52, la: 0, sa: 0, hw: 1.5, rot: -14, L: { ua: 29, fa: 29 } }, A: { ua: -20, fa: -22 }, B: { ua: 92, fa: 92 }, props: [{ line: [12, -14, 12, 104] }, { line: [6, 104, 18, 104] }, { cable: [12, 96], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
   // Lying fly (flat bench): arms up over the chest, then open wide (side view: the arms drop and shorten as they go out)
   "fly-lying": { ...T({ base: { hx: 70, hy: 72, t: -90, th: 70, sh: 0 }, A: { ua: 180, fa: 180, al: 1, fl: 1 }, B: { ua: 190, fa: 205, al: 0.3, fl: 0.45 }, props: [{ line: [28, 80, 82, 80] }, { line: [44, 80, 44, 104] }, { db: "ha" }] }, { joint: "ha", dir: "down" }, "none", [30, 104]), post: false },
   // Standing front raise all the way overhead

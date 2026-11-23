@@ -7,6 +7,7 @@ import figureAudit from "./seed/figure-audit.json";
 import figureMachines from "./seed/figure-machines.json";
 import formTempoWas from "./seed/form-tempo-was.json";
 import exerciseSeed from "./seed/exercises.json";
+import { buildFigure } from "./figure/templates";
 import exerciseJobs from "./seed/exercise-jobs.json";
 import extraExercises from "./seed/extra-exercises.json";
 import textWas from "./seed/text-review-was.json";
@@ -708,6 +709,14 @@ export const MIGRATIONS: Migration[] = [
       });
       return changed ? { ...d, exercises } : null;
     },
+  },
+  {
+    // Nov 23 2026: lean-in lateral raises hold the post (the free hand reached past it).
+    id: "2026-11-23-lean-in-hand-on-post",
+    run: (d) => replaceAppFigures(d, {
+      "lean-in-dumbbell-lateral-raise": { was: ["1tjrmnw"], figure: buildFigure("lateral-raise-lean-in") as Exercise["figure"] },
+      "lean-in-lateral-raise": { was: ["1i3vp5m"], figure: buildFigure("lateral-raise-lean-in-cable") as Exercise["figure"] },
+    }),
   },
 ];
 
