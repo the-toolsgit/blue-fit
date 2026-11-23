@@ -51,6 +51,10 @@ describe("time estimate", () => {
 describe("plates (standard gym plates, unlimited)", () => {
   it("heaviest first, as many as needed", () => {
     expect(platesFor(70).plates).toEqual([45, 25]);
+    // Fewest plates, not heaviest first (Leo, Nov 23 2026)
+    expect(platesFor(60).plates).toEqual([35, 25]);
+    expect(platesFor(80).plates).toEqual([45, 35]);
+    expect(platesFor(50).plates.length).toBe(2);
     expect(platesFor(137.5).plates).toEqual([45, 45, 45, 2.5]);
     expect(platesFor(405).plates).toEqual(Array(9).fill(45));
     expect(platesFor(0).plates).toEqual([]);

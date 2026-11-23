@@ -311,7 +311,7 @@ After a set is marked done (auto-start on, entry rest > 0): start a timer for th
 Build my plan (Nov 21 2026) uses the rest the user picked instead of 2 min, and **Your plan** times each day from its exercises' own rests (`slotsMinutes`: each set's rest except the last, 2 min when an exercise has none). Since Nov 22 2026 Today, the Plan tab, the plan editor and the plan's ~min fact use `slotsMinutes` too, so every screen shows the same time.
 
 ### 5.9 Plate math
-Input: the weight for one sleeve (per-side weight, or the whole weight for a single sleeve). Standard gym plates 45, 35, 25, 10, 5, 2.5 lb, as many as needed; greedy from the heaviest. Output: plates grouped with counts, and any remainder ("+1 lb can't be loaded with standard plates"). No plate setting (`settings.plates` is unused, kept for older backups).
+Input: the weight for one sleeve (per-side weight, or the whole weight for a single sleeve). Standard gym plates 45, 35, 25, 10, 5, 2.5 lb, as many as needed; the **fewest plates** that make the weight (Leo, Nov 23 2026: 60 = 35 + 25, not 45 + 10 + 5), ties going to the heavier plates; a weight they can't make loads the most they can under it. Output: plates grouped with counts, and any remainder ("+1 lb can't be loaded with standard plates"). No plate setting (`settings.plates` is unused, kept for older backups).
 
 ### 5.10 Today's day
 Today's weekday (local time) → the current routine's day with that weekday. Missing or empty day → rest day. The user can preview any weekday and start it.
