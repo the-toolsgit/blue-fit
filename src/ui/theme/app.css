@@ -577,6 +577,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wm-ex li { display: flex; gap: 8px; align-items: baseline; font-size: 14px; }
 .wm-ex li .mono { font-size: 12px; }
 .wm-ex-ind li { color: var(--muted); font-size: 13px; }
+.wm-ex li.half { color: var(--muted); }
+.wm-half { margin-left: 8px; padding: 1px 6px; border: 1px solid var(--line-strong); border-radius: 999px; font: 600 10px var(--body); letter-spacing: .04em; color: var(--neon-ink); vertical-align: 1px; white-space: nowrap; }
 .wm-ex-none { margin: 0; font-size: 13px; color: var(--muted); }
 
 /* Plan tab: Plans menu dropping down under the header row */

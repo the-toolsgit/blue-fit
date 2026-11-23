@@ -164,6 +164,12 @@ describe("exercises per muscle", () => {
     expect(exercisesFor(r, exMap, "adductors").parts).toEqual([]);
     expect(exercisesFor(r, exMap, "adductors").other.length).toBeGreaterThan(0);
   });
+  it("a ½-credit exercise shows under the part it trains (it counts for Every angle), not only as indirect", async () => {
+    const { exercisesFor } = await import("./workoutCheck");
+    const t = exercisesFor(r, exMap, "traps");
+    expect(t.parts.find((p) => p.job === "mid/lower")!.exercises.find((x) => x.exerciseId === "rope-face-pull")?.half).toBe(true);
+    expect(t.indirect.map((x) => x.exerciseId)).not.toContain("rope-face-pull");
+  });
 });
 
 describe("muscle database and the muscle map", () => {

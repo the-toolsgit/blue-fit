@@ -255,9 +255,10 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
 }
 
 /** One exercise of the routine as it works a muscle: where and how much */
-export interface MuscleExercise { exerciseId: string; name: string; days: string[]; sets: number }
-/** The routine's exercises for one muscle, grouped by the part (job) they train; `other` = direct work with no job
- *  tag, `indirect` = exercises that work it at ½ (e.g. rows for biceps). Pure. */
+export interface MuscleExercise { exerciseId: string; name: string; days: string[]; sets: number; half?: boolean }
+/** The routine's exercises for one muscle, grouped by the part (job) they train (½-credit ones too, marked `half`,
+ *  since they count for the Every angle check); `other` = direct work with no job tag, `indirect` = the ½-credit
+ *  exercises not listed under a part (e.g. rows for biceps). Pure. */
 export function exercisesFor(routine: Routine, exMap: Map<string, Exercise>, g: MuscleGroup): { parts: { job: string; exercises: MuscleExercise[] }[]; other: MuscleExercise[]; indirect: MuscleExercise[] } {
   const found = new Map<string, MuscleExercise & { weight: number }>();
   for (const d of routine.days) for (const s of d.slots) {
@@ -271,10 +272,14 @@ export function exercisesFor(routine: Routine, exMap: Map<string, Exercise>, g: 
   const jobsOf = (id: string) => { const j = exMap.get(id)?.jobs?.[g]; return j == null ? [] : Array.isArray(j) ? j : [j]; };
   const all = [...found.values()];
   const strip = ({ weight: _w, ...x }: MuscleExercise & { weight: number }) => x;
-  const parts = (JOBS[g] ?? []).map((job) => ({ job, exercises: all.filter((x) => x.weight === 1 && jobsOf(x.exerciseId).includes(job)).map(strip) }));
+  const multi = (JOBS[g] ?? []).length > 1;
+  const inPart = (x: { exerciseId: string }) => multi && jobsOf(x.exerciseId).some((j) => (JOBS[g] ?? []).includes(j));
+  // Direct work first, then the ½ ones
+  const parts = (JOBS[g] ?? []).map((job) => ({ job, exercises: [...all.filter((x) => x.weight === 1), ...all.filter((x) => x.weight < 1)]
+    .filter((x) => jobsOf(x.exerciseId).includes(job)).map((x) => (x.weight < 1 ? { ...strip(x), half: true } : strip(x))) }));
   return {
-    parts: parts.length > 1 ? parts : [],
-    other: all.filter((x) => x.weight === 1 && (parts.length < 2 || !jobsOf(x.exerciseId).some((j) => (JOBS[g] ?? []).includes(j)))).map(strip),
-    indirect: all.filter((x) => x.weight < 1).map(strip),
+    parts: multi ? parts : [],
+    other: all.filter((x) => x.weight === 1 && !inPart(x)).map(strip),
+    indirect: all.filter((x) => x.weight < 1 && !inPart(x)).map(strip),
   };
 }

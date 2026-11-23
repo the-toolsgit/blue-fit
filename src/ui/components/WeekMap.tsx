@@ -212,8 +212,8 @@ function MuscleDetail({ g, t, edit }: { g: MuscleGroup; t: Tile | undefined; edi
 function MuscleExercises({ g, routine, exMap, t }: { g: MuscleGroup; routine: Routine; exMap: Map<string, Exercise>; t: Tile | undefined }) {
   const x = exercisesFor(routine, exMap, g);
   const focus = !!t && t.status !== "off";
-  const line = (e: { exerciseId: string; name: string; sets: number; days: string[] }) => (
-    <li key={e.exerciseId}><span className="grow">{e.name}</span><span className="mono muted">{fmtNum(e.sets)} sets</span></li>
+  const line = (e: { exerciseId: string; name: string; sets: number; days: string[]; half?: boolean }) => (
+    <li key={e.exerciseId} className={e.half ? "half" : undefined}><span className="grow">{e.name}{e.half && <span className="wm-half">counts ½</span>}</span><span className="mono muted">{fmtNum(e.sets)} sets</span></li>
   );
   return (
     <div className="wm-ex">
