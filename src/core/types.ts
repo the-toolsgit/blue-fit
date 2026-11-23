@@ -115,6 +115,29 @@ export interface Routine {
   days: RoutineDay[];
   /** This plan's weekly set targets per muscle (Nov 21 2026: per plan; before, one list for the whole app) */
   targets?: VolumeTarget[];
+  /** How Build my plan made it (Nov 23 2026), so a reported plan can be rebuilt exactly; absent for hand-made plans */
+  build?: PlanBuild;
+}
+
+/** Build my plan's inputs and its untouched output. Rebuilding with the same inputs (and the same exercise library)
+ *  gives `built` again; any difference between `built` and the saved days is an edit made after the build. */
+export interface PlanBuild {
+  /** App version that built it */
+  version: string;
+  /** When it was built (ISO) */
+  at: string;
+  goal: Goal;
+  phase?: string;
+  trainDays: number[];
+  maxMinutes: number;
+  restSec: number;
+  seed: number;
+  /** The exercises the builder was asked to avoid (the plan that was current then) */
+  avoid: string[];
+  /** The targets it was built for */
+  targets: VolumeTarget[];
+  /** The plan exactly as built, before any swap, removal or addition: per day, [exerciseId, sets] */
+  built: { weekday: number | null; title: string; slots: [string, number][] }[];
 }
 
 export interface VolumeTarget {

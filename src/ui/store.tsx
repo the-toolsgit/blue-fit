@@ -9,7 +9,7 @@ import { IdbAdapter } from "../storage/idbAdapter";
 import { mergeCatalog } from "../core/catalog";
 import { targetsOf } from "../core/volumeModel";
 
-export type Toast = { id: number; kind: "info" | "pr" | "error"; title: string; body?: string; leaving?: boolean;
+export type Toast = { id: number; kind: "info" | "pr" | "error" | "warn"; title: string; body?: string; leaving?: boolean;
   /** A button on the toast (e.g. Undo); tapping it runs `run` and closes the toast */
   action?: { label: string; run: () => void } };
 /** How long a toast takes to slide back up before it is removed (matches .toast.out in app.css). */
@@ -75,7 +75,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const toast = useCallback((t: Omit<Toast, "id">) => {
     const id = ++toastId.current;
     setToasts((x) => [...x.slice(-2), { ...t, id }]);
-    setTimeout(() => dismiss(id), t.action ? 5000 : t.kind === "pr" ? 4200 : 3200);
+    setTimeout(() => dismiss(id), t.action ? 5000 : t.kind === "warn" ? 7000 : t.kind === "pr" ? 4200 : 3200);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // Slide up, then remove

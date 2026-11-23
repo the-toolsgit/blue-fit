@@ -188,6 +188,7 @@ body:has(.dock > *) .bottom-fade { transform: none; }
 .toast.pr { border-color: color-mix(in srgb, var(--pink) 60%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--pink) 25%, transparent), 0 16px 50px -10px var(--pink-glow); }
 .toast-act { min-height: 40px; padding: 0 14px; flex: none; color: var(--neon-ink); }
 .toast.error { border-color: color-mix(in srgb, var(--bad) 60%, transparent); }
+.toast.warn { border-color: color-mix(in srgb, var(--warn) 60%, transparent); }
 @keyframes toastIn { from { opacity: 0; transform: translateY(-16px); } }
 @keyframes toastOut { to { transform: translateY(calc(-100% - env(safe-area-inset-top) - 24px)); } }
 .spark { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: var(--pink); box-shadow: 0 0 8px var(--pink); animation: spark 0.9s var(--ease) forwards; }

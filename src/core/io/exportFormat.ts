@@ -34,6 +34,12 @@ export const routineSchema = z.object({
   id: str.min(1), name: str.min(1), isCurrent: z.boolean(), createdAt: str, rules: z.array(z.object({ title: str, text: str })).optional(),
   days: z.array(z.object({ id: str.min(1), weekday: z.number().int().min(0).max(6).nullable(), title: str, slots: z.array(slotSchema) })),
   targets: z.array(targetSchema).optional(),
+  // How Build my plan made it (Nov 23 2026)
+  build: z.object({
+    version: str, at: str, goal: z.enum(["growth", "strength", "endurance", "maintenance"]), phase: str.optional(),
+    trainDays: z.array(z.number().int()), maxMinutes: z.number(), restSec: z.number(), seed: z.number(), avoid: z.array(str),
+    targets: z.array(targetSchema), built: z.array(z.object({ weekday: z.number().int().nullable(), title: str, slots: z.array(z.tuple([str, z.number()])) })),
+  }).optional(),
 });
 const setSchema = z.object({
   id: str.min(1), type: z.enum(["warmup", "working", "drop", "failure"]),

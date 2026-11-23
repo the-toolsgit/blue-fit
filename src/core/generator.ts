@@ -552,6 +552,111 @@ export function generatePlan(input: GenInput): RoutineDay[] {
     }
     if (fits(d, [{ sets: 2, restSec: restOf(ex) }])) add(d, ex, 2, g);
   }
+  // 8d. Ceilings are a rule (Leo, Nov 23 2026: a built plan was above a target): whatever the steps above left, a muscle
+  //     over its ceiling loses sets until it's back in, only where every muscle of that exercise stays at or above its
+  //     minimum and no angle or stretch is lost. In order: a set off its own exercises (most sets first, down to 2),
+  //     then off the exercises that give it half sets, then a whole exercise. True when every ceiling holds.
+  const all = () => days.flatMap((d) => d.slots);
+  /** Every focus muscle of this exercise keeps its minimum without `by` of its sets; its angles and stretches stay */
+  const safe = (x: Slot, by: number) => {
+    const ex = exMap.get(x.exerciseId)!, vol = volNow();
+    if (!ex.volume.every((v) => { const t = tmap.get(v.group); return !isFocus(t) || (vol.get(v.group) ?? 0) - v.weight * by >= (t!.min ?? 0) - 1e-9; })) return false;
+    const after = all().map((y) => (y === x ? { ...y, sets: y.sets - by } : y)).filter((y) => y.sets > 0);
+    return ex.volume.every((v) => {
+      if (!isFocus(tmap.get(v.group))) return true;
+      // Angles only matter for muscles with more than one (the Every angle rule); a stretch always
+      const multi = (JOBS[v.group] ?? []).length > 1;
+      const before = multi ? anglesCovered(all(), exMap, v.group) : new Set<string>(), now = multi ? anglesCovered(after, exMap, v.group) : new Set<string>();
+      const stretchLost = by === x.sets && ex.stretch?.includes(v.group) && !after.some((y) => exMap.get(y.exerciseId)!.stretch?.includes(v.group));
+      return [...before].every((j) => now.has(j)) && !stretchLost;
+    });
+  };
+  const fixCeilings = (): boolean => {
+    for (let guard = 0; guard < 200; guard++) {
+      const vol = volNow();
+      const over = focus.filter((g) => { const t = tmap.get(g)!; return t.max != null && (vol.get(g) ?? 0) > t.max + 1e-9; })
+        .sort((a, b) => ((vol.get(b) ?? 0) - tmap.get(b)!.max!) - ((vol.get(a) ?? 0) - tmap.get(a)!.max!));
+      if (!over.length) break;
+      let done = false;
+      for (const g of over) {
+        const w = (x: Slot) => exMap.get(x.exerciseId)!.volume.find((v) => v.group === g)?.weight ?? 0;
+        const own = all().filter((x) => w(x) === 1).sort((a, b) => b.sets - a.sets);
+        const half = all().filter((x) => w(x) > 0 && w(x) < 1).sort((a, b) => b.sets - a.sets);
+        const x = own.find((y) => y.sets > 2 && safe(y, 1)) ?? half.find((y) => y.sets > 2 && safe(y, 1));
+        if (x) { x.sets--; done = true; break; }
+        const drop = [...own, ...half].find((y) => safe(y, y.sets));
+        if (drop) { for (const d of days) d.slots = d.slots.filter((y) => y !== drop); done = true; break; }
+      }
+      if (!done) break;
+    }
+    const vol = volNow();
+    return focus.every((g) => { const t = tmap.get(g)!; return t.max == null || (vol.get(g) ?? 0) <= t.max + 1e-9; });
+  };
+  // 8e. Every angle (not for maintain): an angle still not trained enough gets a 2-set exercise of its own on one of
+  //     the muscle's days with room, then 8d makes room under the ceilings; kept only when every ceiling holds and
+  //     nothing else lost an angle, else undone (a ceiling too low for every angle stays the Plan check's call)
+  const snapshot = () => days.map((d) => d.slots.map((x) => ({ ...x })));
+  // A fresh copy each time: the same snapshot may be restored more than once
+  const restore = (snap: Slot[][]) => days.forEach((d, i) => { d.slots = snap[i].map((x) => ({ ...x })); });
+  const missingAll = () => focus.flatMap((g) => { const c = anglesCovered(days.flatMap((d) => d.slots), exMap, g); return (JOBS[g] ?? []).length > 1 ? (JOBS[g] ?? []).filter((j) => !c.has(j)).map((j) => g + "|" + j) : []; });
+  if (angleRule) for (const g of focus) for (const job of JOBS[g] ?? []) {
+    if ((JOBS[g] ?? []).length < 2 || anglesCovered(days.flatMap((d) => d.slots), exMap, g).has(job)) continue;
+    const before = missingAll(), snap = snapshot();
+    // An angle nothing trains directly (lower back: a hinge) may go on any day (a hinge sits well on a legs day)
+    const directOnly = pool.some((e) => e.volume.some((v) => v.group === g && v.weight === 1) && [e.jobs?.[g]].flat().includes(job));
+    const ds = (directOnly ? allowedDaysFor(g, trainDays, themeOf) : trainDays).map(dayOf).sort((x, y) => (x.slots.length >= MAX_EXERCISES ? 1 : 0) - (y.slots.length >= MAX_EXERCISES ? 1 : 0) || slotsMinutes(x.slots) - slotsMinutes(y.slots));
+    let ok = false;
+    for (const d of ds) {
+      // A full day: one exercise goes whose muscles keep their minimum, angles and stretch without it
+      // (else one over the limit, as step 4 allows: a missing angle is worse than an 11th exercise)
+      if (d.slots.length >= MAX_EXERCISES) {
+        const spare = d.slots.filter((y) => meta.get(y.id)?.main !== g).sort((p, q) => p.sets - q.sets).find((y) => safe(y, y.sets));
+        if (spare) d.slots = d.slots.filter((y) => y !== spare);
+        else if (d.slots.length > MAX_EXERCISES) continue;
+      }
+      const taken = new Set(d.slots.filter((x) => meta.get(x.id)?.main === g).map((x) => moveKey(exMap.get(x.exerciseId)!, g)));
+      // Direct work for the angle; an angle nothing trains directly (lower back) takes a half-set one (a hinge)
+      const direct = pool.some((e) => e.volume.some((v) => v.group === g && v.weight === 1) && [e.jobs?.[g]].flat().includes(job));
+      const ex = pool.filter((e) => e.volume.some((v) => v.group === g && (v.weight === 1 || !direct)) && [e.jobs?.[g]].flat().includes(job) && !taken.has(moveKey(e, g)) && !days.some((x) => x.slots.some((y) => y.exerciseId === e.id)) && (e.measure !== "time" || g === "abs"))
+        .sort((x, y) => (isTopPick(y, input.goal) ? 6 : 0) + tierBonus(y, input.goal) - (isTopPick(x, input.goal) ? 6 : 0) - tierBonus(x, input.goal))[0];
+      if (!ex) continue;
+      add(d, ex, 2, g);
+      // Room under the ceilings first (that can free time too), then no time left that day: a set off the other
+      // exercises there whose muscles stay at their minimum (most sets first)
+      const fits2 = fixCeilings();
+      const fresh = d.slots.find((y) => y.exerciseId === ex.id)!;
+      for (let k = 0; k < 12 && slotsMinutes(d.slots) > limit; k++) {
+        const x = d.slots.filter((y) => y !== fresh).sort((p, q) => q.sets - p.sets).find((y) => y.sets > 2 && safe(y, 1));
+        if (!x) break;
+        x.sets--;
+      }
+      if (slotsMinutes(d.slots) > limit) { restore(snap); continue; }
+      const after = missingAll();
+      if (fits2 && after.every((m) => before.includes(m)) && after.length < before.length) { ok = true; break; }
+      restore(snap);
+    }
+    if (!ok) {
+      restore(snap);
+      // Or swap one of its exercises for one that trains what it did and this angle too (e.g. a curl for both heads),
+      // same sets, keeping any stretch it gave
+      for (const d of days) {
+        for (const x of d.slots.filter((y) => meta.get(y.id)?.main === g)) {
+          const old = exMap.get(x.exerciseId)!, jo = [old.jobs?.[g]].flat().filter(Boolean) as string[];
+          const alt = pool.filter((e) => e.volume.some((v) => v.group === g && v.weight === 1) && !all().some((y) => y.exerciseId === e.id) && (e.measure !== "time" || g === "abs")
+            && [...jo, job].every((j) => [e.jobs?.[g]].flat().includes(j)) && (!old.stretch?.includes(g) || e.stretch?.includes(g) || all().some((y) => y !== x && exMap.get(y.exerciseId)!.stretch?.includes(g))))
+            .sort((p, q) => tierBonus(q, input.goal) + (isTopPick(q, input.goal) ? 6 : 0) - tierBonus(p, input.goal) - (isTopPick(p, input.goal) ? 6 : 0))[0];
+          if (!alt) continue;
+          const before = missingAll(), keep = { ...x };
+          Object.assign(x, { exerciseId: alt.id, ...repsFor(alt, input.goal, restSec) });
+          const after = missingAll();
+          if (fixCeilings() && after.every((m) => before.includes(m)) && after.length < before.length && slotsMinutes(d.slots) <= limit) { ok = true; break; }
+          Object.assign(x, keep);
+        }
+        if (ok) break;
+      }
+    }
+  }
+  fixCeilings();
   assignReps();
 
   // 9. Order within each day, then names from the split ("Push A", "Upper B", "Full body C"); a theme used once has no letter

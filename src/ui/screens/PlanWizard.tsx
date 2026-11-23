@@ -7,10 +7,10 @@ import { generatePlanAsync } from "../generate";
 import { planConflicts, repsFor, REST_BY_GOAL, swapOptions, type Conflict } from "../../core/generator";
 import { slotsMinutes } from "../../core/timeEstimate";
 import { uid, WEEKDAY_LONG } from "../../core/util";
-import { completeProfile, MUSCLE_GROUPS, muscleLabel, type Goal, type MuscleGroup, type Phase, type RoutineDay, type VolumeTarget } from "../../core/types";
+import { completeProfile, MUSCLE_GROUPS, muscleLabel, type Goal, type MuscleGroup, type Phase, type PlanBuild, type RoutineDay, type VolumeTarget } from "../../core/types";
 import { formatTarget, isFocus } from "../../core/volume";
 import { defaultRange, priorityOf, type Priority } from "../../core/volumeModel";
-import { weekInsight } from "../../core/workoutCheck";
+import { editImpact, weekInsight } from "../../core/workoutCheck";
 import { useStore } from "../store";
 import { Icon } from "../components/Icon";
 import { MuscleMap } from "../components/MuscleMap";
@@ -25,7 +25,7 @@ import { ExerciseSheet } from "./ExerciseScreen";
 import { useWeekFailure } from "../components/FailFlame";
 import { failureInput } from "../components/WeekInsight";
 
-export interface WizardResult { days: RoutineDay[]; targets: VolumeTarget[]; goal: Goal; phase: Phase }
+export interface WizardResult { days: RoutineDay[]; targets: VolumeTarget[]; goal: Goal; phase: Phase; build?: PlanBuild }
 
 const GOALS: { v: Goal; label: string; sub: string }[] = [
   { v: "growth", label: "Mass gain", sub: "Build muscle" },
@@ -54,7 +54,7 @@ type Step = (typeof STEPS)[number];
 export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   open: boolean; initialTargets: VolumeTarget[]; onClose: () => void; onDone: (r: WizardResult) => void;
 }) {
-  const { settings, exercises, routine, exMap } = useStore();
+  const { settings, exercises, routine, exMap, toast } = useStore();
   const [step, setStep] = useState<Step>("goal");
   const [goal, setGoalRaw] = useState<Goal>(settings.profile?.goal ?? "growth");
   const [phase, setPhaseRaw] = useState<Phase>(settings.profile?.phase ?? "maintaining");
@@ -82,6 +82,8 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   // The built plan, then the user's swaps, removals and additions on top. Built on demand (not derived), so saving
   // a database exercise to the phone (Add exercise) doesn't rebuild it and lose the edits.
   const [result, setResult] = useState<RoutineDay[] | null>(null);
+  /** The recipe and untouched output of the shown plan (saved with it, so a reported plan can be rebuilt exactly) */
+  const [recipe, setRecipe] = useState<PlanBuild | null>(null);
   /** Per slot: the exercise the plan picked and how many swaps along its list of alternatives */
   const [swaps, setSwaps] = useState<Record<string, { orig: string; k: number }>>({});
   const [openRow, setOpenRow] = useState<string | null>(null);
@@ -135,15 +137,20 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
     const w = weekInsight({ id: "", name: "", isCurrent: false, createdAt: "", days: previewPlan }, exMap, targets, goal);
     return [...new Set(w.checks.filter((c) => !c.pass && !c.warn).flatMap((c) => c.issues.map((x) => `${x.who}: ${x.what.split(" · ")[0]}`)))];
   }, [previewPlan, conflicts.length, exMap, targets, goal]);
+  const recipeFor = (sd: number, p: RoutineDay[]): PlanBuild => ({
+    version: __APP_VERSION__, at: new Date().toISOString(), goal, phase, trainDays: [...days], maxMinutes: minutes, restSec, seed: sd,
+    avoid: [...avoid], targets: structuredClone(targets),
+    built: p.map((d) => ({ weekday: d.weekday, title: d.title, slots: d.slots.map((x) => [x.exerciseId, x.sets] as [string, number]) })),
+  });
   const build = (sd: number) => {
     // The check screen already built this exact plan (same answers and seed): use it, don't build twice
     const same = previewPlan && sd === seed;
     setSwaps({}); setOpenRow(null); setEdited(false);
-    if (same) return setResult(structuredClone(previewPlan));
+    if (same) { setRecipe(recipeFor(sd, previewPlan)); return setResult(structuredClone(previewPlan)); }
     // Otherwise built in the worker while the splash plays (the plan list waits for it)
     setResult(null);
     const id = ++buildId.current;
-    generatePlanAsync({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed: sd, restSec }).then((p) => { if (buildId.current === id) setResult(p); });
+    generatePlanAsync({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed: sd, restSec }).then((p) => { if (buildId.current === id) { setRecipe(recipeFor(sd, p)); setResult(p); } });
   };
   const plan = useMemo(() => (result ? { id: "wizard", name: "", isCurrent: false, createdAt: "", days: result } : undefined), [result]);
   // Same score as the editor shows once the plan is used: with this week's failure picks
@@ -185,7 +192,18 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
     if (c.fix?.restSec) setRestPick(c.fix.restSec);
     if (c.fix?.targets) { setTouched(true); setTargets((ts) => ts.map((x) => c.fix!.targets!.find((y) => y.group === x.group) ?? x)); }
   };
-  const editDay = (dayId: string, f: (d: RoutineDay) => RoutineDay) => setResult((ds) => ds && ds.map((d) => (d.id === dayId ? f(d) : d)));
+  const editDay = (dayId: string, f: (d: RoutineDay) => RoutineDay) => { editedBy.current = true; setResult((ds) => ds && ds.map((d) => (d.id === dayId ? f(d) : d))); };
+  // After a swap, removal or addition: say what it broke (a muscle over or under its target, an angle left short)
+  const editedBy = useRef(false), lastResult = useRef<RoutineDay[] | null>(null);
+  useEffect(() => {
+    const prev = lastResult.current;
+    lastResult.current = result;
+    if (!editedBy.current || !prev || !result) return;
+    editedBy.current = false;
+    const R = (days: RoutineDay[]) => ({ id: "", name: "", isCurrent: false, createdAt: "", days });
+    const lines = editImpact(R(prev), R(result), exMap, targets);
+    if (lines.length) toast({ kind: "warn", title: "That change breaks the plan check", body: lines.join(" · ") });
+  }, [result]); // eslint-disable-line react-hooks/exhaustive-deps
   /** Alternatives for a slot: same main muscle and angle, not already in that day; the plan's own pick comes first */
   const altsOf = (d: RoutineDay, slotId: string) => {
     const s = d.slots.find((x) => x.id === slotId)!, orig = swaps[slotId]?.orig ?? s.exerciseId, ex = exMap.get(orig);
@@ -429,7 +447,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
     ? (building || !result ? null : (
       <div className="wz-ctas">
         <button type="button" className="btn btn-ghost" onClick={() => leavePlan(() => { setSeed(seed + 1); build(seed + 1); setBuilding(true); })}><Icon name="undo" size={18} /> Build again</button>
-        <button type="button" className="btn btn-primary btn-xl" onClick={() => onDone({ days: result.map((d) => ({ ...d, title: !d.slots.length ? "Rest" : d.title === "Rest" ? "Extra" : d.title })), targets, goal, phase })}><Icon name="check" size={20} /> Use this plan</button>
+        <button type="button" className="btn btn-primary btn-xl" onClick={() => onDone({ days: result.map((d) => ({ ...d, title: !d.slots.length ? "Rest" : d.title === "Rest" ? "Extra" : d.title })), targets, goal, phase, build: recipe ?? undefined })}><Icon name="check" size={20} /> Use this plan</button>
       </div>))
     : <button type="button" className="btn btn-primary btn-xl wz-next" disabled={step === "days" && !days.length} onClick={next}>{step === "check" ? "Build my plan" : "Continue"}</button>;
 

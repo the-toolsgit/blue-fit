@@ -9,6 +9,7 @@ import { addDay, addSlot, clearDay, copyName, duplicateRoutine, moveSlot, newRou
 import { ExercisePicker } from "../components/ExercisePicker";
 import { Confirm } from "../components/Sheet";
 import { completeProfile, type Routine, type Slot } from "../../core/types";
+import { editImpact } from "../../core/workoutCheck";
 import { freshTargets } from "../../core/volumeModel";
 import { slotsMinutes } from "../../core/timeEstimate";
 import { useWeekFailure } from "../components/FailFlame";
@@ -51,12 +52,19 @@ export function PlanScreen() {
   // Everything is edited in place and saved at once: name and day title are fields that look like text,
   // tap an exercise for its popup, hold to move, swipe left to delete, Add exercise at the bottom.
   const slot = day?.slots.find((x) => x.id === slotId);
-  const setSlot = (p: Partial<Slot>) => day && slot && saveRoutine(updateSlot(routine, day.id, slot.id, p));
+  /** A swap, removal, addition or set change: saved, and a notice when it breaks the plan check (a muscle over or
+   *  under its target, an angle left short) that was fine before */
+  const saveEdit = (next: Routine) => {
+    const lines = editImpact(routine, next, exMap, targets);
+    saveRoutine(next);
+    if (lines.length) toast({ kind: "warn", title: "That change breaks the plan check", body: lines.join(" · ") });
+  };
+  const setSlot = (p: Partial<Slot>) => day && slot && (p.sets != null ? saveEdit : saveRoutine)(updateSlot(routine, day.id, slot.id, p));
   // Undo puts back only this exercise, into the plan as it is then (other changes made meanwhile stay)
   const removeWithUndo = (s: Slot) => {
     if (!day) return;
     const at = day.slots.findIndex((x) => x.id === s.id), dayId = day.id, rid = routine.id;
-    saveRoutine(removeSlot(routine, day.id, s.id));
+    saveEdit(removeSlot(routine, day.id, s.id));
     toast({ kind: "info", title: "Exercise removed", body: exMap.get(s.exerciseId)?.name, action: { label: "Undo", run: () => {
       const r = latest.current.find((x) => x.id === rid);
       if (r) saveRoutine(insertSlot(r, dayId, s, at));
@@ -178,11 +186,11 @@ export function PlanScreen() {
         exclude={picker?.mode === "swap" ? day?.slots.find((x) => x.id === picker.slotId)?.exerciseId : undefined}
         swapFor={picker?.mode === "swap" ? exMap.get(day?.slots.find((x) => x.id === picker.slotId)?.exerciseId ?? "") : undefined}
         onClose={() => setPicker(null)}
-        onPick={picker?.mode === "swap" ? (ex) => { if (day) saveRoutine(swapSlotExercise(routine, day.id, picker.slotId, ex)); } : undefined}
+        onPick={picker?.mode === "swap" ? (ex) => { if (day) saveEdit(swapSlotExercise(routine, day.id, picker.slotId, ex)); } : undefined}
         onPickMany={picker?.mode === "swap" ? undefined : (exs) => {
           // A rest day without a plan day yet gets one on that weekday
           const made = day ? { routine, dayId: day.id } : addDay(routine, cur.weekday);
-          saveRoutine(exs.reduce((r, ex) => addSlot(r, made.dayId, ex, settings.restDefaultSec).routine, made.routine));
+          saveEdit(exs.reduce((r, ex) => addSlot(r, made.dayId, ex, settings.restDefaultSec).routine, made.routine));
         }} />
       {(() => {
         // howTo is a slot id: the sheet shows its exercise with the slot's own why/tips and this week's failure reasons
@@ -190,7 +198,7 @@ export function PlanScreen() {
         return <ExerciseSheet id={hs?.exerciseId ?? null} onClose={() => setHowTo(null)} failWhy={day && hs ? weekFail.get(day.id)?.get(hs.id) : undefined} whyOverride={hs?.whyOverride} tipsOverride={hs?.tipsOverride} />;
       })()}
       <Confirm open={delDay} title={`Delete ${day?.title ?? "this day"}?`} body="All its exercises are removed and it becomes a rest day. Past workouts stay in history." confirm="Delete" danger
-        onClose={() => setDelDay(false)} onConfirm={() => { if (day) saveRoutine(clearDay(routine, day.id)); }} />
+        onClose={() => setDelDay(false)} onConfirm={() => { if (day) saveEdit(clearDay(routine, day.id)); }} />
       <Confirm open={confirmDeload} title="Start a deload week?" confirm="Start deload"
         body={<>{DELOAD_RULE} It lasts until {fmtDate(deloadWeek(today, settings.weekStartDay).end, { weekday: "long" })}, then your normal plan comes back.</>}
         onClose={() => setConfirmDeload(false)} onConfirm={() => saveSettings({ ...settings, deload: deloadWeek(today, settings.weekStartDay), deloadDismissedAt: null })} />

@@ -320,3 +320,23 @@ export function exercisesFor(routine: Routine, exMap: Map<string, Exercise>, g: 
     indirect: all.filter((x) => x.weight < 1 && !inPart(x)).map(strip),
   };
 }
+
+/** What a plan edit (swap, removal, addition, sets) broke: muscles it pushed above their ceiling or below their
+ *  minimum, and angles it left short, that were fine before. Short lines for a notice, e.g. "Traps 16 of 12–15:
+ *  above target", "Traps mid/lower: 1.5 of 2 sets". Pure. */
+export function editImpact(before: Routine, after: Routine, exMap: Map<string, Exercise>, targets: VolumeTarget[]): string[] {
+  const vb = new Map(planVolume(before, exMap).map((v) => [v.group, v.sets])), va = new Map(planVolume(after, exMap).map((v) => [v.group, v.sets]));
+  const sb = before.days.flatMap((d) => d.slots), sa = after.days.flatMap((d) => d.slots);
+  const out: string[] = [];
+  for (const t of targets) {
+    if (!isFocus(t)) continue;
+    const g = t.group, b = vb.get(g) ?? 0, a = va.get(g) ?? 0;
+    if (t.max != null && a > t.max && !(b > t.max)) out.push(`${muscleLabel(g)} ${fmtNum(a)} of ${formatTarget(t)}: above target`);
+    else if (t.min != null && a < t.min && !(b < t.min)) out.push(`${muscleLabel(g)} ${fmtNum(a)} of ${formatTarget(t)}: below target`);
+    if ((JOBS[g] ?? []).length > 1) {
+      const cb = anglesCovered(sb, exMap, g), ca = anglesCovered(sa, exMap, g), n = angleSets(sa, exMap, g);
+      for (const j of JOBS[g] ?? []) if (cb.has(j) && !ca.has(j)) out.push(`${muscleLabel(g)} ${j}: ${n.get(j) ? `only ${fmtNum(n.get(j)!)} of ${ANGLE_MIN_SETS} sets` : "nothing trains it now"}`);
+    }
+  }
+  return out;
+}

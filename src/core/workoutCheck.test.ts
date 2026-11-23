@@ -197,3 +197,13 @@ describe("an angle needs 2 sets, a ½ set counting half", () => {
     expect(anglesCovered([sl("kelso-shrug", 2)], m, "traps").has("mid/lower")).toBe(true);
   });
 });
+
+describe("what a plan edit broke", () => {
+  it("removing the plan's only direct mid/lower trap work names the muscle below target; an unrelated edit says nothing", async () => {
+    const { editImpact } = await import("./workoutCheck");
+    const t = seed.targets.map((x) => (x.group === "traps" ? { ...x, min: 15, max: 25 } : x));
+    const without = { ...r, days: r.days.map((d) => ({ ...d, slots: d.slots.filter((s) => s.exerciseId !== "overhead-trap") })) };
+    expect(editImpact(r, without, exMap, t).some((l) => l.startsWith("Traps") && l.includes("below target"))).toBe(true);
+    expect(editImpact(r, r, exMap, t)).toEqual([]);
+  });
+});

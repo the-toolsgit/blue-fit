@@ -13,6 +13,7 @@ import {
 import { slotsMinutes } from "../../core/timeEstimate";
 import { type Exercise, type Goal, type Phase, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "../../core/types";
 import { targetsOf } from "../../core/volumeModel";
+import { editImpact } from "../../core/workoutCheck";
 import { FailFlame, useWeekFailure } from "../components/FailFlame";
 import { Dock } from "../components/Dock";
 import { ExercisePicker } from "../components/ExercisePicker";
@@ -98,6 +99,13 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const days = [...draft.days].sort((a, b) => mondayFirst(a.weekday) - mondayFirst(b.weekday));
   const day: RoutineDay | undefined = days.find((d) => d.id === dayId) ?? days.find((d) => d.slots.length) ?? days[0];
   const targetsDirty = JSON.stringify(tdraft) !== JSON.stringify(targets);
+  /** A swap, removal, addition or set change: applied, and a notice when it breaks the plan check (a muscle over or
+   *  under its target, an angle left short) that was fine before */
+  const editDraft = (next: Routine) => {
+    const lines = editImpact(draft, next, exMap, tdraft);
+    setDraft(next);
+    if (lines.length) toast({ kind: "warn", title: "That change breaks the plan check", body: lines.join(" · ") });
+  };
   const dirty = JSON.stringify(draft) !== JSON.stringify(original) || targetsDirty;
   const editTarget = (t: VolumeTarget) => setTdraft((ts) => (ts.some((x) => x.group === t.group) ? ts.map((x) => (x.group === t.group ? t : x)) : [...ts, t]));
   const issues = validateRoutine(draft);
@@ -133,7 +141,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
   const removeWithUndo = (s: Slot) => {
     if (!day) return;
     const at = day.slots.findIndex((x) => x.id === s.id), dayId = day.id;
-    setDraft(removeSlot(draft, day.id, s.id));
+    editDraft(removeSlot(draft, day.id, s.id));
     // Undo puts back only this exercise (later edits stay)
     toast({ kind: "info", title: "Exercise removed", body: exMap.get(s.exerciseId)?.name, action: { label: "Undo", run: () => setDraft((d) => d && insertSlot(d, dayId, s, at)) } });
   };
@@ -208,7 +216,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
       </Dock>
 
       <SlotSheet slot={slot} day={day} ex={slot ? exMap.get(slot.exerciseId) : undefined} goal={settings.profile?.goal} failWhy={day && slot ? weekFail.get(day.id)?.get(slot.id) : undefined}
-        restDefault={settings.restDefaultSec} onPatch={(p) => day && slot && setDraft(updateSlot(draft, day.id, slot.id, p))} onClose={() => setSlotOpen(null)}
+        restDefault={settings.restDefaultSec} onPatch={(p) => day && slot && (p.sets != null ? editDraft : setDraft)(updateSlot(draft, day.id, slot.id, p))} onClose={() => setSlotOpen(null)}
         onToggleSuperset={() => day && slot && setDraft(toggleSlotSuperset(draft, day.id, slot.id))}
         onSwap={() => slot && setPicker({ mode: "swap", slotId: slot.id })} onHowTo={() => slot && setHowTo(slot.id)} onRemove={() => slot && removeWithUndo(slot)} />
 
@@ -216,10 +224,10 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
         exclude={picker?.mode === "swap" ? day?.slots.find((s) => s.id === picker.slotId)?.exerciseId : undefined}
         swapFor={picker?.mode === "swap" ? exMap.get(day?.slots.find((s) => s.id === picker.slotId)?.exerciseId ?? "") : undefined}
         onClose={() => setPicker(null)}
-        onPick={picker?.mode === "swap" ? (ex) => { if (day) setDraft(swapSlotExercise(draft, day.id, picker.slotId, ex)); } : undefined}
-        onPickMany={picker?.mode === "swap" ? undefined : (exs) => { if (day) setDraft(exs.reduce((r, ex) => addSlot(r, day.id, ex, settings.restDefaultSec).routine, draft)); }} />
+        onPick={picker?.mode === "swap" ? (ex) => { if (day) editDraft(swapSlotExercise(draft, day.id, picker.slotId, ex)); } : undefined}
+        onPickMany={picker?.mode === "swap" ? undefined : (exs) => { if (day) editDraft(exs.reduce((r, ex) => addSlot(r, day.id, ex, settings.restDefaultSec).routine, draft)); }} />
       <PlanWizard open={wizard} initialTargets={tdraft} onClose={() => setWizard(false)} onDone={(r: WizardResult) => {
-        setDraft({ ...draft, days: r.days });
+        setDraft({ ...draft, days: r.days, build: r.build });
         setTdraft(r.targets);
         setDayId(r.days.find((d) => d.slots.length)?.id ?? null);
         setAnswers({ goal: r.goal, phase: r.phase });
@@ -233,7 +241,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
       })()}
       <Confirm open={confirm === "cancel"} title="Discard changes?" body="Your edits to this plan are thrown away." confirm="Discard" danger onClose={() => setConfirm(null)} onConfirm={cancel} />
       <Confirm open={confirm === "deleteDay"} title={`Delete ${day?.title ?? "this day"}?`} body="All its exercises are removed and it becomes a rest day. Past workouts stay in history." confirm="Delete" danger
-        onClose={() => setConfirm(null)} onConfirm={() => { if (day) setDraft(clearDay(draft, day.id)); }} />
+        onClose={() => setConfirm(null)} onConfirm={() => { if (day) editDraft(clearDay(draft, day.id)); }} />
     </div>
   );
 }
