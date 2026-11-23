@@ -60,7 +60,8 @@ export function RestTimerDock() {
       <div className="dock">
         {restTimer && (
           <div className="glass edge row" style={{ padding: "8px 8px 8px 10px", borderRadius: 20, boxShadow: over ? "0 0 0 1px var(--good), 0 0 40px -6px var(--good)" : "0 12px 40px -14px var(--glow)" }}>
-            <button className="row grow" onClick={() => setBig(true)} aria-label="Open rest timer">
+            {/* Rest over: the tap takes you back to the workout (Leo, Nov 23 2026), not the big timer */}
+            <button className="row grow" onClick={() => { if (over) { setRestTimer(null); if (active) go("workout"); } else setBig(true); }} aria-label={over ? "Back to workout" : "Open rest timer"}>
               <div style={{ position: "relative", width: 46, height: 46 }}>
                 <Ring frac={over ? 1 : frac} size={46} stroke={4} done={over} />
                 <span style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", color: over ? "var(--good)" : "var(--neon-ink)" }}><Icon name="timer" size={18} /></span>
@@ -75,7 +76,7 @@ export function RestTimerDock() {
               <button className="btn btn-ghost" style={{ padding: "0 10px", minWidth: 52 }} onClick={() => adjust(15)} aria-label="15 seconds more">+15</button>
             </>}
             {showResume
-              ? <button className="btn btn-primary" style={{ padding: 0, minHeight: 46, minWidth: 52 }} onClick={() => go("workout")} aria-label="Back to workout"><Icon name="play" size={20} /></button>
+              ? <button className="btn btn-primary" style={{ padding: 0, minHeight: 46, minWidth: 52 }} onClick={() => { if (over) setRestTimer(null); go("workout"); }} aria-label="Back to workout"><Icon name="play" size={20} /></button>
               : <button className="icon-btn" onClick={() => setRestTimer(null)} aria-label="Skip rest"><Icon name="close" /></button>}
           </div>
         )}
