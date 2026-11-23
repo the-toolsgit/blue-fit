@@ -770,3 +770,4 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 @keyframes exSlideNext { from { opacity: 0; transform: translateX(18px); } }
 @keyframes exSlidePrev { from { opacity: 0; transform: translateX(-18px); } }
 @media (prefers-reduced-motion: reduce) { .ex-slide-next, .ex-slide-prev { animation: none; } }
+.wz-insight { margin-top: 18px; }

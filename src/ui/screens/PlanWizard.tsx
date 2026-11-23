@@ -24,7 +24,7 @@ import { Confirm } from "../components/Sheet";
 import { Figure } from "../components/Figure";
 import { ExerciseSheet } from "./ExerciseScreen";
 import { useWeekFailure } from "../components/FailFlame";
-import { failureInput } from "../components/WeekInsight";
+import { failureInput, WeekInsight } from "../components/WeekInsight";
 
 export interface WizardResult { days: RoutineDay[]; targets: VolumeTarget[]; goal: Goal; phase: Phase; build?: PlanBuild }
 
@@ -158,6 +158,17 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
   const weekFail = useWeekFailure(plan, targets);
   const check = useMemo(() => (plan ? weekInsight(plan, exMap, targets, goal, failureInput(plan, exMap, weekFail, goal)) : null), [plan, exMap, targets, goal, weekFail]);
 
+  // (Hooks: above the early return.) After a swap, removal or addition: say what it broke (a muscle over or under its target, an angle left short)
+  const editedBy = useRef(false), lastResult = useRef<RoutineDay[] | null>(null);
+  useEffect(() => {
+    const prev = lastResult.current;
+    lastResult.current = result;
+    if (!editedBy.current || !prev || !result) return;
+    editedBy.current = false;
+    const R = (days: RoutineDay[]) => ({ id: "", name: "", isCurrent: false, createdAt: "", days });
+    const lines = editImpact(R(prev), R(result), exMap, targets);
+    if (lines.length) toast({ kind: "warn", title: "That change breaks the plan check", body: lines.join(" · ") });
+  }, [result]); // eslint-disable-line react-hooks/exhaustive-deps
   if (!open) return null;
   const i = STEPS.indexOf(step);
   const next = () => {
@@ -194,17 +205,6 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
     if (c.fix?.targets) { setTouched(true); setTargets((ts) => ts.map((x) => c.fix!.targets!.find((y) => y.group === x.group) ?? x)); }
   };
   const editDay = (dayId: string, f: (d: RoutineDay) => RoutineDay) => { editedBy.current = true; setResult((ds) => ds && ds.map((d) => (d.id === dayId ? f(d) : d))); };
-  // After a swap, removal or addition: say what it broke (a muscle over or under its target, an angle left short)
-  const editedBy = useRef(false), lastResult = useRef<RoutineDay[] | null>(null);
-  useEffect(() => {
-    const prev = lastResult.current;
-    lastResult.current = result;
-    if (!editedBy.current || !prev || !result) return;
-    editedBy.current = false;
-    const R = (days: RoutineDay[]) => ({ id: "", name: "", isCurrent: false, createdAt: "", days });
-    const lines = editImpact(R(prev), R(result), exMap, targets);
-    if (lines.length) toast({ kind: "warn", title: "That change breaks the plan check", body: lines.join(" · ") });
-  }, [result]); // eslint-disable-line react-hooks/exhaustive-deps
   /** Alternatives for a slot: same main muscle and angle, not already in that day; the plan's own pick comes first */
   const altsOf = (d: RoutineDay, slotId: string) => {
     const s = d.slots.find((x) => x.id === slotId)!, orig = swaps[slotId]?.orig ?? s.exerciseId, ex = exMap.get(orig);
@@ -438,6 +438,8 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
               </div>
             ))}
           </div>
+          {/* The same overview and Plan check as the Plan tab, live with every swap, removal or addition (Leo, Nov 23 2026) */}
+          {plan && <div className="wz-insight"><WeekInsight routine={plan} exMap={exMap} targets={targets} weekFail={weekFail} /></div>}
           <ExercisePicker open={!!addTo} title="Add exercise" onClose={() => setAddTo(null)}
             onPickMany={(es) => { const id = addTo!; setAddTo(null); setEdited(true); editDay(id, (d) => ({ ...d, slots: [...d.slots, ...es.map((e) => ({ id: "slot-" + uid().slice(0, 8), exerciseId: e.id, sets: 3, ...repsFor(e, goal, restSec) }))] })); }} />
         </Screen>);
