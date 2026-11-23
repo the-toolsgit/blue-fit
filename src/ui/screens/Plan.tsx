@@ -21,7 +21,9 @@ import { ExerciseSheet } from "./ExerciseScreen";
 import { WeekInsight } from "../components/WeekInsight";
 
 const SHORT = WEEKDAY_SHORT;
-const SortableDayList = lazy(() => import("../components/SortableDayList").then((m) => ({ default: m.SortableDayList })));
+// Fetched as soon as the app starts (not on first view), so the list shows with the rest of the screen
+const loadDayList = import("../components/SortableDayList");
+const SortableDayList = lazy(() => loadDayList.then((m) => ({ default: m.SortableDayList })));
 
 export function PlanScreen() {
   const { routine, routines, exMap, targets, sessions, saveRoutine, saveRoutines, saveTargets, deleteRoutine, toast, settings, saveSettings } = useStore();

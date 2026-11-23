@@ -20,7 +20,9 @@ import { fmtDate, repRange } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
 
-const SortableDayList = lazy(() => import("../components/SortableDayList").then((m) => ({ default: m.SortableDayList })));
+// Fetched as soon as the app starts (not on first view), so the list shows with the rest of the screen
+const loadDayList = import("../components/SortableDayList");
+const SortableDayList = lazy(() => loadDayList.then((m) => ({ default: m.SortableDayList })));
 
 const LONG = WEEKDAY_LONG;
 
