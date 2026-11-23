@@ -75,3 +75,16 @@ describe("form doesn't repeat the tempo", async () => {
     expect(now.join(" ")).not.toMatch(/\d s\b|slowly/);
   });
 });
+
+describe("regular cable lateral raise stands straight", async () => {
+  const { MIGRATIONS } = await import("./migrations");
+  const run = MIGRATIONS.find((m) => m.id === "2026-11-23-cable-lateral-upright")!.run;
+  const leaning = { v: "f", base: { L: { ua: 72, fa: 80 }, cx: 56, rot: 14, la: 0, sa: 0, hw: 1.5 }, A: { ua: -30, fa: -32 }, B: { ua: 90, fa: 92 }, props: [{ line: [22, -14, 22, 104] }, { line: [16, 104, 30, 104] }, { cable: [22, 96], to: "haR" }] };
+  it("the leaning figure and setup line are replaced; a user's own stays", () => {
+    const mk = (figure: unknown, setup: string[], isCustom = false) => ({ id: "cable-lateral-raise", figure, setup, isCustom }) as never;
+    const out = run({ exercises: [mk(leaning, ["Pulley low.", "Hold the machine with your free hand, lean away."])] } as never, "2026-11-23") as unknown as { exercises: { figure: { base: { rot: number } }; setup: string[] }[] };
+    expect(out.exercises[0].figure.base.rot).toBe(0);
+    expect(out.exercises[0].setup[1]).toBe("Stand tall, free hand on the machine.");
+    expect(run({ exercises: [mk({ ...leaning, base: { cx: 50 } }, ["Mine."])] } as never, "2026-11-23")).toBeNull();
+  });
+});

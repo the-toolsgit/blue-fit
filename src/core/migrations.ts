@@ -6,6 +6,7 @@ import figureFixes from "./seed/figure-fixes.json";
 import figureAudit from "./seed/figure-audit.json";
 import figureMachines from "./seed/figure-machines.json";
 import formTempoWas from "./seed/form-tempo-was.json";
+import exerciseSeed from "./seed/exercises.json";
 import exerciseJobs from "./seed/exercise-jobs.json";
 import extraExercises from "./seed/extra-exercises.json";
 import textWas from "./seed/text-review-was.json";
@@ -686,6 +687,24 @@ export const MIGRATIONS: Migration[] = [
         if (!hit) return e;
         changed = true;
         return { ...e, form: [...hit[1]] };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
+  {
+    // Nov 23 2026: the regular cable lateral raise stands straight (only the lean-away version leans).
+    // Figure while it is still the leaning one; setup line while it still reads as before.
+    id: "2026-11-23-cable-lateral-upright",
+    run(d) {
+      const fig = (exerciseSeed as unknown as Exercise[]).find((e) => e.id === "cable-lateral-raise")!.figure;
+      const was = "Hold the machine with your free hand, lean away.", now = "Stand tall, free hand on the machine.";
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        if (e.id !== "cable-lateral-raise" || e.isCustom) return e;
+        const n = { ...e };
+        if (e.figure && figureHash(e.figure) === "1s8z410") { n.figure = structuredClone(fig); changed = true; }
+        if (e.setup.includes(was)) { n.setup = e.setup.map((x) => (x === was ? now : x)); changed = true; }
+        return n;
       });
       return changed ? { ...d, exercises } : null;
     },

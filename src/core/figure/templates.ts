@@ -126,7 +126,7 @@ export const TEMPLATES: Record<string, Template> = {
   "press-overhead-standing": T({ v: "f", base: {}, A: { ua: 90, fa: 180 }, B: { ua: 160, fa: 175 }, props: [] }, { joint: "haR", dir: "up" }, "bar"),
   "lateral-raise": T({ v: "f", base: {}, A: { ua: 8, fa: 8 }, B: { ua: 88, fa: 90 }, props: [{ db: "haR" }, { db: "haL" }] }, { joint: "haR", dir: "up" }, "none"),
   "lateral-raise-full": T({ v: "f", base: {}, A: { ua: 8, fa: 8 }, B: { ua: 165, fa: 165 }, props: [{ db: "haR" }, { db: "haL" }] }, { joint: "haR", dir: "up" }, "none"),
-  "lateral-raise-cable": T({ v: "f", base: { L: { ua: 72, fa: 80 }, cx: 53, rot: 14, la: 0, sa: 0, hw: 1.5 }, A: { ua: -30, fa: -32 }, B: { ua: 90, fa: 92 }, props: [{ line: [19, -14, 19, 104] }, { line: [13, 104, 27, 104] }, { cable: [19, 96], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
+  "lateral-raise-cable": T({ v: "f", base: { L: { ua: 45, fa: 45 }, cx: 60 }, A: { ua: -30, fa: -32 }, B: { ua: 90, fa: 92 }, props: [{ line: [22, -14, 22, 104] }, { line: [16, 104, 30, 104] }, { cable: [22, 96], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
   "lateral-raise-lean-away": T({ v: "f", base: { cx: 36, la: 0, sa: 0, hw: 1.5, rot: 20, L: { ua: 22, fa: 22 } }, A: { ua: -10, fa: -10 }, B: { ua: 98, fa: 98 }, props: [{ line: [28, -14, 28, 104] }, { line: [22, 104, 36, 104] }, { cable: [28, 96], to: "haR" }] }, { joint: "haR", dir: "up" }, "none"),
   "front-raise": { ...T({ base: { ua: 0 }, A: { ua: 0, fa: 0 }, B: { ua: 95, fa: 95 }, props: [] }, { joint: "ha", dir: "up" }, "db", [86, 100]), post: 110 },
   "upright-row": { ...T({ v: "f", base: {}, A: { ua: 6, fa: 6, al: 1 }, B: { ua: 100, fa: -35, al: 0.8 }, props: [] }, { joint: "haR", dir: "up" }, "bar", [60, 104]), post: false },

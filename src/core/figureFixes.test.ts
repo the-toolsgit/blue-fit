@@ -13,7 +13,7 @@ describe("lateral raise stretch migration", () => {
     const ex = run("2026-11-17-lateral-raise-stretch", d)!.exercises.find((e) => e.id === "cable-lateral-raise")!;
     expect(ex.figure!.A.ua).toBe(-30); // starts across the body
     expect(Array.isArray(ex.figure!.props)).toBe(true);
-    expect(ex.setup[1]).toMatch(/Hold the machine/i);
+    expect(ex.setup[1]).toMatch(/on the machine/i);
     expect(ex.form).toEqual(["My own form note."]);
     expect(ex.rangeOfMotion).toBe("Hand across your body → shoulder height");
     expect(ex.setup[0]).toBe("Pulley low, cable in front of you.");
