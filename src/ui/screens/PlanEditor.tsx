@@ -3,7 +3,8 @@
 import { draftKey, newPlanKey } from "../planDraft";
 import { SlotSheet } from "../components/SlotSheet";
 import { WEEKDAY_SHORT } from "../../core/util";
-import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent, KeyboardSensor } from "@dnd-kit/core";
+import { DndContext, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors, type DragEndEvent, KeyboardSensor, type Modifier } from "@dnd-kit/core";
+import { vibrate } from "../device";
 import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useState } from "react";
@@ -29,6 +30,8 @@ import { ExerciseSheet } from "./ExerciseScreen";
 import { PlanWizard, type WizardResult } from "./PlanWizard";
 
 const SHORT = WEEKDAY_SHORT;
+/** Rows only move up and down. */
+const verticalOnly: Modifier = ({ transform }) => ({ ...transform, x: 0 });
 const mondayFirst = (w: number | null) => (w == null ? 9 : (w + 6) % 7);
 
 
@@ -43,10 +46,7 @@ function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, onDelete, onFi
       {slot.supersetGroup && <div aria-hidden style={{ position: "absolute", left: 2, top: groupStart ? 16 : 0, bottom: groupEnd ? 16 : 0, width: 3, borderRadius: 3, background: "var(--neon-2)", boxShadow: "0 0 10px var(--neon-2)" }} />}
       {sw.button}
       <div className="row" style={{ gap: 0, ...sw.slide }}>
-        <button className="icon-btn" style={{ touchAction: "none", cursor: "grab", width: 32, flex: "none" }} aria-label={`Drag to reorder ${ex?.name}`} {...attributes} {...listeners}>
-          <svg width="16" height="22" viewBox="0 0 16 22" aria-hidden><g fill="currentColor">{[5, 11, 17].flatMap((y) => [<circle key={"a" + y} cx="5" cy={y} r="1.8" />, <circle key={"b" + y} cx="11" cy={y} r="1.8" />])}</g></svg>
-        </button>
-        <button className="list-row grow" style={{ paddingLeft: 0 }} onClick={() => (sw.dx ? sw.setDx(0) : onOpen())}>
+        <button className="list-row grow" onClick={() => (sw.dx ? sw.setDx(0) : onOpen())} {...attributes} {...listeners} aria-roledescription="Exercise. Press and hold to move it.">
           <span className="mono muted" style={{ width: 16, fontSize: 13 }}>{index + 1}</span>
           <FigureTap name={ex?.name ?? "this exercise"} onTap={() => (sw.dx ? sw.setDx(0) : onFigure())}><Figure spec={ex?.figure} size={44} still className="thin" /></FigureTap>
           <span className="grow" style={{ minWidth: 0 }}>
@@ -87,7 +87,12 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
     try { const s = sessionStorage.getItem(draftKey(id ?? "") + "-targets"); if (s) return JSON.parse(s); } catch { /* ignore */ }
     return structuredClone(targets);
   });
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
+  // Press and hold anywhere on a row to move it (a mouse drags after 6 px)
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 280, tolerance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
 
   useEffect(() => { if (!draft && original) setDraft(structuredClone(original)); }, [original, draft]);
   useEffect(() => { if (draft && id) try { sessionStorage.setItem(draftKey(id), JSON.stringify(draft)); } catch { /* ignore */ } }, [draft, id]);
@@ -187,7 +192,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
             <span className="mono muted" style={{ fontSize: 13, whiteSpace: "nowrap" }}>{daySets} sets · ~{slotsMinutes(day.slots)} min</span>
           </div>
           <div className="glass" style={{ padding: 4, marginTop: 8 }}>
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+            <DndContext sensors={sensors} collisionDetection={closestCenter} modifiers={[verticalOnly]} onDragStart={() => vibrate(10)} onDragEnd={onDragEnd}>
               <SortableContext items={day.slots.map((s) => s.id)} strategy={verticalListSortingStrategy}>
                 {day.slots.map((s, i) => (
                   <SlotRow key={s.id} slot={s} ex={exMap.get(s.exerciseId)} index={i}
@@ -200,7 +205,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
             <button className="list-row" style={{ color: "var(--neon-ink)", justifyContent: "center" }} onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
           </div>
           <div className="spread" style={{ margin: "6px 4px 0" }}>
-            <p className="muted" style={{ fontSize: 12 }}>Tap an exercise to change it. Drag ⋮⋮ to move it. Swipe left to delete.</p>
+            <p className="muted" style={{ fontSize: 12 }}>Tap an exercise to change it. Press and hold to move it. Swipe left to delete.</p>
             <button className="btn btn-quiet" style={{ color: "var(--bad)", fontSize: 13, minHeight: 36, padding: 0, whiteSpace: "nowrap" }} onClick={() => setConfirm("deleteDay")} disabled={!day.slots.length}><Icon name="trash" size={16} /> Delete day</button>
           </div>
           
