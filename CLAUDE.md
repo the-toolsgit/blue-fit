@@ -25,7 +25,7 @@ Leo's personal training app (replaces Jefit). Mobile-first PWA on GitHub Pages: 
 ## Commands
 - `npm run dev`: dev server (also on your local network, for testing on the phone)
 - `npm test`: Vitest (core logic + storage)
-- `npm run build`: typecheck + production build
+- `npm run build`: hooks lint (oxlint `rules-of-hooks`) + typecheck + production build; the deploy fails on a hooks error
 - `npm run seed`: re-extract seed JSON from `docs/source/Leo_Training_Plan.html` (local only; `docs/source/` is git-ignored because it holds personal notes)
 - `npm run icons`: regenerate the app icons from the FLEX pose
 
