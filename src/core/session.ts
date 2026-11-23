@@ -80,6 +80,16 @@ const mapEntry = (s: Session, entryId: string, f: (e: SessionEntry) => SessionEn
 export const updateSet = (s: Session, entryId: string, setId: string, patch: Partial<LoggedSet>): Session =>
   mapEntry(s, entryId, (e) => ({ ...e, sets: e.sets.map((x) => (x.id === setId ? { ...x, ...patch } : x)) }));
 
+/** Change a set's weight or reps. On a set not done yet, the later sets of the same type that aren't done take the same
+ *  value too (Leo, Nov 23 2026: set 3 at 10 reps makes set 4 10 as well); a done set changes alone. */
+export function editSet(s: Session, entryId: string, setId: string, patch: Pick<Partial<LoggedSet>, "weight" | "reps">): Session {
+  return mapEntry(s, entryId, (e) => {
+    const i = e.sets.findIndex((y) => y.id === setId), x = e.sets[i];
+    if (!x) return e;
+    return { ...e, sets: e.sets.map((y, k) => (k === i || (!x.done && k > i && !y.done && y.type === x.type) ? { ...y, ...patch } : y)) };
+  });
+}
+
 /** Mark a set done (or undo). When marking done, later empty sets of the same type copy its weight and reps. */
 export function toggleDone(s: Session, entryId: string, setId: string, now: Date): Session {
   const x = s.entries.find((e) => e.id === entryId)?.sets.find((y) => y.id === setId);

@@ -15,7 +15,7 @@ import { alignHint, effortGap, effortLine, failureSet, tooLight } from "../../co
 import { addSetToRecords, cloneRecords, computeRecords, entryVolume, PR_LABEL, prsForSet, type PrKind } from "../../core/records";
 import {
   addEntry, addSet, afterSetDone, applyHint, dropTestIfRaised, testMoot, takeExtra, takeFailure, buildEntry, durationMin, finishSession, lastEntryFor, prevEntryFor, moveEntryTo, refitFailure, removeEntry, removeSet,
-  setEntry, swapEntry, toggleDone, toggleSupersetWithNext, updateSet,
+  editSet, setEntry, swapEntry, toggleDone, toggleSupersetWithNext, updateSet,
 } from "../../core/session";
 import type { Exercise, LoggedSet, Session, SessionEntry, SetType } from "../../core/types";
 import { fmtNum } from "../../core/util";
@@ -545,8 +545,8 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               {isSel && !x.done && (
                 <div style={{ padding: "4px 10px 12px", display: "grid", gap: 10, animation: "pageIn .3s var(--ease) both" }} onClick={(ev) => ev.stopPropagation()}>
                   <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 8, alignItems: "end" }}>
-                    <Stepper invalid={missing?.id === x.id && ex.equipment !== "bodyweight" && !(x.weight != null && x.weight > 0)} label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(updateSet(s, e.id, x.id, { weight: v }))} />
-                    <Stepper invalid={missing?.id === x.id && !(x.reps != null && x.reps > 0)} label={ex.measure === "time" ? "Seconds" : "Reps"} value={x.reps} step={ex.measure === "time" ? 5 : 1} decimals={false} empty={repMin} onChange={(v) => commit(updateSet(s, e.id, x.id, { reps: v }))} />
+                    <Stepper invalid={missing?.id === x.id && ex.equipment !== "bodyweight" && !(x.weight != null && x.weight > 0)} label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(editSet(s, e.id, x.id, { weight: v }))} />
+                    <Stepper invalid={missing?.id === x.id && !(x.reps != null && x.reps > 0)} label={ex.measure === "time" ? "Seconds" : "Reps"} value={x.reps} step={ex.measure === "time" ? 5 : 1} decimals={false} empty={repMin} onChange={(v) => commit(editSet(s, e.id, x.id, { reps: v }))} />
                   </div>
                   {ex.measure === "time" && <HoldTimer onStop={(sec) => commit(updateSet(s, e.id, x.id, { reps: sec }))} />}
                   {x.id === failSetId && <div className="fail-cue"><Icon name="flame" size={18} /><span><b>Last set: go to failure.</b> Keep going until you can't do another clean rep.{e.failWhy?.some((w) => w !== MANUAL_WHY) ? <FailWhy why={e.failWhy} /> : null}</span></div>}

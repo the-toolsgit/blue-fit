@@ -322,3 +322,15 @@ describe("adding a warm-up set", async () => {
     expect(addSet(s, "e").entries[0].sets.at(-1)!.type).toBe("working");
   });
 });
+
+describe("editing a set carries to the later undone sets", () => {
+  it("set 3 at 10 reps makes set 4 10 too; done sets and other types stay; a done set changes alone", async () => {
+    const { editSet } = await import("./session");
+    const mk = (id: string, reps: number, done = false, type: "working" | "drop" = "working") => ({ id, type, weight: 60, reps, done, rir: null, completedAt: null });
+    const s0 = { id: "s", entries: [{ id: "e", exerciseId: "x", sets: [mk("1", 10, true), mk("2", 8), mk("3", 8), mk("4", 8, true), mk("5", 8, false, "drop")] }] } as never;
+    const out = (editSet(s0, "e", "2", { reps: 10 }) as any).entries[0].sets.map((x: any) => x.reps);
+    expect(out).toEqual([10, 10, 10, 8, 8]);
+    const done = (editSet(s0, "e", "1", { reps: 12 }) as any).entries[0].sets.map((x: any) => x.reps);
+    expect(done).toEqual([12, 8, 8, 8, 8]);
+  });
+});
