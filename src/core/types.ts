@@ -242,6 +242,8 @@ export interface Settings {
    *  (off: neither; failure turned On in the plan still applies). Missing = on. */
   autoAdjust: boolean;
   theme: "system" | "light" | "dark";
+  /** App look: neon (the blue line man, default) or signal (flat orange, black and off-white tiles). Missing = neon. */
+  look?: "neon" | "signal";
   /** Accent palette; the line man always stays blue */
   accent: Accent;
   /** Interview: training profile for the volume model (on this phone only) */

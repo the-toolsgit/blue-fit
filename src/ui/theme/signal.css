@@ -1,0 +1,94 @@
+/* Signal look (Settings → Look → Style, Nov 23 2026): flat signal orange, black, off-white and greys on slate. No glow.
+   A layer over the neon styles: nothing here applies unless <html data-look="signal">, so Neon is untouched.
+   The selector is weighted (html:root[…][…]) to win over the light theme and accent token blocks. */
+html:root[data-look="signal"][data-look] {
+  --bg: #3f474f; --bg-2: #3f474f;
+  --surface: #2b2f34; --surface-solid: #2b2f34; --surface-2: #383c41;
+  --line: rgba(236, 235, 230, 0.12); --line-strong: rgba(236, 235, 230, 0.26);
+  --ink: #ecebe6; --muted: #a4a9af; --faint: #6b7178;
+  --fig: #ecebe6; --fig2: #8a8f95;
+  --neon: #ff4b1f; --neon-2: #ff4b1f; --neon-ink: #ff6a43; --neon-ink-2: #ff6a43;
+  --brand: #ecebe6; --pink: #ff6a43; --pink-2: #ecebe6; --recovering: #ff6a43;
+  --glow: transparent; --glow-soft: transparent; --fig-glow: transparent; --fig-glow-soft: transparent; --pink-glow: transparent;
+  --good: #8fe0b0; --warn: #ffc53d; --star: #ff6a43; --on-neon: #000;
+  --bg-fx-1: transparent; --bg-fx-2: transparent; --grid: transparent;
+  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Inter Tight", system-ui, -apple-system, sans-serif;
+  --mono: "Space Mono", ui-monospace, Menlo, monospace;
+  --r-lg: 30px;
+  --sig-orange: #ff4b1f; --sig-black: #000; --sig-paper: #ecebe6; --sig-grey: #62686f; --sig-dark: #383c41; --sig-quiet: #55595e;
+  color-scheme: dark;
+}
+[data-look="signal"] .bg-fx { background: var(--bg); }
+[data-look="signal"] .bg-fx::after { display: none; }
+[data-look="signal"] h1, [data-look="signal"] h2, [data-look="signal"] h3, [data-look="signal"] h4 { font-weight: 800; }
+[data-look="signal"] .eyebrow { font: 700 12px/1 var(--mono); letter-spacing: 0.08em; }
+[data-look="signal"] .section-title { font: 700 13px/1 var(--mono); letter-spacing: 0.08em; color: var(--ink); }
+[data-look="signal"] .neon, [data-look="signal"] .brand { text-shadow: none; }
+[data-look="signal"] .neon-grad { background: none; color: var(--ink); -webkit-text-fill-color: currentColor; filter: none; }
+[data-look="signal"] .glass { border: 0; }
+[data-look="signal"] .edge::before { display: none; }
+[data-look="signal"] .fig, [data-look="signal"] .fig.haloed { filter: none; }
+[data-look="signal"] .fig-stage::before { display: none; }
+[data-look="signal"] .btn { font-weight: 800; border-radius: 99px; }
+[data-look="signal"] .btn-primary, [data-look="signal"] .pulse { background: var(--sig-black); color: var(--sig-paper); box-shadow: none; }
+[data-look="signal"] .pulse::after { display: none; }
+[data-look="signal"] .btn-ghost { background: var(--surface-2); border-color: transparent; }
+[data-look="signal"] .chip[aria-pressed="true"], [data-look="signal"] .chip.on, [data-look="signal"] .seg button[aria-pressed="true"] { box-shadow: none; }
+[data-look="signal"] .tabbar { background: var(--sig-black); border-radius: 30px; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+[data-look="signal"] .tab { font: 400 10px var(--mono); letter-spacing: 0; }
+[data-look="signal"] .tab[aria-current="page"] { color: var(--sig-orange); font-weight: 700; }
+[data-look="signal"] .tab[aria-current="page"] svg { filter: none; }
+[data-look="signal"] .tab[aria-current="page"]::after { background: var(--sig-orange); box-shadow: none; }
+[data-look="signal"] .sheet { box-shadow: none; }
+[data-look="signal"] .day-row.dragging { box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6); }
+
+/* ---------- Today (Signal) ---------- */
+.sig-week { background: var(--surface); border-radius: 30px; padding: 14px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px 4px; justify-items: center; }
+.sig-week > span { font: 400 13px/1 var(--mono); color: var(--muted); }
+.sig-day { position: relative; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font: 700 13px/1 var(--mono); background: var(--sig-dark); color: #7c8188; transition: transform 0.2s var(--ease); }
+.sig-day::before { content: ""; position: absolute; inset: -2px; } /* 44px tap area */
+.sig-day:active { transform: scale(0.92); }
+.sig-day.plan { background: var(--sig-grey); color: var(--ink); }
+.sig-day.done { background: var(--sig-paper); color: #000; }
+.sig-day.today { background: var(--sig-orange); color: #000; }
+.sig-day[aria-selected="true"] { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--ink); }
+
+.sig-tile { margin-top: 12px; background: var(--sig-orange); color: #000; border-radius: 34px; padding: 20px 20px 18px; display: grid; gap: 14px; }
+.sig-tile .sig-eyebrow { font: 700 13px/1 var(--mono); letter-spacing: 0.08em; }
+.sig-pill { display: inline-flex; align-items: center; gap: 6px; background: #000; color: var(--sig-paper); font: 700 12px/1 var(--mono); padding: 8px 11px; border-radius: 99px; }
+.sig-title { margin: 0; font: 800 66px/0.88 var(--display); letter-spacing: -0.01em; text-transform: uppercase; color: #000; overflow-wrap: anywhere; }
+.sig-figure { width: 124px; height: 124px; flex: none; border-radius: 50%; background: var(--sig-paper); display: grid; place-items: center; overflow: hidden; }
+.sig-figure .fig .mn polyline, .sig-figure .fig .mn circle { stroke: #000; }
+.sig-figure .fig .lt line, .sig-figure .fig .lt polyline, .sig-figure .fig .lt circle { stroke: #000; stroke-opacity: 0.35; }
+.sig-figure .fig .floor { stroke: var(--sig-orange); opacity: 1; }
+.sig-caption { font: 400 12px/1.2 var(--mono); text-align: right; margin-top: -6px; min-height: 15px; text-transform: uppercase; }
+.sig-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.sig-stat { background: #000; color: var(--sig-paper); border-radius: 22px; padding: 12px 14px; display: grid; gap: 4px; }
+.sig-stat b { font: 900 34px/1 var(--body); }
+.sig-stat span { font: 400 11px/1 var(--mono); color: var(--muted); text-transform: uppercase; }
+.sig-stat.paper { background: var(--sig-paper); color: #000; }
+.sig-stat.paper span { color: #000; }
+
+.sig-list { background: var(--sig-paper); color: #000; border-radius: 34px; padding: 6px 18px 10px; }
+.sig-list-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 10px; font: 700 13px/1 var(--mono); letter-spacing: 0.08em; }
+.sig-list-head span:last-child { font-weight: 400; color: var(--sig-quiet); letter-spacing: 0; font-size: 12px; }
+.sig-list .list-row { display: grid; grid-template-columns: 26px 2px 14px minmax(0, 1fr) auto; column-gap: 10px; min-height: 64px; padding: 6px 0; border-radius: 0; border-top: 2px solid #000; color: #000; }
+.sig-list .day-row + .day-row .list-row { border-top: 2px solid #000; }
+.sig-list .list-row:active { background: rgba(0, 0, 0, 0.06); }
+.sig-list .day-row.dragging { background: var(--sig-paper); }
+.sig-n { font: 400 15px/1 var(--mono); }
+.sig-rule { align-self: stretch; background: #000; }
+.sig-dot { width: 14px; height: 14px; border-radius: 50%; background: #000; }
+.sig-dot.heavy { background: var(--sig-orange); }
+.sig-name { display: block; font: 800 23px/1 var(--display); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sig-note { display: block; margin-top: 3px; font: 400 11px/1.2 var(--mono); color: var(--sig-quiet); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sig-sets { font: 700 15px/1 var(--mono); white-space: nowrap; }
+.sig-legend { display: flex; align-items: center; gap: 8px; padding: 12px 0 6px; border-top: 2px solid #000; font: 400 11px/1 var(--mono); color: var(--sig-quiet); }
+.sig-legend i { width: 10px; height: 10px; border-radius: 50%; background: #000; }
+.sig-legend i.heavy { background: var(--sig-orange); margin-left: 0; }
+.sig-legend i + i, .sig-legend .gap { margin-left: 10px; }
+
+.sig-start { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 72px; padding: 0 8px 0 26px; border-radius: 36px; background: #000; color: var(--sig-paper); font: 800 30px/1 var(--display); letter-spacing: 0.03em; text-transform: uppercase; transition: transform 0.12s var(--ease); }
+.sig-start:active { transform: scale(0.97); }
+.sig-start .sig-go { width: 56px; height: 56px; flex: none; border-radius: 50%; background: var(--sig-orange); color: #000; display: grid; place-items: center; }

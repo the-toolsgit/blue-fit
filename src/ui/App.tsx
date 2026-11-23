@@ -104,6 +104,12 @@ export function App() {
 
   useEffect(() => {
     const root = document.documentElement;
+    if (settings.look === "signal") root.dataset.look = "signal"; else delete root.dataset.look;
+    try { localStorage.setItem("bf-look", JSON.stringify(settings.look ?? "neon")); } catch { /* ignore */ }
+  }, [settings.look]);
+
+  useEffect(() => {
+    const root = document.documentElement;
     if (settings.accent === "blue") delete root.dataset.accent; else root.dataset.accent = settings.accent;
     try { localStorage.setItem("bf-accent", JSON.stringify(settings.accent)); } catch { /* ignore */ }
   }, [settings.accent]);
