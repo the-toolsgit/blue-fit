@@ -5,9 +5,19 @@ import { muscleLabel, type MuscleGroup } from "../../core/types";
 
 const pts = (l: number[][]) => l.map((q) => q.join(",")).join(" ");
 export const RECOVERY_COLOR: Record<Recovery, string> = { recovering: "var(--recovering)", partial: "var(--warn)", fresh: "var(--good)" };
+/** This week's sets against the target, in clear steps (Progress map): not trained = outline only */
+export type VolumeStage = "none" | "started" | "half" | "target" | "above";
+export const STAGE_STYLE: Record<VolumeStage, { color: string; fill: number; label: string }> = {
+  none: { color: "var(--fig2)", fill: 0, label: "Not yet" },
+  started: { color: "var(--neon)", fill: 0.18, label: "Started" },
+  half: { color: "var(--neon)", fill: 0.8, label: "Halfway" },
+  target: { color: "var(--good)", fill: 0.75, label: "In target" },
+  above: { color: "var(--pink-2)", fill: 0.75, label: "Above" },
+};
 
-export function MuscleMap({ intensity, recovery, selected, onSelect }: {
+export function MuscleMap({ intensity, recovery, stage, selected, onSelect }: {
   intensity?: Partial<Record<MuscleGroup, number>>;
+  stage?: Partial<Record<MuscleGroup, VolumeStage>>;
   recovery?: Partial<Record<MuscleGroup, Recovery>>;
   selected?: MuscleGroup | null;
   onSelect?: (g: MuscleGroup) => void;
@@ -17,13 +27,15 @@ export function MuscleMap({ intensity, recovery, selected, onSelect }: {
       {regionsFor(v).map(({ group, shape }, i) => {
         const k = Math.max(0, Math.min(1, intensity?.[group] ?? 0));
         const rec = recovery?.[group];
-        const color = rec ? RECOVERY_COLOR[rec] : "var(--neon)";
-        const opacity = rec ? (rec === "fresh" ? 0.16 : 0.75) : k > 0 ? 0.14 + 0.7 * k : 0.05;
+        const st = stage ? STAGE_STYLE[stage[group] ?? "none"] : null;
+        const color = st ? st.color : rec ? RECOVERY_COLOR[rec] : "var(--neon)";
+        const opacity = st ? st.fill : rec ? (rec === "fresh" ? 0.16 : 0.75) : k > 0 ? 0.14 + 0.7 * k : 0.05;
+        const glow = st ? st.fill >= 0.7 : rec ? rec !== "fresh" : k > 0.55;
         const sel = selected === group;
         const props = {
           fill: color, fillOpacity: sel ? Math.max(opacity, 0.5) : opacity,
-          stroke: sel ? "var(--ink)" : color, strokeOpacity: sel ? 0.9 : Math.min(1, opacity + 0.15), strokeWidth: sel ? 1.2 : 0.6,
-          style: { filter: (rec ? rec !== "fresh" : k > 0.55) ? `drop-shadow(0 0 3px ${color})` : undefined, transition: "fill-opacity .6s var(--ease)", cursor: onSelect ? "pointer" : undefined },
+          stroke: sel ? "var(--ink)" : color, strokeOpacity: sel ? 0.9 : st ? (st.fill >= 0.7 ? 1 : st.fill ? 0.55 : 0.7) : Math.min(1, opacity + 0.15), strokeWidth: sel ? 1.2 : 0.6,
+          style: { filter: glow ? `drop-shadow(0 0 3px ${color})` : undefined, transition: "fill-opacity .6s var(--ease)", cursor: onSelect ? "pointer" : undefined },
           onClick: onSelect ? () => onSelect(group) : undefined,
         };
         return shape.kind === "ellipse"

@@ -11,7 +11,7 @@ import { Seg } from "../components/Controls";
 import { ExerciseProgress } from "../components/ExerciseProgress";
 import { Figure } from "../components/Figure";
 import { Icon } from "../components/Icon";
-import { MuscleMap, RECOVERY_COLOR } from "../components/MuscleMap";
+import { MuscleMap, RECOVERY_COLOR, STAGE_STYLE, type VolumeStage } from "../components/MuscleMap";
 import { fmtVolume } from "../format";
 import { useStore } from "../store";
 
@@ -55,7 +55,12 @@ export function ProgressScreen() {
   const stepEx = (d: 1 | -1) => { const n = logged[exIdx + d]; if (n) { setExDir(d === 1 ? "next" : "prev"); setExId(n.id); } };
 
   const thisWeek = weeks[weeks.length - 1]?.sets ?? ({} as Record<MuscleGroup, number>);
-  const intensity = Object.fromEntries(MUSCLE_GROUPS.map((m) => { const t = tmap.get(m.id); return [m.id, (thisWeek[m.id] ?? 0) / (t?.max ?? t?.min ?? 12)]; }));
+  // This week's sets against each muscle's target, in clear steps (no target: any sets count as started)
+  const stage = Object.fromEntries(MUSCLE_GROUPS.map((m) => {
+    const n = thisWeek[m.id] ?? 0, t = tmap.get(m.id), min = t && !t.off ? t.min : null, max = t && !t.off ? t.max : null;
+    const st: VolumeStage = n <= 0 ? "none" : max != null && n > max ? "above" : min != null && n >= min ? "target" : min != null && n >= min / 2 ? "half" : "started";
+    return [m.id, st];
+  })) as Record<MuscleGroup, VolumeStage>;
   const recMap = Object.fromEntries(MUSCLE_GROUPS.map((m) => [m.id, rec[m.id].status])) as Record<MuscleGroup, Recovery>;
   const t = tmap.get(muscle);
 
@@ -88,7 +93,7 @@ export function ProgressScreen() {
       <section className="glass" style={{ padding: 14 }}>
         <Seg label="Map mode" value={mapMode} onChange={(v) => { setMapMode(v); setSel(null); }} options={[{ v: "volume", label: "This week" }, { v: "recovery", label: "Recovery" }]} />
         <div style={{ marginTop: 10 }}>
-          <MuscleMap intensity={mapMode === "volume" ? intensity : undefined} recovery={mapMode === "recovery" ? recMap : undefined} selected={sel} onSelect={(g) => { setSwipeDir(null); setSel(sel === g ? null : g); }} />
+          <MuscleMap stage={mapMode === "volume" ? stage : undefined} recovery={mapMode === "recovery" ? recMap : undefined} selected={sel} onSelect={(g) => { setSwipeDir(null); setSel(sel === g ? null : g); }} />
         </div>
         <div className="map-caption row" style={{ minHeight: 48, gap: 0, alignItems: "center", marginTop: 6, textAlign: "center", fontSize: 14, touchAction: "pan-y" }}
           onPointerDown={(e) => { swipe.current = { x: e.clientX, y: e.clientY }; }}
@@ -106,7 +111,7 @@ export function ProgressScreen() {
               ? <><b>{muscleLabel(sel)}</b> · <span className="mono">{fmtNum(thisWeek[sel] ?? 0)}</span> sets this week <span className="muted">· target {formatTarget(tmap.get(sel))}</span></>
               : <><b>{muscleLabel(sel)}</b> · <span style={{ color: RECOVERY_COLOR[rec[sel].status] }}>{REC_LABEL[rec[sel].status]}</span> <span className="muted">· {recNote(rec[sel])}</span></>
           ) : mapMode === "volume"
-            ? <span className="muted">Brighter = closer to the top of the target.</span>
+            ? <span className="row" style={{ justifyContent: "center", gap: "4px 9px", fontSize: 11.5, flexWrap: "wrap" }}>{(Object.keys(STAGE_STYLE) as VolumeStage[]).map((k) => <span key={k} className="row" style={{ gap: 5 }}><i style={{ width: 10, height: 10, borderRadius: 3, border: `1px solid ${STAGE_STYLE[k].color}`, background: STAGE_STYLE[k].fill ? STAGE_STYLE[k].color : "transparent", opacity: k === "started" ? 0.6 : 1, boxShadow: STAGE_STYLE[k].fill >= 0.7 ? `0 0 6px ${STAGE_STYLE[k].color}` : undefined }} />{STAGE_STYLE[k].label}</span>)}</span>
             : <span className="row" style={{ justifyContent: "center", gap: 12, fontSize: 12 }}>{(Object.keys(REC_LABEL) as Recovery[]).map((r) => <span key={r} className="row" style={{ gap: 5 }}><i style={{ width: 10, height: 10, borderRadius: 3, background: RECOVERY_COLOR[r], boxShadow: `0 0 6px ${RECOVERY_COLOR[r]}` }} />{REC_LABEL[r]}</span>)}</span>}
           </div>
           <button className="map-chev" aria-label="Next muscle" onClick={() => step(1)}>›</button>
