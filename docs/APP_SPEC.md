@@ -161,7 +161,7 @@ Empty (no finished workouts): curl figure (CURL pose), "Finish a workout and you
   - **Swipe** left/right on the caption under the map: selects the next/previous muscle, top to bottom (neck, traps, front delts, side delts, rear delts, chest, back, abs, biceps, triceps, forearms, glutes, quads, hamstrings, adductors, calves; wraps around); the caption slides in. Faint ‹ › on both sides of the caption (vertically centered, also tappable) hint at the swipe. The chart below doesn't change.
 - **Weekly sets vs target:** muscle chips; bar chart of that muscle's sets per week with the target as a green band; "Green band = target n–n sets a week." (The volume table with its "This week | Average" toggle was removed from Progress on Nov 21 2026; it stays in the plan editor.)
 - **Weekly volume:** bar chart of tonnage per week (readout shows workouts that week).
-- **Exercise progress:** exercise dropdown (exercises with logged sets, most recently trained first) + the exercise progress chart (§3.13), limited to the range.
+- **Exercise progress:** one neon bar: ‹ previous · exercise dropdown with "n / total" · next › (exercises with logged sets, most recently trained first; arrows step through them without opening the dropdown, dimmed at the ends; the chart slides in from the side it came from, no slide with reduced motion) + the exercise progress chart (§3.13), limited to the range.
 
 ### 3.13 Exercise progress chart (component)
 Segmented Est. 1RM · Best set · Volume. Est. 1RM: line chart, one point per session, readout "160 lb · 120 × 10". Best set: line of the best set's weight (by e1RM), readout "× reps". Volume: bars of the session volume for the exercise, readout "n sets". "No sets logged (in this range) yet." when empty.

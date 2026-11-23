@@ -10,6 +10,7 @@ import { BarChart, weekLabel } from "../components/Charts";
 import { Seg } from "../components/Controls";
 import { ExerciseProgress } from "../components/ExerciseProgress";
 import { Figure } from "../components/Figure";
+import { Icon } from "../components/Icon";
 import { MuscleMap, RECOVERY_COLOR } from "../components/MuscleMap";
 import { fmtVolume } from "../format";
 import { useStore } from "../store";
@@ -49,6 +50,9 @@ export function ProgressScreen() {
   }, [finished, exercises]);
   const [exId, setExId] = useKeptState<string | null>("progress-exercise", null);
   const ex = exMap.get(exId ?? logged[0]?.id ?? "");
+  const exIdx = Math.max(0, logged.findIndex((e) => e.id === ex?.id));
+  const [exDir, setExDir] = useState<"next" | "prev" | null>(null);
+  const stepEx = (d: 1 | -1) => { const n = logged[exIdx + d]; if (n) { setExDir(d === 1 ? "next" : "prev"); setExId(n.id); } };
 
   const thisWeek = weeks[weeks.length - 1]?.sets ?? ({} as Record<MuscleGroup, number>);
   const intensity = Object.fromEntries(MUSCLE_GROUPS.map((m) => { const t = tmap.get(m.id); return [m.id, (thisWeek[m.id] ?? 0) / (t?.max ?? t?.min ?? 12)]; }));
@@ -125,10 +129,17 @@ export function ProgressScreen() {
 
       <h2 className="section-title">Exercise progress</h2>
       <section className="glass" style={{ padding: 14 }}>
-        <select className="input" aria-label="Exercise" value={ex?.id ?? ""} onChange={(e) => setExId(e.target.value)} style={{ marginBottom: 10 }}>
-          {logged.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}
-        </select>
-        {ex && <ExerciseProgress key={ex.id + range} ex={ex} from={from} />}
+        <div className="ex-step">
+          <button className="ex-step-btn" aria-label="Previous exercise" disabled={exIdx <= 0} onClick={() => stepEx(-1)}><span style={{ display: "inline-flex", transform: "scaleX(-1)" }}><Icon name="chevron" size={20} /></span></button>
+          <div className="ex-step-mid">
+            <select className="input" aria-label="Exercise" value={ex?.id ?? ""} onChange={(e) => { setExDir(null); setExId(e.target.value); }}>
+              {logged.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}
+            </select>
+            <span className="ex-step-count">{exIdx + 1} / {logged.length}</span>
+          </div>
+          <button className="ex-step-btn" aria-label="Next exercise" disabled={exIdx >= logged.length - 1} onClick={() => stepEx(1)}><Icon name="chevron" size={20} /></button>
+        </div>
+        {ex && <div key={ex.id} className={exDir ? `ex-slide-${exDir}` : undefined}><ExerciseProgress key={ex.id + range} ex={ex} from={from} /></div>}
       </section>
     </div>
   );

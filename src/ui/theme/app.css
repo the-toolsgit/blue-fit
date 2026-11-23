@@ -743,3 +743,22 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 /* Still figures' drawn glow (see .fig.haloed): after the .fig line rules so it wins */
 .fig.haloed .halo .mn polyline, .fig.haloed .halo .mn circle { fill: none; stroke: var(--fig-glow); stroke-width: 6.5; opacity: .5; }
 .fig.haloed .halo .lt, .fig.haloed .halo .floor { display: none; }
+
+/* Exercise progress: one neon bar, prev ‹ name ⌄ › next */
+.ex-step { display: grid; grid-template-columns: var(--tap) minmax(0, 1fr) var(--tap); align-items: stretch; margin-bottom: 10px; border: 1px solid var(--line-strong); border-radius: 14px; background: var(--surface-2); overflow: hidden; transition: border-color .2s, box-shadow .2s; }
+.ex-step:focus-within { border-color: var(--neon-ink); box-shadow: 0 0 0 3px var(--glow-soft); }
+.ex-step-btn { display: grid; place-items: center; min-height: var(--tap); color: var(--neon-ink); transition: color .2s, background .2s, transform .12s; }
+.ex-step-btn:first-child { border-right: 1px solid var(--line-strong); }
+.ex-step-btn:last-child { border-left: 1px solid var(--line-strong); }
+.ex-step-btn:not(:disabled):active { background: var(--glow-soft); }
+.ex-step-btn:not(:disabled):active svg { transform: scale(.85); }
+.ex-step-btn:not(:disabled) svg { filter: drop-shadow(0 0 4px var(--glow)); }
+.ex-step-btn:disabled { color: var(--muted); opacity: .35; }
+.ex-step-mid { position: relative; min-width: 0; }
+.ex-step-mid select.input { border: 0; border-radius: 0; background-color: transparent; box-shadow: none; height: 100%; padding-right: 82px; font-weight: 600; }
+.ex-step-count { position: absolute; right: 36px; top: 50%; transform: translateY(-50%); font: 500 11px var(--mono); color: var(--muted); pointer-events: none; }
+.ex-slide-next { animation: exSlideNext .28s cubic-bezier(.2,.8,.2,1); }
+.ex-slide-prev { animation: exSlidePrev .28s cubic-bezier(.2,.8,.2,1); }
+@keyframes exSlideNext { from { opacity: 0; transform: translateX(18px); } }
+@keyframes exSlidePrev { from { opacity: 0; transform: translateX(-18px); } }
+@media (prefers-reduced-motion: reduce) { .ex-slide-next, .ex-slide-prev { animation: none; } }
