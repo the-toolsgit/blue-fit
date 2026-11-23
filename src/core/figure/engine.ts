@@ -246,6 +246,13 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
       const pts: Pt[] = [...half(p0, peak), ...half(peak, p2).slice(1)];
       light.push({ kind: "curve", points: pts });
     }
+    // A machine lever arm that swings with the hand (front view): from a pivot post at x = `lever[1]` straight across
+    // to the top of the handle (`dy` above the hand), e.g. a pec deck's arms. The post hangs from `top` to the lever.
+    if (o.lever) {
+      const h = J[o.lever[0]], y = h[1] + (o.dy ?? -6), x0 = o.lever[1];
+      light.push({ kind: "line", x1: x0, y1: o.top ?? 4, x2: x0, y2: y.toFixed(1), width: 2.5 });
+      light.push({ kind: "line", x1: x0, y1: y.toFixed(1), x2: h[0].toFixed(1), y2: y.toFixed(1), width: 2.5 });
+    }
     if (o.perp) {
       const h = J[o.perp], v = V(o.ang, o.len / 2);
       light.push({ kind: "line", x1: (h[0] - v[0]).toFixed(1), y1: (h[1] - v[1]).toFixed(1), x2: (h[0] + v[0]).toFixed(1), y2: (h[1] + v[1]).toFixed(1), width: 2.5 });

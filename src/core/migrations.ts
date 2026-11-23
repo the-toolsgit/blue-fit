@@ -718,6 +718,16 @@ export const MIGRATIONS: Migration[] = [
       "lean-in-lateral-raise": { was: ["1i3vp5m"], figure: buildFigure("lateral-raise-lean-in-cable") as Exercise["figure"] },
     }),
   },
+  {
+    // Nov 23 2026: machine flies (pec deck, reverse fly, single-arm reverse fly) show the machine's lever arms and
+    // tall handles, so the hands hold something. Only while the figure is still the app's old one.
+    id: "2026-11-23-fly-machine-levers",
+    run: (d) => replaceAppFigures(d, {
+      butterfly: { was: ["1xte9lf"], figure: buildFigure("pec-deck") as Exercise["figure"] },
+      "machine-reverse-fly": { was: ["1wbj9eb"], figure: buildFigure("reverse-fly-machine") as Exercise["figure"] },
+      "single-arm-machine-reverse-fly": { was: ["1ev93i7"], figure: buildFigure("reverse-fly-machine-single") as Exercise["figure"] },
+    }),
+  },
 ];
 
 type FigureUpdates = Record<string, { was: string[]; figure: Exercise["figure"] }>;
