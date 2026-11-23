@@ -180,7 +180,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     const t = tmap.get(g)!, w = week.get(g) ?? 0;
     const out = w < t.min! || (!minOnly && t.max != null && w > t.max);
     return out ? [`${L(g)}: ${fmtNum(w)} sets, target ${formatTarget(t)}`] : [];
-  }), "Each muscle gets enough sets a week, not too many (its target)");
+  }), "Each muscle gets enough sets a week");
 
   // Every angle and Stretch look at every focus muscle too: one the plan doesn't train has none of its angles or stretch
   const jobs = check("jobs", "Every angle", focusAll.flatMap((g) => {
@@ -191,7 +191,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     const none = miss.filter((j) => !some.get(j)), short = miss.filter((j) => some.get(j));
     const what = [...(none.length ? [`no ${none.join(", ")}`] : []), ...short.map((j) => `${j} only ${fmtNum(some.get(j)!)} of ${ANGLE_MIN_SETS} sets`)].join(", ");
     return [`${L(g)}: ${what}${tries.length ? ` · try ${tries.slice(0, 2).join(" or ")}` : ""}`];
-  }), `Every muscle trained in all its movements, ${ANGLE_MIN_SETS}+ sets each (a ½ set counts half)`);
+  }), "Every muscle trained in all its movements");
 
   const stretch = check("stretch", "Stretch", focusAll.filter((g) => STRETCH_MUSCLES.has(g) && !slots.some((s) => ex(s).stretch?.includes(g)))
     .map((g) => `${L(g)}: no stretch exercise`), "Each muscle has an exercise that works it fully stretched (like incline curls for biceps)");
@@ -201,10 +201,10 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   // week need 2+ days.
   const needsTwo = (g: MuscleGroup) => (week.get(g) ?? 0) > MAX_SESSION_SETS;
   const frequency = check("frequency", "Twice a week", main.filter((g) => needsTwo(g) && daysFor(g).length < 2).map((g) => `${L(g)}: ${fmtNum(week.get(g) ?? 0)} sets in one day`),
-    `Every muscle over ${MAX_SESSION_SETS} sets a week on 2+ days`);
+    "Muscles with many sets train on at least 2 days a week");
 
   const over = main.flatMap((g) => days.filter((d) => daySets(d, g) > MAX_SESSION_SETS).map((d) => ({ g, d, n: daySets(d, g) })));
-  const dose0 = check("dose", "Sets per workout", uniq(over.map((o) => `${L(o.g)}: ${fmtNum(o.n)} sets on ${o.d.title}`)),
+  const dose0 = check("dose", "No overtraining", uniq(over.map((o) => `${L(o.g)}: ${fmtNum(o.n)} sets on ${o.d.title}`)),
     `${MAX_SESSION_SETS} or fewer sets per muscle per workout`);
   const dose: Check = over.length && over.every((o) => o.n <= MAX_SESSION_SETS + SESSION_SETS_WARN) ? { ...dose0, warn: true } : dose0;
 
@@ -239,14 +239,14 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     if (new Set(own.map((s) => s.exerciseId)).size < 2) return [];
     const heavy = own.some((s) => mid(s) <= HEAVY_REPS), light = own.some((s) => mid(s) >= LIGHT_REPS);
     return heavy && light ? [] : [`${L(g)}: ${!heavy && !light ? "no heavy or light sets" : heavy ? "no light sets" : "no heavy sets"}`];
-  }), `Big muscles get some heavy (max ${HEAVY_REPS} reps) and some light sets (min ${LIGHT_REPS} reps)`);
+  }), "Big muscles get some heavy and some light sets");
   const mix: Check = mix0.pass ? mix0 : { ...mix0, warn: true };
 
   const rest = (min: number | null, max: number | null, only?: Slot[]) => {
     const pool = only ?? slots;
     const bad = uniq(pool.filter((s) => (min != null && s.restSec < min) || (max != null && s.restSec > max)).map((s) => `${ex(s).name}: ${s.restSec} s`));
     return check("rest", min != null && max == null ? "Long rests" : "Short rests", bad,
-      min === GROWTH_REST && !only ? `Rest at least ${min} s (90 s+ is fine too)` : min != null ? `Rests ${min >= 120 ? `${min / 60} min` : `${min} s`} or more` : `Rests ${max} s or less`);
+      min === GROWTH_REST && !only ? `Rest at least ${min} seconds` : min != null ? `Rests ${min >= 120 ? `${min / 60} min` : `${min} s`} or more` : `Rests ${max} s or less`);
   };
 
   const tip = (c: Check): Check => (c.pass ? c : { ...c, warn: true });
@@ -281,7 +281,7 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
     { id: "failure", label: "Failure", max: W.failure, points: !failure || !failure.applies ? W.failure : W.failure * share(failEligible.filter((g) => failure.muscles.has(g)).length, failEligible.length),
       note: !failure || !failure.applies ? "Not used for your goal" : `${failEligible.filter((g) => failure.muscles.has(g)).length} of ${failEligible.length} muscles get a failure set` },
     { id: "twice", label: "Twice a week", max: W.twice, points: W.twice * share(twoNeeded.filter((g) => daysFor(g).length >= 2).length, twoNeeded.length), note: twoNeeded.length ? `${twoNeeded.filter((g) => daysFor(g).length >= 2).length} of ${twoNeeded.length} big muscles on 2+ days` : "No muscle needs it" },
-    { id: "dose", label: "Sets per workout", max: 0, points: -DOSE_PENALTY * over.length, note: over.length ? `${over.length} over ${MAX_SESSION_SETS} in one workout` : `None over ${MAX_SESSION_SETS}` },
+    { id: "dose", label: "No overtraining", max: 0, points: -DOSE_PENALTY * over.length, note: over.length ? `${over.length} over ${MAX_SESSION_SETS} in one workout` : `None over ${MAX_SESSION_SETS}` },
   ];
   // An empty plan earns nothing beyond the base
   const earned = main.length ? parts.reduce((a, p) => a + p.points, 0) : 0;

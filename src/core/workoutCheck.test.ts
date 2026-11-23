@@ -39,7 +39,7 @@ describe("workout check", () => {
     const bad = { ...r, days: r.days.map((d, i) => i ? d : { ...d, slots: d.slots.map((s, k) => k ? s : { ...s, repMin: 2, repMax: 4, restSec: 45 }) }) };
     const w = weekInsight(bad, exMap, seed.targets);
     expect(w.checks.find((c) => c.id === "reps")).toMatchObject({ pass: false, warn: true });
-    expect(w.checks.find((c) => c.id === "rest")).toMatchObject({ pass: false, warn: true, rule: "Rest at least 60 s (90 s+ is fine too)" });
+    expect(w.checks.find((c) => c.id === "rest")).toMatchObject({ pass: false, warn: true, rule: "Rest at least 60 seconds" });
   });
   it("a missing job fails the job check and fades its chip", () => {
     const noHammer = { ...r, days: r.days.map((d) => ({ ...d, slots: d.slots.filter((s) => s.exerciseId !== "db-hammer-curl") })) };

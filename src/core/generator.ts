@@ -226,7 +226,7 @@ export function generatePlan(input: GenInput): RoutineDay[] {
     }
     return best;
   };
-  /** A muscle's sets in one workout as the Sets per workout check counts them (half sets ½) */
+  /** A muscle's sets in one workout as the No overtraining check counts them (half sets ½) */
   const doseOn = (d: RoutineDay, g: MuscleGroup) => d.slots.reduce((a, s) => a + s.sets * (exMap.get(s.exerciseId)?.volume.find((v) => v.group === g)?.weight ?? 0), 0);
   for (const g of focus) {
     const t = tmap.get(g)!, allowed = allowedDaysFor(g, trainDays, themeOf);

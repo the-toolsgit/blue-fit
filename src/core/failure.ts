@@ -269,7 +269,7 @@ export function planExtraSets(day: RoutineDay, date: string, c: FailureContext):
       if (dd && !doneThisWeek(dd.id) && directIn(dd, g, c.exMap).length) { first = d; break; }
     }
     if (first !== date) continue;
-    // The workout's dose for the muscle counts indirect sets as half, like the Sets per workout check
+    // The workout's dose for the muscle counts indirect sets as half, like the No overtraining check
     const dose = day.slots.reduce((a, s) => a + s.sets * (c.exMap.get(s.exerciseId)?.volume.find((v) => v.group === g)?.weight ?? 0), 0);
     if (dose + 1 > MAX_SESSION_SETS) continue;
     // Not if the muscle is hard again within its rest days after this workout (database: 2 big muscles, 1 the rest)
