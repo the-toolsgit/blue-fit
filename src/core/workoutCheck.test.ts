@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
 import { JOBS, weekInsight } from "./workoutCheck";
 import { MIGRATIONS } from "./migrations";
+import { catalog } from "./seed/exercise-db/index";
 
 const seed = buildSeed();
+const catalogEx = () => catalog();
 const exMap = new Map(seed.exercises.map((e) => [e.id, e]));
 const r = seed.routines[0];
 
@@ -180,5 +182,18 @@ describe("muscle database and the muscle map", () => {
       const refs = Object.values(MAP_PARTS[g as keyof typeof MAP_PARTS] ?? {}).flat().map((p) => p!.ref);
       for (const a of angles!) expect(refs, `${g}: ${a}`).toContain(`job:${a}`);
     }
+  });
+});
+
+describe("an angle needs 2 sets, a ½ set counting half", () => {
+  it("3 sets of a ½ exercise (1.5) fall short; 4 (2) cover it; direct work covers it", async () => {
+    const { anglesCovered, angleSets } = await import("./workoutCheck");
+    const sl = (exerciseId: string, sets: number) => ({ id: exerciseId, exerciseId, sets, repMin: 8, repMax: 12, restSec: 90 });
+    const m = new Map(exMap);
+    for (const e of catalogEx()) if (!m.has(e.id)) m.set(e.id, e);
+    expect(angleSets([sl("cable-y-raise", 3)], m, "traps").get("mid/lower")).toBe(1.5);
+    expect(anglesCovered([sl("cable-y-raise", 3)], m, "traps").has("mid/lower")).toBe(false);
+    expect(anglesCovered([sl("cable-y-raise", 4)], m, "traps").has("mid/lower")).toBe(true);
+    expect(anglesCovered([sl("kelso-shrug", 2)], m, "traps").has("mid/lower")).toBe(true);
   });
 });

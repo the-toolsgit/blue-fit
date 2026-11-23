@@ -9,7 +9,7 @@ import { muscleLabel, MUSCLE_GROUPS, type Exercise, type Goal, type MuscleGroup,
 import { uid } from "./util";
 import { isFocus, planVolume } from "./volume";
 import { priorityOf } from "./volumeModel";
-import { HARD_SETS, JOBS, MAX_SESSION_SETS, STRETCH_MUSCLES, weekInsight } from "./workoutCheck";
+import { anglesCovered, HARD_SETS, JOBS, MAX_SESSION_SETS, STRETCH_MUSCLES, weekInsight } from "./workoutCheck";
 
 export interface GenInput {
   goal: Goal;
@@ -186,14 +186,14 @@ export function generatePlan(input: GenInput): RoutineDay[] {
   //    over 11 per workout) on the days its theme trains, with its rest days in between; its sets split evenly over
   //    those days, the bigger share on the lighter day. A share that doesn't fit a day's time goes to another of its days.
   const have = new Map<MuscleGroup, number>();
-  const jobsHit = new Map<MuscleGroup, Set<string>>();
+  /** Angles of g the plan so far trains enough (2+ sets, a ½ set counting half: workoutCheck.anglesCovered) */
+  const covered = (g: MuscleGroup) => anglesCovered(days.flatMap((d) => d.slots), exMap, g);
   const stretched = new Set<MuscleGroup>();
   const used = new Set<string>();
   const add = (d: RoutineDay, ex: Exercise, sets: number, main: MuscleGroup) => {
     const s: Slot = { id: "slot-" + uid().slice(0, 8), exerciseId: ex.id, sets, repMin: 0, repMax: 0, restSec: restOf(ex) };
     d.slots.push(s); meta.set(s.id, { main }); used.add(ex.id);
     for (const v of ex.volume) have.set(v.group, (have.get(v.group) ?? 0) + sets * v.weight);
-    for (const [g, j] of Object.entries(ex.jobs ?? {})) for (const one of [j].flat()) jobsHit.set(g as MuscleGroup, new Set([...(jobsHit.get(g as MuscleGroup) ?? []), one!]));
     for (const g of ex.stretch ?? []) stretched.add(g);
   };
   const pick = (g: MuscleGroup, d: RoutineDay, sets: number): Exercise | undefined => {
@@ -201,13 +201,14 @@ export function generatePlan(input: GenInput): RoutineDay[] {
     const taken = new Set(d.slots.filter((s) => meta.get(s.id)?.main === g).map((s) => moveKey(exMap.get(s.exerciseId)!, g)));
     const cands = pool.filter((e) => e.volume.some((v) => v.group === g && v.weight === 1) && (e.measure !== "time" || g === "abs") && !taken.has(moveKey(e, g)));
     const needCompound = HEADLINE.has(g) && !d.slots.some((s) => meta.get(s.id)?.main === g && exMap.get(s.exerciseId)?.compound);
+    const hitG = covered(g);
     const bestNewTier = Math.max(-1, ...cands.filter((e) => !input.avoid?.has(e.id) && !used.has(e.id)).map(tierPoints));
     let best: Exercise | undefined, bestScore = -Infinity;
     for (const e of cands) {
       let score = rand() * 2;
       // An angle still missing counts more than a top pick: every angle is a rule, a top pick a preference
       const jobs = [e.jobs?.[g]].flat().filter(Boolean) as string[];
-      score += 10 * jobs.filter((j) => !jobsHit.get(g)?.has(j)).length;
+      score += 10 * jobs.filter((j) => !hitG.has(j)).length;
       if (isTopPick(e, input.goal)) score += 6;
       score += tierBonus(e, input.goal);
       if (needCompound && e.compound) score += 8;
@@ -230,7 +231,7 @@ export function generatePlan(input: GenInput): RoutineDay[] {
   for (const g of focus) {
     const t = tmap.get(g)!, allowed = allowedDaysFor(g, trainDays, themeOf);
     if (!allowed.length) continue;
-    const openJobs = () => (JOBS[g] ?? []).filter((j) => !jobsHit.get(g)?.has(j)).length;
+    const openJobs = () => { const c = covered(g); return (JOBS[g] ?? []).filter((j) => !c.has(j)).length; };
     let need = Math.max(0, Math.round(aim.get(g)! - (have.get(g) ?? 0)));
     // Angles still open need their own exercise even when half sets already cover the number (ceiling allowing)
     const open0 = angleRule && (JOBS[g]?.length ?? 1) > 1 ? openJobs() : 0;
@@ -362,7 +363,9 @@ export function generatePlan(input: GenInput): RoutineDay[] {
       const jobsOf = (e: Exercise) => [e.jobs?.[g]].flat().filter(Boolean) as string[];
       // Twice a week: a muscle over 11 a week keeps a second day
       const daysAfter = new Set(days.filter((x) => x.slots.some((o) => o !== s && o.sets > 0 && meta.get(o.id)?.main === g)).map((x) => x.id)).size;
-      const keeps = jobsOf(ex).every((j) => others.some((o) => jobsOf(exMap.get(o.exerciseId)!).includes(j)))
+      // Every angle stays trained enough without it (its sets go to the muscle's other exercises)
+      const all = days.flatMap((x) => x.slots), before = anglesCovered(all, exMap, g), after = anglesCovered(all.filter((o) => o !== s), exMap, g);
+      const keeps = jobsOf(ex).every((j) => after.has(j) || (!before.has(j) && others.some((o) => jobsOf(exMap.get(o.exerciseId)!).includes(j))))
         && (!ex.stretch?.includes(g) || others.some((o) => exMap.get(o.exerciseId)!.stretch?.includes(g)))
         && ((vol.get(g) ?? 0) <= MAX_SESSION_SETS || daysAfter >= 2);
       const room2 = others.filter((o) => o.sets < 4).sort((x, y) => (d.slots.includes(y) ? 1 : 0) - (d.slots.includes(x) ? 1 : 0));
@@ -617,7 +620,7 @@ function polish(c: { days: RoutineDay[]; train: RoutineDay[]; meta: Map<string, 
     const used = new Set(days.flatMap((d) => d.slots.map((s) => s.exerciseId)));
     for (const g of P) {
       const mine = days.flatMap((d) => d.slots.filter((s) => meta.get(s.id)?.main === g || isDirect(exMap.get(s.exerciseId)!, g)).map((s) => ({ d, s })));
-      const hit = new Set(days.flatMap((d) => d.slots.flatMap((s) => [exMap.get(s.exerciseId)!.jobs?.[g]].flat().filter(Boolean) as string[])));
+      const hit = anglesCovered(days.flatMap((d) => d.slots), exMap, g);
       const missing = (JOBS[g] ?? []).filter((j) => !hit.has(j));
       const needStretch = STRETCH_MUSCLES.has(g) && !days.some((d) => d.slots.some((s) => exMap.get(s.exerciseId)!.stretch?.includes(g)));
       const cands = pool.filter((e) => isDirect(e, g) && !used.has(e.id) && (e.measure !== "time" || g === "abs"))

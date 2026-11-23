@@ -561,6 +561,7 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wm-parts li svg { flex: none; }
 .wm-parts li.hit { color: var(--ink); } .wm-parts li.hit svg { color: var(--good); }
 .wm-parts li.miss { color: var(--bad); }
+.wm-parts li.short { color: var(--warn); } .wm-parts li.short .mono { margin-left: 2px; font-size: 11px; opacity: .85; }
 .wm-parts li.off { color: var(--muted); }
 .weekmap-legend { display: flex; gap: 8px; white-space: nowrap; font-size: 10.5px; color: var(--muted); margin-top: 10px; overflow: hidden; }
 .weekmap-legend i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
@@ -573,6 +574,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .wm-ex-part { display: grid; gap: 4px; }
 .wm-ex-job { font: 700 13px var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--neon-ink); }
 .wm-ex-part.miss .wm-ex-job, .wm-ex-part.miss .wm-ex-none { color: var(--bad); }
+.wm-ex-part.short .wm-ex-job, .wm-ex-short { color: var(--warn); }
+.wm-ex-short { margin: 0; font-size: 13px; }
 .wm-ex ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .wm-ex li { display: flex; gap: 8px; align-items: baseline; font-size: 14px; }
 .wm-ex li .mono { font-size: 12px; }

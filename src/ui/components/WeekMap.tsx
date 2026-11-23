@@ -6,7 +6,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { GUIDES, HEAD, MAP_H, MAP_PARTS, MAP_W, OUTLINE, partsKey, regionsFor, viewOf, zoomBox, type MapView } from "../../core/muscleMap";
 import { fmtNum } from "../../core/util";
 import { completeProfile, muscleLabel, type MuscleGroup } from "../../core/types";
-import { exercisesFor, type Tile } from "../../core/workoutCheck";
+import { ANGLE_MIN_SETS, exercisesFor, type Tile } from "../../core/workoutCheck";
 import type { Exercise, Routine, VolumeTarget } from "../../core/types";
 import { TargetEdit, toggleSkip } from "./TargetEdit";
 import { useLongPress } from "./longPress";
@@ -89,7 +89,7 @@ export function WeekMap({ tiles, routine, exMap, edit }: { tiles: Tile[]; routin
     if (!ref.startsWith("job:")) return tileColor(byGroup.get(ref as MuscleGroup));
     const job = byGroup.get(partsKey(sel!) === "frontDelts" ? sel! : partsKey(sel!))?.jobs.find((j) => j.name === ref.slice(4));
     const t = byGroup.get(partsKey(sel!) === "frontDelts" ? sel! : partsKey(sel!));
-    return job?.state === "hit" ? "var(--good)" : !t || t.status === "off" ? "var(--faint)" : "var(--bad)";
+    return job?.state === "hit" ? "var(--good)" : !t || t.status === "off" ? "var(--faint)" : job?.state === "short" ? "hsl(50 100% 58%)" : "var(--bad)";
   };
   // Labels spread out vertically so they never overlap
   const labelYs = (ys: number[]) => ys.map((y, i) => Math.max(y, i ? ys[i - 1] + fs * 1.3 : y));
@@ -198,8 +198,8 @@ function MuscleDetail({ g, t, edit }: { g: MuscleGroup; t: Tile | undefined; edi
       {!!t && t.jobs.length > 1 && (
         <ul className="wm-parts">
           {t.jobs.map((j) => {
-            const ok = j.state === "hit", cls = ok ? "hit" : focus ? "miss" : "off";
-            return <li key={j.name} className={cls}><Icon name={ok ? "check" : "close"} size={13} stroke={3} />{j.name}</li>;
+            const ok = j.state === "hit", cls = ok ? "hit" : !focus ? "off" : j.state === "short" ? "short" : "miss";
+            return <li key={j.name} className={cls}><Icon name={ok ? "check" : j.state === "short" ? "minus" : "close"} size={13} stroke={3} />{j.name}{j.state === "short" && <span className="mono">{fmtNum(j.sets)}/{ANGLE_MIN_SETS}</span>}</li>;
           })}
         </ul>
       )}
@@ -218,12 +218,16 @@ function MuscleExercises({ g, routine, exMap, t }: { g: MuscleGroup; routine: Ro
   return (
     <div className="wm-ex">
       <div className="eyebrow">{muscleLabel(g)} · exercises in your plan</div>
-      {x.parts.map((p) => (
-        <div key={p.job} className={"wm-ex-part" + (!p.exercises.length && focus ? " miss" : "")}>
-          <div className="wm-ex-job">{p.job}</div>
-          {p.exercises.length ? <ul>{p.exercises.map(line)}</ul> : <p className="wm-ex-none">{focus ? "Nothing in your plan trains this part" : "None"}</p>}
-        </div>
-      ))}
+      {x.parts.map((p) => {
+        const j = t?.jobs.find((y) => y.name === p.job), short = focus && j?.state === "short";
+        return (
+          <div key={p.job} className={"wm-ex-part" + (!p.exercises.length && focus ? " miss" : short ? " short" : "")}>
+            <div className="wm-ex-job">{p.job}</div>
+            {p.exercises.length ? <ul>{p.exercises.map(line)}</ul> : <p className="wm-ex-none">{focus ? "Nothing in your plan trains this part" : "None"}</p>}
+            {short && <p className="wm-ex-short">Only {fmtNum(j!.sets)} of {ANGLE_MIN_SETS} sets a week (a ½ set counts half). Add a set or a direct exercise.</p>}
+          </div>
+        );
+      })}
       {!!x.other.length && <div className="wm-ex-part">{!!x.parts.length && <div className="wm-ex-job">other</div>}<ul>{x.other.map(line)}</ul></div>}
       {!x.parts.length && !x.other.length && <p className="wm-ex-none">No exercise in your plan works it directly.</p>}
       {!!x.indirect.length && (

@@ -47,7 +47,7 @@ export const HEAVY_REPS = RULES.heavyMaxReps, LIGHT_REPS = RULES.lightMinReps;
  *  Strength: 3+ min (ACSM 2009). Endurance: ≤ 90 s (ACSM 2009). */
 export const GROWTH_REST = 60, STRENGTH_REST = 180, ENDURANCE_REST = 90;
 
-export type JobState = "hit" | "none";
+export type JobState = "hit" | "short" | "none";
 export interface Tile {
   group: MuscleGroup;
   /** Planned sets for the week (indirect = ½) */
@@ -56,7 +56,8 @@ export interface Tile {
   days: number;
   target?: VolumeTarget;
   status: "ok" | "below" | "above" | "off";
-  jobs: { name: string; state: JobState }[];
+  /** sets: effective weekly sets on that angle (direct 1, indirect ½) */
+  jobs: { name: string; state: JobState; sets: number }[];
 }
 export type CheckId = "volume" | "jobs" | "stretch" | "frequency" | "dose" | "recovery" | "reps" | "mix" | "rest" | "heavy";
 export interface Check { id: CheckId; label: string; pass: boolean; detail: string;
@@ -93,6 +94,38 @@ export function angleExamples(exMap: Map<string, Exercise>, g: MuscleGroup, job:
     .filter((e, _, all) => all.find((x) => base(x.name) === base(e.name)) === e).slice(0, 2).map((e) => e.name);
 }
 
+/** Effective sets an angle needs in a week to count as trained: direct sets 1, indirect ½ (Pelland 2024's ½ credit);
+ *  2 matches the builder's floor per angle (*judgment*, Leo agreed Nov 23 2026). An angle no exercise trains directly
+ *  (lower back: hinges count ½ for back) is covered by any set. */
+export const ANGLE_MIN_SETS = 2;
+const directJobs = new WeakMap<Map<string, Exercise>, Set<string>>();
+/** Does any exercise train this angle of g directly? (cached per exercise map) */
+const hasDirect = (exMap: Map<string, Exercise>, g: MuscleGroup, job: string) => {
+  let set = directJobs.get(exMap);
+  if (!set) {
+    set = new Set();
+    for (const e of exMap.values()) for (const v of e.volume) if (v.weight === 1) for (const j of [e.jobs?.[v.group]].flat()) if (j) set.add(v.group + "|" + j);
+    directJobs.set(exMap, set);
+  }
+  return set.has(g + "|" + job);
+};
+/** Effective weekly sets per angle of g in these slots (direct 1, indirect ½). Pure. */
+export function angleSets(slots: Slot[], exMap: Map<string, Exercise>, g: MuscleGroup): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const s of slots) {
+    const e = exMap.get(s.exerciseId), j = e?.jobs?.[g];
+    if (!e || j == null) continue;
+    const w = e.volume.find((v) => v.group === g)?.weight ?? 0.5;
+    for (const one of [j].flat()) if (one) out.set(one, (out.get(one) ?? 0) + s.sets * w);
+  }
+  return out;
+}
+/** The angles of g these slots train enough (see ANGLE_MIN_SETS). Pure. */
+export function anglesCovered(slots: Slot[], exMap: Map<string, Exercise>, g: MuscleGroup): Set<string> {
+  const sets = angleSets(slots, exMap, g);
+  return new Set([...sets].filter(([j, n]) => n >= ANGLE_MIN_SETS - 1e-9 || !hasDirect(exMap, g, j)).map(([j]) => j));
+}
+
 /** Exercise name without its "(…)" variant */
 const base = (name: string) => name.replace(/\s*\(.*\)\s*$/, "").trim().toLowerCase();
 
@@ -115,7 +148,8 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const week = new Map(planVolume(routine, exMap).map((v) => [v.group, v.sets]));
   // Holds are logged in seconds: left out of the rep checks
   const repSlots = slots.filter((s) => ex(s).measure !== "time");
-  const jobsHit = (g: MuscleGroup) => new Set(slots.flatMap((s) => { const j = ex(s).jobs?.[g]; return j == null ? [] : Array.isArray(j) ? j : [j]; }));
+  const jobsHit = (g: MuscleGroup) => anglesCovered(slots, exMap, g);
+  const jobsSome = (g: MuscleGroup) => angleSets(slots, exMap, g);
   const directSets = (d: RoutineDay, g: MuscleGroup) => d.slots.filter((s) => isDirect(ex(s), g)).reduce((a, s) => a + s.sets, 0);
   const daysFor = (g: MuscleGroup) => days.filter((d) => directSets(d, g) > 0);
   /** Sets a muscle gets in one workout, indirect at ½ (as weekly volume counts them) */
@@ -124,11 +158,11 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   // Every muscle the week trains, plus every focus muscle it doesn't (0 sets, below target) so an empty or thin plan still shows them
   for (const t of targets) if (isFocus(t) && !week.has(t.group)) week.set(t.group, 0);
   const tiles: Tile[] = [...week].filter(([g, n]) => n > 0 || isFocus(tmap.get(g))).sort((a, b) => b[1] - a[1]).map(([g, n]) => {
-    const t = tmap.get(g), hit = jobsHit(g);
+    const t = tmap.get(g), hit = jobsHit(g), some = jobsSome(g);
     return {
       group: g, week: n, days: daysFor(g).length, target: t,
       status: !isFocus(t) ? "off" : n < t.min ? "below" : t.max != null && n > t.max ? "above" : "ok",
-      jobs: (JOBS[g] ?? []).map((name) => ({ name, state: hit.has(name) ? "hit" : "none" })),
+      jobs: (JOBS[g] ?? []).map((name) => ({ name, state: hit.has(name) ? "hit" : (some.get(name) ?? 0) > 0 ? "short" : "none", sets: some.get(name) ?? 0 })),
     };
   });
 
@@ -150,11 +184,14 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
 
   // Every angle and Stretch look at every focus muscle too: one the plan doesn't train has none of its angles or stretch
   const jobs = check("jobs", "Every angle", focusAll.flatMap((g) => {
-    const miss = (JOBS[g] ?? []).filter((j) => !jobsHit(g).has(j));
+    const hit = jobsHit(g), some = jobsSome(g);
+    const miss = (JOBS[g] ?? []).filter((j) => !hit.has(j));
     if (!miss.length) return [];
     const tries = opts?.fast ? [] : miss.flatMap((j) => angleExamples(exMap, g, j, goal));
-    return [`${L(g)}: no ${miss.join(", ")}${tries.length ? ` · try ${tries.slice(0, 2).join(" or ")}` : ""}`];
-  }), "Every muscle trained in all its movements");
+    const none = miss.filter((j) => !some.get(j)), short = miss.filter((j) => some.get(j));
+    const what = [...(none.length ? [`no ${none.join(", ")}`] : []), ...short.map((j) => `${j} only ${fmtNum(some.get(j)!)} of ${ANGLE_MIN_SETS} sets`)].join(", ");
+    return [`${L(g)}: ${what}${tries.length ? ` · try ${tries.slice(0, 2).join(" or ")}` : ""}`];
+  }), `Every muscle trained in all its movements, ${ANGLE_MIN_SETS}+ sets each (a ½ set counts half)`);
 
   const stretch = check("stretch", "Stretch", focusAll.filter((g) => STRETCH_MUSCLES.has(g) && !slots.some((s) => ex(s).stretch?.includes(g)))
     .map((g) => `${L(g)}: no stretch exercise`), "Each muscle has an exercise that works it fully stretched (like incline curls for biceps)");
