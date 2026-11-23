@@ -428,10 +428,10 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   const useKey = `bf-hintused-${s.id}-${e.id}`;
   const [hintUsed, setHintUsed] = useState(() => { try { return sessionStorage.getItem(useKey) === "1"; } catch { return false; } });
   const markUsed = () => { setHintUsed(true); try { sessionStorage.setItem(useKey, "1"); } catch { /* fine */ } };
-  // The first set that isn't done is the open one; a picked set counts only if it's done or that one (sets go in order)
+  // The set you tapped is the open one (any set, Leo Nov 23 2026); otherwise the first set that isn't done
   const firstOpen = e.sets.find((x) => !x.done) ?? null;
   const picked = e.sets.find((x) => x.id === sel);
-  const selected = picked && (picked.done || picked.id === firstOpen?.id) ? picked : firstOpen;
+  const selected = picked ?? firstOpen;
   const workIdx = (x: LoggedSet) => e.sets.filter((y) => y.type === "working" && e.sets.indexOf(y) <= e.sets.indexOf(x)).length;
   const swappedFrom = e.swappedFromId ? exMap.get(e.swappedFromId)?.name : undefined;
   // Last set to failure: picked when the workout started (stored on the entry, so it never changes mid-workout)
@@ -510,10 +510,8 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
       )}
 
       <div style={{ marginTop: 18, display: "grid", gap: 6 }}>
-        {e.sets.map((x, xi) => {
+        {e.sets.map((x) => {
           const isSel = selected?.id === x.id && focused;
-          // Sets open in order: a set can't be expanded while an earlier one isn't done
-          const locked = !x.done && e.sets.slice(0, xi).some((y) => !y.done);
           const t = TYPE_UI[x.type];
           return (
             <div key={x.id} className={x.id === failSetId && isSel && !x.done ? "fail-set" : undefined} style={{ borderRadius: 14, background: isSel ? "var(--surface-2)" : "transparent", border: `1px solid ${isSel ? "var(--line-strong)" : "transparent"}`, transition: "all .25s var(--ease)" }}>
@@ -523,8 +521,8 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   style={{ width: 40, height: 36, borderRadius: 10, font: "700 15px var(--mono)", color: t.color, border: `1px solid color-mix(in srgb, ${t.color} 45%, transparent)` }}>
                   {t.short || workIdx(x)}
                 </button>
-                <button className="grow mono" style={{ textAlign: "left", fontSize: 18, padding: "8px 6px", color: x.done ? "var(--ink)" : "var(--muted)", opacity: locked ? 0.55 : 1, cursor: locked ? "default" : undefined }}
-                  onClick={(ev) => { ev.stopPropagation(); onFocus(); if (!locked) setSel(x.id); }} aria-label={locked ? "Finish the earlier sets first" : "Edit set"} aria-disabled={locked}>
+                <button className="grow mono" style={{ textAlign: "left", fontSize: 18, padding: "8px 6px", color: x.done ? "var(--ink)" : "var(--muted)" }}
+                  onClick={(ev) => { ev.stopPropagation(); onFocus(); setSel(x.id); }} aria-label="Edit set">
                   {fmtW(x.weight)}<span style={{ fontSize: 12 }}>{x.weight != null ? loadSuffix(ex) : ""}</span> <span style={{ opacity: 0.6 }}>×</span> {x.reps ?? "—"}{ex.measure === "time" && x.reps != null ? " s" : ""}
                   {x.id === failSetId && <span className="fail-tag" title="Last set: go to failure"><Icon name="flame" size={14} /> failure</span>}
                 </button>
@@ -532,7 +530,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   onClick={(ev) => {
                     ev.stopPropagation();
                     // Can't be done without weight and reps: shake, open the set (if it's the next one) and mark what's missing
-                    if (!x.done && needsValues(x, ex)) { if (!locked) refuse(x, "check"); else setMissing((m) => ({ id: x.id, n: (m?.n ?? 0) + 1, from: "check" })); return; }
+                    if (!x.done && needsValues(x, ex)) { refuse(x, "check"); return; }
                     setSel(null); onToggle(x);
                   }}
                   style={{ width: 48, height: 40, borderRadius: 12, display: "grid", placeItems: "center", transition: "all .25s var(--ease)",
