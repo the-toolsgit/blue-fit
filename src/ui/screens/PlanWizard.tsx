@@ -12,6 +12,7 @@ import { formatTarget, isFocus } from "../../core/volume";
 import { defaultRange, priorityOf, type Priority } from "../../core/volumeModel";
 import { editImpact, weekInsight } from "../../core/workoutCheck";
 import { useStore } from "../store";
+import { lockScroll } from "../scrollLock";
 import { Icon } from "../components/Icon";
 import { MuscleMap } from "../components/MuscleMap";
 import { DELTS, shouldersTo, TargetEdit, toggleSkip, withPriority } from "../components/TargetEdit";
@@ -113,7 +114,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
     setDays([1, 2, 3, 4, 6, 0]); setMinutes(75); setOpenRow(null); setSel(null); setHead(null); setDir("fwd");
     setGoalRaw(settings.profile?.goal ?? "growth"); setPhaseRaw(settings.profile?.phase ?? "maintaining");
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => { if (!open) return; const prev = document.body.style.overflow; document.body.style.overflow = "hidden"; return () => { document.body.style.overflow = prev; }; }, [open]);
+  useEffect(() => (open ? lockScroll() : undefined), [open]);
 
   const conflicts = useMemo(() => planConflicts({ trainDays: days, maxMinutes: minutes, targets, restSec, goal }), [days, minutes, targets, restSec, goal]);
   // The plan you come from: its exercises are swapped for others wherever possible

@@ -22,6 +22,7 @@ Bottom tab bar (always visible, floating glass bar): **Today · Plan · History 
 The app doesn't zoom: pinch and double-tap zoom are blocked (viewport `user-scalable=no`, iOS gesture events cancelled, `touch-action: manipulation`), like a native app.
 
 Behind the tab bar and dock, a soft fade to the page background (no blur) keeps scrolling content from clashing with them; it is taller when the dock shows something.
+The tab bar, dock and fade sit on their own layer (`translate3d`) so iPhone draws them in place while the page scrolls fast. Sheets and full-screen overlays lock page scrolling through one shared counter (`ui/scrollLock.ts`): the page unlocks only when the last one closes. Before (until v0.1.196), two sheets closing out of order could leave the page locked; on iPhone it still scrolled, but the sticky workout header, tab bar and fade drew in the wrong place (Leo, Nov 23 2026).
 
 Above the tab bar sits the **dock**, a stack of floating actions:
 - Today's **Start workout** button (on Today, when no workout is running and the selected day has exercises).

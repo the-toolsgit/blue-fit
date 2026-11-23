@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from "react";
+import { lockScroll } from "../scrollLock";
 import { reducedMotion } from "../device";
 import { createPortal } from "react-dom";
 
@@ -74,9 +75,8 @@ export function Sheet({ open, onClose, children, label, floating, tall }: { open
     if (!open) return;
     const k = (e: KeyboardEvent) => e.key === "Escape" && closeRef.current();
     window.addEventListener("keydown", k);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", k); document.body.style.overflow = prev; };
+    const unlock = lockScroll();
+    return () => { window.removeEventListener("keydown", k); unlock(); };
   }, [open]);
   if (!open) return null;
   return createPortal(
