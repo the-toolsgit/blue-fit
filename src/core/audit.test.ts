@@ -88,3 +88,14 @@ describe("regular cable lateral raise stands straight", async () => {
     expect(run({ exercises: [mk({ ...leaning, base: { cx: 50 } }, ["Mine."])] } as never, "2026-11-23")).toBeNull();
   });
 });
+
+describe("machine flies get the lever arms", async () => {
+  const { MIGRATIONS } = await import("./migrations");
+  const run = MIGRATIONS.find((m) => m.id === "2026-11-23-fly-machine-levers-all")!.run;
+  it("an older app figure is replaced; a user's own stays", () => {
+    const old = { v: "f", base: { hy: 66 }, A: {}, B: {}, props: [{ line: [44, 68, 76, 68] }, { perp: "haR", ang: 0, len: 10 }, { perp: "haL", ang: 0, len: 10 }] };
+    const out = run({ exercises: [{ id: "machine-reverse-fly", figure: old, isCustom: false }] } as never, "2026-11-23") as unknown as { exercises: { figure: { props: Record<string, unknown>[] } }[] };
+    expect(out.exercises[0].figure.props.some((p) => p.lever)).toBe(true);
+    expect(run({ exercises: [{ id: "machine-reverse-fly", figure: { ...old, props: [{ db: "haR" }] }, isCustom: false }] } as never, "2026-11-23")).toBeNull();
+  });
+});

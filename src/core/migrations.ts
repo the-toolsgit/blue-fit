@@ -728,6 +728,22 @@ export const MIGRATIONS: Migration[] = [
       "single-arm-machine-reverse-fly": { was: ["1ev93i7"], figure: buildFigure("reverse-fly-machine-single") as Exercise["figure"] },
     }),
   },
+  {
+    // Nov 23 2026: the same for any older app version of these figures (e.g. the lower seat): every built-in copy that
+    // still has the app's short grips (perp len 10) and no lever gets the new figure.
+    id: "2026-11-23-fly-machine-levers-all",
+    run(d) {
+      const tpl: Record<string, string> = { butterfly: "pec-deck", "machine-reverse-fly": "reverse-fly-machine", "single-arm-machine-reverse-fly": "reverse-fly-machine-single" };
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        const props = (e.figure?.props ?? []) as Record<string, unknown>[];
+        if (e.isCustom || !tpl[e.id] || props.some((p) => p.lever) || !props.some((p) => p.perp === "haR" && p.len === 10)) return e;
+        changed = true;
+        return { ...e, figure: buildFigure(tpl[e.id]) as Exercise["figure"] };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
 ];
 
 type FigureUpdates = Record<string, { was: string[]; figure: Exercise["figure"] }>;
