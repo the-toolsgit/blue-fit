@@ -1,4 +1,6 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+// A normal import (not lazy): a lazy list showed about 0.3 s after the rest of the screen the first time
+import { SortableDayList } from "../components/SortableDayList";
 import { newPlanKey } from "../planDraft";
 import { SlotSheet } from "../components/SlotSheet";
 import { useKeptState } from "../keptState";
@@ -21,9 +23,7 @@ import { ExerciseSheet } from "./ExerciseScreen";
 import { WeekInsight } from "../components/WeekInsight";
 
 const SHORT = WEEKDAY_SHORT;
-// Fetched as soon as the app starts (not on first view), so the list shows with the rest of the screen
-const loadDayList = import("../components/SortableDayList");
-const SortableDayList = lazy(() => loadDayList.then((m) => ({ default: m.SortableDayList })));
+
 
 export function PlanScreen() {
   const { routine, routines, exMap, targets, sessions, saveRoutine, saveRoutines, saveTargets, deleteRoutine, toast, settings, saveSettings } = useStore();
@@ -143,10 +143,8 @@ export function PlanScreen() {
             <span className="mono muted" style={{ fontSize: 13, whiteSpace: "nowrap" }}>{sets} sets · ~{slotsMinutes(day.slots)} min</span>
           </div>
           <div className="glass" style={{ padding: 4 }}>
-            <Suspense fallback={<div style={{ minHeight: day.slots.length * 64 }} />}>
               <SortableDayList slots={day.slots} exMap={exMap} onOpen={(s) => setSlotId(s.id)} onDelete={removeWithUndo} onFigure={(s) => setHowTo(s.id)}
                 onMove={(from, to) => saveRoutine(moveSlot(routine, day.id, from, to))} fail={weekFail.get(day.id)} />
-            </Suspense>
             <button className="list-row add-row" onClick={() => setPicker({ mode: "add" })}><Icon name="plus" /> Add exercise</button>
           </div>
           <div className="row" style={{ margin: "6px 4px 0", justifyContent: "flex-end" }}>

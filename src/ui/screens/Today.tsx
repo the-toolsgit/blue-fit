@@ -1,4 +1,6 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+// A normal import (not lazy): a lazy list showed about 0.3 s after the rest of the screen the first time
+import { SortableDayList } from "../components/SortableDayList";
 import { moveSlot } from "../../core/routineEdit";
 import { REST, SPLASH_FLEX } from "../../core/figure/poses";
 import { createSessionFromDay } from "../../core/session";
@@ -20,9 +22,7 @@ import { fmtDate, repRange } from "../format";
 import { go } from "../router";
 import { useStore } from "../store";
 
-// Fetched as soon as the app starts (not on first view), so the list shows with the rest of the screen
-const loadDayList = import("../components/SortableDayList");
-const SortableDayList = lazy(() => loadDayList.then((m) => ({ default: m.SortableDayList })));
+
 
 const LONG = WEEKDAY_LONG;
 
@@ -159,7 +159,6 @@ export function TodayScreen() {
 
           <h2 className="section-title">Exercises</h2>
           <div className="glass" style={{ padding: 4 }}>
-            <Suspense fallback={null}>
               <SortableDayList slots={slots} exMap={exMap} onOpen={(s) => setOpen(s.exerciseId)}
                 onMove={(from, to) => routine && day && saveRoutine(moveSlot(routine, day.id, from, to))}
                 row={(s, ex, i) => <>
@@ -171,7 +170,6 @@ export function TodayScreen() {
                   </span>
                   <span className="mono" style={{ fontSize: 15, whiteSpace: "nowrap", color: deloading ? "var(--neon-2)" : undefined }}>{!deloading && <ExtraTag why={extra?.get(s.id)} />}{slotSets(s.sets, s.id)} × {repRange(s.repMin, s.repMax, ex.measure === "time")}</span>
                 </>} />
-            </Suspense>
           </div>
         </>
       )}
