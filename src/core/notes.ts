@@ -132,7 +132,7 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
   const skipped = (s.skipped ?? []).filter((k) => k.sets > 0);
   if (skipped.length) {
     const n = skipped.reduce((a, k) => a + k.sets, 0);
-    notes.push({ kind: "skipped", tone: "info", title: `${n} set${n === 1 ? "" : "s"} skipped`, text: skipped.map((k) => `${name(k.exerciseId)} ${k.sets}`).join(" · ") });
+    notes.push({ kind: "skipped", tone: "info", title: `${n} set${n === 1 ? "" : "s"} skipped`, text: skipped.length === 1 ? name(skipped[0].exerciseId) : skipped.map((k) => `${name(k.exerciseId)} ×${k.sets}`).join(" · ") });
   }
 
   // Volume vs the last time you did this same plan day
