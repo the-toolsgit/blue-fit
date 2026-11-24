@@ -30,8 +30,11 @@ export default defineConfig({
           { src: "icons/icon-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
         ],
       },
-      workbox: { globPatterns: ["**/*.{js,css,html,svg,png,woff2}"], globIgnores: ["**/*.woff", "**/launch/**"], navigateFallback: base + "index.html" },
+      workbox: { globPatterns: ["**/*.{js,css,html,svg,png,woff2}"], globIgnores: ["**/*.woff", "**/launch/**", "**/models/**", "**/mediapipe/**", "**/spike*"], navigateFallback: base + "index.html", navigateFallbackDenylist: [/spike\.html/] },
     }),
   ],
+  // spike.html: temporary body-scan speed test (docs/plans/body-scan.md §4).
+  build: { rollupOptions: { input: { main: "index.html", spike: "spike.html" } } },
+  worker: { format: "es" },
   test: { environment: "node", include: ["src/**/*.test.ts"] },
 });

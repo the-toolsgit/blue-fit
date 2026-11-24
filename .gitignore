@@ -8,3 +8,7 @@ docs/source/
 .figure-sheet.html
 # Dev preview images written by scripts/preview-*.ts
 /*.png
+
+# Body-scan models + MediaPipe wasm, fetched at build time (scripts/fetch-models.mjs)
+public/models/
+public/mediapipe/

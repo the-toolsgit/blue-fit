@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Blue Fit · Scan speed test</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; background: #0b0b0c; color: #e6e8eb; font: 15px/1.4 -apple-system, system-ui, sans-serif; }
+  main { padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 32px max(16px, env(safe-area-inset-left)); display: flex; flex-direction: column; gap: 12px; }
+  h1 { font-size: 22px; margin: 8px 0 0; }
+  p { margin: 0; color: #8e949c; }
+  button { min-height: 52px; border-radius: 14px; border: 1px solid #34373c; background: #3d9bff; color: #06121f; font: 600 17px/1 inherit; font-family: inherit; }
+  button:disabled { background: #282b2f; color: #8e949c; }
+  button.ghost { background: transparent; color: #d4d8de; }
+  #stage { position: relative; width: 100%; aspect-ratio: 9 / 16; max-height: 60vh; background: #121315; border-radius: 16px; overflow: hidden; display: none; }
+  #stage video { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); }
+  #cue { position: absolute; left: 8px; right: 8px; bottom: 8px; padding: 10px; border-radius: 12px; background: rgba(0,0,0,.7); font: 700 26px/1.2 inherit; font-family: inherit; text-align: center; }
+  #status { font-weight: 600; color: #d4d8de; }
+  pre { white-space: pre-wrap; word-break: break-word; background: #121315; border: 1px solid #2e3136; border-radius: 12px; padding: 12px; font: 12px/1.45 ui-monospace, Menlo, monospace; margin: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Scan speed test</h1>
+  <p>Tests the body-scan models on this phone. Takes about 2 minutes. Nothing is saved or sent: camera frames stay in memory and are dropped.</p>
+  <p>When asked, prop the phone upright at waist height (front camera facing you) and stand about 1.5 m (5 ft) back, arms slightly out.</p>
+  <button id="run">Run test</button>
+  <div id="status"></div>
+  <div id="stage"><video id="video" playsinline muted></video><div id="cue"></div></div>
+  <pre id="report" hidden></pre>
+  <button id="copy" class="ghost" hidden>Copy report</button>
+</main>
+<script type="module" src="/src/spike/spike.ts"></script>
+</body>
+</html>
