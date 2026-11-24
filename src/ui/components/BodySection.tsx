@@ -25,7 +25,9 @@ export function BodySection() {
   const [editing, setEditing] = useState<BodyScan | null>(null);
   const [del, setDel] = useState<BodyScan | null>(null);
   const [metric, setMetric] = useKeptState<Metric>("progress-body-metric", "waistLower");
-  const metrics: Metric[] = latest ? [...BODY_PARTS.filter((p) => scans.some((s) => s.measurements[p] != null)), ...(scans.some((s) => s.bodyFatPct != null) ? ["bodyFatPct" as const] : []), ...(scans.some((s) => s.weightLb != null) ? ["weightLb" as const] : [])] : [];
+  // Chips only for what the chart can show: entries made the same way as the latest
+  const same = latest ? scans.filter((s) => s.source === latest.source) : [];
+  const metrics: Metric[] = [...BODY_PARTS.filter((p) => same.some((s) => s.measurements[p] != null)), ...(same.some((s) => s.bodyFatPct != null) ? ["bodyFatPct" as const] : []), ...(same.some((s) => s.weightLb != null) ? ["weightLb" as const] : [])];
   const m = metrics.includes(metric) ? metric : metrics[0];
   const series = latest && m ? partSeries(scans, m, latest.source) : [];
   const metricUnit = (k: Metric) => (k === "bodyFatPct" ? "%" : k === "weightLb" ? "lb" : unit);
@@ -43,7 +45,7 @@ export function BodySection() {
           </div>
         ) : (
           <div className="stack" style={{ gap: 12 }}>
-            <button className="list-row" style={{ display: "block", textAlign: "left" }} onClick={() => setOpen(latest)} aria-label="Open latest measurements">
+            <button className="list-row" style={{ display: "block", textAlign: "left" }} onClick={() => setOpen(latest)}>
               <span className="eyebrow">Latest · {SOURCE[latest.source]}</span>
               <span style={{ display: "block", fontSize: 14, marginTop: 2 }}>{when(latest.date)}{prev ? <span className="muted"> · vs {dayLabel(prev.date.slice(0, 10))}</span> : null}</span>
             </button>
@@ -59,13 +61,17 @@ export function BodySection() {
               ))}
             </div>
             <div>
-              {partChanges(latest, prev).map((c) => (
-                <div key={c.part} className="list-row body-row">
-                  <span className="grow">{PART_NAMES[c.part]}</span>
-                  <span className="mono">{fmtNum(toUnit(c.value, unit))} <small className="muted">{unit}</small></span>
-                  <span className={"mono body-diff" + (c.diff ? (c.diff > 0 ? " up" : " down") : "")}>{c.diff == null ? "" : c.diff === 0 ? "=" : `${c.diff > 0 ? "↑ +" : "↓ −"}${fmtNum(Math.abs(toUnit(c.diff, unit)))}`}</span>
-                </div>
-              ))}
+              {partChanges(latest, prev).map((c) => {
+                // change in the shown unit (a 0.1 cm change reads "=" in inches, never "↑ +0")
+                const d = c.before == null ? null : Math.round((toUnit(c.value, unit) - toUnit(c.before, unit)) * 10) / 10;
+                return (
+                  <div key={c.part} className="list-row body-row">
+                    <span className="grow">{PART_NAMES[c.part]}</span>
+                    <span className="mono">{fmtNum(toUnit(c.value, unit))} <small className="muted">{unit}</small></span>
+                    <span className={"mono body-diff" + (d ? (d > 0 ? " up" : " down") : "")}>{d == null ? "" : d === 0 ? "=" : `${d > 0 ? "↑ +" : "↓ −"}${fmtNum(Math.abs(d))}`}</span>
+                  </div>
+                );
+              })}
             </div>
             {metrics.length > 0 && <>
               <div className="chips-scroll">

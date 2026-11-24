@@ -16,7 +16,7 @@ const nowLocal = () => {
 };
 
 export function BodyEntrySheet({ open, scan, onClose }: { open: boolean; scan?: BodyScan | null; onClose: () => void }) {
-  const { settings, saveSettings, saveBodyScan, toast } = useStore();
+  const { settings, saveSettings, saveBodyScan, bodyScans, toast } = useStore();
   const unit = settings.lengthUnit ?? "in";
   const manual = !scan || scan.source === "manual";
   const [date, setDate] = useState(nowLocal());
@@ -34,11 +34,16 @@ export function BodyEntrySheet({ open, scan, onClose }: { open: boolean; scan?: 
     setVals(Object.fromEntries(BODY_PARTS.map((p) => [p, scan?.measurements[p] != null ? toUnit(scan.measurements[p]!, unit) : null])));
   }, [open, scan, settings.heightCm, settings.sex, unit]);
 
+  // A value shown in inches is rounded: when it wasn't changed, keep the stored cm exactly (no drift on every save)
+  const keepCm = (shown: number, orig: number | null | undefined) =>
+    orig != null && toUnit(orig, unit) === shown ? orig : Math.round(fromUnit(shown, unit) * 10) / 10;
   const save = () => {
     if (height == null || height <= 0) { toast({ kind: "warn", title: "Add your height", body: "Body fat needs it." }); return; }
-    const heightCm = Math.round(fromUnit(height, unit) * 10) / 10;
+    const heightCm = keepCm(height, scan?.heightCm ?? settings.heightCm);
+    if (heightCm < 50 || heightCm > 260) { toast({ kind: "warn", title: "Check your height", body: `${height} ${unit} looks wrong.` }); return; }
+    if (weight != null && (weight < 20 || weight > 1000)) { toast({ kind: "warn", title: "Check your weight", body: "Between 20 and 1000 lb, or leave it empty." }); return; }
     const measurements: Partial<Record<BodyPart, number>> = manual
-      ? Object.fromEntries(BODY_PARTS.flatMap((p) => (vals[p] != null && vals[p]! > 0 ? [[p, Math.round(fromUnit(vals[p]!, unit) * 10) / 10]] : [])))
+      ? Object.fromEntries(BODY_PARTS.flatMap((p) => (vals[p] != null && vals[p]! > 0 ? [[p, keepCm(vals[p]!, scan?.measurements[p])]] : [])))
       : scan!.measurements;
     if (manual && !Object.keys(measurements).length) { toast({ kind: "warn", title: "Add at least one measurement" }); return; }
     const next: BodyScan = {
@@ -48,7 +53,9 @@ export function BodyEntrySheet({ open, scan, onClose }: { open: boolean; scan?: 
     } as BodyScan;
     Object.assign(next, bodyStats(sex, heightCm, measurements));
     saveBodyScan(next);
-    if (settings.heightCm !== heightCm || settings.sex !== sex) saveSettings({ ...settings, heightCm, sex });
+    // Settings follow only a new entry or the newest one (editing an old entry doesn't change today's height)
+    const newest = !scan || !bodyScans.some((b) => b.id !== scan.id && b.date > date);
+    if (newest && (settings.heightCm !== heightCm || settings.sex !== sex)) saveSettings({ ...settings, heightCm, sex });
     toast({ kind: "info", title: scan ? "Saved" : "Measurements added" });
     onClose();
   };
@@ -68,7 +75,7 @@ export function BodyEntrySheet({ open, scan, onClose }: { open: boolean; scan?: 
         <div><span className="eyebrow" style={{ display: "block", margin: "0 2px 8px" }}>Body fat formula</span>
           <Seg label="Sex" value={sex} onChange={setSex} options={[{ v: "male", label: "Male" }, { v: "female", label: "Female" }]} /></div>
         {manual && <>
-          <p className="muted" style={{ fontSize: 12, margin: 0 }}>Tape snug, not tight, in {unit === "in" ? "inches" : "cm"}. Leave out what you didn't measure. Body fat needs neck and lower waist (women: upper waist and hips too).</p>
+          <p className="muted" style={{ fontSize: 12, margin: 0 }}>Tape snug, not tight, in {unit === "in" ? "inches" : "cm"}. Leave out what you didn't measure. Body fat needs neck and lower waist (women: neck, upper waist and hips).</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 10 }}>
             {BODY_PARTS.map((p) => (
               <Stepper key={p} label={PART_NAMES[p]} suffix={unit} value={vals[p] ?? null} step={unit === "in" ? 0.25 : 0.5} min={0} onChange={(v) => setVals((x) => ({ ...x, [p]: v }))} />

@@ -38,13 +38,15 @@ export function navyBodyFat(sex: Sex, heightCm: number, neckCm: number, waistCm:
   const h = inch(heightCm), n = inch(neckCm), w = inch(waistCm);
   if (sex === "male") {
     if (!(w - n > 0) || !(h > 0)) return undefined;
-    return 86.010 * Math.log10(w - n) - 70.041 * Math.log10(h) + 36.76;
+    return plausible(86.010 * Math.log10(w - n) - 70.041 * Math.log10(h) + 36.76);
   }
   if (hipsCm == null) return undefined;
   const x = w + inch(hipsCm) - n;
   if (!(x > 0) || !(h > 0)) return undefined;
-  return 163.205 * Math.log10(x) - 97.684 * Math.log10(h) - 78.387;
+  return plausible(163.205 * Math.log10(x) - 97.684 * Math.log10(h) - 78.387);
 }
+/** Odd inputs give odd numbers: outside 2–60% the formula isn't meaningful, so no result. */
+const plausible = (bf: number) => (bf >= 2 && bf <= 60 ? bf : undefined);
 
 const round1 = (x: number) => Math.round(x * 10) / 10;
 
@@ -91,8 +93,8 @@ export function measureGeometry(g: BodyGeometry, sex: Sex, heightCm: number): Me
   if (navel) m.waistLower = tapeCm(navel.polygon);
   const hips = tapes(slicesBetween(g, L.hipCrest, L.crotch));
   if (hips.length) m.hips = Math.max(...hips);
-  // neck: narrowest cut just above the base (the tape sits below the larynx)
-  const neckLen = Math.hypot(0, L.neckTop - L.neckBase);
+  // neck: narrowest cut just above the base (the tape sits below the larynx); tCm runs along the (tilted) neck axis
+  const neckLen = g.neckSections.length ? Math.max(...g.neckSections.map((s) => s.tCm)) : 0;
   const neck = tapes(pick(g.neckSections, 1, Math.max(1, neckLen * 0.6)));
   if (neck.length) m.neck = Math.min(...neck);
   for (const part of LIMB_PARTS) {

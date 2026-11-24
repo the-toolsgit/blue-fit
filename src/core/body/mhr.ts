@@ -3,7 +3,8 @@
 // body: rest shape from the 20 body identity coefficients, skeleton from the
 // 204 model parameters, linear blend skinning. Units: cm, y up. A line-by-line
 // port of MHR's own PyTorch rig (mhr/_torch_rig.py, pose correctives skipped);
-// mhr.test.ts checks it against vertices from that code.
+// mhr.test.ts checks it against vertices from that code. (Uses TextDecoder for the file header: a native
+// port reads the same JSON header with its own decoder.)
 
 export const BODY_SHAPES = 20;
 export const MODEL_PARAMS = 204;

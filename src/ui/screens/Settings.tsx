@@ -13,7 +13,7 @@ import { backupText, daysSince, downloadBackup, REMIND_AFTER_DAYS } from "../bac
 
 export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; onCheck?: () => Promise<boolean> }) {
   const [checking, setChecking] = useState(false);
-  const { settings, saveSettings, exportAll, replaceAll, toast, routine, saveRoutine, backup, markBackup } = useStore();
+  const { settings, saveSettings, exportAll, replaceAll, toast, routine, saveRoutine, backup, markBackup, bodyScans } = useStore();
   const since = daysSince(backup.lastAt);
   const [pending, setPending] = useState<Backup | null>(null);
   const [pasteOpen, setPasteOpen] = useState(false);
@@ -75,7 +75,14 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
       <div className="glass" style={{ padding: 14, display: "grid", gap: 12 }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 10 }}>
           <Stepper label="Height" suffix={settings.lengthUnit ?? "in"} value={settings.heightCm == null ? null : toUnit(settings.heightCm, settings.lengthUnit ?? "in")} step={(settings.lengthUnit ?? "in") === "in" ? 0.5 : 1} min={0}
-            empty={(settings.lengthUnit ?? "in") === "in" ? 68 : 173} onChange={(v) => set("heightCm", v == null || v <= 0 ? null : Math.round(fromUnit(v, settings.lengthUnit ?? "in") * 10) / 10)} />
+            empty={(settings.lengthUnit ?? "in") === "in" ? 68 : 173} onChange={(v) => {
+              const u = settings.lengthUnit ?? "in";
+              if (v == null || v <= 0) return set("heightCm", null);
+              // unchanged (rounded) inches keep the stored cm; out of range is refused (a backup must still import)
+              const cm = settings.heightCm != null && toUnit(settings.heightCm, u) === v ? settings.heightCm : Math.round(fromUnit(v, u) * 10) / 10;
+              if (cm < 50 || cm > 260) { toast({ kind: "warn", title: "Check your height", body: `${v} ${u} looks wrong.` }); return; }
+              set("heightCm", cm);
+            }} />
           <div><span className="eyebrow" style={{ display: "block", margin: "0 2px 8px" }}>Units</span>
             <Seg label="Body units" value={settings.lengthUnit ?? "in"} onChange={(v) => set("lengthUnit", v)} options={[{ v: "in", label: "in" }, { v: "cm", label: "cm" }]} /></div>
         </div>
@@ -158,7 +165,7 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
         </div>
       </Sheet>
       <Confirm open={!!pending} title="Replace all data with this backup?"
-        body={pending && <>Backup from {new Date(pending.exportedAt).toLocaleString()}: {pending.data.sessions.length} workouts, {pending.data.exercises.length} exercises, {pending.data.routines.length} routine(s). Everything on this phone is replaced.</>}
+        body={pending && <>Backup from {new Date(pending.exportedAt).toLocaleString()}: {pending.data.sessions.length} workouts, {pending.data.exercises.length} exercises, {pending.data.routines.length} routine(s), {pending.data.bodyScans.length} body {pending.data.bodyScans.length === 1 ? "entry" : "entries"}. Everything on this phone is replaced.{bodyScans.length > 0 && !pending.data.bodyScans.length ? <><br /><b style={{ color: "var(--warn)" }}>This backup has no body measurements: your {bodyScans.length} on this phone will be deleted.</b></> : null}</>}
         confirm="Replace" danger onClose={() => setPending(null)}
         onConfirm={async () => { if (!pending) return; try { await replaceAll(pending.data); toast({ kind: "info", title: "Backup imported" }); } catch (e) { console.error(e); toast({ kind: "error", title: "Import failed", body: "Nothing was changed. Try again." }); } }} />
       <Confirm open={reset} title="Reset everything?" body="Deletes all workouts, body measurements, edits and settings, and reloads the original plan. Export a backup first. This can't be undone." confirm="Reset" danger
