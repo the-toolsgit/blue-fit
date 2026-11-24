@@ -2,7 +2,7 @@
 // Opens the same "blue-fit" database the app has always used: object stores exercises (id),
 // routines (id), sessions (id), targets (group), jefitAliases (jefitName) and kv (key).
 // Earlier versions created it with Dexie, which stores schema version 1 as IndexedDB version 10.
-import { DEFAULT_SETTINGS, type AppData, type Settings } from "../core/types";
+import { ACCENTS, DEFAULT_SETTINGS, type AppData, type Settings } from "../core/types";
 import { TABLE_KEYS, type StorageAdapter, type TableName, type Tables } from "../core/storage/StorageAdapter";
 
 const DB_VERSION = 10;
@@ -64,7 +64,11 @@ export class IdbAdapter implements StorageAdapter {
   async remove<T extends TableName>(t: T, key: string) { const s = await this.store(t, "readwrite"); s.delete(key); await done(s.transaction); }
   private async kvGet(key: string) { return (await req((await this.store("kv", "readonly")).get(key)) as { value: unknown } | undefined)?.value; }
   private async kvPut(key: string, value: unknown) { const s = await this.store("kv", "readwrite"); s.put({ key, value }); await done(s.transaction); }
-  async getSettings(): Promise<Settings> { return { ...DEFAULT_SETTINGS, ...((await this.kvGet("settings")) as Partial<Settings> | undefined ?? {}) }; }
+  async getSettings(): Promise<Settings> {
+    const s: Settings = { ...DEFAULT_SETTINGS, ...((await this.kvGet("settings")) as Partial<Settings> | undefined ?? {}) };
+    // An accent that no longer exists (green, removed Nov 24 2026) falls back to blue
+    return ACCENTS.includes(s.accent) ? s : { ...s, accent: "blue" };
+  }
   async saveSettings(s: Settings) { await this.kvPut("settings", s); }
   async getMeta<V>(key: string) { return (await this.kvGet("meta:" + key)) as V | undefined; }
   async setMeta<V>(key: string, value: V | undefined) {

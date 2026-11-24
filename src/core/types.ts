@@ -223,7 +223,8 @@ export type ProfileDraft = { goal: Goal; phase: Phase; age: number | null; years
 export const completeProfile = (p: ProfileDraft | null | undefined): TrainingProfile | null =>
   p && p.age != null && p.yearsTraining != null && p.sleepHours != null ? { ...p, age: p.age, yearsTraining: p.yearsTraining, sleepHours: p.sleepHours } : null;
 
-export const ACCENTS = ["blue", "pink", "orange", "green", "brown"] as const;
+/** Green was removed Nov 24 2026: a saved or imported "green" falls back to blue. */
+export const ACCENTS = ["blue", "pink", "orange", "brown"] as const;
 export type Accent = (typeof ACCENTS)[number];
 
 export interface StreakFreeze { start: string; end: string | null }
@@ -243,8 +244,9 @@ export interface Settings {
   /** Settings → Workout adjustments: the app adds a set for skipped work and picks failure sets from the week
    *  (off: neither; failure turned On in the plan still applies). Missing = on. */
   autoAdjust: boolean;
+  /** No longer used: Gray is the only look and always dark (Nov 24 2026). Kept so older backups still import. */
   theme: "system" | "light" | "dark";
-  /** Style (Settings → Look, Nov 24 2026): neon (default) or gray (Neon with gray backgrounds instead of navy, always dark). Missing = neon. */
+  /** No longer used (Nov 24 2026: Gray is the only look). Kept so older backups still import. */
   look?: "neon" | "gray";
   /** Accent palette; the line man takes it too (the BLUE FIT wordmark stays blue) */
   accent: Accent;

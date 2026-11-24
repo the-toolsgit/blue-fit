@@ -314,6 +314,16 @@ describe("backup export / import", () => {
       if (r.ok) expect(r.backup.data.settings.look).toBe(want);
     }
   });
+  it("a removed accent (green) or a missing one imports as blue; the others stay", async () => {
+    const db = new MemoryAdapter();
+    await db.init(buildSeed);
+    const data = await db.exportAll();
+    for (const [accent, want] of [["green", "blue"], [undefined, "blue"], ["pink", "pink"], ["brown", "brown"]] as const) {
+      const r = parseBackup(JSON.stringify(buildBackup({ ...data, settings: { ...data.settings, accent: accent as "pink" } }, new Date())));
+      expect(r.ok).toBe(true);
+      if (r.ok) expect(r.backup.data.settings.accent).toBe(want);
+    }
+  });
   it("importing a backup from this version re-runs every migration without changing anything", () => {
     const first = applyMigrations(buildSeed(), "2026-11-22");
     const again = applyMigrations(structuredClone(first.data), "2026-11-22");

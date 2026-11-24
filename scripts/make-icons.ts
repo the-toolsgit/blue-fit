@@ -46,7 +46,7 @@ export const LAUNCH_SIZES: [number, number, number][] = [
 mkdirSync("public/icons/launch", { recursive: true });
 for (const [w, h, r] of LAUNCH_SIZES) {
   const W = w * r, H = h * r;
-  writeFileSync(`public/icons/launch/${W}x${H}.png`, png(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><rect width="100%" height="100%" fill="#04060c"/></svg>`));
+  writeFileSync(`public/icons/launch/${W}x${H}.png`, png(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><rect width="100%" height="100%" fill="#0b0b0c"/></svg>`));
 }
 console.log("launch screens written; link tags:");
 for (const [w, h, r] of LAUNCH_SIZES) console.log(`    <link rel="apple-touch-startup-image" media="(device-width: ${w}px) and (device-height: ${h}px) and (-webkit-device-pixel-ratio: ${r}) and (orientation: portrait)" href="icons/launch/${w * r}x${h * r}.png" />`);

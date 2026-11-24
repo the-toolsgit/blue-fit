@@ -10,6 +10,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { go, useRoute } from "./router";
 import { useStore } from "./store";
 import { localDate } from "../core/util";
+import { ACCENTS } from "../core/types";
 import { ExerciseScreen } from "./screens/ExerciseScreen";
 import { HistoryScreen } from "./screens/History";
 import { PlanScreen } from "./screens/Plan";
@@ -96,22 +97,12 @@ export function App() {
     },
   });
 
-  // Not before the saved settings load: the defaults would undo what index.html set early (flash, wrong look stored)
+  // Gray is the only look (Nov 24 2026): index.html sets data-look="gray" and data-theme="dark" on <html>.
   useEffect(() => {
     if (!ready) return;
     const root = document.documentElement;
-    // Gray is always dark, whatever the Theme setting
-    const theme = settings.look === "gray" ? "dark" : settings.theme;
-    if (theme === "system") delete root.dataset.theme; else root.dataset.theme = theme;
-    if (settings.look === "gray") root.dataset.look = "gray"; else delete root.dataset.look;
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", settings.look === "gray" ? "#0b0b0c" : "#05070d");
-    try { localStorage.setItem("bf-theme", JSON.stringify(settings.theme)); localStorage.setItem("bf-look", JSON.stringify(settings.look ?? "neon")); } catch { /* ignore */ }
-  }, [ready, settings.theme, settings.look]);
-
-  useEffect(() => {
-    if (!ready) return;
-    const root = document.documentElement;
-    if (settings.accent === "blue") delete root.dataset.accent; else root.dataset.accent = settings.accent;
+    // Not before the saved settings load: the default would undo what index.html set early (flash)
+    if (settings.accent === "blue" || !ACCENTS.includes(settings.accent)) delete root.dataset.accent; else root.dataset.accent = settings.accent;
     try { localStorage.setItem("bf-accent", JSON.stringify(settings.accent)); } catch { /* ignore */ }
   }, [ready, settings.accent]);
 
