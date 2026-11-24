@@ -503,7 +503,7 @@ Settings → Look → **Style: Neon / Gray** (missing = Neon; saved in settings 
 | star | #FFC53D | #8F6206 | ★ key lift |
 | on-neon | #02101F | #FFFFFF | text on neon fills |
 
-**Accent palettes.** The accent recolors buttons, chips, switches, steppers, bars, glows, lines and the background haze. The line man, his glow and the BLUE FIT wordmark are always blue, and the background stays navy in dark and soft white-blue in light, with a faint blue haze kept in every palette. Each accent has a fill color (buttons, chips, bars; dark text on it) and an ink color (accent text and chart lines). They are the same, except light Blue, whose ink is its deeper shade. (Light Pink/Orange/Green/Brown ink is Leo's choice and is below 4.5:1 on white.)
+**Accent palettes.** The accent recolors buttons, chips, switches, steppers, bars, glows, lines and the background haze. The line man and his glow take the accent too (Nov 24 2026: body in the accent color, equipment and guide lines in a darker shade, lighter in Light; also the muscle-map body outlines); the BLUE FIT wordmark and the app icon stay blue, and the background stays navy in dark and soft white-blue in light, with a faint blue haze kept in every palette. Each accent has a fill color (buttons, chips, bars; dark text on it) and an ink color (accent text and chart lines). They are the same, except light Blue, whose ink is its deeper shade. (Light Pink/Orange/Green/Brown ink is Leo's choice and is below 4.5:1 on white.)
 
 | Accent | Dark fill / 2nd | Light fill / 2nd | Light ink / 2nd (if different) |
 |---|---|---|---|
@@ -513,7 +513,7 @@ Settings → Look → **Style: Neon / Gray** (missing = Neon; saved in settings 
 | Green | #5CF2A8 / #B4FFD8 | #0BDA51 / #4BE887 | same as fill |
 | Brown | #D9A46B / #F0CFA0 | #B07A45 / #C99662 | same as fill |
 
-With the Pink accent, PR highlights (normally pink) turn gold and the "recovering" muscle color turns coral, so they still stand out. PR toasts keep the line man blue.
+With the Pink accent, PR highlights (normally pink) turn gold and the "recovering" muscle color turns coral, so they still stand out. 
 
 Text colors meet WCAG AA (4.5:1) on their backgrounds in both themes, except `faint` (placeholders and decorative only).
 
