@@ -1,0 +1,10 @@
+MHR (Momentum Human Rig)
+Copyright (c) Meta Platforms, Inc. and affiliates.
+Licensed under the Apache License, Version 2.0 (see LICENSE.txt).
+Source: https://github.com/facebookresearch/MHR, release v1.2.0 (converted assets, schema v1).
+
+Modified by Blue Fit: converted to a compact binary by scripts/convert-mhr.py.
+Kept: rest mesh (LOD 2 and LOD 3), the 20 body identity blend shapes, linear
+skinning, skeleton, parameter transform for the 204 model parameters and their
+limits, plus a part label per vertex. Removed: head and hand identity shapes,
+face expressions, pose correctives, texture coordinates.

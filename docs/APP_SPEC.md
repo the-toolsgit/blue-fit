@@ -633,7 +633,7 @@ Mirrored ellipses negate the rotation. Region fill opacity: empty 0.05; value k 
 | Progress charts (1RM, volume) | Per-exercise charts, weekly sets vs targets, tonnage, frequency | Built |
 | Muscle recovery map | Muscle map (weekly sets) + recovery status | Built |
 | Import history | Jefit export importer with name mapping | Left out (skipped by choice; Jefit names stay as exercise aliases in case it comes back) |
-| Body scan | Front-camera 12-angle scan → 3D body, circumferences, body fat; drives plan suggestions (plan: docs/plans/body-scan.md) | In progress: speed test page `spike.html` (temporary, not linked from the app; models self-hosted under `models/` and `mediapipe/`, fetched at build by `scripts/fetch-models.mjs`, not precached; frames only in memory) |
+| Body scan | Front-camera 12-angle scan → 3D body, circumferences, body fat; drives plan suggestions (plan: docs/plans/body-scan.md) | In progress: MHR body model converted (`public/mhr/`, Apache-2.0 with NOTICE; `src/core/body/mhr.ts`); speed test page `spike.html` (temporary, not linked from the app; models self-hosted under `models/` and `mediapipe/`, fetched at build by `scripts/fetch-models.mjs`, not precached; frames only in memory) |
 | Deload weeks | Suggested by interval/stall, user decides; lighter week of the same plan | Built (web: banner; native: notification later) |
 | Interval / stopwatch timer | Timer modes | Later phase |
 | Cloud sync / account | Swap StorageAdapter; then remove manual backup/import | Later phase |
