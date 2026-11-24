@@ -75,7 +75,7 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
         <div className="setting" style={{ display: "block", paddingTop: 12 }}>
           <Stepper label="Default rest" suffix={fmtRest(settings.restDefaultSec)} value={settings.restDefaultSec} step={15} decimals={false} min={0}
             onChange={(v) => set("restDefaultSec", v ?? 120)} />
-          <p className="muted" style={{ fontSize: 12, margin: "6px 0 0" }}>Each exercise can still have its own rest: tap it in the plan.</p>
+          <p className="muted" style={{ fontSize: 12, margin: "6px 0 0" }}>Each exercise can still have its own rest: edit it in the plan.</p>
           <button className="btn btn-quiet" style={{ marginTop: 2, fontSize: 13, minHeight: 44, padding: 0 }} onClick={() => setApplyRest(true)}>Apply to every exercise in the plan</button>
         </div>
         <div className="setting"><span>Start rest timer when a set is done</span><Switch label="Auto-start rest" checked={settings.autoStartRest} onChange={(v) => set("autoStartRest", v)} /></div>
