@@ -106,3 +106,11 @@ html:root[data-look="signal"][data-look]:has(.sig-page) { --bg: #ff4b1f; --bg-2:
 .sig-start .sig-go { width: 56px; height: 56px; flex: none; border-radius: 50%; background: var(--sig-orange); color: #000; display: grid; place-items: center; }
 /* Header date on the orange page: a black pill (the muted grey is unreadable on orange) */
 .sig-page > header .eyebrow { background: #000; color: var(--sig-paper); padding: 9px 12px; border-radius: 99px; }
+
+/* ---------- Signal 2.0 (Settings → Look → Style, Nov 23 2026): a more muted Signal on Today ----------
+   Black page, the week on an orange tile, the day on a light grey tile with a black name, ~minutes in orange */
+html:root[data-look="signal"][data-look][data-sig2]:has(.sig-page) { --bg: #000; --bg-2: #000; }
+[data-sig2] .sig-week { background: var(--sig-orange); border-radius: 30px; padding: 14px; }
+[data-sig2] .sig-tile { background: #a3a9af; }
+[data-sig2] .sig-title { color: #000; }
+[data-sig2] .sig-stat.paper { background: var(--sig-orange); }

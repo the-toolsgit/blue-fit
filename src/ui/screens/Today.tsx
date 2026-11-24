@@ -66,7 +66,7 @@ export function TodayScreen() {
   const skipped = (d: number) => !doneDays.get(d) && (d - sd + 7) % 7 < (todayWd - sd + 7) % 7 && !!routine?.days.some((x) => x.weekday === d && x.slots.length);
   const doneToday = finished.some((s) => s.date === localDate(now) && s.dayId === day?.id);
   // Signal look (Settings → Look): its own week, day tile, list and Start button; logic shared with Neon
-  const signal = settings.look === "signal";
+  const signal = settings.look === "signal" || settings.look === "signal2";
   const planned = (d: number) => !!routine?.days.some((x) => x.weekday === d && x.slots.length);
   const dateOf = (d: number) => { const x = new Date(now); x.setDate(x.getDate() - ((todayWd + 6) % 7) + ((d + 6) % 7)); return x.getDate(); };
   const two = (n: number) => String(n).padStart(2, "0");

@@ -60,7 +60,7 @@ export const sessionSchema = z.object({
 });
 const settingsSchema = z.object({
   units: z.literal("lb"), restDefaultSec: z.number().int().min(0).max(1800), autoStartRest: z.boolean(), sound: z.boolean(), keepAwake: z.boolean(), deloadSuggestions: z.boolean().default(true), progressionHints: z.boolean().default(true), autoAdjust: z.boolean().default(true),
-  theme: z.enum(["system", "light", "dark"]), accent: z.enum(ACCENTS).default("blue"), look: z.enum(["neon", "signal"]).optional(),
+  theme: z.enum(["system", "light", "dark"]), accent: z.enum(ACCENTS).default("blue"), look: z.enum(["neon", "signal", "signal2"]).optional(),
   profile: z.object({ goal: z.enum(["growth", "strength", "endurance", "maintenance"]), phase: z.enum(["cutting", "maintaining", "bulking"]),
     age: z.number().min(10).max(100).nullable(), yearsTraining: z.number().min(0).max(80).nullable(), sleepHours: z.number().min(0).max(16).nullable() }).nullable().optional(), weekStartDay: z.number().int().min(0).max(6).default(6),
   deload: z.object({ start: str, end: str }).nullable().optional(), deloadDismissedAt: str.nullable().optional(), streakFreezes: z.array(z.object({ start: str, end: str.nullable() })).optional(), plates: z.array(z.object({ weight: z.number().positive(), pairs: z.number().int().min(0).max(50) })),
