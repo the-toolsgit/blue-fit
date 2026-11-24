@@ -104,14 +104,6 @@ export function App() {
 
   useEffect(() => {
     const root = document.documentElement;
-    // Signal 2.0 is Signal plus data-sig2 (its own overrides in signal.css)
-    if (settings.look === "signal" || settings.look === "signal2") root.dataset.look = "signal"; else delete root.dataset.look;
-    if (settings.look === "signal2") root.dataset.sig2 = ""; else delete root.dataset.sig2;
-    try { localStorage.setItem("bf-look", JSON.stringify(settings.look ?? "neon")); } catch { /* ignore */ }
-  }, [settings.look]);
-
-  useEffect(() => {
-    const root = document.documentElement;
     if (settings.accent === "blue") delete root.dataset.accent; else root.dataset.accent = settings.accent;
     try { localStorage.setItem("bf-accent", JSON.stringify(settings.accent)); } catch { /* ignore */ }
   }, [settings.accent]);

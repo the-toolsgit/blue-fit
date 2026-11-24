@@ -98,9 +98,6 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
 
       <h2 className="section-title">Look</h2>
       <div className="glass" style={{ padding: 14 }}>
-        <Seg label="Style" value={settings.look ?? "neon"} onChange={(v) => set("look", v)} options={[{ v: "neon", label: "Neon" }, { v: "signal", label: "Signal" }, { v: "signal2", label: "Signal 2.0" }]} />
-        {(settings.look ?? "neon") === "neon" && <>
-        <span className="eyebrow" style={{ display: "block", margin: "16px 2px 10px" }}>Theme</span>
         <Seg label="Theme" value={settings.theme} onChange={(v) => set("theme", v)} options={[{ v: "system", label: "System" }, { v: "dark", label: "Dark" }, { v: "light", label: "Light" }]} />
         <span className="eyebrow" style={{ display: "block", margin: "16px 2px 10px" }}>Accent</span>
         <div className="swatches" role="radiogroup" aria-label="Accent color">
@@ -110,7 +107,6 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
             </button>
           ))}
         </div>
-        </>}
       </div>
 
       <h2 className="section-title">Data</h2>

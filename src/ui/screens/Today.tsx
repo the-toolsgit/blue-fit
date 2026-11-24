@@ -65,11 +65,6 @@ export function TodayScreen() {
   // A planned day earlier this week with no finished workout: grey dot
   const skipped = (d: number) => !doneDays.get(d) && (d - sd + 7) % 7 < (todayWd - sd + 7) % 7 && !!routine?.days.some((x) => x.weekday === d && x.slots.length);
   const doneToday = finished.some((s) => s.date === localDate(now) && s.dayId === day?.id);
-  // Signal look (Settings → Look): its own week, day tile, list and Start button; logic shared with Neon
-  const signal = settings.look === "signal" || settings.look === "signal2";
-  const planned = (d: number) => !!routine?.days.some((x) => x.weekday === d && x.slots.length);
-  const dateOf = (d: number) => { const x = new Date(now); x.setDate(x.getDate() - ((todayWd + 6) % 7) + ((d + 6) % 7)); return x.getDate(); };
-  const two = (n: number) => String(n).padStart(2, "0");
 
   // Hero figure cycles through the day's exercises, one per animation loop
   const [hero, setHero] = useState(0);
@@ -94,7 +89,7 @@ export function TodayScreen() {
   };
 
   return (
-    <div className={signal ? "page sig-page" : "page"}>
+    <div className="page">
       <header className="spread" style={{ marginBottom: 14 }}>
         <div className="row" style={{ gap: 6 }}>
           <Figure spec={SPLASH_FLEX} size={30} still bumps />
@@ -114,16 +109,7 @@ export function TodayScreen() {
         </div>
       )}
 
-      {signal ? (
-        <div className="sig-week" role="tablist" aria-label="Day of the week">
-          {weekOrder(1).map((d) => <span key={"l" + d} aria-hidden="true">{LONG[d][0]}</span>)}
-          {weekOrder(1).map((d) => (
-            <button key={d} role="tab" aria-selected={d === wd} aria-label={`${LONG[d]} ${dateOf(d)}${doneDays.get(d) ? ", done" : ""}`} onClick={() => setWd(d)}
-              className={"sig-day" + (d === todayWd ? " today" : doneDays.get(d) ? " done" : planned(d) && !skipped(d) ? " plan" : "")}>{dateOf(d)}</button>
-          ))}
-        </div>
-      ) : (
-        <div className="glass" style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", padding: 6, gap: 4, borderRadius: 18 }} role="tablist" aria-label="Day of the week">
+      <div className="glass" style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", padding: 6, gap: 4, borderRadius: 18 }} role="tablist" aria-label="Day of the week">
         {weekOrder(1).map((d) => {
           const sel = d === wd, td = d === todayWd;
           return (
@@ -137,7 +123,6 @@ export function TodayScreen() {
           );
         })}
       </div>
-      )}
 
       {isRest ? (
         <section className="glass edge" style={{ marginTop: 14, padding: "26px 18px", textAlign: "center", display: "grid", justifyItems: "center", gap: 8 }}>
@@ -148,48 +133,6 @@ export function TodayScreen() {
           <p className="muted" style={{ fontSize: 13, marginTop: 6 }}>Training anyway? Pick a day above.</p>
         </section>
       ) : (
-        signal ? (
-        <>
-          <section className="sig-tile" aria-label="Workout">
-            <div className="sig-eyebrow-row">
-              <span className="sig-eyebrow">{wd === todayWd ? "TODAY · " : ""}{LONG[wd].slice(0, 3).toUpperCase()}</span>
-            </div>
-            <div className="sig-head">
-              <div className="sig-figure">
-                <Figure key={heroEx?.id} spec={heroEx?.figure} size={110} timing={heroTiming} label={heroEx ? `Animation: ${heroEx.name}` : undefined} />
-              </div>
-              <h1 className="sig-title">{day!.title}</h1>
-              {(doneToday || deloading) && <div className="row" style={{ gap: 6, flexWrap: "wrap" }}>
-                {doneToday && <span className="sig-pill"><Icon name="check" size={13} /> DONE</span>}
-                {deloading && <span className="sig-pill">DELOAD · TO {fmtDate(settings.deload!.end, { weekday: "short" }).toUpperCase()}</span>}
-              </div>}
-            </div>
-            <div className="sig-caption" key={heroEx?.id}>{heroEx ? `→ ${heroEx.name}` : ""}</div>
-            <div className="sig-stats">
-              <div className="sig-stat"><b>{two(slots.length)}</b><span>Exercises</span></div>
-              <div className="sig-stat"><b>{two(sets)}</b><span>Sets</span></div>
-              <div className="sig-stat paper"><b>{slotsMinutes(slots)}</b><span>~Min</span></div>
-            </div>
-          </section>
-
-          <section className="sig-list" aria-label="Exercises">
-            <div className="sig-list-head"><span>EXERCISES</span><span>SETS × REPS</span></div>
-            <SortableDayList slots={slots} exMap={exMap} onOpen={(s) => setOpen(s.exerciseId)}
-              onMove={(from, to) => routine && day && saveRoutine(moveSlot(routine, day.id, from, to))}
-              row={(s, ex, i) => <>
-                <span className="sig-n">{two(i + 1)}</span>
-                <span className="sig-rule" aria-hidden="true" />
-                <span className={"sig-dot" + (ex.isHeavy ? " heavy" : "")} aria-label={ex.isHeavy ? "Heavy" : undefined} />
-                <span style={{ minWidth: 0 }}>
-                  <span className="sig-name">{ex.name}<FailFlame why={fail?.get(s.id)} /></span>
-                  <span className="sig-note">{s.notes ?? ex.muscles.join(", ")}</span>
-                </span>
-                <span className="sig-sets">{!deloading && <ExtraTag why={extra?.get(s.id)} />}{slotSets(s.sets, s.id)}×{repRange(s.repMin, s.repMax, ex.measure === "time")}</span>
-              </>} />
-            <div className="sig-legend"><i className="heavy" />HEAVY<i />LIGHT</div>
-          </section>
-        </>
-        ) : (
         <>
           <section className="glass edge" style={{ marginTop: 14, padding: 18 }}>
             <div className="spread" style={{ alignItems: "flex-start" }}>
@@ -229,22 +172,14 @@ export function TodayScreen() {
                 </>} />
           </div>
         </>
-        )
       )}
 
 
       {!active && !isRest && (
         <Dock>
-          {signal ? (
-            <button className="sig-start" onClick={start}>
-              <span>{wd === todayWd ? "Start workout" : `Start ${LONG[wd]}`}</span>
-              <span className="sig-go" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 13h15M14 6l7 7-7 7" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
-            </button>
-          ) : (
-            <button className="btn btn-primary btn-xl pulse" onClick={start}>
-              <Icon name="play" size={20} /> {wd === todayWd ? "Start workout" : `Start ${LONG[wd]}`}
-            </button>
-          )}
+          <button className="btn btn-primary btn-xl pulse" onClick={start}>
+            <Icon name="play" size={20} /> {wd === todayWd ? "Start workout" : `Start ${LONG[wd]}`}
+          </button>
         </Dock>
       )}
       {(() => { const os = slots.find((s) => s.exerciseId === open);
