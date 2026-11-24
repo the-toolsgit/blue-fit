@@ -334,90 +334,59 @@ copyBtn.addEventListener("click", async () => {
   }
 });
 
-// Camera check (run 2 showed: track says 1080x1920 but the <video> and its
-// frames are 1920x1080). Compares every way to read a frame on this Safari:
-// sizes, rotation, and whether the body is upright in each one.
+// Camera check v2. v0.1.239 showed: every frame source gives the same 1920x1080
+// upright picture (VideoFrame is the same picture turned sideways), so the
+// sensor is being cropped to 16:9. Try other shapes (3:4, square, full size) to
+// find one that shows more of the body top-to-bottom.
 async function cameraCheck() {
   lines.length = 0;
-  log(`Camera check · app ${__APP_VERSION__} · ${navigator.userAgent.match(/OS ([\d_]+)/)?.[1] ?? "?"}`);
+  log(`Camera check 2 · app ${__APP_VERSION__} · iOS ${navigator.userAgent.match(/OS ([\d_]+)/)?.[1] ?? "?"} · screen ${screen.width}x${screen.height}`);
   step("Camera check");
   const fileset = await FilesetResolver.forVisionTasks(WASM);
   const pose = await PoseLandmarker.createFromOptions(fileset, { baseOptions: { modelAssetPath: M("pose_landmarker_full.task"), delegate: "CPU" }, runningMode: "IMAGE", numPoses: 1 });
-  const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: { exact: 1080 }, height: { exact: 1920 } }, audio: false });
-  const track = stream.getVideoTracks()[0];
-  video.srcObject = stream;
-  await video.play();
+  try {
+    const devs = (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "videoinput");
+    log(`cameras: ${devs.map((d) => d.label || "?").join(" | ")}`);
+  } catch { /* ignore */ }
   stage.style.display = "block";
-  const s0 = track.getSettings();
-  log(`track settings ${s0.width}x${s0.height} · aspect ${s0.aspectRatio?.toFixed?.(3) ?? "?"} · screen.orientation ${screen.orientation?.type ?? "?"}`);
-  log(`video at play ${video.videoWidth}x${video.videoHeight}`);
-  video.addEventListener("resize", () => log(`video resize event → ${video.videoWidth}x${video.videoHeight}`));
-  say("Stand back so your whole body shows. Checking in ten seconds.");
+  say("Stand the phone up and step back so your head and hips show. Hold still for about half a minute.");
   for (let i = 10; i > 0; i--) { cue.textContent = `Step back · ${i}`; await sleep(1000); }
 
-  const upright = (src: ImageBitmap | HTMLCanvasElement, label: string) => {
-    const r = pose.detect(src);
-    const lm = r.landmarks[0];
-    if (!lm) { log(`${label}: no body found`); return; }
-    const nose = lm[0], hipY = (lm[23].y + lm[24].y) / 2, hipX = (lm[23].x + lm[24].x) / 2;
-    const dir = Math.abs(nose.y - hipY) > Math.abs(nose.x - hipX) ? (nose.y < hipY ? "UPRIGHT" : "upside down") : (nose.x < hipX ? "SIDEWAYS (head left)" : "SIDEWAYS (head right)");
-    const ys = lm.map((p) => p.y), xs = lm.map((p) => p.x);
-    log(`${label}: body ${dir} · spans y ${Math.min(...ys).toFixed(2)}–${Math.max(...ys).toFixed(2)}, x ${Math.min(...xs).toFixed(2)}–${Math.max(...xs).toFixed(2)}`);
-  };
-
-  // 1. requestVideoFrameCallback metadata
-  const v = video as HTMLVideoElement & { requestVideoFrameCallback?: (cb: (now: number, m: { width: number; height: number; rotation?: number }) => void) => void };
-  if (v.requestVideoFrameCallback) {
-    const m = await new Promise<{ width: number; height: number; rotation?: number }>((res) => v.requestVideoFrameCallback!((_n, md) => res(md)));
-    log(`rVFC frame ${m.width}x${m.height} · rotation ${m.rotation ?? "n/a"}`);
-  } else log("rVFC: not available");
-  // 2. ImageBitmap from the video element
-  const b1 = await createImageBitmap(video);
-  log(`ImageBitmap(video) ${b1.width}x${b1.height}`);
-  upright(b1, "  pose on ImageBitmap(video)");
-  b1.close();
-  // 3. WebCodecs VideoFrame
-  const VF = (globalThis as unknown as { VideoFrame?: new (s: HTMLVideoElement) => { codedWidth: number; codedHeight: number; displayWidth: number; displayHeight: number; visibleRect?: DOMRectReadOnly; rotation?: number; flip?: boolean; close(): void } }).VideoFrame;
-  if (VF) {
+  const asks: [string, MediaTrackConstraints][] = [
+    ["16:9 portrait (as now)", { width: { exact: 1080 }, height: { exact: 1920 } }],
+    ["3:4 portrait 1440x1920", { width: { exact: 1440 }, height: { exact: 1920 } }],
+    ["3:4 portrait 3024x4032", { width: { exact: 3024 }, height: { exact: 4032 } }],
+    ["square 1920", { width: { exact: 1920 }, height: { exact: 1920 } }],
+    ["4:3 landscape 1920x1440", { width: { exact: 1920 }, height: { exact: 1440 } }],
+    ["4:3 landscape 4032x3024", { width: { exact: 4032 }, height: { exact: 3024 } }],
+    ["no crop, ideal max", { width: { ideal: 4096 }, height: { ideal: 4096 }, resizeMode: "none" } as MediaTrackConstraints],
+  ];
+  for (const [label, c] of asks) {
+    let stream: MediaStream | null = null;
     try {
-      const f = new VF(video);
-      log(`VideoFrame coded ${f.codedWidth}x${f.codedHeight} · display ${f.displayWidth}x${f.displayHeight} · visible ${f.visibleRect?.width}x${f.visibleRect?.height} · rotation ${f.rotation ?? "n/a"} · flip ${f.flip ?? "n/a"}`);
-      const b2 = await createImageBitmap(f as unknown as ImageBitmapSource);
-      log(`ImageBitmap(VideoFrame) ${b2.width}x${b2.height}`);
-      upright(b2, "  pose on ImageBitmap(VideoFrame)");
-      b2.close();
-      f.close();
-    } catch (e) { log(`VideoFrame: failed (${err(e)})`); }
-  } else log("VideoFrame: not available");
-  // 4. MediaStreamTrackProcessor (raw frames from the track)
-  const MSTP = (globalThis as unknown as { MediaStreamTrackProcessor?: new (o: { track: MediaStreamTrack }) => { readable: ReadableStream } }).MediaStreamTrackProcessor;
-  if (MSTP) {
-    try {
-      const reader = new MSTP({ track: track.clone() }).readable.getReader();
-      const { value: f } = await reader.read();
-      log(`TrackProcessor frame coded ${f.codedWidth}x${f.codedHeight} · display ${f.displayWidth}x${f.displayHeight} · rotation ${f.rotation ?? "n/a"}`);
-      const b3 = await createImageBitmap(f);
-      upright(b3, "  pose on TrackProcessor frame");
-      b3.close();
-      f.close();
-      reader.cancel();
-    } catch (e) { log(`TrackProcessor: failed (${err(e)})`); }
-  } else log("TrackProcessor: not available");
-  // 5. ImageCapture (full still photo)
-  const IC = (globalThis as unknown as { ImageCapture?: new (t: MediaStreamTrack) => { grabFrame(): Promise<ImageBitmap>; takePhoto(): Promise<Blob> } }).ImageCapture;
-  if (IC) {
-    try {
-      const ic = new IC(track);
-      const g = await ic.grabFrame();
-      log(`ImageCapture.grabFrame ${g.width}x${g.height}`);
-      upright(g, "  pose on grabFrame");
-      g.close();
-    } catch (e) { log(`ImageCapture: failed (${err(e)})`); }
-  } else log("ImageCapture: not available");
-  const s1 = track.getSettings();
-  log(`track settings now ${s1.width}x${s1.height} · video now ${video.videoWidth}x${video.videoHeight}`);
-
-  stream.getTracks().forEach((t) => t.stop());
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", ...c }, audio: false });
+      video.srcObject = stream;
+      await video.play();
+      await sleep(1800);
+      const st = stream.getVideoTracks()[0].getSettings();
+      const bmp = await createImageBitmap(video);
+      const r = pose.detect(bmp);
+      const lm = r.landmarks[0];
+      let body = "no body";
+      if (lm) {
+        const nose = lm[0], hip = (lm[23].y + lm[24].y) / 2;
+        // nose→hip distance as a share of the frame height: smaller = wider view
+        body = `nose→hip ${(Math.abs(hip - nose.y) * 100).toFixed(0)}% of height, ${(Math.abs(hip - nose.y) * bmp.height).toFixed(0)} px · ${nose.y < hip ? "upright" : "not upright"}`;
+      }
+      log(`${label}: track ${st.width}x${st.height} · frame ${bmp.width}x${bmp.height} · ${body}`);
+      bmp.close();
+    } catch (e) {
+      log(`${label}: ${(e as Error).name}`);
+    }
+    stream?.getTracks().forEach((t) => t.stop());
+    video.srcObject = null;
+    await sleep(300);
+  }
   stage.style.display = "none";
   pose.close();
   say("Done.");
