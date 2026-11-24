@@ -1,8 +1,8 @@
 # Body scan: plan
 
 Goal: scan the body with the phone's front camera, build a 3D body and measurements per part, track them over time, and let them adjust the plan. Camera only, always (no LiDAR: Pro-only; Leo, Nov 24 2026). The web scanner is temporary; the native app swaps in a native camera scanner with the same flow. Measuring, storage, interpretation, Progress and plan effects are permanent.
-Reviewed by an agent Nov 24 2026; all findings applied below.
-Must work on every iPhone from the iPhone 14 on (Leo, Nov 24 2026); tested first on Leo's iPhone 16 Pro.
+Reviewed twice by an agent (Nov 24 2026); all findings applied below.
+**Supported:** every iPhone from the iPhone 14 on (Leo, Nov 24 2026), **iOS 18.4+** (OffscreenCanvas WebGL in workers; wake lock in home-screen mode fixed in Safari 18.4); checked in `capabilities()`. Tested first on Leo's iPhone 16 Pro. iPhone 17 models have a square 18 MP front sensor with Center Stage → covered by the camera rule (§3.1.2) and tested in spike 2.
 
 ## 1. Architecture (swappable scanner)
 
@@ -12,33 +12,35 @@ Must work on every iPhone from the iPhone 14 on (Leo, Nov 24 2026); tested first
 ```
 
 - **The scanner returns geometry only, never measurements**, so web and native scanners measure the same way.
+- **Every scanner must provide the same fixed level keys** (`LEVEL_KEYS`): `neckBase`, `neckTop` (axis for the neck tape), `armpit`, `lowestRib`, `navel`, `hipCrest`, `buttocksMax`, `crotch`, `kneeMid`; limb axes: `shoulderL/R`, `elbowL/R`, `wristL/R`, `hipJointL/R`, `kneeL/R`, `ankleL/R`. The scanner finds them on its own 3D body (web: on the fitted MHR mesh); `measure.ts` picks slices only from these keys.
 - `src/core/body/types.ts` (framework-free, portable to Swift):
-  - `BodyGeometry { slices: { yCm, polygon: [x,z][] (quantized mm) }[] (1 cm steps, scanner-neutral), limbs: { part, axis, sections[] }[] (cross-sections perpendicular to each bone), landmarkHeights, shape?: { model: "MHR", coeffs: number[45], pose: number[] } (rebuilds the mesh), viewQuality: number[], scannerId, scannerVersion }`
-  - `BodyScan { id, date, source: "web-camera" | "native-camera" | "manual", scannerVersion, measureVersion, heightCm, weight?: { value, unit: "lb" }, sex, geometry?: BodyGeometry, measurements: Partial<Record<BodyPart, number>> (cm), bodyFatPct?, confidence: Partial<Record<BodyPart, number>> }`
-  - `BodyPart`: neck, chest, waistUpper, waistLower (navel), hips, upperArmL/R, forearmL/R, thighL/R, calfL/R.
-- `src/core/body/measure.ts` (pure maths): convex-hull perimeter of slices (= tape), limb sections, Cauchy cross-check, Navy body fat, confidence. Unit-tested against published worked examples.
-- `src/core/body/scanner.ts`: `interface BodyScanner { id; version; capabilities(): Promise<{available, reason?}>; run(input: {heightCm, sex}): Promise<BodyGeometry> }` — no UI types; the scanner owns its own capture screens; shared screens (weight & height, results) live outside it.
+  - `BodyGeometry { torsoSlices: { yCm: number; polygon: [number, number][] /* x,z in mm, ints */ }[] (1 cm steps, **torso vertices only** — arms/hands excluded by skinning labels), limbSections: { part: LimbPart; axis: [[x,y,z],[x,y,z]] (cm); sections: { tCm: number; polygon: [number, number][] }[] }[] (perpendicular to the bone, 1 cm steps), neckSections: same shape along the neck axis, levels: Record<LevelKey, number /* yCm */>, limbAxes: Record<AxisKey, [number,number,number]>, shape?: { model: "MHR"; version: string; body: number[20]; pose: number[] }, viewQuality: number[12] (0–1), scannerId: string, scannerVersion: string }`
+  - `BodyScan { id: string; date: string /* ISO date-time, local */; source: "web-camera" | "native-camera" | "manual"; scannerVersion: string; measureVersion: number; heightCm: number; weightLb?: number; sex: "male" | "female"; geometry?: BodyGeometry; measurements: Partial<Record<BodyPart, number>> /* cm */; bodyFatPct?: number; waistToHeight?: number; confidence: Partial<Record<BodyPart, number>> /* 0–1 */ }`
+  - `BodyPart`: neck, chest, waistUpper (narrowest, lowest rib → hip crest), waistLower (navel), hips, upperArmL/R, forearmL/R, thighL/R, calfL/R.
+- `src/core/body/measure.ts` (pure maths, `MEASURE_VERSION = 1`): convex-hull perimeter of torso slices (= tape), limb and neck sections, Cauchy cross-check, Navy body fat, waist-to-height, confidence. **When `MEASURE_VERSION` changes, stored geometry is re-measured** (scans with geometry keep one trend line).
+- `src/core/body/scanner.ts`: `interface BodyScanner { id; version; capabilities(): Promise<{available, reason?}>; run(input: {heightCm, sex}): Promise<BodyGeometry> }` — no UI types; the scanner owns its capture screens; shared screens (weight & height, results) live outside it.
 - `src/scan/web/`: everything web-only (camera, models, guidance, fit). `src/scan/registry.ts` picks the scanner.
-- **The real long-term contract** (for a Swift rewrite) is the stored `BodyScan` JSON schema + the measurement definitions in APP_SPEC; both written down there.
-- **Trends never mix methods:** scans compare only within the same `source` + `measureVersion`, or show a "method changed" break. When the native scanner arrives: a few same-day overlap scans (web + native) to measure the bias.
+- **The real long-term contract** (for a Swift rewrite) is the stored `BodyScan` JSON schema + `LEVEL_KEYS` + the measurement definitions in APP_SPEC; all written down there.
+- **Trends never mix methods:** scans compare only within the same `source` (and re-measured to the current `measureVersion`); a source change shows a "method changed" break. When the native scanner arrives: a few same-day overlap scans (web + native) to measure the bias.
 
 ## 2. Storage, settings, backup
 
-- New `bodyScans` table: `Tables`/`TABLE_KEYS` (key `id`), `AppData`, idbAdapter version bump + new object store, Dexie old-data test still opens.
-- `exportFormat`: `bodyScans: z.array(...).default([])` so old backups import; Reset clears scans; backup size check (geometry tens of KB per scan).
-- Settings: `heightCm`, `sex: "male" | "female"`, `lengthUnit: "in" | "cm"` (default in) with zod defaults; `units` stays lb. Weight stored as typed (lb).
+- `bodyScans` table: add to `TABLES`/`TABLE_KEYS` (key `id`), `Tables`, `AppData`; idbAdapter `DB_VERSION` → next (the `onupgradeneeded` loop creates the store); `exportAll`/`replaceAll` include it; Reset clears it; Dexie old-data test still opens.
+- `exportFormat`: `SCHEMA_VERSION` → 2 with a `migrate()` step (`bodyScans: []` for v1), so an older app refuses a newer backup instead of silently dropping scans; `bodyScans: z.array(bodyScanSchema).default([])`.
+- Settings: `heightCm: number | null`, `sex: "male" | "female" | null` (asked once on the first scan, editable in Settings), `lengthUnit: "in" | "cm"` (default in). `units` stays lb. Each scan stores the height and weight confirmed on its Step 1 screen; confirming also updates Settings (the scan's own values win for that scan).
+- APP_SPEC §4.8 `BodyEntry` (inches, `photoIds`) is replaced by `BodyScan` in step 1.
+- Mesh rebuild from `shape` needs the MHR file; if it isn't cached (evicted, or scan imported on another phone), the results view draws the stored slices/sections instead.
 - Export screen note: "Contains body measurements."
 
 ## 3. Web scanner
 
 ### 3.1 Capture
-1. Phone upright on a waist-height surface, front camera, user ~1.5 m away (verify in the spike that a 1.8 m body fits in frame at that distance; else adjust the distance cue).
-2. Camera: `getUserMedia({ video: { facingMode: "user", width, height, aspectRatio } })` with an explicit size; check in the spike that Safari doesn't crop, auto-frame or switch lenses; zoom/crop fixed during the scan.
-3. Frames to the worker via `createImageBitmap(video)` (transferred). Front-camera frames are unmirrored (preview mirrored by CSS only); anatomical left/right pinned from the first frame and carried through.
+1. Phone upright on a waist-height surface, front camera, user ~1.5 m away. The real field of view is measured live from the body's height in pixels; "Step back" / "Come closer" follow it.
+2. **Camera rule:** ask landscape 4:3 (`width: {exact: 4032}, height: {exact: 3024}`, then 1920×1440); **accept only a portrait stream** (iOS swaps it: 3024×4032); if it comes back landscape, try the portrait sizes; if nothing is portrait → "This phone's camera isn't supported yet". Zoom fixed at 1. Spike 2 checks Center Stage (iPhone 17) doesn't crop or follow the user; if it does, the scanner refuses that camera mode.
+3. Live guidance frames: `createImageBitmap(video, { resizeWidth: 720, resizeHeight: 960 })`, transferred to the worker. Captures: one full-resolution `createImageBitmap(video)` per hour (no ImageCapture in Safari). Front-camera frames are unmirrored (preview mirrored by CSS only); anatomical left/right pinned from the first frame and carried through.
 4. **Turn tracking:** angle followed continuously, clockwise only (no jumping back), from shoulder/hip yaw in world landmarks + nose/face visibility (front vs back) + silhouette width; never decided from one frame. Too far → "You turned too much"; not enough → repeat the cue. Auto-capture when steady at the hour.
-5. **Per capture, right away:** segment, keep only mask + landmarks, `ImageBitmap.close()` the frame (memory: Safari kills the tab at ~1–1.5 GB). Frames never touch IndexedDB, crash-recovery state, the SW cache or logs.
-6. Phone tilt: gravity vector from `DeviceMotionEvent.accelerationIncludingGravity` (not Euler angles, unstable near 90°); permission from a tap; 85–95° = green; must stay green during the scan; if it moves → restart. Permission denied → continue with "tilt not checked".
-
+5. **Per capture, right away (in the worker):** crop to the person, pose heavy (IMAGE, CPU, ~120 ms) for landmarks + its mask, multiclass segmentation (CPU), refine, keep only the mask (crop size, 1 byte/pixel) + landmarks, `close()` the bitmap. Peak memory budget < 600 MB (measured in spike 2). Frames never touch IndexedDB, crash-recovery state, the SW cache or logs.
+6. Phone tilt: gravity vector from `DeviceMotionEvent.accelerationIncludingGravity` (not Euler angles); permission from a tap; 85–95° = green; must stay green during the scan; if it moves → restart. Permission denied → continue with "tilt not checked".
 7. **Pre-scan room check** (live, before the countdown; each shows a fix in words + voice, scan waits until green):
    - **Phone:** upright 85–95° (gravity), not moving.
    - **User:** whole body in frame (per-side bars), centered, distance right (body height in frame within a target band; "Step back" / "Come closer"), A-pose matched (arm angle from landmarks), one person only.
@@ -46,77 +48,94 @@ Must work on every iPhone from the iPhone 14 on (Leo, Nov 24 2026); tested first
    - **Background:** plain enough — edge/texture density and color variance in the background area (outside the body mask), no hard-edged objects touching the outline (furniture, door frames), contrast between body and wall; mask confidence high along the whole outline. Messages: "Too busy behind you — stand in front of a plain wall", "Your outline blends into the wall — try a different wall or clothes".
    - Same checks keep running during the rotation; a drop pauses the scan.
 
-### 3.2 Models and the 3D fit
-- **Live guidance:** MediaPipe Pose Landmarker (*full*, VIDEO mode, `numPoses: 2` to catch a second person), GPU delegate in a worker, with CPU/main-thread fallback if worker+GPU fails on Safari.
-- **Outline per capture:** MediaPipe multiclass segmenter on a crop around the person (from landmarks), 512 px variant if available, **CPU delegate** (GPU returns scrambled classes on iOS Safari), edges refined at full camera resolution (guided filter). Body = body skin + face skin + clothes + "hair" below the neck (body hair); head hair excluded.
-- **3D fit:** MHR body model taken straight from `facebookresearch/MHR` (Apache-2.0), converted at build time to a compact binary (template, 45 identity blendshapes, skinning, skeleton; decimated ~6.9k-vertex mesh for the fit; pose correctives skipped). Start: mean MHR body scaled to height. Optimizer: Levenberg–Marquardt on CPU in a worker over ~110 parameters (45 shape + ~20 pose + per view yaw and x/z translation + focal length), residuals = projected mesh outline → mask edge (distance transform, analytic gradient) + landmark reprojection + height constraint; perspective camera, focal length unknown, phone height and tilt as priors. WebGPU not required. Target < 20 s (measured in the spike).
-- **InstantHMR: not used by default** (its weights and `mhr-body.onnx` are under the SAM License, not open source). Optional later only if Leo accepts that license (with `LICENSE-SAM` bundled).
-- **Cross-check:** visual hull + Cauchy only for neck, chest, waist, hips (torso slices seen cleanly in most views). Arms, forearms, thighs, calves come from the fit only, measured perpendicular to the bone.
-- **Measurement levels** (no navel/armpit landmarks in MediaPipe): defined on the fitted mesh — neck just below the larynx level (fraction along head–shoulder), chest at the armpit level, waistUpper = narrowest between lowest rib and hip crest, waistLower = navel level, hips = widest around the buttocks, upper arm mid humerus, forearm widest, thigh mid femur (and widest below glutes), calf widest. Navy: men waist at navel (waistLower) + neck; women narrowest waist (waistUpper) + hips + neck; inches + log10.
+### 3.2 Models
+- **Live guidance:** MediaPipe Pose Landmarker *full*, VIDEO mode, **GPU delegate in a worker** (40 fps measured); fallback **CPU in a worker** (19 fps). `numPoses: 2` (second person check) verified in spike 2. **Warm-up starts on the Weight & Height step** (first GPU compile can take seconds; the tutorial is skipped after the first scan).
+- **Outline per capture:** MediaPipe `selfie_multiclass_256x256` (the only multiclass model; classes background, hair, body-skin, face-skin, clothes, others), **CPU delegate**, on the person crop. 256 px on a ~1300×3500 px crop is ~8 mm per mask pixel, so the edge is refined at full resolution: guided filter on the crop + the heavy pose model's own mask; spike 2 compares this against overlapping vertical tiles (3 tiles head/torso/legs) and keeps the better one. Body = body-skin + face-skin + clothes; whether body hair is tagged "hair" is tested in the synthetic/real checks before deciding to count hair below the neck as body.
+- **InstantHMR: not used** (SAM License). Optional later only if Leo accepts that license.
 
-### 3.3 Hosting, audio, screen
-- All model files and wasm self-hosted: MediaPipe `FilesetResolver` pointed at our own path (default is jsDelivr/Google storage); no onnxruntime unless InstantHMR is added. CSP `connect-src 'self'` so a stray CDN fetch fails loudly.
-- Models in a separate runtime cache downloaded on the first scan with a progress screen (not precached: Workbox skips > 2 MiB and every update would re-download). Files < 100 MB for GitHub Pages; MHR binary generated at build time, not committed if large.
-- Voice: short bundled clips (generated on the Mac at build time), `speechSynthesis` fallback; `navigator.audioSession.type = "playback"` so the silent switch doesn't mute them; shutter sound via Web Audio. On-screen text mirrors every cue, very large type (readable at 1.5 m), announced to VoiceOver.
+### 3.3 3D fit (worker, CPU)
+- **Body model:** MHR from `facebookresearch/MHR` (Apache-2.0, LICENSE + NOTICE shipped). Converted once on the Mac by `scripts/convert-mhr.py` (step 0) to a compact binary: one LOD (picked in step 0 by size/accuracy; target ≤ 8k vertices, file ≤ 10 MB), template, the **20 body identity blendshapes** (the 20 head and 5 hand coefficients fixed at 0), skeleton, linear skinning weights (pose correctives skipped), vertex part labels from skinning (torso / arm / hand / leg / head). Committed if ≤ 10 MB, else downloaded by a pinned, cached CI step.
+- **Parameters:** 20 body shape coefficients; shared pose over ~20 joint angles (spine 2, spine 3, neck, shoulders 3+3, elbows 1+1, hips 3+3, knees 1+1) + small per-view arm offsets (shoulder 2+2) for arm drift; per view: body yaw + x/z on the floor; one camera: focal length, height (prior ~1 m), tilt from gravity (prior, small correction). ≈ 20 + 20 + 12×(3+4) + 2 ≈ 126.
+- **Start:** yaw = hour × 30°; translation from the landmarks; pose from MediaPipe world landmarks; shape = mean; scale from height.
+- **Coarse to fine:** (a) scale, yaw, translation, focal → (b) + pose → (c) + shape.
+- **Residuals:** silhouette — per iteration find contour edges (faces flipping facing), held fixed for that iteration; **two-way chamfer**: model contour → mask via distance transform, and mask contour → nearest model contour point; DT at ¼ mask resolution then bilinear. Landmark reprojection (weighted 0.3). Height (head hair excluded) soft term. **Shape prior:** Gaussian on coefficients. Robust (Huber) loss.
+- **Jacobians:** analytic through linear blend skinning, sparse rows (each vertex depends on ≤ 4 joints).
+- **Levenberg–Marquardt:** λ start 1e-3, ×10 on a rejected step, ÷10 on accept; stop when step < 1e-6 or Δcost < 1e-4 relative; cap 80 iterations.
+- **Failure detection → "Let's scan again":** any view IoU < 0.9, RMS edge distance > 3 px (at mask scale), any shape coefficient > 3σ, or torso slices vs visual hull differ > 2 cm.
+- **Time:** the bench (36 ms/iteration) skipped skinning, contours and DT, so the real fit is expected at 3–15 s; budget < 20 s, measured in step 3a and on the phone in 3c.
+
+### 3.4 Measurement definitions (in APP_SPEC)
+- Torso tapes from torso-only slices (arms excluded by vertex labels): chest at `armpit`, waistUpper = narrowest between `lowestRib` and `hipCrest`, waistLower at `navel`, hips at `buttocksMax` — convex-hull perimeter. Neck: perpendicular to the neck axis just above `neckBase`. Limbs perpendicular to the bone: upper arm mid humerus, forearm widest, thigh just below the gluteal fold and mid femur (report the upper one), calf widest.
+- **Cross-check:** visual hull + Cauchy only on torso levels, using only the views where the arms don't overlap the torso (drop 3 and 9 o'clock ±1 if they do).
+- **Body fat (Hodgdon–Beckett / U.S. Navy), inches + log10:** men %BF = 86.010·log10(waist − neck) − 70.041·log10(height) + 36.76 (waist at navel = waistLower); women %BF = 163.205·log10(waist + hips − neck) − 97.684·log10(height) − 78.387 (waist = waistUpper). Tested against published worked examples; shown as an estimate (±3–4 %). Waist-to-height ratio shown too (the U.S. military now leans on it).
+
+### 3.5 Hosting, audio, screen
+- All model files and wasm self-hosted. `fetch-models.mjs` uses **pinned model versions** (no `/latest/`), versioned paths (`models/v1/…`). Inside the worker, `fetch` is wrapped to reject other origins (a page CSP doesn't cover workers); a test checks every model/wasm path is same-origin. Page CSP `<meta>` with `connect-src 'self'`.
+- Models in a separate runtime cache downloaded on the first scan with a progress screen (not precached).
+- Voice: short clips generated **locally** by `scripts/make-voice.ts` and committed (CI is Ubuntu). Voice source: an open-licensed TTS (e.g. Piper with a CC-licensed voice) unless the macOS voice license allows publishing; `speechSynthesis` fallback; `navigator.audioSession.type = "playback"`; shutter via Web Audio. On-screen text mirrors every cue, very large type, announced to VoiceOver.
 - Wake lock held, re-acquired on `visibilitychange`.
 
-### 3.4 Error states
-Camera denied (standalone PWA may ask on every launch) · motion denied · models still downloading / offline · too dark or backlit (brightness/contrast check) · too close / too far / cut off (per-side red bars) · person lost mid-turn → pause, "Step back into the frame" · two people · wrong direction · pose drifting from A-pose · phone moved or tilted → restart · app backgrounded or call → discard frames, restart · cancel anytime · fit failed or low confidence → "Let's scan again" · delete a scan (show it first, then confirm) · edit a scan's weight/height afterwards.
+### 3.6 Error states
+Camera denied (standalone PWA may ask on every launch) · unsupported camera / iOS < 18.4 · motion denied · models still downloading / offline · too dark or backlit · too close / too far / cut off · person lost mid-turn → pause, "Step back into the frame" · two people · wrong direction · pose drifting from A-pose · phone moved or tilted → restart · app backgrounded or call → discard frames, restart · cancel anytime · fit failed → "Let's scan again" · delete a scan (show it first, then confirm) · edit a scan's weight/height afterwards.
 
 ## 4. Validation
 
-- **Spike first, on Leo's iPhone** (hidden test page, report to copy): model load time, live fps, per-capture time, fit time, memory peak, worker+GPU vs CPU, camera crop/lens behavior, field of view at 1.5 m.
-- **Synthetic bench (made-up bodies only):** random MHR shapes rendered at the 12 hours with noise (incl. hairy-chest texture, underwear, tight clothes) → full pipeline → error vs exact. Target ≤ 1.5 cm torso, ≤ 1 cm repeat.
-- **Real check, local only:** Leo's own tape measurements compared to his scans, kept under `docs/source/` (git-ignored) — never committed.
-- Repeat test: two scans back to back must agree within the repeat error, else "scan again".
+- **Spike 1 (done, below).** **Spike 2** (before step 3b, on the iPhone; newest iPhone and an iPhone 14 if available): 3024×4032 stream fps with live pose on downscaled bitmaps; peak memory with 12 captures processed + fit arrays; mask quality (guided filter vs tiles); worker GPU first-compile time; `numPoses: 2` on GPU; Center Stage behavior on iPhone 17.
+- **Synthetic bench (made-up bodies only, Node/Vitest):** random MHR shapes rendered at the 12 hours with noise → fit + measure → error vs exact. Target ≤ 1.5 cm torso, ≤ 1 cm repeat. Optimistic by design (MHR fitting MHR renders): real validation is Leo's tape check.
+- **Real check, local only:** Leo's tape measurements vs his scans, kept under `docs/source/` (git-ignored).
+- **Repeatability:** back-to-back scans give SEM per part; MDC95 = 1.96·√2·SEM per part (stored locally, used by §5).
+- **Debug export (dev only, localhost only):** masks + landmarks saved to the Mac for tuning; never in production, never committed.
 - Privacy test: nothing image-like is ever stored.
 
-### Spike results — Leo's iPhone, Nov 24 2026 (v0.1.237)
-- **Fast enough on the phone; no server needed.** 3D fit benchmark: 36 ms per iteration → ~1 s for 30 iterations.
-- **Live pose: run it in a worker on the GPU** (40 fps). The main-thread GPU path spent 13 s compiling shaders (unusable); CPU on the main thread gives 12 fps, CPU in a worker 19 fps (fallback). Warm the models up while the tutorial is shown.
-- **Per capture:** segmentation on CPU ~280 ms at 1920×1080 (classes looked right; the GPU gave the same classes but took 11 s the first time → stay on CPU); heavy pose + mask ~120 ms.
-- **Model loading:** 0.6–3.4 s each → load during the tutorial / weight & height step.
-- **Camera came back landscape (1920×1080) even though portrait was asked**, so the body used only the middle third of the width and was cut off at the bottom at ~1.5 m (tilt was 75°, leaning back). Fix: get real portrait frames (exact constraints, or rotate), then re-check the distance. The tilt check (85–95°) would have caught the lean.
-- **Camera fix found (camera check 2, v0.1.240):** iOS Safari swaps the asked size: asking **landscape 4:3** (`width: {exact: 1920}, height: {exact: 1440}`) returns a real **portrait 1440×1920**, upright, with the widest top-to-bottom view (nose→hip 29% of the frame → whole body fits with room at ~1.5 m). Asking 4032×3024 returns full-sensor portrait **3024×4032** (same view, ~0.6 mm per pixel on the body). Asking portrait sizes gives landscape or a cropped 16:9 view; square 4032 shows less top-to-bottom. Rule for the scanner: ask landscape 4:3; if the stream comes back landscape, ask the portrait sizes instead; use whichever is portrait. Live guidance on a downscaled bitmap, captures at full 3024×4032 (process and close right away). The 4:3 front camera is the same on iPhone 14–16, so this should hold for all supported phones (check on others when possible).
-- WebGPU adapter OK; wake lock, motion permission, audio session all work. Speech voices list was empty at start (loads late) → bundled voice clips stay the plan.
+### Spike 1 results — Leo's iPhone 16 Pro, Nov 24 2026 (v0.1.237–0.1.240)
+- **Fast enough on the phone; no server needed.** Simplified fit benchmark: 36 ms per iteration (real fit expected 3–15 s, §3.3).
+- **Live pose: worker + GPU** (40 fps). Main-thread GPU spent 13 s compiling shaders (unusable); CPU main thread 12 fps; CPU worker 19 fps (fallback).
+- **Per capture:** segmentation on CPU ~280 ms at 1920×1080 (GPU same classes but 11 s first time → CPU); heavy pose + mask ~120 ms.
+- **Model loading:** 0.6–3.4 s each → load during the Weight & Height step.
+- **Camera:** asking portrait sizes gave landscape or a cropped 16:9 view; asking **landscape 4:3 returns real portrait 3:4** (1440×1920 or full 3024×4032), upright, widest top-to-bottom view (nose→hip 29% of the frame → whole body fits at ~1.5 m; ~0.6 mm per pixel at full size). Square 4032 shows less top-to-bottom. → §3.1.2.
+- WebGPU adapter OK; wake lock, motion permission, audio session work. Speech voices load late → bundled clips.
 - No crash / memory problem.
 
 ## 5. Interpretation (permanent)
 
 - `src/core/body/trends.ts`: change per part over 4/8/12 weeks, left/right balance, smoothed over the last scans.
-- A change counts only if it exceeds the measured repeat error over ≥ 3 scans (arm growth in trained adults is millimetres per month, so arms/forearms/calves will rarely qualify; research before building, nothing guessed).
+- A change is real only if it exceeds that part's **MDC95** (from repeat scans) and holds over ≥ 3 scans. Arm growth in trained adults is millimetres per month, so arms/forearms/calves will rarely qualify.
 - Growth vs fat: limb/chest change read together with waist and body-fat change.
 - Parts → muscles: chest → chest; upper arm → biceps/triceps; forearm → forearms; thigh → quads/hams/glutes; calf → calves.
 
 ## 6. Effect on the plan (permanent)
 
-- Every 4–6 weeks, with ≥ 3 good scans, a suggestion card on Today like the deload card ("Arms haven't grown in 8 weeks: +2 sets a week for biceps and triceps?" Accept / Not now). Accepting raises the weekly target for those muscles and uses the existing volume/plan logic. Limits and steps from research.
+- Suggestion card on Today like the deload card ("Arms haven't grown in 8 weeks: +2 sets a week for biceps and triceps?" Accept / Not now). Accepting raises the weekly target for those muscles via the existing volume/plan logic.
+- **Gates (all required):** ≥ 3 good scans over ≥ 6 weeks; not in a cutting phase (`profile.phase`); the logged weekly sets actually met the current target for those muscles; waist and body fat stable (within MDC); cooldown 6 weeks per muscle after a suggestion.
+- **Step sizes, maximum target and cooldown come from a short research note** (dose-response meta-analyses, e.g. Schoenfeld 2017, Pelland 2024) written before step 5 and **approved by Leo**; nothing guessed.
 
 ## 7. Screens
 
 - **Scan flow:** as in the reference flow below, in Blue Fit's look, the line man as the pose guide.
-- **Results:** rotatable 3D body as an **SVG wireframe** in the figure engine's line style (projected in core; drag to turn; no auto-spin with reduced motion), callouts with value + change arrow, body fat and weight, compare with any older scan; color map and side-by-side later. three.js only if SVG is too slow.
+- **Results:** rotatable 3D body as an **SVG wireframe** in the figure engine's line style (projected in core; drag to turn; no auto-spin with reduced motion), callouts with value + change arrow, body fat, waist-to-height and weight, compare with any older scan; color map and side-by-side later. three.js only if SVG is too slow.
 - **Progress → Body section:** latest scan, chart per part, left/right balance.
 - **Settings:** height, sex, length unit.
 - 44 px+ targets, actions at the bottom, reduced motion respected.
 
 ## 8. Privacy
 
-Scans live only on the phone (IndexedDB, in the backup JSON). Photos only in memory during the scan. No uploads, no external hosts. Tests use made-up bodies. Never commit screenshots of other apps, real scans or tape values.
+Scans live only on the phone (IndexedDB, in the backup JSON). Photos only in memory during the scan. No uploads, no external hosts (worker fetch guard). Tests use made-up bodies. Never commit screenshots of other apps, real scans, debug exports or tape values.
 
 ## 9. Roadmap (native app)
 
-Native camera scanner (same front-camera flow, native pose/segmentation) producing the same `BodyGeometry`; scans get `source: "native-camera"`; overlap scans to measure the bias. Measuring, storage, interpretation, Progress and plan unchanged. No LiDAR.
+Native camera scanner (same front-camera flow, native pose/segmentation) producing the same `BodyGeometry` + `LEVEL_KEYS`; scans get `source: "native-camera"`; overlap scans to measure the bias. Measuring, storage, interpretation, Progress and plan unchanged. No LiDAR.
 
-## 10. Build order (APP_SPEC updated and version bumped in every step)
+## 10. Build order (APP_SPEC updated and version bumped in every push)
 
-0. Spike on the iPhone + MHR conversion check (size, license notice).
-1. Core types, `measure.ts` + Navy tests, storage table, export/import, settings.
-2. Progress Body section + manual entry (`source: "manual"`, no geometry) for testing.
-3. Web scanner: capture flow + guidance, segmentation, fit, synthetic bench.
-4. Results screen (SVG 3D), error states.
-5. Interpretation + research-based rules, suggestion card.
-6. Agent review, push.
+0. **MHR conversion** (`scripts/convert-mhr.py`, LOD pick, file size, LICENSE/NOTICE). Done when: binary ≤ 10 MB loads in Node and rebuilds the mean body at the right height.
+1. **Core data:** types, `LEVEL_KEYS`, `measure.ts` + Navy tests, storage table, `SCHEMA_VERSION` 2 + migrate, settings, APP_SPEC §4.8 replaced. Done when: Navy worked examples pass, an old v1 backup imports, old DBs open.
+2. **Progress Body section + manual entry** (`source: "manual"`, no geometry). Done when: manual scans show, chart, delete (shown first), edit.
+3a. **Fit + measure in Node/Vitest** on synthetic masks from random MHR bodies. Done when: torso error ≤ 1.5 cm, limbs ≤ 2 cm, fit converges on 95% of cases, time measured.
+3b. **Spike 2** on the iPhone (§4). Then **capture flow + guidance** in the app (tutorial, Weight & Height, sound check, phone height, tilt, room check, 12-hour rotation with voice). Done when: a full rotation captures 12 good masks on the phone.
+3c. **Integrate on the phone:** masks → fit → measure → save. Done when: two back-to-back scans agree within 1 cm on torso, fit < 20 s.
+4. **Results screen** (SVG 3D) + all error states. Done when: every §3.6 state is reachable and shown.
+5. **Research note → Leo's OK → interpretation + suggestion card.** Done when: gates tested with made-up scan histories.
+6. **Agent review, remove `spike.html` from the build, push.**
 
 ## Reference scan process (ZOZOFIT app-only scan)
 
@@ -165,7 +184,7 @@ Sources: help.zozofit.com "Tips for Scanning" articles and "Why is my scan faili
 - Web limits to handle:
   - iOS web can't read or set the volume → "Turn your volume up" + a **Test sound** button instead of the slider.
   - Tilt: motion permission from a tap on the Phone Angle step (see §3.1.6).
-  - Voice: see §3.3.
+  - Voice: see §3.5.
   - Screen wake lock during the scan; front camera via `getUserMedia({ facingMode: "user" })`.
   - Guide bars per side: each bar turns red only on the side the body is cut off (or too close), from the segmentation mask.
 - Rotation: same voice cues + shutter sound; the turn angle is checked from the pose landmarks (shoulder/hip width and facing side) and the shoulder line's rotation; too far → "You turned too much, turn back a little", too little → repeat the cue. Auto-capture when steady at the right angle.
