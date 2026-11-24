@@ -242,6 +242,8 @@ export interface Settings {
    *  (off: neither; failure turned On in the plan still applies). Missing = on. */
   autoAdjust: boolean;
   theme: "system" | "light" | "dark";
+  /** Style (Settings → Look, Nov 24 2026): neon (default) or gray (Neon with gray backgrounds instead of navy, always dark). Missing = neon. */
+  look?: "neon" | "gray";
   /** Accent palette; the line man always stays blue */
   accent: Accent;
   /** Interview: training profile for the volume model (on this phone only) */

@@ -157,3 +157,14 @@
   --line: rgba(135, 83, 31, 0.15); --line-strong: rgba(135, 83, 31, 0.3);
   --bg-fx-1: rgba(176, 122, 69, 0.13); --bg-fx-2: rgba(31, 107, 255, 0.08);
 }
+
+/* ---------- Gray style (Settings → Look → Style, Nov 24 2026) ----------
+   Neon with neutral gray backgrounds, surfaces, lines and text instead of navy; the accent and the blue line man
+   stay. Always dark (the app sets data-theme="dark" with it). Weighted selector so it wins over the accent blocks. */
+:root[data-look="gray"][data-look] {
+  --bg: #0f1012; --bg-2: #16171a;
+  --surface: rgba(28, 30, 33, 0.78); --surface-solid: #1a1c1f; --surface-2: rgba(46, 49, 54, 0.62);
+  --line: rgba(200, 205, 212, 0.14); --line-strong: rgba(200, 205, 212, 0.3);
+  --ink: #e6e8eb; --muted: #8e949c; --faint: #5a5f66;
+  --bg-fx-1: rgba(150, 155, 165, 0.16); --bg-fx-2: rgba(120, 125, 135, 0.08); --grid: rgba(200, 205, 212, 0.035);
+}

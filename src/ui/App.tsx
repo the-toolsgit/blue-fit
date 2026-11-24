@@ -98,9 +98,12 @@ export function App() {
 
   useEffect(() => {
     const root = document.documentElement;
-    if (settings.theme === "system") delete root.dataset.theme; else root.dataset.theme = settings.theme;
-    try { localStorage.setItem("bf-theme", JSON.stringify(settings.theme)); } catch { /* ignore */ }
-  }, [settings.theme]);
+    // Gray is always dark, whatever the Theme setting
+    const theme = settings.look === "gray" ? "dark" : settings.theme;
+    if (theme === "system") delete root.dataset.theme; else root.dataset.theme = theme;
+    if (settings.look === "gray") root.dataset.look = "gray"; else delete root.dataset.look;
+    try { localStorage.setItem("bf-theme", JSON.stringify(settings.theme)); localStorage.setItem("bf-look", JSON.stringify(settings.look ?? "neon")); } catch { /* ignore */ }
+  }, [settings.theme, settings.look]);
 
   useEffect(() => {
     const root = document.documentElement;

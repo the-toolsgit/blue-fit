@@ -268,6 +268,16 @@ describe("backup export / import", () => {
     await db2.replaceAll(r.backup.data);
     expect(await db2.all("sessions")).toHaveLength(1);
   });
+  it("keeps the Gray style; an unknown style from an older version (Signal) imports as Neon", async () => {
+    const db = new MemoryAdapter();
+    await db.init(buildSeed);
+    const data = await db.exportAll();
+    for (const [look, want] of [["gray", "gray"], ["signal2", undefined]] as const) {
+      const r = parseBackup(JSON.stringify(buildBackup({ ...data, settings: { ...data.settings, look: look as "gray" } }, new Date())));
+      expect(r.ok).toBe(true);
+      if (r.ok) expect(r.backup.data.settings.look).toBe(want);
+    }
+  });
   it("importing a backup from this version re-runs every migration without changing anything", () => {
     const first = applyMigrations(buildSeed(), "2026-11-22");
     const again = applyMigrations(structuredClone(first.data), "2026-11-22");
