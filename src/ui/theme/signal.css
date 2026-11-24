@@ -2,7 +2,7 @@
    A layer over the neon styles: nothing here applies unless <html data-look="signal">, so Neon is untouched.
    The selector is weighted (html:root[…][…]) to win over the light theme and accent token blocks. */
 html:root[data-look="signal"][data-look] {
-  --bg: #55595e; --bg-2: #55595e;
+  --bg: #303131; --bg-2: #303131;
   --surface: #2b2f34; --surface-solid: #2b2f34; --surface-2: #383c41;
   --line: rgba(236, 235, 230, 0.12); --line-strong: rgba(236, 235, 230, 0.26);
   --ink: #ecebe6; --muted: #a4a9af; --faint: #6b7178;
