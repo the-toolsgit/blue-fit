@@ -22,7 +22,7 @@ export type Polygon = [number, number][];
 export interface Section { tCm: number; polygon: Polygon }
 
 export interface BodyGeometry {
-  /** Horizontal torso cuts every 1 cm (torso surface only, arms and hands left out). Polygon = [x, z]. */
+  /** Horizontal body cuts every 1 cm from the crotch to the neck (torso and legs; arms and hands left out). Polygon = [x, z]. */
   torsoSlices: { yCm: number; polygon: Polygon }[];
   /** Cuts perpendicular to each limb bone, every 1 cm from the proximal joint (tCm). */
   limbSections: { part: LimbPart; sections: Section[] }[];

@@ -96,6 +96,11 @@ Camera denied (standalone PWA may ask on every launch) · unsupported camera / i
 - WebGPU adapter OK; wake lock, motion permission, audio session work. Speech voices load late → bundled clips.
 - No crash / memory problem.
 
+### Step 3a results (Nov 24 2026, made-up bodies, Intel Mac)
+- 12 of 12 random bodies converge. Errors vs the true body: chest ≤ 0.8 cm, upper waist ≤ 1.3, lower waist ≤ 1.8, hips ≤ 0.7, limbs ≤ 1.4, neck ≤ 2.5 (most under 1 cm). 9–19 s per fit here (the iPhone ran the fit benchmark 3× faster).
+- What made it work: fit on **LOD 2** (LOD 3 inflated the body ~1 cm to match), size **locked to the entered height** (otherwise it traded size for distance), outline distances to the **true pixel edge** (edge pixels' centers shrank the body half a pixel), the **scan pose** as the base pose (MHR's rest pose holds the arms ~50° out), hip cuts **include the legs** (a hip tape goes around both buttocks), measuring in the **standard pose** (posture changes don't move tapes), waist levels from **front-midline surface points**, and a robust edge check (90th percentile ≤ 2 px).
+- Known weak spot: the neck (±2.5 cm). Lower waist depends on where the navel sits on the fitted body.
+
 ## 5. Interpretation (permanent)
 
 - `src/core/body/trends.ts`: change per part over 4/8/12 weeks, left/right balance, smoothed over the last scans.
@@ -130,7 +135,7 @@ Native camera scanner (same front-camera flow, native pose/segmentation) produci
 0. ✅ **MHR conversion (done Nov 24 2026, v0.1.243).** `scripts/convert-mhr.py` (numpy only) → `public/mhr/v1/mhr-lod3.bin` (1.5 MB, 4,899 vertices: **used for the fit**) and `mhr-lod2.bin` (3.3 MB, 10,661 vertices: **used for measuring** — LOD 3 reads torso tapes ~0.3 cm short of LOD 2, LOD 4 ~1 cm). `src/core/body/mhr.ts` rebuilds the body (rest shape, skeleton, skinning) and matches MHR's own PyTorch rig to < 0.01 cm (`mhr.test.ts`, fixture from `scripts/mhr-reference.py`). Mean body 172.5 cm, cm units, y up, rest pose = T-pose. Note: in MHR the identity shapes don't move the skeleton; height and limb lengths come from the `scale_*` / `*_flexible` model parameters (fitted with the pose). Part labels per vertex (torso/arm/hand/leg/neck/head). LICENSE + NOTICE in `public/mhr/`. Not precached (runtime cache on first scan).
 1. ✅ (v0.1.244) **Core data:** types, `LEVEL_KEYS`, `measure.ts` + Navy tests, storage table, `SCHEMA_VERSION` 2 + migrate, settings, APP_SPEC §4.8 replaced. Done when: Navy worked examples pass, an old v1 backup imports, old DBs open.
 2. ✅ (v0.1.245) **Progress Body section + manual entry** (`source: "manual"`, no geometry). Done when: manual scans show, chart, delete (shown first), edit.
-3a. **Fit + measure in Node/Vitest** on synthetic masks from random MHR bodies. Done when: torso error ≤ 1.5 cm, limbs ≤ 2 cm, fit converges on 95% of cases, time measured.
+3a. ✅ (v0.1.247) **Fit + measure in Node/Vitest** on synthetic masks from random MHR bodies. Done when: torso error ≤ 1.5 cm, limbs ≤ 2 cm, fit converges on 95% of cases, time measured.
 3b. **Spike 2** on the iPhone (§4). Then **capture flow + guidance** in the app (tutorial, Weight & Height, sound check, phone height, tilt, room check, 12-hour rotation with voice). Done when: a full rotation captures 12 good masks on the phone.
 3c. **Integrate on the phone:** masks → fit → measure → save. Done when: two back-to-back scans agree within 1 cm on torso, fit < 20 s.
 4. **Results screen** (SVG 3D) + all error states. Done when: every §3.6 state is reachable and shown.
