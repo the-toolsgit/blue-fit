@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildSeed } from "./seed";
 import { dailyLoad, setSessionDate, setSessionDuration, weeklyStreak } from "./history";
-import { averageSets, exerciseSeries, muscleFrequency, rangeStart, weeklyTotals } from "./progress";
+import { averageSets, exerciseSeries, lastChanges, muscleFrequency, rangeStart, weeklyTotals } from "./progress";
 import { recoveryStatus } from "./recovery";
 import type { LoggedSet, Session } from "./types";
 import { weekOrder, weekStart } from "./util";
@@ -257,3 +257,21 @@ describe("plain rule text", () => {
   });
 });
 
+
+describe("up / down (last workout vs the one before)", () => {
+  const exs = seed.exercises.filter((e) => ["leg-press", "barbell-shrug"].includes(e.id));
+  it("compares the heaviest counted weight of the last two workouts; warm-ups ignored; one workout is not enough", () => {
+    const h = [
+      sess("2026-11-02", "leg-press", [set(80, 10)]),
+      sess("2026-11-09", "leg-press", [set(100, 8), set(90, 10)]),
+      sess("2026-11-16", "leg-press", [set(200, 5, "warmup"), set(95, 12)]),
+      sess("2026-11-16", "barbell-shrug", [set(100, 10)]),
+    ];
+    const r = lastChanges(h, exs);
+    expect(r).toEqual([{ exerciseId: "leg-press", before: 100, after: 95, unit: "lb", date: "2026-11-16" }]);
+  });
+  it("bodyweight work without a weight compares the most reps", () => {
+    const r = lastChanges([sess("2026-11-02", "barbell-shrug", [set(0, 10)]), sess("2026-11-09", "barbell-shrug", [set(0, 12)])], exs);
+    expect(r[0]).toMatchObject({ before: 10, after: 12, unit: "reps" });
+  });
+});

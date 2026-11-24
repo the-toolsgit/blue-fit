@@ -41,6 +41,32 @@ export function exerciseSeries(sessions: Session[], exerciseId: string, time = f
   return out;
 }
 
+/** Up / down (Progress tab, Nov 24 2026): each exercise's last workout against the one before.
+ *  The value is the heaviest weight of the counted sets (no warm-ups); holds compare the longest hold in seconds,
+ *  and bodyweight work logged without a weight the most reps. Needs two workouts with the exercise. */
+export interface LastChange { exerciseId: string; before: number; after: number; unit: "lb" | "s" | "reps"; date: string }
+export function lastChanges(sessions: Session[], exercises: Exercise[]): LastChange[] {
+  const done = [...sessions].filter((x) => x.status === "finished").sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1));
+  const out: LastChange[] = [];
+  for (const ex of exercises) {
+    const time = ex.measure === "time";
+    const tops: { date: string; weight: number; reps: number }[] = [];
+    for (const s of done) {
+      const sets = s.entries.filter((e) => e.exerciseId === ex.id).flatMap((e) => e.sets)
+        .filter((x) => x.done && countsForLoad(x.type) && x.reps != null && x.reps > 0);
+      if (!sets.length) continue;
+      tops.push({ date: s.date, weight: Math.max(...sets.map((x) => x.weight ?? 0)), reps: Math.max(...sets.map((x) => x.reps!)) });
+      if (tops.length === 2) break;
+    }
+    if (tops.length < 2) continue;
+    const [last, prev] = tops;
+    // Seconds or reps when it is a hold, or when neither workout had a weight
+    const byReps = time || (last.weight === 0 && prev.weight === 0);
+    out.push({ exerciseId: ex.id, before: byReps ? prev.reps : prev.weight, after: byReps ? last.reps : last.weight, unit: time ? "s" : byReps ? "reps" : "lb", date: last.date });
+  }
+  return out;
+}
+
 export interface WeekTotals { weekStart: string; tonnage: number; sets: GroupTotals; workouts: number }
 
 /** Weekly totals (weeks begin on startDay) from `from` (or the first workout) through the current week. Empty weeks included. */

@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { useKeptState } from "../keptState";
-import { inRange, rangeStart, RANGE_LABEL, weeklyTotals, type Range } from "../../core/progress";
+import { inRange, lastChanges, rangeStart, RANGE_LABEL, weeklyTotals, type Range } from "../../core/progress";
 import { recoveryStatus, type MuscleRecovery, type Recovery } from "../../core/recovery";
 import { MUSCLE_GROUPS, muscleLabel, type MuscleGroup } from "../../core/types";
 import { fmtNum, localDate } from "../../core/util";
@@ -12,7 +12,7 @@ import { ExerciseProgress } from "../components/ExerciseProgress";
 import { Figure } from "../components/Figure";
 import { Icon } from "../components/Icon";
 import { MuscleMap, RECOVERY_COLOR, STAGE_STYLE, type VolumeStage } from "../components/MuscleMap";
-import { fmtVolume } from "../format";
+import { fmtVolume, loadSuffix } from "../format";
 import { useStore } from "../store";
 
 const ago = (k: number) => (k === 0 ? "today" : k === 1 ? "yesterday" : `${k} days ago`);
@@ -52,6 +52,14 @@ export function ProgressScreen() {
   const ex = exMap.get(exId ?? logged[0]?.id ?? "");
   const exIdx = Math.max(0, logged.findIndex((e) => e.id === ex?.id));
   const [exDir, setExDir] = useState<"next" | "prev" | null>(null);
+  // Up / down: last workout vs the one before, per exercise (biggest change first)
+  const changes = useMemo(() => lastChanges(finished, exercises), [finished, exercises]);
+  const ups = changes.filter((c) => c.after > c.before).sort((a, b) => (b.after - b.before) - (a.after - a.before));
+  const downs = changes.filter((c) => c.after < c.before).sort((a, b) => (a.after - a.before) - (b.after - b.before));
+  const [udPick, setUd] = useKeptState<"up" | "down">("progress-updown", "up");
+  const ud = udPick === "up" && !ups.length && downs.length ? "down" : udPick === "down" && !downs.length && ups.length ? "up" : udPick;
+  const exSection = useRef<HTMLHeadingElement>(null);
+  const openEx = (id: string) => { setExDir(null); setExId(id); exSection.current?.scrollIntoView({ behavior: "smooth", block: "start" }); };
   const stepEx = (d: 1 | -1) => { const n = logged[exIdx + d]; if (n) { setExDir(d === 1 ? "next" : "prev"); setExId(n.id); } };
 
   const thisWeek = weeks[weeks.length - 1]?.sets ?? ({} as Record<MuscleGroup, number>);
@@ -132,7 +140,7 @@ export function ProgressScreen() {
         <BarChart key={"t" + range} points={weeks.map((w) => ({ label: weekLabel(w.weekStart), value: w.tonnage, sub: `${w.workouts} workouts` }))} unit="lb" highlightLast />
       </section>
 
-      <h2 className="section-title">Exercise progress</h2>
+      <h2 className="section-title" ref={exSection} style={{ scrollMarginTop: 16 }}>Exercise progress</h2>
       <section className="glass" style={{ padding: 14 }}>
         <div className="ex-step">
           <button className="ex-step-btn" aria-label="Previous exercise" disabled={exIdx <= 0} onClick={() => stepEx(-1)}><span style={{ display: "inline-flex", transform: "scaleX(-1)" }}><Icon name="chevron" size={20} /></span></button>
@@ -145,6 +153,34 @@ export function ProgressScreen() {
           <button className="ex-step-btn" aria-label="Next exercise" disabled={exIdx >= logged.length - 1} onClick={() => stepEx(1)}><Icon name="chevron" size={20} /></button>
         </div>
         {ex && <div key={ex.id} className={exDir ? `ex-slide-${exDir}` : undefined}><ExerciseProgress key={ex.id + range} ex={ex} from={from} /></div>}
+      </section>
+
+      {/* Up / down: tap a count for its list; tap an exercise to see its chart above */}
+      <h2 className="section-title">Up / down</h2>
+      <section className="glass" style={{ padding: 14 }}>
+        {!changes.length ? <p className="muted" style={{ fontSize: 14 }}>Do an exercise twice to see if it went up or down.</p> : <>
+          <div className="ud-tiles" role="group" aria-label="Went up or down">
+            <button className="ud-tile up" aria-pressed={ud === "up"} onClick={() => setUd("up")}><b>{ups.length}</b><span>Went up</span></button>
+            <button className="ud-tile down" aria-pressed={ud === "down"} onClick={() => setUd("down")}><b>{downs.length}</b><span>Went down</span></button>
+          </div>
+          <p className="muted" style={{ fontSize: 12, margin: "10px 2px 4px" }}>Last workout vs the one before · heaviest weight</p>
+          {(ud === "up" ? ups : downs).length === 0
+            ? <p className="muted" style={{ fontSize: 14, padding: "8px 2px" }}>{ud === "up" ? "Nothing went up last time." : "Nothing went down last time."}</p>
+            : (ud === "up" ? ups : downs).map((c) => {
+              const e = exMap.get(c.exerciseId)!;
+              const d = c.after - c.before;
+              const u = c.unit === "lb" ? `lb${loadSuffix(e)}` : c.unit;
+              return (
+                <button key={c.exerciseId} className="list-row ud-row" onClick={() => openEx(c.exerciseId)}
+                  aria-label={`${e.name}: ${fmtNum(c.before)} to ${fmtNum(c.after)} ${u}`}>
+                  <span className={"ud-arrow " + ud} aria-hidden="true">{d > 0 ? "↑" : "↓"}</span>
+                  <span className="ud-name">{e.name}</span>
+                  <span className="mono ud-vals">{fmtNum(c.before)} → {fmtNum(c.after)} <small>{u}</small></span>
+                  <span className={"mono ud-d " + ud}>{d > 0 ? "+" : "−"}{fmtNum(Math.abs(d))}</span>
+                </button>
+              );
+            })}
+        </>}
       </section>
     </div>
   );

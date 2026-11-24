@@ -771,3 +771,23 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 @keyframes exSlidePrev { from { opacity: 0; transform: translateX(-18px); } }
 @media (prefers-reduced-motion: reduce) { .ex-slide-next, .ex-slide-prev { animation: none; } }
 .wz-insight { margin-top: 18px; }
+
+/* Progress → Up / down (Nov 24 2026): two count tiles (tap to pick the list), rows open the exercise's chart */
+.ud-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ud-tile { display: grid; justify-items: center; gap: 4px; min-height: 76px; padding: 10px 6px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface-2); transition: border-color .2s, background .2s, box-shadow .2s, transform .12s; }
+.ud-tile:active { transform: scale(0.97); }
+.ud-tile b { font: 700 30px/1 var(--display); }
+.ud-tile span { font: 600 11px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.ud-tile.up b { color: var(--good); }
+.ud-tile.down b { color: var(--bad); }
+.ud-tile.up[aria-pressed="true"] { border-color: var(--good); background: color-mix(in srgb, var(--good) 12%, var(--surface-2)); }
+.ud-tile.down[aria-pressed="true"] { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, var(--surface-2)); }
+.ud-row { gap: 10px; min-height: 52px; padding: 8px 4px; border-radius: 0; border-top: 1px solid var(--line); }
+.ud-row:first-of-type { border-top: 0; }
+.ud-arrow { font-weight: 700; width: 14px; text-align: center; }
+.ud-name { flex: 1; min-width: 0; font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ud-vals { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.ud-vals small { font-size: 10px; }
+.ud-d { font-size: 14px; font-weight: 700; min-width: 34px; text-align: right; white-space: nowrap; }
+.up.ud-arrow, .ud-d.up { color: var(--good); }
+.down.ud-arrow, .ud-d.down { color: var(--bad); }
