@@ -8,6 +8,7 @@ import { DEFAULT_SETTINGS, type AppData, type Exercise, type RestTimer, type Rou
 import { IdbAdapter } from "../storage/idbAdapter";
 import { mergeCatalog } from "../core/catalog";
 import { targetsOf } from "../core/volumeModel";
+import type { BodyScan } from "../core/body/types";
 
 export type Toast = { id: number; kind: "info" | "pr" | "error" | "warn"; title: string; body?: string; leaving?: boolean;
   /** A button on the toast (e.g. Undo); tapping it runs `run` and closes the toast */
@@ -29,6 +30,8 @@ interface Store extends AppData {
   restTimer: RestTimer | null;
   saveSession(s: Session): void;
   deleteSession(id: string): void;
+  saveBodyScan(b: BodyScan): void;
+  deleteBodyScan(id: string): void;
   saveSettings(s: Settings): void;
   saveExercise(e: Exercise): void;
   saveRoutine(r: Routine): void;
@@ -178,6 +181,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       deleteSession: (id) => {
         setData((d) => ({ ...d, sessions: d.sessions.filter((s) => s.id !== id) }));
         write(() => adapter.remove("sessions", id));
+      },
+      saveBodyScan: (b) => putRow("bodyScans", b, "id"),
+      deleteBodyScan: (id) => {
+        setData((d) => ({ ...d, bodyScans: d.bodyScans.filter((b) => b.id !== id) }));
+        write(() => adapter.remove("bodyScans", id));
       },
       saveSettings: (s) => {
         setData((d) => ({ ...d, settings: s }));

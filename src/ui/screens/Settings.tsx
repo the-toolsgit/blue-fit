@@ -8,6 +8,7 @@ import { Confirm, Sheet } from "../components/Sheet";
 import { isStandalone } from "../device";
 import { fmtRest } from "../format";
 import { loadSeed, useStore } from "../store";
+import { fromUnit, toUnit } from "../../core/body/trends";
 import { backupText, daysSince, downloadBackup, REMIND_AFTER_DAYS } from "../backup";
 
 export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; onCheck?: () => Promise<boolean> }) {
@@ -70,6 +71,19 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
         <p className="muted" style={{ fontSize: 12, margin: 0 }}>Used to work out your weekly set targets (tap a muscle on the Plan tab → Reset to default). Stays on this phone.</p>
       </div>
 
+      <h2 className="section-title">Body</h2>
+      <div className="glass" style={{ padding: 14, display: "grid", gap: 12 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 10 }}>
+          <Stepper label="Height" suffix={settings.lengthUnit ?? "in"} value={settings.heightCm == null ? null : toUnit(settings.heightCm, settings.lengthUnit ?? "in")} step={(settings.lengthUnit ?? "in") === "in" ? 0.5 : 1} min={0}
+            empty={(settings.lengthUnit ?? "in") === "in" ? 68 : 173} onChange={(v) => set("heightCm", v == null || v <= 0 ? null : Math.round(fromUnit(v, settings.lengthUnit ?? "in") * 10) / 10)} />
+          <div><span className="eyebrow" style={{ display: "block", margin: "0 2px 8px" }}>Units</span>
+            <Seg label="Body units" value={settings.lengthUnit ?? "in"} onChange={(v) => set("lengthUnit", v)} options={[{ v: "in", label: "in" }, { v: "cm", label: "cm" }]} /></div>
+        </div>
+        <div><span className="eyebrow" style={{ display: "block", margin: "0 2px 8px" }}>Body fat formula</span>
+          <Seg label="Sex" value={settings.sex ?? "unset"} onChange={(v) => set("sex", v === "unset" ? null : v)} options={[{ v: "male", label: "Male" }, { v: "female", label: "Female" }, ...(settings.sex ? [] : [{ v: "unset" as const, label: "Not set" }])]} /></div>
+        <p className="muted" style={{ fontSize: 12, margin: 0 }}>For body measurements and body fat. Stays on this phone.</p>
+      </div>
+
       <h2 className="section-title">Workout</h2>
       <div className="glass" style={{ padding: "4px 14px" }}>
         <div className="setting" style={{ display: "block", paddingTop: 12 }}>
@@ -111,7 +125,7 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
 
       <h2 className="section-title">Data</h2>
       <div className="glass" style={{ padding: 14 }} >
-        <p className="muted" style={{ fontSize: 13, marginBottom: 12 }}>Everything is stored on this phone only. Last backup: <b style={{ color: since == null || since >= REMIND_AFTER_DAYS ? "var(--warn)" : "var(--ink)" }}>{since == null ? "never" : since === 0 ? "today" : since === 1 ? "yesterday" : `${since} days ago`}</b>.</p>
+        <p className="muted" style={{ fontSize: 13, marginBottom: 12 }}>Everything is stored on this phone only (backups include your body measurements). Last backup: <b style={{ color: since == null || since >= REMIND_AFTER_DAYS ? "var(--warn)" : "var(--ink)" }}>{since == null ? "never" : since === 0 ? "today" : since === 1 ? "yesterday" : `${since} days ago`}</b>.</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
           <button className="btn btn-primary" onClick={doExport}><Icon name="download" size={18} /> Export</button>
           <button className="btn btn-ghost" onClick={doCopy}><Icon name="copy" size={18} /> Copy JSON</button>
@@ -147,7 +161,7 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
         body={pending && <>Backup from {new Date(pending.exportedAt).toLocaleString()}: {pending.data.sessions.length} workouts, {pending.data.exercises.length} exercises, {pending.data.routines.length} routine(s). Everything on this phone is replaced.</>}
         confirm="Replace" danger onClose={() => setPending(null)}
         onConfirm={async () => { if (!pending) return; try { await replaceAll(pending.data); toast({ kind: "info", title: "Backup imported" }); } catch (e) { console.error(e); toast({ kind: "error", title: "Import failed", body: "Nothing was changed. Try again." }); } }} />
-      <Confirm open={reset} title="Reset everything?" body="Deletes all workouts, edits and settings, and reloads the original plan. Export a backup first. This can't be undone." confirm="Reset" danger
+      <Confirm open={reset} title="Reset everything?" body="Deletes all workouts, body measurements, edits and settings, and reloads the original plan. Export a backup first. This can't be undone." confirm="Reset" danger
         onClose={() => setReset(false)} onConfirm={async () => { try { await replaceAll(await loadSeed()); toast({ kind: "info", title: "Reset done" }); } catch (e) { console.error(e); toast({ kind: "error", title: "Reset failed", body: "Nothing was changed. Try again." }); } }} />
       <Confirm open={applyRest} title={`Set rest to ${fmtRest(settings.restDefaultSec)} everywhere?`} body={`Every exercise in ${routine?.name ?? "the plan"} gets this rest time.`} confirm="Apply"
         onClose={() => setApplyRest(false)} onConfirm={() => routine && saveRoutine({ ...routine, days: routine.days.map((d) => ({ ...d, slots: d.slots.map((s) => ({ ...s, restSec: settings.restDefaultSec })) })) })} />

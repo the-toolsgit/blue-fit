@@ -11,6 +11,7 @@ import { Seg } from "../components/Controls";
 import { ExerciseProgress } from "../components/ExerciseProgress";
 import { Figure } from "../components/Figure";
 import { Icon } from "../components/Icon";
+import { BodySection } from "../components/BodySection";
 import { MuscleMap, RECOVERY_COLOR, STAGE_STYLE, type VolumeStage } from "../components/MuscleMap";
 import { fmtVolume, loadSuffix } from "../format";
 import { useStore } from "../store";
@@ -78,6 +79,7 @@ export function ProgressScreen() {
         <span className="eyebrow">Progress</span>
         <h1 className="title-lg" style={{ marginTop: 6 }}>Progress</h1>
         <div className="empty" style={{ paddingTop: 40 }}><Figure spec={CURL} size={120} /><p>Finish a workout and your charts, muscle map and recovery show up here.</p></div>
+        <BodySection />
       </div>
     );
   }
@@ -96,6 +98,8 @@ export function ProgressScreen() {
           </div>
         ))}
       </div>
+
+      <BodySection />
 
       <h2 className="section-title">Muscle map</h2>
       <section className="glass" style={{ padding: 14 }}>
