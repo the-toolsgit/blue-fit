@@ -2,7 +2,7 @@
    A layer over the neon styles: nothing here applies unless <html data-look="signal">, so Neon is untouched.
    The selector is weighted (html:root[…][…]) to win over the light theme and accent token blocks. */
 html:root[data-look="signal"][data-look] {
-  --bg: #3f474f; --bg-2: #3f474f;
+  --bg: #55595e; --bg-2: #55595e;
   --surface: #2b2f34; --surface-solid: #2b2f34; --surface-2: #383c41;
   --line: rgba(236, 235, 230, 0.12); --line-strong: rgba(236, 235, 230, 0.26);
   --ink: #ecebe6; --muted: #a4a9af; --faint: #6b7178;
@@ -44,7 +44,7 @@ html:root[data-look="signal"][data-look] {
 [data-look="signal"] .day-row.dragging { box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6); }
 
 /* ---------- Today (Signal) ---------- */
-.sig-week { background: var(--surface); border-radius: 30px; padding: 14px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px 4px; justify-items: center; }
+.sig-week { background: var(--surface); border-radius: 30px; padding: 14px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; justify-items: center; }
 .sig-week > span { font: 400 13px/1 var(--mono); color: var(--muted); }
 .sig-day { position: relative; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font: 700 13px/1 var(--mono); background: var(--sig-dark); color: #7c8188; transition: transform 0.2s var(--ease); }
 .sig-day::before { content: ""; position: absolute; inset: -2px; } /* 44px tap area */
@@ -57,8 +57,14 @@ html:root[data-look="signal"][data-look] {
 .sig-tile { margin-top: 12px; background: var(--sig-orange); color: #000; border-radius: 34px; padding: 20px 20px 18px; display: grid; gap: 14px; }
 .sig-tile .sig-eyebrow { font: 700 13px/1 var(--mono); letter-spacing: 0.08em; }
 .sig-pill { display: inline-flex; align-items: center; gap: 6px; background: #000; color: var(--sig-paper); font: 700 12px/1 var(--mono); padding: 8px 11px; border-radius: 99px; }
-.sig-title { margin: 0; font: 800 66px/0.88 var(--display); letter-spacing: -0.01em; text-transform: uppercase; color: #000; overflow-wrap: anywhere; }
-.sig-figure { width: 124px; height: 124px; flex: none; border-radius: 50%; background: var(--sig-paper); display: grid; place-items: center; overflow: hidden; }
+/* Day, name and pills stacked on the left; the figure circle on the right beside all of them */
+.sig-head { display: grid; grid-template-columns: minmax(0, 1fr) 132px; column-gap: 14px; row-gap: 12px; align-items: center; }
+.sig-eyebrow-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.sig-eyebrow-row .sig-eyebrow { white-space: nowrap; }
+.sig-dots { flex: 1; min-width: 0; height: 12px; background-image: radial-gradient(circle, #000 0.9px, transparent 1.3px); background-size: 4px 4px; }
+.sig-title { margin: 0; font: 800 70px/0.86 var(--display); letter-spacing: -0.01em; text-transform: uppercase; color: #000; overflow-wrap: anywhere; }
+.sig-head .sig-figure { grid-column: 2; grid-row: 1 / span 3; }
+.sig-figure { width: 132px; height: 132px; flex: none; border-radius: 50%; background: var(--sig-paper); display: grid; place-items: center; overflow: hidden; }
 .sig-figure .fig .mn polyline, .sig-figure .fig .mn circle { stroke: #000; }
 .sig-figure .fig .lt line, .sig-figure .fig .lt polyline, .sig-figure .fig .lt circle { stroke: #000; stroke-opacity: 0.35; }
 .sig-figure .fig .floor { stroke: var(--sig-orange); opacity: 1; }

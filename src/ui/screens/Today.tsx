@@ -151,18 +151,19 @@ export function TodayScreen() {
         signal ? (
         <>
           <section className="sig-tile" aria-label="Workout">
-            <div className="spread">
-              <span className="sig-eyebrow">{wd === todayWd ? "TODAY · " : ""}{LONG[wd].slice(0, 3).toUpperCase()}</span>
-              <span className="row" style={{ gap: 6 }}>
-                {deloading && <span className="sig-pill">DELOAD · TO {fmtDate(settings.deload!.end, { weekday: "short" }).toUpperCase()}</span>}
-                {doneToday && <span className="sig-pill"><Icon name="check" size={13} /> DONE</span>}
-              </span>
-            </div>
-            <div className="spread" style={{ alignItems: "center" }}>
-              <h1 className="sig-title grow">{day!.title}</h1>
-              <div className="sig-figure">
-                <Figure key={heroEx?.id} spec={heroEx?.figure} size={104} timing={heroTiming} label={heroEx ? `Animation: ${heroEx.name}` : undefined} />
+            <div className="sig-head">
+              <div className="sig-eyebrow-row">
+                <span className="sig-eyebrow">{wd === todayWd ? "TODAY · " : ""}{LONG[wd].slice(0, 3).toUpperCase()}</span>
+                <span className="sig-dots" aria-hidden="true" />
               </div>
+              <div className="sig-figure">
+                <Figure key={heroEx?.id} spec={heroEx?.figure} size={110} timing={heroTiming} label={heroEx ? `Animation: ${heroEx.name}` : undefined} />
+              </div>
+              <h1 className="sig-title">{day!.title}</h1>
+              {(doneToday || deloading) && <div className="row" style={{ gap: 6, flexWrap: "wrap" }}>
+                {doneToday && <span className="sig-pill"><Icon name="check" size={13} /> DONE</span>}
+                {deloading && <span className="sig-pill">DELOAD · TO {fmtDate(settings.deload!.end, { weekday: "short" }).toUpperCase()}</span>}
+              </div>}
             </div>
             <div className="sig-caption" key={heroEx?.id}>{heroEx ? `→ ${heroEx.name}` : ""}</div>
             <div className="sig-stats">
