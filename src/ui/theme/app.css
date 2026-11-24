@@ -375,6 +375,7 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .day-row.swiping { overflow: hidden; }
 .day-row-del { position: absolute; top: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 14px; background: color-mix(in srgb, var(--bad) 85%, transparent); color: #fff; font-size: 12px; font-weight: 600; box-shadow: 0 0 18px -4px var(--bad); }
 .day-row.dragging { z-index: 5; background: var(--surface-solid); box-shadow: 0 0 0 1px var(--neon), 0 16px 40px -10px var(--glow); }
+.day-row + .day-row, .day-row + .list-row { border-top: 1px solid var(--line); border-radius: 0; }
 
 /* "Last set to failure" (mass gain): a small flame tag on the set and a cue when it's open */
 /* The set to failure, when open: its outline flickers softly like a flame (animated values beat the inline border) */
