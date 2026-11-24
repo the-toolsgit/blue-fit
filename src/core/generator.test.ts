@@ -212,3 +212,26 @@ describe("Jeff Nippard's tiers rank swaps", () => {
     expect(swapOptions(ex, cat.exercises, "growth", new Set())[0].id).toBe("machine-shoulder-press");
   });
 });
+
+describe("Build my plan: drop sets when time is short (Nov 24 2026)", async () => {
+  const { dropSlotOk } = await import("./dropSet");
+  const exMap = cat.exMap;
+  const build = (maxMinutes: number, trainDays: number[]) => generatePlan({ goal: "growth", trainDays, maxMinutes, targets, exercises: cat.exercises, seed: 3 });
+  it("short workouts get drop sets only on eligible slots, within time and ceilings; long ones need fewer", () => {
+    const short = build(45, [1, 2, 4, 5]);
+    const drops = short.flatMap((d) => d.slots).filter((s) => s.dropSet);
+    expect(drops.length).toBeGreaterThan(0);
+    for (const s of drops) expect(dropSlotOk(s, exMap.get(s.exerciseId))).toBe(true);
+    // Never longer than the length (+5), or than the day was without its drop sets
+    for (const d of short) expect(slotsMinutes(d.slots)).toBeLessThanOrEqual(Math.max(50, slotsMinutes(d.slots.map((x) => ({ ...x, dropSet: false })))));
+    const vol = planVolume(routine(short), exMap);
+    for (const t of targets) if (t.max != null) expect(vol.find((v) => v.group === t.group)!.sets).toBeLessThanOrEqual(t.max);
+    const long = build(90, SIX).flatMap((d) => d.slots).filter((s) => s.dropSet);
+    expect(long.length).toBeLessThan(drops.length);
+  });
+  it("a drop set adds ½ min and counts ½ set", () => {
+    const a = { sets: 2, restSec: 120 }, b = { ...a, dropSet: true };
+    expect(planVolume(routine([{ id: "d", weekday: 1, title: "x", slots: [{ id: "s", exerciseId: "cable-seated-row", repMin: 10, repMax: 12, ...b }] }]), exMap).find((v) => v.group === "back")!.sets).toBe(2.5);
+    expect(slotsMinutes([b, b, b, b, b, b, b, b, b, b])).toBeGreaterThanOrEqual(slotsMinutes([a, a, a, a, a, a, a, a, a, a]));
+  });
+});

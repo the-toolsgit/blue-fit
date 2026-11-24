@@ -3,7 +3,7 @@
 // Pure and framework-free. Numbers marked *judgment* are our own reasoning; the rest cite their source.
 import { ANGLES, NEEDS_HEAVY_LIGHT, restDaysOf, RULES, STRETCH_CHECKED } from "./muscles";
 import { muscleLabel, MUSCLE_GROUPS, type Exercise, type Goal, type MuscleGroup, type Routine, type RoutineDay, type Slot, type VolumeTarget } from "./types";
-import { formatTarget, isFocus, planVolume } from "./volume";
+import { formatTarget, isFocus, planVolume, slotVolumeSets } from "./volume";
 import { fmtNum } from "./util";
 import { slotsMinutes } from "./timeEstimate";
 
@@ -116,7 +116,7 @@ export function angleSets(slots: Slot[], exMap: Map<string, Exercise>, g: Muscle
     const e = exMap.get(s.exerciseId), j = e?.jobs?.[g];
     if (!e || j == null) continue;
     const w = e.volume.find((v) => v.group === g)?.weight ?? 0.5;
-    for (const one of [j].flat()) if (one) out.set(one, (out.get(one) ?? 0) + s.sets * w);
+    for (const one of [j].flat()) if (one) out.set(one, (out.get(one) ?? 0) + slotVolumeSets(s) * w);
   }
   return out;
 }
@@ -150,10 +150,10 @@ export function weekInsight(routine: Routine, exMap: Map<string, Exercise>, targ
   const repSlots = slots.filter((s) => ex(s).measure !== "time");
   const jobsHit = (g: MuscleGroup) => anglesCovered(slots, exMap, g);
   const jobsSome = (g: MuscleGroup) => angleSets(slots, exMap, g);
-  const directSets = (d: RoutineDay, g: MuscleGroup) => d.slots.filter((s) => isDirect(ex(s), g)).reduce((a, s) => a + s.sets, 0);
+  const directSets = (d: RoutineDay, g: MuscleGroup) => d.slots.filter((s) => isDirect(ex(s), g)).reduce((a, s) => a + slotVolumeSets(s), 0);
   const daysFor = (g: MuscleGroup) => days.filter((d) => directSets(d, g) > 0);
   /** Sets a muscle gets in one workout, indirect at ½ (as weekly volume counts them) */
-  const daySets = (d: RoutineDay, g: MuscleGroup) => d.slots.reduce((a, s) => a + s.sets * (ex(s).volume.find((v) => v.group === g)?.weight ?? 0), 0);
+  const daySets = (d: RoutineDay, g: MuscleGroup) => d.slots.reduce((a, s) => a + slotVolumeSets(s) * (ex(s).volume.find((v) => v.group === g)?.weight ?? 0), 0);
 
   // Every muscle the week trains, plus every focus muscle it doesn't (0 sets, below target) so an empty or thin plan still shows them
   for (const t of targets) if (isFocus(t) && !week.has(t.group)) week.set(t.group, 0);

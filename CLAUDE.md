@@ -17,7 +17,7 @@ Leo's personal training app (replaces Jefit). Mobile-first PWA on GitHub Pages: 
 - The **figure engine** is a pure function: spec + progress (0–1) → shapes (`core/figure/engine.ts`). SVG output is a thin layer (`core/figure/svg.ts`, `ui/components/Figure.tsx`).
 - Screens use only the **`StorageAdapter`** interface (`core/storage/StorageAdapter.ts`). IndexedDB lives only in `src/storage/idbAdapter.ts` (raw IndexedDB, no library). `dexieAdapter.ts` is kept only to test that data written by older versions still opens.
 - Weights are stored **exactly as typed**: plate lifts per side without the bar, dumbbells per hand, fixed bars and machines as shown. No bar-weight math.
-- Volume counting: direct set = 1, indirect = 0.5. Warm-ups and drop sets don't count toward weekly sets. Drop sets count toward tonnage and PRs.
+- Volume counting: direct set = 1, indirect = 0.5. Warm-ups don't count toward weekly sets; a drop set counts ½ (Leo, Nov 24 2026). Drop sets count toward tonnage and PRs.
 
 ## Living spec (required)
 - `docs/APP_SPEC.md` describes the whole app platform-neutrally. **Update it in the same commit** as any change to behavior or looks.

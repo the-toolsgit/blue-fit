@@ -186,7 +186,7 @@ export function WorkoutScreen() {
     const ex = exMap.get(e.exerciseId)!;
     if (!x.done && needsValues(x, ex)) return; // the card shakes the button and highlights what's missing
     // Gym order can differ from the plan: the failure set stays, its "Last … exercise" reason adapts
-    const next = refitFailure(toggleDone(s, e.id, x.id, new Date()), exMap);
+    const next = refitFailure(toggleDone(s, e.id, x.id, new Date(), ex.incrementLb), exMap);
     commit(next);
     if (x.done) return; // undo
     vibrate(12);
@@ -455,7 +455,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           <span className="grow" style={{ display: "block" }}>
           <div style={{ font: "700 21px/1.1 var(--display)", letterSpacing: ".01em" }}>{ex.name} {ex.isHeavy && <span className="star">★</span>}</div>
           <div className="muted" style={{ fontSize: 13, marginTop: 3 }}>
-            {e.sets.filter((x) => x.type !== "warmup").length} × {repRange(e.repMin, e.repMax) || "—"}{ex.measure === "time" && e.repMin != null ? " s" : ""} · rest {fmtRest(e.restSec)}
+            {e.sets.filter((x) => x.type !== "warmup" && x.type !== "drop").length} × {repRange(e.repMin, e.repMax) || "—"}{ex.measure === "time" && e.repMin != null ? " s" : ""}{e.sets.some((x) => x.type === "drop") ? " + drop" : ""} · rest {fmtRest(e.restSec)}
             {swappedFrom && <> · <span style={{ color: "var(--neon-2)" }}>swapped from {swappedFrom}</span></>}
           </div>
           {e.extraSet && <div className="extra-why"><span className="extra-tag">+1 set</span> {e.extraSet.map((w) => w.replace(/ \(skipped[^)]*\)$/, "")).join(" · ")}</div>}
@@ -547,6 +547,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                     <Stepper invalid={missing?.id === x.id && !(x.reps != null && x.reps > 0)} label={ex.measure === "time" ? "Seconds" : "Reps"} value={x.reps} step={ex.measure === "time" ? 5 : 1} decimals={false} empty={repMin} onChange={(v) => commit(editSet(s, e.id, x.id, { reps: v }))} />
                   </div>
                   {ex.measure === "time" && <HoldTimer onStop={(sec) => commit(updateSet(s, e.id, x.id, { reps: sec }))} />}
+                  {x.type === "drop" && <div className="fail-cue drop-cue"><Icon name="down" size={18} /><span><b>Drop set: lower the weight, no rest.</b> Go until you can't do another clean rep.</span></div>}
                   {x.id === failSetId && <div className="fail-cue"><Icon name="flame" size={18} /><span><b>Last set: go to failure.</b> Keep going until you can't do another clean rep.{e.failWhy?.some((w) => w !== MANUAL_WHY) ? <FailWhy why={e.failWhy} /> : null}</span></div>}
                   {(ex.loadMode === "perSide" || ex.singleSleeve) && x.weight != null && x.weight > 0 && <Plates weight={x.weight} single={ex.singleSleeve} />}
                   <button key={missing?.id === x.id ? missing.n : 0} className={"btn btn-primary btn-xl" + (missing?.id === x.id && missing.from === "done" ? " shake" : "")} style={{ minHeight: 56 }} onClick={() => { if (needsValues(x, ex)) return refuse(x, "done"); setSel(null); onToggle(x); }}>

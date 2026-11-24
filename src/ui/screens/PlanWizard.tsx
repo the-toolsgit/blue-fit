@@ -414,7 +414,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
                       return (
                         <li key={s.id} className={on ? "open" : ""}>
                           <button type="button" className="wz-ex" aria-expanded={on} onClick={() => setOpenRow(on ? null : s.id)}>
-                            <span>{exMap.get(s.exerciseId)?.name}</span><span className="mono">{s.sets} × {s.repMin === s.repMax ? s.repMin : `${s.repMin}–${s.repMax}`}</span>
+                            <span>{exMap.get(s.exerciseId)?.name}</span><span className="mono">{s.sets} × {s.repMin === s.repMax ? s.repMin : `${s.repMin}–${s.repMax}`}{s.dropSet && <span className="drop-tag">+drop</span>}</span>
                           </button>
                           {on && (
                             <div className="wz-exact">

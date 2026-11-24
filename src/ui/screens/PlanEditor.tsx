@@ -53,7 +53,7 @@ function SlotRow({ slot, ex, index, groupStart, groupEnd, onOpen, onDelete, onFi
             <span style={{ display: "block", fontWeight: 600 }}>{ex?.name ?? slot.exerciseId} {ex?.isHeavy && <span className="star">★</span>}<FailFlame why={fail} /></span>
             <span className="muted" style={{ fontSize: 12 }}>{slot.supersetGroup && groupStart ? `Superset ${slot.supersetGroup} · ` : ""}{slot.notes ? `${slot.notes} · ` : ""}rest {fmtRest(slot.restSec)}</span>
           </span>
-          <span className="mono" style={{ whiteSpace: "nowrap" }}>{slot.sets} × {repRange(slot.repMin, slot.repMax, ex?.measure === "time")}</span>
+          <span className="mono" style={{ whiteSpace: "nowrap" }}>{slot.sets} × {repRange(slot.repMin, slot.repMax, ex?.measure === "time")}{slot.dropSet && !slot.supersetGroup && <span className="drop-tag">+drop</span>}</span>
           <Icon name="chevron" size={16} />
         </button>
       </div>

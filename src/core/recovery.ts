@@ -9,7 +9,7 @@
 // common and works (Schoenfeld 2016, 2019). The 4-set line and the +1 day are *judgment*.
 import { MUSCLE_DB, PROFILE_RULES, profileStep, restDaysOf, RULES } from "./muscles";
 import { MUSCLE_GROUPS, type Exercise, type MuscleGroup, type ProfileDraft, type Session } from "./types";
-import { countsForVolume } from "./volume";
+import { volumeShare } from "./volume";
 import { daysBetween } from "./util";
 
 export type Recovery = "recovering" | "partial" | "fresh";
@@ -50,9 +50,9 @@ export function recoveryStatus(sessions: Session[], exMap: Map<string, Exercise>
       const ex = exMap.get(e.exerciseId);
       if (!ex) continue;
       for (const x of e.sets) {
-        if (!x.done || !countsForVolume(x.type)) continue;
+        if (!x.done || !volumeShare(x.type)) continue;
         for (const v of ex.volume) {
-          sets[k].set(v.group, (sets[k].get(v.group) ?? 0) + v.weight);
+          sets[k].set(v.group, (sets[k].get(v.group) ?? 0) + v.weight * volumeShare(x.type));
           if (ex.isHeavy && x.type === "failure" && v.weight === 1) keyFail[k].add(v.group);
         }
       }

@@ -46,6 +46,16 @@ export function SlotSheet({ slot, day, ex, goal, failWhy, restDefault, onPatch, 
               </div>
             );
           })()}
+          {!time && (
+            <div>
+              <span className="row" style={{ gap: 6, fontWeight: 600, marginBottom: 6 }}><span style={{ color: "var(--neon-2)", display: "inline-flex" }}><Icon name="down" size={16} /></span>Drop set after the last set</span>
+              <Seg label="Drop set after the last set" value={slot.dropSet ? "on" : "off"} onChange={(v) => onPatch({ dropSet: v === "on" ? true : undefined })}
+                options={[{ v: "off", label: "Off" }, { v: "on", label: "On" }]} />
+              <p className="muted" style={{ fontSize: 12, margin: "6px 2px 0" }}>
+                {slot.supersetGroup ? "Not in a superset." : "Lighter, no rest, to failure. Counts ½ set. Saves time."}
+              </p>
+            </div>
+          )}
           <div className="field"><label htmlFor="snote">Note</label>
             <input id="snote" className="input" value={slot.notes ?? ""} placeholder="e.g. elbows to hips" onChange={(e) => onPatch({ notes: e.target.value || undefined })} /></div>
           <div>

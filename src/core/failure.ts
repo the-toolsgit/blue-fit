@@ -4,7 +4,7 @@
 // short and costs more fatigue (Refalo 2023); failure needs roughly 24–48 h more recovery (Morán-Navarro 2017).
 // Numbers marked *judgment* are our own reasoning. Plan: docs/plans/failure-strategy.md.
 import { muscleLabel, type Exercise, type Goal, type MuscleGroup, type ProfileDraft, type Routine, type RoutineDay, type Session, type Settings, type Slot, type VolumeTarget } from "./types";
-import { countsForVolume, isFocus, planVolume } from "./volume";
+import { countsForVolume, isFocus, planVolume, slotVolumeSets, volumeShare } from "./volume";
 import { HARD_SETS, MAX_SESSION_SETS } from "./workoutCheck";
 import { restDaysOf } from "./muscles";
 import { priorityOf } from "./volumeModel";
@@ -97,14 +97,14 @@ export function projectedWeek(c: FailureContext): Map<MuscleGroup, number> {
   const add = (g: MuscleGroup, n: number) => out.set(g, (out.get(g) ?? 0) + n);
   const week = c.finished.filter((s) => s.status === "finished" && s.date >= ws && s.date <= we);
   for (const s of week) for (const e of s.entries) {
-    const n = e.sets.filter((x) => x.done && countsForVolume(x.type)).length;
+    const n = e.sets.reduce((a, x) => a + (x.done ? volumeShare(x.type) : 0), 0);
     for (const v of c.exMap.get(e.exerciseId)?.volume ?? []) add(v.group, n * v.weight);
   }
   for (let d = c.today; d <= we; d = addDays(d, 1)) {
     const day = dayOn(c.routine, d);
     // A plan day already done this week (on any date, e.g. moved earlier) isn't still to come
     if (!day || week.some((s) => s.dayId === day.id)) continue;
-    for (const slot of day.slots) for (const v of c.exMap.get(slot.exerciseId)?.volume ?? []) add(v.group, slot.sets * v.weight);
+    for (const slot of day.slots) for (const v of c.exMap.get(slot.exerciseId)?.volume ?? []) add(v.group, slotVolumeSets(slot) * v.weight);
   }
   return out;
 }
@@ -178,7 +178,8 @@ export function planFailure(day: RoutineDay, date: string, c: FailureContext): F
   });
   const tested = new Set(tests.map((t) => t.slotId));
   day.slots.forEach((slot, index) => {
-    if (slot.toFailure !== undefined || tested.has(slot.id)) return;
+    // A planned drop set is already the hard set: no other failure pick there (a weight test still goes first)
+    if (slot.toFailure !== undefined || tested.has(slot.id) || slot.dropSet) return;
     const ex = c.exMap.get(slot.exerciseId);
     const g = mainMuscle(ex);
     if (!g || !failureEligible(ex)) return;
@@ -270,7 +271,7 @@ export function planExtraSets(day: RoutineDay, date: string, c: FailureContext):
     }
     if (first !== date) continue;
     // The workout's dose for the muscle counts indirect sets as half, like the No overtraining check
-    const dose = day.slots.reduce((a, s) => a + s.sets * (c.exMap.get(s.exerciseId)?.volume.find((v) => v.group === g)?.weight ?? 0), 0);
+    const dose = day.slots.reduce((a, s) => a + slotVolumeSets(s) * (c.exMap.get(s.exerciseId)?.volume.find((v) => v.group === g)?.weight ?? 0), 0);
     if (dose + 1 > MAX_SESSION_SETS) continue;
     // Not if the muscle is hard again within its rest days after this workout (database: 2 big muscles, 1 the rest)
     const rest = restDaysOf(g);

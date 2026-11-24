@@ -191,6 +191,20 @@ describe("session logic", () => {
     s = toggleSupersetWithNext(s, a.id);
     expect(s.entries[4].supersetGroup).toBeUndefined();
   });
+  it("planned drop set: added after the last set, ~22 % lighter, no rest before it, none in deload (Nov 24 2026)", () => {
+    const slot = mon.slots.find((x) => exMap.get(x.exerciseId)!.equipment === "cable")!;
+    const day = { ...mon, slots: mon.slots.map((x) => (x === slot ? { ...x, dropSet: true } : x)) };
+    let s = createSessionFromDay(routine, day, exMap, [], new Date());
+    const e = s.entries.find((x) => x.slotId === slot.id)!;
+    expect(e.sets.map((x) => x.type)).toEqual([...Array(slot.sets).fill("working"), "drop"]);
+    s = updateSet(s, e.id, e.sets[0].id, { weight: 100, reps: 10 });
+    for (const x of e.sets.slice(0, -1)) s = toggleDone(s, e.id, x.id, new Date(), 5);
+    const e2 = s.entries.find((x) => x.id === e.id)!;
+    expect(e2.sets.at(-1)!.weight).toBe(75);
+    expect(afterSetDone(s, e.id)).toEqual({ rest: false, nextEntryId: e.id });
+    const dl = createSessionFromDay(routine, day, exMap, [], new Date(), { deload: true });
+    expect(dl.entries.find((x) => x.slotId === slot.id)!.sets.some((x) => x.type === "drop")).toBe(false);
+  });
   it("no rest after the workout's last set", () => {
     let s = createSessionFromDay(routine, mon, exMap, [], new Date());
     for (const e of s.entries) for (const x of e.sets) s = toggleDone(s, e.id, x.id, new Date());
@@ -230,9 +244,9 @@ describe("session logic", () => {
     expect(sum.durationMin).toBe(50);
     expect(sum.setsDone).toBe(2);
     expect(sum.tonnage).toBe(1480);
-    expect(sum.perGroup.back).toBe(1); // drop set excluded from weekly sets
-    expect(sum.perGroup.biceps).toBe(0.5);
-    expect(sessionsVolume([s], exMap).rearDelts).toBe(0.5);
+    expect(sum.perGroup.back).toBe(1.5); // drop set counts ½ (Nov 24 2026)
+    expect(sum.perGroup.biceps).toBe(0.75);
+    expect(sessionsVolume([s], exMap).rearDelts).toBe(0.75);
     expect(tonnage([s])).toBe(1480);
     // Undone working sets are remembered for the finish screen: 2 left on the first exercise, every set of the rest
     expect(s.skipped![0]).toEqual({ exerciseId: "t-bar-reverse-row", sets: 2 });

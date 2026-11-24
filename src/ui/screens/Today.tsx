@@ -168,7 +168,7 @@ export function TodayScreen() {
                     <span style={{ display: "block", fontWeight: 600 }}>{ex.name} {ex.isHeavy && <span className="star">★</span>}<FailFlame why={fail?.get(s.id)} /></span>
                     <span className="muted" style={{ fontSize: 13 }}>{s.notes ?? ex.muscles.join(", ")}</span>
                   </span>
-                  <span className="mono" style={{ fontSize: 15, whiteSpace: "nowrap", color: deloading ? "var(--neon-2)" : undefined }}>{!deloading && <ExtraTag why={extra?.get(s.id)} />}{slotSets(s.sets, s.id)} × {repRange(s.repMin, s.repMax, ex.measure === "time")}</span>
+                  <span className="mono" style={{ fontSize: 15, whiteSpace: "nowrap", color: deloading ? "var(--neon-2)" : undefined }}>{!deloading && <ExtraTag why={extra?.get(s.id)} />}{slotSets(s.sets, s.id)} × {repRange(s.repMin, s.repMax, ex.measure === "time")}{s.dropSet && !s.supersetGroup && !deloading && <span className="drop-tag">+drop</span>}</span>
                 </>} />
           </div>
         </>

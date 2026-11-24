@@ -95,6 +95,8 @@ export interface Slot {
   tipsOverride?: string[];
   /** Last set to failure: the user's choice in Edit plan (true/false). Unset = the app decides each workout. */
   toFailure?: boolean;
+  /** One drop set after the last working set (Nov 24 2026): set by Build my plan to save time, or by the user. */
+  dropSet?: boolean;
 }
 
 export interface RoutineDay {

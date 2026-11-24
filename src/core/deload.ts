@@ -68,7 +68,8 @@ export const STALL_MIN_SESSIONS = 3;
 function repsByWeight(sessions: Session[], exerciseId: string): Map<number, number> {
   const m = new Map<number, number>();
   for (const s of sessions) for (const e of s.entries) if (e.exerciseId === exerciseId)
-    for (const x of e.sets) if (x.done && x.type !== "warmup" && x.weight != null && x.reps != null && x.reps > 0)
+    // Drop sets left out: tired reps at a lighter weight say nothing about a stall (Nov 24 2026)
+    for (const x of e.sets) if (x.done && x.type !== "warmup" && x.type !== "drop" && x.weight != null && x.reps != null && x.reps > 0)
       m.set(x.weight, Math.max(m.get(x.weight) ?? 0, x.reps));
   return m;
 }

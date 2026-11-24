@@ -25,7 +25,7 @@ export const exerciseSchema = z.object({
 
 const slotSchema = z.object({
   id: str.min(1), exerciseId: str.min(1), sets: z.number().int().min(1).max(20), repMin: z.number().int().min(1), repMax: z.number().int().min(1),
-  restSec: z.number().int().min(0).max(1800), supersetGroup: str.optional(), notes: str.optional(), whyOverride: str.optional(), tipsOverride: strs.optional(), toFailure: z.boolean().optional(),
+  restSec: z.number().int().min(0).max(1800), supersetGroup: str.optional(), notes: str.optional(), whyOverride: str.optional(), tipsOverride: strs.optional(), toFailure: z.boolean().optional(), dropSet: z.boolean().optional(),
 });
 const targetSchema = z.object({
   group, min: z.number().nullable(), max: z.number().nullable(), angles: str.optional(), gap: str.optional(), note: str.optional(), off: z.boolean().optional(), priority: z.boolean().optional(), acceptedBelow: z.boolean().optional(),

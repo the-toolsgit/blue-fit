@@ -391,6 +391,8 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .fail-cue { display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border-radius: 12px; font-size: 13px; color: var(--ink); background: color-mix(in srgb, var(--warn) 12%, transparent); border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); }
 .fail-cue svg { color: var(--warn); flex: none; margin-top: 1px; }
 .fail-cue > span { flex: 1; min-width: 0; }
+.drop-cue { background: color-mix(in srgb, var(--neon-2) 12%, transparent); border-color: color-mix(in srgb, var(--neon-2) 35%, transparent); }
+.drop-cue svg { color: var(--neon-2); }
 /* Effort check: earlier sets left too many reps (the failure set shows it) */
 .effort-note { display: flex; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 12px; font-size: 13px; color: var(--ink); border: 1px dashed color-mix(in srgb, var(--warn) 50%, transparent); }
 .effort-note svg { color: var(--warn); flex: none; }
@@ -795,3 +797,5 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .ud-d { font-size: 14px; font-weight: 700; min-width: 34px; text-align: right; white-space: nowrap; }
 .up.ud-arrow, .ud-d.up { color: var(--good); }
 .down.ud-arrow, .ud-d.down { color: var(--bad); }
+/* Planned drop set on a plan row ("3 × 10 +drop", Nov 24 2026) */
+.drop-tag { margin-left: 6px; font-size: 0.8em; color: var(--neon-2); }

@@ -7,7 +7,8 @@ import { HOLD_SLOT } from "./routineEdit";
 import { estimateMinutes, slotsMinutes } from "./timeEstimate";
 import { muscleLabel, MUSCLE_GROUPS, type Exercise, type Goal, type MuscleGroup, type RoutineDay, type Slot, type VolumeTarget } from "./types";
 import { uid } from "./util";
-import { isFocus, planVolume } from "./volume";
+import { dropSlotOk } from "./dropSet";
+import { isFocus, planVolume, slotVolumeSets } from "./volume";
 import { priorityOf } from "./volumeModel";
 import { anglesCovered, HARD_SETS, JOBS, MAX_SESSION_SETS, STRETCH_MUSCLES, weekInsight } from "./workoutCheck";
 
@@ -227,7 +228,7 @@ export function generatePlan(input: GenInput): RoutineDay[] {
     return best;
   };
   /** A muscle's sets in one workout as the No overtraining check counts them (half sets ½) */
-  const doseOn = (d: RoutineDay, g: MuscleGroup) => d.slots.reduce((a, s) => a + s.sets * (exMap.get(s.exerciseId)?.volume.find((v) => v.group === g)?.weight ?? 0), 0);
+  const doseOn = (d: RoutineDay, g: MuscleGroup) => d.slots.reduce((a, s) => a + slotVolumeSets(s) * (exMap.get(s.exerciseId)?.volume.find((v) => v.group === g)?.weight ?? 0), 0);
   for (const g of focus) {
     const t = tmap.get(g)!, allowed = allowedDaysFor(g, trainDays, themeOf);
     if (!allowed.length) continue;
@@ -397,7 +398,7 @@ export function generatePlan(input: GenInput): RoutineDay[] {
           // Don't take a themed day's only headline compound away
           if (HEADLINE.has(g) && ex.compound && !H.slots.some((x) => x !== s && meta.get(x.id)?.main === g && exMap.get(x.exerciseId)?.compound)) continue;
           const groups = ex.volume.filter((v) => v.weight === 1).map((v) => v.group);
-          if (ex.volume.some((v) => doseOn(L, v.group) + s.sets * v.weight > MAX_SESSION_SETS)) continue;
+          if (ex.volume.some((v) => doseOn(L, v.group) + slotVolumeSets(s) * v.weight > MAX_SESSION_SETS)) continue;
           const before = groups.map((m) => restsEnough(train.filter((d) => directOn(d, m) >= HARD_SETS).map((d) => d.weekday!), m));
           H.slots = H.slots.filter((x) => x !== s); L.slots = [...L.slots, s];
           const ok = groups.every((m, i) => !before[i] || restsEnough(train.filter((d) => directOn(d, m) >= HARD_SETS).map((d) => d.weekday!), m));
@@ -426,7 +427,7 @@ export function generatePlan(input: GenInput): RoutineDay[] {
       const okRest = (m: MuscleGroup) => restsEnough(train.filter((d) => directOn(d, m) >= HARD_SETS).map((d) => d.weekday!), m);
       const tryMove = (s: Slot, from: RoutineDay, to: RoutineDay) => {
         const ex = exMap.get(s.exerciseId)!;
-        if (!from.slots.includes(s) || to.slots.some((x) => x.exerciseId === s.exerciseId) || ex.volume.some((v) => doseOn(to, v.group) + s.sets * v.weight > MAX_SESSION_SETS)) return false;
+        if (!from.slots.includes(s) || to.slots.some((x) => x.exerciseId === s.exerciseId) || ex.volume.some((v) => doseOn(to, v.group) + slotVolumeSets(s) * v.weight > MAX_SESSION_SETS)) return false;
         const groups = ex.volume.filter((v) => v.weight === 1).map((v) => v.group), before = groups.map(okRest);
         from.slots = from.slots.filter((x) => x !== s); to.slots = [...to.slots, s];
         if (groups.every((m, i) => !before[i] || okRest(m))) return true;
@@ -658,11 +659,64 @@ export function generatePlan(input: GenInput): RoutineDay[] {
   }
   fixCeilings();
   assignReps();
+  addDropSets({ train, exMap, tmap, focus, limit, volNow, doseOn });
 
   // 9. Order within each day, then names from the split ("Push A", "Upper B", "Full body C"); a theme used once has no letter
   for (const d of train) d.slots.sort((a, b) => rank(exMap.get(a.exerciseId)!, meta.get(a.id)?.main ?? ORDER[0]) - rank(exMap.get(b.exerciseId)!, meta.get(b.id)?.main ?? ORDER[0]));
   nameDays();
   return days;
+}
+
+/**
+ * Step 8f of generatePlan: drop sets where time is short (Leo, Nov 24 2026; docs/plans/drop-sets.md). Runs last, once
+ * every exercise, set and rep range is in place, so no earlier step sees or undoes them. Only on eligible slots
+ * (dropSlotOk), one per exercise, never past a ceiling or 11 sets a workout.
+ *  1. A day still over its length: 3+ set exercises become one set fewer + a drop set (≈ 2¼ min saved, ½ set lost
+ *     instead of a whole one), muscles furthest above their minimum first.
+ *  2. A muscle below its minimum (time cut its sets): drop sets on its exercises, ½ set each, where the day's time allows.
+ *  3. Still below: on a full day, an exercise of a muscle with sets to spare trades a set for a drop set; the freed time
+ *     gives the short muscle its drop set.
+ */
+function addDropSets(c: { train: RoutineDay[]; exMap: Map<string, Exercise>; tmap: Map<MuscleGroup, VolumeTarget>; focus: MuscleGroup[];
+  limit: number; volNow: () => Map<MuscleGroup, number>; doseOn: (d: RoutineDay, g: MuscleGroup) => number }) {
+  const { train, exMap, tmap, focus, limit, volNow, doseOn } = c;
+  const ex = (s: Slot) => exMap.get(s.exerciseId)!;
+  const ok = (s: Slot) => !s.dropSet && dropSlotOk(s, ex(s));
+  const minOf = (g: MuscleGroup) => { const t = tmap.get(g); return isFocus(t) ? t.min : 0; };
+  /** Every muscle of the exercise stays under its ceiling and 11 a workout with ½ set more */
+  const room = (d: RoutineDay, s: Slot, vol: Map<MuscleGroup, number>) => ex(s).volume.every((v) => {
+    const t = tmap.get(v.group);
+    return (t?.max == null || (vol.get(v.group) ?? 0) + v.weight / 2 <= t.max) && doseOn(d, v.group) + v.weight / 2 <= MAX_SESSION_SETS;
+  });
+  /** Every focus muscle of the exercise stays at or above its minimum with ½ set less */
+  const spare = (s: Slot, vol: Map<MuscleGroup, number>) => ex(s).volume.every((v) => !isFocus(tmap.get(v.group)) || (vol.get(v.group) ?? 0) - v.weight / 2 >= minOf(v.group));
+  const surplus = (s: Slot, vol: Map<MuscleGroup, number>) => Math.min(...ex(s).volume.filter((v) => v.weight === 1).map((v) => (vol.get(v.group) ?? 0) - minOf(v.group)), 99);
+  const trade = (s: Slot) => { s.sets--; s.dropSet = true; };
+
+  // 1. Days over time
+  for (const d of train) for (let guard = 0; guard < 12 && slotsMinutes(d.slots) > limit; guard++) {
+    const vol = volNow();
+    const s = d.slots.filter((x) => ok(x) && x.sets >= 3).sort((a, b) => surplus(b, vol) - surplus(a, vol))[0];
+    if (!s) break;
+    trade(s);
+  }
+  // 2. and 3. Muscles below their minimum
+  for (const g of focus) for (let guard = 0; guard < 8; guard++) {
+    const vol = volNow();
+    if ((vol.get(g) ?? 0) >= minOf(g)) break;
+    let done = false;
+    for (const d of train) {
+      const s = d.slots.find((x) => ok(x) && ex(x).volume.some((v) => v.group === g && v.weight === 1) && room(d, x, vol));
+      if (!s) continue;
+      s.dropSet = true;
+      if (slotsMinutes(d.slots) <= limit) { done = true; break; }
+      // 3. No time: another exercise there with sets to spare trades a set for a drop set
+      const t = d.slots.filter((x) => x !== s && ok(x) && x.sets >= 3 && spare(x, vol) && !ex(x).volume.some((v) => v.group === g)).sort((a, b) => surplus(b, vol) - surplus(a, vol))[0];
+      if (t) { trade(t); if (slotsMinutes(d.slots) <= limit) { done = true; break; } t.sets++; t.dropSet = false; }
+      s.dropSet = false;
+    }
+    if (!done) break;
+  }
 }
 
 /** Step 8b of generatePlan: local search against the Plan check (see there) */

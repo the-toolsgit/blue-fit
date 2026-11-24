@@ -5,6 +5,7 @@ import { muscleLabel, type Exercise, type LoggedSet, type MuscleGroup, type Rout
 import { localDate, uid } from "./util";
 import { deloadAssist, deloadSets, deloadWeight } from "./deload";
 import { failureEligible, mainMuscle, MANUAL_WHY, TEST_WHY } from "./failure";
+import { dropWeight } from "./dropSet";
 import { countsForLoad, countsForVolume, sessionsVolume, tonnage, type GroupTotals } from "./volume";
 
 const byNewest = (a: Session, b: Session) => (b.startedAt > a.startedAt ? 1 : b.startedAt < a.startedAt ? -1 : 0);
@@ -39,6 +40,14 @@ export function buildEntry(ex: Exercise, history: Session[], opts: { sets?: numb
   const top = lastWork.length ? lastWork[lastWork.length - 1] : undefined;
   const w = (v: number | null | undefined) => (v == null ? null : opts.deload ? (ex.assisted ? deloadAssist(v, ex.incrementLb) : deloadWeight(v, ex.incrementLb)) : v);
   const sets = Array.from({ length: n }, (_, i) => newSet(w(lastWork[i]?.weight ?? top?.weight), lastWork[i]?.reps ?? top?.reps ?? opts.slot?.repMin ?? opts.repMin ?? null)); // no history: reps start at the low end of the plan's range
+  // A planned drop set (Nov 24 2026) after the last working set: last time's drop, else ~22 % under the last set.
+  // Not in deload weeks or supersets.
+  if (opts.slot?.dropSet && !opts.deload && !opts.slot.supersetGroup && n > 0) {
+    const lastDrop = last?.entry.sets.filter((x) => x.done && x.type === "drop").at(-1);
+    const base = sets[n - 1].weight;
+    const dw = lastDrop?.weight != null && base != null && lastDrop.weight < base ? lastDrop.weight : dropWeight(base, ex.incrementLb);
+    sets.push(newSet(dw, lastDrop?.reps ?? null, "drop"));
+  }
   return {
     id: uid(),
     exerciseId: ex.id,
@@ -91,7 +100,7 @@ export function editSet(s: Session, entryId: string, setId: string, patch: Pick<
 }
 
 /** Mark a set done (or undo). When marking done, later empty sets of the same type copy its weight and reps. */
-export function toggleDone(s: Session, entryId: string, setId: string, now: Date): Session {
+export function toggleDone(s: Session, entryId: string, setId: string, now: Date, incrementLb?: number): Session {
   const x = s.entries.find((e) => e.id === entryId)?.sets.find((y) => y.id === setId);
   if (!x) return s;
   if (x.done) return updateSet(s, entryId, setId, { done: false, completedAt: null });
@@ -102,6 +111,8 @@ export function toggleDone(s: Session, entryId: string, setId: string, now: Date
       sets: e.sets.map((y, k) => {
         if (k === i) return { ...y, done: true, completedAt: now.toISOString() };
         if (k > i && !y.done && y.type === x.type) return { ...y, weight: y.weight ?? x.weight, reps: y.reps ?? x.reps };
+        // The drop set right after a working or failure set starts ~22 % under what was really lifted
+        if (k === i + 1 && !y.done && y.type === "drop" && x.type !== "drop" && x.type !== "warmup" && incrementLb != null) return { ...y, weight: dropWeight(x.weight, incrementLb) ?? y.weight };
         return y;
       }),
     };
@@ -223,6 +234,9 @@ export function afterSetDone(s: Session, entryId: string): { rest: boolean; next
   if (!e) return { rest: false, nextEntryId: null };
   // The workout's last set: nothing left to rest for
   if (s.entries.every((x) => x.sets.every((y) => y.done))) return { rest: false, nextEntryId: e.id };
+  // A drop set comes next: straight into it, no rest (Nov 24 2026)
+  const k = e.sets.findIndex((x) => !x.done);
+  if (k > 0 && e.sets[k].type === "drop" && e.sets[k - 1].done && e.sets[k - 1].type !== "drop") return { rest: false, nextEntryId: e.id };
   if (!e.supersetGroup) return { rest: true, nextEntryId: e.sets.some((x) => !x.done) ? e.id : s.entries[i + 1]?.id ?? null };
   const group = s.entries.filter((x) => x.supersetGroup === e.supersetGroup);
   const gi = group.findIndex((x) => x.id === e.id);
