@@ -169,8 +169,6 @@
   --bg-fx-1: transparent; --bg-fx-2: transparent; --grid: transparent;
 }
 /* The page: a soft cool-gray glow from the top left fading to near-black (the canvas board), with fine dots
-   instead of the grid (fading out down the page, like the grid). The body is see-through so the glow shows
-   (its solid color painted over the background layer); the root keeps the near-black under it. */
-[data-look="gray"] body { background: transparent; }
+   instead of the grid (fading out down the page, like the grid). */
 [data-look="gray"] .bg-fx { background: radial-gradient(120% 60% at 10% 0%, #2a2d31 0%, #121315 55%, #0b0b0c 100%); }
 [data-look="gray"] .bg-fx::after { background-image: radial-gradient(rgba(200, 205, 212, 0.1) 0.7px, transparent 1px); background-size: 10px 10px; }

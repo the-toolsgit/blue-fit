@@ -2,8 +2,11 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
 html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+/* The page color sits on the root; the body is see-through so the background layer (.bg-fx: haze, grid or dots)
+   shows. A solid body painted over it, so the haze and grid never showed (fixed v0.1.226). */
+html { background: var(--bg); }
 body {
-  background: var(--bg);
+  background: transparent;
   color: var(--ink);
   font: 15px/1.5 var(--body);
   overscroll-behavior-y: none;
