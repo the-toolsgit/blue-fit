@@ -2,6 +2,7 @@
 
 Goal: scan the body with the phone's front camera, build a 3D body and measurements per part, track them over time, and let them adjust the plan. Camera only, always (no LiDAR: Pro-only; Leo, Nov 24 2026). The web scanner is temporary; the native app swaps in a native camera scanner with the same flow. Measuring, storage, interpretation, Progress and plan effects are permanent.
 Reviewed by an agent Nov 24 2026; all findings applied below.
+Must work on every iPhone from the iPhone 14 on (Leo, Nov 24 2026); tested first on Leo's iPhone 16 Pro.
 
 ## 1. Architecture (swappable scanner)
 
@@ -76,6 +77,7 @@ Camera denied (standalone PWA may ask on every launch) · motion denied · model
 - **Per capture:** segmentation on CPU ~280 ms at 1920×1080 (classes looked right; the GPU gave the same classes but took 11 s the first time → stay on CPU); heavy pose + mask ~120 ms.
 - **Model loading:** 0.6–3.4 s each → load during the tutorial / weight & height step.
 - **Camera came back landscape (1920×1080) even though portrait was asked**, so the body used only the middle third of the width and was cut off at the bottom at ~1.5 m (tilt was 75°, leaning back). Fix: get real portrait frames (exact constraints, or rotate), then re-check the distance. The tilt check (85–95°) would have caught the lean.
+- **Camera fix found (camera check 2, v0.1.240):** iOS Safari swaps the asked size: asking **landscape 4:3** (`width: {exact: 1920}, height: {exact: 1440}`) returns a real **portrait 1440×1920**, upright, with the widest top-to-bottom view (nose→hip 29% of the frame → whole body fits with room at ~1.5 m). Asking 4032×3024 returns full-sensor portrait **3024×4032** (same view, ~0.6 mm per pixel on the body). Asking portrait sizes gives landscape or a cropped 16:9 view; square 4032 shows less top-to-bottom. Rule for the scanner: ask landscape 4:3; if the stream comes back landscape, ask the portrait sizes instead; use whichever is portrait. Live guidance on a downscaled bitmap, captures at full 3024×4032 (process and close right away). The 4:3 front camera is the same on iPhone 14–16, so this should hold for all supported phones (check on others when possible).
 - WebGPU adapter OK; wake lock, motion permission, audio session all work. Speech voices list was empty at start (loads late) → bundled voice clips stay the plan.
 - No crash / memory problem.
 
