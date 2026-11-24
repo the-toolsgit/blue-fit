@@ -169,8 +169,8 @@ export function planFailure(day: RoutineDay, date: string, c: FailureContext): F
     const ex = c.exMap.get(slot.exerciseId);
     const g = mainMuscle(ex);
     if (!g || !failureEligible(ex)) return;
-    const [last, prev] = pastOf(c, slot.exerciseId, date);
-    if (!needsTest(last, prev, slot.repMax ?? slot.repMin)) return;
+    const [last] = pastOf(c, slot.exerciseId, date);
+    if (!needsTest(last, slot.repMax ?? slot.repMin)) return;
     const gap = nextTrained(c.routine, c.exMap, g, date);
     if (gap != null && gap <= FAILURE_GAP_DAYS) return;
     if (trainedRecently(c, g, date)) return;

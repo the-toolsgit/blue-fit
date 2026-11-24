@@ -1,11 +1,12 @@
 // Progression (double progression): pick a weight that reaches the bottom of the rep range, add reps until every set
 // reaches the top, then add weight (the exercise's increment) and start at the bottom again.
 // Ready for more weight only when the top isn't a one-off (Leo, Nov 18 2026; thresholds are *judgment*):
-//  • every regular set reached the top two workouts in a row (workouts, not weeks), or
+//  • every regular set reached the top two workouts in a row (workouts, not weeks), only for exercises the app
+//    can't test with a failure set (Leo, Nov 24 2026: failure-safe exercises always prove it with a test first), or
 //  • the failure set beat the top by 2+ reps (it shows the reps you really had left), or
 //  • the failure set shows even the bottom-of-the-effort target is past the range (failure reps − 2 > top).
-// Top reached once without that proof → "hold": stay at the same weight once more (the app also tests it with a
-// failure set when it safely can, core/failure.ts).
+// Top reached without that proof → "hold": stay at the same weight (the app tests it with a failure set when it
+// safely can, core/failure.ts). A failed test → one more workout at that weight, then test again.
 import type { LoggedSet } from "./types";
 
 export type Hint =
@@ -53,7 +54,7 @@ export function failureWeight(top: number, failReps: number, repMax: number, inc
 }
 
 export function progressionHint(lastSets: LoggedSet[] | undefined, repMin: number, repMax: number, increment: number,
-  opts: { fail?: LoggedSet; prev?: PastSets; time?: boolean } = {}): Hint {
+  opts: { fail?: LoggedSet; prev?: PastSets; time?: boolean; testable?: boolean } = {}): Hint {
   // Holds (seconds; *judgment*, coaching): every set held to the top of the range → add a little weight, back to the
   // bottom of the range; otherwise add 5 s to the first set that fell short.
   if (opts.time) {
@@ -73,7 +74,7 @@ export function progressionHint(lastSets: LoggedSet[] | undefined, repMin: numbe
   const f = last.fail && load(last.fail) === top && last.fail.reps != null ? last.fail.reps : null;
   const topNow = atTop(last, repMax);
   const proven = f != null && f >= repMax + READY_MARGIN;
-  const twice = topNow && atTop(opts.prev, repMax) && Math.max(...(opts.prev?.sets ?? []).filter(isWork).map(load)) >= top;
+  const twice = !opts.testable && topNow && atTop(opts.prev, repMax) && Math.max(...(opts.prev?.sets ?? []).filter(isWork).map(load)) >= top;
   // The failure set says too light: add by how far past (5 or 10 lb), never less than the normal step
   if (f != null && f - READY_MARGIN > repMax) return { kind: "addWeight", weight: failureWeight(top, f, repMax, increment), reps: repMin, from: top };
   if (topNow && (proven || twice)) return { kind: "addWeight", weight: nextWeight(top, increment), reps: repMin, from: top };
@@ -85,7 +86,8 @@ export function progressionHint(lastSets: LoggedSet[] | undefined, repMin: numbe
   return { kind: "beatReps", weight: top, targetReps, lastReps };
 }
 
-/** Whether this exercise should test with a failure set next time: top reached once, no failure set to prove it. */
-export function needsTest(last: PastSets | undefined, prev: PastSets | undefined, repMax: number): boolean {
-  return !!last && !last.fail && !last.sets.some((x) => x.done && x.type === "failure") && atTop(last, repMax) && !atTop(prev, repMax);
+/** Whether this exercise should test with a failure set next time: top reached last time, no failure set to prove it.
+ *  After a failed test the next workout has a failure set, so it waits one workout, then tests again (Leo, Nov 24 2026). */
+export function needsTest(last: PastSets | undefined, repMax: number): boolean {
+  return !!last && !last.fail && !last.sets.some((x) => x.done && x.type === "failure") && atTop(last, repMax);
 }

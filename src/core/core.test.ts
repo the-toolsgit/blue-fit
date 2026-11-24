@@ -107,13 +107,20 @@ describe("progression hint", () => {
     expect(progressionHint(withFail, 10, 15, 5).kind).toBe("addWeight");
     expect(progressionHint([set(170, 15), set(170, 15), set(170, 16, "failure")], 10, 15, 5).kind).toBe("hold"); // only 1 above
   });
-  it("tests with failure only when the top was reached once with no failure set", async () => {
+  it("tests with failure whenever the top was reached with no failure set; a failed test waits one workout", async () => {
     const { needsTest } = await import("./progression");
     const top = { sets: [set(100, 12), set(100, 12)] };
-    expect(needsTest(top, undefined, 12)).toBe(true);
-    expect(needsTest(top, top, 12)).toBe(false); // already twice: ready
-    expect(needsTest({ sets: [set(100, 12), set(100, 14, "failure")] }, undefined, 12)).toBe(false); // already tested
-    expect(needsTest({ sets: [set(100, 11), set(100, 12)] }, undefined, 12)).toBe(false);
+    expect(needsTest(top, 12)).toBe(true);
+    expect(needsTest({ sets: [set(100, 12), set(100, 14, "failure")] }, 12)).toBe(false); // just tested: wait one workout
+    expect(needsTest({ sets: [set(100, 11), set(100, 12)] }, 12)).toBe(false);
+  });
+  it("failure-safe exercises never go up from two workouts at the top; they need a passed test (Nov 24 2026)", () => {
+    const top = [set(190, 10), set(190, 10), set(190, 10)];
+    const failedTest = { sets: [set(190, 10), set(190, 10), set(190, 10, "failure")] };
+    expect(progressionHint(top, 10, 10, 10, { prev: failedTest, testable: true })).toEqual({ kind: "hold", weight: 190, reps: 10 });
+    expect(progressionHint(top, 10, 10, 10, { prev: { sets: top }, testable: true }).kind).toBe("hold");
+    expect(progressionHint([...top.slice(0, 2), set(190, 12, "failure")], 10, 10, 10, { testable: true }).kind).toBe("addWeight");
+    expect(progressionHint(top, 10, 10, 10, { prev: { sets: top } }).kind).toBe("addWeight"); // not testable: twice still counts
   });
   it("otherwise asks to beat last reps", () => {
     expect(progressionHint([set(170, 10), set(170, 10), set(170, 9)], 10, 15, 5)).toEqual({ kind: "beatReps", weight: 170, targetReps: [11, 10, 9], lastReps: [10, 10, 9] });

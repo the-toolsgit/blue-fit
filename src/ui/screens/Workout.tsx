@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode }
 import { DndContext, MeasuringStrategy, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors, type DragEndEvent, type DragStartEvent, type DraggableAttributes, type DraggableSyntheticListeners, type Modifier } from "@dnd-kit/core";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { MANUAL_WHY } from "../../core/failure";
+import { MANUAL_WHY, failureEligible } from "../../core/failure";
 import { tooHeavy } from "../../core/notes";
 import { orderSlotsLike } from "../../core/routineEdit";
 import { useRestRunning, WorkoutRestPanel, WorkoutRestPill } from "../components/RestTimer";
@@ -395,7 +395,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   // Deload: no progression push; a fixed reminder instead.
   const prev = useMemo(() => prevEntryFor(finished, ex.id, s.id), [finished, ex.id, s.id]);
   const hint0 = s.deload || !settings.progressionHints || ex.assisted ? ({ kind: "none" } as const)
-    : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb, { time: ex.measure === "time", fail: last ? failureSet(last.entry) : undefined, prev: prev ? { sets: prev.entry.sets, fail: failureSet(prev.entry) } : undefined });
+    : progressionHint(last?.entry.sets, repMin, repMax, ex.incrementLb, { time: ex.measure === "time", testable: failureEligible(ex) && settings.autoAdjust !== false, fail: last ? failureSet(last.entry) : undefined, prev: prev ? { sets: prev.entry.sets, fail: failureSet(prev.entry) } : undefined });
   const allDone = e.sets.length > 0 && e.sets.every((x) => x.done);
   // Effort check: the failure set shows earlier sets at the same weight left too many reps (today, and last time)
   // A moot test for more weight (already heavier than last time) isn't a failure set today
