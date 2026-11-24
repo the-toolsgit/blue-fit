@@ -70,6 +70,15 @@ Camera denied (standalone PWA may ask on every launch) · motion denied · model
 - Repeat test: two scans back to back must agree within the repeat error, else "scan again".
 - Privacy test: nothing image-like is ever stored.
 
+### Spike results — Leo's iPhone, Nov 24 2026 (v0.1.237)
+- **Fast enough on the phone; no server needed.** 3D fit benchmark: 36 ms per iteration → ~1 s for 30 iterations.
+- **Live pose: run it in a worker on the GPU** (40 fps). The main-thread GPU path spent 13 s compiling shaders (unusable); CPU on the main thread gives 12 fps, CPU in a worker 19 fps (fallback). Warm the models up while the tutorial is shown.
+- **Per capture:** segmentation on CPU ~280 ms at 1920×1080 (classes looked right; the GPU gave the same classes but took 11 s the first time → stay on CPU); heavy pose + mask ~120 ms.
+- **Model loading:** 0.6–3.4 s each → load during the tutorial / weight & height step.
+- **Camera came back landscape (1920×1080) even though portrait was asked**, so the body used only the middle third of the width and was cut off at the bottom at ~1.5 m (tilt was 75°, leaning back). Fix: get real portrait frames (exact constraints, or rotate), then re-check the distance. The tilt check (85–95°) would have caught the lean.
+- WebGPU adapter OK; wake lock, motion permission, audio session all work. Speech voices list was empty at start (loads late) → bundled voice clips stay the plan.
+- No crash / memory problem.
+
 ## 5. Interpretation (permanent)
 
 - `src/core/body/trends.ts`: change per part over 4/8/12 weeks, left/right balance, smoothed over the last scans.

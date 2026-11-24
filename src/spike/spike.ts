@@ -189,7 +189,7 @@ async function run() {
     if (g) gpu = (await g.requestAdapter()) ? "adapter OK" : "no adapter";
   } catch (e) { gpu = `error ${err(e)}`; }
   log(`WebGPU: ${gpu} · OffscreenCanvas: ${typeof OffscreenCanvas !== "undefined"} · audioSession: ${"audioSession" in navigator} · wakeLock: ${"wakeLock" in navigator}`);
-  log(`Motion permission: ${motion} · voices: ${speechSynthesis.getVoices().length}`);
+  log(`Motion permission: ${motion}`);
 
   let wake: { release: () => Promise<void> } | null = null;
   try { wake = await (navigator as unknown as { wakeLock: { request: (t: string) => Promise<{ release: () => Promise<void> }> } }).wakeLock.request("screen"); log("Wake lock: OK"); } catch (e) { log(`Wake lock: failed (${err(e)})`); }
@@ -203,24 +203,43 @@ async function run() {
     const t = performance.now();
     try { const r = await f(); log(`LOAD  ${label}: ${ms(t)} ms`); return r; } catch (e) { log(`LOAD  ${label}: FAILED (${err(e)})`); return null; }
   };
-  const poseGpu = await load("pose full (GPU)", () => PoseLandmarker.createFromOptions(fileset, { baseOptions: { modelAssetPath: M("pose_landmarker_full.task"), delegate: "GPU" }, runningMode: "VIDEO", numPoses: 2 }));
   const poseCpu = await load("pose full (CPU)", () => PoseLandmarker.createFromOptions(fileset, { baseOptions: { modelAssetPath: M("pose_landmarker_full.task"), delegate: "CPU" }, runningMode: "VIDEO", numPoses: 2 }));
   const poseHeavy = await load("pose heavy (CPU, image + mask)", () => PoseLandmarker.createFromOptions(fileset, { baseOptions: { modelAssetPath: M("pose_landmarker_heavy.task"), delegate: "CPU" }, runningMode: "IMAGE", numPoses: 1, outputSegmentationMasks: true }));
   const segCpu = await load("segmenter multiclass (CPU)", () => ImageSegmenter.createFromOptions(fileset, { baseOptions: { modelAssetPath: M("selfie_multiclass_256x256.tflite"), delegate: "CPU" }, runningMode: "IMAGE", outputCategoryMask: true, outputConfidenceMasks: false }));
-  const segGpu = await load("segmenter multiclass (GPU)", () => ImageSegmenter.createFromOptions(fileset, { baseOptions: { modelAssetPath: M("selfie_multiclass_256x256.tflite"), delegate: "GPU" }, runningMode: "IMAGE", outputCategoryMask: true, outputConfidenceMasks: false }));
 
   // Camera.
   step("Opening camera");
   let stream: MediaStream;
   try {
     t0 = performance.now();
-    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: { ideal: 1080 }, height: { ideal: 1920 }, aspectRatio: { ideal: 9 / 16 } }, audio: false });
+    // Run 1 (v0.1.237) got landscape 1920x1080 with "ideal" portrait sizes: try stricter asks first.
+    const asks: [string, MediaTrackConstraints][] = [
+      ["exact 1080x1920", { facingMode: "user", width: { exact: 1080 }, height: { exact: 1920 } }],
+      ["exact aspect 9:16", { facingMode: "user", aspectRatio: { exact: 9 / 16 }, height: { ideal: 1920 } }],
+      ["ideal 1080x1920", { facingMode: "user", width: { ideal: 1080 }, height: { ideal: 1920 }, aspectRatio: { ideal: 9 / 16 } }],
+    ];
+    let got: MediaStream | null = null;
+    const tries: string[] = [];
+    for (const [label, c] of asks) {
+      try {
+        const st = await navigator.mediaDevices.getUserMedia({ video: c, audio: false });
+        const ss = st.getVideoTracks()[0].getSettings();
+        tries.push(`${label} → ${ss.width}x${ss.height}`);
+        got = st;
+        break;
+      } catch (e) {
+        tries.push(`${label} → ${(e as Error).name}`);
+      }
+    }
+    log(`\nCAMERA tries: ${tries.join(" · ")}`);
+    if (!got) throw new Error("no camera stream");
+    stream = got;
     video.srcObject = stream;
     await video.play();
     const tr = stream.getVideoTracks()[0];
     const s = tr.getSettings() as MediaTrackSettings & { zoom?: number };
     const caps = (tr.getCapabilities?.() ?? {}) as MediaTrackCapabilities & { zoom?: { min: number; max: number } };
-    log(`\nCAMERA open ${ms(t0)} ms · got ${s.width}x${s.height} (asked 1080x1920) · video ${video.videoWidth}x${video.videoHeight} · ${s.frameRate?.toFixed?.(0) ?? "?"} fps · facing ${s.facingMode ?? "?"} · zoom ${s.zoom ?? "n/a"} (range ${caps.zoom ? `${caps.zoom.min}-${caps.zoom.max}` : "n/a"})`);
+    log(`CAMERA open ${ms(t0)} ms · got ${s.width}x${s.height} (asked 1080x1920) · video ${video.videoWidth}x${video.videoHeight} · ${s.frameRate?.toFixed?.(0) ?? "?"} fps · facing ${s.facingMode ?? "?"} · zoom ${s.zoom ?? "n/a"} (range ${caps.zoom ? `${caps.zoom.min}-${caps.zoom.max}` : "n/a"})`);
   } catch (e) {
     log(`CAMERA: FAILED (${err(e)}) · skipping the camera tests`);
     const c = document.createElement("canvas");
@@ -243,8 +262,8 @@ async function run() {
   step("Live pose test");
   say("Hold still.");
   let span: ReturnType<typeof bodySpan> | null = null;
-  if (poseGpu) span = await liveTest(poseGpu, 8, "\nLIVE  pose full GPU (main thread)");
-  if (poseCpu) span = (await liveTest(poseCpu, 6, "LIVE  pose full CPU (main thread)")) ?? span;
+  if (poseCpu) span = await liveTest(poseCpu, 6, "\nLIVE  pose full CPU (main thread)");
+  log(`VIDEO now ${video.videoWidth}x${video.videoHeight} (${video.videoHeight > video.videoWidth ? "portrait" : "LANDSCAPE"})`);
   if (span) log(`FRAME body spans y ${span.top.toFixed(2)}–${span.bottom.toFixed(2)}, x ${span.left.toFixed(2)}–${span.right.toFixed(2)} of the frame (1.00 = full) · fits: ${span.top > 0 && span.bottom < 1 ? "yes" : "NO (cut off)"}`);
   else log("FRAME no body detected");
 
@@ -256,7 +275,6 @@ async function run() {
     beep(1500, 0.05);
     const line: string[] = [`CAPTURE ${i}: ${bmp.width}x${bmp.height}`];
     if (segCpu) { const r = classCounts(segCpu, bmp); line.push(`seg CPU ${r.t} ms (${r.size}: ${r.summary})`); }
-    if (i === 1 && segGpu) { const r = classCounts(segGpu, bmp); line.push(`seg GPU ${r.t} ms (${r.summary})`); }
     if (poseHeavy) {
       const t = performance.now();
       const r = poseHeavy.detect(bmp);
@@ -273,9 +291,10 @@ async function run() {
   await workerTest(5);
 
   say("Done with the camera. You can pick up the phone.");
+  log(`Voices available: ${speechSynthesis.getVoices().length}`);
   stream.getTracks().forEach((t) => t.stop());
   stage.style.display = "none";
-  poseGpu?.close(); poseCpu?.close(); poseHeavy?.close(); segCpu?.close(); segGpu?.close();
+  poseCpu?.close(); poseHeavy?.close(); segCpu?.close();
 
   benchFit();
   finish(wake);
