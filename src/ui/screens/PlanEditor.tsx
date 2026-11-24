@@ -176,12 +176,21 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
           <button className="btn btn-primary btn-xl" onClick={() => setWizard(true)}><Icon name="bolt" size={20} /> Build my plan</button>
         </div>
       )}
-      <div className="chips-scroll" style={{ marginTop: 12 }}>
-        {days.map((d) => (
-          <button key={d.id} className="chip" aria-pressed={d.id === day?.id} onClick={() => setDayId(d.id)} title={d.title}>
-            {d.weekday != null ? SHORT[d.weekday] : d.title.length > 10 ? d.title.slice(0, 9) + "…" : d.title || "New"}
-          </button>
-        ))}
+      {/* Week strip as on the Plan tab: weekday over the day's name */}
+      <div className="week-strip" style={{ gridTemplateColumns: `repeat(${days.length}, minmax(0, 1fr))` }}>
+        {days.map((d) => {
+          const on = d.slots.length > 0;
+          const isToday = d.weekday === new Date().getDay();
+          // A day without a weekday is never a rest day: it shows its name even before it has exercises
+          const name = on || d.weekday == null ? d.title || "New" : "Rest";
+          return (
+            <button key={d.id} className={"ws-day" + (on ? "" : " rest") + (isToday ? " today" : "")} aria-pressed={d.id === day?.id} onClick={() => setDayId(d.id)}
+              aria-label={`${d.weekday != null ? SHORT[d.weekday] : d.title || "New day"}: ${on ? name : "rest day"}${isToday ? " (today)" : ""}`}>
+              <span className="ws-dow">{d.weekday != null ? SHORT[d.weekday] : "Day"}</span>
+              <span className="ws-title">{name}</span>
+            </button>
+          );
+        })}
       </div>
 
       {day && (
