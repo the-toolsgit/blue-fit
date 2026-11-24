@@ -25,7 +25,8 @@ ul { margin: 0; padding-left: 18px; }
   radial-gradient(60% 45% at 10% 0%, var(--bg-fx-1), transparent 70%),
   radial-gradient(55% 40% at 100% 100%, var(--bg-fx-2), transparent 70%),
   linear-gradient(var(--bg), var(--bg-2)); }
-.bg-fx::after { content: ""; position: absolute; inset: 0; background-image:
+/* The pattern (grid, or dots in Gray) shows only on the launch splash (Nov 24 2026); pages keep just the haze */
+.splash .bg-fx::after { content: ""; position: absolute; inset: 0; background-image:
   linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
   background-size: 28px 28px; mask-image: linear-gradient(to bottom, black, transparent 85%); -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%); }
 
