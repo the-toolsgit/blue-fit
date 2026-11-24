@@ -94,7 +94,7 @@ export function TodayScreen() {
   };
 
   return (
-    <div className="page">
+    <div className={signal ? "page sig-page" : "page"}>
       <header className="spread" style={{ marginBottom: 14 }}>
         <div className="row" style={{ gap: 6 }}>
           <Figure spec={SPLASH_FLEX} size={30} still bumps />
@@ -151,11 +151,11 @@ export function TodayScreen() {
         signal ? (
         <>
           <section className="sig-tile" aria-label="Workout">
+            <div className="sig-eyebrow-row">
+              <span className="sig-eyebrow">{wd === todayWd ? "TODAY · " : ""}{LONG[wd].slice(0, 3).toUpperCase()}</span>
+              <span className="sig-line" aria-hidden="true" />
+            </div>
             <div className="sig-head">
-              <div className="sig-eyebrow-row">
-                <span className="sig-eyebrow">{wd === todayWd ? "TODAY · " : ""}{LONG[wd].slice(0, 3).toUpperCase()}</span>
-                <span className="sig-dots" aria-hidden="true" />
-              </div>
               <div className="sig-figure">
                 <Figure key={heroEx?.id} spec={heroEx?.figure} size={110} timing={heroTiming} label={heroEx ? `Animation: ${heroEx.name}` : undefined} />
               </div>
@@ -171,9 +171,10 @@ export function TodayScreen() {
               <div className="sig-stat"><b>{two(sets)}</b><span>Sets</span></div>
               <div className="sig-stat paper"><b>{slotsMinutes(slots)}</b><span>~Min</span></div>
             </div>
+            <span className="sig-rule-h" aria-hidden="true" />
           </section>
 
-          <section className="sig-list" aria-label="Exercises" style={{ marginTop: 12 }}>
+          <section className="sig-list" aria-label="Exercises">
             <div className="sig-list-head"><span>EXERCISES</span><span>SETS × REPS</span></div>
             <SortableDayList slots={slots} exMap={exMap} onOpen={(s) => setOpen(s.exerciseId)}
               onMove={(from, to) => routine && day && saveRoutine(moveSlot(routine, day.id, from, to))}

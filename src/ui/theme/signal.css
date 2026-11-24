@@ -19,6 +19,8 @@ html:root[data-look="signal"][data-look] {
   --sig-orange: #ff4b1f; --sig-black: #000; --sig-paper: #ecebe6; --sig-grey: #62686f; --sig-dark: #383c41; --sig-quiet: #55595e;
   color-scheme: dark;
 }
+/* Today's page is signal orange (the canvas); other screens keep the dark grey until they are redesigned */
+html:root[data-look="signal"][data-look]:has(.sig-page) { --bg: #ff4b1f; --bg-2: #ff4b1f; }
 [data-look="signal"] .bg-fx { background: var(--bg); }
 [data-look="signal"] .bg-fx::after { display: none; }
 [data-look="signal"] h1, [data-look="signal"] h2, [data-look="signal"] h3, [data-look="signal"] h4 { font-weight: 800; }
@@ -44,7 +46,7 @@ html:root[data-look="signal"][data-look] {
 [data-look="signal"] .day-row.dragging { box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6); }
 
 /* ---------- Today (Signal) ---------- */
-.sig-week { background: var(--bg); border-radius: 30px; padding: 14px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; justify-items: center; }
+.sig-week { background: #000; border-radius: 30px; padding: 14px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; justify-items: center; }
 .sig-week > span { font: 400 13px/1 var(--mono); color: var(--muted); }
 .sig-day { position: relative; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font: 700 13px/1 var(--mono); background: var(--sig-dark); color: #7c8188; transition: transform 0.2s var(--ease); }
 .sig-day::before { content: ""; position: absolute; inset: -2px; } /* 44px tap area */
@@ -54,16 +56,20 @@ html:root[data-look="signal"][data-look] {
 .sig-day.today { background: var(--sig-orange); color: #000; }
 .sig-day[aria-selected="true"] { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--ink); }
 
-.sig-tile { margin-top: 12px; background: var(--sig-orange); color: #000; border-radius: 34px; padding: 20px 20px 18px; display: grid; gap: 14px; }
+.sig-tile { margin: 12px 0 32px; background: var(--sig-orange); color: #000; border-radius: 34px; padding: 20px 20px 0; display: grid; gap: 14px; }
 .sig-tile .sig-eyebrow { font: 700 13px/1 var(--mono); letter-spacing: 0.08em; }
 .sig-pill { display: inline-flex; align-items: center; gap: 6px; background: #000; color: var(--sig-paper); font: 700 12px/1 var(--mono); padding: 8px 11px; border-radius: 99px; }
 /* Day, name and pills stacked on the left; the figure circle on the right beside all of them */
 .sig-head { display: grid; grid-template-columns: minmax(0, 1fr) 132px; column-gap: 14px; row-gap: 12px; align-items: center; }
 .sig-eyebrow-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .sig-eyebrow-row .sig-eyebrow { white-space: nowrap; }
-.sig-dots { flex: 1; min-width: 0; height: 12px; background-image: radial-gradient(circle, #000 0.9px, transparent 1.3px); background-size: 4px 4px; }
+.sig-eyebrow-row { gap: 12px; margin-right: -6px; }
+.sig-line { flex: 1; min-width: 0; height: 4px; border-radius: 2px; background: #000; }
+.sig-rule-h { height: 4px; border-radius: 2px; background: #000; margin: 4px -11px 0; }
 .sig-title { margin: 0; font: 800 70px/0.86 var(--display); letter-spacing: -0.01em; text-transform: uppercase; color: #000; overflow-wrap: anywhere; }
-.sig-head .sig-figure { grid-column: 2; grid-row: 1 / span 3; }
+.sig-head .sig-figure { grid-column: 2; grid-row: 1 / span 2; }
+.sig-head .sig-title { grid-column: 1; grid-row: 1; align-self: end; }
+.sig-head > .row { grid-column: 1; grid-row: 2; align-self: start; }
 .sig-figure { width: 132px; height: 132px; flex: none; border-radius: 50%; background: var(--sig-paper); display: grid; place-items: center; overflow: hidden; }
 .sig-figure .fig .mn polyline, .sig-figure .fig .mn circle { stroke: #000; }
 .sig-figure .fig .lt line, .sig-figure .fig .lt polyline, .sig-figure .fig .lt circle { stroke: #000; stroke-opacity: 0.35; }
