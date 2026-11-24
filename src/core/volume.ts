@@ -10,7 +10,7 @@ export const countsForVolume = (t: SetType) => t === "working" || t === "failure
  *  similar growth in less time, Sødal 2023), warm-ups 0. */
 export const volumeShare = (t: SetType) => (t === "working" || t === "failure" ? 1 : t === "drop" ? 0.5 : 0);
 /** A plan slot's sets toward weekly sets: its sets plus ½ for its drop set. */
-export const slotVolumeSets = (s: Pick<Slot, "sets" | "dropSet">) => s.sets + (s.dropSet ? 0.5 : 0);
+export const slotVolumeSets = (s: Pick<Slot, "sets" | "dropSet" | "supersetGroup">) => s.sets + (s.dropSet && !s.supersetGroup ? 0.5 : 0);
 /** Set types that count toward tonnage and PRs. Only warm-ups are excluded. */
 export const countsForLoad = (t: SetType) => t !== "warmup";
 

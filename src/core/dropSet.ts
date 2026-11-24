@@ -15,6 +15,9 @@ export function dropEligible(ex: Exercise | undefined): boolean {
   return ex.equipment === "dumbbell" && !ex.compound;
 }
 
+/** Whether a plan slot really gets its drop set: on, and not in a superset (supersets alternate, no drop). */
+export const hasDrop = (s: Pick<Slot, "dropSet" | "supersetGroup"> | undefined) => !!s?.dropSet && !s.supersetGroup;
+
 /** A plan slot that may get a drop set: an eligible exercise, not a heavy 6–10 slot (or lower), not in a superset. */
 export const dropSlotOk = (s: Slot, ex: Exercise | undefined) => dropEligible(ex) && s.repMin >= 8 && !s.supersetGroup;
 

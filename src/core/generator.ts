@@ -696,7 +696,9 @@ function addDropSets(c: { train: RoutineDay[]; exMap: Map<string, Exercise>; tma
   // 1. Days over time
   for (const d of train) for (let guard = 0; guard < 12 && slotsMinutes(d.slots) > limit; guard++) {
     const vol = volNow();
-    const s = d.slots.filter((x) => ok(x) && x.sets >= 3).sort((a, b) => surplus(b, vol) - surplus(a, vol))[0];
+    // Muscles that keep their minimum first; the length wins over a minimum (as step 7 does with whole sets)
+    const pool = d.slots.filter((x) => ok(x) && x.sets >= 3);
+    const s = [...pool.filter((x) => spare(x, vol)), ...pool].sort((a, b) => (spare(b, vol) ? 1 : 0) - (spare(a, vol) ? 1 : 0) || surplus(b, vol) - surplus(a, vol))[0];
     if (!s) break;
     trade(s);
   }

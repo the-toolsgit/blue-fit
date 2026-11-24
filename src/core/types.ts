@@ -246,7 +246,7 @@ export interface Settings {
   theme: "system" | "light" | "dark";
   /** Style (Settings → Look, Nov 24 2026): neon (default) or gray (Neon with gray backgrounds instead of navy, always dark). Missing = neon. */
   look?: "neon" | "gray";
-  /** Accent palette; the line man always stays blue */
+  /** Accent palette; the line man takes it too (the BLUE FIT wordmark stays blue) */
   accent: Accent;
   /** Interview: training profile for the volume model (on this phone only) */
   profile?: ProfileDraft | null;

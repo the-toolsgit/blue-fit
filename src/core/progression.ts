@@ -1,8 +1,8 @@
 // Progression (double progression): pick a weight that reaches the bottom of the rep range, add reps until every set
 // reaches the top, then add weight (the exercise's increment) and start at the bottom again.
 // Ready for more weight only when the top isn't a one-off (Leo, Nov 18 2026; thresholds are *judgment*):
-//  • every regular set reached the top two workouts in a row (workouts, not weeks), only for exercises the app
-//    can't test with a failure set (Leo, Nov 24 2026: failure-safe exercises always prove it with a test first), or
+//  • every regular set reached the top two workouts in a row (workouts, not weeks), unless the last one had a failure
+//    set that didn't prove it or this workout tests it (Leo, Nov 24 2026: test first whenever the app can), or
 //  • the failure set beat the top by 2+ reps (it shows the reps you really had left), or
 //  • the failure set shows even the bottom-of-the-effort target is past the range (failure reps − 2 > top).
 // Top reached without that proof → "hold": stay at the same weight (the app tests it with a failure set when it
@@ -54,7 +54,7 @@ export function failureWeight(top: number, failReps: number, repMax: number, inc
 }
 
 export function progressionHint(lastSets: LoggedSet[] | undefined, repMin: number, repMax: number, increment: number,
-  opts: { fail?: LoggedSet; prev?: PastSets; time?: boolean; testable?: boolean } = {}): Hint {
+  opts: { fail?: LoggedSet; prev?: PastSets; time?: boolean; testing?: boolean } = {}): Hint {
   // Holds (seconds; *judgment*, coaching): every set held to the top of the range → add a little weight, back to the
   // bottom of the range; otherwise add 5 s to the first set that fell short.
   if (opts.time) {
@@ -74,7 +74,9 @@ export function progressionHint(lastSets: LoggedSet[] | undefined, repMin: numbe
   const f = last.fail && load(last.fail) === top && last.fail.reps != null ? last.fail.reps : null;
   const topNow = atTop(last, repMax);
   const proven = f != null && f >= repMax + READY_MARGIN;
-  const twice = !opts.testable && topNow && atTop(opts.prev, repMax) && Math.max(...(opts.prev?.sets ?? []).filter(isWork).map(load)) >= top;
+  // Two workouts at the top count only when no failure set says otherwise: not right after a failed test (wait one
+  // workout), not while this workout tests it (Leo, Nov 24 2026). When no test can be planned, it still counts.
+  const twice = !opts.testing && !last.fail && topNow && atTop(opts.prev, repMax) && Math.max(...(opts.prev?.sets ?? []).filter(isWork).map(load)) >= top;
   // The failure set says too light: add by how far past (5 or 10 lb), never less than the normal step
   if (f != null && f - READY_MARGIN > repMax) return { kind: "addWeight", weight: failureWeight(top, f, repMax, increment), reps: repMin, from: top };
   if (topNow && (proven || twice)) return { kind: "addWeight", weight: nextWeight(top, increment), reps: repMin, from: top };

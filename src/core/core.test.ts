@@ -114,14 +114,18 @@ describe("progression hint", () => {
     expect(needsTest({ sets: [set(100, 12), set(100, 14, "failure")] }, 12)).toBe(false); // just tested: wait one workout
     expect(needsTest({ sets: [set(100, 11), set(100, 12)] }, 12)).toBe(false);
   });
-  it("failure-safe exercises never go up from two workouts at the top; they need a passed test (Nov 24 2026)", () => {
+  it("after a failed test: one workout at the same weight, then test; two at the top only count when no test can run (Nov 24 2026)", () => {
     const top = [set(190, 10), set(190, 10), set(190, 10)];
-    const failedTest = { sets: [set(190, 10), set(190, 10), set(190, 10, "failure")] };
-    expect(progressionHint(top, 10, 10, 10, { prev: failedTest, testable: true })).toEqual({ kind: "hold", weight: 190, reps: 10 });
-    expect(progressionHint(top, 10, 10, 10, { prev: { sets: top }, testable: true }).kind).toBe("hold");
-    expect(progressionHint([...top.slice(0, 2), set(190, 12, "failure")], 10, 10, 10, { testable: true }).kind).toBe("addWeight");
-    expect(progressionHint(top, 10, 10, 10, { prev: { sets: top } }).kind).toBe("addWeight"); // not testable: twice still counts
+    const failedTest = [set(190, 10), set(190, 10), set(190, 10, "failure")];
+    // Right after the failed test: hold, even though both workouts reached the top
+    expect(progressionHint(failedTest, 10, 10, 10, { prev: { sets: top } })).toEqual({ kind: "hold", weight: 190, reps: 10 });
+    // The next workout tests it: hold, the test decides
+    expect(progressionHint(top, 10, 10, 10, { prev: { sets: failedTest }, testing: true }).kind).toBe("hold");
+    // No test possible (recovery, goal, setting): two workouts at the top still go up, never stuck
+    expect(progressionHint(top, 10, 10, 10, { prev: { sets: failedTest } }).kind).toBe("addWeight");
+    expect(progressionHint([...top.slice(0, 2), set(190, 12, "failure")], 10, 10, 10).kind).toBe("addWeight");
   });
+
   it("otherwise asks to beat last reps", () => {
     expect(progressionHint([set(170, 10), set(170, 10), set(170, 9)], 10, 15, 5)).toEqual({ kind: "beatReps", weight: 170, targetReps: [11, 10, 9], lastReps: [10, 10, 9] });
     expect(progressionHint([set(170, 10), set(170, 10), set(170, 9)], 10, 10, 5)).toMatchObject({ targetReps: [10, 10, 10] });
@@ -202,6 +206,16 @@ describe("session logic", () => {
     const e2 = s.entries.find((x) => x.id === e.id)!;
     expect(e2.sets.at(-1)!.weight).toBe(75);
     expect(afterSetDone(s, e.id)).toEqual({ rest: false, nextEntryId: e.id });
+    // + Add set goes before the drop set and copies the working weight; a swap keeps the working sets only
+    s = addSet(s, e.id);
+    const e3 = s.entries.find((x) => x.id === e.id)!;
+    expect(e3.sets.map((x) => x.type).at(-1)).toBe("drop");
+    expect(e3.sets.at(-2)!.weight).toBe(100);
+    const other = [...exMap.values()].find((x) => x.equipment === "cable" && x.id !== e.exerciseId)!;
+    expect(swapEntry(s, e.id, other, []).entries.find((x) => x.id === e.id)!.sets.length).toBe(slot.sets + 1);
+    // In a superset: no drop set, and it doesn't count
+    const sup = { ...mon, slots: mon.slots.map((x) => (x === slot ? { ...x, dropSet: true, supersetGroup: "A" } : x)) };
+    expect(createSessionFromDay(routine, sup, exMap, [], new Date()).entries.find((x) => x.slotId === slot.id)!.sets.some((x) => x.type === "drop")).toBe(false);
     const dl = createSessionFromDay(routine, day, exMap, [], new Date(), { deload: true });
     expect(dl.entries.find((x) => x.slotId === slot.id)!.sets.some((x) => x.type === "drop")).toBe(false);
   });
@@ -259,7 +273,8 @@ describe("session logic", () => {
     // Editing: a forgotten set recorded later takes one off the skipped count; deleting a set never adds one
     const e0 = s.entries[0];
     const added = addSet(s, e0.id, "working");
-    const withSet = updateSet(added, e0.id, added.entries[0].sets.at(-1)!.id, { weight: 100, reps: 10, done: true });
+    const fresh = added.entries[0].sets.find((x) => !e0.sets.some((y) => y.id === x.id))!; // before the drop set
+    const withSet = updateSet(added, e0.id, fresh.id, { weight: 100, reps: 10, done: true });
     expect(reconcileSkipped(s, withSet).skipped![0]).toEqual({ exerciseId: "t-bar-reverse-row", sets: 1 });
     // Deleting a recorded set of a plan exercise brings its skipped set back
     expect(reconcileSkipped(s, removeSet(s, e0.id, e0.sets[0].id)).skipped![0]).toEqual({ exerciseId: "t-bar-reverse-row", sets: 3 });

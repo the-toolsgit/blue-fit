@@ -5,7 +5,7 @@ import { muscleLabel, type Exercise, type LoggedSet, type MuscleGroup, type Rout
 import { localDate, uid } from "./util";
 import { deloadAssist, deloadSets, deloadWeight } from "./deload";
 import { failureEligible, mainMuscle, MANUAL_WHY, TEST_WHY } from "./failure";
-import { dropWeight } from "./dropSet";
+import { dropWeight, hasDrop } from "./dropSet";
 import { countsForLoad, countsForVolume, sessionsVolume, tonnage, type GroupTotals } from "./volume";
 
 const byNewest = (a: Session, b: Session) => (b.startedAt > a.startedAt ? 1 : b.startedAt < a.startedAt ? -1 : 0);
@@ -42,7 +42,7 @@ export function buildEntry(ex: Exercise, history: Session[], opts: { sets?: numb
   const sets = Array.from({ length: n }, (_, i) => newSet(w(lastWork[i]?.weight ?? top?.weight), lastWork[i]?.reps ?? top?.reps ?? opts.slot?.repMin ?? opts.repMin ?? null)); // no history: reps start at the low end of the plan's range
   // A planned drop set (Nov 24 2026) after the last working set: last time's drop, else ~22 % under the last set.
   // Not in deload weeks or supersets.
-  if (opts.slot?.dropSet && !opts.deload && !opts.slot.supersetGroup && n > 0) {
+  if (hasDrop(opts.slot) && !opts.deload && !ex.assisted && ex.measure !== "time" && n > 0) {
     const lastDrop = last?.entry.sets.filter((x) => x.done && x.type === "drop").at(-1);
     const base = sets[n - 1].weight;
     const dw = lastDrop?.weight != null && base != null && lastDrop.weight < base ? lastDrop.weight : dropWeight(base, ex.incrementLb);
@@ -112,7 +112,8 @@ export function toggleDone(s: Session, entryId: string, setId: string, now: Date
         if (k === i) return { ...y, done: true, completedAt: now.toISOString() };
         if (k > i && !y.done && y.type === x.type) return { ...y, weight: y.weight ?? x.weight, reps: y.reps ?? x.reps };
         // The drop set right after a working or failure set starts ~22 % under what was really lifted
-        if (k === i + 1 && !y.done && y.type === "drop" && x.type !== "drop" && x.type !== "warmup" && incrementLb != null) return { ...y, weight: dropWeight(x.weight, incrementLb) ?? y.weight };
+        if (k === i + 1 && !y.done && y.type === "drop" && x.type !== "drop" && x.type !== "warmup" && incrementLb != null
+          && (y.weight == null || x.weight == null || y.weight >= x.weight)) return { ...y, weight: dropWeight(x.weight, incrementLb) ?? y.weight };
         return y;
       }),
     };
@@ -128,8 +129,11 @@ export const addSet = (s: Session, entryId: string, type: LoggedSet["type"] = "w
       const i = at < 0 ? e.sets.length : at;
       return { ...e, sets: [...e.sets.slice(0, i), newSet(null, null, "warmup"), ...e.sets.slice(i)] };
     }
-    const prev = e.sets[e.sets.length - 1];
-    return { ...e, sets: [...e.sets, newSet(prev?.weight ?? null, prev?.reps ?? null, type)] };
+    // A working (or failure) set goes before any drop sets at the end and copies the last of its kind (Nov 24 2026)
+    let i = e.sets.length;
+    if (type !== "drop") while (i > 0 && e.sets[i - 1].type === "drop") i--;
+    const prev = (type !== "drop" ? e.sets.slice(0, i).filter((x) => x.type !== "warmup").at(-1) : undefined) ?? e.sets[e.sets.length - 1];
+    return { ...e, sets: [...e.sets.slice(0, i), newSet(prev?.weight ?? null, prev?.reps ?? null, type), ...e.sets.slice(i)] };
   });
 
 export const removeSet = (s: Session, entryId: string, setId: string): Session => mapEntry(s, entryId, (e) => ({ ...e, sets: e.sets.filter((x) => x.id !== setId) }));
@@ -195,7 +199,7 @@ export function refitFailure(s: Session, exMap: Map<string, Exercise>): Session 
 export function swapEntry(s: Session, entryId: string, ex: Exercise, history: Session[]): Session {
   return mapEntry(s, entryId, (e) => {
     const time = ex.measure === "time"; // a hold gets a seconds range
-    const fresh = buildEntry(ex, history, { sets: e.sets.length, restSec: e.restSec, repMin: time ? 20 : e.repMin, repMax: time ? 60 : e.repMax });
+    const fresh = buildEntry(ex, history, { sets: e.sets.filter((x) => x.type === "working" || x.type === "failure").length || 1, restSec: e.restSec, repMin: time ? 20 : e.repMin, repMax: time ? 60 : e.repMax });
     // A swap to a move that isn't safe to take to failure drops the flame
     const keep = e.toFailure && failureEligible(ex);
     return { ...e, ...(time ? { repMin: 20, repMax: 60 } : {}), exerciseId: ex.id, swappedFromId: e.swappedFromId ?? e.exerciseId, sets: fresh.sets, toFailure: keep || undefined, failWhy: keep ? e.failWhy : undefined };

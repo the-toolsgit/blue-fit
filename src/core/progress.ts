@@ -52,8 +52,9 @@ export function lastChanges(sessions: Session[], exercises: Exercise[]): LastCha
     const time = ex.measure === "time";
     const tops: { date: string; weight: number; reps: number }[] = [];
     for (const s of done) {
+      // Working and failure sets only: a drop set's extra reps at a lighter weight aren't progress
       const sets = s.entries.filter((e) => e.exerciseId === ex.id).flatMap((e) => e.sets)
-        .filter((x) => x.done && countsForLoad(x.type) && x.reps != null && x.reps > 0);
+        .filter((x) => x.done && countsForVolume(x.type) && x.reps != null && x.reps > 0);
       if (!sets.length) continue;
       tops.push({ date: s.date, weight: Math.max(...sets.map((x) => x.weight ?? 0)), reps: Math.max(...sets.map((x) => x.reps!)) });
       if (tops.length === 2) break;

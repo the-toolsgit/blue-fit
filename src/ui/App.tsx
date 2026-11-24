@@ -96,20 +96,24 @@ export function App() {
     },
   });
 
+  // Not before the saved settings load: the defaults would undo what index.html set early (flash, wrong look stored)
   useEffect(() => {
+    if (!ready) return;
     const root = document.documentElement;
     // Gray is always dark, whatever the Theme setting
     const theme = settings.look === "gray" ? "dark" : settings.theme;
     if (theme === "system") delete root.dataset.theme; else root.dataset.theme = theme;
     if (settings.look === "gray") root.dataset.look = "gray"; else delete root.dataset.look;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", settings.look === "gray" ? "#0b0b0c" : "#05070d");
     try { localStorage.setItem("bf-theme", JSON.stringify(settings.theme)); localStorage.setItem("bf-look", JSON.stringify(settings.look ?? "neon")); } catch { /* ignore */ }
-  }, [settings.theme, settings.look]);
+  }, [ready, settings.theme, settings.look]);
 
   useEffect(() => {
+    if (!ready) return;
     const root = document.documentElement;
     if (settings.accent === "blue") delete root.dataset.accent; else root.dataset.accent = settings.accent;
     try { localStorage.setItem("bf-accent", JSON.stringify(settings.accent)); } catch { /* ignore */ }
-  }, [settings.accent]);
+  }, [ready, settings.accent]);
 
   useEffect(() => {
     if (needRefresh) toast({ kind: "info", title: "Update ready", body: "Open Settings → Update app, or it applies next launch." });

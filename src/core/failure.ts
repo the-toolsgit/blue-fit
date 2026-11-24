@@ -12,6 +12,7 @@ import { addDays, parseLocalDate, weekStart } from "./util";
 import { deloadActive } from "./deload";
 import { failureSet } from "./effort";
 import { needsTest, type PastSets } from "./progression";
+import { hasDrop } from "./dropSet";
 
 /** Mass gain and endurance use it. Strength and maintain don't. No profile yet counts as mass gain. */
 export const failureApplies = (goal: Goal | undefined) => { const g = goal ?? "growth"; return g === "growth" || g === "endurance"; };
@@ -179,7 +180,7 @@ export function planFailure(day: RoutineDay, date: string, c: FailureContext): F
   const tested = new Set(tests.map((t) => t.slotId));
   day.slots.forEach((slot, index) => {
     // A planned drop set is already the hard set: no other failure pick there (a weight test still goes first)
-    if (slot.toFailure !== undefined || tested.has(slot.id) || slot.dropSet) return;
+    if (slot.toFailure !== undefined || tested.has(slot.id) || hasDrop(slot)) return;
     const ex = c.exMap.get(slot.exerciseId);
     const g = mainMuscle(ex);
     if (!g || !failureEligible(ex)) return;

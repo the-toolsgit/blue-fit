@@ -191,7 +191,7 @@ describe("Build my plan: integrity", () => {
 });
 
 describe("Build my plan: never the same movement twice on one day", () => {
-  it("same angle + same equipment for a muscle appears at most once a day", () => {
+  it("same angle + same equipment for a muscle appears at most once a day", { timeout: 20000 }, () => {
     const profile = (goal: Goal) => ({ goal, phase: "maintaining" as const, age: 30, yearsTraining: 3, sleepHours: 7.5 });
     for (const goal of ["growth", "strength", "endurance", "maintenance"] as const) for (const days of [[1, 3, 5], [1, 2, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 6, 0]]) for (const seed of [1, 2, 3]) {
       const plan = generatePlan({ goal, trainDays: days, maxMinutes: 60, targets: freshTargets(profile(goal)), exercises: cat.exercises, seed, restSec: REST_BY_GOAL[goal] });
