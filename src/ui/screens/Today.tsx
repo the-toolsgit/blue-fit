@@ -153,7 +153,6 @@ export function TodayScreen() {
           <section className="sig-tile" aria-label="Workout">
             <div className="sig-eyebrow-row">
               <span className="sig-eyebrow">{wd === todayWd ? "TODAY · " : ""}{LONG[wd].slice(0, 3).toUpperCase()}</span>
-              <span className="sig-line" aria-hidden="true" />
             </div>
             <div className="sig-head">
               <div className="sig-figure">
@@ -171,7 +170,6 @@ export function TodayScreen() {
               <div className="sig-stat"><b>{two(sets)}</b><span>Sets</span></div>
               <div className="sig-stat paper"><b>{slotsMinutes(slots)}</b><span>~Min</span></div>
             </div>
-            <span className="sig-rule-h" aria-hidden="true" />
           </section>
 
           <section className="sig-list" aria-label="Exercises">
