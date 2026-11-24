@@ -1,3 +1,4 @@
+import type { BodyScan } from "./body/types";
 // Core data types. Framework-free: no DOM, no React. Mirrors docs/APP_SPEC.md §Data model.
 
 import muscleDb from "./seed/muscles.json";
@@ -262,6 +263,11 @@ export interface Settings {
   deloadDismissedAt?: string | null;
   /** Week streak freezes (inclusive local dates; end null = still frozen). A frozen week holds the streak. */
   streakFreezes?: StreakFreeze[];
+  /** Body scan (Nov 24 2026): asked once on the first scan, editable in Settings. null = not set yet. */
+  heightCm?: number | null;
+  sex?: "male" | "female" | null;
+  /** Unit for body measurements (weights stay lb) */
+  lengthUnit?: "in" | "cm";
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -294,4 +300,6 @@ export interface AppData {
   targets: VolumeTarget[];
   settings: Settings;
   jefitAliases: JefitAlias[];
+  /** Body scans and manual body measurements (docs/plans/body-scan.md) */
+  bodyScans: BodyScan[];
 }

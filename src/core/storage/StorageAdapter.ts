@@ -1,7 +1,8 @@
 // Storage abstraction. Screens talk only to this interface, so IndexedDB can be replaced
 // by a cloud database (e.g. Supabase) later. Keys: exercises.id, routines.id, sessions.id,
-// targets.group, jefitAliases.jefitName. Settings and meta are single key/value records.
+// targets.group, jefitAliases.jefitName, bodyScans.id. Settings and meta are single key/value records.
 import type { AppData, Exercise, JefitAlias, Routine, Session, Settings, VolumeTarget } from "../types";
+import type { BodyScan } from "../body/types";
 
 export interface Tables {
   exercises: Exercise;
@@ -9,10 +10,11 @@ export interface Tables {
   sessions: Session;
   targets: VolumeTarget;
   jefitAliases: JefitAlias;
+  bodyScans: BodyScan;
 }
 export type TableName = keyof Tables;
 export const TABLE_KEYS: { [T in TableName]: keyof Tables[T] } = {
-  exercises: "id", routines: "id", sessions: "id", targets: "group", jefitAliases: "jefitName",
+  exercises: "id", routines: "id", sessions: "id", targets: "group", jefitAliases: "jefitName", bodyScans: "id",
 };
 
 export interface StorageAdapter {

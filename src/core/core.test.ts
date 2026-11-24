@@ -351,6 +351,26 @@ describe("backup export / import", () => {
     delete old.data.settings.profile;
     expect(parseBackup(JSON.stringify(old)).ok).toBe(true);
   });
+  it("body scans (format 2): round-trip; a format-1 backup imports with none; a newer format is refused", () => {
+    const d = buildSeed();
+    // made-up body
+    d.settings = { ...d.settings, heightCm: 180, sex: "male", lengthUnit: "cm" };
+    d.bodyScans = [{ id: "b1", date: "2026-11-24T08:00", source: "manual", scannerVersion: "manual", measureVersion: 1, heightCm: 180, weightLb: 200, sex: "male",
+      measurements: { chest: 110, waistLower: 95, neck: 41 }, confidence: { chest: 1, waistLower: 1, neck: 1 }, bodyFatPct: 20.1, waistToHeight: 0.528 }];
+    const r = parseBackup(JSON.stringify(buildBackup(d, new Date())));
+    expect(r.ok && r.backup.schemaVersion).toBe(2);
+    expect(r.ok && r.backup.data.bodyScans).toEqual(d.bodyScans);
+    expect(r.ok && r.backup.data.settings).toMatchObject({ heightCm: 180, sex: "male", lengthUnit: "cm" });
+    const v1 = JSON.parse(JSON.stringify(buildBackup(buildSeed(), new Date())));
+    v1.schemaVersion = 1;
+    delete v1.data.bodyScans;
+    const r1 = parseBackup(JSON.stringify(v1));
+    expect(r1.ok && r1.backup.data.bodyScans).toEqual([]);
+    expect(parseBackup(JSON.stringify({ ...v1, schemaVersion: 3 }))).toMatchObject({ ok: false });
+    const bad = JSON.parse(JSON.stringify(buildBackup(d, new Date())));
+    bad.data.bodyScans[0].measurements.chest = "big";
+    expect(parseBackup(JSON.stringify(bad))).toMatchObject({ ok: false });
+  });
   it("refuses bad files with a clear message", () => {
     expect(parseBackup("nope")).toEqual({ ok: false, error: "This file isn't valid JSON." });
     expect(parseBackup('{"app":"other"}')).toMatchObject({ ok: false, error: "This isn't a Blue Fit backup file." });

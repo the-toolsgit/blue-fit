@@ -56,7 +56,7 @@ export const useStore = () => {
 };
 
 const adapter: StorageAdapter = new IdbAdapter();
-const EMPTY: AppData = { exercises: [], routines: [], sessions: [], targets: [], jefitAliases: [], settings: DEFAULT_SETTINGS };
+const EMPTY: AppData = { exercises: [], routines: [], sessions: [], targets: [], jefitAliases: [], bodyScans: [], settings: DEFAULT_SETTINGS };
 // The seed (plan + exercise library) is only needed on first launch and reset, so it loads on demand.
 export const loadSeed = async () => (await import("../core/seed")).buildSeed();
 // The exercise database (built-in, ~425 exercises) loads with storage; built once.

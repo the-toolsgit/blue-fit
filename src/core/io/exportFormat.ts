@@ -1,9 +1,11 @@
 // Versioned JSON backup format. Validates strictly; refuses bad data with a clear message.
 import { z } from "zod";
 import { ACCENTS, type AppData } from "../types";
+import { AXIS_KEYS, BODY_PARTS, LEVEL_KEYS, LIMB_PARTS } from "../body/types";
 
 export const APP_ID = "blue-fit";
-export const SCHEMA_VERSION = 1;
+/** 2 (Nov 24 2026): body scans. An older app refuses a version-2 backup instead of silently dropping scans. */
+export const SCHEMA_VERSION = 2;
 
 const group = z.enum(["back", "biceps", "triceps", "sideDelts", "rearDelts", "traps", "frontDelts", "chest", "quads", "hamstrings", "adductors", "calves", "glutes", "forearms", "abs", "neck"]);
 const str = z.string();
@@ -63,13 +65,37 @@ const settingsSchema = z.object({
   theme: z.enum(["system", "light", "dark"]), accent: z.enum(ACCENTS).catch("blue"), look: z.enum(["neon", "gray"]).optional().catch(undefined),
   profile: z.object({ goal: z.enum(["growth", "strength", "endurance", "maintenance"]), phase: z.enum(["cutting", "maintaining", "bulking"]),
     age: z.number().min(10).max(100).nullable(), yearsTraining: z.number().min(0).max(80).nullable(), sleepHours: z.number().min(0).max(16).nullable() }).nullable().optional(), weekStartDay: z.number().int().min(0).max(6).default(6),
-  deload: z.object({ start: str, end: str }).nullable().optional(), deloadDismissedAt: str.nullable().optional(), streakFreezes: z.array(z.object({ start: str, end: str.nullable() })).optional(), plates: z.array(z.object({ weight: z.number().positive(), pairs: z.number().int().min(0).max(50) })),
+  deload: z.object({ start: str, end: str }).nullable().optional(), deloadDismissedAt: str.nullable().optional(), streakFreezes: z.array(z.object({ start: str, end: str.nullable() })).optional(),
+  heightCm: z.number().min(50).max(260).nullable().optional(), sex: z.enum(["male", "female"]).nullable().optional(), lengthUnit: z.enum(["in", "cm"]).optional(), plates: z.array(z.object({ weight: z.number().positive(), pairs: z.number().int().min(0).max(50) })),
+});
+
+const num = z.number().finite();
+const polygon = z.array(z.tuple([num, num]));
+const section = z.object({ tCm: num, polygon });
+const partRecord = z.partialRecord(z.enum(BODY_PARTS), num);
+export const bodyGeometrySchema = z.object({
+  torsoSlices: z.array(z.object({ yCm: num, polygon })),
+  limbSections: z.array(z.object({ part: z.enum(LIMB_PARTS), sections: z.array(section) })),
+  neckSections: z.array(section),
+  levels: z.record(z.enum(LEVEL_KEYS), num),
+  axes: z.record(z.enum(AXIS_KEYS), z.tuple([num, num, num])),
+  shape: z.object({ model: z.literal("MHR"), version: str, body: z.array(num), params: z.array(num), scale: num }).optional(),
+  viewQuality: z.array(num), scannerId: str, scannerVersion: str,
+});
+export const bodyScanSchema = z.object({
+  id: str.min(1), date: str.regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/, "date must be YYYY-MM-DDTHH:mm"),
+  source: z.enum(["web-camera", "native-camera", "manual"]), scannerVersion: str, measureVersion: z.number().int().min(0),
+  heightCm: z.number().min(50).max(260), weightLb: z.number().min(20).max(1000).optional(), sex: z.enum(["male", "female"]),
+  geometry: bodyGeometrySchema.optional(),
+  measurements: partRecord, bodyFatPct: num.optional(), waistToHeight: num.optional(),
+  confidence: z.partialRecord(z.enum(BODY_PARTS), z.number().min(0).max(1)),
 });
 
 export const appDataSchema = z.object({
   exercises: z.array(exerciseSchema), routines: z.array(routineSchema), sessions: z.array(sessionSchema),
   targets: z.array(targetSchema), settings: settingsSchema,
   jefitAliases: z.array(z.object({ jefitName: str.min(1), exerciseId: str.nullable() })),
+  bodyScans: z.array(bodyScanSchema).default([]),
 });
 
 export const backupSchema = z.object({ app: z.literal(APP_ID), schemaVersion: z.number().int(), exportedAt: str, data: appDataSchema });
@@ -101,9 +127,13 @@ export function parseBackup(text: string): ParseResult {
   return { ok: true, backup: r.data, counts: { sessions: d.sessions.length, exercises: d.exercises.length, routines: d.routines.length } };
 }
 
-/** Upgrade older backup formats to the current one. Version 1 is the first format. */
+/** Upgrade older backup formats to the current one. Version 1 is the first format; 2 added body scans
+ *  (a version-1 backup simply has none). */
 function migrate(raw: Record<string, unknown>): Record<string, unknown> {
-  return stripRemovedGroups(raw);
+  const r = stripRemovedGroups(raw);
+  const d = r.data as Record<string, unknown> | undefined;
+  if (d && typeof d === "object" && !Array.isArray(d.bodyScans)) return { ...r, data: { ...d, bodyScans: [] } };
+  return r;
 }
 
 /** Muscle groups the app no longer has (rotator cuff, removed Nov 18 2026): dropped from exercises and targets of

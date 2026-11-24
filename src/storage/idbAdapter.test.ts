@@ -25,6 +25,8 @@ describe("IdbAdapter", () => {
     expect((await db.all("sessions"))[0].entries[0].sets[0].weight).toBe(90);
     expect((await db.getSettings()).restDefaultSec).toBe(90);
     expect(await db.getMeta("migrations")).toEqual(["x"]);
+    // the upgrade added the body scans store (Nov 24 2026)
+    expect(await db.all("bodyScans")).toEqual([]);
   });
   it("seeds a new database once, writes through, replaces atomically", async () => {
     const db = new IdbAdapter("new-" + Math.random());
@@ -44,5 +46,11 @@ describe("IdbAdapter", () => {
     expect(await db.all("sessions")).toHaveLength(0);
     expect(await db.all("exercises")).toHaveLength(35);
     expect(await db.getMeta("restTimer")).toBeUndefined();
+    // body scans: stored, exported, cleared by Reset (replaceAll)
+    const scan = { id: "b1", date: "2026-11-24T08:00", source: "manual" as const, scannerVersion: "manual", measureVersion: 1, heightCm: 175, sex: "female" as const, measurements: { hips: 100 }, confidence: { hips: 1 } };
+    await db.put("bodyScans", scan);
+    expect((await db.exportAll()).bodyScans).toEqual([scan]);
+    await db.replaceAll({ ...(await db.exportAll()), bodyScans: [] });
+    expect(await db.all("bodyScans")).toEqual([]);
   });
 });

@@ -29,5 +29,6 @@ export function buildSeed(): AppData {
     targets: structuredClone(targets) as VolumeTarget[],
     settings: structuredClone(DEFAULT_SETTINGS),
     jefitAliases: ex.flatMap((e) => e.aliases.map((a) => ({ jefitName: a, exerciseId: e.id }))),
+    bodyScans: [],
   };
 }

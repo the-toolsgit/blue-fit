@@ -263,16 +263,18 @@ Exactly one routine has `isCurrent = true`. Seed: "Leo v3.1" (Sat Back & Biceps,
 At most one session is `active`. Duration = finishedAt − startedAt (minutes, rounded).
 
 ### 4.6 Settings
-`{ units: "lb", restDefaultSec: 120, autoStartRest: true, sound: true, keepAwake: true, deloadSuggestions: true, progressionHints: true (backups without them import as on), theme: system | light | dark (no longer used: kept for old backups), look?: neon | gray (no longer used), profile?: { goal: growth | strength | endurance | maintenance, phase: cutting | maintaining | bulking, age, yearsTraining, sleepHours (numbers may be null while filling in) } | null, accent: blue | pink | orange | brown (default blue; a missing accent or a saved or imported green becomes blue), weekStartDay: 0–6 (0 = Sunday; default 6 = Saturday; backups without it import as 1 = Monday), plates: [{weight, pairs}], deload?: {start, end} | null (current or last deload week, inclusive dates), deloadDismissedAt?: date | null ("Not now") }`. Default plates (pairs): 45×8, 35×2, 25×4, 10×4, 5×4, 2.5×2.
+`{ units: "lb", restDefaultSec: 120, autoStartRest: true, sound: true, keepAwake: true, deloadSuggestions: true, progressionHints: true (backups without them import as on), theme: system | light | dark (no longer used: kept for old backups), look?: neon | gray (no longer used), profile?: { goal: growth | strength | endurance | maintenance, phase: cutting | maintaining | bulking, age, yearsTraining, sleepHours (numbers may be null while filling in) } | null, accent: blue | pink | orange | brown (default blue; a missing accent or a saved or imported green becomes blue), weekStartDay: 0–6 (0 = Sunday; default 6 = Saturday; backups without it import as 1 = Monday), plates: [{weight, pairs}], deload?: {start, end} | null (current or last deload week, inclusive dates), deloadDismissedAt?: date | null ("Not now"), heightCm?: number | null and sex?: male | female | null (body scan: asked once on the first scan, editable in Settings; null = not set), lengthUnit?: in | cm (body measurements; default in) }`. Default plates (pairs): 45×8, 35×2, 25×4, 10×4, 5×4, 2.5×2.
 
 ### 4.7 Other records
 - `JefitAlias { jefitName, exerciseId | null }` (null = skip). Seeded from every exercise's aliases.
 - `RestTimer { endsAt (epoch ms), durationSec, sessionId, entryId }`: stored so it survives navigation and restarts.
 - Personal records are **derived**, never stored (§5.4).
+- `BodyScan` (Nov 24 2026, body scan; plan: docs/plans/body-scan.md) `{ id, date: "YYYY-MM-DDTHH:mm" local, source: web-camera | native-camera | manual, scannerVersion, measureVersion, heightCm, weightLb?, sex, geometry?, measurements: {neck?, chest?, waistUpper?, waistLower?, hips?, upperArmL/R?, forearmL/R?, thighL/R?, calfL/R?} (cm), bodyFatPct?, waistToHeight?, confidence: {part: 0–1} }`. Manual entries have no geometry and confidence 1. `geometry` (scanner-neutral, what every scanner returns): `torsoSlices` [{yCm, polygon [[x,z] mm]}] every 1 cm (torso surface only, arms and hands left out), `limbSections` [{part, sections [{tCm, polygon}]}] perpendicular to each bone every 1 cm from the proximal joint, `neckSections` along the neck axis, `levels` {neckBase, neckTop, armpit, lowestRib, navel, hipCrest, buttocksMax, crotch, kneeMid} (cm), `axes` {shoulderL/R, elbowL/R, wristL/R, hipJointL/R, kneeL/R, ankleL/R} ([x,y,z] cm), `shape?` {model "MHR", version, body[20], params[204], scale}, `viewQuality` [12 × 0–1], scannerId, scannerVersion.
+- **Measurement rules** (`core/body/measure.ts`, MEASURE_VERSION 1; the same for every scanner): every tape = perimeter of the convex hull of the cut (a tape bridges dents). Chest: torso slice at `armpit`. Upper waist: narrowest torso slice between `lowestRib` and `hipCrest`. Lower waist: slice at `navel`. Hips: widest slice between `hipCrest` and `crotch`. Neck: narrowest neck cut from 1 cm above the base to 60% of the neck. Upper arm: cut at mid humerus (50% shoulder→elbow). Forearm: widest cut at 10–60% elbow→wrist. Thigh: widest at 10–35% hip joint→knee (just below the gluteal fold). Calf: widest at 15–60% knee→ankle. Values to 0.1 cm. When MEASURE_VERSION changes, scans with geometry are measured again, so trends stay on one method.
+- **Body fat** (U.S. Navy / Hodgdon–Beckett, inches, log10): men %BF = 86.010·log10(waist − neck) − 70.041·log10(height) + 36.76 with waist = lower waist (navel); women %BF = 163.205·log10(waist + hips − neck) − 97.684·log10(height) − 78.387 with waist = upper (narrowest) waist. An estimate (about ±3–4%). Waist-to-height = lower waist (else upper) ÷ height.
 
 ### 4.8 Later phases (designed, not built)
 - **Deload notification (native app):** the deload suggestion (§5.16) becomes a notification. Previously planned as: the app suggests a deload week (whichever comes first: 6 weeks since the last deload or since the user started; or a 4-week stall of half or more of the plan's exercises, §5.16) and the user decides: "Deload this week" or "Not now". Web version: a banner on Today (web apps on iPhone can't notify without a server). **Native app: turn it into a notification.**
-- `BodyEntry { id, date, weightLb?, bodyFatPct?, measurements: {chest?, hips?, upperWaist?, lowerWaist?, upperArmR?, upperArmL?, forearmR?, forearmL?, thighR?, thighL?} (inches), photoIds?: string[], source: manual | scan }`, with a bodyweight band setting (min/max).
 - Routine versions and deload weeks: `Routine.basedOn?`, `Session.routineId` keeps history tied to the version used.
 
 ## 5. Business rules
@@ -545,18 +547,19 @@ The splash's end pose (front double-biceps, both arms up) drawn by the figure en
 `init(seed)`, `all(table)`, `put(table, row)`, `putMany(table, rows)`, `remove(table, key)`, `getSettings()`, `saveSettings(s)`, `getMeta(key)`, `setMeta(key, value)`, `exportAll()`, `replaceAll(data)` (one transaction). Tables and keys: exercises.id, routines.id, sessions.id, targets.group, jefitAliases.jefitName. Screens never touch the database directly.
 
 ### 7.1.1 Web implementation
-Raw IndexedDB (no library), database `blue-fit`, IndexedDB version 10, object stores exercises (keyPath id, index name), routines (id), sessions (id, indexes date, status, importKey), targets (group), jefitAliases (jefitName), kv (key; holds `settings` and `meta:*`). Versions up to Phase 3 wrote the same database through the Dexie library (which records schema 1 as version 10); a test proves the current adapter opens that data unchanged.
+Raw IndexedDB (no library), database `blue-fit`, IndexedDB version 11 (10 → 11 on Nov 24 2026 added bodyScans), object stores exercises (keyPath id, index name), routines (id), sessions (id, indexes date, status, importKey), targets (group), jefitAliases (jefitName), bodyScans (id), kv (key; holds `settings` and `meta:*`). Versions up to Phase 3 wrote the same database through the Dexie library (which records schema 1 as version 10); a test proves the current adapter opens that data unchanged.
 
 Meta keys: `restTimer`, `migrations` (done migration ids), `lastBackupAt`, `backupSnoozedUntil`.
 
 ### 7.2 Write-through
 The UI updates its in-memory snapshot immediately, then queues the write; writes run in order. A failed write shows "Couldn't save" with advice to export a backup. The browser is asked for persistent storage.
 
-### 7.3 Backup JSON (version 1)
+### 7.3 Backup JSON (version 2)
 ```json
-{ "app": "blue-fit", "schemaVersion": 1, "exportedAt": "2026-11-14T18:00:00.000Z",
-  "data": { "exercises": [...], "routines": [...], "sessions": [...], "targets": [...], "settings": {...}, "jefitAliases": [...] } }
+{ "app": "blue-fit", "schemaVersion": 2, "exportedAt": "2026-11-24T18:00:00.000Z",
+  "data": { "exercises": [...], "routines": [...], "sessions": [...], "targets": [...], "settings": {...}, "jefitAliases": [...], "bodyScans": [...] } }
 ```
+Version 2 (Nov 24 2026) added `bodyScans`; a version-1 backup imports with none, and an app that only knows version 1 refuses a version-2 file instead of silently dropping scans.
 Import checks, in order: valid JSON ("This file isn't valid JSON."); `app` = "blue-fit" ("This isn't a Blue Fit backup file."); version not newer than supported ("…from a newer version of Blue Fit…"); full schema (first error with its path); every session and slot references a known exercise; at most one current routine. Then the user confirms and all data is replaced. The backup keeps everything saved, including each plan's own targets and the auto-adjust suggestions on workouts (Nov 22 2026; they were dropped before). Every migration then runs on the imported data (and on the seed after Reset everything), so a backup from an older version comes up to date; each one changes nothing on current data. The weekday move of Nov 16 never re-runs on an import (`IMPORT_SKIP`). A failed import or reset shows an error toast and changes nothing.
 
 ### 7.4 Swapping in a cloud database later

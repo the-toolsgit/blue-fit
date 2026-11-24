@@ -24,13 +24,18 @@ class BlueFitDB extends Dexie {
   }
 }
 
-const TABLES: TableName[] = ["exercises", "routines", "sessions", "targets", "jefitAliases"];
+// The old (Dexie) database never had bodyScans.
+type OldTable = Exclude<TableName, "bodyScans">;
+const TABLES: OldTable[] = ["exercises", "routines", "sessions", "targets", "jefitAliases"];
 
 export class DexieAdapter implements StorageAdapter {
   private db: BlueFitDB;
   constructor(name = "blue-fit") { this.db = new BlueFitDB(name); }
 
-  private table<T extends TableName>(t: T) { return this.db[t] as unknown as Table<Tables[T], string>; }
+  private table<T extends TableName>(t: T) {
+    if (t === "bodyScans") throw new Error("The old database has no body scans");
+    return this.db[t as OldTable] as unknown as Table<Tables[T], string>;
+  }
 
   async init(seed: () => AppData | Promise<AppData>) {
     await this.db.open();
@@ -55,7 +60,7 @@ export class DexieAdapter implements StorageAdapter {
   async exportAll(): Promise<AppData> {
     return {
       exercises: await this.all("exercises"), routines: await this.all("routines"), sessions: await this.all("sessions"),
-      targets: await this.all("targets"), jefitAliases: await this.all("jefitAliases"), settings: await this.getSettings(),
+      targets: await this.all("targets"), jefitAliases: await this.all("jefitAliases"), bodyScans: [], settings: await this.getSettings(),
     };
   }
   async replaceAll(d: AppData) {
