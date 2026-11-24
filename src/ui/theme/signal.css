@@ -64,11 +64,10 @@ html:root[data-look="signal"][data-look] {
 .sig-dots { flex: 1; min-width: 0; height: 12px; background-image: radial-gradient(circle, #000 0.9px, transparent 1.3px); background-size: 4px 4px; }
 .sig-title { margin: 0; font: 800 70px/0.86 var(--display); letter-spacing: -0.01em; text-transform: uppercase; color: #000; overflow-wrap: anywhere; }
 .sig-head .sig-figure { grid-column: 2; grid-row: 1 / span 3; }
-.sig-figure { width: 132px; height: 132px; flex: none; border-radius: 50%; background: #000; display: grid; place-items: center; overflow: hidden; }
-/* Black circle: the man in off-white, equipment and floor in light grey */
-.sig-figure .fig .mn polyline, .sig-figure .fig .mn circle { stroke: var(--sig-paper); }
-.sig-figure .fig .lt line, .sig-figure .fig .lt polyline, .sig-figure .fig .lt circle { stroke: var(--muted); stroke-opacity: 1; }
-.sig-figure .fig .floor { stroke: var(--muted); opacity: 1; }
+.sig-figure { width: 132px; height: 132px; flex: none; border-radius: 50%; background: var(--sig-paper); display: grid; place-items: center; overflow: hidden; }
+.sig-figure .fig .mn polyline, .sig-figure .fig .mn circle { stroke: #000; }
+.sig-figure .fig .lt line, .sig-figure .fig .lt polyline, .sig-figure .fig .lt circle { stroke: #000; stroke-opacity: 0.35; }
+.sig-figure .fig .floor { stroke: var(--sig-orange); opacity: 1; }
 .sig-caption { font: 400 12px/1.2 var(--mono); text-align: right; margin-top: -6px; min-height: 15px; text-transform: uppercase; }
 .sig-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .sig-stat { background: #000; color: var(--sig-paper); border-radius: 22px; padding: 12px 14px; display: grid; gap: 4px; }
