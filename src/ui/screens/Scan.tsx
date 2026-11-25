@@ -7,15 +7,16 @@ import { MEASURE_VERSION } from "../../core/body/measure";
 import { fromUnit, toUnit } from "../../core/body/trends";
 import { PART_NAMES, type BodyScan, type Sex } from "../../core/body/types";
 import { fmtNum, uid } from "../../core/util";
-import { openCamera, ScanWorker, type Fitted } from "../../scan/web/client";
+import { openCamera, ScanWorker, type Fitted, type FitView } from "../../scan/web/client";
+import { FIT_H, FIT_W } from "../../scan/web/constants";
 import { SCANNER_VERSION } from "../../scan/web/constants";
-import { TurnTracker, bodyAngle, framing, hourCue, pitchFromBeta, poseCheck, roomCheck, tiltFromGravity, tiltOk, type Framing, type RoomStats } from "../../scan/web/guide";
+import { TurnTracker, bodyAngle, framing, hourCue, motion, pitchFromBeta, poseCheck, roomCheck, tiltFromGravity, tiltOk, type Framing, type RoomStats } from "../../scan/web/guide";
 import { Seg, Stepper } from "../components/Controls";
 import { back, go } from "../router";
 import { useStore } from "../store";
 
 /** What the live step saw (for the scan report; no body values). */
-interface LiveStats { betaMean: number | null; captures: number; retries: number; frames: number; seconds: number; direction: number; tooFar: number }
+interface LiveStats { betaMean: number | null; captures: number; retries: number; frames: number; seconds: number; direction: number; tooFar: number; stillLimit: number }
 type Step = "details" | "sound" | "tutorial" | "placement" | "angle" | "live" | "processing" | "result" | "failed";
 const TUTORIAL_KEY = "bf-scan-tutorial-seen";
 const seen = () => { try { return localStorage.getItem(TUTORIAL_KEY) === "1"; } catch { return false; } };
@@ -41,13 +42,25 @@ function shutter() {
   n.connect(g).connect(audio.destination);
   n.start();
 }
-let lastSaid = "", lastSaidAt = 0;
+// One voice line at a time, never cut off: a new line waits for the current one (only the latest waiting line is
+// kept), the same line isn't repeated within 6 s, and a short pause separates lines.
+let lastSaid = "", lastSaidAt = 0, speaking = false, pending: string | null = null;
 function say(text: string, force = false) {
   const now = Date.now();
-  if (!force && text === lastSaid && now - lastSaidAt < 4500) return;
-  lastSaid = text; lastSaidAt = now;
-  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.rate = 1.02; speechSynthesis.speak(u); } catch { /* no voice */ }
+  if (!force && text === lastSaid && now - lastSaidAt < 6000) return;
+  if (speaking) { if (text !== lastSaid) pending = text; return; }
+  lastSaid = text; lastSaidAt = now; pending = null;
+  try {
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1.02;
+    speaking = true;
+    const next = () => { speaking = false; setTimeout(() => { const p = pending; pending = null; if (p) say(p, true); }, 350); };
+    u.onend = next; u.onerror = next;
+    speechSynthesis.speak(u);
+    setTimeout(() => { if (speaking && Date.now() - now > 6000) next(); }, 6500); // a lost onend can't block the voice
+  } catch { speaking = false; }
 }
+function hush() { pending = null; speaking = false; lastSaid = ""; try { speechSynthesis.cancel(); } catch { /* */ } }
 
 export function ScanScreen() {
   const { settings, saveSettings, saveBodyScan, bodyScans, toast } = useStore();
@@ -64,6 +77,7 @@ export function ScanScreen() {
   const [result, setResult] = useState<Fitted | null>(null);
   const [failWhy, setFailWhy] = useState("");
   const [report, setReport] = useState("");
+  const [views, setViews] = useState<FitView[]>([]);
   const boot = useRef<{ ms: number; delegate: string } | null>(null);
   const heightCm = height != null ? (settings.heightCm != null && toUnit(settings.heightCm, unit) === height ? settings.heightCm : Math.round(fromUnit(height, unit) * 10) / 10) : null;
 
@@ -72,7 +86,7 @@ export function ScanScreen() {
     const w = new ScanWorker();
     worker.current = w;
     ready.current = w.init().then((r) => { boot.current = r; }).catch((e) => { setLoadErr(e.message); throw e; });
-    return () => { w.close(); try { speechSynthesis.cancel(); } catch { /* */ } };
+    return () => { w.close(); hush(); };
   }, []);
 
   const close = () => back("progress");
@@ -81,13 +95,15 @@ export function ScanScreen() {
   const finish = useCallback(async (live: LiveStats) => {
     setStep("processing");
     const lines = [`Blue Fit ${__APP_VERSION__} scan report`, `models ${boot.current?.ms ?? "?"} ms (${boot.current?.delegate ?? "?"})`,
-      `live: ${live.captures} photos, ${live.retries} retries, ${live.frames} frames in ${live.seconds} s (${live.seconds ? Math.round(live.frames / live.seconds) : 0} fps), turn ${live.direction}, too far ×${live.tooFar}, beta ${live.betaMean == null ? "none" : live.betaMean.toFixed(1)}`];
+      `live: ${live.captures} photos, ${live.retries} retries, ${live.frames} frames in ${live.seconds} s (${live.seconds ? Math.round(live.frames / live.seconds) : 0} fps), turn ${live.direction}, too far ×${live.tooFar}, still < ${live.stillLimit.toFixed(4)}, beta ${live.betaMean == null ? "none" : live.betaMean.toFixed(1)}`];
     try {
       const r = await worker.current!.fit(heightCm!, sex, pitchFromBeta(live.betaMean));
       const q = r.report;
       lines.push(`fit ${r.ok ? "ok" : "failed: " + (r.reason ?? "")} in ${r.ms} ms, ${q.iterations} iterations`,
         `overlap ${q.iou.join(" ")}`, `edge px ${q.rmsPx.join(" ")}`, `turn ° ${q.yawDeg.join(" ")}`,
-        `pitch ${q.pitchDeg}° (sensor ${q.pitchGuessDeg}°), focal ${q.focal}, phone ${q.camH} cm`);
+        `pitch ${q.pitchDeg}° (sensor ${q.pitchGuessDeg}°), focal ${q.focal}, phone ${q.camH} cm, shape max ${q.shapeMax}`,
+        `masks ${q.masks.join(" | ")}`);
+      setViews(r.views);
       setReport(lines.join("\n"));
       if (!r.ok) { setFailWhy(r.reason ?? ""); setStep("failed"); return; }
       setResult(r);
@@ -179,6 +195,7 @@ export function ScanScreen() {
           <p className="muted">{failWhy ? `The scan didn't come out clean (${failWhy}).` : "The scan didn't come out clean."} Check the light, a plain wall behind you, and keep the same pose while turning.</p>
           <button className="btn btn-primary btn-block" onClick={() => location.reload()}>Scan again</button>
           {report && <CopyReport text={report} />}
+          {views.length > 0 && <Outlines views={views} />}
           <button className="btn btn-quiet btn-block" onClick={close}>Close</button>
         </section>
       )}
@@ -194,6 +211,7 @@ export function ScanScreen() {
           </div>
           <button className="btn btn-primary btn-block" style={{ minHeight: 56 }} onClick={save}>Save scan</button>
           {report && <CopyReport text={report} />}
+          {views.length > 0 && <Outlines views={views} />}
           <button className="btn btn-quiet btn-block" onClick={close}>Discard</button>
         </section>
       )}
@@ -278,7 +296,7 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
     const betas: number[] = [];
     const onOrient = (e: DeviceOrientationEvent) => { if (e.beta != null) beta = e.beta; };
     addEventListener("deviceorientation", onOrient);
-    const stats: LiveStats = { betaMean: null, captures: 0, retries: 0, frames: 0, seconds: 0, direction: 0, tooFar: 0 };
+    const stats: LiveStats = { betaMean: null, captures: 0, retries: 0, frames: 0, seconds: 0, direction: 0, tooFar: 0, stillLimit: 0 };
     const t0 = performance.now();
     const lockWake = async () => { try { wake = await (navigator as unknown as { wakeLock: { request(t: string): Promise<{ release(): Promise<void> }> } }).wakeLock.request("screen"); } catch { /* not supported */ } };
     const onVis = () => { if (document.visibilityState === "hidden" && alive) { alive = false; onFail("the app went to the background"); } else void lockWake(); };
@@ -291,8 +309,12 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
         setCue("Loading the scanner…");
         await ready.current;
         await worker.current!.reset();
-        const tracker = new TurnTracker(700, 12);
+        const tracker = new TurnTracker(700);
         let room: RoomStats | null = null, roomAt = 0, goodSince: number | null = null, started = false, lastHour = -1;
+        let prevLm: Parameters<typeof motion>[0] = null;
+        const still: number[] = [];
+        // a problem must last before it's shown or said (a moment of a bad pose reading isn't a problem)
+        let problemText: string | null = null, problemSince = 0;
         while (alive) {
           const v = video.current!;
           const p = await worker.current!.pose(v);
@@ -317,19 +339,29 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
             if (!pc.ok) problem = pc.say!;
             else if (room) { const rc = roomCheck(room); if (!rc.ok) problem = rc.say!; }
           }
+          if (problem !== problemText) { problemText = problem; problemSince = now; }
+          const lasting = problem != null && now - problemSince > (started ? 1500 : 1000);
           if (problem) {
             goodSince = null;
-            setCue(problem); say(problem);
-            await new Promise((r) => setTimeout(r, 80));
+            if (lasting) { setCue(problem); say(problem); }
+            prevLm = lm;
+            await new Promise((r) => setTimeout(r, 60));
             continue;
           }
           if (!started) {
-            goodSince ??= now;
-            setCue("Hold still"); say("Great. Hold still.");
+            if (goodSince == null) { goodSince = now; still.length = 0; setCue("Hold still"); say("Great. Hold still."); }
+            still.push(motion(prevLm, lm));
+            prevLm = lm;
             if (now - goodSince < 1500) continue;
+            // the pose tracker's jitter while this user stands still sets what "still" means for the turn
+            const base = still.slice(1).sort((a, b) => a - b)[Math.floor((still.length - 1) / 2)] ?? 0.002;
+            tracker.stillLimit = Math.min(0.02, Math.max(0.004, base * 2.5));
+            stats.stillLimit = tracker.stillLimit;
             started = true;
           }
-          const c = tracker.update(bodyAngle(p.world ?? lm!), now);
+          const moved = motion(prevLm, lm);
+          prevLm = lm;
+          const c = tracker.update(bodyAngle(p.world ?? lm!), now, moved);
           if (c.kind === "capture") {
             shutter();
             const ok = await worker.current!.capture(v, c.hour);
@@ -339,9 +371,11 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
             setHour(c.hour);
             if (c.hour >= 11) { setCue("Done"); alive = false; break; }
           } else if (c.kind === "tooFar") { stats.tooFar++; setCue("You turned too much. Turn back a little"); say("You turned too much. Turn back a little"); }
-          else if (c.kind === "turn" && c.hour !== lastHour) { lastHour = c.hour; setCue(hourCue(c.hour)); say(hourCue(c.hour), true); }
-          else if (c.kind === "turn") setCue(hourCue(c.hour));
-          else if (c.kind === "hold") setCue("Hold still");
+          else if (c.kind === "turn" || c.kind === "hold") {
+            if (c.hour === 0) setCue("Hold still");
+            else if (c.hour !== lastHour) { lastHour = c.hour; setCue(hourCue(c.hour)); say(hourCue(c.hour)); }
+            else setCue(hourCue(c.hour));
+          }
         }
         if (tracker.hour >= 12) {
           stream?.getTracks().forEach((t) => t.stop());
@@ -388,6 +422,35 @@ function CopyReport({ text }: { text: string }) {
       <pre className="scan-report" aria-label="Scan report">{text}</pre>
     </>
   );
+}
+
+/** What the fit saw, per photo: the photo's outline (grey) and the fitted body (blue line). Outlines only, never the
+ *  photos; in memory until this screen closes. */
+function Outlines({ views }: { views: FitView[] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button className="btn btn-ghost btn-block" onClick={() => setOpen(!open)}>{open ? "Hide outlines" : "Show outlines"}</button>
+      {open && <div className="scan-outlines">{views.map((v) => <OutlineCanvas key={v.hour} v={v} />)}</div>}
+    </>
+  );
+}
+function OutlineCanvas({ v }: { v: FitView }) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const c = ref.current?.getContext("2d");
+    if (!c) return;
+    const img = c.createImageData(FIT_W, FIT_H), d = img.data;
+    for (let y = 0; y < FIT_H; y++)
+      for (let x = 0; x < FIT_W; x++) {
+        const i = y * FIT_W + x, k = i * 4;
+        const m = v.model[i], edge = m && (x === 0 || y === 0 || x === FIT_W - 1 || y === FIT_H - 1 || !v.model[i - 1] || !v.model[i + 1] || !v.model[i - FIT_W] || !v.model[i + FIT_W]);
+        const [r, g, b] = edge ? [60, 200, 255] : v.photo[i] ? (m ? [120, 120, 130] : [200, 90, 90]) : m ? [30, 60, 90] : [12, 12, 14];
+        d[k] = r; d[k + 1] = g; d[k + 2] = b; d[k + 3] = 255;
+      }
+    c.putImageData(img, 0, 0);
+  }, [v]);
+  return <figure><canvas ref={ref} width={FIT_W} height={FIT_H} /><figcaption>{v.hour === 0 ? 12 : v.hour} o'clock</figcaption></figure>;
 }
 
 // ── simple line drawings in the app's style ──

@@ -114,6 +114,10 @@ Tests: normal, turning the other way with a 6° tilt and ±10° sloppy turns, bo
 - Tilt: the fit needs the tilt's **sign** (a wrong sign breaks it). Gravity signs differ between iOS and Android, so the app uses DeviceOrientation `beta` (pitch = 90° − beta).
 - Known: one made-up body (seed 7, no damage) reads the upper waist 2.8 cm off; watch it in real scans.
 
+### First real scan (Nov 24 2026, v0.1.249, Leo's iPhone 16 Pro)
+Room, light, framing and pose were good. Problems: the voice talked over itself and reacted to every small move; the tracker's angle reads short at 3 and 9 o'clock, so photos needed the exact turn (20 "too far"); the fit failed (overlap 0.3–0.5, edge 11–20 px, shape coefficients past ±3). The live pose ran at 26 fps, models loaded in 3.3 s (GPU), the fit took 12 s.
+Fixes (v0.1.250): masks read at the mask's own size (the worker assumed the frame's size: the likely cause of the bad outlines), mask size and body share per photo in the report, **Show outlines** on the end screens, a turn rule that needs movement then stillness near the hour (−22° / +40°), stillness measured per user, one voice line at a time, problems must last before they're said.
+
 ### Next
 - First real scan on Leo's iPhone 16 Pro (Copy scan report → paste), then tape check, then step 4 (3D results), step 5 (research note for Leo's OK).
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { MP, TurnTracker, bodyAngle, framing, pitchFromBeta, poseCheck, roomCheck, tiltFromGravity, tiltOk, type Lm } from "./guide";
+import { MP, TurnTracker, motion, bodyAngle, framing, pitchFromBeta, poseCheck, roomCheck, tiltFromGravity, tiltOk, type Lm } from "./guide";
 
 // A made-up standing body in normalized image coords, facing the phone, arms ~20° out.
 function body(scale = 0.8, cx = 0.5): Lm[] {
@@ -52,26 +52,47 @@ describe("scan guidance", () => {
     expect(bodyAngle(w(0, 0.2))).toBeCloseTo(90, 5);
     expect(bodyAngle(w(-0.2, 0))).toBeCloseTo(180, 5);
   });
-  it("turn tracker: captures 12 hours in order, learns the direction, says when you turned too far", () => {
+  it("turn tracker: a photo when the user has turned and stands still near the hour, rough angles ok", () => {
     for (const dir of [1, -1]) {
-      const t = new TurnTracker(300, 12);
+      const t = new TurnTracker(300);
       let now = 0;
       const seen: number[] = [];
-      const go = (angle: number, ms: number) => { for (let k = 0; k < ms; k += 50) { const c = t.update(((dir * angle) % 360 + 360) % 360, (now += 50)); if (c.kind === "capture") seen.push(c.hour); } };
+      const feed = (angle: number, ms: number, moved: number) => {
+        for (let k = 0; k < ms; k += 50) { const c = t.update(((dir * angle) % 360 + 360) % 360, (now += 50), moved); if (c.kind === "capture") seen.push(c.hour); }
+      };
       for (let h = 0; h < 12; h++) {
-        for (let a = (h - 1) * 30; a < h * 30; a += 5) go(Math.max(0, a), 50);
-        if (h === 5) { const c = t.update(((dir * 185) % 360 + 360) % 360, (now += 50)); expect(c.kind).toBe("tooFar"); }
-        go(h * 30, 400);
+        // turning (moving), then standing still; the tracker reads the sides 20° short
+        const read = h === 3 || h === 9 ? h * 30 - 20 : h * 30;
+        for (let a = Math.max(0, (h - 1) * 30); a < read; a += 3) feed(a, 50, 0.02);
+        feed(read, 800, 0);
       }
       expect(seen).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
       expect(t.direction).toBe(dir);
     }
+  });
+  it("turn tracker: no photo while moving, none twice at the same spot, too far when clearly past", () => {
+    const t = new TurnTracker(300);
+    let now = 0, c = t.update(0, 0, 0);
+    const kinds: string[] = [];
+    for (let k = 0; k < 10; k++) kinds.push(t.update(0, (now += 50), 0).kind);
+    expect(kinds).toContain("capture"); // hour 0
+    for (let k = 0; k < 20; k++) c = t.update(0, (now += 50), 0);
+    expect(c.kind).toBe("turn"); // still at 12 o'clock: hasn't turned, no second photo
+    for (let a = 0; a <= 90; a += 3) c = t.update(a, (now += 50), 0.02);
+    expect(c.kind).toBe("turn"); // moving
+    for (let k = 0; k < 20; k++) c = t.update(90, (now += 50), 0);
+    expect(c.kind).toBe("tooFar"); // 90° when 1 o'clock (30°) was asked
   });
   it("tilt from gravity: upright 90°, flat 0°, green 85–95°", () => {
     expect(tiltFromGravity({ y: -9.81, z: 0 })).toBeCloseTo(90);
     expect(tiltFromGravity({ y: 0, z: -9.81 })).toBeCloseTo(0);
     expect(tiltOk(87)).toBe(true);
     expect(tiltOk(80)).toBe(false);
+  });
+  it("motion: 0 when nothing moved, grows with the shift", () => {
+    const a = body(), b = body(0.8, 0.52);
+    expect(motion(a, a)).toBe(0);
+    expect(motion(a, b)).toBeCloseTo(0.02, 5);
   });
   it("pitch from beta: upright 0, screen tipped up 5° → +5°, unknown → 0", () => {
     expect(pitchFromBeta(90)).toBeCloseTo(0);

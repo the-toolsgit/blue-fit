@@ -12,6 +12,8 @@ import type { Sex } from "../../core/body/types";
 import { FitBody, LANDMARK_JOINTS } from "./fit/body";
 import { SilhouetteFit, type Photo } from "./fit/fit";
 import { buildGeometry } from "./fit/geometry";
+import { project } from "./fit/camera";
+import { rasterize } from "./fit/raster";
 import { MP } from "./guide";
 
 import { FIT_H, FIT_W, SCANNER_ID, SCANNER_VERSION } from "./constants";
@@ -29,6 +31,7 @@ let heavy: PoseLandmarker | null = null;
 let seg: ImageSegmenter | null = null;
 let liveDelegate: "GPU" | "CPU" = "GPU";
 const photos: Photo[] = [];
+const maskInfo: string[] = []; // per photo: mask size / frame size, body share (scan report)
 
 const post = (m: unknown, t: Transferable[] = []) => (self as unknown as Worker).postMessage(m, t);
 
@@ -107,8 +110,12 @@ self.onmessage = async (ev: MessageEvent) => {
       const px = c.getImageData(0, 0, w, h).data;
       const res = heavy!.detect(bmp);
       bmp.close();
-      const mask = res.segmentationMasks?.[0]?.getAsFloat32Array();
+      const rm = res.segmentationMasks?.[0];
+      const raw = rm?.getAsFloat32Array();
+      const rw = rm?.width ?? w, rh = rm?.height ?? h;
       const lm = res.landmarks[0];
+      // resample to the frame's pixels when the mask has its own size
+      const mask = raw && (rw !== w || rh !== h) ? Float32Array.from({ length: w * h }, (_, i) => raw[Math.floor(((Math.floor(i / w) + 0.5) * rh) / h) * rw + Math.floor((((i % w) + 0.5) * rw) / w)]) : raw?.slice();
       res.close();
       if (!mask || !lm) { post({ type: "room", id: d.id, stats: null }); return; }
       const hipY = ((lm[MP.hipL].y + lm[MP.hipR].y) / 2) * h;
@@ -135,7 +142,10 @@ self.onmessage = async (ev: MessageEvent) => {
       const w = bmp.width, h = bmp.height;
       const r = heavy!.detect(bmp);
       const lm = r.landmarks[0];
-      const conf = r.segmentationMasks?.[0]?.getAsFloat32Array().slice();
+      // the mask's own size (not assumed to be the frame's)
+      const mk = r.segmentationMasks?.[0];
+      const conf = mk?.getAsFloat32Array().slice();
+      const mw = mk?.width ?? w, mh = mk?.height ?? h;
       r.close();
       const s = seg!.segment(bmp);
       const cat = s.categoryMask?.getAsUint8Array().slice();
@@ -151,11 +161,14 @@ self.onmessage = async (ev: MessageEvent) => {
         for (let y = 0; y < Math.min(FIT_H, neckY); y++)
           for (let x = 0; x < FIT_W; x++) if (cat[Math.floor((y / FIT_H) * ch) * cw + Math.floor((x / FIT_W) * cw)] === 1) keep[y * FIT_W + x] = 0;
       }
-      const mask = toFitMask(conf, w, h, keep);
+      const mask = toFitMask(conf, mw, mh, keep);
       photos[d.hour] = { mask: { w: FIT_W, h: FIT_H, data: mask }, landmarks: toJoints(lm), hour: d.hour };
+      let area = 0;
+      for (let i = 0; i < mask.length; i++) area += mask[i];
+      maskInfo[d.hour] = `${mw}×${mh}/${w}×${h} ${Math.round((area / mask.length) * 1000) / 10}%`;
       post({ type: "captured", id: d.id, ok: true, hour: d.hour });
     } else if (d.type === "reset") {
-      photos.length = 0;
+      photos.length = 0; maskInfo.length = 0;
       post({ type: "reset", id: d.id });
     } else if (d.type === "fit") {
       // free the camera models before the fit (memory)
@@ -171,7 +184,16 @@ self.onmessage = async (ev: MessageEvent) => {
       photos.length = 0;
       const deg = (r: number) => Math.round((r * 180) / Math.PI);
       const report = { iou: res.iou, rmsPx: res.rmsPx, yawDeg: res.views.map((v) => deg(v.yaw)), pitchDeg: Math.round((res.cam.pitch * 1800) / Math.PI) / 10, pitchGuessDeg: Math.round(((d.pitch ?? 0) * 1800) / Math.PI) / 10, focal: Math.round(res.cam.f), camH: Math.round(res.cam.h), iterations: res.iterations };
-      post({ type: "fitted", id: d.id, ok: res.ok, reason: res.reason, ms: res.ms, geometry, measured, report });
+      // what the fit saw, for the on-phone outline check: each photo mask and the fitted body's mask (never saved)
+      const body = fb.evaluate(res.params, d.heightCm);
+      const uv = new Float64Array(m.vertexCount * 2);
+      const views = got.map((ph, i) => {
+        project(body.verts, m.vertexCount, res.views[i], res.cam, uv);
+        return { hour: ph.hour, photo: ph.mask.data, model: rasterize(uv, m.faces, FIT_W, FIT_H).data };
+      });
+      const shapeMax = Math.round(Math.max(...res.params.body.map(Math.abs)) * 10) / 10;
+      photos.length = 0;
+      post({ type: "fitted", id: d.id, ok: res.ok, reason: res.reason, ms: res.ms, geometry, measured, report: { ...report, masks: got.map((p) => maskInfo[p.hour] ?? "?"), shapeMax }, views });
     }
   } catch (e) {
     post({ type: "error", id: d.id, error: (e instanceof Error ? e.message : String(e)).slice(0, 200) });

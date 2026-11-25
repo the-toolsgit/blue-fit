@@ -74,38 +74,65 @@ export function bodyAngle(world: Lm[]): number {
   return (deg + 360) % 360;
 }
 
-export type TurnCue = { kind: "hold" } | { kind: "turn"; hour: number } | { kind: "tooFar"; hour: number } | { kind: "capture"; hour: number } | { kind: "done" };
+export type TurnCue = { kind: "hold"; hour: number } | { kind: "turn"; hour: number } | { kind: "tooFar"; hour: number } | { kind: "capture"; hour: number } | { kind: "done" };
 
-/** Follows the turn through the 12 hours: clockwise only, captures when steady at each hour. */
+/** How much the body moved between two frames (mean 2D shift of shoulders, hips, knees, ankles; share of the frame). */
+export function motion(a: Lm[] | null, b: Lm[] | null): number {
+  if (!a || !b) return 1;
+  const ids = [MP.shoulderL, MP.shoulderR, MP.hipL, MP.hipR, MP.kneeL, MP.kneeR, MP.ankleL, MP.ankleR];
+  let s = 0;
+  for (const i of ids) s += Math.hypot(a[i].x - b[i].x, a[i].y - b[i].y);
+  return s / ids.length;
+}
+
+/**
+ * Follows the turn through the 12 hours (one direction, learned from the first clear move). A photo is taken when
+ * the user has turned since the last one and then stands still, with the estimated turn anywhere near the hour:
+ * the angle from the pose tracker is rough (worst at the sides, 3 and 9 o'clock), and the 3D fit finds each
+ * photo's exact turn anyway (within ±34°). "Too far" only when clearly past the next hour.
+ */
 export class TurnTracker {
   hour = 0; // next hour to capture (0 = facing the phone)
+  /** Body motion per frame below which the user counts as still (set from the user's own stillness at the start). */
+  stillLimit = 0.004;
   private dir: 1 | -1 | 0 = 0;
   private unwrapped = 0;
   private last: number | null = null;
   private steadySince: number | null = null;
-  constructor(private steadyMs = 600, private tol = 12) {}
+  private moveEma = 0;
+  private turnEma = 0;
+  private movedSince = false; // the body moved (turned) since the last photo
+  constructor(private steadyMs = 600, private early = 22, private late = 40) {}
 
-  /** Feed one frame's raw angle (0–360). Returns what to do now. */
-  update(raw: number, now: number): TurnCue {
+  /** Feed one frame's raw angle (0–360) and how much the body moved since the last frame (see `motion`). */
+  update(raw: number, now: number, moved = 0): TurnCue {
     if (this.hour >= 12) return { kind: "done" };
+    let d = 0;
     if (this.last == null) { this.last = raw; this.unwrapped = raw > 180 ? raw - 360 : raw; }
     else {
-      let d = raw - this.last;
+      d = raw - this.last;
       if (d > 180) d -= 360; if (d < -180) d += 360;
-      // ignore jumps a body can't make between two frames (tracker glitches)
-      if (Math.abs(d) < 45) this.unwrapped += d;
+      // ignore jumps a body can't make between two frames (tracker glitches, left/right swaps)
+      if (Math.abs(d) < 45) this.unwrapped += d; else d = 0;
       this.last = raw;
     }
+    this.moveEma = this.moveEma * 0.7 + moved * 0.3;
+    this.turnEma = this.turnEma * 0.7 + Math.abs(d) * 0.3;
+    if (this.moveEma > this.stillLimit * 2 || this.turnEma > 3) this.movedSince = true;
     if (this.dir === 0 && this.hour >= 1 && Math.abs(this.unwrapped) > 15) this.dir = this.unwrapped > 0 ? 1 : -1;
     const progress = this.dir === 0 ? Math.abs(this.unwrapped) : this.dir * this.unwrapped;
     const target = this.hour * 30;
-    if (progress > target + this.tol + 8) { this.steadySince = null; return { kind: "tooFar", hour: this.hour }; }
-    if (Math.abs(progress - target) <= this.tol) {
-      this.steadySince ??= now;
-      if (now - this.steadySince >= this.steadyMs) { const h = this.hour; this.hour++; this.steadySince = null; return { kind: "capture", hour: h }; }
-      return { kind: "hold" };
+    const still = this.moveEma < this.stillLimit && this.turnEma < 1.5;
+    if (!still) { this.steadySince = null; return { kind: "turn", hour: this.hour }; }
+    this.steadySince ??= now;
+    if (now - this.steadySince < this.steadyMs) return { kind: "hold", hour: this.hour };
+    // standing still: take the photo if near the hour (and, after the first, turned since the last one)
+    if (progress > target + this.late) return { kind: "tooFar", hour: this.hour };
+    const turned = this.hour === 0 || this.movedSince;
+    if (progress >= target - this.early && turned) {
+      const h = this.hour; this.hour++; this.movedSince = false; this.steadySince = null;
+      return { kind: "capture", hour: h };
     }
-    this.steadySince = null;
     return { kind: "turn", hour: this.hour };
   }
   /** Which way the user turned (+1 / −1; 0 = not known yet). */
