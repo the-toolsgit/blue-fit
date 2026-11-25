@@ -99,13 +99,15 @@ describe("records and PRs", () => {
 });
 
 describe("progression hint", () => {
-  it("top reached once → hold; twice in a row, or a failure set 2+ above the top → add weight", () => {
+  it("top reached once → hold; twice in a row, or a failure set 3+ above the top → add weight; 2 above holds", () => {
     const top = [set(170, 15), set(170, 15), set(170, 15), set(50, 5, "warmup")];
     expect(progressionHint(top, 10, 15, 2.5)).toEqual({ kind: "hold", weight: 170, reps: 15 });
     expect(progressionHint(top, 10, 15, 2.5, { prev: { sets: top } })).toEqual({ kind: "addWeight", weight: 180, reps: 10, from: 170 }); // 172.5 → round number
-    const withFail = [set(170, 15), set(170, 15), set(170, 17, "failure")];
+    const withFail = [set(170, 15), set(170, 15), set(170, 18, "failure")];
     expect(progressionHint(withFail, 10, 15, 5).kind).toBe("addWeight");
     expect(progressionHint([set(170, 15), set(170, 15), set(170, 16, "failure")], 10, 15, 5).kind).toBe("hold"); // only 1 above
+    expect(progressionHint([set(180, 12), set(180, 12), set(180, 14, "failure")], 8, 12, 5).kind).toBe("hold"); // 2 above: on target (Leo, Nov 25 2026)
+    expect(progressionHint([set(180, 12), set(180, 12), set(180, 15, "failure")], 8, 12, 5).kind).toBe("addWeight");
   });
   it("tests with failure whenever the top was reached with no failure set; a failed test waits one workout", async () => {
     const { needsTest } = await import("./progression");
@@ -123,7 +125,7 @@ describe("progression hint", () => {
     expect(progressionHint(top, 10, 10, 10, { prev: { sets: failedTest }, testing: true }).kind).toBe("hold");
     // No test possible (recovery, goal, setting): two workouts at the top still go up, never stuck
     expect(progressionHint(top, 10, 10, 10, { prev: { sets: failedTest } }).kind).toBe("addWeight");
-    expect(progressionHint([...top.slice(0, 2), set(190, 12, "failure")], 10, 10, 10).kind).toBe("addWeight");
+    expect(progressionHint([...top.slice(0, 2), set(190, 13, "failure")], 10, 10, 10).kind).toBe("addWeight");
   });
 
   it("otherwise asks to beat last reps", () => {

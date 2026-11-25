@@ -39,10 +39,11 @@ describe("too light by the failure set", () => {
     const set = (reps: number, type: "working" | "failure" = "working") => ({ id: String(reps) + type, weight: 110, reps, type, done: true }) as never;
     expect(progressionHint([set(12), set(12), set(12), set(15, "failure")], 10, 12, 5)).toMatchObject({ kind: "addWeight", weight: 120 }); // 115 → round number from 40 lb
   });
-  it("more failure reps never give a smaller jump (200 × 10: 12 → 210, 13 → 210, 15 → 210)", async () => {
+  it("more failure reps never give a smaller jump (200 × 10: 12 = on target, hold; 13 → 210, 15 → 210)", async () => {
     const { progressionHint } = await import("./progression");
     const set = (reps: number, type: "working" | "failure" = "working") => ({ id: String(reps) + type, weight: 200, reps, type, done: true }) as never;
-    for (const f of [12, 13, 14, 15]) expect(progressionHint([set(10), set(10), set(f, "failure")], 10, 10, 5)).toMatchObject({ kind: "addWeight", weight: 210 });
+    expect(progressionHint([set(10), set(10), set(12, "failure")], 10, 10, 5).kind).toBe("hold"); // 2 over: on target (Leo, Nov 25 2026)
+    for (const f of [13, 14, 15]) expect(progressionHint([set(10), set(10), set(f, "failure")], 10, 10, 5)).toMatchObject({ kind: "addWeight", weight: 210 });
   });
 });
 

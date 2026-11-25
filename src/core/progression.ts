@@ -3,7 +3,8 @@
 // Ready for more weight only when the top isn't a one-off (Leo, Nov 18 2026; thresholds are *judgment*):
 //  • every regular set reached the top two workouts in a row (workouts, not weeks), unless the last one had a failure
 //    set that didn't prove it or this workout tests it (Leo, Nov 24 2026: test first whenever the app can), or
-//  • the failure set beat the top by 2+ reps (it shows the reps you really had left), or
+//  • the failure set beat the top by 3+ reps (2 over the top is right on the target effort, not proof; Leo, Nov 25
+//    2026), or
 //  • the failure set shows even the bottom-of-the-effort target is past the range (failure reps − 2 > top).
 // Top reached without that proof → "hold": stay at the same weight (the app tests it with a failure set when it
 // safely can, core/failure.ts). A failed test → one more workout at that weight, then test again.
@@ -73,7 +74,8 @@ export function progressionHint(lastSets: LoggedSet[] | undefined, repMin: numbe
   const last: PastSets = { sets: work, fail: opts.fail ?? work.find((x) => x.type === "failure") };
   const f = last.fail && load(last.fail) === top && last.fail.reps != null ? last.fail.reps : null;
   const topNow = atTop(last, repMax);
-  const proven = f != null && f >= repMax + READY_MARGIN;
+  // proof: more than the target's 2 reps left on the regular sets (Leo, Nov 25 2026: 14 on a 12 plan is on target)
+  const proven = f != null && f > repMax + READY_MARGIN;
   // Two workouts at the top count only when no failure set says otherwise: not right after a failed test (wait one
   // workout), not while this workout tests it (Leo, Nov 24 2026). When no test can be planned, it still counts.
   const twice = !opts.testing && !last.fail && topNow && atTop(opts.prev, repMax) && Math.max(...(opts.prev?.sets ?? []).filter(isWork).map(load)) >= top;
