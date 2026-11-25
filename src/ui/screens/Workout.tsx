@@ -5,7 +5,7 @@ import { DndContext, MeasuringStrategy, MouseSensor, TouchSensor, closestCenter,
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MANUAL_WHY, TEST_WHY } from "../../core/failure";
-import { tooHeavy } from "../../core/notes";
+import { newRangeWeight, tooHeavy } from "../../core/notes";
 import { orderSlotsLike } from "../../core/routineEdit";
 import { useRestRunning, WorkoutRestPanel, WorkoutRestPill } from "../components/RestTimer";
 import { CURL } from "../../core/figure/poses";
@@ -407,9 +407,14 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
   // Tips stay quiet until the weight should change (Leo, Nov 19 2026): only "go up" shows, and effort notes only
   // when the failure set says the weight was too light.
   // "Go down" when last time's first regular set fell short of today's rep range (same rule as the workout note)
-  const heavy = hint0.kind === "none" || !last ? null : tooHeavy({ ...last.entry, repMin }, ex);
+  // A new, higher rep range (new routine): the same effort at today's reps (180×10 → 12 reps → 170), shown even
+  // without other tips; a bad day (3+ reps short in the same range) as before
+  const heavy = !last || !settings.progressionHints || s.deload || ex.assisted ? null
+    : (ex.measure === "time" ? null : newRangeWeight(last.entry, e.repMin, ex)) ?? (hint0.kind === "none" ? null : tooHeavy({ ...last.entry, repMin }, ex));
+  const newRange = !!heavy && last?.entry.repMin != null && e.repMin != null && last.entry.repMin < e.repMin;
   // Today already proves it: a done set at that weight or heavier reached the plan's reps → no "go down"
-  const heavyNow = heavy && e.sets.some((x) => x.done && x.type === "working" && (x.weight ?? 0) >= heavy.from && (x.reps ?? 0) >= repMin);
+  // (new rep range: doing the suggested weight for today's reps is enough)
+  const heavyNow = heavy && e.sets.some((x) => x.done && x.type === "working" && (x.weight ?? 0) >= (newRange ? heavy.weight : heavy.from) && (x.reps ?? 0) >= repMin);
   const hint = hint1.kind === "addWeight" ? hint1
     : heavy && !heavyNow ? ({ kind: "lowerWeight", weight: heavy.weight, reps: repMin, got: heavy.reps, from: heavy.from } as const)
     : ({ kind: "none" } as const);
@@ -480,7 +485,8 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
               <span style={{ color: "var(--neon-ink)" }}><Icon name={hint.kind === "lowerWeight" ? "down" : "up"} size={18} /></span>
               <span className="grow" style={{ fontSize: 14 }}>
                 {hint.kind === "lowerWeight"
-                  ? <>You got {hint.got} reps at {fmtNum(hint.from)} last time, the plan says {repRange(repMin, repMax)}. Go down to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>
+                  ? newRange ? <>New rep range: last time {fmtNum(hint.from)} × {hint.got}. Start at <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>
+                  : <>You got {hint.got} reps at {fmtNum(hint.from)} last time, the plan says {repRange(repMin, repMax)}. Go down to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>
                   : ex.measure === "time" ? <>You held {repMax} s on every set last time. Add a little weight: <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps} s.</>
                   : <>You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>}
               </span>

@@ -260,7 +260,7 @@ describe("plain rule text", () => {
 
 describe("up / down (last workout vs the one before)", () => {
   const exs = seed.exercises.filter((e) => ["leg-press", "barbell-shrug"].includes(e.id));
-  it("compares the heaviest counted weight of the last two workouts; warm-ups ignored; one workout is not enough", () => {
+  it("compares the best set by estimated max of the last two workouts; warm-ups ignored; one workout is not enough", () => {
     const h = [
       sess("2026-11-02", "leg-press", [set(80, 10)]),
       sess("2026-11-09", "leg-press", [set(100, 8), set(90, 10)]),
@@ -268,7 +268,21 @@ describe("up / down (last workout vs the one before)", () => {
       sess("2026-11-16", "barbell-shrug", [set(100, 10)]),
     ];
     const r = lastChanges(h, exs);
-    expect(r).toEqual([{ exerciseId: "leg-press", before: 100, after: 95, unit: "lb", date: "2026-11-16" }]);
+    // 100×8 (est. 127) → 95×12 (est. 133): lighter but more reps = up
+    expect(r).toEqual([{ exerciseId: "leg-press", before: 100, after: 95, beforeReps: 8, afterReps: 12, unit: "lb", date: "2026-11-16", dir: 1 }]);
+  });
+  it("a new rep range: 180×10 → 170×12 is the same, 180×10 → 180×12 up, 180×10 → 170×10 down", () => {
+    const dir = (w: number, r: number) => lastChanges([sess("2026-11-02", "leg-press", [set(180, 10)]), sess("2026-11-09", "leg-press", [set(w, r)])], exs)[0].dir;
+    expect(dir(170, 12)).toBe(0);
+    expect(dir(180, 12)).toBe(1);
+    expect(dir(170, 10)).toBe(-1);
+  });
+  it("assisted: less help is up", () => {
+    const a = [{ ...exs[0], id: "leg-press", assisted: true }];
+    const dir = (w: number, r: number) => lastChanges([sess("2026-11-02", "leg-press", [set(50, 10)]), sess("2026-11-09", "leg-press", [set(w, r)])], a)[0].dir;
+    expect(dir(40, 10)).toBe(1);
+    expect(dir(60, 12)).toBe(-1);
+    expect(dir(50, 11)).toBe(1);
   });
   it("bodyweight work without a weight compares the most reps", () => {
     const r = lastChanges([sess("2026-11-02", "barbell-shrug", [set(0, 10)]), sess("2026-11-09", "barbell-shrug", [set(0, 12)])], exs);

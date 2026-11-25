@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from "react";
+import { epley } from "../../core/oneRm";
 import { useKeptState } from "../keptState";
 import { inRange, lastChanges, rangeStart, RANGE_LABEL, weeklyTotals, type Range } from "../../core/progress";
 import { recoveryStatus, type MuscleRecovery, type Recovery } from "../../core/recovery";
@@ -55,8 +56,16 @@ export function ProgressScreen() {
   const [exDir, setExDir] = useState<"next" | "prev" | null>(null);
   // Up / down: last workout vs the one before, per exercise (biggest change first)
   const changes = useMemo(() => lastChanges(finished, exercises), [finished, exercises]);
-  const ups = changes.filter((c) => c.after > c.before).sort((a, b) => (b.after - b.before) - (a.after - a.before));
-  const downs = changes.filter((c) => c.after < c.before).sort((a, b) => (a.after - a.before) - (b.after - b.before));
+  // by estimated max (weight × reps), so a lighter weight for more reps isn't "down" (core/progress.ts)
+  // relative change for every unit (sorting); weighted by estimated max, assisted by less help; null = nothing before
+  const gain = (c: (typeof changes)[number]): number | null => {
+    const e = exMap.get(c.exerciseId);
+    const [a, b] = c.unit !== "lb" ? [c.after, c.before] : e?.assisted ? [c.before, c.after] : [epley(c.after, c.afterReps ?? 0), epley(c.before, c.beforeReps ?? 0)];
+    return b > 0 ? a / b - 1 : null;
+  };
+  const rank = (c: (typeof changes)[number]) => gain(c) ?? (c.dir > 0 ? 1e9 : -1e9);
+  const ups = changes.filter((c) => c.dir > 0).sort((a, b) => rank(b) - rank(a));
+  const downs = changes.filter((c) => c.dir < 0).sort((a, b) => rank(a) - rank(b));
   const [udPick, setUd] = useKeptState<"up" | "down">("progress-updown", "up");
   const ud = udPick === "up" && !ups.length && downs.length ? "down" : udPick === "down" && !downs.length && ups.length ? "up" : udPick;
   const exSection = useRef<HTMLHeadingElement>(null);
@@ -167,20 +176,25 @@ export function ProgressScreen() {
             <button className="ud-tile up" aria-pressed={ud === "up"} onClick={() => setUd("up")}><b>{ups.length}</b><span>Went up</span></button>
             <button className="ud-tile down" aria-pressed={ud === "down"} onClick={() => setUd("down")}><b>{downs.length}</b><span>Went down</span></button>
           </div>
-          <p className="muted" style={{ fontSize: 12, margin: "10px 2px 4px" }}>Last workout vs the one before · heaviest weight</p>
+          <p className="muted" style={{ fontSize: 12, margin: "10px 2px 4px" }}>Last workout vs the one before · best set (weight and reps together)</p>
           {(ud === "up" ? ups : downs).length === 0
             ? <p className="muted" style={{ fontSize: 14, padding: "8px 2px" }}>{ud === "up" ? "Nothing went up last time." : "Nothing went down last time."}</p>
             : (ud === "up" ? ups : downs).map((c) => {
               const e = exMap.get(c.exerciseId)!;
-              const d = c.after - c.before;
-              const u = c.unit === "lb" ? `lb${loadSuffix(e)}` : c.unit;
+              const lb = c.unit === "lb";
+              const u = lb ? `lb${loadSuffix(e)}` : c.unit;
+              const val = (w: number, r?: number) => lb ? `${fmtNum(w)}×${r ?? "?"}` : fmtNum(w);
+              // weighted: change of the estimated max in %; holds and reps: the difference
+              const g = gain(c);
+              const d = lb && g != null && !e.assisted ? `${Math.round(Math.abs(g) * 100)}%`
+                : c.after === c.before && c.afterReps != null ? `${Math.abs(c.afterReps - (c.beforeReps ?? 0))} reps` : fmtNum(Math.abs(c.after - c.before));
               return (
                 <button key={c.exerciseId} className="list-row ud-row" onClick={() => openEx(c.exerciseId)}
-                  aria-label={`${e.name}: ${fmtNum(c.before)} to ${fmtNum(c.after)} ${u}`}>
-                  <span className={"ud-arrow " + ud} aria-hidden="true">{d > 0 ? "↑" : "↓"}</span>
+                  aria-label={`${e.name}: ${val(c.before, c.beforeReps)} to ${val(c.after, c.afterReps)} ${u}`}>
+                  <span className={"ud-arrow " + ud} aria-hidden="true">{c.dir > 0 ? "↑" : "↓"}</span>
                   <span className="ud-name">{e.name}</span>
-                  <span className="mono ud-vals">{fmtNum(c.before)} → {fmtNum(c.after)} <small>{u}</small></span>
-                  <span className={"mono ud-d " + ud}>{d > 0 ? "+" : "−"}{fmtNum(Math.abs(d))}</span>
+                  <span className="mono ud-vals">{val(c.before, c.beforeReps)} → {val(c.after, c.afterReps)} <small>{u}</small></span>
+                  <span className={"mono ud-d " + ud}>{c.dir > 0 ? "+" : "−"}{d}</span>
                 </button>
               );
             })}

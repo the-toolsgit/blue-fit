@@ -42,28 +42,54 @@ export function exerciseSeries(sessions: Session[], exerciseId: string, time = f
 }
 
 /** Up / down (Progress tab, Nov 24 2026): each exercise's last workout against the one before.
- *  The value is the heaviest weight of the counted sets (no warm-ups); holds compare the longest hold in seconds,
- *  and bodyweight work logged without a weight the most reps. Needs two workouts with the exercise. */
-export interface LastChange { exerciseId: string; before: number; after: number; unit: "lb" | "s" | "reps"; date: string }
+ *  Weighted work compares the best set by estimated max (Epley), so a lighter weight for more reps (a new rep range:
+ *  180×10 → 170×12) counts as the same, not down (Leo, Nov 25 2026); within ±2% is "same". Holds compare the longest
+ *  hold in seconds, bodyweight work logged without a weight the most reps, assisted work less help (then more reps). Needs two workouts with the exercise. */
+export interface LastChange {
+  exerciseId: string; before: number; after: number; unit: "lb" | "s" | "reps"; date: string;
+  /** Reps of the best set (weighted work only), shown as weight × reps */
+  beforeReps?: number; afterReps?: number;
+  /** 1 up, −1 down, 0 about the same */
+  dir: 1 | -1 | 0;
+}
+/** Estimated-max change that still counts as the same (*judgment*: a rep or so of day-to-day noise) */
+export const SAME_PCT = 0.02;
 export function lastChanges(sessions: Session[], exercises: Exercise[]): LastChange[] {
   const done = [...sessions].filter((x) => x.status === "finished").sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1));
   const out: LastChange[] = [];
   for (const ex of exercises) {
     const time = ex.measure === "time";
-    const tops: { date: string; weight: number; reps: number }[] = [];
+    const tops: { date: string; weight: number; reps: number; maxReps: number; e1rm: number }[] = [];
     for (const s of done) {
       // Working and failure sets only: a drop set's extra reps at a lighter weight aren't progress
       const sets = s.entries.filter((e) => e.exerciseId === ex.id).flatMap((e) => e.sets)
         .filter((x) => x.done && countsForVolume(x.type) && x.reps != null && x.reps > 0);
       if (!sets.length) continue;
-      tops.push({ date: s.date, weight: Math.max(...sets.map((x) => x.weight ?? 0)), reps: Math.max(...sets.map((x) => x.reps!)) });
+      // best set: highest estimated max (ties: the heavier one)
+      const best = ex.assisted
+        ? sets.reduce((b, x) => ((x.weight ?? 0) < (b.weight ?? 0) || ((x.weight ?? 0) === (b.weight ?? 0) && x.reps! > b.reps!) ? x : b))
+        : sets.reduce((b, x) => { const v = epley(x.weight ?? 0, x.reps!), bv = epley(b.weight ?? 0, b.reps!); return v > bv || (v === bv && (x.weight ?? 0) > (b.weight ?? 0)) ? x : b; });
+      tops.push({ date: s.date, weight: best.weight ?? 0, reps: best.reps!, maxReps: Math.max(...sets.map((x) => x.reps!)), e1rm: epley(best.weight ?? 0, best.reps!) });
       if (tops.length === 2) break;
     }
     if (tops.length < 2) continue;
     const [last, prev] = tops;
     // Seconds or reps when it is a hold, or when neither workout had a weight
     const byReps = time || (last.weight === 0 && prev.weight === 0);
-    out.push({ exerciseId: ex.id, before: byReps ? prev.reps : prev.weight, after: byReps ? last.reps : last.weight, unit: time ? "s" : byReps ? "reps" : "lb", date: last.date });
+    // Assisted (the weight is help, less is harder): less help is up, then more reps at the same help
+    if (ex.assisted && !byReps) {
+      const dir = last.weight < prev.weight ? 1 : last.weight > prev.weight ? -1 : last.reps > prev.reps ? 1 : last.reps < prev.reps ? -1 : 0;
+      out.push({ exerciseId: ex.id, before: prev.weight, after: last.weight, beforeReps: prev.reps, afterReps: last.reps, unit: "lb", date: last.date, dir });
+      continue;
+    }
+    if (byReps) {
+      const before = prev.maxReps, after = last.maxReps;
+      out.push({ exerciseId: ex.id, before, after, unit: time ? "s" : "reps", date: last.date, dir: after > before ? 1 : after < before ? -1 : 0 });
+      continue;
+    }
+    const ch = prev.e1rm > 0 ? last.e1rm / prev.e1rm - 1 : last.e1rm > 0 ? 1 : 0;
+    out.push({ exerciseId: ex.id, before: prev.weight, after: last.weight, beforeReps: prev.reps, afterReps: last.reps, unit: "lb", date: last.date,
+      dir: ch > SAME_PCT ? 1 : ch < -SAME_PCT ? -1 : 0 });
   }
   return out;
 }

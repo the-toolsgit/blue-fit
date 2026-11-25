@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { workoutNotes, weightFor } from "./notes";
+import { newRangeWeight, workoutNotes, weightFor } from "./notes";
 import type { Exercise, LoggedSet, Session, SessionEntry } from "./types";
 
 const ex = { id: "x", name: "Raise", incrementLb: 5, volume: [{ group: "sideDelts", weight: 1 }] } as unknown as Exercise;
@@ -45,5 +45,18 @@ describe("volume object", async () => {
     expect(liftedFor(3600)?.label).toBe("a car");
     expect(liftedFor(30000)?.label).toBe("1.2 school buses");
     expect(liftedFor(90000)?.label).toBe("a jet airliner");
+  });
+});
+
+describe("new rep range (Leo, Nov 25 2026)", () => {
+  const ex = { id: "x", incrementLb: 5, equipment: "machine" } as unknown as Parameters<typeof newRangeWeight>[2];
+  const entry = (repMin: number, w: number, r: number) => ({ id: "e", exerciseId: "x", restSec: 90, repMin, repMax: repMin + 2, sets: [{ id: "s", type: "working", weight: w, reps: r, done: true }] }) as unknown as Parameters<typeof newRangeWeight>[0];
+  it("180×10 in 8–10, today 12–15 → start at 170", () => {
+    expect(newRangeWeight(entry(8, 180, 10), 12, ex)).toMatchObject({ weight: 170, from: 180, reps: 10 });
+  });
+  it("same range, or already at today's reps → nothing", () => {
+    expect(newRangeWeight(entry(12, 180, 10), 12, ex)).toBeNull();
+    expect(newRangeWeight(entry(8, 180, 12), 12, ex)).toBeNull();
+    expect(newRangeWeight(entry(10, 180, 10), 8, ex)).toBeNull();
   });
 });

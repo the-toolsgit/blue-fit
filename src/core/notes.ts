@@ -73,6 +73,20 @@ export function tooHeavy(e: SessionEntry, ex: Exercise, deload = false): { weigh
   return w > 0 && w < first.weight! ? { weight: w, from: first.weight!, reps: first.reps! } : null;
 }
 
+/**
+ * New rep range (Leo, Nov 25 2026): today's range starts higher than the one the exercise was last done in, and last
+ * time's first regular set is under today's bottom → start at the weight that gives the same effort for today's reps
+ * (same estimated max, Epley, rounded down): 180×10 → 12–15 reps → 170. Any shortfall counts (not 3 reps like a bad day).
+ */
+export function newRangeWeight(last: SessionEntry, repMin: number | undefined, ex: Exercise, deload = false): { weight: number; from: number; reps: number } | null {
+  if (repMin == null || last.repMin == null || last.repMin >= repMin) return null;
+  const f = failureSet(last, deload);
+  const first = last.sets.find((x) => isWork(x) && x.type === "working" && x !== f);
+  if (!first || !first.weight || first.reps! >= repMin) return null;
+  const w = roundDown(epley(first.weight, first.reps!) / (1 + repMin / 30), ex);
+  return w > 0 && w < first.weight ? { weight: w, from: first.weight, reps: first.reps! } : null;
+}
+
 export function workoutNotes(s: Session, history: Session[], exMap: Map<string, Exercise>, routine?: Routine): WorkoutNote[] {
   const notes: WorkoutNote[] = [];
   const all = history.some((h) => h.id === s.id) ? history : [...history, s];
@@ -97,7 +111,10 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
     if (!s.deload) {
       // Lighter than last time (same exercise, top working weight)
       const now = topWeight(e.sets), before = lastTime ? topWeight(lastTime.sets) : 0;
-      if (now > 0 && before > 0 && now < before)
+      // (not when today's rep range starts higher and today is at least the weight for it: a lighter weight for more
+      // reps is the plan, newRangeWeight)
+      const planned = lastTime ? newRangeWeight(lastTime, e.repMin, ex) : null;
+      if (now > 0 && before > 0 && now < before && !(planned && now >= planned.weight))
         notes.push({ kind: "drop", tone: "warn", exerciseId: e.exerciseId, title: `${ex.name}: lighter`, text: `${fmtNum(now)}, last time ${fmtNum(before)}. Go back to ${fmtNum(before)} next time, unless it was on purpose.` });
 
       // Below the range: the first regular set fell short of the bottom → too heavy
