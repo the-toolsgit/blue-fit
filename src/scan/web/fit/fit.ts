@@ -45,11 +45,14 @@ function pack(s: State): number[] {
 /** Each photo's turn stays within this of its clock hour: a body seen from the front and from the back has nearly
  *  the same outline, so without a bound a photo can settle at the mirror-image turn. */
 const YAW_BOUND = 0.6;
+/** Body shape coefficients stay within this (standard deviations of MHR's people): beyond it the mesh folds into
+ *  shapes that match an outline's edge without filling it (first real scans). */
+const SHAPE_MAX = 3.5;
 let yawTargets: number[] = [];
 function unpack(x: number[], base: State): State {
   const s = clone(base);
   let k = 0;
-  for (let i = 0; i < NB; i++) s.b.body[i] = x[k++];
+  for (let i = 0; i < NB; i++) s.b.body[i] = Math.max(-SHAPE_MAX, Math.min(SHAPE_MAX, x[k++]));
   for (let i = 0; i < NP; i++) s.b.pose[i] = x[k++];
   for (let i = 0; i < NS; i++) s.b.scales[i] = x[k++];
   s.b.scale = x[k++]; s.cam.f = x[k++]; s.cam.h = x[k++]; s.cam.pitch = x[k++];
@@ -388,7 +391,8 @@ export class SilhouetteFit {
       const e = c.filter((i) => !this.skip[i] && inImg(i)).map((i) => Math.abs(sample(vd[v].dt, ph.mask.w, ph.mask.h, uv[i * 2], uv[i * 2 + 1]))).sort((a, b) => a - b);
       rms.push(Math.round((e[Math.floor(e.length * 0.9)] ?? 0) * 100) / 100);
     });
-    const badShape = s.b.body.some((x) => Math.abs(x) > 3);
+    // shapes are clamped to ±SHAPE_MAX; a fit that pins most of them there is straining against the photos
+    const badShape = s.b.body.filter((x) => Math.abs(x) >= SHAPE_MAX - 1e-6).length > NB / 2;
     const ok = ious.every((x) => x >= 0.9) && rms.every((x) => x <= 3) && !badShape;
     return {
       params: s.b, cam: s.cam, views: s.views, iou: ious, rmsPx: rms, iterations, ms: Math.round(performance.now() - t0), ok, cost: lastCost,

@@ -189,7 +189,7 @@ self.onmessage = async (ev: MessageEvent) => {
       const uv = new Float64Array(m.vertexCount * 2);
       const views = got.map((ph, i) => {
         project(body.verts, m.vertexCount, res.views[i], res.cam, uv);
-        return { hour: ph.hour, photo: ph.mask.data, model: rasterize(uv, m.faces, FIT_W, FIT_H).data };
+        return { hour: ph.hour, photo: ph.mask.data, model: rasterize(uv, m.faces, FIT_W, FIT_H).data, landmarks: Array.from(ph.landmarks) };
       });
       const shapeMax = Math.round(Math.max(...res.params.body.map(Math.abs)) * 10) / 10;
       photos.length = 0;

@@ -78,6 +78,7 @@ export function ScanScreen() {
   const [failWhy, setFailWhy] = useState("");
   const [report, setReport] = useState("");
   const [views, setViews] = useState<FitView[]>([]);
+  const [pitchUsed, setPitchUsed] = useState(0);
   const boot = useRef<{ ms: number; delegate: string } | null>(null);
   const heightCm = height != null ? (settings.heightCm != null && toUnit(settings.heightCm, unit) === height ? settings.heightCm : Math.round(fromUnit(height, unit) * 10) / 10) : null;
 
@@ -97,6 +98,7 @@ export function ScanScreen() {
     const lines = [`Blue Fit ${__APP_VERSION__} scan report`, `models ${boot.current?.ms ?? "?"} ms (${boot.current?.delegate ?? "?"})`,
       `live: ${live.captures} photos, ${live.retries} retries, ${live.frames} frames in ${live.seconds} s (${live.seconds ? Math.round(live.frames / live.seconds) : 0} fps), turn ${live.direction}, too far ×${live.tooFar}, still < ${live.stillLimit.toFixed(4)}, beta ${live.betaMean == null ? "none" : live.betaMean.toFixed(1)}`, `travel per photo ${live.travels.join(" ")}`];
     try {
+      setPitchUsed(pitchFromBeta(live.betaMean));
       const r = await worker.current!.fit(heightCm!, sex, pitchFromBeta(live.betaMean));
       const q = r.report;
       lines.push(`fit ${r.ok ? "ok" : "failed: " + (r.reason ?? "")} in ${r.ms} ms, ${q.iterations} iterations`,
@@ -196,6 +198,7 @@ export function ScanScreen() {
           <button className="btn btn-primary btn-block" onClick={() => location.reload()}>Scan again</button>
           {report && <CopyReport text={report} />}
           {views.length > 0 && <Outlines views={views} />}
+          {views.length > 0 && <ShareData views={views} heightCm={heightCm} pitch={pitchUsed} report={report} />}
           <button className="btn btn-quiet btn-block" onClick={close}>Close</button>
         </section>
       )}
@@ -212,6 +215,7 @@ export function ScanScreen() {
           <button className="btn btn-primary btn-block" style={{ minHeight: 56 }} onClick={save}>Save scan</button>
           {report && <CopyReport text={report} />}
           {views.length > 0 && <Outlines views={views} />}
+          {views.length > 0 && <ShareData views={views} heightCm={heightCm} pitch={pitchUsed} report={report} />}
           <button className="btn btn-quiet btn-block" onClick={close}>Discard</button>
         </section>
       )}
@@ -471,6 +475,26 @@ function OutlineCanvas({ v }: { v: FitView }) {
     c.putImageData(img, 0, 0);
   }, [v]);
   return <figure><canvas ref={ref} width={FIT_W} height={FIT_H} /><figcaption>{v.hour === 0 ? 12 : v.hour} o'clock</figcaption></figure>;
+}
+
+/** Shares what the fit saw as a file (outlines as run lengths, landmarks, height, tilt, report; never the photos),
+ *  so a failed scan can be replayed on a computer. Goes only where the user sends it. */
+function ShareData({ views, heightCm, pitch, report }: { views: FitView[]; heightCm: number | null; pitch: number; report: string }) {
+  const [msg, setMsg] = useState("");
+  const share = async () => {
+    const rle = (d: Uint8Array) => { const out: number[] = []; let v = 0, n = 0; for (let i = 0; i < d.length; i++) { if (d[i] === v) n++; else { out.push(n); v = d[i]; n = 1; } } out.push(n); return out; };
+    const json = JSON.stringify({ kind: "bluefit-scan-data", version: __APP_VERSION__, w: FIT_W, h: FIT_H, heightCm, pitch, report, views: views.map((v) => ({ hour: v.hour, mask: rle(v.photo), landmarks: v.landmarks })) });
+    const file = new File([json], "bluefit-scan-data.json", { type: "application/json" });
+    try {
+      const nav = navigator as Navigator & { canShare?: (d: { files: File[] }) => boolean };
+      if (nav.share && nav.canShare?.({ files: [file] })) { await nav.share({ files: [file] }); setMsg("Shared"); return; }
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(file); a.download = file.name; a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+      setMsg("Saved");
+    } catch (e) { if ((e as Error).name !== "AbortError") setMsg("Couldn't share"); }
+  };
+  return <button className="btn btn-ghost btn-block" onClick={share}>{msg || "Share scan data"}</button>;
 }
 
 // ── simple line drawings in the app's style ──

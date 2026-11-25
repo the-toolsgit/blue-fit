@@ -10,7 +10,7 @@ export interface PoseFrame { people: number; landmarks: NormalizedLandmark[] | n
 /** Fit quality per photo and the fitted camera: for the scan report (no body values). */
 export interface FitReport { iou: number[]; rmsPx: number[]; yawDeg: number[]; pitchDeg: number; pitchGuessDeg: number; focal: number; camH: number; iterations: number; masks: string[]; shapeMax: number }
 /** One photo's outline (FIT_W×FIT_H, 1 = body) and the fitted body's, for the on-phone check; kept in memory only. */
-export interface FitView { hour: number; photo: Uint8Array; model: Uint8Array }
+export interface FitView { hour: number; photo: Uint8Array; model: Uint8Array; landmarks: number[] }
 export interface Fitted { ok: boolean; reason?: string; ms: number; geometry: BodyGeometry; measured: Measured; report: FitReport; views: FitView[] }
 
 /** Open the front camera in portrait. Throws a readable error. */
