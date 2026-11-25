@@ -10,13 +10,15 @@ import { fmtNum, uid } from "../../core/util";
 import { openCamera, ScanWorker, type Fitted, type FitView } from "../../scan/web/client";
 import { FIT_H, FIT_W } from "../../scan/web/constants";
 import { SCANNER_VERSION } from "../../scan/web/constants";
-import { TurnTracker, bodyAngle, framing, hourCue, motion, pitchFromBeta, poseCheck, roomCheck, tiltFromGravity, tiltOk, type Framing, type RoomStats } from "../../scan/web/guide";
+import { TurnTracker, bodyAngle, framing, hourCue, motion, pitchFromBeta, poseShift, poseCheck, roomCheck, tiltFromGravity, tiltOk, type Framing, type RoomStats } from "../../scan/web/guide";
 import { Seg, Stepper } from "../components/Controls";
 import { back, go } from "../router";
 import { useStore } from "../store";
 
 /** What the live step saw (for the scan report; no body values). */
-interface LiveStats { betaMean: number | null; captures: number; retries: number; frames: number; seconds: number; direction: number; tooFar: number; stillLimit: number; travels: number[] }
+interface LiveStats { betaMean: number | null; captures: number; retries: number; frames: number; seconds: number; direction: number; tooFar: number; stillLimit: number; travels: number[];
+  /** What the scan saw, every ½ s: seconds, state or problem, next hour, motion over ¼ s, shift since the last photo */
+  trace: string[] }
 type Step = "details" | "sound" | "tutorial" | "placement" | "angle" | "live" | "processing" | "result" | "failed";
 const TUTORIAL_KEY = "bf-scan-tutorial-seen";
 const seen = () => { try { return localStorage.getItem(TUTORIAL_KEY) === "1"; } catch { return false; } };
@@ -97,10 +99,27 @@ export function ScanScreen() {
   const close = () => back("progress");
   const startCamera = () => { markSeen(); setStep("placement"); };
 
+  const liveLines = (live: LiveStats) => [`Blue Fit ${__APP_VERSION__} scan report`, `models ${boot.current?.ms ?? "?"} ms (${boot.current?.delegate ?? "?"})`,
+    `live: ${live.captures} photos, ${live.retries} retries, ${live.frames} frames in ${live.seconds} s (${live.seconds ? Math.round(live.frames / live.seconds) : 0} fps), turn ${live.direction}, too far ×${live.tooFar}, still < ${live.stillLimit.toFixed(4)}, beta ${live.betaMean == null ? "none" : live.betaMean.toFixed(1)}`, `travel per photo ${live.travels.join(" ")}`];
+  const traceLines = (live: LiveStats) => ["timeline (s · state · next hour · motion · shift since photo):", ...live.trace];
+
+  // Stopped (Stop button, app in the background, error): report, the photos so far and the timeline, no fit
+  const stopped = useCallback(async (why: string, live: LiveStats) => {
+    const lines = [...liveLines(live), `stopped: ${why}`];
+    try {
+      setPitchUsed(pitchFromBeta(live.betaMean));
+      const d = await worker.current!.dump();
+      lines.push(`masks ${d.masks.join(" | ")}`);
+      setViews(d.views);
+    } catch (e) { lines.push(`photos: ${(e as Error).message}`); }
+    setFailWhy(why);
+    setReport([...lines, ...traceLines(live)].join("\n"));
+    setStep("failed");
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const finish = useCallback(async (live: LiveStats) => {
     setStep("processing");
-    const lines = [`Blue Fit ${__APP_VERSION__} scan report`, `models ${boot.current?.ms ?? "?"} ms (${boot.current?.delegate ?? "?"})`,
-      `live: ${live.captures} photos, ${live.retries} retries, ${live.frames} frames in ${live.seconds} s (${live.seconds ? Math.round(live.frames / live.seconds) : 0} fps), turn ${live.direction}, too far ×${live.tooFar}, still < ${live.stillLimit.toFixed(4)}, beta ${live.betaMean == null ? "none" : live.betaMean.toFixed(1)}`, `travel per photo ${live.travels.join(" ")}`];
+    const lines = liveLines(live);
     try {
       setPitchUsed(pitchFromBeta(live.betaMean));
       const r = await worker.current!.fit(heightCm!, sex, pitchFromBeta(live.betaMean));
@@ -110,6 +129,7 @@ export function ScanScreen() {
         `pitch ${q.pitchDeg}° (sensor ${q.pitchGuessDeg}°), focal ${q.focal}, phone ${q.camH} cm, shape max ${q.shapeMax}`,
         `masks ${q.masks.join(" | ")}`);
       setViews(r.views);
+      lines.push(...traceLines(live));
       setReport(lines.join("\n"));
       if (!r.ok) { setFailWhy(r.reason ?? ""); setStep("failed"); return; }
       setResult(r);
@@ -191,7 +211,7 @@ export function ScanScreen() {
       {step === "angle" && <AngleStep onOk={() => setStep("live")} />}
       {step === "live" && (
         loadErr ? <section className="scan-body stack"><h1 className="title-md">The scanner couldn't start</h1><p className="muted">{loadErr}</p><button className="btn btn-primary btn-block" onClick={close}>Close</button></section>
-          : <LiveStep worker={worker} ready={ready} onDone={finish} onFail={(why) => { setFailWhy(why); setReport(`Blue Fit ${__APP_VERSION__} scan report\nstopped: ${why}`); setStep("failed"); }} />
+          : <LiveStep worker={worker} ready={ready} onDone={finish} onFail={stopped} />
       )}
       {step === "processing" && (
         <section className="scan-body scan-center stack">
@@ -289,7 +309,7 @@ function AngleStep({ onOk }: { onOk: () => void }) {
   );
 }
 
-function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefObject<ScanWorker | null>; ready: React.MutableRefObject<Promise<unknown> | null>; onDone: (s: LiveStats) => void; onFail: (why: string) => void }) {
+function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefObject<ScanWorker | null>; ready: React.MutableRefObject<Promise<unknown> | null>; onDone: (s: LiveStats) => void; onFail: (why: string, s: LiveStats) => void }) {
   const video = useRef<HTMLVideoElement>(null);
   const [cue, setCue] = useState("Getting the camera ready…");
   const [bars, setBars] = useState<Framing | null>(null);
@@ -298,8 +318,9 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
   // callbacks through refs: a parent re-render must not restart the camera loop mid-scan
   const done = useRef(onDone), fail = useRef(onFail);
   done.current = onDone; fail.current = onFail;
+  const stop = useRef<() => void>(() => {});
   useEffect(() => {
-    const onDone = (s: LiveStats) => done.current(s), onFail = (why: string) => fail.current(why);
+    const onDone = (s: LiveStats) => done.current(s);
     let alive = true, stream: MediaStream | null = null, wake: { release(): Promise<void> } | null = null;
     let tilt: number | null = 90;
     const onMotion = (e: DeviceMotionEvent) => { const g = e.accelerationIncludingGravity; if (g) tilt = tiltFromGravity({ y: g.y, z: g.z }); };
@@ -309,8 +330,13 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
     const betas: number[] = [];
     const onOrient = (e: DeviceOrientationEvent) => { if (e.beta != null) beta = e.beta; };
     addEventListener("deviceorientation", onOrient);
-    const stats: LiveStats = { betaMean: null, captures: 0, retries: 0, frames: 0, seconds: 0, direction: 0, tooFar: 0, stillLimit: 0, travels: [] };
+    const stats: LiveStats = { betaMean: null, captures: 0, retries: 0, frames: 0, seconds: 0, direction: 0, tooFar: 0, stillLimit: 0, travels: [], trace: [] };
     const t0 = performance.now();
+    const wrap = () => { stats.seconds = Math.round((performance.now() - t0) / 1000); stats.betaMean = betas.length ? betas.reduce((a, b) => a + b, 0) / betas.length : null; };
+    const onFail = (why: string) => { wrap(); stream?.getTracks().forEach((t) => t.stop()); hush(); fail.current(why, stats); };
+    stop.current = () => { if (alive) { alive = false; onFail("stopped by you"); } };
+    let traceAt = -1e9;
+    const trace = (now: number, text: string) => { if (now - traceAt >= 500) { traceAt = now; stats.trace.push(`${((now - t0) / 1000).toFixed(1)} ${text}`); } };
     const lockWake = async () => { try { wake = await (navigator as unknown as { wakeLock: { request(t: string): Promise<{ release(): Promise<void> }> } }).wakeLock.request("screen"); } catch { /* not supported */ } };
     const onVis = () => { if (document.visibilityState === "hidden" && alive) { alive = false; onFail("the app went to the background"); } else void lockWake(); };
     document.addEventListener("visibilitychange", onVis);
@@ -324,7 +350,12 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
         await worker.current!.reset();
         const tracker = new TurnTracker(700);
         let room: RoomStats | null = null, roomAt = 0, goodSince: number | null = null, started = false, lastHour = -1;
-        let prevLm: Parameters<typeof motion>[0] = null;
+        // motion is measured over ~¼ s, not frame to frame: a slow turn moves the body too little per frame to tell
+        // from the tracker's jitter (v0.1.261, stuck at 1 o'clock)
+        type Lms = Parameters<typeof motion>[0];
+        let hist: { t: number; lm: Lms }[] = [];
+        const lagMotion = (t: number, l: Lms) => { hist.push({ t, lm: l }); while (hist.length > 1 && hist[1].t <= t - 250) hist.shift(); return hist.length > 1 ? motion(hist[0].lm, l) : 0; };
+        let anchor: Lms = null; // pose at the last photo
         const still: number[] = [];
         // a problem must last before it's shown or said (a moment of a bad pose reading isn't a problem)
         let problemText: string | null = null, problemSince = 0, problemSaid = "", problemSaidAt = -1e9, tooFarSince: number | null = null;
@@ -359,7 +390,8 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
           if (problem !== problemText) { problemText = problem; problemSince = now; }
           const lasting = problem != null && now - problemSince > (started ? 3000 : 2500);
           if (problem) {
-            prevLm = lm;
+            trace(now, `problem: ${problem}${lasting ? "" : " (waiting)"}`);
+            hist = [];
             if (lasting) {
               goodSince = null;
               setCue(problem);
@@ -370,20 +402,21 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
           }
           if (!started) {
             if (goodSince == null) { goodSince = now; still.length = 0; setCue("Hold still"); say("Great. Hold still."); }
-            still.push(motion(prevLm, lm));
-            prevLm = lm;
+            still.push(lagMotion(now, lm));
             if (now - goodSince < 1500) continue;
             // the pose tracker's jitter while this user stands still sets what "still" means for the turn
-            const base = still.slice(1).sort((a, b) => a - b)[Math.floor((still.length - 1) / 2)] ?? 0.002;
+            const base = still.slice(3).sort((a, b) => a - b)[Math.floor((still.length - 1) / 2)] ?? 0.002;
             tracker.stillLimit = Math.min(0.02, Math.max(0.004, base * 2.5));
             stats.stillLimit = tracker.stillLimit;
             started = true;
           }
-          const moved = motion(prevLm, lm);
-          prevLm = lm;
+          const moved = lagMotion(now, lm);
           const travelBefore = tracker.travel;
-          const c = tracker.update(bodyAngle(p.world ?? lm!), now, moved);
+          const shift = poseShift(anchor, lm);
+          const c = tracker.update(bodyAngle(p.world ?? lm!), now, moved, shift);
+          trace(now, `${c.kind} ${"hour" in c ? c.hour : ""} m${moved.toFixed(3)} s${shift.toFixed(3)}`);
           if (c.kind === "capture") {
+            anchor = lm;
             shutter();
             stats.travels.push(Math.round(travelBefore * 1000) / 1000);
             const ok = await worker.current!.capture(v, c.hour);
@@ -418,7 +451,7 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
           onDone(stats);
         }
       } catch (e) {
-        if (alive) onFail((e as Error).message);
+        if (alive) { alive = false; onFail((e as Error).message); }
       }
     })();
     return () => {
@@ -442,6 +475,7 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
         {hour != null && <ClockArt done={hour + 1} small />}
       </div>
       <div className="scan-cue" aria-live="assertive">{cue}</div>
+      <button className="btn btn-ghost scan-stop" onClick={() => stop.current()}>Stop scan</button>
     </section>
   );
 }

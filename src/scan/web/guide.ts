@@ -88,6 +88,17 @@ export function motion(a: Lm[] | null, b: Lm[] | null): number {
   return s / ids.length;
 }
 
+/** How far the body (arms included) is from where it was (mean 2D shift of 12 joints, share of the frame). */
+export function poseShift(a: Lm[] | null, b: Lm[] | null): number {
+  if (!a || !b) return 0;
+  const ids = [MP.shoulderL, MP.shoulderR, MP.elbowL, MP.elbowR, MP.wristL, MP.wristR, MP.hipL, MP.hipR, MP.kneeL, MP.kneeR, MP.ankleL, MP.ankleR];
+  let s = 0;
+  for (const i of ids) s += Math.hypot(a[i].x - b[i].x, a[i].y - b[i].y);
+  return s / ids.length;
+}
+/** Shift that counts as having turned since the last photo (a 30° turn moves the arms and shoulders ~0.03+). */
+export const TURN_SHIFT = 0.025;
+
 /**
  * Paces the 12 photos: after each cue ("Turn to n o'clock") the user gets at least `minTurnMs` to turn, has to move,
  * and the photo is taken once they stand still for `steadyMs`. The phone can't see the turn angle reliably (the
@@ -108,10 +119,13 @@ export class TurnTracker {
   private moveEma = 0;
   private cueAt: number | null = null;
   private movedSince = false;
-  constructor(private steadyMs = 700, private minTurnMs = 2500) {}
+  /** `giveUpMs`: if the turn wasn't seen by then, a still user gets the photo anyway (the fit finds the angle; v0.1.261,
+   *  Leo got stuck at 1 o'clock: a slow 30° turn barely moved the body per frame). */
+  constructor(private steadyMs = 700, private minTurnMs = 2500, private giveUpMs = 6000) {}
 
-  /** Feed one frame's raw angle (0–360, for the turn direction only) and the body's motion since the last frame. */
-  update(raw: number, now: number, moved = 0): TurnCue {
+  /** Feed one frame's raw angle (0–360, for the turn direction only), the body's motion over the last ~¼ s and its
+   *  shift from where it was at the last photo. */
+  update(raw: number, now: number, moved = 0, shift = 0): TurnCue {
     if (this.hour >= 12) return { kind: "done" };
     if (this.last == null) { this.last = raw; this.unwrapped = 0; }
     else {
@@ -124,11 +138,11 @@ export class TurnTracker {
     this.cueAt ??= now;
     this.moveEma = this.moveEma * 0.7 + moved * 0.3;
     if (moved < 1) this.travel += Math.max(0, moved - this.stillLimit);
-    if (this.moveEma > this.stillLimit * 1.5) this.movedSince = true;
+    if (this.moveEma > this.stillLimit * 1.5 || shift > Math.max(TURN_SHIFT, this.stillLimit * 3)) this.movedSince = true;
     const still = this.moveEma < this.stillLimit;
     if (!still) { this.steadySince = null; return { kind: "moving", hour: this.hour }; }
     this.steadySince ??= now;
-    const ready = this.hour === 0 || (now - this.cueAt >= this.minTurnMs && this.movedSince);
+    const ready = this.hour === 0 || (now - this.cueAt >= this.minTurnMs && this.movedSince) || now - this.cueAt >= this.giveUpMs;
     if (!ready) return { kind: "turn", hour: this.hour };
     if (now - this.steadySince < this.steadyMs) return { kind: "hold", hour: this.hour };
     const h = this.hour;

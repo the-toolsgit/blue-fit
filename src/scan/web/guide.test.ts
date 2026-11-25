@@ -66,11 +66,21 @@ describe("scan guidance", () => {
     let now = 0;
     const kinds = (ms: number, moved: number, angle = 0) => { const out: string[] = []; for (let k = 0; k < ms; k += 50) out.push(t.update(angle, (now += 50), moved).kind); return out; };
     expect(kinds(500, 0)).toContain("capture"); // 12 o'clock
-    expect(kinds(4000, 0, 90)).not.toContain("capture"); // the angle jumps but the body didn't move
+    expect(kinds(4000, 0, 90)).not.toContain("capture"); // the angle jumps but the body didn't move (under the 6 s give-up)
     expect(kinds(300, 0.02)).not.toContain("capture"); // a quick move
     expect(kinds(400, 0)).not.toContain("capture"); // still, but only ~0.7 s since the cue... and the 2.5 s aren't up
     expect(kinds(4000, 0.02)).not.toContain("capture"); // moving all the time
     expect(kinds(1000, 0)).toContain("capture"); // moved, time is up, now still
+  });
+  it("turn tracker: a slow turn (tiny motion per frame) counts once the body has shifted; stuck → photo anyway after 6 s", () => {
+    const t = new TurnTracker(300, 2500, 6000);
+    let now = 0;
+    const kinds = (ms: number, moved: number, shift = 0) => { const out: string[] = []; for (let k = 0; k < ms; k += 50) out.push(t.update(0, (now += 50), moved, shift).kind); return out; };
+    expect(kinds(500, 0)).toContain("capture");
+    expect(kinds(2000, 0.002, 0.04)).not.toContain("capture"); // turning slowly: below the still limit per frame, but shifted
+    expect(kinds(1000, 0)).toContain("capture"); // then still → photo
+    expect(kinds(5000, 0)).not.toContain("capture"); // didn't move
+    expect(kinds(1500, 0)).toContain("capture"); // 6 s up: photo anyway
   });
   it("tilt from gravity: upright 90°, flat 0°, green 85–95°", () => {
     expect(tiltFromGravity({ y: -9.81, z: 0 })).toBeCloseTo(90);

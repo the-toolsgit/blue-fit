@@ -85,6 +85,8 @@ export class ScanWorker {
     return (await this.ask<{ ok: boolean }>({ type: "capture", bitmap, hour }, [bitmap])).ok;
   }
   reset() { return this.ask({ type: "reset" }); }
+  /** A scan stopped early: the photos taken so far (outlines and landmarks only, no fitted body). */
+  dump(): Promise<{ views: FitView[]; masks: string[] }> { return this.ask({ type: "dump" }); }
   /** pitch: the phone's camera pitch during the photos (radians, + = looking up). */
   fit(heightCm: number, sex: "male" | "female", pitch: number): Promise<Fitted> {
     return this.ask({ type: "fit", heightCm, sex, pitch, base: import.meta.env.BASE_URL });

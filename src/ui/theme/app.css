@@ -851,3 +851,4 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 @keyframes lifeIn { from { opacity: 0; transform: translateY(6px); } }
 @media (prefers-reduced-motion: reduce) { .life-tile { animation: none; transition: none; } }
 .scan-me { justify-self: start; min-height: 44px; gap: 8px; }
+.scan-stop { align-self: center; min-height: 44px; padding: 0 22px; }

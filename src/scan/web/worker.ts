@@ -167,6 +167,13 @@ self.onmessage = async (ev: MessageEvent) => {
       for (let i = 0; i < mask.length; i++) area += mask[i];
       maskInfo[d.hour] = `${mw}×${mh}/${w}×${h} ${Math.round((area / mask.length) * 1000) / 10}%`;
       post({ type: "captured", id: d.id, ok: true, hour: d.hour });
+    } else if (d.type === "dump") {
+      // a scan stopped early: the photos so far (outlines + landmarks, no fit) for the report; then dropped
+      const got = photos.filter(Boolean);
+      const views = got.map((ph) => ({ hour: ph.hour, photo: ph.mask.data, model: new Uint8Array(FIT_W * FIT_H), landmarks: Array.from(ph.landmarks) }));
+      const masks = got.map((p) => maskInfo[p.hour] ?? "?");
+      photos.length = 0;
+      post({ type: "dumped", id: d.id, views, masks });
     } else if (d.type === "reset") {
       photos.length = 0; maskInfo.length = 0;
       post({ type: "reset", id: d.id });
