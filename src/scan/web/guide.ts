@@ -89,57 +89,53 @@ export function motion(a: Lm[] | null, b: Lm[] | null): number {
 }
 
 /**
- * Follows the turn through the 12 hours by counting stops: a photo is taken when the user has clearly moved since
- * the last photo (body travel, or the estimated turn) and then stands still. The pose tracker's angle is too rough
- * to place a photo (sides and back confuse it, and summed small errors drift), so it's only used per step: to see a
- * turn and to catch a step far bigger than one hour. The 3D fit finds each photo's exact turn (within ±34°).
+ * Paces the 12 photos: after each cue ("Turn to n o'clock") the user gets at least `minTurnMs` to turn, has to move,
+ * and the photo is taken once they stand still for `steadyMs`. The phone can't see the turn angle reliably (the
+ * pose tracker's angle jumps, worst at the sides and the back), so it isn't used to take photos; the 3D fit finds
+ * each photo's turn itself, sloppy stops and a missed or doubled stop included (v0.1.257, after the second real
+ * scan: angle jumps took photos before the user turned).
  */
 export class TurnTracker {
   hour = 0; // next hour to capture (0 = facing the phone)
   /** Body motion per frame below which the user counts as still (set from the user's own stillness at the start). */
   stillLimit = 0.004;
-  /** Body travel since the last photo (share of the frame, summed over moving frames). */
+  /** Body travel since the last photo (share of the frame, summed over moving frames; for the report). */
   travel = 0;
   private dir: 1 | -1 | 0 = 0;
   private unwrapped = 0;
-  private atLast = 0; // unwrapped angle at the last photo
   private last: number | null = null;
   private steadySince: number | null = null;
   private moveEma = 0;
-  private turnEma = 0;
-  constructor(private steadyMs = 600, private minTravel = 0.03, private maxStep = 75) {}
+  private cueAt: number | null = null;
+  private movedSince = false;
+  constructor(private steadyMs = 700, private minTurnMs = 2500) {}
 
-  /** Feed one frame's raw angle (0–360) and how much the body moved since the last frame (see `motion`). */
+  /** Feed one frame's raw angle (0–360, for the turn direction only) and the body's motion since the last frame. */
   update(raw: number, now: number, moved = 0): TurnCue {
     if (this.hour >= 12) return { kind: "done" };
-    let d = 0;
-    if (this.last == null) { this.last = raw; this.unwrapped = raw > 180 ? raw - 360 : raw; this.atLast = this.unwrapped; }
+    if (this.last == null) { this.last = raw; this.unwrapped = 0; }
     else {
-      d = raw - this.last;
+      let d = raw - this.last;
       if (d > 180) d -= 360; if (d < -180) d += 360;
-      // ignore jumps a body can't make between two frames (tracker glitches, left/right swaps)
-      if (Math.abs(d) < 45) this.unwrapped += d; else d = 0;
+      if (Math.abs(d) < 45) this.unwrapped += d;
       this.last = raw;
     }
+    if (this.dir === 0 && this.hour >= 2 && Math.abs(this.unwrapped) > 40) this.dir = this.unwrapped > 0 ? 1 : -1;
+    this.cueAt ??= now;
     this.moveEma = this.moveEma * 0.7 + moved * 0.3;
-    this.turnEma = this.turnEma * 0.7 + Math.abs(d) * 0.3;
     if (moved < 1) this.travel += Math.max(0, moved - this.stillLimit);
-    if (this.dir === 0 && this.hour >= 1 && Math.abs(this.unwrapped) > 15) this.dir = this.unwrapped > 0 ? 1 : -1;
-    const still = this.moveEma < this.stillLimit && this.turnEma < 1.5;
+    if (this.moveEma > this.stillLimit * 1.5) this.movedSince = true;
+    const still = this.moveEma < this.stillLimit;
     if (!still) { this.steadySince = null; return { kind: "moving", hour: this.hour }; }
     this.steadySince ??= now;
+    const ready = this.hour === 0 || (now - this.cueAt >= this.minTurnMs && this.movedSince);
+    if (!ready) return { kind: "turn", hour: this.hour };
     if (now - this.steadySince < this.steadyMs) return { kind: "hold", hour: this.hour };
-    const step = this.dir === 0 ? Math.abs(this.unwrapped - this.atLast) : this.dir * (this.unwrapped - this.atLast);
-    if (this.hour > 0 && step > this.maxStep) return { kind: "tooFar", hour: this.hour };
-    const turned = this.hour === 0 || this.travel >= this.minTravel || step >= 15;
-    if (turned) {
-      const h = this.hour;
-      this.hour++; this.travel = 0; this.atLast = this.unwrapped; this.steadySince = null;
-      return { kind: "capture", hour: h };
-    }
-    return this.travel > this.minTravel / 3 ? { kind: "more", hour: this.hour } : { kind: "turn", hour: this.hour };
+    const h = this.hour;
+    this.hour++; this.travel = 0; this.steadySince = null; this.cueAt = now; this.movedSince = false;
+    return { kind: "capture", hour: h };
   }
-  /** Which way the user turned (+1 / −1; 0 = not known yet). */
+  /** Which way the user turned (+1 / −1; 0 = not known yet), from the rough angle; for the report. */
   get direction() { return this.dir; }
 }
 

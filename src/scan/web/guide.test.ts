@@ -53,45 +53,24 @@ describe("scan guidance", () => {
     expect(bodyAngle(w(0, 0.2))).toBeCloseTo(90, 5);
     expect(bodyAngle(w(-0.2, 0))).toBeCloseTo(180, 5);
   });
-  it("turn tracker: a photo at each stop after a turn, even when the angle reads badly (sides, back, drift)", () => {
-    for (const dir of [1, -1]) {
-      const t = new TurnTracker(300);
-      let now = 0;
-      const seen: number[] = [];
-      let prev = 0;
-      const feed = (angle: number, ms: number, moved: number) => {
-        for (let k = 0; k < ms; k += 50) { const c = t.update(((dir * angle) % 360 + 360) % 360, (now += 50), moved); if (c.kind === "capture") seen.push(c.hour); }
-      };
-      for (let h = 0; h < 12; h++) {
-        // turning (moving), then standing still; the tracker reads the sides 20° short
-        // the tracker reads the sides 20° short and drifts 4° short per hour (11 o'clock reads 286°)
-        const read = (h === 3 || h === 9 ? h * 30 - 20 : h * 30) - h * 4;
-        for (let k = 0; k < 10; k++) feed(prev + ((read - prev) * k) / 10, 50, 0.02); // turning: the body moves
-        feed(read, 800, 0);
-        prev = read;
-      }
-      expect(seen).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
-      expect(t.direction).toBe(dir);
-    }
+  it("turn tracker: a photo per cue once the user has moved and stands still, whatever the angle reads", () => {
+    const t = new TurnTracker(300, 2000);
+    let now = 0;
+    const seen: number[] = [];
+    const feed = (ms: number, moved: number, angle = 0) => { for (let k = 0; k < ms; k += 50) { const c = t.update(angle, (now += 50), moved); if (c.kind === "capture") seen.push(c.hour); } };
+    for (let h = 0; h < 12; h++) { feed(1500, 0.02, (h * 50) % 360); feed(1200, 0, (h * 50) % 360); }
+    expect(seen).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
   });
-  it("turn tracker: no photo while moving, none twice at the same spot, too far when clearly past", () => {
-    const t = new TurnTracker(300);
-    let now = 0, c = t.update(0, 0, 0);
-    const kinds: string[] = [];
-    for (let k = 0; k < 10; k++) kinds.push(t.update(0, (now += 50), 0).kind);
-    expect(kinds).toContain("capture"); // hour 0
-    for (let k = 0; k < 20; k++) c = t.update(0, (now += 50), 0);
-    expect(c.kind).toBe("turn"); // still at 12 o'clock: hasn't turned, no second photo
-    for (let a = 0; a <= 90; a += 3) c = t.update(a, (now += 50), 0.02);
-    expect(c.kind).toBe("moving");
-    for (let k = 0; k < 20; k++) c = t.update(90, (now += 50), 0);
-    expect(c.kind).toBe("tooFar"); // a 90° step when one hour (30°) was asked
-    const t2 = new TurnTracker(300);
-    now = 0;
-    for (let k = 0; k < 10; k++) t2.update(0, (now += 50), 0); // hour 0
-    for (let a = 0; a <= 5; a += 1) t2.update(a, (now += 50), 0.008); // a small shuffle
-    for (let k = 0; k < 20; k++) c = t2.update(5, (now += 50), 0);
-    expect(c.kind).toBe("more"); // stopped at 5° when 30° was asked
+  it("turn tracker: no photo right after the cue, none without moving, none while moving", () => {
+    const t = new TurnTracker(300, 2500);
+    let now = 0;
+    const kinds = (ms: number, moved: number, angle = 0) => { const out: string[] = []; for (let k = 0; k < ms; k += 50) out.push(t.update(angle, (now += 50), moved).kind); return out; };
+    expect(kinds(500, 0)).toContain("capture"); // 12 o'clock
+    expect(kinds(4000, 0, 90)).not.toContain("capture"); // the angle jumps but the body didn't move
+    expect(kinds(300, 0.02)).not.toContain("capture"); // a quick move
+    expect(kinds(400, 0)).not.toContain("capture"); // still, but only ~0.7 s since the cue... and the 2.5 s aren't up
+    expect(kinds(4000, 0.02)).not.toContain("capture"); // moving all the time
+    expect(kinds(1000, 0)).toContain("capture"); // moved, time is up, now still
   });
   it("tilt from gravity: upright 90°, flat 0°, green 85–95°", () => {
     expect(tiltFromGravity({ y: -9.81, z: 0 })).toBeCloseTo(90);
