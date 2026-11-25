@@ -226,9 +226,43 @@ export class SilhouetteFit {
       return { yaw: Math.PI + sign * ph.hour * (Math.PI / 6), tx: -(((left + right) / 2 - cam.cx) * tz) / cam.f, tz };
     });
     yawTargets = input.photos.map((ph) => Math.PI + sign * ph.hour * (Math.PI / 6));
+    const hourYaw = [...yawTargets];
     let s: State = opts.init ? clone({ b: opts.init.params, cam: opts.init.cam, views: opts.init.views }) : { b: b0, cam, views };
+    // People stop well off the hour, and a stop can be skipped or doubled: place every photo at once over a wide
+    // range (±75° of its hour), keeping them roughly in order (each step −20° to 80° the same way round). Outline overlap with
+    // the mean body scores each turn; the order settles what the overlap can't (front vs back look alike). The
+    // chosen turns become the photos' new hours for the bounded fit.
+    const order = (st: State) => {
+      const body0 = this.fb.evaluate(st.b, input.heightCm);
+      const nV = this.fb.m.vertexCount, uv0 = new Float64Array(nV * 2);
+      const buf = new Uint8Array(input.photos[0].mask.w * input.photos[0].mask.h);
+      const STEP = Math.PI / 24, K = 10; // 7.5°, ±75°
+      const cand = (i: number, k: number) => yawTargets[i] + (k - K) * STEP;
+      const score = st.views.map((v, i) => Array.from({ length: 2 * K + 1 }, (_, k) => {
+        project(body0.verts, nV, { ...v, yaw: cand(i, k) }, st.cam, uv0);
+        return iou(rasterize(uv0, this.fb.m.faces, input.photos[i].mask.w, input.photos[i].mask.h, buf), cleaned[i]);
+      }));
+      const n = st.views.length, M = 2 * K + 1;
+      const best = score.map(() => new Float64Array(M).fill(-Infinity)), from = score.map(() => new Int32Array(M).fill(-1));
+      best[0].set(score[0]);
+      for (let i = 1; i < n; i++)
+        for (let k = 0; k < M; k++)
+          for (let j = 0; j < M; j++) {
+            const step = sign * (cand(i, k) - cand(i - 1, j)) * (180 / Math.PI);
+            if (step < -20 || step > 80 || best[i - 1][j] === -Infinity) continue;
+            const v = best[i - 1][j] + score[i][k];
+            if (v > best[i][k]) { best[i][k] = v; from[i][k] = j; }
+          }
+      let k = -1, top = -Infinity;
+      for (let q = 0; q < M; q++) if (best[n - 1][q] > top) { top = best[n - 1][q]; k = q; }
+      if (k < 0) return; // no ordered placement (can't happen with 12 photos 30° apart): keep the hours
+      const pick: number[] = new Array(n);
+      for (let i = n - 1; i >= 0; i--) { pick[i] = k; k = from[i][k]; }
+      pick.forEach((q, i) => { st.views[i].yaw = cand(i, q); yawTargets[i] = cand(i, q); });
+    };
     // people rarely stop exactly on the hour: put a photo at the turn (within the bound) whose outline overlaps best
-    const regrid = (st: State, only?: (i: number) => boolean) => {
+    // wide: search ±75° of the photo's clock hour (not ±34° of its current turn) and move its bound there
+    const regrid = (st: State, only?: (i: number) => boolean, wide = false) => {
       const body0 = this.fb.evaluate(st.b, input.heightCm);
       const nV = this.fb.m.vertexCount, uv0 = new Float64Array(nV * 2);
       const quality: number[] = [];
@@ -239,16 +273,18 @@ export class SilhouetteFit {
         if (only && !only(i)) { quality.push(at(v.yaw)); return; }
         let best = v.yaw, bestIou = only ? at(v.yaw) : -1;
         const tryYaw = (yaw: number) => { const q = at(yaw); if (q > bestIou) { bestIou = q; best = yaw; } };
-        // coarse (0.2 rad) over the bound, then ±0.1 around the best
-        for (let d = -YAW_BOUND; d <= YAW_BOUND + 1e-9; d += 0.2) tryYaw(yawTargets[i] + d);
+        // coarse over the range, then half a step either side of the best
+        const center = wide ? hourYaw[i] : yawTargets[i], range = wide ? (75 * Math.PI) / 180 : YAW_BOUND, step = wide ? Math.PI / 24 : 0.2;
+        for (let d = -range; d <= range + 1e-9; d += step) tryYaw(center + d);
         const c = best;
-        for (const d of [-0.1, 0.1]) if (Math.abs(c + d - yawTargets[i]) <= YAW_BOUND + 1e-9) tryYaw(c + d);
+        for (const d of [-step / 2, step / 2]) if (Math.abs(c + d - center) <= range + 1e-9) tryYaw(c + d);
         v.yaw = best;
+        if (wide) yawTargets[i] = best;
         quality.push(bestIou);
       });
       return quality;
     };
-    if (!opts.init) regrid(s);
+    if (!opts.init) { order(s); regrid(s); }
     const stages: { iters: number; active: (k: number) => boolean }[] = [
       { iters: opts.firstIters ?? 15, active: (k) => k > NB + NP + NS }, // camera, placement (size is fixed by the height)
       { iters: 10, active: (k) => k >= NB && k !== NB + NP + NS }, // + posture and proportions
@@ -332,7 +368,9 @@ export class SilhouetteFit {
       if (!opts.init) {
         const q = regrid(s, () => false);
         const bad = new Set(q.flatMap((x, i) => (x < 0.95 ? [i] : [])));
-        if (bad.size) regrid(s, (i) => bad.has(i));
+        // with the fitted body (not front/back alike like the mean body), search wide: a photo stuck at the mirror
+        // turn (a side view seen from the front vs from the back) is found again
+        if (bad.size) regrid(s, (i) => bad.has(i), true);
       }
     }
     // quality per photo

@@ -14,7 +14,7 @@ export function rng(seed: number) {
 
 export interface Scene { truth: BodyParams; cam: Cam; views: View[]; photos: Photo[]; heightCm: number }
 
-export function makeScene(fb: FitBody, seed: number, opts: { w?: number; h?: number; noisePx?: number; turn?: 1 | -1; swapBack?: boolean; pitch?: number; yawNoise?: number; damage?: boolean | string } = {}): Scene {
+export function makeScene(fb: FitBody, seed: number, opts: { w?: number; h?: number; noisePx?: number; turn?: 1 | -1; swapBack?: boolean; pitch?: number; yawNoise?: number; damage?: boolean | string; skipAt?: number } = {}): Scene {
   const r = rng(seed);
   const W = opts.w ?? 480, H = opts.h ?? 640;
   const truth = zeroParams();
@@ -31,7 +31,9 @@ export function makeScene(fb: FitBody, seed: number, opts: { w?: number; h?: num
   const photos: Photo[] = [];
   for (let hour = 0; hour < 12; hour++) {
     // far enough that the whole body is in frame (the real scan won't start otherwise)
-    const v: View = { yaw: Math.PI + (opts.turn ?? 1) * hour * (Math.PI / 6) + r.n(opts.yawNoise ?? 0.06), tx: r.n(6), tz: heightCm * 1.05 + 10 + Math.abs(r.n(6)) };
+    // skipAt: the user turned two hours at that stop, so every later photo is one hour further than its label
+    const turned = hour + (opts.skipAt != null && hour >= opts.skipAt ? 1 : 0);
+    const v: View = { yaw: Math.PI + (opts.turn ?? 1) * turned * (Math.PI / 6) + r.n(opts.yawNoise ?? 0.06), tx: r.n(6), tz: heightCm * 1.05 + 10 + Math.abs(r.n(6)) };
     views.push(v);
     project(body.verts, nV, v, cam, uv);
     project(body.joints, body.joints.length / 3, v, cam, juv);
