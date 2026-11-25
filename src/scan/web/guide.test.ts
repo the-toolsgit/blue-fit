@@ -58,6 +58,7 @@ describe("scan guidance", () => {
       const t = new TurnTracker(300);
       let now = 0;
       const seen: number[] = [];
+      let prev = 0;
       const feed = (angle: number, ms: number, moved: number) => {
         for (let k = 0; k < ms; k += 50) { const c = t.update(((dir * angle) % 360 + 360) % 360, (now += 50), moved); if (c.kind === "capture") seen.push(c.hour); }
       };
@@ -65,8 +66,9 @@ describe("scan guidance", () => {
         // turning (moving), then standing still; the tracker reads the sides 20° short
         // the tracker reads the sides 20° short and drifts 4° short per hour (11 o'clock reads 286°)
         const read = (h === 3 || h === 9 ? h * 30 - 20 : h * 30) - h * 4;
-        for (let a = Math.max(0, (h - 1) * 30); a < read; a += 3) feed(a, 50, 0.02);
+        for (let k = 0; k < 10; k++) feed(prev + ((read - prev) * k) / 10, 50, 0.02); // turning: the body moves
         feed(read, 800, 0);
+        prev = read;
       }
       expect(seen).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
       expect(t.direction).toBe(dir);
