@@ -62,14 +62,18 @@ function say(text: string, force = false) {
 }
 function hush() { pending = null; speaking = false; lastSaid = ""; try { speechSynthesis.cancel(); } catch { /* */ } }
 
+/** The last weight typed for a scan (this phone only), so test scans that aren't saved don't ask again. */
+const WEIGHT_KEY = "bf-scan-weight";
+
 export function ScanScreen() {
   const { settings, saveSettings, saveBodyScan, bodyScans, toast } = useStore();
   const unit = settings.lengthUnit ?? "in";
-  const [step, setStep] = useState<Step>("details");
+  // Height and sex already saved → straight to the volume step (Edit goes back)
+  const [step, setStep] = useState<Step>(settings.heightCm != null && settings.sex ? "sound" : "details");
   const [page, setPage] = useState(0);
   const [height, setHeight] = useState<number | null>(settings.heightCm != null ? toUnit(settings.heightCm, unit) : null);
   const lastWeight = [...bodyScans].sort((a, b) => (a.date < b.date ? 1 : -1)).find((b) => b.weightLb != null)?.weightLb ?? null;
-  const [weight, setWeight] = useState<number | null>(lastWeight);
+  const [weight, setWeight] = useState<number | null>(() => { try { const w = Number(localStorage.getItem(WEIGHT_KEY)); return w > 0 ? w : lastWeight; } catch { return lastWeight; } });
   const [sex, setSex] = useState<Sex>(settings.sex ?? "male");
   const worker = useRef<ScanWorker | null>(null);
   const ready = useRef<Promise<unknown> | null>(null);
@@ -153,6 +157,9 @@ export function ScanScreen() {
           <button className="btn btn-primary btn-block" style={{ minHeight: 56 }} onClick={() => {
             if (heightCm == null || heightCm < 50 || heightCm > 260) { toast({ kind: "warn", title: "Check your height" }); return; }
             if (weight != null && (weight < 20 || weight > 1000)) { toast({ kind: "warn", title: "Check your weight", body: "Between 20 and 1000 lb, or leave it empty." }); return; }
+            // remembered now, not only when a scan is saved
+            if (settings.heightCm !== heightCm || settings.sex !== sex) saveSettings({ ...settings, heightCm, sex });
+            try { if (weight != null) localStorage.setItem(WEIGHT_KEY, String(weight)); else localStorage.removeItem(WEIGHT_KEY); } catch { /* */ }
             setStep("sound");
           }}>Continue</button>
           <p className="muted scan-privacy">Private: photos are processed on this phone and deleted right after. They're never saved or sent.</p>
@@ -164,6 +171,8 @@ export function ScanScreen() {
           <span className="eyebrow neon">Step 2 of 2</span>
           <h1 className="title-lg">Turn your volume up</h1>
           <p className="muted">A voice tells you when to turn. Use the volume buttons, then test it.</p>
+          <button className="chip scan-me" onClick={() => setStep("details")} aria-label="Edit height, weight and sex">
+            {height} {unit}{weight != null ? ` · ${weight} lb` : ""} · {sex === "male" ? "Male" : "Female"} <span className="neon">Edit</span></button>
           <button className="btn btn-ghost btn-block" onClick={() => { unlockAudio(); say("This is the scan voice.", true); shutter(); }}>Test sound</button>
           <button className="scan-start" onClick={() => { unlockAudio(); if (seen()) startCamera(); else { setPage(0); setStep("tutorial"); } }}>Start scan</button>
           <button className="btn btn-quiet btn-block" onClick={() => { setPage(0); setStep("tutorial"); }}>Watch tutorial</button>
