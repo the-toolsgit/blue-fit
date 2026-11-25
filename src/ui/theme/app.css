@@ -209,8 +209,8 @@ select.input { -webkit-appearance: none; appearance: none; padding-right: 38px; 
 .input { width: 100%; min-height: var(--tap); padding: 10px 14px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface-2); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
 .input:focus { border-color: var(--neon-ink); box-shadow: 0 0 0 3px var(--glow-soft); }
 /* iOS gives date fields a built-in minimum width that pushes them out of their box; make them fill it instead */
-input.input[type="date"] { -webkit-appearance: none; appearance: none; display: block; min-width: 0; max-width: 100%; text-align: left; }
-input.input[type="date"]::-webkit-date-and-time-value { text-align: left; }
+input.input[type="date"], input.input[type="month"] { -webkit-appearance: none; appearance: none; display: block; min-width: 0; max-width: 100%; text-align: left; }
+input.input[type="date"]::-webkit-date-and-time-value, input.input[type="month"]::-webkit-date-and-time-value { text-align: left; }
 textarea.input { min-height: 84px; resize: vertical; }
 .switch::before { content: ""; position: absolute; inset: -7px -4px; } /* 44px+ hit area */
 .switch { position: relative; width: 52px; height: 32px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--line-strong); transition: background 0.25s; flex: none; }
@@ -840,3 +840,13 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .scan-spinner { width: 64px; height: 64px; border-radius: 50%; border: 4px solid var(--line); border-top-color: var(--neon, #3d9bff); animation: scan-spin 1s linear infinite; }
 @keyframes scan-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .scan-spinner { animation: none; } .scan-bar, .scan-phone { transition: none; } }
+
+/* Age / years lifting: two glowing numbers; tap to change the dates */
+.life-tile { display: grid; justify-items: center; gap: 4px; min-height: 92px; padding: 14px 8px 8px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line-strong); color: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; animation: lifeIn 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.life-tile:active { transform: scale(0.97); border-color: var(--neon-ink); box-shadow: 0 0 16px -4px var(--glow); }
+.life-tile .stepper-label { margin: 0; }
+.life-num { font: 600 34px var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1; color: var(--neon-ink); text-shadow: 0 0 14px var(--glow); }
+.life-dates { display: grid; gap: 12px; }
+.life-dates label { display: grid; }
+@keyframes lifeIn { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { .life-tile { animation: none; transition: none; } }

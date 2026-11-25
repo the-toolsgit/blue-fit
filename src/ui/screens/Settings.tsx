@@ -8,6 +8,7 @@ import { Confirm, Sheet } from "../components/Sheet";
 import { isStandalone } from "../device";
 import { fmtRest } from "../format";
 import { loadSeed, useStore } from "../store";
+import { localDate } from "../../core/util";
 import { fromUnit, toUnit } from "../../core/body/trends";
 import { backupText, daysSince, downloadBackup, REMIND_AFTER_DAYS } from "../backup";
 
@@ -64,8 +65,7 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
         <div><span className="eyebrow" style={{ display: "block", margin: "0 2px 8px" }}>Eating</span>
           <Seg label="Eating phase" value={prof.phase} onChange={(v) => setProf({ phase: v })} options={[{ v: "cutting", label: "Cutting" }, { v: "maintaining", label: "Maintaining" }, { v: "bulking", label: "Bulking" }]} /></div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 10 }}>
-          <Stepper label="Age" value={prof.age} step={1} decimals={false} min={10} empty={30} onChange={(v) => setProf({ age: v })} />
-          <Stepper label="Years lifting" value={prof.yearsTraining} step={0.5} min={0} empty={1} onChange={(v) => setProf({ yearsTraining: v })} />
+          <AgeYears prof={prof} setProf={setProf} />
           <Stepper label="Sleep a night (h)" value={prof.sleepHours} step={0.5} min={0} empty={7} onChange={(v) => setProf({ sleepHours: v })} />
         </div>
         <p className="muted" style={{ fontSize: 12, margin: 0 }}>Used to work out your weekly set targets (tap a muscle on the Plan tab → Reset to default). Stays on this phone.</p>
@@ -172,6 +172,46 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
         onClose={() => setReset(false)} onConfirm={async () => { try { await replaceAll(await loadSeed()); toast({ kind: "info", title: "Reset done" }); } catch (e) { console.error(e); toast({ kind: "error", title: "Reset failed", body: "Nothing was changed. Try again." }); } }} />
       <Confirm open={applyRest} title={`Set rest to ${fmtRest(settings.restDefaultSec)} everywhere?`} body={`Every exercise in ${routine?.name ?? "the plan"} gets this rest time.`} confirm="Apply"
         onClose={() => setApplyRest(false)} onConfirm={() => routine && saveRoutine({ ...routine, days: routine.days.map((d) => ({ ...d, slots: d.slots.map((s) => ({ ...s, restSec: settings.restDefaultSec })) })) })} />
+    </div>
+  );
+}
+
+/** Age and years lifting: asks once for the birthday and the month lifting started, then shows the numbers
+ *  (they update on their own). Tap a number to change the dates. */
+function AgeYears({ prof, setProf }: { prof: ProfileDraft; setProf: (p: Partial<ProfileDraft>) => void }) {
+  const [edit, setEdit] = useState(false);
+  const set = !!(prof.born && prof.liftingSince);
+  const save = (born: string, liftingSince: string) => { setProf({ born, liftingSince }); setEdit(false); };
+  if (!set) return <div style={{ gridColumn: "1 / -1" }}><LifeDates prof={prof} onSave={save} /></div>;
+  return (
+    <>
+      <button className="life-tile" onClick={() => setEdit(true)} aria-label={`Age ${prof.age}. Change birthday`}>
+        <span className="life-num">{prof.age}</span><span className="stepper-label">Age</span>
+      </button>
+      <button className="life-tile" onClick={() => setEdit(true)} aria-label={`${prof.yearsTraining} years lifting. Change start`}>
+        <span className="life-num">{fmtYears(prof.yearsTraining ?? 0)}</span><span className="stepper-label">Years lifting</span>
+      </button>
+      <Sheet open={edit} onClose={() => setEdit(false)} label="Birthday and start">
+        {edit && <LifeDates prof={prof} onSave={save} />}
+      </Sheet>
+    </>
+  );
+}
+
+const fmtYears = (y: number) => (y % 1 ? `${Math.floor(y)}½` : String(y)).replace(/^0½$/, "½");
+
+function LifeDates({ prof, onSave }: { prof: ProfileDraft; onSave: (born: string, since: string) => void }) {
+  const today = localDate(new Date());
+  const [born, setBorn] = useState(prof.born ?? "");
+  const [since, setSince] = useState(prof.liftingSince ?? "");
+  const ok = !!born && !!since && born <= today && since <= today.slice(0, 7) && since >= born.slice(0, 7);
+  return (
+    <div className="life-dates">
+      <label><span className="stepper-label">Birthday</span>
+        <input type="date" className="input" value={born} max={today} onChange={(e) => setBorn(e.target.value)} /></label>
+      <label><span className="stepper-label">Started lifting</span>
+        <input type="month" className="input" value={since} max={today.slice(0, 7)} placeholder="YYYY-MM" onChange={(e) => setSince(e.target.value)} /></label>
+      <button className="btn btn-primary btn-block" disabled={!ok} onClick={() => onSave(born, since)}>Save</button>
     </div>
   );
 }

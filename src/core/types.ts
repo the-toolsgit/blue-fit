@@ -220,7 +220,11 @@ export type Phase = "cutting" | "maintaining" | "bulking";
 /** Interview: the training profile the volume model uses. */
 export interface TrainingProfile { goal: Goal; phase: Phase; age: number; yearsTraining: number; sleepHours: number }
 /** Saved while filling in: numbers can still be missing. */
-export type ProfileDraft = { goal: Goal; phase: Phase; age: number | null; yearsTraining: number | null; sleepHours: number | null };
+export type ProfileDraft = {
+  goal: Goal; phase: Phase; age: number | null; yearsTraining: number | null; sleepHours: number | null;
+  /** Birthday ("YYYY-MM-DD") and the month lifting started ("YYYY-MM"): when set, age and years lifting follow them (core/profile.ts) */
+  born?: string | null; liftingSince?: string | null;
+};
 export const completeProfile = (p: ProfileDraft | null | undefined): TrainingProfile | null =>
   p && p.age != null && p.yearsTraining != null && p.sleepHours != null ? { ...p, age: p.age, yearsTraining: p.yearsTraining, sleepHours: p.sleepHours } : null;
 

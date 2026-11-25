@@ -132,7 +132,7 @@ export function PlanEditorScreen({ id, onExit, initialDayId }: { id?: string; on
     if (answers) {
       // The goal and eating answers update the training profile (the other numbers stay as they were)
       const p = settings.profile;
-      saveSettings({ ...settings, profile: { goal: answers.goal, phase: answers.phase, age: p?.age ?? null, yearsTraining: p?.yearsTraining ?? null, sleepHours: p?.sleepHours ?? null } });
+      saveSettings({ ...settings, profile: { ...p, goal: answers.goal, phase: answers.phase, age: p?.age ?? null, yearsTraining: p?.yearsTraining ?? null, sleepHours: p?.sleepHours ?? null } });
     }
     toast({ kind: "info", title: "Plan saved" });
     leave();

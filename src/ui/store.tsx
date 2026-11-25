@@ -8,6 +8,7 @@ import { DEFAULT_SETTINGS, type AppData, type Exercise, type RestTimer, type Rou
 import { IdbAdapter } from "../storage/idbAdapter";
 import { mergeCatalog } from "../core/catalog";
 import { targetsOf } from "../core/volumeModel";
+import { resolveProfile } from "../core/profile";
 import type { BodyScan } from "../core/body/types";
 
 export type Toast = { id: number; kind: "info" | "pr" | "error" | "warn"; title: string; body?: string; leaving?: boolean;
@@ -137,11 +138,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const current = data.routines.find((r) => r.isCurrent) ?? data.routines[0];
     return { current, targets: targetsOf(current, data.targets) };
   }, [data.routines, data.targets]);
+  // Age and years lifting follow the saved birthday and start month (worked out for today)
+  const day = localDate(new Date());
+  const settingsView = useMemo(() => ({ ...data.settings, profile: resolveProfile(data.settings.profile, day) }), [data.settings, day]);
   const store = useMemo<Store>(() => {
     const { exMap } = cat;
     const { current } = planView;
     return {
       ...data,
+      settings: settingsView,
       exercises: cat.exercises,
       phoneExercises: data.exercises,
       ensureSaved: (e) => { if (!cat.phoneIds.has(e.id)) putRow("exercises", e, "id"); },
@@ -209,7 +214,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return adapter.exportAll();
       },
     };
-  }, [data, cat, sessionsView, planView, ready, restTimer, toasts, toast, dismissToast, putRow, write, backup]);
+  }, [data, settingsView, cat, sessionsView, planView, ready, restTimer, toasts, toast, dismissToast, putRow, write, backup]);
 
   return <Ctx.Provider value={store}>{children}</Ctx.Provider>;
 }
