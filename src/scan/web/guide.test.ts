@@ -20,7 +20,8 @@ describe("scan guidance", () => {
     expect(f).toMatchObject({ top: true, bottom: true, left: true, right: true, distance: "ok", centered: true });
     expect(framing(body(0.95)).distance).toBe("back");
     expect(framing(body(1.02)).bottom).toBe(false);
-    expect(framing(body(0.5)).distance).toBe("closer");
+    expect(framing(body(0.5)).distance).toBe("ok");
+    expect(framing(body(0.4)).distance).toBe("closer");
     expect(framing(body(0.7, 0.86)).right).toBe(false);
   });
   it("pose: arms a few inches out and feet apart pass; arms against the body or raised don't", () => {

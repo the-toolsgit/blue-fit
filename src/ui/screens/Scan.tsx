@@ -330,7 +330,8 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
           if (!tiltOk(tilt)) problem = started ? "The phone moved. Stand it upright again" : "Stand the phone upright";
           else if (!lm || p.people === 0) problem = "Step into the frame";
           else if (p.people > 1) problem = "Only one person in the frame, please";
-          else if (!f!.top || !f!.bottom) problem = f!.distance === "closer" ? "Come a little closer" : "Step back until your whole body shows";
+          else if (!f!.bottom) problem = "Step back until your feet show";
+          else if (!f!.top) problem = "Step back until your head shows";
           else if (f!.distance === "back") problem = "Step back a little";
           else if (f!.distance === "closer") problem = "Come a little closer";
           else if (!f!.left || !f!.right || !f!.centered) problem = "Move to the middle of the frame";

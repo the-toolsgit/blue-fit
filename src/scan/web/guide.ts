@@ -28,10 +28,12 @@ export function framing(lm: Lm[]): Framing {
   const xs = lm.filter(vis).map((p) => p.x);
   const left = Math.min(...xs) - 0.03, right = Math.max(...xs) + 0.03;
   const fill = bottom - top;
+  // Feet must be in (the size comes from the height, head to toe) but only just: with the phone at waist height the
+  // feet reach the bottom edge before the body fills the frame, so "closer" waits until the body is under half of it.
   const M = 0.02;
   return {
-    top: top > M, bottom: feet.length >= 2 && bottom < 1 - M, left: left > M, right: right < 1 - M,
-    fill, distance: fill > 0.9 ? "back" : fill < 0.62 ? "closer" : "ok",
+    top: top > M, bottom: feet.length >= 2 && bottom < 0.995, left: left > M, right: right < 1 - M,
+    fill, distance: fill > 0.92 ? "back" : fill < 0.45 ? "closer" : "ok",
     centered: Math.abs((left + right) / 2 - 0.5) < 0.12,
   };
 }
