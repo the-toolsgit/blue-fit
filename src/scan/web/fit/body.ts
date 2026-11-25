@@ -43,15 +43,29 @@ export class FitBody {
     this.scaleIdx.forEach((k, i) => (out[k] = b.scales[i]));
     return out;
   }
+  private straightKey = "";
+  private straightHeight = 0;
+  /** Height of this shape and these proportions standing straight (posture left out): what a height entry means.
+   *  Cached: posture changes (most Jacobian columns) don't change it. */
+  straight(b: BodyParams): number {
+    const key = b.body.join(",") + "|" + b.scales.join(",");
+    if (key !== this.straightKey) {
+      const v = poseVertices(this.m, b.body, this.modelParams({ ...b, pose: b.pose.map(() => 0) }));
+      let lo = Infinity, hi = -Infinity;
+      for (let i = 1; i < v.length; i += 3) { if (v[i] < lo) lo = v[i]; if (v[i] > hi) hi = v[i]; }
+      this.straightKey = key; this.straightHeight = hi - lo;
+    }
+    return this.straightHeight;
+  }
   /** Vertices (scaled, feet on the floor) and landmark joints (same frame). With `heightCm` the size is set so the
-   *  body is exactly that tall (b.scale is ignored; the scale used is returned). */
+   *  body standing straight is exactly that tall (b.scale is ignored; the scale used is returned). */
   evaluate(b: BodyParams, heightCm?: number): { verts: Float32Array; joints: Float64Array; height: number; scale: number } {
     const params = this.modelParams(b);
     const v = poseVertices(this.m, b.body, params);
     const st = skeletonState(this.m, params);
     let minY = Infinity, maxY = -Infinity;
     for (let i = 1; i < v.length; i += 3) { if (v[i] < minY) minY = v[i]; if (v[i] > maxY) maxY = v[i]; }
-    const s = heightCm ? heightCm / (maxY - minY) : b.scale;
+    const s = heightCm ? heightCm / this.straight(b) : b.scale;
     for (let i = 0; i < v.length; i += 3) { v[i] *= s; v[i + 1] = (v[i + 1] - minY) * s; v[i + 2] *= s; }
     const joints = new Float64Array(this.jointIdx.length * 3);
     this.jointIdx.forEach((j, k) => {

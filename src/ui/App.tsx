@@ -23,6 +23,7 @@ import { TodayScreen } from "./screens/Today";
 const WorkoutScreen = lazy(() => import("./screens/Workout").then((m) => ({ default: m.WorkoutScreen })));
 const ProgressScreen = lazy(() => import("./screens/Progress").then((m) => ({ default: m.ProgressScreen })));
 const PlanEditorScreen = lazy(() => import("./screens/PlanEditor").then((m) => ({ default: m.PlanEditorScreen })));
+const ScanScreen = lazy(() => import("./screens/Scan").then((m) => ({ default: m.ScanScreen })));
 const EditWorkoutScreen = lazy(() => import("./screens/EditWorkout").then((m) => ({ default: m.EditWorkoutScreen })));
 // The runner with air streaks behind him (a separate svg, so the CSS animation isn't restarted by the figure's redraws)
 const Loading = () => (
@@ -182,6 +183,7 @@ export function App() {
   else if (name === "plan-edit") screen = <PlanEditorScreen id={id} />;
   else if (name === "history") screen = <HistoryScreen key={today} />;
   else if (name === "progress") screen = <ProgressScreen key={today} />;
+  else if (name === "scan") screen = <ScanScreen />;
   else if (name === "settings") screen = <SettingsScreen onUpdate={needRefresh ? () => updateServiceWorker(true) : undefined} onCheck={checkForUpdate} />;
   else screen = <TodayScreen key={today} />;
 

@@ -97,12 +97,66 @@ export function signedDistance(m: Mask): Float32Array {
   for (let i = 0; i < w * h; i++) outsideSet[i] = data[i] ? 0 : 1;
   const dIn = distanceTransform(data, w, h), dOut = distanceTransform(outsideSet, w, h);
   const out = new Float32Array(w * h);
-  // at an inside pixel next to the edge: (0 - 1) / 2 = -0.5, the true distance to the edge
-  for (let i = 0; i < w * h; i++) out[i] = (dIn[i] - dOut[i]) / 2;
+  // the edge lies half a pixel from the nearest pixel center of the other side
+  for (let i = 0; i < w * h; i++) out[i] = data[i] ? -(dOut[i] - 0.5) : dIn[i] - 0.5;
   return out;
 }
 
-/** Points on the mask's true edge: the middle of every side shared by an inside and an outside pixel. */
+const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]] as const;
+
+/** Clean a person mask: keep the biggest blob and any blob at least 5% of its size (a hand separated by a thin
+ *  gap), drop small specks, fill holes. */
+export function cleanMask(m: Mask): Mask {
+  const { w, h, data } = m;
+  const lab = new Int32Array(w * h);
+  let best = 0, bestN = 0, next = 0;
+  const sizes: number[] = [0];
+  const stack: number[] = [];
+  for (let i = 0; i < w * h; i++) {
+    if (!data[i] || lab[i]) continue;
+    next++; let n = 0; lab[i] = next; stack.push(i);
+    while (stack.length) {
+      const j = stack.pop()!; n++;
+      const x = j % w, y = (j - x) / w;
+      if (x > 0 && data[j - 1] && !lab[j - 1]) { lab[j - 1] = next; stack.push(j - 1); }
+      if (x < w - 1 && data[j + 1] && !lab[j + 1]) { lab[j + 1] = next; stack.push(j + 1); }
+      if (y > 0 && data[j - w] && !lab[j - w]) { lab[j - w] = next; stack.push(j - w); }
+      if (y < h - 1 && data[j + w] && !lab[j + w]) { lab[j + w] = next; stack.push(j + w); }
+    }
+    sizes[next] = n;
+    if (n > bestN) { bestN = n; best = next; }
+  }
+  const keepLab = (l: number) => l !== 0 && (l === best || sizes[l] >= bestN * 0.05);
+  // outside = background reachable from the image border; everything else is the person (holes filled)
+  const out = new Uint8Array(w * h).fill(1), seen = new Uint8Array(w * h);
+  for (let x = 0; x < w; x++) for (const y of [0, h - 1]) { const i = y * w + x; if (!keepLab(lab[i]) && !seen[i]) { seen[i] = 1; stack.push(i); } }
+  for (let y = 0; y < h; y++) for (const x of [0, w - 1]) { const i = y * w + x; if (!keepLab(lab[i]) && !seen[i]) { seen[i] = 1; stack.push(i); } }
+  while (stack.length) {
+    const j = stack.pop()!; out[j] = 0;
+    const x = j % w, y = (j - x) / w;
+    for (const k of [x > 0 ? j - 1 : -1, x < w - 1 ? j + 1 : -1, y > 0 ? j - w : -1, y < h - 1 ? j + w : -1])
+      if (k >= 0 && !seen[k] && !keepLab(lab[k])) { seen[k] = 1; stack.push(k); }
+  }
+  // enclosed background: fill only small holes (noise). A big one is real, e.g. the gap between an arm and the
+  // body when the hand touches the hip.
+  const hole = new Uint8Array(w * h);
+  for (let i = 0; i < w * h; i++) {
+    if (!out[i] || keepLab(lab[i]) || hole[i]) continue;
+    const region: number[] = [];
+    hole[i] = 1; stack.push(i);
+    while (stack.length) {
+      const j = stack.pop()!; region.push(j);
+      const x = j % w, y = (j - x) / w;
+      for (const k of [x > 0 ? j - 1 : -1, x < w - 1 ? j + 1 : -1, y > 0 ? j - w : -1, y < h - 1 ? j + w : -1])
+        if (k >= 0 && out[k] && !keepLab(lab[k]) && !hole[k]) { hole[k] = 1; stack.push(k); }
+    }
+    if (region.length > bestN * 0.005) for (const j of region) out[j] = 0;
+  }
+  return { w, h, data: out };
+}
+
+/** Points on the mask's true edge: the middle of every side shared by an inside and an outside pixel
+ *  (not along the image border: a body cut by the frame edge has no real edge there). */
 export function edgePoints(m: Mask, every = 1): [number, number][] {
   const { w, h, data } = m;
   const pts: [number, number][] = [];
@@ -111,8 +165,11 @@ export function edgePoints(m: Mask, every = 1): [number, number][] {
   for (let y = 0; y < h; y++)
     for (let x = 0; x < w; x++) {
       if (!data[y * w + x]) continue;
-      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]])
-        if (!inside(x + dx, y + dy) && k++ % every === 0) pts.push([x + 0.5 + dx / 2, y + 0.5 + dy / 2]);
+      for (const [dx, dy] of DIRS) {
+        const nx = x + dx, ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= w || ny >= h || inside(nx, ny)) continue;
+        if (k++ % every === 0) pts.push([x + 0.5 + dx / 2, y + 0.5 + dy / 2]);
+      }
     }
   return pts;
 }

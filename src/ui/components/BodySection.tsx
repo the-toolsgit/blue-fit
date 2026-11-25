@@ -9,6 +9,7 @@ import { BodyEntrySheet } from "./BodyEntrySheet";
 import { Confirm, Sheet } from "./Sheet";
 import { useKeptState } from "../keptState";
 import { useStore } from "../store";
+import { go } from "../router";
 
 const SOURCE: Record<BodyScan["source"], string> = { "web-camera": "Camera scan", "native-camera": "Camera scan", manual: "Tape" };
 const when = (d: string) => new Date(d).toLocaleString(undefined, { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
@@ -40,8 +41,9 @@ export function BodySection() {
       <section className="glass" style={{ padding: 14 }}>
         {!latest ? (
           <div className="stack" style={{ gap: 10 }}>
-            <p className="muted" style={{ fontSize: 14, margin: 0 }}>Track chest, waist, arms, thighs and body fat. The camera scan is coming; for now add tape measurements.</p>
-            <button className="btn btn-primary btn-block" onClick={() => setAdding(true)}>Add measurements</button>
+            <p className="muted" style={{ fontSize: 14, margin: 0 }}>Track chest, waist, arms, thighs and body fat with a 3D camera scan, or add tape measurements.</p>
+            <button className="btn btn-primary btn-block" onClick={() => go("scan")}>Scan my body</button>
+            <button className="btn btn-ghost btn-block" onClick={() => setAdding(true)}>Add tape measurements</button>
           </div>
         ) : (
           <div className="stack" style={{ gap: 12 }}>
@@ -80,7 +82,10 @@ export function BodySection() {
               <LineChart key={m} points={series.map((p) => ({ label: dayLabel(p.date.slice(0, 10)), value: metricVal(m!, p.value) }))} unit={metricUnit(m!)} fmt={(n) => fmtNum(Math.round(n * 10) / 10)} />
               {scans.some((s) => s.source !== latest.source) && <p className="muted" style={{ fontSize: 12, margin: 0 }}>Chart shows {SOURCE[latest.source].toLowerCase()} entries only: tape and camera measure differently.</p>}
             </>}
-            <button className="btn btn-ghost btn-block" onClick={() => setAdding(true)}>Add measurements</button>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              <button className="btn btn-primary" onClick={() => go("scan")}>Scan</button>
+              <button className="btn btn-ghost" onClick={() => setAdding(true)}>Add tape</button>
+            </div>
             {scans.length > 1 && <details className="body-history">
               <summary className="muted" style={{ fontSize: 13 }}>All entries ({scans.length})</summary>
               {scans.map((s) => (

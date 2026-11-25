@@ -2,7 +2,7 @@
 // World: cm, y up, floor y = 0. The phone sits at (0, h, 0) looking along +z, pitched by
 // `pitch` (radians, + = tilted up, from gravity). For each photo the body (model space: y up,
 // front = +z) is turned by `yaw` about the vertical axis and stands at (tx, 0, tz).
-// Image: u right, v down, pixels.
+// Image: u right, v down, pixels, as the camera sees it (not mirrored): the user's left shows on the image's right.
 
 export interface Cam { f: number; cx: number; cy: number; h: number; pitch: number }
 export interface View { yaw: number; tx: number; tz: number }
@@ -20,7 +20,7 @@ export function project(pts: ArrayLike<number>, n: number, view: View, cam: Cam,
     const Y = cp * yc - sp * wz;
     const Z = sp * yc + cp * wz;
     const iz = 1 / Math.max(1, Z);
-    out[i * 2] = cam.cx + cam.f * wx * iz;
+    out[i * 2] = cam.cx - cam.f * wx * iz;
     out[i * 2 + 1] = cam.cy - cam.f * Y * iz;
   }
 }

@@ -6,7 +6,8 @@
 // Jacobian is taken (finite differences: the body rebuild takes ~1 ms). Coarse to fine: placement
 // and camera first, then posture and proportions, then body shape.
 import { project, type Cam, type View } from "./camera";
-import { edgePoints, iou, rasterize, sample, signedDistance, type Mask } from "./raster";
+import { cleanMask, edgePoints, iou, rasterize, sample, signedDistance, type Mask } from "./raster";
+import { PART_LABELS } from "../../../core/body/mhr";
 import { FitBody, POSE_PARAMS, SCALE_PARAMS, zeroParams, type BodyParams } from "./body";
 
 export interface Photo {
@@ -16,44 +17,64 @@ export interface Photo {
   /** Clock hour the user was asked to face (0 = facing the phone … 11) */
   hour: number;
 }
+/** yawSign: which way the user turned (+1 / −1); left out = tried both, the better fit wins. */
 export interface FitInput { photos: Photo[]; heightCm: number; camGuess: Cam; yawSign?: 1 | -1 }
 export interface FitResult {
   params: BodyParams; cam: Cam; views: View[];
   /** Per photo: overlap of the fitted body with the photo outline (0–1) and 90th-percentile outline distance (px) */
   iou: number[]; rmsPx: number[];
   iterations: number; ms: number; ok: boolean; reason?: string;
+  /** Final cost (for comparing turn directions) */
+  cost: number;
 }
 
-const W_OUT = 1, W_IN = 1, W_LM = 0.3, W_HEIGHT = 3, W_SHAPE = 2, W_POSE = 4, W_SCALE = 6;
+const W_OUT = 1, W_IN = 1, W_LM = 0.3, W_SHAPE = 2, W_POSE = 4, W_SCALE = 6, W_PITCH = 40;
+/** Landmark trust per LANDMARK_JOINTS entry: pose-tracker hips and shoulders aren't joint centers, the head is
+ *  between the ears. */
+const LM_TRUST = [0.5, 0.5, 0.5, 1, 1, 1, 1, 0.3, 0.3, 1, 1, 1, 1];
 const HUBER = 3;
 const NB = 20, NP = POSE_PARAMS.length, NS = SCALE_PARAMS.length;
 
 type State = { b: BodyParams; cam: Cam; views: View[] };
 const clone = (s: State): State => ({ b: { body: [...s.b.body], pose: [...s.b.pose], scales: [...s.b.scales], scale: s.b.scale }, cam: { ...s.cam }, views: s.views.map((v) => ({ ...v })) });
 
-// Parameter vector: [body 20 | pose | scales | scale | f | camH | (yaw, tx, tz) × views]
+// Parameter vector: [body 20 | pose | scales | scale (unused: set by the height) | f | camH | pitch | (yaw, tx, tz) × views]
 function pack(s: State): number[] {
-  return [...s.b.body, ...s.b.pose, ...s.b.scales, s.b.scale, s.cam.f, s.cam.h, ...s.views.flatMap((v) => [v.yaw, v.tx, v.tz])];
+  return [...s.b.body, ...s.b.pose, ...s.b.scales, s.b.scale, s.cam.f, s.cam.h, s.cam.pitch, ...s.views.flatMap((v) => [v.yaw, v.tx, v.tz])];
 }
+/** Each photo's turn stays within this of its clock hour: a body seen from the front and from the back has nearly
+ *  the same outline, so without a bound a photo can settle at the mirror-image turn. */
+const YAW_BOUND = 0.6;
+let yawTargets: number[] = [];
 function unpack(x: number[], base: State): State {
   const s = clone(base);
   let k = 0;
   for (let i = 0; i < NB; i++) s.b.body[i] = x[k++];
   for (let i = 0; i < NP; i++) s.b.pose[i] = x[k++];
   for (let i = 0; i < NS; i++) s.b.scales[i] = x[k++];
-  s.b.scale = x[k++]; s.cam.f = x[k++]; s.cam.h = x[k++];
-  for (const v of s.views) { v.yaw = x[k++]; v.tx = x[k++]; v.tz = x[k++]; }
+  s.b.scale = x[k++]; s.cam.f = x[k++]; s.cam.h = x[k++]; s.cam.pitch = x[k++];
+  s.views.forEach((v, i) => {
+    const t = yawTargets[i];
+    v.yaw = t == null ? x[k++] : Math.max(t - YAW_BOUND, Math.min(t + YAW_BOUND, x[k++]));
+    v.tx = x[k++]; v.tz = x[k++];
+  });
   return s;
 }
 const SHARED = NB + NP + NS + 1; // parameters that need a body rebuild
+const VIEW0 = SHARED + 3; // first per-photo parameter
 
 interface ViewData { dt: Float32Array; samples: [number, number][] }
-interface Corr { need: number[]; cIdx: number[]; nIdx: number[] }
+interface Corr { need: number[]; cIdx: number[]; nIdx: number[]; swap: boolean }
 
 export class SilhouetteFit {
   private edges: [number, number, number, number][] = []; // v0, v1, face a, face b (-1 = border)
+  /** Hands are left out of the quality check: fingers are noisy in photos, outnumber the torso's vertices, and no
+   *  tape is taken there. (They stay in the match, or the arms would be pulled onto the hands' outline.) */
+  private skip: Uint8Array;
   constructor(private fb: FitBody) {
     const m = fb.m;
+    const hands = [PART_LABELS.indexOf("handL"), PART_LABELS.indexOf("handR")];
+    this.skip = Uint8Array.from(m.partLabels, (l) => (hands.includes(l) ? 1 : 0));
     const map = new Map<number, [number, number, number, number]>();
     for (let f = 0; f < m.faces.length / 3; f++)
       for (let k = 0; k < 3; k++) {
@@ -109,20 +130,24 @@ export class SilhouetteFit {
     const sm = vd[v].samples;
     for (let q = 0; q < sm.length; q++) {
       const k = c.nIdx[q];
-      out[off++] = W_IN * (uv[k * 2] - sm[q][0]);
-      out[off++] = W_IN * (uv[k * 2 + 1] - sm[q][1]);
+      const du = uv[k * 2] - sm[q][0], dv = uv[k * 2 + 1] - sm[q][1], len = Math.hypot(du, dv);
+      // Huber on the pair's length: a hair strand, a floor shadow or a hand on the hip can't pull hard
+      const f = len > HUBER ? Math.sqrt(HUBER * (2 * len - HUBER)) / len : 1;
+      out[off++] = W_IN * f * du;
+      out[off++] = W_IN * f * dv;
     }
     const nj = body.joints.length / 3;
     const juv = new Float64Array(nj * 2);
     project(body.joints, nj, s.views[v], s.cam, juv);
-    for (let j = 0; j < juv.length; j++) out[off++] = Number.isFinite(ph.landmarks[j]) ? W_LM * (juv[j] - ph.landmarks[j]) : 0;
+    const lm = c.swap ? swapLR(ph.landmarks) : ph.landmarks;
+    for (let j = 0; j < juv.length; j++) out[off++] = Number.isFinite(lm[j]) ? W_LM * LM_TRUST[j >> 1] * (juv[j] - lm[j]) : 0;
     return off;
   }
-  private globalRes(s: State, body: ReturnType<FitBody["evaluate"]>, input: FitInput, out: Float64Array, off: number) {
-    out[off++] = W_HEIGHT * (body.height - input.heightCm);
-    // weak camera priors (focal length and phone height trade off against distance otherwise)
+  private globalRes(s: State, _body: ReturnType<FitBody["evaluate"]>, input: FitInput, out: Float64Array, off: number) {
+    // weak camera priors (focal length and phone height trade off against distance otherwise); tilt from gravity
     out[off++] = (20 * (s.cam.f - input.camGuess.f)) / input.camGuess.f;
     out[off++] = 0.2 * (s.cam.h - input.camGuess.h);
+    out[off++] = W_PITCH * (s.cam.pitch - input.camGuess.pitch);
     for (const x of s.b.body) out[off++] = W_SHAPE * x;
     for (const x of s.b.pose) out[off++] = W_POSE * x;
     for (const x of s.b.scales) out[off++] = W_SCALE * x;
@@ -146,9 +171,15 @@ export class SilhouetteFit {
         for (const i of contour) { const d = (uv[i * 2] - qx) ** 2 + (uv[i * 2 + 1] - qy) ** 2; if (d < bd) { bd = d; best = i; } }
         return best;
       });
+      // pose trackers mix up left and right when the back faces the camera: use whichever labelling fits better
+      const nj = body.joints.length / 3;
+      const juv = new Float64Array(nj * 2);
+      project(body.joints, nj, s.views[v], s.cam, juv);
+      const err = (lm: Float64Array) => { let e = 0; for (let j = 0; j < juv.length; j++) if (Number.isFinite(lm[j])) e += (juv[j] - lm[j]) ** 2; return e; };
+      const swap = ph.hour >= 4 && ph.hour <= 8 && err(swapLR(ph.landmarks)) < err(ph.landmarks);
       const need = [...new Set([...contour, ...nearest])];
       const pos = new Map(need.map((i, k) => [i, k]));
-      return { need, cIdx: contour.map((i) => pos.get(i)!), nIdx: nearest.map((i) => pos.get(i)!) };
+      return { need, cIdx: contour.map((i) => pos.get(i)!), nIdx: nearest.map((i) => pos.get(i)!), swap };
     });
   }
   /** Where each photo's residuals start, and the total count. */
@@ -161,12 +192,19 @@ export class SilhouetteFit {
     return { starts, total: off + 3 + NB + NP + NS };
   }
 
-  run(input: FitInput, opts: { maxIter?: number; init?: { params: BodyParams; cam: Cam; views: View[] }; noFit?: boolean } = {}): FitResult {
+  run(input: FitInput, opts: { maxIter?: number; init?: { params: BodyParams; cam: Cam; views: View[] }; noFit?: boolean; stages?: number; firstIters?: number } = {}): FitResult {
+    if (!input.yawSign && !opts.init) {
+      // which way did the user turn? Place the photos both ways (first stage only) and keep the better one
+      const a = this.run({ ...input, yawSign: 1 }, { stages: 1, firstIters: 6 }), b = this.run({ ...input, yawSign: -1 }, { stages: 1, firstIters: 6 });
+      const r = this.run({ ...input, yawSign: a.cost <= b.cost ? 1 : -1 }, opts);
+      return { ...r, ms: r.ms + a.ms + b.ms };
+    }
     const t0 = performance.now();
     const sign = input.yawSign ?? 1;
     const vd: ViewData[] = input.photos.map((ph) => {
       // the true edge (between pixels), not the edge pixels' centers: those sit half a pixel inside
-      return { dt: signedDistance(ph.mask), samples: edgePoints(ph.mask, 4) };
+      const mask = cleanMask(ph.mask);
+      return { dt: signedDistance(mask), samples: edgePoints(mask, 4) };
     });
     // start: mean body at the user's height, each photo placed from its outline box
     const b0 = zeroParams();
@@ -177,18 +215,42 @@ export class SilhouetteFit {
       const { w, data } = ph.mask;
       for (let i = 0; i < data.length; i++) if (data[i]) { const x = i % w, y = Math.floor(i / w); top = Math.min(top, y); bot = Math.max(bot, y); left = Math.min(left, x); right = Math.max(right, x); }
       const tz = (cam.f * input.heightCm) / Math.max(1, bot - top);
-      return { yaw: Math.PI + sign * ph.hour * (Math.PI / 6), tx: (((left + right) / 2 - cam.cx) * tz) / cam.f, tz };
+      return { yaw: Math.PI + sign * ph.hour * (Math.PI / 6), tx: -(((left + right) / 2 - cam.cx) * tz) / cam.f, tz };
     });
+    yawTargets = input.photos.map((ph) => Math.PI + sign * ph.hour * (Math.PI / 6));
     let s: State = opts.init ? clone({ b: opts.init.params, cam: opts.init.cam, views: opts.init.views }) : { b: b0, cam, views };
+    const cleaned = input.photos.map((ph) => cleanMask(ph.mask));
+    // people rarely stop exactly on the hour: put a photo at the turn (within the bound) whose outline overlaps best
+    const regrid = (st: State, only?: (i: number) => boolean) => {
+      const body0 = this.fb.evaluate(st.b, input.heightCm);
+      const nV = this.fb.m.vertexCount, uv0 = new Float64Array(nV * 2);
+      const quality: number[] = [];
+      st.views.forEach((v, i) => {
+        const ph = input.photos[i];
+        const q0 = () => { project(body0.verts, nV, v, st.cam, uv0); return iou(rasterize(uv0, this.fb.m.faces, ph.mask.w, ph.mask.h), cleaned[i]); };
+        if (only && !only(i)) { quality.push(q0()); return; }
+        let best = v.yaw, bestIou = only ? q0() : -1;
+        for (let d = -YAW_BOUND; d <= YAW_BOUND + 1e-9; d += 0.1) {
+          project(body0.verts, nV, { ...v, yaw: yawTargets[i] + d }, st.cam, uv0);
+          const q = iou(rasterize(uv0, this.fb.m.faces, ph.mask.w, ph.mask.h), cleaned[i]);
+          if (q > bestIou) { bestIou = q; best = yawTargets[i] + d; }
+        }
+        v.yaw = best;
+        quality.push(bestIou);
+      });
+      return quality;
+    };
+    if (!opts.init) regrid(s);
     const stages: { iters: number; active: (k: number) => boolean }[] = [
-      { iters: 15, active: (k) => k > NB + NP + NS }, // camera, placement (size is fixed by the height)
+      { iters: opts.firstIters ?? 15, active: (k) => k > NB + NP + NS }, // camera, placement (size is fixed by the height)
       { iters: 10, active: (k) => k >= NB && k !== NB + NP + NS }, // + posture and proportions
       { iters: opts.maxIter ?? 25, active: (k) => k !== NB + NP + NS }, // + body shape
     ];
     const nP = pack(s).length;
     let iterations = 0;
 
-    for (const stage of opts.noFit ? [] : stages) {
+    let lastCost = Infinity;
+    for (const stage of opts.noFit ? [] : stages.slice(0, opts.stages ?? stages.length)) {
       let lambda = 1e-3;
       for (let it = 0; it < stage.iters; it++) {
         iterations++;
@@ -198,6 +260,7 @@ export class SilhouetteFit {
         const r = new Float64Array(lay.total), rp = new Float64Array(lay.total);
         this.residuals(s, body, input, vd, corr, r);
         const cost = r.reduce((a, x) => a + x * x, 0);
+        if (lastCost === Infinity) lastCost = cost;
         const x = pack(s);
         const act = x.map((_, k) => stage.active(k));
         // Jacobian (forward differences), column by column
@@ -205,13 +268,13 @@ export class SilhouetteFit {
         const span: [number, number][] = new Array(nP).fill([0, 0]);
         for (let k = 0; k < nP; k++) {
           if (!act[k]) continue;
-          const step = k < NB ? 1e-3 : k < NB + NP + NS ? 1e-4 : k === NB + NP + NS ? 1e-5 : k === SHARED ? 0.05 : k === SHARED + 1 ? 0.05 : (k - SHARED - 2) % 3 === 0 ? 1e-4 : 0.05;
+          const step = k < NB ? 1e-3 : k < NB + NP + NS ? 1e-4 : k === NB + NP + NS ? 1e-5 : k === SHARED ? 0.05 : k === SHARED + 1 ? 0.05 : k === SHARED + 2 ? 1e-4 : (k - VIEW0) % 3 === 0 ? 1e-4 : 0.05;
           const xp = [...x]; xp[k] += step;
           const sp = unpack(xp, s);
           const col = new Float64Array(r.length);
-          if (k >= SHARED + 2) {
+          if (k >= VIEW0) {
             // one photo's placement: only that photo's residuals move
-            const v = Math.floor((k - SHARED - 2) / 3);
+            const v = Math.floor((k - VIEW0) / 3);
             this.viewRes(sp, body, input, vd, corr[v], v, rp, lay.starts[v]);
             for (let i = lay.starts[v]; i < lay.starts[v + 1]; i++) col[i] = (rp[i] - r[i]) / step;
             rp.set(r.subarray(lay.starts[v], lay.starts[v + 1]), lay.starts[v]);
@@ -252,10 +315,16 @@ export class SilhouetteFit {
           const bn = this.fb.evaluate(sn.b, input.heightCm);
           this.residuals(sn, bn, input, vd, corr, rp);
           const cn = rp.reduce((a2, v) => a2 + v * v, 0);
-          if (cn < cost) { s = sn; body = bn; lambda = Math.max(1e-7, lambda / 10); accepted = true; if ((cost - cn) / cost < 1e-4) it = stage.iters; }
+          if (cn < cost) { s = sn; body = bn; lastCost = cn; lambda = Math.max(1e-7, lambda / 10); accepted = true; if ((cost - cn) / cost < 1e-4) it = stage.iters; }
           else lambda *= 10;
         }
         if (!accepted) break;
+      }
+      // a photo that still matches poorly probably sits at the wrong turn: search its turn again with this body
+      if (!opts.init) {
+        const q = regrid(s, () => false);
+        const bad = new Set(q.flatMap((x, i) => (x < 0.95 ? [i] : [])));
+        if (bad.size) regrid(s, (i) => bad.has(i));
       }
     }
     // quality per photo
@@ -269,16 +338,27 @@ export class SilhouetteFit {
       ious.push(Math.round(iou(rasterize(uv, this.fb.m.faces, ph.mask.w, ph.mask.h), ph.mask) * 1000) / 1000);
       const c = this.contour(uv, ph.mask.w, ph.mask.h);
       // 90th percentile of the outline distance: a few stray points (a finger, a fold) don't fail a good fit
-      const e = c.map((i) => Math.abs(sample(vd[v].dt, ph.mask.w, ph.mask.h, uv[i * 2], uv[i * 2 + 1]))).sort((a, b) => a - b);
+      const inImg = (i: number) => uv[i * 2] >= 1 && uv[i * 2 + 1] >= 1 && uv[i * 2] <= ph.mask.w - 1 && uv[i * 2 + 1] <= ph.mask.h - 1;
+      const e = c.filter((i) => !this.skip[i] && inImg(i)).map((i) => Math.abs(sample(vd[v].dt, ph.mask.w, ph.mask.h, uv[i * 2], uv[i * 2 + 1]))).sort((a, b) => a - b);
       rms.push(Math.round((e[Math.floor(e.length * 0.9)] ?? 0) * 100) / 100);
     });
     const badShape = s.b.body.some((x) => Math.abs(x) > 3);
     const ok = ious.every((x) => x >= 0.9) && rms.every((x) => x <= 2) && !badShape;
     return {
-      params: s.b, cam: s.cam, views: s.views, iou: ious, rmsPx: rms, iterations, ms: Math.round(performance.now() - t0), ok,
+      params: s.b, cam: s.cam, views: s.views, iou: ious, rmsPx: rms, iterations, ms: Math.round(performance.now() - t0), ok, cost: lastCost,
       reason: ok ? undefined : badShape ? "unusual body shape" : ious.some((x) => x < 0.9) ? "outline doesn't match" : "edges too far",
     };
   }
+}
+
+/** Landmarks with left and right swapped (LANDMARK_JOINTS order: head, then L/R pairs). */
+function swapLR(lm: Float64Array): Float64Array {
+  const out = Float64Array.from(lm);
+  for (let j = 1; j + 1 < lm.length / 2; j += 2) {
+    out[j * 2] = lm[(j + 1) * 2]; out[j * 2 + 1] = lm[(j + 1) * 2 + 1];
+    out[(j + 1) * 2] = lm[j * 2]; out[(j + 1) * 2 + 1] = lm[j * 2 + 1];
+  }
+  return out;
 }
 
 /** Solve M d = g (symmetric positive definite) by Cholesky; null if not positive definite. */

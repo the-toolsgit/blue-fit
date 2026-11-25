@@ -101,6 +101,18 @@ Camera denied (standalone PWA may ask on every launch) · unsupported camera / i
 - What made it work: fit on **LOD 2** (LOD 3 inflated the body ~1 cm to match), size **locked to the entered height** (otherwise it traded size for distance), outline distances to the **true pixel edge** (edge pixels' centers shrank the body half a pixel), the **scan pose** as the base pose (MHR's rest pose holds the arms ~50° out), hip cuts **include the legs** (a hip tape goes around both buttocks), measuring in the **standard pose** (posture changes don't move tapes), waist levels from **front-midline surface points**, and a robust edge check (90th percentile ≤ 2 px).
 - Known weak spot: the neck (±2.5 cm). Lower waist depends on where the navel sits on the fitted body.
 
+### Fit review fixes (Nov 24 2026, v0.1.248)
+Edge distance now true size (was ~½); size locked to the height **standing straight** (posture left out); Huber on both outline terms; masks cleaned (biggest blob + blobs ≥ 5% of it, small holes filled, real gaps like arm–hip kept); edge points on the image border ignored; camera **tilt fitted** with a prior from the phone's gravity reading; landmark trust per joint (hips/shoulders/head weaker); left/right swap only for hours 4–8; each photo's turn bounded to ±34° of its hour and **picked by outline overlap** at the start and again after each stage for photos matching < 0.95; hands left out of the quality check; the camera model is no longer mirrored (user's left = image right, like the real front camera); the turn direction is tried both ways.
+Tests: normal, turning the other way with a 6° tilt and ±10° sloppy turns, both pass (torso ≤ 1.5 cm, limbs ≤ 2 cm). Fit time grew to 20–35 s on the Intel Mac (iPhone ~3× faster).
+
+### Open items (next session)
+1. Quality-check false alarm: a good fit (overlap 0.985) can still show a 90th-percentile edge distance of ~18 px in one photo (seed 6). Find which points and fix the metric.
+2. Damaged masks (floor shadow at the feet, ragged edges): fit misses by 2–4 cm; cut the mask below the feet / handle shadows, then re-enable `damage: true` in the tests.
+3. Dev server: the worker can't import MediaPipe's runtime from `public/` (Vite blocks it); load it as an asset (`@mediapipe/tasks-vision/vision_wasm_module_internal.js?url` + `.wasm?url` as a WasmFileset). Production works.
+4. Speed: reuse Jacobian/column buffers, no allocations in `viewRes`/`stateMul`/`poseVertices`, grid nearest search (review #16–18).
+5. Neck cuts: keep only the loop around the neck axis (±8 cm); thigh cuts start below the crotch; exact cuts at armpit/navel height (review #12–14).
+6. Step 3b screens are written (`src/ui/screens/Scan.tsx`, worker, client, guide) but untested on a phone → spike 2 + first real scan with Leo; then step 4 (3D results), step 5 (research note for Leo's OK).
+
 ## 5. Interpretation (permanent)
 
 - `src/core/body/trends.ts`: change per part over 4/8/12 weeks, left/right balance, smoothed over the last scans.
@@ -136,7 +148,7 @@ Native camera scanner (same front-camera flow, native pose/segmentation) produci
 1. ✅ (v0.1.244) **Core data:** types, `LEVEL_KEYS`, `measure.ts` + Navy tests, storage table, `SCHEMA_VERSION` 2 + migrate, settings, APP_SPEC §4.8 replaced. Done when: Navy worked examples pass, an old v1 backup imports, old DBs open.
 2. ✅ (v0.1.245) **Progress Body section + manual entry** (`source: "manual"`, no geometry). Done when: manual scans show, chart, delete (shown first), edit.
 3a. ✅ (v0.1.247) **Fit + measure in Node/Vitest** on synthetic masks from random MHR bodies. Done when: torso error ≤ 1.5 cm, limbs ≤ 2 cm, fit converges on 95% of cases, time measured.
-3b. **Spike 2** on the iPhone (§4). Then **capture flow + guidance** in the app (tutorial, Weight & Height, sound check, phone height, tilt, room check, 12-hour rotation with voice). Done when: a full rotation captures 12 good masks on the phone.
+3b. 🟡 (code written, v0.1.248; needs the phone) **Spike 2** on the iPhone (§4). Then **capture flow + guidance** in the app (tutorial, Weight & Height, sound check, phone height, tilt, room check, 12-hour rotation with voice). Done when: a full rotation captures 12 good masks on the phone.
 3c. **Integrate on the phone:** masks → fit → measure → save. Done when: two back-to-back scans agree within 1 cm on torso, fit < 20 s.
 4. **Results screen** (SVG 3D) + all error states. Done when: every §3.6 state is reachable and shown.
 5. **Research note → Leo's OK → interpretation + suggestion card.** Done when: gates tested with made-up scan histories.
