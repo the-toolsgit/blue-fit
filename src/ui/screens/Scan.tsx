@@ -314,7 +314,7 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
         let prevLm: Parameters<typeof motion>[0] = null;
         const still: number[] = [];
         // a problem must last before it's shown or said (a moment of a bad pose reading isn't a problem)
-        let problemText: string | null = null, problemSince = 0;
+        let problemText: string | null = null, problemSince = 0, problemSaid = "", problemSaidAt = -1e9, tooFarSince: number | null = null;
         while (alive) {
           const v = video.current!;
           const p = await worker.current!.pose(v);
@@ -339,12 +339,17 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
             if (!pc.ok) problem = pc.say!;
             else if (room) { const rc = roomCheck(room); if (!rc.ok) problem = rc.say!; }
           }
+          // buffer: a problem counts only after it lasts (2.5 s, 3 s while turning); shorter blips are ignored, not
+          // said and don't reset anything. Spoken problems: at most one every 5 s, the same one every 8 s.
           if (problem !== problemText) { problemText = problem; problemSince = now; }
-          const lasting = problem != null && now - problemSince > (started ? 1500 : 1000);
+          const lasting = problem != null && now - problemSince > (started ? 3000 : 2500);
           if (problem) {
-            goodSince = null;
-            if (lasting) { setCue(problem); say(problem); }
             prevLm = lm;
+            if (lasting) {
+              goodSince = null;
+              setCue(problem);
+              if (now - problemSaidAt > (problem === problemSaid ? 8000 : 5000)) { problemSaid = problem; problemSaidAt = now; say(problem, true); }
+            }
             await new Promise((r) => setTimeout(r, 60));
             continue;
           }
@@ -370,8 +375,13 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
             if (beta != null) betas.push(beta);
             setHour(c.hour);
             if (c.hour >= 11) { setCue("Done"); alive = false; break; }
-          } else if (c.kind === "tooFar") { stats.tooFar++; setCue("You turned too much. Turn back a little"); say("You turned too much. Turn back a little"); }
-          else if (c.kind === "turn" || c.kind === "hold") {
+          } else if (c.kind === "tooFar") {
+            // only after 2 s past the hour (a glance or a sway isn't a turn)
+            tooFarSince ??= now;
+            if (now - tooFarSince > 2000) { stats.tooFar++; tooFarSince = now; setCue("You turned too much. Turn back a little"); say("You turned too much. Turn back a little"); }
+          }
+          if (c.kind !== "tooFar") tooFarSince = null;
+          if (c.kind === "turn" || c.kind === "hold") {
             if (c.hour === 0) setCue("Hold still");
             else if (c.hour !== lastHour) { lastHour = c.hour; setCue(hourCue(c.hour)); say(hourCue(c.hour)); }
             else setCue(hourCue(c.hour));
