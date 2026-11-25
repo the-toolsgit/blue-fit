@@ -1,6 +1,6 @@
 // Rest timer dock: lives above the tab bar on every screen, survives navigation and reloads
 // (its end time is stored). Chimes at zero. Also shows a "Back to workout" pill away from the logger.
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { REST } from "../../core/figure/poses";
 import { durationMin } from "../../core/session";
 import { chime, vibrate } from "../device";
@@ -12,12 +12,14 @@ import { Icon } from "./Icon";
 
 export function Ring({ frac, size, stroke, done }: { frac: number; size: number; stroke: number; done?: boolean }) {
   const r = (size - stroke) / 2, c = 2 * Math.PI * r;
+  // own gradient id per ring: with a shared id Safari used another (hidden) ring's gradient and drew nothing
+  const grad = "ringGrad" + useId().replace(/:/g, "");
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: "rotate(-90deg)", filter: "drop-shadow(0 0 6px var(--glow))" }} aria-hidden>
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--line-strong)" strokeWidth={stroke} />
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={done ? "var(--good)" : "url(#ringGrad)"} strokeWidth={stroke} strokeLinecap="round"
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={done ? "var(--good)" : `url(#${grad})`} strokeWidth={stroke} strokeLinecap="round"
         strokeDasharray={c} strokeDashoffset={c * (1 - Math.max(0, Math.min(1, frac)))} style={{ transition: "stroke-dashoffset .3s linear" }} />
-      <defs><linearGradient id="ringGrad"><stop offset="0" stopColor="var(--neon)" /><stop offset="1" stopColor="var(--neon-2)" /></linearGradient></defs>
+      <defs><linearGradient id={grad}><stop offset="0" stopColor="var(--neon)" /><stop offset="1" stopColor="var(--neon-2)" /></linearGradient></defs>
     </svg>
   );
 }
