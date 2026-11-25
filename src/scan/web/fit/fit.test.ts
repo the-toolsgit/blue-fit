@@ -42,17 +42,18 @@ describe("silhouette fit on made-up bodies", () => {
   const fb = new FitBody(m);
   const cases: { seed: number; turn: 1 | -1; label: string; pitch?: number; yawNoise?: number; damage?: boolean }[] = [
     { seed: 2, turn: 1, label: "turning one way" },
-    { seed: 4, turn: -1 as const, label: "turning the other way, phone tilted 6°, ±10° off each hour", pitch: 0.1, yawNoise: 0.17, damage: false },
-    { seed: 5, turn: 1 as const, label: "phone tilted 6°, ±10° off each hour", pitch: 0.1, yawNoise: 0.17, damage: false },
+    { seed: 6, turn: 1, label: "a small gap between the legs in one view (no false quality alarm)" },
+    { seed: 4, turn: -1, label: "turning the other way, phone tilted 6°, ±10° off each hour, damaged masks", pitch: 0.1, yawNoise: 0.17, damage: true },
+    { seed: 5, turn: 1, label: "phone tilted 6°, ±10° off each hour, damaged masks", pitch: 0.1, yawNoise: 0.17, damage: true },
   ];
   for (const { seed, turn, label, pitch, yawNoise, damage } of cases) {
-    it(`body ${seed} (${label}; left/right swapped on back views): converges, torso within 1.5 cm, limbs within 2 cm`, () => {
+    it(`body ${seed} (${label}; left/right swapped on back views): converges, torso within ${damage ? 2 : 1.5} cm, limbs within 2 cm`, () => {
       const sc = makeScene(fb, seed, { turn, swapBack: true, pitch, yawNoise, damage });
       const res = new SilhouetteFit(fb).run({ photos: sc.photos, heightCm: sc.heightCm, camGuess: { f: 0.725 * 640, cx: 240, cy: 320, h: 100, pitch: sc.cam.pitch } });
       expect(res.ok).toBe(true);
       const truth = measureGeometry(buildGeometry(m, fb, sc.truth, meta), "male", sc.heightCm).measurements;
       const got = measureGeometry(buildGeometry(m, fb, res.params, meta), "male", sc.heightCm).measurements;
-      for (const k of ["chest", "waistUpper", "waistLower", "hips"] as const) expect(Math.abs(got[k]! - truth[k]!)).toBeLessThanOrEqual(1.5);
+      for (const k of ["chest", "waistUpper", "waistLower", "hips"] as const) expect(Math.abs(got[k]! - truth[k]!)).toBeLessThanOrEqual(damage ? 2 : 1.5);
       for (const k of LIMB_PARTS) expect(Math.abs(got[k]! - truth[k]!)).toBeLessThanOrEqual(2);
       expect(Math.abs(got.neck! - truth.neck!)).toBeLessThanOrEqual(2.5);
     }, 180_000);

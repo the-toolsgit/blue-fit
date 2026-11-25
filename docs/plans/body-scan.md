@@ -98,20 +98,24 @@ Camera denied (standalone PWA may ask on every launch) · unsupported camera / i
 
 ### Step 3a results (Nov 24 2026, made-up bodies, Intel Mac)
 - 12 of 12 random bodies converge. Errors vs the true body: chest ≤ 0.8 cm, upper waist ≤ 1.3, lower waist ≤ 1.8, hips ≤ 0.7, limbs ≤ 1.4, neck ≤ 2.5 (most under 1 cm). 9–19 s per fit here (the iPhone ran the fit benchmark 3× faster).
-- What made it work: fit on **LOD 2** (LOD 3 inflated the body ~1 cm to match), size **locked to the entered height** (otherwise it traded size for distance), outline distances to the **true pixel edge** (edge pixels' centers shrank the body half a pixel), the **scan pose** as the base pose (MHR's rest pose holds the arms ~50° out), hip cuts **include the legs** (a hip tape goes around both buttocks), measuring in the **standard pose** (posture changes don't move tapes), waist levels from **front-midline surface points**, and a robust edge check (90th percentile ≤ 2 px).
+- What made it work: fit on **LOD 2** (LOD 3 inflated the body ~1 cm to match), size **locked to the entered height** (otherwise it traded size for distance), outline distances to the **true pixel edge** (edge pixels' centers shrank the body half a pixel), the **scan pose** as the base pose (MHR's rest pose holds the arms ~50° out), hip cuts **include the legs** (a hip tape goes around both buttocks), measuring in the **standard pose** (posture changes don't move tapes), waist levels from **front-midline surface points**, and a robust edge check (90th percentile ≤ 3 px since v0.1.249).
 - Known weak spot: the neck (±2.5 cm). Lower waist depends on where the navel sits on the fitted body.
 
 ### Fit review fixes (Nov 24 2026, v0.1.248)
 Edge distance now true size (was ~½); size locked to the height **standing straight** (posture left out); Huber on both outline terms; masks cleaned (biggest blob + blobs ≥ 5% of it, small holes filled, real gaps like arm–hip kept); edge points on the image border ignored; camera **tilt fitted** with a prior from the phone's gravity reading; landmark trust per joint (hips/shoulders/head weaker); left/right swap only for hours 4–8; each photo's turn bounded to ±34° of its hour and **picked by outline overlap** at the start and again after each stage for photos matching < 0.95; hands left out of the quality check; the camera model is no longer mirrored (user's left = image right, like the real front camera); the turn direction is tried both ways.
 Tests: normal, turning the other way with a 6° tilt and ±10° sloppy turns, both pass (torso ≤ 1.5 cm, limbs ≤ 2 cm). Fit time grew to 20–35 s on the Intel Mac (iPhone ~3× faster).
 
-### Open items (next session)
-1. Quality-check false alarm: a good fit (overlap 0.985) can still show a 90th-percentile edge distance of ~18 px in one photo (seed 6). Find which points and fix the metric.
-2. Damaged masks (floor shadow at the feet, ragged edges): fit misses by 2–4 cm; cut the mask below the feet / handle shadows, then re-enable `damage: true` in the tests.
-3. Dev server: the worker can't import MediaPipe's runtime from `public/` (Vite blocks it); load it as an asset (`@mediapipe/tasks-vision/vision_wasm_module_internal.js?url` + `.wasm?url` as a WasmFileset). Production works.
-4. Speed: reuse Jacobian/column buffers, no allocations in `viewRes`/`stateMul`/`poseVertices`, grid nearest search (review #16–18).
-5. Neck cuts: keep only the loop around the neck axis (±8 cm); thigh cuts start below the crotch; exact cuts at armpit/navel height (review #12–14).
-6. Step 3b screens are written (`src/ui/screens/Scan.tsx`, worker, client, guide) but untested on a phone → spike 2 + first real scan with Leo; then step 4 (3D results), step 5 (research note for Leo's OK).
+### Open items fixed (v0.1.249)
+1. Quality false alarm: the photo cleaning filled a real ~280 px gap between the legs that the model outline kept. Now the model's own outline is cleaned too, with a larger hole limit (photos ≤ 0.5% of the body, model ≤ 1%), so a gap filled in the photo is always filled in the model. Edge limit 3 px (ragged real masks). Grid nearest search walks ring edges only and handles an empty outline (review).
+2. Damaged masks: a stray blob in the room moved the start box (it came from the raw mask) → box from the cleaned mask; overlap measured against the cleaned mask. Tests now run damaged masks (ragged edges, hole, floor shadow, stray blob): torso ≤ 2 cm (clean masks 1.5), limbs ≤ 2 cm.
+3. Dev server: MediaPipe runtime imported as build assets (`?url`); the worker keeps MediaPipe's `ModuleFactory` and puts it back before each model (a module import runs once per worker, so the 2nd model failed with "ModuleFactory not set": would have broken the phone too).
+4. Speed: rasterizer with stepped edge functions, mask cleaning without closures, the model outline cleaned on its box only, cached rest shape, no allocations in `stateMul`, grid nearest search, turn search coarse-to-fine. Mac 32–46 s → 19–25 s per scan.
+5. Cuts: neck = the closed loop around the neck axis, narrowest over 1 cm–90% of the neck (60% stopped in the trapezius flare: errors up to 3.6 cm → ≤ 0.4); thighs only below the crotch; exact cuts at armpit and navel.
+- Tilt: the fit needs the tilt's **sign** (a wrong sign breaks it). Gravity signs differ between iOS and Android, so the app uses DeviceOrientation `beta` (pitch = 90° − beta).
+- Known: one made-up body (seed 7, no damage) reads the upper waist 2.8 cm off; watch it in real scans.
+
+### Next
+- First real scan on Leo's iPhone 16 Pro (Copy scan report → paste), then tape check, then step 4 (3D results), step 5 (research note for Leo's OK).
 
 ## 5. Interpretation (permanent)
 

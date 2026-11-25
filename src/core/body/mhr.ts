@@ -116,15 +116,16 @@ function rotate(q: ArrayLike<number>, o: number, vx: number, vy: number, vz: num
 }
 
 /** States are 8 numbers per joint: t(3), q(4), s(1). out = first ∘ second. */
+const QA = new Float64Array(4), QB = new Float64Array(4);
 function stateMul(a: Float64Array, ao: number, b: ArrayLike<number>, bo: number, out: Float64Array, oo: number, tmp: Float64Array) {
-  const qa = new Float64Array([a[ao + 3], a[ao + 4], a[ao + 5], a[ao + 6]]);
-  normalize4(qa, 0);
-  const qb = new Float64Array([b[bo + 3], b[bo + 4], b[bo + 5], b[bo + 6]]);
-  normalize4(qb, 0);
-  rotate(qa, 0, b[bo], b[bo + 1], b[bo + 2], tmp);
+  QA[0] = a[ao + 3]; QA[1] = a[ao + 4]; QA[2] = a[ao + 5]; QA[3] = a[ao + 6];
+  normalize4(QA, 0);
+  QB[0] = b[bo + 3]; QB[1] = b[bo + 4]; QB[2] = b[bo + 5]; QB[3] = b[bo + 6];
+  normalize4(QB, 0);
+  rotate(QA, 0, b[bo], b[bo + 1], b[bo + 2], tmp);
   const sa = a[ao + 7];
   const t0 = a[ao] + sa * tmp[0], t1 = a[ao + 1] + sa * tmp[1], t2 = a[ao + 2] + sa * tmp[2];
-  qmul(qa, 0, qb, 0, out, oo + 3);
+  qmul(QA, 0, QB, 0, out, oo + 3);
   out[oo] = t0; out[oo + 1] = t1; out[oo + 2] = t2;
   out[oo + 7] = sa * b[bo + 7];
 }
@@ -180,8 +181,11 @@ export function skeletonState(m: MhrModel, params: ArrayLike<number>): Float64Ar
 
 /** Posed vertices (V*3, cm) for body coefficients + model parameters. */
 export function poseVertices(m: MhrModel, body: ArrayLike<number>, params: ArrayLike<number>): Float32Array {
-  const rest = restShape(m, body);
-  const state = skeletonState(m, params);
+  return skinVertices(m, restShape(m, body), skeletonState(m, params));
+}
+
+/** Linear blend skinning of a rest shape with a skeleton state (both reusable across calls). */
+export function skinVertices(m: MhrModel, rest: Float32Array, state: Float64Array, out = new Float32Array(m.vertexCount * 3)): Float32Array {
   const J = m.jointCount;
   const js = new Float64Array(J * 8);
   const tmp = new Float64Array(3);
@@ -190,7 +194,6 @@ export function poseVertices(m: MhrModel, body: ArrayLike<number>, params: Array
     normalize4(js, j * 8 + 3);
   }
   const V = m.vertexCount;
-  const out = new Float32Array(V * 3);
   const r = new Float64Array(3);
   for (let v = 0; v < V; v++) {
     let x = 0, y = 0, z = 0;

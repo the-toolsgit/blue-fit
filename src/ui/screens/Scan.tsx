@@ -9,11 +9,13 @@ import { PART_NAMES, type BodyScan, type Sex } from "../../core/body/types";
 import { fmtNum, uid } from "../../core/util";
 import { openCamera, ScanWorker, type Fitted } from "../../scan/web/client";
 import { SCANNER_VERSION } from "../../scan/web/constants";
-import { TurnTracker, bodyAngle, framing, hourCue, poseCheck, roomCheck, tiltFromGravity, tiltOk, type Framing, type RoomStats } from "../../scan/web/guide";
+import { TurnTracker, bodyAngle, framing, hourCue, pitchFromBeta, poseCheck, roomCheck, tiltFromGravity, tiltOk, type Framing, type RoomStats } from "../../scan/web/guide";
 import { Seg, Stepper } from "../components/Controls";
 import { back, go } from "../router";
 import { useStore } from "../store";
 
+/** What the live step saw (for the scan report; no body values). */
+interface LiveStats { betaMean: number | null; captures: number; retries: number; frames: number; seconds: number; direction: number; tooFar: number }
 type Step = "details" | "sound" | "tutorial" | "placement" | "angle" | "live" | "processing" | "result" | "failed";
 const TUTORIAL_KEY = "bf-scan-tutorial-seen";
 const seen = () => { try { return localStorage.getItem(TUTORIAL_KEY) === "1"; } catch { return false; } };
@@ -61,29 +63,39 @@ export function ScanScreen() {
   const [loadErr, setLoadErr] = useState<string | null>(null);
   const [result, setResult] = useState<Fitted | null>(null);
   const [failWhy, setFailWhy] = useState("");
+  const [report, setReport] = useState("");
+  const boot = useRef<{ ms: number; delegate: string } | null>(null);
   const heightCm = height != null ? (settings.heightCm != null && toUnit(settings.heightCm, unit) === height ? settings.heightCm : Math.round(fromUnit(height, unit) * 10) / 10) : null;
 
   // models start loading right away (seconds), while the user fills in the first screens
   useEffect(() => {
     const w = new ScanWorker();
     worker.current = w;
-    ready.current = w.init().catch((e) => { setLoadErr(e.message); throw e; });
+    ready.current = w.init().then((r) => { boot.current = r; }).catch((e) => { setLoadErr(e.message); throw e; });
     return () => { w.close(); try { speechSynthesis.cancel(); } catch { /* */ } };
   }, []);
 
   const close = () => back("progress");
   const startCamera = () => { markSeen(); setStep("placement"); };
 
-  const finish = useCallback(async () => {
+  const finish = useCallback(async (live: LiveStats) => {
     setStep("processing");
+    const lines = [`Blue Fit ${__APP_VERSION__} scan report`, `models ${boot.current?.ms ?? "?"} ms (${boot.current?.delegate ?? "?"})`,
+      `live: ${live.captures} photos, ${live.retries} retries, ${live.frames} frames in ${live.seconds} s (${live.seconds ? Math.round(live.frames / live.seconds) : 0} fps), turn ${live.direction}, too far ×${live.tooFar}, beta ${live.betaMean == null ? "none" : live.betaMean.toFixed(1)}`];
     try {
-      const r = await worker.current!.fit(heightCm!, sex);
+      const r = await worker.current!.fit(heightCm!, sex, pitchFromBeta(live.betaMean));
+      const q = r.report;
+      lines.push(`fit ${r.ok ? "ok" : "failed: " + (r.reason ?? "")} in ${r.ms} ms, ${q.iterations} iterations`,
+        `overlap ${q.iou.join(" ")}`, `edge px ${q.rmsPx.join(" ")}`, `turn ° ${q.yawDeg.join(" ")}`,
+        `pitch ${q.pitchDeg}° (sensor ${q.pitchGuessDeg}°), focal ${q.focal}, phone ${q.camH} cm`);
+      setReport(lines.join("\n"));
       if (!r.ok) { setFailWhy(r.reason ?? ""); setStep("failed"); return; }
       setResult(r);
       setStep("result");
       say("Done. Here's your scan.", true);
     } catch (e) {
       setFailWhy((e as Error).message);
+      setReport([...lines, `error: ${(e as Error).message}`].join("\n"));
       setStep("failed");
     }
   }, [heightCm, sex]);
@@ -152,7 +164,7 @@ export function ScanScreen() {
       {step === "angle" && <AngleStep onOk={() => setStep("live")} />}
       {step === "live" && (
         loadErr ? <section className="scan-body stack"><h1 className="title-md">The scanner couldn't start</h1><p className="muted">{loadErr}</p><button className="btn btn-primary btn-block" onClick={close}>Close</button></section>
-          : <LiveStep worker={worker} ready={ready} onDone={finish} onFail={(why) => { setFailWhy(why); setStep("failed"); }} />
+          : <LiveStep worker={worker} ready={ready} onDone={finish} onFail={(why) => { setFailWhy(why); setReport(`Blue Fit ${__APP_VERSION__} scan report\nstopped: ${why}`); setStep("failed"); }} />
       )}
       {step === "processing" && (
         <section className="scan-body scan-center stack">
@@ -166,6 +178,7 @@ export function ScanScreen() {
           <h1 className="title-md">Let's scan again</h1>
           <p className="muted">{failWhy ? `The scan didn't come out clean (${failWhy}).` : "The scan didn't come out clean."} Check the light, a plain wall behind you, and keep the same pose while turning.</p>
           <button className="btn btn-primary btn-block" onClick={() => location.reload()}>Scan again</button>
+          {report && <CopyReport text={report} />}
           <button className="btn btn-quiet btn-block" onClick={close}>Close</button>
         </section>
       )}
@@ -180,6 +193,7 @@ export function ScanScreen() {
             ))}
           </div>
           <button className="btn btn-primary btn-block" style={{ minHeight: 56 }} onClick={save}>Save scan</button>
+          {report && <CopyReport text={report} />}
           <button className="btn btn-quiet btn-block" onClick={close}>Discard</button>
         </section>
       )}
@@ -225,7 +239,9 @@ function AngleStep({ onOk }: { onOk: () => void }) {
   const ask = async () => {
     try {
       const DME = DeviceMotionEvent as unknown as { requestPermission?: () => Promise<string> };
+      const DOE = (globalThis.DeviceOrientationEvent ?? {}) as unknown as { requestPermission?: () => Promise<string> };
       const r = DME.requestPermission ? await DME.requestPermission() : "granted";
+      if (DOE.requestPermission) await DOE.requestPermission().catch(() => "denied"); // the tilt's sign for the fit
       if (r !== "granted") setDenied(true);
     } catch { setDenied(true); }
     setAsked(true);
@@ -242,17 +258,28 @@ function AngleStep({ onOk }: { onOk: () => void }) {
   );
 }
 
-function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefObject<ScanWorker | null>; ready: React.MutableRefObject<Promise<unknown> | null>; onDone: () => void; onFail: (why: string) => void }) {
+function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefObject<ScanWorker | null>; ready: React.MutableRefObject<Promise<unknown> | null>; onDone: (s: LiveStats) => void; onFail: (why: string) => void }) {
   const video = useRef<HTMLVideoElement>(null);
   const [cue, setCue] = useState("Getting the camera ready…");
   const [bars, setBars] = useState<Framing | null>(null);
   const [hour, setHour] = useState<number | null>(null);
   const [toast, setToast] = useState(true);
+  // callbacks through refs: a parent re-render must not restart the camera loop mid-scan
+  const done = useRef(onDone), fail = useRef(onFail);
+  done.current = onDone; fail.current = onFail;
   useEffect(() => {
+    const onDone = (s: LiveStats) => done.current(s), onFail = (why: string) => fail.current(why);
     let alive = true, stream: MediaStream | null = null, wake: { release(): Promise<void> } | null = null;
     let tilt: number | null = 90;
     const onMotion = (e: DeviceMotionEvent) => { const g = e.accelerationIncludingGravity; if (g) tilt = tiltFromGravity({ y: g.y, z: g.z }); };
     addEventListener("devicemotion", onMotion);
+    // front-back tilt (beta) at each photo: its sign tells the fit whether the camera looks up or down
+    let beta: number | null = null;
+    const betas: number[] = [];
+    const onOrient = (e: DeviceOrientationEvent) => { if (e.beta != null) beta = e.beta; };
+    addEventListener("deviceorientation", onOrient);
+    const stats: LiveStats = { betaMean: null, captures: 0, retries: 0, frames: 0, seconds: 0, direction: 0, tooFar: 0 };
+    const t0 = performance.now();
     const lockWake = async () => { try { wake = await (navigator as unknown as { wakeLock: { request(t: string): Promise<{ release(): Promise<void> }> } }).wakeLock.request("screen"); } catch { /* not supported */ } };
     const onVis = () => { if (document.visibilityState === "hidden" && alive) { alive = false; onFail("the app went to the background"); } else void lockWake(); };
     document.addEventListener("visibilitychange", onVis);
@@ -269,6 +296,7 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
         while (alive) {
           const v = video.current!;
           const p = await worker.current!.pose(v);
+          stats.frames++;
           if (!alive) break;
           const now = performance.now();
           if (now - roomAt > 1500 && !started) { roomAt = now; room = await worker.current!.room(v); }
@@ -305,15 +333,23 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
           if (c.kind === "capture") {
             shutter();
             const ok = await worker.current!.capture(v, c.hour);
-            if (!ok) { tracker.hour = c.hour; say("Hold still", true); continue; }
+            if (!ok) { tracker.hour = c.hour; stats.retries++; say("Hold still", true); continue; }
+            stats.captures++;
+            if (beta != null) betas.push(beta);
             setHour(c.hour);
             if (c.hour >= 11) { setCue("Done"); alive = false; break; }
-          } else if (c.kind === "tooFar") { setCue("You turned too much. Turn back a little"); say("You turned too much. Turn back a little"); }
+          } else if (c.kind === "tooFar") { stats.tooFar++; setCue("You turned too much. Turn back a little"); say("You turned too much. Turn back a little"); }
           else if (c.kind === "turn" && c.hour !== lastHour) { lastHour = c.hour; setCue(hourCue(c.hour)); say(hourCue(c.hour), true); }
           else if (c.kind === "turn") setCue(hourCue(c.hour));
           else if (c.kind === "hold") setCue("Hold still");
         }
-        if (tracker.hour >= 12) { stream?.getTracks().forEach((t) => t.stop()); onDone(); }
+        if (tracker.hour >= 12) {
+          stream?.getTracks().forEach((t) => t.stop());
+          stats.betaMean = betas.length ? betas.reduce((a, b) => a + b, 0) / betas.length : null;
+          stats.seconds = Math.round((performance.now() - t0) / 1000);
+          stats.direction = tracker.direction;
+          onDone(stats);
+        }
       } catch (e) {
         if (alive) onFail((e as Error).message);
       }
@@ -323,9 +359,10 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
       stream?.getTracks().forEach((t) => t.stop());
       void wake?.release().catch(() => {});
       removeEventListener("devicemotion", onMotion);
+      removeEventListener("deviceorientation", onOrient);
       document.removeEventListener("visibilitychange", onVis);
     };
-  }, [worker, ready, onDone, onFail]);
+  }, [worker, ready]);
   // the preview is mirrored like a selfie, so the image's left edge shows on the right
   const bar = (k: keyof Pick<Framing, "top" | "bottom" | "left" | "right">) => (bars ? (bars[k] ? "ok" : "bad") : "");
   return (
@@ -339,6 +376,17 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
       </div>
       <div className="scan-cue" aria-live="assertive">{cue}</div>
     </section>
+  );
+}
+
+/** Copies the scan report (quality numbers only, no body values) so it can be pasted into a chat. */
+function CopyReport({ text }: { text: string }) {
+  const [done, setDone] = useState(false);
+  return (
+    <>
+      <button className="btn btn-ghost btn-block" onClick={() => navigator.clipboard?.writeText(text).then(() => setDone(true), () => setDone(false))}>{done ? "Report copied" : "Copy scan report"}</button>
+      <pre className="scan-report" aria-label="Scan report">{text}</pre>
+    </>
   );
 }
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { MP, TurnTracker, bodyAngle, framing, poseCheck, roomCheck, tiltFromGravity, tiltOk, type Lm } from "./guide";
+import { MP, TurnTracker, bodyAngle, framing, pitchFromBeta, poseCheck, roomCheck, tiltFromGravity, tiltOk, type Lm } from "./guide";
 
 // A made-up standing body in normalized image coords, facing the phone, arms ~20° out.
 function body(scale = 0.8, cx = 0.5): Lm[] {
@@ -72,5 +72,11 @@ describe("scan guidance", () => {
     expect(tiltFromGravity({ y: 0, z: -9.81 })).toBeCloseTo(0);
     expect(tiltOk(87)).toBe(true);
     expect(tiltOk(80)).toBe(false);
+  });
+  it("pitch from beta: upright 0, screen tipped up 5° → +5°, unknown → 0", () => {
+    expect(pitchFromBeta(90)).toBeCloseTo(0);
+    expect(pitchFromBeta(85)).toBeCloseTo((5 * Math.PI) / 180);
+    expect(pitchFromBeta(95)).toBeCloseTo((-5 * Math.PI) / 180);
+    expect(pitchFromBeta(null)).toBe(0);
   });
 });

@@ -96,13 +96,22 @@ export class SilhouetteFit {
       const area = (uv[b] - uv[a]) * (uv[c + 1] - uv[a + 1]) - (uv[c] - uv[a]) * (uv[b + 1] - uv[a + 1]);
       facing[f] = area > 0 ? 1 : -1;
     }
-    // the model's own outline: a vertex is on it when a pixel next to it is outside the model's own mask
-    const hw = w, hh = h;
-    const half = uv;
-    const own = rasterize(uv, F, w, h).data;
-    const outside = (x: number, y: number) => x < 0 || y < 0 || x >= hw || y >= hh || !own[y * hw + x];
+    // the model's own outline: a vertex is on it when a pixel next to it is outside the model's own mask, cleaned
+    // like the photo masks (a small gap the photo's cleaning fills, between the legs, isn't outline). Worked on the
+    // body's box only (with a margin, so the box border is background like the image border).
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (let i = 0; i < uv.length; i += 2) { const u = uv[i], v = uv[i + 1]; if (u < x0) x0 = u; if (u > x1) x1 = u; if (v < y0) y0 = v; if (v > y1) y1 = v; }
+    x0 = Math.max(0, Math.floor(x0) - 2); y0 = Math.max(0, Math.floor(y0) - 2);
+    x1 = Math.min(w, Math.ceil(x1) + 3); y1 = Math.min(h, Math.ceil(y1) + 3);
+    const bw = Math.max(1, x1 - x0), bh = Math.max(1, y1 - y0);
+    const local = new Float64Array(uv.length);
+    for (let i = 0; i < uv.length; i += 2) { local[i] = uv[i] - x0; local[i + 1] = uv[i + 1] - y0; }
+    // holes up to 1% filled (photos: 0.5%): a gap the photo's cleaning filled is always filled here too, so it
+    // can't read as an outline error the length of the gap
+    const own = cleanMask(rasterize(local, F, bw, bh), 0.01).data;
+    const outside = (x: number, y: number) => x < 0 || y < 0 || x >= bw || y >= bh || !own[y * bw + x];
     const onOutline = (v: number) => {
-      const x = Math.floor(half[v * 2]), y = Math.floor(half[v * 2 + 1]);
+      const x = Math.floor(local[v * 2]), y = Math.floor(local[v * 2 + 1]);
       for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (outside(x + dx, y + dy)) return true;
       return false;
     };
@@ -166,11 +175,8 @@ export class SilhouetteFit {
       project(body.verts, nV, s.views[v], s.cam, uv);
       const { w, h } = ph.mask;
       const contour = this.contour(uv, w, h).filter((i) => uv[i * 2] >= 1 && uv[i * 2 + 1] >= 1 && uv[i * 2] <= w - 1 && uv[i * 2 + 1] <= h - 1);
-      const nearest = vd[v].samples.map(([qx, qy]) => {
-        let best = contour[0], bd = Infinity;
-        for (const i of contour) { const d = (uv[i * 2] - qx) ** 2 + (uv[i * 2 + 1] - qy) ** 2; if (d < bd) { bd = d; best = i; } }
-        return best;
-      });
+      // an empty outline (body pushed off the image by a wild trial step) pairs every photo point with vertex 0
+      const nearest = nearestOn(contour.length ? contour : [0], uv, vd[v].samples);
       // pose trackers mix up left and right when the back faces the camera: use whichever labelling fits better
       const nj = body.joints.length / 3;
       const juv = new Float64Array(nj * 2);
@@ -201,40 +207,42 @@ export class SilhouetteFit {
     }
     const t0 = performance.now();
     const sign = input.yawSign ?? 1;
-    const vd: ViewData[] = input.photos.map((ph) => {
+    const cleaned = input.photos.map((ph) => cleanMask(ph.mask));
+    const vd: ViewData[] = input.photos.map((_, i) => {
       // the true edge (between pixels), not the edge pixels' centers: those sit half a pixel inside
-      const mask = cleanMask(ph.mask);
+      const mask = cleaned[i];
       return { dt: signedDistance(mask), samples: edgePoints(mask, 4) };
     });
     // start: mean body at the user's height, each photo placed from its outline box
     const b0 = zeroParams();
     b0.scale = input.heightCm / this.fb.evaluate(b0).height;
     const cam = { ...input.camGuess };
-    const views: View[] = input.photos.map((ph) => {
+    const views: View[] = input.photos.map((ph, i) => {
       let top = Infinity, bot = -Infinity, left = Infinity, right = -Infinity;
-      const { w, data } = ph.mask;
+      const { w, data } = cleaned[i]; // the cleaned outline: a stray blob in the room would move the box
       for (let i = 0; i < data.length; i++) if (data[i]) { const x = i % w, y = Math.floor(i / w); top = Math.min(top, y); bot = Math.max(bot, y); left = Math.min(left, x); right = Math.max(right, x); }
+      if (top === Infinity) return { yaw: Math.PI + sign * ph.hour * (Math.PI / 6), tx: 0, tz: input.heightCm * 1.2 }; // empty mask
       const tz = (cam.f * input.heightCm) / Math.max(1, bot - top);
       return { yaw: Math.PI + sign * ph.hour * (Math.PI / 6), tx: -(((left + right) / 2 - cam.cx) * tz) / cam.f, tz };
     });
     yawTargets = input.photos.map((ph) => Math.PI + sign * ph.hour * (Math.PI / 6));
     let s: State = opts.init ? clone({ b: opts.init.params, cam: opts.init.cam, views: opts.init.views }) : { b: b0, cam, views };
-    const cleaned = input.photos.map((ph) => cleanMask(ph.mask));
     // people rarely stop exactly on the hour: put a photo at the turn (within the bound) whose outline overlaps best
     const regrid = (st: State, only?: (i: number) => boolean) => {
       const body0 = this.fb.evaluate(st.b, input.heightCm);
       const nV = this.fb.m.vertexCount, uv0 = new Float64Array(nV * 2);
       const quality: number[] = [];
+      const buf = new Uint8Array(input.photos[0].mask.w * input.photos[0].mask.h);
       st.views.forEach((v, i) => {
         const ph = input.photos[i];
-        const q0 = () => { project(body0.verts, nV, v, st.cam, uv0); return iou(rasterize(uv0, this.fb.m.faces, ph.mask.w, ph.mask.h), cleaned[i]); };
-        if (only && !only(i)) { quality.push(q0()); return; }
-        let best = v.yaw, bestIou = only ? q0() : -1;
-        for (let d = -YAW_BOUND; d <= YAW_BOUND + 1e-9; d += 0.1) {
-          project(body0.verts, nV, { ...v, yaw: yawTargets[i] + d }, st.cam, uv0);
-          const q = iou(rasterize(uv0, this.fb.m.faces, ph.mask.w, ph.mask.h), cleaned[i]);
-          if (q > bestIou) { bestIou = q; best = yawTargets[i] + d; }
-        }
+        const at = (yaw: number) => { project(body0.verts, nV, { ...v, yaw }, st.cam, uv0); return iou(rasterize(uv0, this.fb.m.faces, ph.mask.w, ph.mask.h, buf), cleaned[i]); };
+        if (only && !only(i)) { quality.push(at(v.yaw)); return; }
+        let best = v.yaw, bestIou = only ? at(v.yaw) : -1;
+        const tryYaw = (yaw: number) => { const q = at(yaw); if (q > bestIou) { bestIou = q; best = yaw; } };
+        // coarse (0.2 rad) over the bound, then ±0.1 around the best
+        for (let d = -YAW_BOUND; d <= YAW_BOUND + 1e-9; d += 0.2) tryYaw(yawTargets[i] + d);
+        const c = best;
+        for (const d of [-0.1, 0.1]) if (Math.abs(c + d - yawTargets[i]) <= YAW_BOUND + 1e-9) tryYaw(c + d);
         v.yaw = best;
         quality.push(bestIou);
       });
@@ -335,7 +343,7 @@ export class SilhouetteFit {
     const ious: number[] = [], rms: number[] = [];
     input.photos.forEach((ph, v) => {
       project(body.verts, nV, s.views[v], s.cam, uv);
-      ious.push(Math.round(iou(rasterize(uv, this.fb.m.faces, ph.mask.w, ph.mask.h), ph.mask) * 1000) / 1000);
+      ious.push(Math.round(iou(rasterize(uv, this.fb.m.faces, ph.mask.w, ph.mask.h), cleaned[v]) * 1000) / 1000);
       const c = this.contour(uv, ph.mask.w, ph.mask.h);
       // 90th percentile of the outline distance: a few stray points (a finger, a fold) don't fail a good fit
       const inImg = (i: number) => uv[i * 2] >= 1 && uv[i * 2 + 1] >= 1 && uv[i * 2] <= ph.mask.w - 1 && uv[i * 2 + 1] <= ph.mask.h - 1;
@@ -343,12 +351,42 @@ export class SilhouetteFit {
       rms.push(Math.round((e[Math.floor(e.length * 0.9)] ?? 0) * 100) / 100);
     });
     const badShape = s.b.body.some((x) => Math.abs(x) > 3);
-    const ok = ious.every((x) => x >= 0.9) && rms.every((x) => x <= 2) && !badShape;
+    const ok = ious.every((x) => x >= 0.9) && rms.every((x) => x <= 3) && !badShape;
     return {
       params: s.b, cam: s.cam, views: s.views, iou: ious, rmsPx: rms, iterations, ms: Math.round(performance.now() - t0), ok, cost: lastCost,
       reason: ok ? undefined : badShape ? "unusual body shape" : ious.some((x) => x < 0.9) ? "outline doesn't match" : "edges too far",
     };
   }
+}
+
+/** For each query point, the nearest of `ids` (points uv[i*2], uv[i*2+1]): a uniform grid, searched ring by ring. */
+function nearestOn(ids: number[], uv: Float64Array, queries: [number, number][]): number[] {
+  if (!ids.length) return queries.map(() => -1);
+  const C = 8;
+  const cells = new Map<number, number[]>();
+  const key = (cx: number, cy: number) => cx * 4096 + cy;
+  for (const i of ids) {
+    const k = key(Math.floor(uv[i * 2] / C), Math.floor(uv[i * 2 + 1] / C));
+    const c = cells.get(k);
+    if (c) c.push(i); else cells.set(k, [i]);
+  }
+  return queries.map(([qx, qy]) => {
+    const cx = Math.floor(qx / C), cy = Math.floor(qy / C);
+    let best = ids[0], bd = Infinity;
+    const visit = (x: number, y: number) => {
+      const c = cells.get(key(x, y));
+      if (c) for (const i of c) { const d = (uv[i * 2] - qx) ** 2 + (uv[i * 2 + 1] - qy) ** 2; if (d < bd) { bd = d; best = i; } }
+    };
+    for (let r = 0; ; r++) {
+      // every point in ring r is at least (r - 1) cells away
+      if (r > 0 && ((r - 1) * C) ** 2 > bd) break;
+      if (r > 600) break; // far outside any image
+      if (r === 0) { visit(cx, cy); continue; }
+      for (let d = -r; d <= r; d++) { visit(cx + d, cy - r); visit(cx + d, cy + r); }
+      for (let d = -r + 1; d <= r - 1; d++) { visit(cx - r, cy + d); visit(cx + r, cy + d); }
+    }
+    return best;
+  });
 }
 
 /** Landmarks with left and right swapped (LANDMARK_JOINTS order: head, then L/R pairs). */

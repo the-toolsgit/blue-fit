@@ -116,6 +116,9 @@ export class TurnTracker {
 export const tiltFromGravity = (g: { y: number | null; z: number | null }) =>
   g.y == null || g.z == null ? null : (Math.atan2(Math.abs(g.y), Math.abs(g.z)) * 180) / Math.PI;
 export const tiltOk = (deg: number | null) => deg != null && deg >= 85 && deg <= 95;
+/** Camera pitch for the fit (radians, + = looking up) from DeviceOrientation beta (90 = upright; below 90 the screen
+ *  tips up, so the front camera looks up). beta follows the W3C axes on iOS and Android, unlike the gravity signs. */
+export const pitchFromBeta = (beta: number | null) => (beta == null ? 0 : (Math.max(-30, Math.min(30, 90 - beta)) * Math.PI) / 180);
 
 /** Words for each hour ("Turn to 1 o'clock"). */
 export const hourCue = (h: number) => `Turn to ${h} o'clock`;

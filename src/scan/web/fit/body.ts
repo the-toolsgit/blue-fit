@@ -2,7 +2,7 @@
 // to change. Body shape = the 20 body identity coefficients; posture = a few joint angles
 // (arms, legs, spine); proportions = MHR's bone-length scales (in MHR the identity shapes don't
 // move the skeleton). Then one uniform scale, feet on the floor (y = 0).
-import { MODEL_PARAMS, poseVertices, skeletonState, type MhrModel } from "../../../core/body/mhr";
+import { MODEL_PARAMS, restShape, skeletonState, skinVertices, type MhrModel } from "../../../core/body/mhr";
 
 export const POSE_PARAMS = [
   "l_uparm_ry", "l_uparm_rz", "r_uparm_ry", "r_uparm_rz", "l_elbow_bend", "r_elbow_bend",
@@ -43,6 +43,14 @@ export class FitBody {
     this.scaleIdx.forEach((k, i) => (out[k] = b.scales[i]));
     return out;
   }
+  private restKey = "";
+  private restCache: Float32Array | null = null;
+  /** Rest shape for these shape coefficients; cached (only shape columns of the Jacobian change it). */
+  private rest(body: number[]): Float32Array {
+    const key = body.join(",");
+    if (key !== this.restKey || !this.restCache) { this.restCache = restShape(this.m, body); this.restKey = key; }
+    return this.restCache;
+  }
   private straightKey = "";
   private straightHeight = 0;
   /** Height of this shape and these proportions standing straight (posture left out): what a height entry means.
@@ -50,7 +58,7 @@ export class FitBody {
   straight(b: BodyParams): number {
     const key = b.body.join(",") + "|" + b.scales.join(",");
     if (key !== this.straightKey) {
-      const v = poseVertices(this.m, b.body, this.modelParams({ ...b, pose: b.pose.map(() => 0) }));
+      const v = skinVertices(this.m, this.rest(b.body), skeletonState(this.m, this.modelParams({ ...b, pose: b.pose.map(() => 0) })));
       let lo = Infinity, hi = -Infinity;
       for (let i = 1; i < v.length; i += 3) { if (v[i] < lo) lo = v[i]; if (v[i] > hi) hi = v[i]; }
       this.straightKey = key; this.straightHeight = hi - lo;
@@ -61,8 +69,8 @@ export class FitBody {
    *  body standing straight is exactly that tall (b.scale is ignored; the scale used is returned). */
   evaluate(b: BodyParams, heightCm?: number): { verts: Float32Array; joints: Float64Array; height: number; scale: number } {
     const params = this.modelParams(b);
-    const v = poseVertices(this.m, b.body, params);
     const st = skeletonState(this.m, params);
+    const v = skinVertices(this.m, this.rest(b.body), st);
     let minY = Infinity, maxY = -Infinity;
     for (let i = 1; i < v.length; i += 3) { if (v[i] < minY) minY = v[i]; if (v[i] > maxY) maxY = v[i]; }
     const s = heightCm ? heightCm / this.straight(b) : b.scale;

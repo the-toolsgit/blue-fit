@@ -7,7 +7,9 @@ import type { RoomStats } from "./guide";
 import { FIT_H, FIT_W } from "./constants";
 
 export interface PoseFrame { people: number; landmarks: NormalizedLandmark[] | null; world: NormalizedLandmark[] | null }
-export interface Fitted { ok: boolean; reason?: string; ms: number; geometry: BodyGeometry; measured: Measured }
+/** Fit quality per photo and the fitted camera: for the scan report (no body values). */
+export interface FitReport { iou: number[]; rmsPx: number[]; yawDeg: number[]; pitchDeg: number; pitchGuessDeg: number; focal: number; camH: number; iterations: number }
+export interface Fitted { ok: boolean; reason?: string; ms: number; geometry: BodyGeometry; measured: Measured; report: FitReport }
 
 /** Open the front camera in portrait. Throws a readable error. */
 export async function openCamera(video: HTMLVideoElement): Promise<MediaStream> {
@@ -81,8 +83,9 @@ export class ScanWorker {
     return (await this.ask<{ ok: boolean }>({ type: "capture", bitmap, hour }, [bitmap])).ok;
   }
   reset() { return this.ask({ type: "reset" }); }
-  fit(heightCm: number, sex: "male" | "female"): Promise<Fitted> {
-    return this.ask({ type: "fit", heightCm, sex, base: import.meta.env.BASE_URL });
+  /** pitch: the phone's camera pitch during the photos (radians, + = looking up). */
+  fit(heightCm: number, sex: "male" | "female", pitch: number): Promise<Fitted> {
+    return this.ask({ type: "fit", heightCm, sex, pitch, base: import.meta.env.BASE_URL });
   }
   close() { this.w.terminate(); this.waiting.clear(); }
 }

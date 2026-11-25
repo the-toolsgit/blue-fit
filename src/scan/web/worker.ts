@@ -2,7 +2,10 @@
 // Live pose (MediaPipe full, GPU with a CPU fallback), room statistics, each capture's outline + landmarks
 // (heavy pose with its full-resolution person mask; the multiclass segmenter removes head hair), and the 3D fit.
 // Frames arrive as ImageBitmaps and are closed right after use; nothing is stored.
-import { FilesetResolver, ImageSegmenter, PoseLandmarker, type NormalizedLandmark } from "@mediapipe/tasks-vision";
+import { ImageSegmenter, PoseLandmarker, type NormalizedLandmark } from "@mediapipe/tasks-vision";
+// MediaPipe's runtime as build assets (served by the app; the dev server won't let a worker import files from public/)
+import wasmLoaderPath from "@mediapipe/tasks-vision/vision_wasm_module_internal.js?url";
+import wasmBinaryPath from "@mediapipe/tasks-vision/vision_wasm_module_internal.wasm?url";
 import { parseMhr } from "../../core/body/mhr";
 import { measureGeometry } from "../../core/body/measure";
 import type { Sex } from "../../core/body/types";
@@ -60,17 +63,27 @@ function toFitMask(conf: Float32Array, w: number, h: number, hairBelowNeckOk: Ui
   return out;
 }
 
+// MediaPipe imports its loader for each model and expects the import to set self.ModuleFactory; a module import
+// runs only once per worker, so the factory is kept here and put back before each model is created.
+let factory: unknown = null;
+async function create<T>(make: () => Promise<T>): Promise<T> {
+  const g = self as unknown as { ModuleFactory?: unknown };
+  if (!factory) { const mod = await import(/* @vite-ignore */ wasmLoaderPath); factory = mod.default ?? g.ModuleFactory; }
+  g.ModuleFactory = factory;
+  return make();
+}
+
 async function init(base: string) {
-  const files = await FilesetResolver.forVisionTasks(`${base}mediapipe`, true);
+  const files = { wasmLoaderPath, wasmBinaryPath };
   const model = (f: string) => `${base}models/${f}`;
   try {
-    live = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: model("pose_landmarker_full.task"), delegate: "GPU" }, runningMode: "VIDEO", numPoses: 2, canvas: new OffscreenCanvas(1, 1) });
+    live = await create(() => PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: model("pose_landmarker_full.task"), delegate: "GPU" }, runningMode: "VIDEO", numPoses: 2, canvas: new OffscreenCanvas(1, 1) }));
   } catch {
     liveDelegate = "CPU";
-    live = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: model("pose_landmarker_full.task"), delegate: "CPU" }, runningMode: "VIDEO", numPoses: 2 });
+    live = await create(() => PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: model("pose_landmarker_full.task"), delegate: "CPU" }, runningMode: "VIDEO", numPoses: 2 }));
   }
-  heavy = await PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: model("pose_landmarker_heavy.task"), delegate: "CPU" }, runningMode: "IMAGE", numPoses: 1, outputSegmentationMasks: true });
-  seg = await ImageSegmenter.createFromOptions(files, { baseOptions: { modelAssetPath: model("selfie_multiclass_256x256.tflite"), delegate: "CPU" }, runningMode: "IMAGE", outputCategoryMask: true, outputConfidenceMasks: false });
+  heavy = await create(() => PoseLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: model("pose_landmarker_heavy.task"), delegate: "CPU" }, runningMode: "IMAGE", numPoses: 1, outputSegmentationMasks: true }));
+  seg = await create(() => ImageSegmenter.createFromOptions(files, { baseOptions: { modelAssetPath: model("selfie_multiclass_256x256.tflite"), delegate: "CPU" }, runningMode: "IMAGE", outputCategoryMask: true, outputConfidenceMasks: false }));
 }
 
 self.onmessage = async (ev: MessageEvent) => {
@@ -152,11 +165,13 @@ self.onmessage = async (ev: MessageEvent) => {
       const fb = new FitBody(m);
       const got = photos.filter(Boolean);
       const res = new SilhouetteFit(fb).run({ photos: got, heightCm: d.heightCm, camGuess: { f: 0.725 * FIT_H, cx: FIT_W / 2, cy: FIT_H / 2, h: 100, pitch: d.pitch ?? 0 } });
-      const viewQuality = res.iou.map((x, i) => Math.round(Math.max(0, Math.min(1, x * (res.rmsPx[i] <= 2 ? 1 : 0.8))) * 100) / 100);
+      const viewQuality = res.iou.map((x, i) => Math.round(Math.max(0, Math.min(1, x * (res.rmsPx[i] <= 3 ? 1 : 0.8))) * 100) / 100);
       const geometry = buildGeometry(m, fb, res.params, { scannerId: SCANNER_ID, scannerVersion: SCANNER_VERSION, viewQuality });
       const measured = measureGeometry(geometry, d.sex as Sex, d.heightCm);
       photos.length = 0;
-      post({ type: "fitted", id: d.id, ok: res.ok, reason: res.reason, ms: res.ms, geometry, measured });
+      const deg = (r: number) => Math.round((r * 180) / Math.PI);
+      const report = { iou: res.iou, rmsPx: res.rmsPx, yawDeg: res.views.map((v) => deg(v.yaw)), pitchDeg: Math.round((res.cam.pitch * 1800) / Math.PI) / 10, pitchGuessDeg: Math.round(((d.pitch ?? 0) * 1800) / Math.PI) / 10, focal: Math.round(res.cam.f), camH: Math.round(res.cam.h), iterations: res.iterations };
+      post({ type: "fitted", id: d.id, ok: res.ok, reason: res.reason, ms: res.ms, geometry, measured, report });
     }
   } catch (e) {
     post({ type: "error", id: d.id, error: (e instanceof Error ? e.message : String(e)).slice(0, 200) });

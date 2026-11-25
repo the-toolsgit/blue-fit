@@ -4,23 +4,32 @@
 export interface Mask { w: number; h: number; data: Uint8Array }
 
 /** Fill every projected triangle (pixel centers) into a w×h mask. */
-export function rasterize(uv: Float64Array, faces: ArrayLike<number>, w: number, h: number): Mask {
-  const data = new Uint8Array(w * h);
+export function rasterize(uv: Float64Array, faces: ArrayLike<number>, w: number, h: number, data = new Uint8Array(w * h)): Mask {
+  data.fill(0);
   for (let f = 0; f < faces.length; f += 3) {
     const a = faces[f] * 2, b = faces[f + 1] * 2, c = faces[f + 2] * 2;
-    const x0 = uv[a], y0 = uv[a + 1], x1 = uv[b], y1 = uv[b + 1], x2 = uv[c], y2 = uv[c + 1];
-    const area = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
+    let x0 = uv[a], y0 = uv[a + 1], x1 = uv[b], y1 = uv[b + 1];
+    const x2 = uv[c], y2 = uv[c + 1];
+    let area = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
     if (Math.abs(area) < 1e-9) continue;
+    if (area < 0) { const tx = x0, ty = y0; x0 = x1; y0 = y1; x1 = tx; y1 = ty; area = -area; } // counter-clockwise
     const minX = Math.max(0, Math.floor(Math.min(x0, x1, x2))), maxX = Math.min(w - 1, Math.ceil(Math.max(x0, x1, x2)));
     const minY = Math.max(0, Math.floor(Math.min(y0, y1, y2))), maxY = Math.min(h - 1, Math.ceil(Math.max(y0, y1, y2)));
+    if (minX > maxX || minY > maxY) continue;
+    // edge functions at the first pixel center, stepped by their x/y increments (same inside test as barycentrics)
+    const px0 = minX + 0.5, py0 = minY + 0.5;
+    const e0x = -(y2 - y1), e0y = x2 - x1, e1x = -(y0 - y2), e1y = x0 - x2, e2x = -(y1 - y0), e2y = x1 - x0;
+    let r0 = (x1 - px0) * (y2 - py0) - (x2 - px0) * (y1 - py0);
+    let r1 = (x2 - px0) * (y0 - py0) - (x0 - px0) * (y2 - py0);
+    let r2 = area - r0 - r1;
     for (let y = minY; y <= maxY; y++) {
-      const py = y + 0.5;
+      let w0 = r0, w1 = r1, w2 = r2;
+      const row = y * w;
       for (let x = minX; x <= maxX; x++) {
-        const px = x + 0.5;
-        const w0 = ((x1 - px) * (y2 - py) - (x2 - px) * (y1 - py)) / area;
-        const w1 = ((x2 - px) * (y0 - py) - (x0 - px) * (y2 - py)) / area;
-        if (w0 >= 0 && w1 >= 0 && w0 + w1 <= 1) data[y * w + x] = 1;
+        if (w0 >= 0 && w1 >= 0 && w2 >= 0) data[row + x] = 1;
+        w0 += e0x; w1 += e1x; w2 += e2x;
       }
+      r0 += e0y; r1 += e1y; r2 += e2y;
     }
   }
   return { w, h, data };
@@ -106,52 +115,59 @@ const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]] as const;
 
 /** Clean a person mask: keep the biggest blob and any blob at least 5% of its size (a hand separated by a thin
  *  gap), drop small specks, fill holes. */
-export function cleanMask(m: Mask): Mask {
+export function cleanMask(m: Mask, holeFrac = 0.005): Mask {
   const { w, h, data } = m;
-  const lab = new Int32Array(w * h);
+  const N = w * h;
+  const lab = new Int32Array(N);
+  const stack = new Int32Array(N);
   let best = 0, bestN = 0, next = 0;
   const sizes: number[] = [0];
-  const stack: number[] = [];
-  for (let i = 0; i < w * h; i++) {
+  // 1. person blobs (4-connected)
+  for (let i = 0; i < N; i++) {
     if (!data[i] || lab[i]) continue;
-    next++; let n = 0; lab[i] = next; stack.push(i);
-    while (stack.length) {
-      const j = stack.pop()!; n++;
-      const x = j % w, y = (j - x) / w;
-      if (x > 0 && data[j - 1] && !lab[j - 1]) { lab[j - 1] = next; stack.push(j - 1); }
-      if (x < w - 1 && data[j + 1] && !lab[j + 1]) { lab[j + 1] = next; stack.push(j + 1); }
-      if (y > 0 && data[j - w] && !lab[j - w]) { lab[j - w] = next; stack.push(j - w); }
-      if (y < h - 1 && data[j + w] && !lab[j + w]) { lab[j + w] = next; stack.push(j + w); }
+    const l = ++next;
+    let sp = 0, n = 0;
+    lab[i] = l; stack[sp++] = i;
+    while (sp) {
+      const j = stack[--sp]; n++;
+      const x = j % w;
+      if (x > 0 && data[j - 1] && !lab[j - 1]) { lab[j - 1] = l; stack[sp++] = j - 1; }
+      if (x < w - 1 && data[j + 1] && !lab[j + 1]) { lab[j + 1] = l; stack[sp++] = j + 1; }
+      if (j >= w && data[j - w] && !lab[j - w]) { lab[j - w] = l; stack[sp++] = j - w; }
+      if (j < N - w && data[j + w] && !lab[j + w]) { lab[j + w] = l; stack[sp++] = j + w; }
     }
-    sizes[next] = n;
-    if (n > bestN) { bestN = n; best = next; }
+    sizes[l] = n;
+    if (n > bestN) { bestN = n; best = l; }
   }
-  const keepLab = (l: number) => l !== 0 && (l === best || sizes[l] >= bestN * 0.05);
-  // outside = background reachable from the image border; everything else is the person (holes filled)
-  const out = new Uint8Array(w * h).fill(1), seen = new Uint8Array(w * h);
-  for (let x = 0; x < w; x++) for (const y of [0, h - 1]) { const i = y * w + x; if (!keepLab(lab[i]) && !seen[i]) { seen[i] = 1; stack.push(i); } }
-  for (let y = 0; y < h; y++) for (const x of [0, w - 1]) { const i = y * w + x; if (!keepLab(lab[i]) && !seen[i]) { seen[i] = 1; stack.push(i); } }
-  while (stack.length) {
-    const j = stack.pop()!; out[j] = 0;
-    const x = j % w, y = (j - x) / w;
-    for (const k of [x > 0 ? j - 1 : -1, x < w - 1 ? j + 1 : -1, y > 0 ? j - w : -1, y < h - 1 ? j + w : -1])
-      if (k >= 0 && !seen[k] && !keepLab(lab[k])) { seen[k] = 1; stack.push(k); }
-  }
-  // enclosed background: fill only small holes (noise). A big one is real, e.g. the gap between an arm and the
-  // body when the hand touches the hip.
-  const hole = new Uint8Array(w * h);
-  for (let i = 0; i < w * h; i++) {
-    if (!out[i] || keepLab(lab[i]) || hole[i]) continue;
-    const region: number[] = [];
-    hole[i] = 1; stack.push(i);
-    while (stack.length) {
-      const j = stack.pop()!; region.push(j);
-      const x = j % w, y = (j - x) / w;
-      for (const k of [x > 0 ? j - 1 : -1, x < w - 1 ? j + 1 : -1, y > 0 ? j - w : -1, y < h - 1 ? j + w : -1])
-        if (k >= 0 && out[k] && !keepLab(lab[k]) && !hole[k]) { hole[k] = 1; stack.push(k); }
+  // kept = 1 for pixels of kept blobs; region id for background (2 = reachable from the border, 3+ = holes)
+  const keep = new Uint8Array(next + 1);
+  for (let l = 1; l <= next; l++) keep[l] = l === best || sizes[l] >= bestN * 0.05 ? 1 : 0;
+  const reg = new Int32Array(N); // 0 = not visited background, -1 = kept body
+  for (let i = 0; i < N; i++) if (lab[i] && keep[lab[i]]) reg[i] = -1;
+  const out = new Uint8Array(N).fill(1);
+  let rid = 1;
+  const flood = (i: number, id: number) => {
+    let sp = 0, n = 0;
+    reg[i] = id; stack[sp++] = i;
+    while (sp) {
+      const j = stack[--sp]; n++;
+      const x = j % w;
+      if (x > 0 && !reg[j - 1]) { reg[j - 1] = id; stack[sp++] = j - 1; }
+      if (x < w - 1 && !reg[j + 1]) { reg[j + 1] = id; stack[sp++] = j + 1; }
+      if (j >= w && !reg[j - w]) { reg[j - w] = id; stack[sp++] = j - w; }
+      if (j < N - w && !reg[j + w]) { reg[j + w] = id; stack[sp++] = j + w; }
     }
-    if (region.length > bestN * 0.005) for (const j of region) out[j] = 0;
-  }
+    return n;
+  };
+  // 2. outside = background reachable from the image border
+  const OUT = ++rid;
+  for (let x = 0; x < w; x++) { if (!reg[x]) flood(x, OUT); if (!reg[N - w + x]) flood(N - w + x, OUT); }
+  for (let y = 0; y < h; y++) { if (!reg[y * w]) flood(y * w, OUT); if (!reg[y * w + w - 1]) flood(y * w + w - 1, OUT); }
+  // 3. enclosed background: fill only small holes (mask noise, ≤ holeFrac of the body; photos 0.5%). Bigger ones
+  // are real (the gap between the arm and the body, between the thighs).
+  const big = new Set<number>([OUT]);
+  for (let i = 0; i < N; i++) if (!reg[i]) { const id = ++rid; if (flood(i, id) > bestN * holeFrac) big.add(id); }
+  for (let i = 0; i < N; i++) if (reg[i] > 0 && big.has(reg[i])) out[i] = 0;
   return { w, h, data: out };
 }
 

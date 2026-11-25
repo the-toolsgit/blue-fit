@@ -20,14 +20,18 @@ const LIMBS: Record<LimbPart, { from: AxisKey; to: AxisKey; label: number }> = {
   calfL: { from: "kneeL", to: "ankleL", label: L("legL") }, calfR: { from: "kneeR", to: "ankleR", label: L("legR") },
 };
 
-/** Cut the faces whose 3 vertices all carry `labels` with a plane (point p, normal n). Points in mm on (e1, e2). */
-export function cut(verts: ArrayLike<number>, faces: ArrayLike<number>, lab: ArrayLike<number>, labels: number[], p: V3, n: V3, e1: V3, e2: V3): Polygon {
+/** Cut the faces whose 3 vertices all carry `labels` with a plane (point p, normal n). Points in mm on (e1, e2).
+ *  With `aroundAxis` only the closed loop around p is kept (the neck, not a shoulder crossing the same plane). */
+export function cut(verts: ArrayLike<number>, faces: ArrayLike<number>, lab: ArrayLike<number>, labels: number[], p: V3, n: V3, e1: V3, e2: V3, aroundAxis = false): Polygon {
   const out: Polygon = [];
   const d = (i: number) => (verts[i * 3] - p[0]) * n[0] + (verts[i * 3 + 1] - p[1]) * n[1] + (verts[i * 3 + 2] - p[2]) * n[2];
+  const point = new Map<number, [number, number]>(); // crossing edge (a*65536+b, a<b) → point
+  const links = new Map<number, number[]>(); // crossing edge → the edges it's joined to (through a face)
   for (let f = 0; f < faces.length; f += 3) {
     const ids = [faces[f], faces[f + 1], faces[f + 2]];
     if (!ids.every((i) => labels.includes(lab[i]))) continue;
     const ds = ids.map(d);
+    const hit: number[] = [];
     for (let k = 0; k < 3; k++) {
       const a = ids[k], b = ids[(k + 1) % 3], da = ds[k], db = ds[(k + 1) % 3];
       if ((da < 0) === (db < 0)) continue;
@@ -35,10 +39,41 @@ export function cut(verts: ArrayLike<number>, faces: ArrayLike<number>, lab: Arr
       const x = verts[a * 3] + t * (verts[b * 3] - verts[a * 3]) - p[0];
       const y = verts[a * 3 + 1] + t * (verts[b * 3 + 1] - verts[a * 3 + 1]) - p[1];
       const z = verts[a * 3 + 2] + t * (verts[b * 3 + 2] - verts[a * 3 + 2]) - p[2];
-      out.push([Math.round((x * e1[0] + y * e1[1] + z * e1[2]) * 10), Math.round((x * e2[0] + y * e2[1] + z * e2[2]) * 10)]);
+      const q: [number, number] = [Math.round((x * e1[0] + y * e1[1] + z * e1[2]) * 10), Math.round((x * e2[0] + y * e2[1] + z * e2[2]) * 10)];
+      out.push(q);
+      const key = Math.min(a, b) * 65536 + Math.max(a, b);
+      point.set(key, q);
+      hit.push(key);
+    }
+    if (hit.length === 2) {
+      for (const [u, v] of [[hit[0], hit[1]], [hit[1], hit[0]]]) { const l = links.get(u); if (l) l.push(v); else links.set(u, [v]); }
     }
   }
-  return out;
+  if (!aroundAxis) return out;
+  // walk each loop of joined crossings; keep the smallest one that goes around p (the origin of e1, e2)
+  const seen = new Set<number>();
+  let best: Polygon | null = null, bestArea = Infinity;
+  for (const start of links.keys()) {
+    if (seen.has(start)) continue;
+    const loop: Polygon = [];
+    let prev = -1, cur = start;
+    while (!seen.has(cur)) {
+      seen.add(cur); loop.push(point.get(cur)!);
+      const nx = (links.get(cur) ?? []).find((e) => e !== prev && !seen.has(e));
+      if (nx == null) break;
+      prev = cur; cur = nx;
+    }
+    if (loop.length < 3) continue;
+    let inside = false, area = 0;
+    for (let i = 0, j = loop.length - 1; i < loop.length; j = i++) {
+      const [xi, yi] = loop[i], [xj, yj] = loop[j];
+      if ((yi > 0) !== (yj > 0) && 0 < ((xj - xi) * (0 - yi)) / (yj - yi) + xi) inside = !inside;
+      area += xj * yi - xi * yj;
+    }
+    area = Math.abs(area) / 2;
+    if (inside && area < bestArea) { bestArea = area; best = loop; }
+  }
+  return best ?? out;
 }
 
 const sub = (a: V3, b: V3): V3 => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
@@ -50,13 +85,14 @@ function basis(n: V3): [V3, V3] {
   const e1 = norm(cross(ref, n));
   return [e1, cross(n, e1)];
 }
-function sections(verts: ArrayLike<number>, m: MhrModel, labels: number[], a: V3, b: V3): Section[] {
+function sections(verts: ArrayLike<number>, m: MhrModel, labels: number[], a: V3, b: V3, keep: (p: V3) => boolean = () => true, aroundAxis = false): Section[] {
   const n = norm(sub(b, a));
   const [e1, e2] = basis(n);
   const out: Section[] = [];
   for (let t = 0; t <= len(sub(b, a)); t += 1) {
     const p: V3 = [a[0] + n[0] * t, a[1] + n[1] * t, a[2] + n[2] * t];
-    const poly = cut(verts, m.faces, m.partLabels, labels, p, n, e1, e2);
+    if (!keep(p)) continue;
+    const poly = cut(verts, m.faces, m.partLabels, labels, p, n, e1, e2, aroundAxis);
     if (poly.length >= 3) out.push({ tCm: t, polygon: poly });
   }
   return out;
@@ -132,16 +168,23 @@ export function buildGeometry(m: MhrModel, fb: FitBody, fitted: BodyParams, meta
   for (const k of Object.keys(levels) as LevelKey[]) levels[k] = Math.round(levels[k] * 10) / 10;
 
   // body cuts: torso + legs (at buttock height a tape goes around both upper thighs), arms and hands left out
+  // every cm, plus exact cuts at the armpit and navel (the chest and lower-waist tapes are taken there)
+  const ys = new Set<number>();
+  for (let yy = Math.ceil(crotch); yy <= levels.neckBase; yy++) ys.add(yy);
+  ys.add(levels.armpit); ys.add(levels.navel);
   const torsoSlices = [];
-  for (let yy = Math.ceil(crotch); yy <= levels.neckBase; yy++) {
+  for (const yy of [...ys].sort((a, b) => a - b)) {
     const poly = cut(verts, m.faces, m.partLabels, [torso, L("legL"), L("legR")], [0, yy, 0], [0, 1, 0], [1, 0, 0], [0, 0, 1]);
     if (poly.length >= 3) torsoSlices.push({ yCm: yy, polygon: poly });
   }
   const limbSections = (Object.keys(LIMBS) as LimbPart[]).map((part) => {
     const r = LIMBS[part];
-    return { part, sections: sections(verts, m, [r.label], axes[r.from], axes[r.to]) };
+    // thigh cuts only below the crotch: above it the leg's plane runs into the buttock and groin
+    const below = part.startsWith("thigh") ? (q: V3) => q[1] <= crotch - 1 : undefined;
+    return { part, sections: sections(verts, m, [r.label], axes[r.from], axes[r.to], below) };
   });
-  const neckSections = sections(verts, m, [torso, L("neck"), L("head")], joint("c_neck"), joint("c_head"));
+  // neck: only the loop around the neck axis (the trapezius and shoulders can cross the same plane)
+  const neckSections = sections(verts, m, [torso, L("neck"), L("head")], joint("c_neck"), joint("c_head"), undefined, true);
   return {
     torsoSlices, limbSections, neckSections, levels, axes,
     shape: { model: "MHR", version: "v1", body: p.body.map((x) => Math.round(x * 1e4) / 1e4), params: fb.modelParams(fitted).map((x) => Math.round(x * 1e4) / 1e4), scale: Math.round(s * 1e5) / 1e5 },

@@ -93,9 +93,10 @@ export function measureGeometry(g: BodyGeometry, sex: Sex, heightCm: number): Me
   if (navel) m.waistLower = tapeCm(navel.polygon);
   const hips = tapes(slicesBetween(g, L.hipCrest, L.crotch));
   if (hips.length) m.hips = Math.max(...hips);
-  // neck: narrowest cut just above the base (the tape sits below the larynx); tCm runs along the neck axis
+  // neck: narrowest cut along the neck (minimal neck girth, just below the larynx); tCm runs along the neck axis.
+  // Low cuts flare into the trapezius and the top one reaches the jaw, so the narrowest is the neck itself.
   const neckLen = g.neckSections.length ? Math.max(...g.neckSections.map((s) => s.tCm)) : 0;
-  const neck = tapes(pick(g.neckSections, 1, Math.max(1, neckLen * 0.6)));
+  const neck = tapes(pick(g.neckSections, 1, Math.max(1, neckLen * 0.9)));
   if (neck.length) m.neck = Math.min(...neck);
   for (const part of LIMB_PARTS) {
     const secs = g.limbSections.find((l) => l.part === part)?.sections;
