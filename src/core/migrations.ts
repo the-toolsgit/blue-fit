@@ -744,6 +744,16 @@ export const MIGRATIONS: Migration[] = [
       return changed ? { ...d, exercises } : null;
     },
   },
+  {
+    // Nov 25 2026 (Leo): rope overhead extension keeps the elbows in, close to the head (better stretch). Only while
+    // the line still reads as before.
+    id: "2026-11-25-rope-overhead-elbows-in",
+    run(d) {
+      const was = "Rope behind your head, elbows forward by your ears.", now = "Rope behind your head, elbows in close to your ears.";
+      if (!d.exercises.some((e) => e.id === "rope-overhead-tricep-extension" && !e.isCustom && e.setup.includes(was))) return null;
+      return { ...d, exercises: d.exercises.map((e) => (e.id === "rope-overhead-tricep-extension" && !e.isCustom ? { ...e, setup: e.setup.map((x) => (x === was ? now : x)) } : e)) };
+    },
+  },
 ];
 
 type FigureUpdates = Record<string, { was: string[]; figure: Exercise["figure"] }>;
