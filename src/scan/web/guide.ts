@@ -76,7 +76,8 @@ export function bodyAngle(world: Lm[]): number {
   return (deg + 360) % 360;
 }
 
-export type TurnCue = { kind: "hold"; hour: number } | { kind: "turn"; hour: number } | { kind: "tooFar"; hour: number } | { kind: "capture"; hour: number } | { kind: "done" };
+/** moving: still turning; hold: just stopped; more: standing still short of the hour; turn: standing still without having turned yet. */
+export type TurnCue = { kind: "moving"; hour: number } | { kind: "more"; hour: number } | { kind: "hold"; hour: number } | { kind: "turn"; hour: number } | { kind: "tooFar"; hour: number } | { kind: "capture"; hour: number } | { kind: "done" };
 
 /** How much the body moved between two frames (mean 2D shift of shoulders, hips, knees, ankles; share of the frame). */
 export function motion(a: Lm[] | null, b: Lm[] | null): number {
@@ -125,7 +126,7 @@ export class TurnTracker {
     const progress = this.dir === 0 ? Math.abs(this.unwrapped) : this.dir * this.unwrapped;
     const target = this.hour * 30;
     const still = this.moveEma < this.stillLimit && this.turnEma < 1.5;
-    if (!still) { this.steadySince = null; return { kind: "turn", hour: this.hour }; }
+    if (!still) { this.steadySince = null; return { kind: "moving", hour: this.hour }; }
     this.steadySince ??= now;
     if (now - this.steadySince < this.steadyMs) return { kind: "hold", hour: this.hour };
     // standing still: take the photo if near the hour (and, after the first, turned since the last one)
@@ -135,7 +136,7 @@ export class TurnTracker {
       const h = this.hour; this.hour++; this.movedSince = false; this.steadySince = null;
       return { kind: "capture", hour: h };
     }
-    return { kind: "turn", hour: this.hour };
+    return turned ? { kind: "more", hour: this.hour } : { kind: "turn", hour: this.hour };
   }
   /** Which way the user turned (+1 / −1; 0 = not known yet). */
   get direction() { return this.dir; }

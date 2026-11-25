@@ -80,9 +80,15 @@ describe("scan guidance", () => {
     for (let k = 0; k < 20; k++) c = t.update(0, (now += 50), 0);
     expect(c.kind).toBe("turn"); // still at 12 o'clock: hasn't turned, no second photo
     for (let a = 0; a <= 90; a += 3) c = t.update(a, (now += 50), 0.02);
-    expect(c.kind).toBe("turn"); // moving
+    expect(c.kind).toBe("moving");
     for (let k = 0; k < 20; k++) c = t.update(90, (now += 50), 0);
     expect(c.kind).toBe("tooFar"); // 90° when 1 o'clock (30°) was asked
+    const t2 = new TurnTracker(300);
+    now = 0;
+    for (let k = 0; k < 10; k++) t2.update(0, (now += 50), 0); // hour 0
+    for (let a = 0; a <= 5; a += 1) t2.update(a, (now += 50), 0.02); // a small move
+    for (let k = 0; k < 20; k++) c = t2.update(5, (now += 50), 0);
+    expect(c.kind).toBe("more"); // stopped at 5° when 30° was asked
   });
   it("tilt from gravity: upright 90°, flat 0°, green 85–95°", () => {
     expect(tiltFromGravity({ y: -9.81, z: 0 })).toBeCloseTo(90);

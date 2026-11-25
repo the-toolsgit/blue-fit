@@ -315,6 +315,7 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
         const still: number[] = [];
         // a problem must last before it's shown or said (a moment of a bad pose reading isn't a problem)
         let problemText: string | null = null, problemSince = 0, problemSaid = "", problemSaidAt = -1e9, tooFarSince: number | null = null;
+        let stateKind = "", stateSince = 0, nudgeAt = 0;
         while (alive) {
           const v = video.current!;
           const p = await worker.current!.pose(v);
@@ -382,10 +383,16 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
             if (now - tooFarSince > 2000) { stats.tooFar++; tooFarSince = now; setCue("You turned too much. Turn back a little"); say("You turned too much. Turn back a little"); }
           }
           if (c.kind !== "tooFar") tooFarSince = null;
-          if (c.kind === "turn" || c.kind === "hold") {
-            if (c.hour === 0) setCue("Hold still");
-            else if (c.hour !== lastHour) { lastHour = c.hour; setCue(hourCue(c.hour)); say(hourCue(c.hour)); }
-            else setCue(hourCue(c.hour));
+          // never silent for long: when the user stands still without a photo, say why (after a buffer, then every 5 s)
+          if (c.kind !== stateKind) { stateKind = c.kind; stateSince = now; }
+          const nudge = (text: string, after: number) => { if (now - stateSince > after && now - nudgeAt > 5000) { nudgeAt = now; setCue(text); say(text, true); } };
+          if (c.kind !== "capture" && c.kind !== "tooFar" && c.kind !== "done") {
+            if (c.hour === 0) { setCue("Hold still"); nudge("Hold still", 3000); }
+            else if (c.hour !== lastHour) { lastHour = c.hour; nudgeAt = now; setCue(hourCue(c.hour)); say(hourCue(c.hour)); }
+            else if (c.kind === "more") { setCue("Turn a little more"); nudge(`Turn a little more, to ${c.hour} o'clock`, 2000); }
+            else if (c.kind === "turn") { setCue(hourCue(c.hour)); nudge(hourCue(c.hour), 3000); }
+            else if (c.kind === "moving") { setCue(hourCue(c.hour)); nudge(`Stop at ${c.hour} o'clock and hold still`, 6000); }
+            else setCue("Hold still");
           }
         }
         if (tracker.hour >= 12) {
