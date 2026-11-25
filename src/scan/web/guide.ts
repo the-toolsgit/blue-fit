@@ -89,29 +89,31 @@ export function motion(a: Lm[] | null, b: Lm[] | null): number {
 }
 
 /**
- * Follows the turn through the 12 hours (one direction, learned from the first clear move). A photo is taken when
- * the user has turned since the last one and then stands still, with the estimated turn anywhere near the hour:
- * the angle from the pose tracker is rough (worst at the sides, 3 and 9 o'clock), and the 3D fit finds each
- * photo's exact turn anyway (within ±34°). "Too far" only when clearly past the next hour.
+ * Follows the turn through the 12 hours by counting stops: a photo is taken when the user has clearly moved since
+ * the last photo (body travel, or the estimated turn) and then stands still. The pose tracker's angle is too rough
+ * to place a photo (sides and back confuse it, and summed small errors drift), so it's only used per step: to see a
+ * turn and to catch a step far bigger than one hour. The 3D fit finds each photo's exact turn (within ±34°).
  */
 export class TurnTracker {
   hour = 0; // next hour to capture (0 = facing the phone)
   /** Body motion per frame below which the user counts as still (set from the user's own stillness at the start). */
   stillLimit = 0.004;
+  /** Body travel since the last photo (share of the frame, summed over moving frames). */
+  travel = 0;
   private dir: 1 | -1 | 0 = 0;
   private unwrapped = 0;
+  private atLast = 0; // unwrapped angle at the last photo
   private last: number | null = null;
   private steadySince: number | null = null;
   private moveEma = 0;
   private turnEma = 0;
-  private movedSince = false; // the body moved (turned) since the last photo
-  constructor(private steadyMs = 600, private early = 22, private late = 40) {}
+  constructor(private steadyMs = 600, private minTravel = 0.03, private maxStep = 75) {}
 
   /** Feed one frame's raw angle (0–360) and how much the body moved since the last frame (see `motion`). */
   update(raw: number, now: number, moved = 0): TurnCue {
     if (this.hour >= 12) return { kind: "done" };
     let d = 0;
-    if (this.last == null) { this.last = raw; this.unwrapped = raw > 180 ? raw - 360 : raw; }
+    if (this.last == null) { this.last = raw; this.unwrapped = raw > 180 ? raw - 360 : raw; this.atLast = this.unwrapped; }
     else {
       d = raw - this.last;
       if (d > 180) d -= 360; if (d < -180) d += 360;
@@ -121,22 +123,21 @@ export class TurnTracker {
     }
     this.moveEma = this.moveEma * 0.7 + moved * 0.3;
     this.turnEma = this.turnEma * 0.7 + Math.abs(d) * 0.3;
-    if (this.moveEma > this.stillLimit * 2 || this.turnEma > 3) this.movedSince = true;
+    if (moved < 1) this.travel += Math.max(0, moved - this.stillLimit);
     if (this.dir === 0 && this.hour >= 1 && Math.abs(this.unwrapped) > 15) this.dir = this.unwrapped > 0 ? 1 : -1;
-    const progress = this.dir === 0 ? Math.abs(this.unwrapped) : this.dir * this.unwrapped;
-    const target = this.hour * 30;
     const still = this.moveEma < this.stillLimit && this.turnEma < 1.5;
     if (!still) { this.steadySince = null; return { kind: "moving", hour: this.hour }; }
     this.steadySince ??= now;
     if (now - this.steadySince < this.steadyMs) return { kind: "hold", hour: this.hour };
-    // standing still: take the photo if near the hour (and, after the first, turned since the last one)
-    if (progress > target + this.late) return { kind: "tooFar", hour: this.hour };
-    const turned = this.hour === 0 || this.movedSince;
-    if (progress >= target - this.early && turned) {
-      const h = this.hour; this.hour++; this.movedSince = false; this.steadySince = null;
+    const step = this.dir === 0 ? Math.abs(this.unwrapped - this.atLast) : this.dir * (this.unwrapped - this.atLast);
+    if (this.hour > 0 && step > this.maxStep) return { kind: "tooFar", hour: this.hour };
+    const turned = this.hour === 0 || this.travel >= this.minTravel || step >= 15;
+    if (turned) {
+      const h = this.hour;
+      this.hour++; this.travel = 0; this.atLast = this.unwrapped; this.steadySince = null;
       return { kind: "capture", hour: h };
     }
-    return turned ? { kind: "more", hour: this.hour } : { kind: "turn", hour: this.hour };
+    return this.travel > this.minTravel / 3 ? { kind: "more", hour: this.hour } : { kind: "turn", hour: this.hour };
   }
   /** Which way the user turned (+1 / −1; 0 = not known yet). */
   get direction() { return this.dir; }

@@ -53,7 +53,7 @@ describe("scan guidance", () => {
     expect(bodyAngle(w(0, 0.2))).toBeCloseTo(90, 5);
     expect(bodyAngle(w(-0.2, 0))).toBeCloseTo(180, 5);
   });
-  it("turn tracker: a photo when the user has turned and stands still near the hour, rough angles ok", () => {
+  it("turn tracker: a photo at each stop after a turn, even when the angle reads badly (sides, back, drift)", () => {
     for (const dir of [1, -1]) {
       const t = new TurnTracker(300);
       let now = 0;
@@ -63,7 +63,8 @@ describe("scan guidance", () => {
       };
       for (let h = 0; h < 12; h++) {
         // turning (moving), then standing still; the tracker reads the sides 20° short
-        const read = h === 3 || h === 9 ? h * 30 - 20 : h * 30;
+        // the tracker reads the sides 20° short and drifts 4° short per hour (11 o'clock reads 286°)
+        const read = (h === 3 || h === 9 ? h * 30 - 20 : h * 30) - h * 4;
         for (let a = Math.max(0, (h - 1) * 30); a < read; a += 3) feed(a, 50, 0.02);
         feed(read, 800, 0);
       }
@@ -82,11 +83,11 @@ describe("scan guidance", () => {
     for (let a = 0; a <= 90; a += 3) c = t.update(a, (now += 50), 0.02);
     expect(c.kind).toBe("moving");
     for (let k = 0; k < 20; k++) c = t.update(90, (now += 50), 0);
-    expect(c.kind).toBe("tooFar"); // 90° when 1 o'clock (30°) was asked
+    expect(c.kind).toBe("tooFar"); // a 90° step when one hour (30°) was asked
     const t2 = new TurnTracker(300);
     now = 0;
     for (let k = 0; k < 10; k++) t2.update(0, (now += 50), 0); // hour 0
-    for (let a = 0; a <= 5; a += 1) t2.update(a, (now += 50), 0.02); // a small move
+    for (let a = 0; a <= 5; a += 1) t2.update(a, (now += 50), 0.008); // a small shuffle
     for (let k = 0; k < 20; k++) c = t2.update(5, (now += 50), 0);
     expect(c.kind).toBe("more"); // stopped at 5° when 30° was asked
   });

@@ -16,7 +16,7 @@ import { back, go } from "../router";
 import { useStore } from "../store";
 
 /** What the live step saw (for the scan report; no body values). */
-interface LiveStats { betaMean: number | null; captures: number; retries: number; frames: number; seconds: number; direction: number; tooFar: number; stillLimit: number }
+interface LiveStats { betaMean: number | null; captures: number; retries: number; frames: number; seconds: number; direction: number; tooFar: number; stillLimit: number; travels: number[] }
 type Step = "details" | "sound" | "tutorial" | "placement" | "angle" | "live" | "processing" | "result" | "failed";
 const TUTORIAL_KEY = "bf-scan-tutorial-seen";
 const seen = () => { try { return localStorage.getItem(TUTORIAL_KEY) === "1"; } catch { return false; } };
@@ -95,7 +95,7 @@ export function ScanScreen() {
   const finish = useCallback(async (live: LiveStats) => {
     setStep("processing");
     const lines = [`Blue Fit ${__APP_VERSION__} scan report`, `models ${boot.current?.ms ?? "?"} ms (${boot.current?.delegate ?? "?"})`,
-      `live: ${live.captures} photos, ${live.retries} retries, ${live.frames} frames in ${live.seconds} s (${live.seconds ? Math.round(live.frames / live.seconds) : 0} fps), turn ${live.direction}, too far ×${live.tooFar}, still < ${live.stillLimit.toFixed(4)}, beta ${live.betaMean == null ? "none" : live.betaMean.toFixed(1)}`];
+      `live: ${live.captures} photos, ${live.retries} retries, ${live.frames} frames in ${live.seconds} s (${live.seconds ? Math.round(live.frames / live.seconds) : 0} fps), turn ${live.direction}, too far ×${live.tooFar}, still < ${live.stillLimit.toFixed(4)}, beta ${live.betaMean == null ? "none" : live.betaMean.toFixed(1)}`, `travel per photo ${live.travels.join(" ")}`];
     try {
       const r = await worker.current!.fit(heightCm!, sex, pitchFromBeta(live.betaMean));
       const q = r.report;
@@ -296,7 +296,7 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
     const betas: number[] = [];
     const onOrient = (e: DeviceOrientationEvent) => { if (e.beta != null) beta = e.beta; };
     addEventListener("deviceorientation", onOrient);
-    const stats: LiveStats = { betaMean: null, captures: 0, retries: 0, frames: 0, seconds: 0, direction: 0, tooFar: 0, stillLimit: 0 };
+    const stats: LiveStats = { betaMean: null, captures: 0, retries: 0, frames: 0, seconds: 0, direction: 0, tooFar: 0, stillLimit: 0, travels: [] };
     const t0 = performance.now();
     const lockWake = async () => { try { wake = await (navigator as unknown as { wakeLock: { request(t: string): Promise<{ release(): Promise<void> }> } }).wakeLock.request("screen"); } catch { /* not supported */ } };
     const onVis = () => { if (document.visibilityState === "hidden" && alive) { alive = false; onFail("the app went to the background"); } else void lockWake(); };
@@ -368,9 +368,11 @@ function LiveStep({ worker, ready, onDone, onFail }: { worker: React.MutableRefO
           }
           const moved = motion(prevLm, lm);
           prevLm = lm;
+          const travelBefore = tracker.travel;
           const c = tracker.update(bodyAngle(p.world ?? lm!), now, moved);
           if (c.kind === "capture") {
             shutter();
+            stats.travels.push(Math.round(travelBefore * 1000) / 1000);
             const ok = await worker.current!.capture(v, c.hour);
             if (!ok) { tracker.hour = c.hour; stats.retries++; say("Hold still", true); continue; }
             stats.captures++;
