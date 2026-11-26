@@ -104,7 +104,7 @@ export function TodayScreen() {
         <div className="glass row" role="status" style={{ padding: "8px 8px 8px 14px", marginBottom: 12, borderRadius: 16, borderColor: "color-mix(in srgb, var(--warn) 45%, transparent)" }}>
           <span style={{ color: "var(--warn)" }}><Icon name="download" size={20} /></span>
           <span className="grow" style={{ fontSize: 13 }}>{since == null ? "You haven't backed up your workouts yet." : `Last backup ${since} days ago.`}</span>
-          <button className="btn btn-ghost" style={{ minHeight: 38, padding: "0 12px", fontSize: 14 }} onClick={async () => { await downloadBackup(await exportAll()); markBackup(); toast({ kind: "info", title: "Backup exported" }); }}>Back up</button>
+          <button className="btn btn-ghost hit" style={{ minHeight: 38, padding: "0 12px", fontSize: 14 }} onClick={async () => { try { await downloadBackup(await exportAll()); markBackup(); toast({ kind: "info", title: "Backup exported" }); } catch { toast({ kind: "error", title: "Couldn't export", body: "Try Copy in Settings." }); } }}>Back up</button>
           <button className="icon-btn" aria-label="Remind me in a week" onClick={() => snoozeBackup(7)}><Icon name="close" size={18} /></button>
         </div>
       )}

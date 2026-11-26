@@ -130,7 +130,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
     if (step !== "check") return;
     // Built in a worker (Nov 22 2026), so the screen stays smooth while it works
     let live = true;
-    generatePlanAsync({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed, restSec }).then((p) => { if (live) setPreviewPlan(p); });
+    generatePlanAsync({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed, restSec }).then((p) => { if (live) setPreviewPlan(p); }, console.error);
     return () => { live = false; };
   }, [step, goal, days, minutes, targets, exercises, avoid, seed, restSec]);
   const preview = useMemo(() => {
@@ -151,7 +151,8 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
     // Otherwise built in the worker while the splash plays (the plan list waits for it)
     setResult(null);
     const id = ++buildId.current;
-    generatePlanAsync({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed: sd, restSec }).then((p) => { if (buildId.current === id) { setRecipe(recipeFor(sd, p)); setResult(p); } });
+    generatePlanAsync({ goal, trainDays: days, maxMinutes: minutes, targets, exercises, avoid, seed: sd, restSec }).then((p) => { if (buildId.current === id) { setRecipe(recipeFor(sd, p)); setResult(p); } },
+      (e) => { console.error(e); toast({ kind: "error", title: "Couldn't build the plan", body: "Try again or change an answer." }); });
   };
   const plan = useMemo(() => (result ? { id: "wizard", name: "", isCurrent: false, createdAt: "", days: result } : undefined), [result]);
   // Same score as the editor shows once the plan is used: with this week's failure picks

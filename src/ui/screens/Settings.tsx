@@ -29,9 +29,8 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
   // The backup format (with its validator) loads only when needed.
   const io = () => import("../../core/io/exportFormat");
   const doExport = async () => {
-    await downloadBackup(await exportAll());
-    markBackup();
-    toast({ kind: "info", title: "Backup exported" });
+    try { await downloadBackup(await exportAll()); markBackup(); toast({ kind: "info", title: "Backup exported" }); }
+    catch { toast({ kind: "error", title: "Couldn't export", body: "Try Copy instead." }); }
   };
   const doCopy = async () => {
     try { await navigator.clipboard.writeText(await backupText(await exportAll())); markBackup(); toast({ kind: "info", title: "Backup copied", body: "Paste it into Notes or Files to keep it." }); }

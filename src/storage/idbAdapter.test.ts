@@ -27,6 +27,9 @@ describe("IdbAdapter", () => {
     expect(await db.getMeta("migrations")).toEqual(["x"]);
     // the upgrade added the body scans store (Nov 24 2026)
     expect(await db.all("bodyScans")).toEqual([]);
+    // meta written in the same transaction as the data (import: the migrations list)
+    await db.replaceAll(await db.exportAll(), { migrations: ["a", "b"] });
+    expect(await db.getMeta("migrations")).toEqual(["a", "b"]);
   });
   it("seeds a new database once, writes through, replaces atomically", async () => {
     const db = new IdbAdapter("new-" + Math.random());
@@ -52,5 +55,8 @@ describe("IdbAdapter", () => {
     expect((await db.exportAll()).bodyScans).toEqual([scan]);
     await db.replaceAll({ ...(await db.exportAll()), bodyScans: [] });
     expect(await db.all("bodyScans")).toEqual([]);
+    // meta written in the same transaction as the data (import: the migrations list)
+    await db.replaceAll(await db.exportAll(), { migrations: ["a", "b"] });
+    expect(await db.getMeta("migrations")).toEqual(["a", "b"]);
   });
 });

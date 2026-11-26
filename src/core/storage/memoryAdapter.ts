@@ -22,10 +22,11 @@ export class MemoryAdapter implements StorageAdapter {
   async exportAll(): Promise<AppData> {
     return { exercises: await this.all("exercises"), routines: await this.all("routines"), sessions: await this.all("sessions"), targets: await this.all("targets"), jefitAliases: await this.all("jefitAliases"), bodyScans: await this.all("bodyScans"), settings: await this.getSettings() };
   }
-  async replaceAll(d: AppData) {
+  async replaceAll(d: AppData, meta: Record<string, unknown> = {}) {
     (Object.keys(this.t) as TableName[]).forEach((k) => this.t[k].clear());
     await this.putMany("exercises", d.exercises); await this.putMany("routines", d.routines); await this.putMany("sessions", d.sessions);
     await this.putMany("targets", d.targets); await this.putMany("jefitAliases", d.jefitAliases); await this.putMany("bodyScans", d.bodyScans ?? []); await this.saveSettings(d.settings);
     this.meta.delete("restTimer");
+    for (const [k, v] of Object.entries(meta)) this.meta.set(k, v);
   }
 }

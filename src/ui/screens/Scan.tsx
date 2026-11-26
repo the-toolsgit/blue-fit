@@ -93,6 +93,7 @@ export function ScanScreen() {
     const w = new ScanWorker();
     worker.current = w;
     ready.current = w.init().then((r) => { boot.current = r; }).catch((e) => { setLoadErr(e.message); throw e; });
+    ready.current.catch(() => { /* shown via loadErr; the scan step awaits it */ });
     return () => { w.close(); hush(); };
   }, []);
 

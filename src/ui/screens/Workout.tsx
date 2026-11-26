@@ -246,7 +246,7 @@ export function WorkoutScreen() {
           <button className="icon-btn" aria-label="Go to the current exercise" onClick={goToCurrent}><Icon name="target" /></button>
           {resting
             ? <WorkoutRestPill open={restOpen} onToggle={() => setRestOpen((o) => !o)} />
-            : <button className="btn btn-primary" style={{ minHeight: 42, padding: "0 16px", fontSize: 16 }} onClick={() => setFinishOpen(true)}>Finish</button>}
+            : <button className="btn btn-primary hit" style={{ minHeight: 42, padding: "0 16px", fontSize: 16 }} onClick={() => setFinishOpen(true)}>Finish</button>}
         </div>
         <div style={{ marginTop: 10, height: 6, borderRadius: 6, background: "var(--surface-2)", overflow: "hidden" }} role="progressbar" aria-valuenow={done} aria-valuemax={total} aria-label="Sets done">
           <div style={{ height: "100%", width: `${total ? (done / total) * 100 : 0}%`, borderRadius: 6, background: "linear-gradient(90deg,var(--neon),var(--neon-2))", boxShadow: "0 0 12px var(--glow)", transition: "width .5s var(--ease)" }} />
@@ -490,7 +490,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   : ex.measure === "time" ? <>You held {repMax} s on every set last time. Add a little weight: <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps} s.</>
                   : <>You reached {repMax} reps on every set last time. Go up to <b className="mono">{fmtNum(hint.weight)}{loadSuffix(ex)}</b> × {hint.reps}.</>}
               </span>
-              <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
+              <button className="btn btn-ghost hit" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }}
                 onClick={(ev) => { ev.stopPropagation(); commit(applyHint(s, e.id, hint.weight, hint.reps)); markUsed(); }}>Use</button>
             </div>
           )}
@@ -498,14 +498,14 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
             <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
               <span style={{ color: "var(--neon-ink)" }}><Icon name="plus" size={18} /></span>
               <span className="grow" style={{ fontSize: 14 }}>{sugExtra.join(" · ")}. Add a set to catch up.</span>
-              <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(takeExtra(s, e.id)); }}>Add</button>
+              <button className="btn btn-ghost hit" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(takeExtra(s, e.id)); }}>Add</button>
             </div>
           )}
           {sugFail && (
             <div className="row" style={{ padding: "8px 10px", borderRadius: 12, background: "var(--glow-soft)", border: "1px solid color-mix(in srgb,var(--neon) 30%,transparent)" }}>
               <span style={{ color: "var(--warn)" }}><Icon name="flame" size={18} /></span>
               <span className="grow" style={{ fontSize: 14 }}>Take the last set to failure.</span>
-              <button className="btn btn-ghost" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(takeFailure(s, e.id)); }}>Use</button>
+              <button className="btn btn-ghost hit" style={{ minHeight: 36, padding: "0 12px", fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(takeFailure(s, e.id)); }}>Use</button>
             </div>
           )}
           {lastLight && hint.kind === "none" && !allDone && !nowLight && !tipOff && (
@@ -522,7 +522,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
           return (
             <div key={x.id} className={x.id === failSetId && isSel && !x.done ? "fail-set" : undefined} style={{ borderRadius: 14, background: isSel ? "var(--surface-2)" : "transparent", border: `1px solid ${isSel ? "var(--line-strong)" : "transparent"}`, transition: "all .25s var(--ease)" }}>
               <div className="row" style={{ minHeight: 48, padding: "0 4px 0 6px" }}>
-                <button aria-label={`Set type: ${t.long}. Tap to change`} title={t.long}
+                <button className="hit" aria-label={`Set type: ${t.long}. Tap to change`} title={t.long}
                   onClick={(ev) => { ev.stopPropagation(); commit(updateSet(s, e.id, x.id, { type: TYPES[(TYPES.indexOf(x.type) + 1) % TYPES.length] })); }}
                   style={{ width: 40, height: 36, borderRadius: 10, font: "700 15px var(--mono)", color: t.color, border: `1px solid color-mix(in srgb, ${t.color} 45%, transparent)` }}>
                   {t.short || workIdx(x)}
@@ -532,7 +532,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   {fmtW(x.weight)}<span style={{ fontSize: 12 }}>{x.weight != null ? loadSuffix(ex) : ""}</span> <span style={{ opacity: 0.6 }}>×</span> {x.reps ?? "—"}{ex.measure === "time" && x.reps != null ? " s" : ""}
                   {x.id === failSetId && <span className="fail-tag" title="Last set: go to failure"><Icon name="flame" size={14} /> failure</span>}
                 </button>
-                <button key={missing?.id === x.id ? "m" + missing.n : "c"} className={missing?.id === x.id && missing.from === "check" && !x.done ? "shake" : undefined} aria-label={x.done ? "Mark not done" : "Mark done"} aria-pressed={x.done}
+                <button key={missing?.id === x.id ? "m" + missing.n : "c"} className={"hit" + (missing?.id === x.id && missing.from === "check" && !x.done ? " shake" : "")} aria-label={x.done ? "Mark not done" : "Mark done"} aria-pressed={x.done}
                   onClick={(ev) => {
                     ev.stopPropagation();
                     // Can't be done without weight and reps: shake, open the set (if it's the next one) and mark what's missing
@@ -559,7 +559,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   <button key={missing?.id === x.id ? missing.n : 0} className={"btn btn-primary btn-xl" + (missing?.id === x.id && missing.from === "done" ? " shake" : "")} style={{ minHeight: 56 }} onClick={() => { if (needsValues(x, ex)) return refuse(x, "done"); setSel(null); onToggle(x); }}>
                     <Icon name="check" size={22} stroke={2.6} /> Done{e.sets.indexOf(x) === e.sets.length - 1 ? "" : ` · set ${e.sets.indexOf(x) + 1}`}
                   </button>
-                  <button className="btn btn-quiet" style={{ minHeight: 36, fontSize: 13 }} onClick={() => commit(removeSet(s, e.id, x.id))}><Icon name="trash" size={16} /> Remove this set</button>
+                  <button className="btn btn-quiet hit" style={{ minHeight: 36, fontSize: 13 }} onClick={() => commit(removeSet(s, e.id, x.id))}><Icon name="trash" size={16} /> Remove this set</button>
                 </div>
               )}
             </div>
@@ -567,7 +567,7 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
         })}
       </div>
       {nowLight && <div className="effort-note" style={{ marginTop: 8 }}><Icon name="flame" size={18} /><span>{effortLine(gap!, repMax, ex.incrementLb)}</span></div>}
-      <button className="btn btn-quiet btn-block" style={{ marginTop: 4, minHeight: 40, fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(addSet(s, e.id)); onFocus(); }}>
+      <button className="btn btn-quiet btn-block hit" style={{ marginTop: 4, minHeight: 40, fontSize: 14 }} onClick={(ev) => { ev.stopPropagation(); commit(addSet(s, e.id)); onFocus(); }}>
         <Icon name="plus" size={18} /> Add set
       </button>
     </article>

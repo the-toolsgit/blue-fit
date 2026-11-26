@@ -103,8 +103,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       let d = await adapter.exportAll();
       // One-time migrations (each runs once; ids remembered in meta)
       const m = applyMigrations(d, localDate(new Date()), (await adapter.getMeta<string[]>("migrations")) ?? []);
-      if (m.changed) { await adapter.replaceAll(m.data); d = await adapter.exportAll(); }
-      await adapter.setMeta("migrations", m.done);
+      if (m.changed) { await adapter.replaceAll(m.data, { migrations: m.done }); d = await adapter.exportAll(); }
+      else await adapter.setMeta("migrations", m.done);
       const t = await adapter.getMeta<RestTimer>("restTimer");
       setBackup({ lastAt: (await adapter.getMeta<string>("lastBackupAt")) ?? null, snoozedUntil: (await adapter.getMeta<string>("backupSnoozedUntil")) ?? null });
       setDb(await dbP);
@@ -204,8 +204,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         await queue.current;
         // A backup from an older version (or the raw seed on reset) gets every migration, like a first launch
         const m = applyMigrations(d, localDate(new Date()), IMPORT_SKIP);
-        await adapter.replaceAll(m.data);
-        await adapter.setMeta("migrations", m.done);
+        await adapter.replaceAll(m.data, { migrations: m.done });
         setData(await adapter.exportAll());
         setTimerState(null);
       },

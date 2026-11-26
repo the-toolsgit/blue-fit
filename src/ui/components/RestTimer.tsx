@@ -46,9 +46,17 @@ export function RestTimerDock() {
     alerted.current = restTimer.endsAt;
     if (settings.sound) chime();
     vibrate([180, 90, 180]);
-    const t = setTimeout(() => { setRestTimer(null); setBig(false); }, 6000);
+  }, [over, restTimer, settings.sound]);
+
+  // Clear "GO!" 6 s after the rest ends. Keyed on endsAt only: store re-renders (a tap, a toast) must not cancel it.
+  const clearRest = useRef(setRestTimer);
+  clearRest.current = setRestTimer;
+  const endsAt = restTimer?.endsAt;
+  useEffect(() => {
+    if (endsAt == null || !over) return;
+    const t = setTimeout(() => { clearRest.current(null); setBig(false); }, Math.max(0, endsAt + 6000 - Date.now()));
     return () => clearTimeout(t);
-  }, [over, restTimer, settings.sound, setRestTimer]);
+  }, [over, endsAt]);
 
   const adjust = (d: number) => restTimer && setRestTimer({ ...restTimer, endsAt: Math.max(Date.now() + 1000, restTimer.endsAt + d * 1000), durationSec: Math.max(1, restTimer.durationSec + d) });
   const frac = restTimer ? Math.max(0, left) / restTimer.durationSec : 0;

@@ -29,6 +29,7 @@ export interface StorageAdapter {
   getMeta<V>(key: string): Promise<V | undefined>;
   setMeta<V>(key: string, value: V | undefined): Promise<void>;
   exportAll(): Promise<AppData>;
-  /** Replace everything in one transaction (used by backup import and reset). */
-  replaceAll(data: AppData): Promise<void>;
+  /** Replace everything in one transaction (used by backup import, reset and migrations).
+   *  `meta` keys are written in the same transaction, so e.g. the migrations list can't be left behind. */
+  replaceAll(data: AppData, meta?: Record<string, unknown>): Promise<void>;
 }

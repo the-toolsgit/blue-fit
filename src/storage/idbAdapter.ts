@@ -60,11 +60,23 @@ export class IdbAdapter implements StorageAdapter {
     if ((await req((await this.store("exercises", "readonly")).count())) === 0) await this.replaceAll(await seed());
   }
   async all<T extends TableName>(t: T) { return req((await this.store(t, "readonly")).getAll()) as Promise<Tables[T][]>; }
-  async put<T extends TableName>(t: T, row: Tables[T]) { const s = await this.store(t, "readwrite"); await req(s.put(row)); await done(s.transaction); }
-  async putMany<T extends TableName>(t: T, rows: Tables[T][]) { const s = await this.store(t, "readwrite"); rows.forEach((r) => s.put(r)); await done(s.transaction); }
-  async remove<T extends TableName>(t: T, key: string) { const s = await this.store(t, "readwrite"); s.delete(key); await done(s.transaction); }
+  /** A write whose transaction failed on a lost connection (iOS, after the background) runs once more on a fresh one.
+   *  Every write here is a put or delete by key, so running it twice gives the same result. */
+  private async write(t: TableName | "kv", f: (s: IDBObjectStore) => void) {
+    const run = async () => { const s = await this.store(t, "readwrite"); f(s); await done(s.transaction); };
+    try { await run(); }
+    catch (e) {
+      const name = (e as { name?: string } | null)?.name;
+      if (name !== "UnknownError" && name !== "InvalidStateError" && name !== "AbortError" && !(e instanceof Error && e.message === "Transaction aborted")) throw e;
+      this.dbp = null;
+      await run();
+    }
+  }
+  async put<T extends TableName>(t: T, row: Tables[T]) { await this.write(t, (s) => s.put(row)); }
+  async putMany<T extends TableName>(t: T, rows: Tables[T][]) { await this.write(t, (s) => rows.forEach((r) => s.put(r))); }
+  async remove<T extends TableName>(t: T, key: string) { await this.write(t, (s) => s.delete(key)); }
   private async kvGet(key: string) { return (await req((await this.store("kv", "readonly")).get(key)) as { value: unknown } | undefined)?.value; }
-  private async kvPut(key: string, value: unknown) { const s = await this.store("kv", "readwrite"); s.put({ key, value }); await done(s.transaction); }
+  private async kvPut(key: string, value: unknown) { await this.write("kv", (s) => s.put({ key, value })); }
   async getSettings(): Promise<Settings> {
     const s: Settings = { ...DEFAULT_SETTINGS, ...((await this.kvGet("settings")) as Partial<Settings> | undefined ?? {}) };
     // An accent that no longer exists (green, removed Nov 24 2026) falls back to blue
@@ -74,18 +86,19 @@ export class IdbAdapter implements StorageAdapter {
   async getMeta<V>(key: string) { return (await this.kvGet("meta:" + key)) as V | undefined; }
   async setMeta<V>(key: string, value: V | undefined) {
     if (value !== undefined) return this.kvPut("meta:" + key, value);
-    const s = await this.store("kv", "readwrite"); s.delete("meta:" + key); await done(s.transaction);
+    await this.write("kv", (s) => s.delete("meta:" + key));
   }
   async exportAll(): Promise<AppData> {
     return { exercises: await this.all("exercises"), routines: await this.all("routines"), sessions: await this.all("sessions"),
       targets: await this.all("targets"), jefitAliases: await this.all("jefitAliases"), bodyScans: await this.all("bodyScans"), settings: await this.getSettings() };
   }
   /** Replace everything in one transaction: all or nothing. */
-  async replaceAll(d: AppData) {
+  async replaceAll(d: AppData, meta: Record<string, unknown> = {}) {
     const tx = await this.tx([...TABLES, "kv"]);
     for (const t of TABLES) { const s = tx.objectStore(t); s.clear(); for (const row of d[t] ?? []) s.put(row); }
     tx.objectStore("kv").put({ key: "settings", value: d.settings });
     tx.objectStore("kv").delete("meta:restTimer");
+    for (const [k, v] of Object.entries(meta)) tx.objectStore("kv").put({ key: "meta:" + k, value: v });
     await done(tx);
   }
 }
