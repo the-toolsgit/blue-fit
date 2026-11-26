@@ -546,7 +546,8 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   <Icon name="check" size={22} stroke={2.6} />
                 </button>
               </div>
-              {isSel && !x.done && (
+              {/* A done set opens too (to fix a typo); its button closes it and it stays done */}
+              {isSel && (
                 <div style={{ padding: "4px 10px 12px", display: "grid", gap: 10, animation: "pageIn .3s var(--ease) both" }} onClick={(ev) => ev.stopPropagation()}>
                   <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 8, alignItems: "end" }}>
                     <Stepper invalid={missing?.id === x.id && ex.equipment !== "bodyweight" && !(x.weight != null && x.weight > 0)} label="Weight" suffix={ex.loadMode === "perSide" ? "lb/side" : ex.loadMode === "perHand" ? "lb/hand" : "lb"} value={x.weight} step={ex.incrementLb || 5} onChange={(v) => commit(editSet(s, e.id, x.id, { weight: v }))} />
@@ -556,8 +557,8 @@ function EntryCard({ s, e, ex, index, focused, onFocus, onToggle, commit, onDeta
                   {x.type === "drop" && <div className="fail-cue drop-cue"><Icon name="down" size={18} /><span><b>Drop set: lower the weight, no rest.</b> Go until you can't do another clean rep.</span></div>}
                   {x.id === failSetId && <div className="fail-cue"><Icon name="flame" size={18} /><span><b>Last set: go to failure.</b> Keep going until you can't do another clean rep.{e.failWhy?.some((w) => w !== MANUAL_WHY) ? <FailWhy why={e.failWhy} /> : null}</span></div>}
                   {(ex.loadMode === "perSide" || ex.singleSleeve) && x.weight != null && x.weight > 0 && <Plates weight={x.weight} single={ex.singleSleeve} />}
-                  <button key={missing?.id === x.id ? missing.n : 0} className={"btn btn-primary btn-xl" + (missing?.id === x.id && missing.from === "done" ? " shake" : "")} style={{ minHeight: 56 }} onClick={() => { if (needsValues(x, ex)) return refuse(x, "done"); setSel(null); onToggle(x); }}>
-                    <Icon name="check" size={22} stroke={2.6} /> Done{e.sets.indexOf(x) === e.sets.length - 1 ? "" : ` · set ${e.sets.indexOf(x) + 1}`}
+                  <button key={missing?.id === x.id ? missing.n : 0} className={"btn btn-primary btn-xl" + (missing?.id === x.id && missing.from === "done" ? " shake" : "")} style={{ minHeight: 56 }} onClick={() => { if (needsValues(x, ex)) return refuse(x, "done"); setSel(null); if (!x.done) onToggle(x); }}>
+                    <Icon name="check" size={22} stroke={2.6} /> {x.done ? "Save" : <>Done{e.sets.indexOf(x) === e.sets.length - 1 ? "" : ` · set ${e.sets.indexOf(x) + 1}`}</>}
                   </button>
                   <button className="btn btn-quiet hit" style={{ minHeight: 36, fontSize: 13 }} onClick={() => commit(removeSet(s, e.id, x.id))}><Icon name="trash" size={16} /> Remove this set</button>
                 </div>

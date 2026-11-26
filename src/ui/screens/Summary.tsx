@@ -17,7 +17,7 @@ import { back, go } from "../router";
 import { useStore } from "../store";
 
 export function SummaryScreen({ id }: { id?: string }) {
-  const { sessions, exMap, finished, deleteSession, routines } = useStore();
+  const { sessions, exMap, finished, deleteSession, routines, settings } = useStore();
   const s = sessions.find((x) => x.id === id);
   const [del, setDel] = useState(false);
   const fresh = !!s?.finishedAt && Date.now() - Date.parse(s.finishedAt) < 10 * 60_000;
@@ -30,7 +30,7 @@ export function SummaryScreen({ id }: { id?: string }) {
   const maxG = Math.max(1, ...groups.map((m) => sum.perGroup[m.id] + sk(m.id)));
   const anySkipped = groups.some((m) => sk(m.id) > 0);
   // Notes: what changed against past workouts and what to do; the volume as an object of about that weight
-  const notes = workoutNotes(s, finished, exMap, routines.find((r) => r.id === s.routineId) ?? routines.find((r) => r.isCurrent));
+  const notes = workoutNotes(s, finished, exMap, routines.find((r) => r.id === s.routineId) ?? routines.find((r) => r.isCurrent), settings);
   const lifted = liftedFor(sum.tonnage);
 
   return (

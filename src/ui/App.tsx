@@ -128,7 +128,7 @@ export function App() {
   // sheets, form fields and the plan editor.
   const tabRef = useRef("");
   useEffect(() => {
-    let st: { x: number; y: number; t: number; leftOnly: boolean } | null = null;
+    let st: { x: number; y: number; t: number; leftOnly: boolean; onTab: boolean } | null = null;
     /** What a sideways swipe already does under the finger: "both" ways, only "left" (rows that swipe left to delete), or nothing */
     const ownsSwipe = (el: Element | null): "both" | "left" | null => {
       let left = false;
@@ -147,16 +147,18 @@ export function App() {
       const name = location.hash.replace(/^#\/?/, "").split("/")[0] || "today";
       const owns = ownsSwipe(e.target as Element);
       st = e.touches.length === 1 && (TABS.some((t) => t.id === name) || !!backBtn()) && owns !== "both"
-        ? { x: e.touches[0].clientX, y: e.touches[0].clientY, t: performance.now(), leftOnly: owns === "left" } : null;
+        ? { x: e.touches[0].clientX, y: e.touches[0].clientY, t: performance.now(), leftOnly: owns === "left", onTab: TABS.some((t) => t.id === name) } : null;
     };
     const end = (e: TouchEvent) => {
       if (!st) return;
-      const dx = e.changedTouches[0].clientX - st.x, dy = e.changedTouches[0].clientY - st.y, ms = performance.now() - st.t, leftOnly = st.leftOnly;
+      const dx = e.changedTouches[0].clientX - st.x, dy = e.changedTouches[0].clientY - st.y, ms = performance.now() - st.t, leftOnly = st.leftOnly, onTab = st.onTab;
       st = null;
       if (leftOnly && dx < 0) return;
       if (Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 2 || ms > 700) return;
       const b = dx > 0 ? backBtn() : undefined;
       if (b) { document.documentElement.dataset.swipe = "prev"; b.click(); return; }
+      // Inner screens (a back arrow, not a tab) only swipe back; tabs switch only from a tab screen
+      if (!onTab) return;
       const i = TABS.findIndex((t) => t.id === tabRef.current), j = i + (dx < 0 ? 1 : -1);
       if (i < 0 || j < 0 || j >= TABS.length) return;
       document.documentElement.dataset.swipe = dx < 0 ? "next" : "prev";

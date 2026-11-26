@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 // A normal import (not lazy): a lazy list showed about 0.3 s after the rest of the screen the first time
 import { SortableDayList } from "../components/SortableDayList";
-import { newPlanKey } from "../planDraft";
+import { draftKey, newPlanKey } from "../planDraft";
 import { SlotSheet } from "../components/SlotSheet";
 import { useKeptState } from "../keptState";
 import { deloadActive, deloadWeek, endDeload } from "../../core/deload";
@@ -32,6 +32,18 @@ export function PlanScreen() {
   const deloading = deloadActive(settings, today);
   const [confirmDeload, setConfirmDeload] = useState(false);
   const [manage, setManage] = useState(false);
+  // A "New plan" left without Save (e.g. through the tab bar) goes away, like Cancel (v0.1.267).
+  // On opening the Plan tab only: "New plan" itself sets the flag while this screen is still showing.
+  useEffect(() => {
+    for (const r of routines) {
+      let fresh = false;
+      try { fresh = sessionStorage.getItem(newPlanKey(r.id)) === "1"; } catch { /* ignore */ }
+      if (!fresh) continue;
+      try { for (const k of [newPlanKey(r.id), draftKey(r.id), draftKey(r.id) + "-targets", draftKey(r.id) + "-answers"]) sessionStorage.removeItem(k); } catch { /* ignore */ }
+      if (!r.isCurrent) deleteRoutine(r.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [slotId, setSlotId] = useState<string | null>(null); // the exercise whose popup is open
   const [howTo, setHowTo] = useState<string | null>(null);
   const [picker, setPicker] = useState<{ mode: "add" } | { mode: "swap"; slotId: string } | null>(null);

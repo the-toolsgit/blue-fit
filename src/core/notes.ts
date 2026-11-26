@@ -1,9 +1,9 @@
 // Notes at the end of a workout (summary → Notes): what changed against your past workouts and what to do about it.
 // Pure and framework-free. Numbers marked *judgment* are our own reasoning (coaching practice, not studies).
-import { DELOAD, stallCheck } from "./deload";
+import { DELOAD, deloadSuggestion, stallCheck } from "./deload";
 import { andList, effortGap, effortLine, failureSet } from "./effort";
 import { epley } from "./oneRm";
-import type { Exercise, LoggedSet, Routine, Session, SessionEntry } from "./types";
+import type { Exercise, LoggedSet, Routine, Session, SessionEntry, Settings } from "./types";
 import { fmtNum } from "./util";
 import { tonnage } from "./volume";
 
@@ -87,7 +87,9 @@ export function newRangeWeight(last: SessionEntry, repMin: number | undefined, e
   return w > 0 && w < first.weight ? { weight: w, from: first.weight, reps: first.reps! } : null;
 }
 
-export function workoutNotes(s: Session, history: Session[], exMap: Map<string, Exercise>, routine?: Routine): WorkoutNote[] {
+/** `settings` (when given) gates the deload note like Today's suggestion: Deload suggestions on, no deload running,
+ *  4+ weeks since the last deload / "Not now" / the first workout. */
+export function workoutNotes(s: Session, history: Session[], exMap: Map<string, Exercise>, routine?: Routine, settings?: Settings): WorkoutNote[] {
   const notes: WorkoutNote[] = [];
   const all = history.some((h) => h.id === s.id) ? history : [...history, s];
   const name = (id: string) => exMap.get(id)?.name ?? "Exercise";
@@ -96,7 +98,8 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
   const ids = new Set(s.entries.map((e) => e.exerciseId));
   const st = s.deload ? null : stallCheck(all, routine, exMap, s.date);
   const stuck = st?.lifts.filter((l) => l.stalled && ids.has(l.exerciseId)) ?? [];
-  if (st && st.judged > 0 && st.stalled * 2 >= st.judged)
+  const deloadOk = !settings || (settings.deloadSuggestions && deloadSuggestion(all, routine, exMap, settings, s.date)?.reason === "stall");
+  if (st && deloadOk && st.judged > 0 && st.stalled * 2 >= st.judged)
     notes.push({ kind: "deload", tone: "warn", title: "Time for a deload", text: `${st.stalled} of ${st.judged} exercises stopped improving over ${DELOAD.stallWeeks} weeks. That points to tiredness, not the exercises. Start a deload week (Plan tab).` });
 
   for (const e of s.entries) {
@@ -108,7 +111,8 @@ export function workoutNotes(s: Session, history: Session[], exMap: Map<string, 
     const range = repMin == null ? "" : repMin === repMax ? String(repMin) : `${repMin}–${repMax}`;
     const lastTime = previous(all, s, e.exerciseId);
 
-    if (!s.deload) {
+    // Assisted: the weight is help, less is harder; the weight notes (lighter / too heavy / go heavier) don't apply
+    if (!s.deload && !ex.assisted) {
       // Lighter than last time (same exercise, top working weight)
       const now = topWeight(e.sets), before = lastTime ? topWeight(lastTime.sets) : 0;
       // (not when today's rep range starts higher and today is at least the weight for it: a lighter weight for more

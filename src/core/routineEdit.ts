@@ -1,6 +1,7 @@
 // Plan (routine) editing. Pure functions: every operation returns a new Routine.
 import type { Exercise, Routine, RoutineDay, Session, Slot, VolumeTarget } from "./types";
 import { uid, WEEKDAY_LONG } from "./util";
+import { dropEligible } from "./dropSet";
 
 export const NEW_SLOT = { sets: 3, repMin: 10, repMax: 12 };
 /** Holds (sets in seconds): 20–60 s (*judgment*, coaching) */
@@ -64,9 +65,10 @@ export function orderSlotsLike(r: Routine, dayId: string, slotIds: string[]): Ro
   if (slots.every((s, i) => s === day.slots[i])) return r;
   return mapDay(r, dayId, (d) => ({ ...d, slots: regroup(slots) }));
 }
-/** Swap the exercise in a slot. Day-specific text overrides are dropped (they described the old exercise). */
+/** Swap the exercise in a slot. Day-specific text overrides are dropped (they described the old exercise), and so is
+ *  the drop set when the new exercise can't take one (barbell, plate-loaded, assisted…). */
 export const swapSlotExercise = (r: Routine, dayId: string, slotId: string, ex: Exercise): Routine =>
-  mapDay(r, dayId, (d) => ({ ...d, slots: d.slots.map((s) => (s.id === slotId ? { ...s, exerciseId: ex.id, whyOverride: undefined, tipsOverride: undefined, ...(ex.measure === "time" ? { repMin: HOLD_SLOT.repMin, repMax: HOLD_SLOT.repMax } : {}) } : s)) }));
+  mapDay(r, dayId, (d) => ({ ...d, slots: d.slots.map((s) => (s.id === slotId ? { ...s, exerciseId: ex.id, whyOverride: undefined, tipsOverride: undefined, ...(ex.measure === "time" ? { repMin: HOLD_SLOT.repMin, repMax: HOLD_SLOT.repMax } : {}), ...(s.dropSet && !dropEligible(ex) ? { dropSet: undefined } : {}) } : s)) }));
 
 /** Link a slot with the next one in a superset, or unlink if they already share a group. */
 export function toggleSlotSuperset(r: Routine, dayId: string, slotId: string): Routine {

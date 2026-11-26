@@ -142,11 +142,17 @@ function ExerciseHistory({ ex }: { ex: Exercise }) {
 
 export function ExerciseSheet({ id, onClose, whyOverride, tipsOverride, failWhy }: { id: string | null; onClose: () => void; whyOverride?: string; tipsOverride?: string[]; failWhy?: string[] }) {
   const { exMap } = useStore();
+  const [editing, setEditing] = useState(false);
   const ex = id ? exMap.get(id) : undefined;
   return (
-    <Sheet open={!!ex} onClose={onClose} label={ex?.name ?? "Exercise"}>
-      {ex && <ExerciseInfo ex={ex} whyOverride={whyOverride} tipsOverride={tipsOverride} failWhy={failWhy} />}
-    </Sheet>
+    <>
+      <Sheet open={!!ex} onClose={onClose} label={ex?.name ?? "Exercise"}>
+        {ex && <ExerciseInfo ex={ex} whyOverride={whyOverride} tipsOverride={tipsOverride} failWhy={failWhy} />}
+        {/* Your own exercises can be edited from here (the only way in, v0.1.267) */}
+        {ex?.isCustom && <button className="btn btn-ghost btn-block" style={{ marginTop: 16 }} onClick={() => setEditing(true)}><Icon name="note" size={18} /> Edit exercise</button>}
+      </Sheet>
+      <ExerciseEditor open={editing} exercise={ex} onClose={() => setEditing(false)} />
+    </>
   );
 }
 

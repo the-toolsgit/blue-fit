@@ -10,6 +10,7 @@
 import { MUSCLE_DB, PROFILE_RULES, profileStep, restDaysOf, RULES } from "./muscles";
 import { MUSCLE_GROUPS, type Exercise, type MuscleGroup, type ProfileDraft, type Session } from "./types";
 import { volumeShare } from "./volume";
+import { failureSet } from "./effort";
 import { daysBetween } from "./util";
 
 export type Recovery = "recovering" | "partial" | "fresh";
@@ -49,11 +50,13 @@ export function recoveryStatus(sessions: Session[], exMap: Map<string, Exercise>
     for (const e of s.entries) {
       const ex = exMap.get(e.exerciseId);
       if (!ex) continue;
+      // The failure set: marked, or the last set when the app or Edit plan picked failure (toFailure)
+      const f = failureSet(e, s.deload);
       for (const x of e.sets) {
         if (!x.done || !volumeShare(x.type)) continue;
         for (const v of ex.volume) {
           sets[k].set(v.group, (sets[k].get(v.group) ?? 0) + v.weight * volumeShare(x.type));
-          if (ex.isHeavy && x.type === "failure" && v.weight === 1) keyFail[k].add(v.group);
+          if (ex.isHeavy && x === f && v.weight === 1) keyFail[k].add(v.group);
         }
       }
     }

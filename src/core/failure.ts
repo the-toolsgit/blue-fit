@@ -197,7 +197,9 @@ export function planFailure(day: RoutineDay, date: string, c: FailureContext): F
     const why = [`Last ${label(g)} exercise`];
     if (pr === "priority") why.push("Priority muscle");
     if (below) why.push("Below weekly target");
-    why.push(gap == null ? "Not trained again this week" : `${gap} days rest after`);
+    // The plan repeats weekly, so the next time is usually the same day next week: say so when it's past this week
+    const weekEnd = addDays(weekStart(date, c.settings.weekStartDay), 6);
+    why.push(gap == null || addDays(date, gap) > weekEnd ? "Not trained again this week" : `${gap} days rest after`);
     cands.push({ slot, index, prio: pr === "priority" ? 2 : pr === "normal" ? 1 : 0, below: below ? 1 : 0, why });
   });
   cands.sort((a, b) => b.prio - a.prio || b.below - a.below || b.index - a.index);
