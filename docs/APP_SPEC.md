@@ -602,9 +602,9 @@ The app always uses Gray (§6.1 describes the Neon base it is built on; the navy
 | Pink | #FF8FD0 / #FFC2E6 |
 | Orange | #FF9D4D / #FFC98A |
 | Brown | #D9A46B / #F0CFA0 |
-| Red (infrared, Nov 27 2026) | #FF4B3E / #FF9B87 |
+| Red (infrared, flat; Nov 27 2026) | #E5453B / #E5453B |
 
-With the Pink accent, PR highlights (normally pink) turn gold and the "recovering" muscle color turns coral, so they still stand out. With the Red accent, "recovering" turns pink (#FF8FD0). 
+With the Pink accent, PR highlights (normally pink) turn gold and the "recovering" muscle color turns coral, so they still stand out. With the Red accent, "recovering" turns pink (#FF8FD0). Red is **flat** (Leo, Nov 27 2026, sampled from a plyo box photo): no glows anywhere (buttons, line man, tab icons, wordmark), no gradients (fill = 2nd), no background haze, white text on red buttons, and the BLUE FIT wordmark turns red too (the only accent that recolors it). 
 
 Text colors meet WCAG AA (4.5:1) on their backgrounds, except `faint` (placeholders and decorative only).
 

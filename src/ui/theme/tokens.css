@@ -77,12 +77,14 @@
 }
 
 :root[data-accent="red"] {
-  /* Infrared, from Leo's plyo box photo (Nov 27 2026). "Recovering" turns pink so it doesn't read as the accent. */
-  --fig: #ff4b3e; --fig2: #8f2f28; --fig-glow: rgba(255, 75, 62, 0.55); --fig-glow-soft: rgba(255, 75, 62, 0.16);
-  --neon: #ff4b3e; --neon-2: #ff9b87; --neon-ink: #ff4b3e; --neon-ink-2: #ff9b87; --on-neon: #2a0604;
-  --glow: rgba(255, 75, 62, 0.55); --glow-soft: rgba(255, 75, 62, 0.16);
-  --line: rgba(255, 140, 125, 0.15); --line-strong: rgba(255, 140, 125, 0.32);
-  --bg-fx-1: rgba(255, 70, 55, 0.16); --bg-fx-2: rgba(61, 155, 255, 0.12);
+  /* Flat infrared, from Leo's plyo box photo (Nov 27 2026): no glow, no gradient (the second color = the first),
+     and the BLUE FIT wordmark turns red too. "Recovering" turns pink so it doesn't read as the accent. */
+  --fig: #e5453b; --fig2: #9e2f28; --fig-glow: transparent; --fig-glow-soft: transparent;
+  --neon: #e5453b; --neon-2: #e5453b; --neon-ink: #e5453b; --neon-ink-2: #e5453b; --on-neon: #ffffff;
+  --glow: transparent; --glow-soft: rgba(229, 69, 59, 0.14);
+  --line: rgba(229, 69, 59, 0.16); --line-strong: rgba(229, 69, 59, 0.34);
+  --bg-fx-1: transparent; --bg-fx-2: transparent;
+  --brand: #e5453b; --brand-glow: transparent; --brand-glow-soft: transparent;
   --recovering: #ff8fd0;
 }
 
