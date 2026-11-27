@@ -357,7 +357,7 @@ textarea.input { min-height: 84px; resize: vertical; }
 .swatch:active i { transform: scale(0.92); }
 .swatch[data-a="blue"] { --sw: #3d9bff; --sw2: #23e2ff; }
 .swatch[data-a="pink"] { --sw: #ff8da1; --sw2: #ffc4ce; }
-.swatch[data-a="orange"] { --sw: #ff9d4d; --sw2: #ffc98a; }
+.swatch[data-a="orange"] { --sw: #ff5f1f; --sw2: #ff9466; }
 .swatch[data-a="brown"] { --sw: #d9a46b; --sw2: #f0cfa0; }
 .swatch[data-a="red"] { --sw: #e5453b; --sw2: #e5453b; }
 html { touch-action: manipulation; } /* no double-tap zoom */

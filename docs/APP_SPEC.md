@@ -600,7 +600,7 @@ The app always uses Gray (§6.1 describes the Neon base it is built on; the navy
 |---|---|
 | Blue (default) | #3D9BFF / #23E2FF |
 | Pink (Nov 27 2026; was #FF8FD0) | #FF8DA1 / #FFC4CE |
-| Orange | #FF9D4D / #FFC98A |
+| Orange (Nov 27 2026; was #FF9D4D) | #FF5F1F / #FF9466 (white text on it) |
 | Brown | #D9A46B / #F0CFA0 |
 | Red (infrared; Nov 27 2026) | #E5453B / #E5453B |
 
