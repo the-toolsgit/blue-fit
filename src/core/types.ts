@@ -229,7 +229,7 @@ export const completeProfile = (p: ProfileDraft | null | undefined): TrainingPro
   p && p.age != null && p.yearsTraining != null && p.sleepHours != null ? { ...p, age: p.age, yearsTraining: p.yearsTraining, sleepHours: p.sleepHours } : null;
 
 /** Green was removed Nov 24 2026: a saved or imported "green" falls back to blue. */
-export const ACCENTS = ["blue", "pink", "orange", "brown", "red"] as const;
+export const ACCENTS = ["blue", "red", "pink", "orange", "brown"] as const;
 export type Accent = (typeof ACCENTS)[number];
 
 export interface StreakFreeze { start: string; end: string | null }
