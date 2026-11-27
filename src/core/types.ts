@@ -249,6 +249,8 @@ export interface Settings {
   /** Settings → Workout adjustments: the app adds a set for skipped work and picks failure sets from the week
    *  (off: neither; failure turned On in the plan still applies). Missing = on. */
   autoAdjust: boolean;
+  /** Settings → Look → Glow: neon glows and gradients (off: flat colors, any accent; Nov 27 2026). Missing = on. */
+  glow?: boolean;
   /** No longer used: Gray is the only look and always dark (Nov 24 2026). Kept so older backups still import. */
   theme: "system" | "light" | "dark";
   /** No longer used (Nov 24 2026: Gray is the only look). Kept so older backups still import. */

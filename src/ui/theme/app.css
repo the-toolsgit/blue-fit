@@ -360,8 +360,6 @@ textarea.input { min-height: 84px; resize: vertical; }
 .swatch[data-a="orange"] { --sw: #ff9d4d; --sw2: #ffc98a; }
 .swatch[data-a="brown"] { --sw: #d9a46b; --sw2: #f0cfa0; }
 .swatch[data-a="red"] { --sw: #e5453b; --sw2: #e5453b; }
-.swatch[data-a="red"] i, .swatch[data-a="red"][aria-checked="true"] i { box-shadow: none; } /* flat, no glow */
-.swatch[data-a="red"][aria-checked="true"] i { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--sw); }
 html { touch-action: manipulation; } /* no double-tap zoom */
 
 /* Plan tab: exercise rows can be pressed and held to move */
@@ -861,6 +859,7 @@ html { touch-action: manipulation; } /* no double-tap zoom */
 .scan-me { justify-self: start; min-height: 44px; gap: 8px; }
 .scan-stop { align-self: center; min-height: 44px; padding: 0 22px; }
 
-/* ---------- Red accent: flat (Nov 27 2026). Glow tokens are transparent; these use other colors for their glow ---------- */
-:root[data-accent="red"] .neon-grad, :root[data-accent="red"] .run-air line { filter: none; }
-:root[data-accent="red"] .btn-primary { box-shadow: none; }
+/* ---------- Glow off (data-flat): these glow with other colors than the glow tokens ---------- */
+:root[data-flat] .neon-grad, :root[data-flat] .run-air line, :root[data-flat] .lifted .lf-m { filter: none; }
+:root[data-flat] .btn-primary, :root[data-flat] .swatch i, :root[data-flat] .pulse::after { box-shadow: none; }
+:root[data-flat] .swatch[aria-checked="true"] i { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--sw); }

@@ -127,6 +127,8 @@ export function SettingsScreen({ onUpdate, onCheck }: { onUpdate?: () => void; o
             </button>
           ))}
         </div>
+        <div className="setting" style={{ borderBottom: 0, marginTop: 6 }}><span>Glow<span className="muted" style={{ display: "block", fontSize: 12 }}>Neon glow on buttons, the line man and the logo. Off: flat colors</span></span>
+          <Switch label="Glow" checked={settings.glow !== false} onChange={(v) => set("glow", v)} /></div>
       </div>
 
       <h2 className="section-title">Data</h2>

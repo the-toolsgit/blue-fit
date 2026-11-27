@@ -27,7 +27,7 @@
     <style>html{background:#0b0b0c}</style>
     <title>Blue Fit</title>
     <script>
-      try { var a = JSON.parse(localStorage.getItem("bf-accent") || '"blue"'); if (a === "pink" || a === "orange" || a === "brown" || a === "red") document.documentElement.dataset.accent = a; } catch (e) {}
+      try { var a = JSON.parse(localStorage.getItem("bf-accent") || '"blue"'); if (a === "pink" || a === "orange" || a === "brown" || a === "red") document.documentElement.dataset.accent = a; if (localStorage.getItem("bf-glow") === "false") document.documentElement.dataset.flat = ""; } catch (e) {}
     </script>
   </head>
   <body>

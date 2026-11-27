@@ -77,15 +77,24 @@
 }
 
 :root[data-accent="red"] {
-  /* Flat infrared, from Leo's plyo box photo (Nov 27 2026): no glow, no gradient (the second color = the first),
-     and the BLUE FIT wordmark turns red too. "Recovering" turns pink so it doesn't read as the accent. */
-  --fig: #e5453b; --fig2: #9e2f28; --fig-glow: transparent; --fig-glow-soft: transparent;
+  /* Infrared, from Leo's plyo box photo (Nov 27 2026): one red (no second color), and the BLUE FIT wordmark turns
+     red too. Flat with Glow off (Leo's pick). "Recovering" turns pink so it doesn't read as the accent. */
+  --fig: #e5453b; --fig2: #9e2f28; --fig-glow: rgba(229, 69, 59, 0.55); --fig-glow-soft: rgba(229, 69, 59, 0.16);
   --neon: #e5453b; --neon-2: #e5453b; --neon-ink: #e5453b; --neon-ink-2: #e5453b; --on-neon: #ffffff;
-  --glow: transparent; --glow-soft: rgba(229, 69, 59, 0.14);
+  --glow: rgba(229, 69, 59, 0.55); --glow-soft: rgba(229, 69, 59, 0.14);
   --line: rgba(229, 69, 59, 0.16); --line-strong: rgba(229, 69, 59, 0.34);
-  --bg-fx-1: transparent; --bg-fx-2: transparent;
-  --brand: #e5453b; --brand-glow: transparent; --brand-glow-soft: transparent;
+  --bg-fx-1: rgba(229, 69, 59, 0.14); --bg-fx-2: rgba(61, 155, 255, 0.10);
+  --brand: #e5453b; --brand-glow: rgba(229, 69, 59, 0.55); --brand-glow-soft: rgba(229, 69, 59, 0.18);
   --recovering: #ff8fd0;
+}
+
+/* ---------- Glow off (Settings → Look → Glow; Nov 27 2026): flat colors in any accent. No glows, no two-color
+   gradients (the second color = the first), no background haze. Comes after the accents so it wins. ---------- */
+:root[data-flat] {
+  --glow: transparent; --fig-glow: transparent; --fig-glow-soft: transparent;
+  --brand-glow: transparent; --brand-glow-soft: transparent;
+  --neon-2: var(--neon); --neon-ink-2: var(--neon-ink);
+  --bg-fx-1: transparent; --bg-fx-2: transparent;
 }
 
 /* ---------- Gray style (the only look since Nov 24 2026; index.html sets data-look="gray" on <html>) ----------

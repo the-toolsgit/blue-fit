@@ -105,7 +105,10 @@ export function App() {
     // Not before the saved settings load: the default would undo what index.html set early (flash)
     if (settings.accent === "blue" || !ACCENTS.includes(settings.accent)) delete root.dataset.accent; else root.dataset.accent = settings.accent;
     try { localStorage.setItem("bf-accent", JSON.stringify(settings.accent)); } catch { /* ignore */ }
-  }, [ready, settings.accent]);
+    // Glow off: flat colors (Settings → Look)
+    if (settings.glow === false) root.dataset.flat = ""; else delete root.dataset.flat;
+    try { localStorage.setItem("bf-glow", JSON.stringify(settings.glow !== false)); } catch { /* ignore */ }
+  }, [ready, settings.accent, settings.glow]);
 
   useEffect(() => {
     if (needRefresh) toast({ kind: "info", title: "Update ready", body: "Open Settings → Update app, or it applies next launch." });
