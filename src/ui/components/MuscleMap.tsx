@@ -16,7 +16,17 @@ export const STAGE_STYLE: Record<VolumeStage, { color: string; fill: number; lab
   above: { color: "var(--pink-2)", fill: 0.75, label: "Above" },
 };
 
-export function MuscleMap({ intensity, recovery, stage, selected, onSelect }: {
+/** Build my plan → Your targets (Leo, Nov 27 2026): what each muscle is set to, never the accent */
+export type PlanLevel = "skip" | "normal" | "priority" | "above";
+export const PLAN_LEVEL_STYLE: Record<PlanLevel, { color: string; fill: number; label: string }> = {
+  skip: { color: "var(--map-line)", fill: 0.1, label: "Skipped" },
+  normal: { color: "var(--plan-normal)", fill: 0.7, label: "In range" },
+  priority: { color: "var(--good)", fill: 0.75, label: "Priority" },
+  above: { color: "var(--plan-above)", fill: 0.75, label: "Above range" },
+};
+
+export function MuscleMap({ intensity, recovery, stage, level, selected, onSelect }: {
+  level?: Partial<Record<MuscleGroup, PlanLevel>>;
   intensity?: Partial<Record<MuscleGroup, number>>;
   stage?: Partial<Record<MuscleGroup, VolumeStage>>;
   recovery?: Partial<Record<MuscleGroup, Recovery>>;
@@ -28,7 +38,7 @@ export function MuscleMap({ intensity, recovery, stage, selected, onSelect }: {
       {regionsFor(v).map(({ group, shape }, i) => {
         const k = Math.max(0, Math.min(1, intensity?.[group] ?? 0));
         const rec = recovery?.[group];
-        const st = stage ? STAGE_STYLE[stage[group] ?? "none"] : null;
+        const st = stage ? STAGE_STYLE[stage[group] ?? "none"] : level ? PLAN_LEVEL_STYLE[level[group] ?? "skip"] : null;
         const color = st ? st.color : rec ? RECOVERY_COLOR[rec] : "var(--neon)";
         const opacity = st ? st.fill : rec ? (rec === "fresh" ? 0.16 : 0.75) : k > 0 ? 0.14 + 0.7 * k : 0.05;
         const glow = st ? st.fill >= 0.7 : rec ? rec !== "fresh" : k > 0.55;

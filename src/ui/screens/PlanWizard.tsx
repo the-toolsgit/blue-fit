@@ -16,6 +16,7 @@ import { lockScroll } from "../scrollLock";
 import { Icon } from "../components/Icon";
 import { MuscleMap } from "../components/MuscleMap";
 import { DELTS, shouldersTo, TargetEdit, toggleSkip, withPriority } from "../components/TargetEdit";
+import type { PlanLevel } from "../components/MuscleMap";
 import { useLongPress } from "../components/longPress";
 import { Seg } from "../components/Controls";
 import { Splash } from "../components/Splash";
@@ -228,7 +229,16 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
     setOpenRow(null); setEdited(true);
     editDay(d.id, (day) => ({ ...day, slots: day.slots.filter((x) => x.id !== slotId) }));
   };
-  const intensity = Object.fromEntries(MUSCLE_GROUPS.map((m) => { const t = targets.find((x) => x.group === m.id); return [m.id, !isFocus(t) ? 0 : priorityOf(m.id, t) === "priority" ? 1 : 0.55]; }));
+  // Your targets map (Leo, Nov 27 2026): skipped gray, in the app's range dark green, priority bright green,
+  // above the app's range for its Priority / Normal purple
+  const level = Object.fromEntries(MUSCLE_GROUPS.map((m) => {
+    const t = targets.find((x) => x.group === m.id);
+    if (!t || !isFocus(t)) return [m.id, "skip"];
+    const pr = priorityOf(m.id, t) === "priority" ? "priority" : "normal";
+    const d = defaultRange(m.id, profile, pr, goal);
+    if (d.max != null && t.max != null && t.max > d.max) return [m.id, "above"];
+    return [m.id, pr];
+  })) as Record<MuscleGroup, PlanLevel>;
 
   const body = (() => {
     switch (step) {
@@ -278,7 +288,7 @@ export function PlanWizard({ open, initialTargets, onClose, onDone }: {
         </Screen>);
       case "targets": return (
         <Screen eyebrow="Weekly sets per muscle" title="Your targets" sub="Tap to adjust">
-          <div className="wz-map"><MuscleMap intensity={intensity} selected={sel} onSelect={(g) => setSel(sel === g ? null : g)} /></div>
+          <div className="wz-map"><MuscleMap level={level} selected={sel} onSelect={(g) => setSel(sel === g ? null : g)} /></div>
           <div className="wz-targets">
             {MUSCLE_GROUPS.filter((m) => !DELTS.includes(m.id) || m.id === DELTS[0]).map((m) => {
               if (DELTS.includes(m.id)) {

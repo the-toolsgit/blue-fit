@@ -14,6 +14,8 @@
   --fig2: #2b5aa6;
   /* Muscle-map body outline (Plan, Progress): gray in every accent, so it never reads as a muscle color (Nov 27 2026) */
   --map-line: #7a8089; --map-guide: #3e4248; --map-half: #b4bac2;
+  /* Your targets map (Leo, Nov 27 2026): in the app's range, above it (priority = --good) */
+  --plan-normal: #31aa76; --plan-above: #c67aff;
   --neon: #3d9bff;
   --neon-2: #23e2ff;
   --neon-ink: #3d9bff; /* accent for text and lines */
