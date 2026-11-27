@@ -108,9 +108,9 @@ export function WeekMap({ tiles, routine, exMap, edit }: { tiles: Tile[]; routin
                   : <polygon key={i} points={pts(shape.points)} {...p}><title>{muscleLabel(group)}</title></polygon>;
               })}
               <g style={{ pointerEvents: "none" }}>
-                {OUTLINE.map((l, i) => <polyline key={i} points={pts(l)} fill="none" stroke="var(--fig)" strokeWidth={2} vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />)}
-                {GUIDES[view].map((l, i) => <polyline key={"g" + i} points={pts(l)} fill="none" stroke="var(--fig2)" strokeWidth={1} vectorEffect="non-scaling-stroke" />)}
-                <circle cx={HEAD.cx} cy={HEAD.cy} r={HEAD.r} fill="none" stroke="var(--fig)" strokeWidth={2} vectorEffect="non-scaling-stroke" />
+                {OUTLINE.map((l, i) => <polyline key={i} points={pts(l)} fill="none" stroke="var(--map-line)" strokeWidth={2} vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />)}
+                {GUIDES[view].map((l, i) => <polyline key={"g" + i} points={pts(l)} fill="none" stroke="var(--map-guide)" strokeWidth={1} vectorEffect="non-scaling-stroke" />)}
+                <circle cx={HEAD.cx} cy={HEAD.cy} r={HEAD.r} fill="none" stroke="var(--map-line)" strokeWidth={2} vectorEffect="non-scaling-stroke" />
                 {parts && (() => {
                   const ys = labelYs(parts.map((q) => q.y));
                   return parts.map((q, i) => {

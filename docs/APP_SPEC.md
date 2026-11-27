@@ -594,7 +594,7 @@ The app always uses Gray (§6.1 describes the Neon base it is built on; the navy
 | star | #FFC53D | ★ key lift |
 | on-neon | #02101F | text on neon fills |
 
-**Accent palettes.** The accent recolors buttons, chips, switches, steppers, bars, glows, lines and the background haze. The line man and his glow take the accent too (Nov 24 2026: body in the accent color, equipment and guide lines in a darker shade; also the muscle-map body outlines); the BLUE FIT wordmark and the app icon stay blue, and the Gray background stays the same in every palette. Each accent has a fill color (buttons, chips, bars; dark text on it) and an ink color (accent text and chart lines). They are the same, except light Blue, whose ink is its deeper shade. (Light Pink/Orange/Brown ink is Leo's choice and is below 4.5:1 on white.)
+**Accent palettes.** The accent recolors buttons, chips, switches, steppers, bars, glows, lines and the background haze. The line man and his glow take the accent too (Nov 24 2026: body in the accent color, equipment and guide lines in a darker shade). The muscle-map body outline (Plan and Progress maps) is gray in every accent (#7A8089, guide lines #3E4248; Nov 27 2026), so it never looks like a muscle, recovery or target color); the BLUE FIT wordmark and the app icon stay blue, and the Gray background stays the same in every palette. Each accent has a fill color (buttons, chips, bars; dark text on it) and an ink color (accent text and chart lines). They are the same, except light Blue, whose ink is its deeper shade. (Light Pink/Orange/Brown ink is Leo's choice and is below 4.5:1 on white.)
 
 | Accent | Fill / 2nd |
 |---|---|

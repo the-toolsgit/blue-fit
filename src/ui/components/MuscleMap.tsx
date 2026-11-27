@@ -43,9 +43,9 @@ export function MuscleMap({ intensity, recovery, stage, selected, onSelect }: {
           : <polygon key={i} points={pts(shape.points)} {...props}><title>{muscleLabel(group)}</title></polygon>;
       })}
       <g style={{ pointerEvents: "none" }}>
-        {OUTLINE.map((l, i) => <polyline key={i} points={pts(l)} fill="none" stroke="var(--fig)" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />)}
-        {GUIDES[v].map((l, i) => <polyline key={"g" + i} points={pts(l)} fill="none" stroke="var(--fig2)" strokeWidth={0.8} />)}
-        <circle cx={HEAD.cx} cy={HEAD.cy} r={HEAD.r} fill="none" stroke="var(--fig)" strokeWidth={1.5} />
+        {OUTLINE.map((l, i) => <polyline key={i} points={pts(l)} fill="none" stroke="var(--map-line)" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />)}
+        {GUIDES[v].map((l, i) => <polyline key={"g" + i} points={pts(l)} fill="none" stroke="var(--map-guide)" strokeWidth={0.8} />)}
+        <circle cx={HEAD.cx} cy={HEAD.cy} r={HEAD.r} fill="none" stroke="var(--map-line)" strokeWidth={1.5} />
       </g>
       <text x={MAP_W / 2} y={MAP_H + 12} textAnchor="middle" fill="var(--muted)" style={{ font: "600 9px var(--body)", letterSpacing: ".16em" }}>{v.toUpperCase()}</text>
     </g>
