@@ -56,12 +56,13 @@
    accent for text and chart lines (the same colors).
    With the pink accent, PR highlights (--pink) turn gold and "recovering" turns coral so they still stand out. */
 :root[data-accent="pink"] {
-  --fig: #ff8fd0; --fig2: #8a4373; --fig-glow: rgba(255, 120, 200, 0.55); --fig-glow-soft: rgba(255, 120, 200, 0.16);
-  --neon: #ff8fd0; --neon-2: #ffc2e6; --neon-ink: #ff8fd0; --neon-ink-2: #ffc2e6; --on-neon: #2a0418;
-  --glow: rgba(255, 120, 200, 0.55); --glow-soft: rgba(255, 120, 200, 0.16);
-  --line: rgba(255, 160, 215, 0.15); --line-strong: rgba(255, 160, 215, 0.32);
-  --bg-fx-1: rgba(255, 110, 190, 0.18); --bg-fx-2: rgba(61, 155, 255, 0.12);
-  --pink: #ffc53d; --pink-glow: rgba(255, 197, 61, 0.5); --pink-2: #ff8a3d; --recovering: #ff5a5f;
+  /* #FF8DA1 (Leo, Nov 27 2026; was #FF8FD0) */
+  --fig: #ff8da1; --fig2: #8a4c57; --fig-glow: rgba(255, 141, 161, 0.55); --fig-glow-soft: rgba(255, 141, 161, 0.16);
+  --neon: #ff8da1; --neon-2: #ffc4ce; --neon-ink: #ff8da1; --neon-ink-2: #ffc4ce; --on-neon: #2a0410;
+  --glow: rgba(255, 141, 161, 0.55); --glow-soft: rgba(255, 141, 161, 0.16);
+  --line: rgba(255, 170, 185, 0.15); --line-strong: rgba(255, 170, 185, 0.32);
+  --bg-fx-1: rgba(255, 130, 155, 0.18); --bg-fx-2: rgba(61, 155, 255, 0.12);
+  --pink: #ffc53d; --pink-glow: rgba(255, 197, 61, 0.5); --pink-2: #ff8a3d; --recovering: #b57bff;
 }
 :root[data-accent="orange"] {
   --fig: #ff9d4d; --fig2: #8f5a2c; --fig-glow: rgba(255, 150, 70, 0.55); --fig-glow-soft: rgba(255, 150, 70, 0.16);

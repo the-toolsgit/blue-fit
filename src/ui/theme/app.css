@@ -356,7 +356,7 @@ textarea.input { min-height: 84px; resize: vertical; }
 .swatch[aria-checked="true"] i { transform: scale(1.12); box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--sw), 0 0 16px -2px var(--sw); }
 .swatch:active i { transform: scale(0.92); }
 .swatch[data-a="blue"] { --sw: #3d9bff; --sw2: #23e2ff; }
-.swatch[data-a="pink"] { --sw: #ff8fd0; --sw2: #ffc2e6; }
+.swatch[data-a="pink"] { --sw: #ff8da1; --sw2: #ffc4ce; }
 .swatch[data-a="orange"] { --sw: #ff9d4d; --sw2: #ffc98a; }
 .swatch[data-a="brown"] { --sw: #d9a46b; --sw2: #f0cfa0; }
 .swatch[data-a="red"] { --sw: #e5453b; --sw2: #e5453b; }

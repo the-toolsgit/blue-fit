@@ -599,12 +599,12 @@ The app always uses Gray (§6.1 describes the Neon base it is built on; the navy
 | Accent | Fill / 2nd |
 |---|---|
 | Blue (default) | #3D9BFF / #23E2FF |
-| Pink | #FF8FD0 / #FFC2E6 |
+| Pink (Nov 27 2026; was #FF8FD0) | #FF8DA1 / #FFC4CE |
 | Orange | #FF9D4D / #FFC98A |
 | Brown | #D9A46B / #F0CFA0 |
 | Red (infrared; Nov 27 2026) | #E5453B / #E5453B |
 
-With the Pink accent, PR highlights (normally pink) turn gold and the "recovering" muscle color turns coral, so they still stand out. With the Red accent, "recovering" turns pink (#FF8FD0). Red (sampled from a plyo box photo, Nov 27 2026) has one color (fill = 2nd), white text on red buttons, and the BLUE FIT wordmark turns red too (the only accent that recolors it). **Glow off** (any accent): no glows anywhere (buttons, line man, tab icons, wordmark, swatches), no two-color gradients (the 2nd color = the 1st), no background haze; saved on the phone too so it applies before the splash paints. 
+With the Pink accent, PR highlights (normally pink) turn gold and the "recovering" muscle color turns violet (#B57BFF; coral was too close to the new pink), so they still stand out. With the Red accent, "recovering" turns pink (#FF8FD0). Red (sampled from a plyo box photo, Nov 27 2026) has one color (fill = 2nd), white text on red buttons, and the BLUE FIT wordmark turns red too (the only accent that recolors it). **Glow off** (any accent): no glows anywhere (buttons, line man, tab icons, wordmark, swatches), no two-color gradients (the 2nd color = the 1st), no background haze; saved on the phone too so it applies before the splash paints. 
 
 Text colors meet WCAG AA (4.5:1) on their backgrounds, except `faint` (placeholders and decorative only).
 
