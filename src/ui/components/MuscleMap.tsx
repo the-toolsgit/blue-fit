@@ -8,9 +8,10 @@ export const RECOVERY_COLOR: Record<Recovery, string> = { recovering: "var(--rec
 /** This week's sets against the target, in clear steps (Progress map): not trained = outline only */
 export type VolumeStage = "none" | "started" | "half" | "target" | "above";
 export const STAGE_STYLE: Record<VolumeStage, { color: string; fill: number; label: string }> = {
-  none: { color: "var(--fig2)", fill: 0, label: "Not yet" },
-  started: { color: "var(--neon)", fill: 0.18, label: "Started" },
-  half: { color: "var(--neon)", fill: 0.8, label: "Halfway" },
+  none: { color: "var(--map-guide)", fill: 0, label: "Not yet" },
+  // Gray, not the accent (Nov 27 2026): only In target and Above are colors
+  started: { color: "var(--map-line)", fill: 0.22, label: "Started" },
+  half: { color: "var(--map-half)", fill: 0.62, label: "Halfway" },
   target: { color: "var(--good)", fill: 0.75, label: "In target" },
   above: { color: "var(--pink-2)", fill: 0.75, label: "Above" },
 };
