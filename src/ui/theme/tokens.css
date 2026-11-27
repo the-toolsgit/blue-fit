@@ -65,9 +65,9 @@
   --pink: #ffc53d; --pink-glow: rgba(255, 197, 61, 0.5); --pink-2: #ff8a3d; --recovering: #b57bff;
 }
 :root[data-accent="orange"] {
-  /* #FB7641 (Leo's pick on the canvas, Nov 27 2026; was #FF9D4D), white text on it like the mockup */
+  /* #FB7641 (Leo's pick on the canvas, Nov 27 2026; was #FF9D4D); dark text on it, like every accent */
   --fig: #fb7641; --fig2: #8c4224; --fig-glow: rgba(251, 118, 65, 0.55); --fig-glow-soft: rgba(251, 118, 65, 0.16);
-  --neon: #fb7641; --neon-2: #fda882; --neon-ink: #fb7641; --neon-ink-2: #fda882; --on-neon: #ffffff;
+  --neon: #fb7641; --neon-2: #fda882; --neon-ink: #fb7641; --neon-ink-2: #fda882; --on-neon: #1a0a02;
   --glow: rgba(251, 118, 65, 0.55); --glow-soft: rgba(251, 118, 65, 0.16);
   --line: rgba(251, 150, 110, 0.15); --line-strong: rgba(251, 150, 110, 0.32);
   --bg-fx-1: rgba(251, 118, 65, 0.16); --bg-fx-2: rgba(61, 155, 255, 0.12);
@@ -84,7 +84,7 @@
   /* Infrared, from Leo's plyo box photo (Nov 27 2026): one red (no second color), and the BLUE FIT wordmark turns
      red too. Flat with Glow off (Leo's pick). "Recovering" turns pink so it doesn't read as the accent. */
   --fig: #e5453b; --fig2: #9e2f28; --fig-glow: rgba(229, 69, 59, 0.55); --fig-glow-soft: rgba(229, 69, 59, 0.16);
-  --neon: #e5453b; --neon-2: #e5453b; --neon-ink: #e5453b; --neon-ink-2: #e5453b; --on-neon: #ffffff;
+  --neon: #e5453b; --neon-2: #e5453b; --neon-ink: #e5453b; --neon-ink-2: #e5453b; --on-neon: #140806;
   --glow: rgba(229, 69, 59, 0.55); --glow-soft: rgba(229, 69, 59, 0.14);
   --line: rgba(229, 69, 59, 0.16); --line-strong: rgba(229, 69, 59, 0.34);
   --bg-fx-1: rgba(229, 69, 59, 0.14); --bg-fx-2: rgba(61, 155, 255, 0.10);
