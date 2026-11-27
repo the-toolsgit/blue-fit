@@ -76,6 +76,16 @@
   --bg-fx-1: rgba(200, 140, 80, 0.15); --bg-fx-2: rgba(61, 155, 255, 0.13);
 }
 
+:root[data-accent="red"] {
+  /* Infrared, from Leo's plyo box photo (Nov 27 2026). "Recovering" turns pink so it doesn't read as the accent. */
+  --fig: #ff4b3e; --fig2: #8f2f28; --fig-glow: rgba(255, 75, 62, 0.55); --fig-glow-soft: rgba(255, 75, 62, 0.16);
+  --neon: #ff4b3e; --neon-2: #ff9b87; --neon-ink: #ff4b3e; --neon-ink-2: #ff9b87; --on-neon: #2a0604;
+  --glow: rgba(255, 75, 62, 0.55); --glow-soft: rgba(255, 75, 62, 0.16);
+  --line: rgba(255, 140, 125, 0.15); --line-strong: rgba(255, 140, 125, 0.32);
+  --bg-fx-1: rgba(255, 70, 55, 0.16); --bg-fx-2: rgba(61, 155, 255, 0.12);
+  --recovering: #ff8fd0;
+}
+
 /* ---------- Gray style (the only look since Nov 24 2026; index.html sets data-look="gray" on <html>) ----------
    Neon with neutral gray backgrounds, surfaces, lines and text instead of navy; the accent and the blue line man
    stay. Always dark. Weighted selector so it wins over the accent blocks. */

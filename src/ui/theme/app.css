@@ -359,6 +359,7 @@ textarea.input { min-height: 84px; resize: vertical; }
 .swatch[data-a="pink"] { --sw: #ff8fd0; --sw2: #ffc2e6; }
 .swatch[data-a="orange"] { --sw: #ff9d4d; --sw2: #ffc98a; }
 .swatch[data-a="brown"] { --sw: #d9a46b; --sw2: #f0cfa0; }
+.swatch[data-a="red"] { --sw: #ff4b3e; --sw2: #ff9b87; }
 html { touch-action: manipulation; } /* no double-tap zoom */
 
 /* Plan tab: exercise rows can be pressed and held to move */
