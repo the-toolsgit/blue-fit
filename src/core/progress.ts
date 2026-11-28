@@ -54,7 +54,9 @@ export interface LastChange {
 }
 /** Estimated-max change that still counts as the same (*judgment*: a rep or so of day-to-day noise) */
 export const SAME_PCT = 0.02;
-export function lastChanges(sessions: Session[], exercises: Exercise[]): LastChange[] {
+/** Up / down shows only exercises done in the last this-many days */
+export const UPDOWN_DAYS = 14;
+export function lastChanges(sessions: Session[], exercises: Exercise[], today?: string): LastChange[] {
   const done = [...sessions].filter((x) => x.status === "finished").sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1));
   const out: LastChange[] = [];
   for (const ex of exercises) {
@@ -91,7 +93,8 @@ export function lastChanges(sessions: Session[], exercises: Exercise[]): LastCha
     out.push({ exerciseId: ex.id, before: prev.weight, after: last.weight, beforeReps: prev.reps, afterReps: last.reps, unit: "lb", date: last.date,
       dir: ch > SAME_PCT ? 1 : ch < -SAME_PCT ? -1 : 0 });
   }
-  return out;
+  // An exercise not done in the last 2 weeks drops off (a dropped or swapped exercise; Leo, Nov 27 2026)
+  return today ? out.filter((c) => c.date >= addDays(today, -UPDOWN_DAYS)) : out;
 }
 
 export interface WeekTotals { weekStart: string; tonnage: number; sets: GroupTotals; workouts: number }

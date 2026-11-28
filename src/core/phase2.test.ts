@@ -272,6 +272,10 @@ describe("up / down (last workout vs the one before)", () => {
     expect(r).toEqual([{ exerciseId: "leg-press", before: 100, after: 95, beforeReps: 8, afterReps: 12, unit: "lb", date: "2026-11-16", dir: 1 }]);
   });
   it("a new rep range: 180×10 → 170×12 is the same, 180×10 → 180×12 up, 180×10 → 170×10 down", () => {
+    // Not done in the last 2 weeks: gone (2026-11-09 + 14 = 11-23 still shows, 11-24 doesn't)
+    const two = [sess("2026-11-02", "leg-press", [set(180, 10)]), sess("2026-11-09", "leg-press", [set(190, 10)])];
+    expect(lastChanges(two, exs, "2026-11-23")).toHaveLength(1);
+    expect(lastChanges(two, exs, "2026-11-24")).toHaveLength(0);
     const dir = (w: number, r: number) => lastChanges([sess("2026-11-02", "leg-press", [set(180, 10)]), sess("2026-11-09", "leg-press", [set(w, r)])], exs)[0].dir;
     expect(dir(170, 12)).toBe(0);
     expect(dir(180, 12)).toBe(1);

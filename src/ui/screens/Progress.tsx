@@ -55,7 +55,7 @@ export function ProgressScreen() {
   const exIdx = Math.max(0, logged.findIndex((e) => e.id === ex?.id));
   const [exDir, setExDir] = useState<"next" | "prev" | null>(null);
   // Up / down: last workout vs the one before, per exercise (biggest change first)
-  const changes = useMemo(() => lastChanges(finished, exercises), [finished, exercises]);
+  const changes = useMemo(() => lastChanges(finished, exercises, today), [finished, exercises, today]);
   // by estimated max (weight × reps), so a lighter weight for more reps isn't "down" (core/progress.ts)
   // relative change for every unit (sorting); weighted by estimated max, assisted by less help; null = nothing before
   const gain = (c: (typeof changes)[number]): number | null => {
