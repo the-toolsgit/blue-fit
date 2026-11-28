@@ -53,3 +53,26 @@ describe("audit fixes", () => {
     expect(workoutNotes(s, [s], exMap, routine, { ...DEFAULT_SETTINGS, deloadSuggestions: false }).some((n) => n.kind === "deload")).toBe(false);
   });
 });
+
+describe("barbell bench: rack and plate (Nov 27 2026)", () => {
+  it("barbell bench figures get the rack and a plate; EZ bar only the plate; dumbbells and Smith nothing", async () => {
+    const { buildFigure } = await import("./figure/templates");
+    const hi = (f: ReturnType<typeof buildFigure>) => ((f?.props ?? []) as Record<string, unknown>[]).filter((p) => p.hi);
+    expect(hi(buildFigure("press-flat", {}))).toHaveLength(5);
+    expect(hi(buildFigure("press-incline", {}))).toHaveLength(5);
+    expect(hi(buildFigure("press-flat", { noRack: true }))).toHaveLength(1);
+    expect(hi(buildFigure("press-flat", { equipmentProp: "db" }))).toHaveLength(0);
+    expect(hi(buildFigure("press-flat-smith", {}))).toHaveLength(0);
+  });
+  it("migration adds it to phone copies once", async () => {
+    const { MIGRATIONS } = await import("./migrations");
+    const { buildFigure } = await import("./figure/templates");
+    const m = MIGRATIONS.find((x) => x.id === "2026-11-27-bench-rack-plate")!;
+    const old = buildFigure("press-flat", {})!;
+    old.props = (old.props as Record<string, unknown>[]).filter((p) => !p.hi);
+    const d = { ...seed, exercises: [{ ...seed.exercises[0], id: "x-bench", isCustom: false, equipment: "barbell", figure: old }] } as typeof seed;
+    const out = m.run(d, "2026-11-27")!;
+    expect(((out.exercises[0].figure!.props ?? []) as Record<string, unknown>[]).filter((p) => p.hi)).toHaveLength(5);
+    expect(m.run(out, "2026-11-27")).toBeNull();
+  });
+});

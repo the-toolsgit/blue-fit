@@ -7,7 +7,7 @@ import figureAudit from "./seed/figure-audit.json";
 import figureMachines from "./seed/figure-machines.json";
 import formTempoWas from "./seed/form-tempo-was.json";
 import exerciseSeed from "./seed/exercises.json";
-import { buildFigure } from "./figure/templates";
+import { benchBarDetail, buildFigure } from "./figure/templates";
 import exerciseJobs from "./seed/exercise-jobs.json";
 import extraExercises from "./seed/extra-exercises.json";
 import textWas from "./seed/text-review-was.json";
@@ -752,6 +752,27 @@ export const MIGRATIONS: Migration[] = [
       const was = "Rope behind your head, elbows forward by your ears.", now = "Rope behind your head, elbows in close to your ears.";
       if (!d.exercises.some((e) => e.id === "rope-overhead-tricep-extension" && !e.isCustom && e.setup.includes(was))) return null;
       return { ...d, exercises: d.exercises.map((e) => (e.id === "rope-overhead-tricep-extension" && !e.isCustom ? { ...e, setup: e.setup.map((x) => (x === was ? now : x)) } : e)) };
+    },
+  },
+  {
+    // Nov 27 2026 (Leo): barbell benches looked like dumbbell work. App copies of a flat / incline / decline barbell
+    // bench (found by the bench line and the bar-end dot; not Smith) get the rack upright and a plate on the bar end,
+    // in the lighter accent; an EZ bar (fixedBar) gets only the plate.
+    id: "2026-11-27-bench-rack-plate",
+    run(d) {
+      const BENCH: Record<string, string> = { "28,80,82,80": "press-flat", "64,86,34,64": "press-incline", "16,80,62,66": "press-decline" };
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        const props = (e.figure?.props ?? []) as Record<string, unknown>[];
+        if (e.isCustom || e.equipment === "smith" || props.some((p) => p.hi)) return e;
+        const t = props.map((p) => (Array.isArray(p.line) ? BENCH[(p.line as number[]).join(",")] : undefined)).find(Boolean);
+        const i = props.findIndex((p) => p.pad === "ha" && p.r === 3);
+        if (!t || i < 0) return e;
+        changed = true;
+        const next = [...props.slice(0, i), ...benchBarDetail(t, e.equipment !== "fixedBar"), ...props.slice(i)];
+        return { ...e, figure: { ...e.figure, props: next } as Exercise["figure"] };
+      });
+      return changed ? { ...d, exercises } : null;
     },
   },
 ];

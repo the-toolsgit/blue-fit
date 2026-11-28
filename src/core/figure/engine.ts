@@ -6,9 +6,9 @@ import type { FigureSpec } from "../types";
 
 export type Pt = [number, number];
 export type LightShape =
-  | { kind: "line"; x1: number | string; y1: number | string; x2: number | string; y2: number | string; width?: number }
+  | { kind: "line"; x1: number | string; y1: number | string; x2: number | string; y2: number | string; width?: number; hi?: boolean }
   | { kind: "cable"; points: Pt[]; anchor: Pt }
-  | { kind: "circle"; cx: number; cy: number; r: number }
+  | { kind: "circle"; cx: number; cy: number; r: number; hi?: boolean }
   /** A muscle drawn as a filled shape in the body color (e.g. the traps squeezing), closed back along the body line */
   | { kind: "curve"; points: Pt[] };
 
@@ -168,7 +168,8 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
   const { p, J } = poseJoints(f, k);
   const light: LightShape[] = [];
   for (const o of (f.props || []) as any[]) {
-    if (o.line) light.push({ kind: "line", x1: o.line[0], y1: o.line[1], x2: o.line[2], y2: o.line[3], ...(o.width ? { width: o.width } : {}) });
+    // `hi`: equipment detail drawn in the lighter accent (the bench rack and plate, Nov 27 2026)
+    if (o.line) light.push({ kind: "line", x1: o.line[0], y1: o.line[1], x2: o.line[2], y2: o.line[3], ...(o.width ? { width: o.width } : {}), ...(o.hi ? { hi: true } : {}) });
     // A straight up/down bar from a joint to height `y` that moves sideways with it, e.g. a pec deck arm hanging
     // from the frame to the handle
     if (o.vline) { const h = J[o.vline]; light.push({ kind: "line", x1: h[0].toFixed(1), y1: h[1].toFixed(1), x2: h[0].toFixed(1), y2: o.y, ...(o.width ? { width: o.width } : {}) }); }
@@ -206,7 +207,7 @@ export function poseFrame(f: FigureSpec, k: number): FigureFrame {
     }
     // A rigid bar from a fixed point to a joint, e.g. a landmine or T-bar pivoting on the floor
     if (o.rod) { const h = J[o.to || "ha"]; light.push({ kind: "line", x1: o.rod[0], y1: o.rod[1], x2: h[0].toFixed(1), y2: h[1].toFixed(1), width: 2.5 }); }
-    if (o.pad) { const h = J[o.pad]; light.push({ kind: "circle", cx: h[0] + (o.dx || 0), cy: h[1] + (o.dy || 0), r: o.r || 2.6 }); }
+    if (o.pad) { const h = J[o.pad]; light.push({ kind: "circle", cx: h[0] + (o.dx || 0), cy: h[1] + (o.dy || 0), r: o.r || 2.6, ...(o.hi ? { hi: true } : {}) }); }
     // A pad or sled that moves with a body segment: a line parallel to joint a → joint b, `off` to the side (+ = behind
     // a side-view torso, i.e. to the left of a → b), stretched `ext` [before a, past b]; e.g. a hack squat's back pad
     if (o.along) {

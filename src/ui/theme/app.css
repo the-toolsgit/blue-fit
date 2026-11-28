@@ -132,6 +132,7 @@ ul { margin: 0; padding-left: 18px; }
 .fig .mn polyline, .fig .mn circle { fill: none; stroke: var(--fig); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 /* Equipment (machine, bench, cable, bar) in a faded lighter blue, so the eye stays on the man's movement (Leo, Nov 22 2026) */
 .fig .lt line, .fig .lt polyline, .fig .lt circle { fill: none; stroke: var(--fig2); stroke-width: 1.6; stroke-linecap: round; stroke-opacity: .55; }
+.fig .lt .hi { stroke: var(--fig-hi); stroke-opacity: .85; stroke-width: 1.4; } /* equipment detail in the lighter accent (bench rack and plate) */
 .fig .floor { stroke: var(--fig2); stroke-width: 1; opacity: 0.7; }
 .fig.thin .mn polyline, .fig.thin .mn circle { stroke-width: 2.2; }
 .fig-stage { position: relative; display: grid; place-items: center; }

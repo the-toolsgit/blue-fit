@@ -7,10 +7,11 @@ const pts = (a: Pt[]) => a.map((q) => q[0].toFixed(1) + "," + q[1].toFixed(1)).j
 export function frameToSvg(fr: FigureFrame, dx = 0): string {
   let light = "";
   for (const s of fr.light) {
-    if (s.kind === "line") light += `<line x1="${s.x1}" y1="${s.y1}" x2="${s.x2}" y2="${s.y2}"${s.width ? ` stroke-width="${s.width}"` : ""}/>`;
+    const hi = "hi" in s && s.hi ? ` class="hi"` : "";
+    if (s.kind === "line") light += `<line${hi} x1="${s.x1}" y1="${s.y1}" x2="${s.x2}" y2="${s.y2}"${s.width ? ` stroke-width="${s.width}"` : ""}/>`;
     else if (s.kind === "cable") light += `<polyline points="${pts(s.points)}" stroke-dasharray="2 2"/><circle cx="${s.anchor[0]}" cy="${s.anchor[1]}" r="2.2"/>`;
     else if (s.kind === "curve") light += `<polygon class="muscle" points="${pts(s.points)}"/>`;
-    else light += `<circle cx="${s.cx.toFixed(1)}" cy="${s.cy.toFixed(1)}" r="${s.r}"/>`;
+    else light += `<circle${hi} cx="${s.cx.toFixed(1)}" cy="${s.cy.toFixed(1)}" r="${s.r}"/>`;
   }
   const f = fr.floor;
   const body = `<g class="lt">${light}</g><g class="mn">${fr.main

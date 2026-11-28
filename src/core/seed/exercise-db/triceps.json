@@ -126,7 +126,8 @@
   "bodyRegion": "upper",
   "figureTemplate": "press-flat",
   "figureAdjust": {
-   "grip": "close"
+   "grip": "close",
+   "noRack": true
   },
   "source": {
    "db": "free-exercise-db",

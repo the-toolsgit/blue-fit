@@ -447,6 +447,22 @@ export interface FigureAdjust {
   kneeling?: boolean;
   bench?: "flat" | "incline" | "decline";
   equipmentProp?: "cable" | "bar" | "db" | "none";
+  /** Barbell bench without a rack (EZ bar from the floor): the plate only */
+  noRack?: boolean;
+}
+
+/** Barbell bench (side view, Leo Nov 27 2026): the bar end alone looked like a dumbbell. The hand at the top of the
+ *  press per template; the rack upright with its J-hook stands just behind it, and a plate rides on the bar end. */
+const BENCH_BAR: Record<string, [number, number]> = { "press-flat": [36, 34], "press-incline": [57.1, 27.6], "press-decline": [14.7, 34.8] };
+export function benchBarDetail(templateId: string, rack = true): Record<string, unknown>[] {
+  const h = BENCH_BAR[templateId];
+  if (!h) return [];
+  const x = +(h[0] - 4).toFixed(1), y = h[1];
+  const r = (n: number) => +n.toFixed(1);
+  return [
+    ...(rack ? [{ line: [x, 104, x, r(y - 12)], hi: 1 }, { line: [r(x - 5), 104, r(x + 5), 104], hi: 1 }, { line: [x, r(y + 3), r(x + 6), r(y + 3)], hi: 1 }, { line: [r(x + 6), r(y + 3), r(x + 6), r(y - 1)], hi: 1 }] : []),
+    { pad: "ha", r: 9, hi: 1 },
+  ];
 }
 
 /** Top of a cable tower (viewBox y) */
@@ -471,7 +487,7 @@ export function buildFigure(templateId: string, adj: FigureAdjust = {}): FigureS
   // Equipment prop
   const prop = adj.equipmentProp ?? t.prop;
   if (prop === "db") props.push({ db: side ? "ha" : "haR" });
-  else if (prop === "bar") props.push(side ? { pad: "ha", r: 3 } : { bar: 1 });
+  else if (prop === "bar") props.push(...(side ? benchBarDetail(templateId, !adj.noRack) : []), side ? { pad: "ha", r: 3 } : { bar: 1 });
   else if (prop === "cable" && t.pulley) {
     // The tower first (behind the cable): a column at the pulley, or at `post` with a beam over to the pulley
     const [px, py] = t.pulley, x = t.post === false ? null : t.post ?? px;
