@@ -1,7 +1,7 @@
 // The exercise database (one file per main muscle), built into the app's Exercise shape. Loaded lazily by the store.
 // Plain imports so core stays portable (no bundler globs).
 import type { Exercise } from "../../types";
-import { buildFigure, type FigureAdjust } from "../../figure/templates";
+import { buildFigure, withPlates, type FigureAdjust } from "../../figure/templates";
 import { withDerivedMuscles } from "../../customExercise";
 import abs from "./abs.json";
 import adductors from "./adductors.json";
@@ -34,7 +34,7 @@ export function toExercise(e: DbEntry): Exercise {
   return withDerivedMuscles({
     ...rest, muscles: [], secondaryMuscles: [], tips: e.tips ?? [], avoid: e.avoid ?? [],
     ...(preferred ? { preferred: { goals: preferred.goals, why: preferred.why } } : {}),
-    figure: buildFigure(figureTemplate, figureAdjust ?? {}), isCustom: false, archived: false,
+    figure: withPlates(buildFigure(figureTemplate, figureAdjust ?? {}), e.equipment as string), isCustom: false, archived: false,
   } as Exercise);
 }
 

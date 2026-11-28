@@ -7,7 +7,7 @@ import figureAudit from "./seed/figure-audit.json";
 import figureMachines from "./seed/figure-machines.json";
 import formTempoWas from "./seed/form-tempo-was.json";
 import exerciseSeed from "./seed/exercises.json";
-import { benchBarDetail, buildFigure } from "./figure/templates";
+import { benchBarDetail, buildFigure, withPlates } from "./figure/templates";
 import exerciseJobs from "./seed/exercise-jobs.json";
 import extraExercises from "./seed/extra-exercises.json";
 import textWas from "./seed/text-review-was.json";
@@ -769,8 +769,24 @@ export const MIGRATIONS: Migration[] = [
         const i = props.findIndex((p) => p.pad === "ha" && p.r === 3);
         if (!t || i < 0) return e;
         changed = true;
-        const next = [...props.slice(0, i), ...benchBarDetail(t, e.equipment !== "fixedBar"), ...props.slice(i)];
+        const next = [...props.slice(0, i), ...benchBarDetail(t, e.equipment !== "fixedBar"), { pad: "ha", r: 9, hi: 1 }, ...props.slice(i)];
         return { ...e, figure: { ...e.figure, props: next } as Exercise["figure"] };
+      });
+      return changed ? { ...d, exercises } : null;
+    },
+  },
+  {
+    // Nov 27 2026 (Leo): plates on every bar, not only the bench (Romanian deadlift, rows, squats, curls…): app copies
+    // with barbell / EZ or fixed bar / Smith equipment get a plate around each side-view bar end (withPlates).
+    id: "2026-11-27-plates-on-every-bar",
+    run(d) {
+      let changed = false;
+      const exercises = d.exercises.map((e) => {
+        if (e.isCustom) return e;
+        const f = withPlates(e.figure, e.equipment);
+        if (f === e.figure) return e;
+        changed = true;
+        return { ...e, figure: f };
       });
       return changed ? { ...d, exercises } : null;
     },

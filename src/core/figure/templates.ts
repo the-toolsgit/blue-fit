@@ -452,7 +452,7 @@ export interface FigureAdjust {
 }
 
 /** Barbell bench (side view, Leo Nov 27 2026): the bar end alone looked like a dumbbell. The hand at the top of the
- *  press per template; the rack upright with its J-hook stands just behind it, and a plate rides on the bar end. */
+ *  press per template; the rack upright with its J-hook stands just behind it (the plate: withPlates). */
 const BENCH_BAR: Record<string, [number, number]> = { "press-flat": [36, 34], "press-incline": [57.1, 27.6], "press-decline": [14.7, 34.8] };
 export function benchBarDetail(templateId: string, rack = true): Record<string, unknown>[] {
   const h = BENCH_BAR[templateId];
@@ -461,8 +461,28 @@ export function benchBarDetail(templateId: string, rack = true): Record<string, 
   const r = (n: number) => +n.toFixed(1);
   return [
     ...(rack ? [{ line: [x, 104, x, r(y - 12)], hi: 1 }, { line: [r(x - 5), 104, r(x + 5), 104], hi: 1 }, { line: [x, r(y + 3), r(x + 6), r(y + 3)], hi: 1 }, { line: [r(x + 6), r(y + 3), r(x + 6), r(y - 1)], hi: 1 }] : []),
-    { pad: "ha", r: 9, hi: 1 },
   ];
+}
+
+/** Equipment that carries plates on a bar: every side-view bar end (a small pad on a hand, the shoulders, knees or
+ *  hips) gets a plate around it in the lighter accent (Leo, Nov 27 2026: consistent with the bench). Front views
+ *  already draw the plates on the bar. */
+export const PLATE_EQUIPMENT = ["barbell", "fixedBar", "smith"];
+export const PLATE_R = 9;
+export function withPlates<F extends { props?: unknown[] } | null | undefined>(f: F, equipment: string): F {
+  if (!f || !PLATE_EQUIPMENT.includes(equipment)) return f;
+  const props = (f.props ?? []) as Record<string, unknown>[];
+  const out: Record<string, unknown>[] = [];
+  let changed = false;
+  for (const p of props) {
+    const end = p.pad && !p.hi && ((p.r as number | undefined) ?? 2.6) <= 3;
+    if (end && !props.some((q) => q.hi && q.pad === p.pad && q.r === PLATE_R)) {
+      out.push({ pad: p.pad, r: PLATE_R, hi: 1, ...(p.dx ? { dx: p.dx } : {}), ...(p.dy ? { dy: p.dy } : {}) });
+      changed = true;
+    }
+    out.push(p);
+  }
+  return changed ? ({ ...f, props: out } as F) : f;
 }
 
 /** Top of a cable tower (viewBox y) */

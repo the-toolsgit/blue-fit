@@ -58,9 +58,16 @@ describe("barbell bench: rack and plate (Nov 27 2026)", () => {
   it("barbell bench figures get the rack and a plate; EZ bar only the plate; dumbbells and Smith nothing", async () => {
     const { buildFigure } = await import("./figure/templates");
     const hi = (f: ReturnType<typeof buildFigure>) => ((f?.props ?? []) as Record<string, unknown>[]).filter((p) => p.hi);
-    expect(hi(buildFigure("press-flat", {}))).toHaveLength(5);
-    expect(hi(buildFigure("press-incline", {}))).toHaveLength(5);
-    expect(hi(buildFigure("press-flat", { noRack: true }))).toHaveLength(1);
+    const { withPlates } = await import("./figure/templates");
+    expect(hi(buildFigure("press-flat", {}))).toHaveLength(4); // the rack
+    expect(hi(withPlates(buildFigure("press-flat", {}), "barbell"))).toHaveLength(5); // + the plate
+    expect(hi(withPlates(buildFigure("press-incline", {}), "barbell"))).toHaveLength(5);
+    expect(hi(withPlates(buildFigure("press-flat", { noRack: true }), "fixedBar"))).toHaveLength(1);
+    expect(hi(withPlates(buildFigure("press-flat", { equipmentProp: "db" }), "dumbbell"))).toHaveLength(0);
+    // Plates on every bar: a squat's bar on the shoulders, once only
+    const sq = withPlates(buildFigure("squat", {}), "barbell")!;
+    expect(hi(sq).map((p) => p.pad)).toEqual(["sh"]);
+    expect(withPlates(sq, "barbell")).toBe(sq);
     expect(hi(buildFigure("press-flat", { equipmentProp: "db" }))).toHaveLength(0);
     expect(hi(buildFigure("press-flat-smith", {}))).toHaveLength(0);
   });
@@ -74,5 +81,8 @@ describe("barbell bench: rack and plate (Nov 27 2026)", () => {
     const out = m.run(d, "2026-11-27")!;
     expect(((out.exercises[0].figure!.props ?? []) as Record<string, unknown>[]).filter((p) => p.hi)).toHaveLength(5);
     expect(m.run(out, "2026-11-27")).toBeNull();
+    // the plates migration then adds nothing more to it
+    const all = MIGRATIONS.find((x) => x.id === "2026-11-27-plates-on-every-bar")!;
+    expect(all.run(out, "2026-11-27")).toBeNull();
   });
 });
